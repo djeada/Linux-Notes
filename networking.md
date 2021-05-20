@@ -7,3 +7,6 @@ tcpdump
 
  ifconfig has been deprecated. What command is now recommended for changing IP addresses in the live config?
  ip
+
+What is the job of the NetworkManager daemon?
+It is a command-line tool that manages network connections.
