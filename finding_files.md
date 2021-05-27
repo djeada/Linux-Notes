@@ -6,4 +6,6 @@ locate --regexp '^/usr.*pixmaps.*jpg$'
 
 find and remove all files with bak extension
 
+```bash
 find . -name \*.bak -type f -delete
+```
