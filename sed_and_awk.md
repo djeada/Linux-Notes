@@ -1,1 +1,1 @@
-find . -type f -exec sed -i.bak "s/allConstruct/canConstruct/g" {} \;
+find . -type f -exec sed -i.bak "s/allConstruct/countConstruct/g" {} \;
