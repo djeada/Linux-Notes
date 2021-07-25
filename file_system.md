@@ -1,6 +1,20 @@
-In Linux, files are arranged into directories (analogous to folders in Windows). 
-The root directory is simply referred to as "/."
-Users' files are stored in their home folders, which are located in "/home/." For instance, "/home/adam/."
+<h2>Type of item stored in UNIX filesystem </h2>
+
+1. Ordinary files
+  Text, data, and code information can all be found in ordinary files. 
+  Files and folders can not be contained within other files or directories. 
+  Unlike other operating systems, UNIX filenames do not have a name and an extension .
+
+1. Directories
+  In Linux, files are arranged into directories (analogous to folders in Windows). 
+  The root directory is simply referred to as "/."
+  Users' files are stored in their home folders, which are located in "/home/." For instance, "/home/adam/."
+
+1. Devices
+  To provide applications simple access to hardware devices, UNIX permits them to be utilized in the same manner that regular files are. In UNIX, there are two sorts of devices: block-oriented devices that transport data in blocks (e.g., hard drives) and character-oriented devices that send data byte by byte (e.g. modems and dumb terminals).
+
+1. Links
+  A link is a reference to another file. There are two kinds of links: hard links and soft links. A hard link to a file is indistinguishable from the file itself. A soft link (also known as a symbolic link) is an indirect pointer or shortcut to a file. A soft link is created as a directory file entry with a pathname.
 
 <h2>Special directory names</h2> 
 
@@ -22,3 +36,18 @@ The three most basic forms of access are read, write, and execute.
 You can read the content of a file (e.g., make your own copy) if you have read access. 
 You can remove, edit, or replace files with write access.
 Execute access is necessary to run programs or access the contents of folders.
+
+
+<h2>UNIX Directory Structure</h2>
+| Command | Description |
+| --- | --- |
+| <i>/</i> | home directory |
+| <i>/bin</i> | low-level system utilities |
+| <i>/usr/bin</i> | system utilities for normal users |
+| <i>/sbin</i> | system utilities for superusers |
+| <i>/lib</i> | low-level system utility program libraries |
+| <i>/usr/lib</i> | library programs for higher-level user programs |
+| <i>/tmp</i> | storage for temporary files |
+| <i>/home</i> | Each user's home directory has personal file space. Each directory is named after the user's login. |
+| <i>/etc</i> | system configuration |
+| <i>/dev</i> | info about hardware devices |
