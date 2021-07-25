@@ -39,6 +39,7 @@ Execute access is necessary to run programs or access the contents of folders.
 
 
 <h2>UNIX Directory Structure</h2>
+
 | Command | Description |
 | --- | --- |
 | <i>/</i> | home directory |
