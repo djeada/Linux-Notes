@@ -1,4 +1,4 @@
-<h2>Type of item stored in UNIX filesystem </h2>
+<h2>Types of item stored in UNIX filesystem </h2>
 
 1. Ordinary files
   Text, data, and code information can all be found in ordinary files. 
