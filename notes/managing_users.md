@@ -4,7 +4,7 @@ The superuser is a privileged user with full access to all commands and files on
 !Don't use:
 
 ```bash
-rm –rf \*
+rm –rf /*
 ```
 
 <h2>adding user</h2>
