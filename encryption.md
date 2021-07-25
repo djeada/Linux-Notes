@@ -1,4 +1,4 @@
-Since an encrypted file is usually smaller than a non-encrypted file, it uploads faster.
+Because an encrypted file is typically smaller than a non-encrypted file, it transfers more quickly.
 
 <h1>Make public and private GPG keys.</h1>
 
@@ -29,8 +29,8 @@ gpg2 --list-secret-keys
 ```
 
 <h1>File encryption and decryption</h1>
-You've got a public key from somebody and want to encrypt a file with it so that it can be safely transmitted.
-The extension of the file containing the public key is usually .gpg or.asc.
+You've obtained a public key from someone and want to use it to encrypt a file so that it may be safely sent.
+The public key is generally stored in a file with the extension .gpg or.asc.
 
 1. Import the public key:
 
@@ -51,7 +51,7 @@ gpg2 -e -r user@domain.com example.txt
 ```
 
 4. This will create the example.txt.gpg encrypted file, which is smaller than the initial.
-Send the encrypted file to the recipient and instruct them to decrypt it at their end using the following command:
+Send the encrypted file to the receiver and ask them to decode it using the following command at their end:
 
 ```bash
 gpg2 -o example.txt -d example.txt.gpg
