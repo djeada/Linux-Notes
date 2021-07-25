@@ -33,7 +33,7 @@ You may narrow the list by using wildcards:
 ls /home/mydirectory/*.txt
 ```
 
-| Command | Description |
+| Symbol | Description |
 | --- | --- |
 | <i>~</i> | home directory |
 | <i>.</i> | current directory |
