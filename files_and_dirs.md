@@ -10,12 +10,19 @@ cd with no parameters switches to your home directory
 ls directoryname: lists contents of directories.
 You can limit the list with wildcards
 
-
 ```bash
 ls /home/mydirectory/*.txt
 ```
 
 Use ls -l for more information about the files.
+
+| Command | Description |
+| --- | --- |
+| <i>~</i> | home directory |
+| <i>.</i> | current directory |
+| <i>..</i> | parent directory |
+| <i>*</i> | wildcard matching any filename |
+| <i>?</i> | wildcard matching any character |
 
 <h2>Creating files</h2>
 mkdir directoryname: creates a new directory.
@@ -33,7 +40,7 @@ rm –r directory: removes directory (-ies) including its content
 
 When a user deletes a file using the rm command, Linux will ask for confirmation if configured to do so
 
-<h1>Reading files</h2>
+<h2>Reading files</h2>
 
 cat file: prints the whole file on the screen. 
 
@@ -51,7 +58,7 @@ cat *.txt > new_file.txt
 
 more file: shows a file page by page. 
 
-<h1>Editing</h1>
+<h2>Editing</h2>
 
 | Command | Description |
 | --- | --- |
