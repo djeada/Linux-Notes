@@ -3,7 +3,7 @@
 | --- | --- | --- |
 | read | The file's contents can be seen by the user | The files in the directory can be listed by the user |
 | write | The file's contents can be changed by the user | The user can add new files to the directory and delete old ones |
-| execute | The filename can be used as a UNIX command by the user | The user can go to the directory, but he or she cannot list the files unless they have read permission. If the user has read permission on the files, they can read them. |
+| execute | The filename can be used as a UNIX command by the user | The user can go to the directory, but they cannot list the files unless they have read permission. |
 
 Permissions may be specified symbolically, using the symbols u (user), g (group), o (other), a (all), r (read), w (write), x (execute), + (add permission), - (take away permission) and = (assign permission).
 
