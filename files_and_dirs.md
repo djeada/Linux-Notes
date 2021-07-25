@@ -42,9 +42,11 @@ ls /home/mydirectory/*.txt
 | <i>?</i> | wildcard matching any character |
 
 <h2>Creating files</h2>
+
 * <i>mkdir directoryname</i> : creates a new directory.
 
 <h2>Copying files</h2>
+
 * <i>cp source destination</i> : makes a copy of a file named “source” to “destination”.
 
 * To copy a directory and its content:
@@ -54,9 +56,11 @@ cp –r source destination
 ```
 
 <h2>Moving files</h2>
+
 * <i>mv source destination</i>: moves a file or directory.
 
 <h2>Remove files</h2>
+
 * <i>rm filenamelist</i>: removes/deletes file(s). Be careful with wildcards.
 * To removy a directory and its content:
 
