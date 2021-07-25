@@ -13,7 +13,11 @@ To see the user ID, process ID, parent process ID, CPU usage, and command name o
 ps -e --format uid,pid,ppid,%cpu,cmd 
 ```
 
-* top shows the sorted list of active processes
+<i>top</i> shows the sorted list of active processes:
+
+```bash
+top
+```
 
 <h2>Foreground and background</h2>
 
