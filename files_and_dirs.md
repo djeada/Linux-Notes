@@ -10,11 +10,13 @@ With no arguments, cd changes your location to your home directory.
 
 * <i>ls directoryname</i>: lists contents of directories.
 
-To see all files use:
+To see all files (-a) and display more informations abou them (-l) use:
 
 ```bash
 ls -al
 ```
+
+Following info will be displayed:
 
 - <i>type</i> is a single character that can be 'd' (directory), '-' (normal file), 'l' (symbolic link), 'b' (block-oriented device), or 'c' (character-oriented device).
 - <i>permissions</i> is a set of characters that describe access permissions. There are 9 permission characters that describe three sorts of access granted to three user groups. The three forms of access are read ('r'), write ('w'), and execute ('x'), and the three user categories are the user who owns the file, users in the file's group, and other users (the general public).
@@ -30,8 +32,6 @@ You may narrow the list by using wildcards:
 ```bash
 ls /home/mydirectory/*.txt
 ```
-
-Use ls -l for more information about the files.
 
 | Command | Description |
 | --- | --- |
