@@ -1,5 +1,3 @@
-
-
 What is one major difference between brace expansion and globs?
 Brace expansion creates a list; globs match the list of pathnames.
 
@@ -34,3 +32,31 @@ rm filenamelist: removes/deletes file(s). Be careful with wildcards.
 rm –r directory: removes directory (-ies) including its content 
 
 When a user deletes a file using the rm command, Linux will ask for confirmation if configured to do so
+
+<h1>Reading files</h2>
+
+cat file: prints the whole file on the screen. 
+
+When used in conjunction with redirection, it will concatenate the files file_1 and file_2 into a single file named new_file.
+
+```bash
+cat file_1.txt file_2.txt > new_file.txt
+```
+
+You can also use wildcards:
+
+```bash
+cat *.txt > new_file.txt
+```
+
+more file: shows a file page by page. 
+
+<h1>Editing</h1>
+
+| Command | Description |
+| --- | --- |
+| <i>Enter</i> | to move forward one line |
+| <i>Space</i> | to move forward one page |
+| <i>b</i> | to move one page backward |
+| <i>q</i> | to end |
+| <i>/pattern</i> | to jump to the next occurrence of the text “pattern” |
