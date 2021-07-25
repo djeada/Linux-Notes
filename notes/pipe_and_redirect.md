@@ -19,6 +19,26 @@ date | mail -s "This is a remote test" user1@rhhost1.localnet.com
 ```
 
 <h2> Redirect</h2>
+Program output is often shown on the screen, while program input is typically provided through the keyboard (if no file arguments are given). In technical terms, processes typically write to standard output (the screen) and receive input from standard input (the keyboard). In reality, there is another output channel called standard error where programs can post their error messages.
+
+The > operator is used to redirect standard output to a file rather than the screen:
+
+```bash
+echo "hello" > file.txt
+```
+
+If the file already exists, the contents of the file output will be deleted. Instead, we may use the >> operator to append the command's output to the file:
+
+```bash
+echo "Hello" > file.txt
+echo "World!" >> file.txt
+```
+
+To capture standard error, prefix the > operator with a 2 (under UNIX, file numbers 0, 1, and 2 are assigned to standard input, standard output, and standard error, respectively), for example:
+
+```bash
+less non_existent_file 2> file.txt
+```
 
 <h2>Sort</h2>
 
