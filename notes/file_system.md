@@ -1,20 +1,16 @@
 <h2>Types of item stored in UNIX filesystem </h2>
 
-1. Ordinary files
-  Text, data, and code information can all be found in ordinary files. 
+1. Ordinary files: Text, data, and code information can all be found in ordinary files. 
   Files and folders can not be contained within other files or directories. 
   Unlike other operating systems, UNIX filenames do not have a name and an extension .
 
-1. Directories
-  In Linux, files are arranged into directories (analogous to folders in Windows). 
+1. Directories: In Linux, files are arranged into directories (analogous to folders in Windows). 
   The root directory is simply referred to as "/."
   Users' files are stored in their home folders, which are located in "/home/." For instance, "/home/adam/."
 
-1. Devices
-  To provide applications simple access to hardware devices, UNIX permits them to be utilized in the same manner that regular files are. In UNIX, there are two sorts of devices: block-oriented devices that transport data in blocks (e.g., hard drives) and character-oriented devices that send data byte by byte (e.g. modems and dumb terminals).
+1. Devices: To provide applications simple access to hardware devices, UNIX permits them to be utilized in the same manner that regular files are. In UNIX, there are two sorts of devices: block-oriented devices that transport data in blocks (e.g., hard drives) and character-oriented devices that send data byte by byte (e.g. modems and dumb terminals).
 
-1. Links
-  A link is a reference to another file. There are two kinds of links: hard links and soft links. A hard link to a file is indistinguishable from the file itself. A soft link (also known as a symbolic link) is an indirect pointer or shortcut to a file. A soft link is created as a directory file entry with a pathname.
+1. Links: A link is a reference to another file. There are two kinds of links: hard links and soft links. A hard link to a file is indistinguishable from the file itself. A soft link (also known as a symbolic link) is an indirect pointer or shortcut to a file. A soft link is created as a directory file entry with a pathname.
 
 <h2>Special directory names</h2> 
 
