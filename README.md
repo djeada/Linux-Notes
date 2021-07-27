@@ -1,5 +1,5 @@
 # Linux
-My notes about Linux.
+Notes on Linux.
 
 Bibliography:
 
