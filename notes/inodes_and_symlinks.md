@@ -7,7 +7,7 @@ The inode is a filesystem object that contains details about:
 * timestamps with the last file's access and its modifications.
 
 
-```
+```bash
 ls -i
 ```
 
@@ -17,16 +17,22 @@ ls -i
 <h1>Hardlink</h1>
 The same file can have different name and appear in different places.
 
-```
-ln existing_file hard_link_name
+```bash
+ln existing_file hardlink_name
 ```
 
 <h1>Symlink</h1>
 
 It is a file that points to another file.
 
+```bash
+ln -s existing_file symlink_name
 ```
-ln -s existing_file sym_link_name
+
+Identifying the source file of a symbolic link.
+
+```bash
+readlink -f symlink_name
 ```
 
 <h1>Differences</h1>
