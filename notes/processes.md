@@ -26,7 +26,7 @@ Jobs can either be in the foreground or the background. Thus far, we have run co
 Use the “&” operator, to run programs in the “background”:
 
 ```bash
-chromium &
+sleep 1000 &
 ```
 
 Now you can see which processes are running in the background:
