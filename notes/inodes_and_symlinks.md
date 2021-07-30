@@ -8,7 +8,7 @@ The inode is a filesystem object that contains details about:
 
 
 ```bash
-ls -i
+ls -li
 ```
 
 * first column - inode number
