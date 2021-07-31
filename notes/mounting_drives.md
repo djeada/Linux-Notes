@@ -1,3 +1,0 @@
-First retrive id:
-
-blkid
