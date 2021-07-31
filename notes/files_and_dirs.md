@@ -41,6 +41,13 @@ ls /home/mydirectory/*.txt
 | <i>*</i> | wildcard matching any filename |
 | <i>?</i> | wildcard matching any character |
 
+<h2>List files in a tree-like format</h2>
+The tree command displays a tree-like listing of the contents of a specified directory. If no directory is given, the contents of the current directory are displayed by default.
+
+```bash
+tree /tmp
+```
+
 <h2>Creating files</h2>
 
 * <i>mkdir directoryname</i> : creates a new directory.
