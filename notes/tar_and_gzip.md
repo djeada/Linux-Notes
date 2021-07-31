@@ -24,7 +24,7 @@ tar -xvf myfiles.tar
 
 <h2>gzip</h2>
 
-Compress with gzip:
+To compress a file with gzip, use:
 
 ```bash
 gzip mytar.tar
