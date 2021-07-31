@@ -1,4 +1,4 @@
-<h2>Types of item stored in UNIX filesystem </h2>
+<h2>Types of items stored in UNIX filesystem </h2>
 
 1. Ordinary files: Text, data, and code information can all be found in ordinary files. 
   Files and folders can not be contained within other files or directories. 
@@ -48,3 +48,33 @@ Execute access is necessary to run programs or access the contents of folders.
 | <i>/home</i> | Each user's home directory has personal file space. Each directory is named after the user's login. |
 | <i>/etc</i> | system configuration |
 | <i>/dev</i> | info about hardware devices |
+
+<h2>Second Extended File System (ext2)</h2>
+
+* Maximum file size: 2 TB
+* Maximum volume size: 4 TB
+* File name size: 255 characters
+* Supports: POSIX permissions and compression
+* If a system shuts down unexpectedly, it takes an EXTREMELY LONG TIME to recover.
+
+<h2>Second Extended File System (ext3)</h2>
+
+* Does everything ext2 does (you can upgrade 2 to 3).
+* It comes with a journal (before making a transaction it will describe it in the journal and mark it as incomplete). It is a lifesaver.
+* Security over slightly slower I/O actions.
+
+<h2>Reiser File System </h2>
+
+* Uses journaling.
+* Maximum file size: 8 TB
+* Maximum volume size: 16 TB
+* Faster than ext2 and ext3.
+
+<h2>Fourth Extended File System (ext4)</h2>
+
+* Maximum file size: 16 TB
+* Maximum volume size: 1 exabyte
+* Maximum number of files: 4 billion
+* Maximum file name length: 255 characters
+* Uses a journal.
+
