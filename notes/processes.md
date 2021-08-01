@@ -56,10 +56,13 @@ kill -9 54356
 ```
 
 Available signals:
-* SIGHUP (1)
-* SIGINT (2)
-* SIGKILL (9)
-* SIGTERM (15)
+
+| Signal | Value |  Description |
+| --- | --- | --- |
+| SIGHUP | (1) | Hangup |
+| SIGINT | (2) | Interrupt from keyboard |
+| SIGKILL | (9) | Kill signal |
+| SIGTERM |  (15) | Termination signal |
 
 Properly killing processes:
 1. Send a SIGINT.
@@ -74,5 +77,3 @@ Both pkill and killall offer distinct choices. Killall provides an option to mat
 pkill -SIGTERM -f chromium
 killall -15 chromium
 ```
-
-
