@@ -56,6 +56,9 @@ tree /tmp
 
 * <i>cp source destination</i> : makes a copy of a file named “source” to “destination”.
 
+```bash
+cp /path/to/source/foo.txt /path/to/target/folder/
+```
 * To copy a directory and its content:
 
 ```bash
