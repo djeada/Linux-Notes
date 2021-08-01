@@ -1,3 +1,4 @@
+<h2>Permissions</h2>
 
 | Command | Description | Description |
 | --- | --- | --- |
@@ -23,6 +24,29 @@ chmod u+x file
 | r-x | 5 |
 | rw- | 6 |
 | rwx | 7 |
+
+<h2>Default permissions</h2>
+
+* Files: rw-rw-rw- (666)
+* Directories: rwxrwxrwx (777)
+
+Use umask to change the default permissions. With no options specified umask, displays which current default permissions are removed (masked).
+Three numbers, for user, group and others.
+
+```bash
+umask
+```
+
+For example, let's say we want to:
+
+1. prevent the file's owner (user) from being granted the execute permission while leaving the rest of the owner permissions untouched;
+2. allow the group to read while restricting the group from writing or executing;
+3. allow write permission for others while not changing the other permissions.
+then, we would use:
+
+```bash
+umask u-x,g=r,o+w
+```
 
 <h2>ACls</h2>
 ACLs (access control lists) in Linux are discretionary access control system permissions that are built on top of regular Linux permissions.
