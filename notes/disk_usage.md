@@ -15,3 +15,9 @@ The <i>lsof</i> command stands for List Of Open Files and provides information t
 ```bash
 sudo lsof | less
 ```
+
+To check which process running on port 8080, use:
+
+```bash
+lsof -i :8080
+```
