@@ -29,9 +29,8 @@ You create a cron tab file in /etc/cron.d
 
 You have 5 fields: minutes, hour, day of the month, month, day of the week.
 
-Hours: 24 hour clock.
-Days of the week: number with minus, e.g. 1-5.
-
+* Hours: 24 hour clock.
+* Days of the week: number with minus, e.g. 1-5.
 
 When creating a cron config in /etc/cron.d/ or /etc/crontab, you must provide the username under whom the command should be performed:
 
