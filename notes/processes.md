@@ -1,7 +1,7 @@
 <h2>Processes</h2>
 We create "processes" when we interact with Linux. A process is just a numbered instance of a running program. The <i>ps</i> command displays a list of all processes.
 
-To long listing of all processes on the system, use:
+Many processes can run concurrently on modern systems. The OS quickly swithces between various processes running on the CPU. Multicore CPU's can acutually execute many processes at the same time. Each core quickly switches between various processes. To long listing of all processes on the system, use:
 
 ```bash
 ps -ef 
@@ -54,3 +54,25 @@ Use a -9 option to cause a process to end suddenly (and with a greater likelihoo
 ```bash
 kill -9 54356
 ```
+
+Available signals:
+* SIGHUP (1)
+* SIGINT (2)
+* SIGKILL (9)
+* SIGTERM (15)
+
+Properly killing processes:
+1. Send a SIGINT.
+2. Send a SIGTERM.
+3. Send a SIGKILL.
+
+<h2>pkill vs killall</h2>
+
+Both pkill and killall offer distinct choices. Killall provides an option to match processes based on their age, whereas pkill contains a flag to exclusively kill processes on a certain tty. Neither is superior; they simply specialize in different areas.
+
+```bash
+pkill -SIGTERM -f chromium
+killall -15 chromium
+```
+
+
