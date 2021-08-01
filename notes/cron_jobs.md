@@ -23,7 +23,7 @@ Put your script in the correct directory.
 * /etc/cron.weekly <- those scripts run once per week
 * /etc/cron.monthly <- those scripts run once per month
 
-<h2>What if your schedule is different?</h2>
+<h2>What if your desired schedule is different?</h2>
 
 You create a cron tab file in /etc/cron.d
 
