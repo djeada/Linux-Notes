@@ -1,4 +1,4 @@
-<h2>Types of items stored in UNIX filesystem </h2>
+<h1>Types of items stored in UNIX filesystem </h1>
 
 1. Ordinary files: Text, data, and code information can all be found in ordinary files. 
   Files and folders can not be contained within other files or directories. 
@@ -34,7 +34,7 @@ You can remove, edit, or replace files with write access.
 Execute access is necessary to run programs or access the contents of folders.
 
 
-<h2>UNIX Directory Structure</h2>
+<h1>UNIX Directory Structure</h1>
 
 | Command | Description |
 | --- | --- |
@@ -48,6 +48,8 @@ Execute access is necessary to run programs or access the contents of folders.
 | <i>/home</i> | Each user's home directory has personal file space. Each directory is named after the user's login. |
 | <i>/etc</i> | system configuration |
 | <i>/dev</i> | info about hardware devices |
+
+<h1>File system types</h1>
 
 <h2>Second Extended File System (ext2)</h2>
 
@@ -78,3 +80,21 @@ Execute access is necessary to run programs or access the contents of folders.
 * Maximum file name length: 255 characters
 * Uses a journal.
 
+<h1>Creating a File System</h1>
+Assume we have a disk with defined partitions but no data stored on it.
+
+To check the disk info and partitions, use:
+
+```bash
+fdisk -l /dev/sdb 
+```
+
+Assume the following partition exists on /dev/sdb: /dev/sdb1, /dev/sdb2, /dev/sdb3.
+
+To create ext4 file system on each of them, use:
+
+```bash
+mkfs -t ext4 /dev/sdb1
+mkfs -t ext4 /dev/sdb2
+mkfs -t ext4 /dev/sdb3
+```
