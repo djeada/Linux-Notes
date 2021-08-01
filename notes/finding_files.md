@@ -33,7 +33,7 @@ locate --regexp '^/usr.*pixmaps.*jpg$'
 One drawback of <i>locate</i> is that it saves all filenames on the system in an index, which is often only updated once per day. This indicates that locate will not detect files that were generated lately.
 
 <h2>Which</h2>
-You may use <i>which</i> to find out where an application program or system utility is located on disk if you can execute it by typing its name at the shell prompt.
+If you can launch an application program or system utility by typing its name at the shell prompt, you can use <i>which</i> to find out where it is on disk.
 
 ```bash
 which python
