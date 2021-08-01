@@ -20,10 +20,16 @@ ifconfig eth0
 <h2>ip</h2>
 
  ifconfig has been deprecated. What command is now recommended for changing IP addresses in the live config?
- ip
+
+```bash
+ip
+```
  
  When using iproute2, how do you show routing information for an IPv6 network?
- ip -6 route show
+ 
+ ```bash
+ip -6 route show
+```
 
 <h2>ping</h2>
 
