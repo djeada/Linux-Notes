@@ -53,3 +53,23 @@ Change the primary group of adam to new_group:
 ```bash
 usermod -g new_group adam 
 ```
+
+<h2>User ID</h2>
+
+Each user has a distinct user id (uid). To check a user's id, use:
+
+```bash
+id user_name
+```
+
+To change UID of user <i>adam</i> to 1100, use:
+
+```bash
+usermod -u 1100 adam
+```
+
+To change GID of a group called <i>new_group</i> to 2500, use:
+
+```bash
+groupmod -g 2500 new_group
+```
