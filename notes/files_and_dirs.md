@@ -10,7 +10,18 @@ With no arguments, cd changes your location to your home directory.
 
 * <i>ls directoryname</i>: lists contents of directories.
 
-To see all files (-a) and display more informations abou them (-l) use:
+Available flags:
+
+| Flag | Description |
+| --- | --- |
+| <i>-l</i> | newlines and all info |
+| <i>-a</i> | show hidden files |
+| <i>-t</i> | sort modification date |
+| <i>-r</i> | reverse order |
+| <i>-R</i> |  list subdirectories recursively |
+| <i>-i</i> | show inodes |
+
+Use the following command to view all files (-a) and display extra information about them (-l):
 
 ```bash
 ls -al
@@ -64,6 +75,9 @@ cp /path/to/source/foo.txt /path/to/target/folder/
 ```bash
 cp –r source destination
 ```
+
+Use the -a flag to copy permissions as well.
+Use the -A option to copy all files (hidden and normal).
 
 <h2>Moving files</h2>
 
