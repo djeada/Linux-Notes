@@ -6,7 +6,7 @@ If you know where the file may reside in the directory tree, you can use <i>find
 
 Flags:
 
-* <i>-type f/d/l</i> look for files, dirs, symlinks. 
+* <i>-type f/d/l</i> look for files, dirs or symlinks. 
 * <i>-user user_name</i> owner is user_name.
 
 Find all files larger than 10 MB and long list them using the ls command:
