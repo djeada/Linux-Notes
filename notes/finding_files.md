@@ -36,7 +36,7 @@ Find all file paths that start with "/usr", include the word "pixmaps", and end 
 locate --regexp '^/usr.*pixmaps.*jpg$'
 ```
 
-One drawback of <i>locate</i> is that it saves all filenames on the system in an index, which is often only updated once per day (/etc/cron.daily/mlocate). This indicates that locate will not detect files that were generated lately.
+One drawback of <i>locate</i> is that it saves all filenames on the system in an index, which is often only updated once per day (/etc/cron.daily/mlocate). This indicates that locate will not detect newly created files.
 
 The database is normally stored at /var/lib/mlocate/mlocate.db.
 
