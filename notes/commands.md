@@ -28,7 +28,7 @@ The <i>man</i> command displays the documentation for every command we execute o
 | <i>5</i> | file formats and conventions |
 | <i>8</i> | system administration commands |
 
-Use man -f command name to display a short description of a command, for example:
+Use 'man -f command_name' to display a short description of a command, for example:
 
 ```bash
 man git
