@@ -3,6 +3,7 @@ Notes on Linux.
 
 <h1>Available notes</h1>
 
+* <a href="https://github.com/djeada/Linux/blob/main/notes/commands.md">commands</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/files_and_dirs.md">files and dirs</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/file_system.md">file system</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/permissions.md">permissions</a>
