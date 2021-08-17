@@ -47,7 +47,7 @@ updatedb
 ```
 
 <h2>Which</h2>
-If you can launch an application program or system utility by typing its name at the shell prompt, you can use <i>which</i> to find out where it is on disk.
+If you can launch an application program or system utility by typing its name at the shell prompt, you can use <i>which</i> to find out where it is stored on the disk.
 
 ```bash
 which python
