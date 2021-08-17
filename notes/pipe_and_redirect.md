@@ -48,6 +48,16 @@ less non_existent_file 2> file.txt
 sort file_1.txt file_2.txt > file_name.txt
 ```
 
+* <i>-n</i> numeric sorting
+* <i>-r</i> reverse order
+* <i>-t</i> sorting using a template, usually joined with <i>-kX</i> where X is the column number.
+
+Sort using the third column, with columns separated by ':' sign:
+
+ ```bash
+sort -k3 -t : /etc/passwd
+```
+
 <h2>Tee</h2>
 The <i>tee</i> command reads standard input and writes it to standard output as well as one or more files.
 
