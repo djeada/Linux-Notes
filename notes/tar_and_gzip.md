@@ -10,6 +10,8 @@ By default, tar does not do any compression.
 | <i>-f</i> | pack into file |
 | <i>-x</i> | extract |
 
+Important: -f flag should be put before the file name.
+
 To pack mytree file1 file2 into an archive called myfiles.tar, use:
 
 ```bash
