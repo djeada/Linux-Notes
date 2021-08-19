@@ -63,7 +63,7 @@ setfacl -m g:group_name:rw /opt/test
 ```
 
 * to have all new files in the directory inherit the ACLs, use the <i>-m</i> flag with the <i>d</i> option:
-* 
+
 ```bash
 setfacl -m d:g:group_name:rw /opt/test
 ```
