@@ -43,6 +43,28 @@ passwd adam
 * <i>passwd -l</i>  blocks user from chaning their password (-u flags unlocks). Why doesn't it keep a user from logging in via other methods?
 - It locks only the password, not the account, so users can still authenticate with keys or other methods.
  
+Columns of /etc/passwd:
+
+* username
+* password
+* UID
+* GID
+* comment (GECOS filed)
+* home dir path
+* shell (e.g. /bin/bash)
+
+Columns of /etc/shadow
+
+* username
+* encrypted password
+* number of days since last password change
+* number of days before password can be changed again (e.g. 0)
+* number of days before password must be changed
+* warning period
+* inactivity period
+* expiration date
+* unused
+ 
 <h2>bashrc</h2>
 
 The <i>\~/.bash_profile</i> file would only be utilized once, at login. Every time a shell is started, the  <i>\~/.bashrc</i> script is read. This is similar to  <i>\~/.cshrc</i>  in C Shell.
@@ -76,6 +98,13 @@ Change the primary group of adam to new_group:
 ```bash
 usermod -g new_group adam 
 ```
+
+Columns of /etc/group
+
+* group name
+* password
+* group id
+* members
 
 <h2>User ID</h2>
 
