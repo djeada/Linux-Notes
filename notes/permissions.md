@@ -62,8 +62,8 @@ Set (replaces), modify, or remove the access control list using the <i>setfacl</
 setfacl -m g:group_name:rw /opt/test
 ```
 
-* use <i>-m</i> flag with <i>d</i> option to make all new files in the dir inherit the ACLs:
-
+* to have all new files in the directory inherit the ACLs, use the <i>-m</i> flag with the <i>d</i> option:
+* 
 ```bash
 setfacl -m d:g:group_name:rw /opt/test
 ```
