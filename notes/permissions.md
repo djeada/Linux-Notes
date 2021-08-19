@@ -50,3 +50,44 @@ umask u-x,g=r,o+w
 
 <h2>ACls</h2>
 ACLs (access control lists) in Linux are discretionary access control system permissions that are built on top of regular Linux permissions.
+
+* not all tools support ACLs
+* a modern mke2fs now sets acl in default mount options automatically at filesystem creation time, at least in "enterprise" Linux distributions
+
+Set (replaces), modify, or remove the access control list using the <i>setfacl</i> command (ACL). It also updates and deletes ACL entries for each path-specified file and directory. If no path is given, the names of files and directories are taken from standard input (stdin). In this scenario, each line of input should have one path name.
+
+* use <i>-m</i> flag to modify the ACLs:
+
+```bash
+setfacl -m g:group_name:rw /opt/test
+```
+
+* use <i>-m</i> flag with <i>d</i> option to make all new files in the dir inherit the ACLs:
+
+```bash
+setfacl -m d:g:group_name:rw /opt/test
+```
+
+* use <i>-X</i> lag to remove a user or group:
+
+```bash
+setfacl -X g:group_name /opt/test
+```
+
+* use <i>-b</i> flag to remove everything: 
+
+```bash
+setfacl -b /opt/test
+```
+
+* use <i>-k</i> flag to go back to default ACL's: 
+
+```bash
+setfacl -k /opt/test
+```
+
+* ACLs from one file/dir can be reused in another one:
+
+```bash
+getfacl /opt/test | setfacl --set-file= /opt/test2
+```
