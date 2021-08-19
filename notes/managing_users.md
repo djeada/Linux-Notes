@@ -1,10 +1,23 @@
 <h2>superuser</h2>
-The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. Typically, the superuser's login is root. A password is required to access the root account (the root password). Because the root account has the greatest potential for damage, the root password should be carefully crafted and only supplied to those who require it.
+The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account (the root password). Because the root account has the greatest potential for damage, the root password should be carefully crafted and only supplied to those who require it.
 
-!Don't use:
+!Keep in mind that the following command should not be used:
 
 ```bash
 rm –rf /*
+```
+
+<h2>changing users</h2>
+<i>su</i> without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
+
+```bash
+su adam
+```
+
+The -c option enables you to run a command as another user account and redirect the output to your terminal:
+
+```bash
+su adam -c whoami
 ```
 
 <h2>adding user</h2>
@@ -15,6 +28,11 @@ rm –rf /*
 useradd adam
 ```
 
+Flags:
+* <i>-m</i> create home dir. The template is located at /etc/skel.
+* <i>-u</i> specify UID (it has to be free).
+* <i>-G</i> add the user to the following groups.
+
 <h2>passwd</h2>
 Use the <i>passwd</i> command to set or modify a user's password:
 
@@ -22,10 +40,7 @@ Use the <i>passwd</i> command to set or modify a user's password:
 passwd adam
 ```
 
-* Why is the passwd command able to modify the /etc/passwd file?
-- It has the SUID permission mode and is owned by root.
-
-* Why doesn't passwd -l keep a user from logging in via other methods?
+* <i>passwd -l</i>  blocks user from chaning their password (-u flags unlocks). Why doesn't it keep a user from logging in via other methods?
 - It locks only the password, not the account, so users can still authenticate with keys or other methods.
  
 <h2>bashrc</h2>
@@ -35,6 +50,8 @@ The <i>\~/.bash_profile</i> file would only be utilized once, at login. Every ti
 The script is designed to be lightweight, with just the most important commands being run.
 
 <h2>Groups</h2>
+
+All new users in RHEL/CENTOS are automatically added to the wheel group.
 
 <i>groupadd</i> creates a new group and saves its details to /etc/group:
 
