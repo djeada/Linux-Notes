@@ -19,16 +19,34 @@ ifconfig eth0
 
 <h2>ip</h2>
 
- ifconfig has been deprecated. What command is now recommended for changing IP addresses in the live config?
+ifconfig has been deprecated. What command is now recommended for changing IP addresses in the live config?
 
 ```bash
 ip
 ```
  
- When using iproute2, how do you show routing information for an IPv6 network?
+When using iproute2, how do you show routing information for an IPv6 network?
  
- ```bash
+```bash
 ip -6 route show
+```
+
+Use the following command to display network interfaces:
+
+ ```bash
+ip addr show
+```
+
+Use the following command to display  interfaces installed on your computer (more concise):
+
+ ```bash
+ip link show
+```
+
+Use the following command to display network interfaces and info about sent packets:
+
+ ```bash
+ip -s link
 ```
 
 <h2>ping</h2>
@@ -46,9 +64,44 @@ The command above is used to examine the network route information and show the 
 route
 ```
 
-<h2>NetworkManager daemon</h2>
+<h2>Network Manager daemon</h2>
 
-It is a command-line tool that manages network connections.
+It is a command-line tool that manages network connections. To check if it running use:
+
+```bash
+nmcli -t -f RUNNING general
+```
+
+It is a daemon configured with scripts (all having ifcfg prefix) located at /etc/sysconfig/network-scripts.
+
+If you have modified one of those files, you must run the following command to reload the settings:
+
+```bash
+nmcli con reload
+```
+
+<h2>nmcli continued</h2>
+
+Use the following command to display all the available connections:
+
+```bash
+nmcli con show
+```
+
+To list all the available devices, use:
+
+```bash
+nmcli dev status
+```
+
+Use nmcli to configure the eth2 interface statically, using the IPv4 address and network prefix 10.10.10.4/24 and default gateway 10.10.10.1, but still make it auto connect at startup and save its configuration into /etc/sysconfig/network-scripts/ifcfg-eth2 file:
+
+```bash
+nmcli con add con-name eth2 type ethernet ifname eth2 ipv4.method manual ipv4.address 10.10.10.4/24 ipv4.gateway 10.10.10.1
+```
+
+To create a new ethernet connection and assign DHCP IP Address, use ipv4.mehod auto.
+
 
 <h2>Packet analysis</h2>
 
