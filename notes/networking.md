@@ -102,6 +102,38 @@ nmcli con add con-name eth2 type ethernet ifname eth2 ipv4.method manual ipv4.ad
 
 To create a new ethernet connection and assign DHCP IP Address, use ipv4.mehod auto.
 
+<h2>nmtu</h2>
+<i>nmtui</i> is a file based version of <i>nmcli</i>. Use it to:
+
+* modify the connections
+* change the hostname
+* activate a connection
+
+After you've made the necessary modifications, use the following command to re-establish the connections:
+
+```bash
+systemctl restart network
+```
+
+<h2>DNS</h2>
+
+DNS settings (/etc/resolv.conf):
+
+* use nmtui to set the DNS name servers
+* set the DNS1 to DNS2 in the ifcf network connection configuration file in /etc/sysconfig/network-scripts
+* To change an existing connection, use the following command:
+
+```bash
+nmcli con mod enps03 ipv4.dns "8.8.8.8 8.8.4.4"
+nmcli con mod enps03 ipv4.ignore-auto-dns yes
+nmcli con down enps03
+nmcli con up enps03
+```
+
+The command 'nmcli con' can be used to find the name of a connection (for example, enps03).
+
+View the /etc/resolv.conf file to confirm the modifications. You should not manually change /etc/resolv.conf since it is created by the Network Manager daemon and is likely to be overwritten at any moment.
+
 
 <h2>Packet analysis</h2>
 
