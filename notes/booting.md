@@ -54,3 +54,30 @@ You may change the system hostname on a systemd-based operating system by manual
 
 <h2>Uptime</h2>
 uptime
+
+<h2>Reboot</h2>
+Reboot system with systemctl:
+
+```bash
+systemctl reboot
+```
+
+<h2>Shutdown</h2>
+
+To power off inmmediately, use the <i>shutdown</i> command:
+
+```bash
+shutdown now
+```
+
+To restart in 5 minutes, use the <i>shutdown</i> command:
+
+```bash
+shutdown -r +5
+```
+
+To power off with systemctl, use:
+
+```bash
+systemctl poweroff
+```
