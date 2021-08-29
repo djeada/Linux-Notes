@@ -84,7 +84,7 @@ systemctl poweroff
 
 <h2>Recover root password</h2>
 
-1. reboot machine
+1. reboot the machine
 1. interrupt grub process typing any key
 1. press 'e' to edit the kernel that you want to init
 1. locate 'linux16' line and add at the end of the line 'rd.break' and press Ctrl-x
