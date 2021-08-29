@@ -81,3 +81,16 @@ To power off with systemctl, use:
 ```bash
 systemctl poweroff
 ```
+
+<h2>Recover root password</h2>
+
+1. reboot machine
+1. interrupt grub process typing any key
+1. press 'e' to edit the kernel that you want to init
+1. locate 'linux16' line and add at the end of the line 'rd.break' and press Ctrl-x
+1. the sysroot is mounted as read only filesystem, remount with rw filesystem
+1. mount -o remount,rw /sysroot
+1. chroot /sysroot
+1. use passwd command to change the password
+1. touch /.autorelabel
+1. exit
