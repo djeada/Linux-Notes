@@ -51,7 +51,7 @@ grep -nE "[[:alpha:]]{8,12}" file_name
 | <i>^</i> | Match the start of the string. |
 | <i>$</i> | Match the end of the string. |
 | <i>*</i> | Match any number of times of the character of the string. |
-| <i>/\</i> | Escape following character. |
+| <i>\\</i> | Escape following character. |
 | <i>()</i> | Match for a set of regular expressions. |
 | <i>?</i> | Match exactly one character in the string. |
 
