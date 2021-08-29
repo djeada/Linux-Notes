@@ -1,5 +1,7 @@
 <h1>journald for systemd based systems</h1>
 
+<i>journald</i> is in charge of event logging. It records events from log files, kernel messages, etc.
+
 Display man pages about <i>journald</i>:
 
 ```bash
