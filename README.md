@@ -11,6 +11,7 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/booting.md">booting</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/inodes_and_symlinks.md">inodes and symlinks</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/enviroment_variable.md">enviroment variables</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/enviroment_modules.md">enviroment modules</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/disk_usage.md">disk usage</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/mounting.md">mounting</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/logical_volume_management.md">logical volume management</a>
@@ -23,11 +24,14 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/managing_users.md">managing users</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/processes.md">processes</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/cron_jobs.md">cron jobs</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/services.md">services</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/networking.md">networking</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ports.md">ports</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ssh_and_scp.md">ssh and scp</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/packet_managers.md">packet managers</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/performance_monitoring.md">performance monitoring</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/log_files_and_journals.md">log files and journals</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/ldap.md">ldap</a>
 
 
 <h1>Bibliography</h1>
