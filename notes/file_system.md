@@ -38,16 +38,19 @@ Execute access is necessary to run programs or access the contents of folders.
 
 | Command | Description |
 | --- | --- |
-| <i>/</i> | home directory |
+| <i>/</i> | root directory |
 | <i>/bin</i> | low-level system utilities |
 | <i>/usr/bin</i> | system utilities for normal users |
 | <i>/sbin</i> | system utilities for superusers |
 | <i>/lib</i> | low-level system utility program libraries |
 | <i>/usr/lib</i> | library programs for higher-level user programs |
-| <i>/tmp</i> | storage for temporary files |
+| <i>/tmp</i> | storage for temporary files (removed after 10 days) |
 | <i>/home</i> | Each user's home directory has personal file space. Each directory is named after the user's login. |
-| <i>/etc</i> | system configuration |
+| <i>/etc</i> |  configuration files for programs and packages |
 | <i>/dev</i> | info about hardware devices |
+| <i>/var</i> | variable data specfic to the system |
+| <i>/root</i> | root user home directory |
+| <i>/boot</i> | files needed for the boot process |
 
 <h1>File system types</h1>
 
