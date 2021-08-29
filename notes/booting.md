@@ -62,18 +62,18 @@ Reboot system with systemctl:
 systemctl reboot
 ```
 
+To restart in 5 minutes, use the <i>shutdown</i> command:
+
+```bash
+shutdown -r +5
+```
+
 <h2>Shutdown</h2>
 
 To power off inmmediately, use the <i>shutdown</i> command:
 
 ```bash
 shutdown now
-```
-
-To restart in 5 minutes, use the <i>shutdown</i> command:
-
-```bash
-shutdown -r +5
 ```
 
 To power off with systemctl, use:
