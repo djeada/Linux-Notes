@@ -25,9 +25,21 @@ tar -xvf myfiles.tar
 ```
 
 <h2>gzip</h2>
+It is a file compression tool that is used to reduce file size.
 
-To compress a file with gzip, use:
+| Flag | Description |
+| --- | --- |
+| <i>-d</i> | decompress files |
+| <i>-l</i> | list compression information |
+
+To compress a mytar.tar to  mytar.tar.gz, use:
 
 ```bash
 gzip mytar.tar
+```
+
+To unpack file_name.gz, use:
+
+```bash
+gzip -d file_name.gz
 ```
