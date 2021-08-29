@@ -24,9 +24,15 @@ The <i>man</i> command displays the documentation for every command we execute o
 
 | Number | Description |
 | --- | --- |
-| <i>1</i> | executable programs or shell commands |
-| <i>5</i> | file formats and conventions |
-| <i>8</i> | system administration commands |
+| <i><b>1</b></i> | executable programs or shell commands |
+| <i>2</i> | system calls |
+| <i>3</i> | library calls |
+| <i>4</i> | special files |
+| <i><b>5</b></i> | file formats and conventions |
+| <i>6</i> | games |
+| <i>7</i> | misc |
+| <i><b>8</b></i> | system administration (root) commands |
+| <i>9</i> | kernel routines |
 
 Use 'man -f command_name' to display a short description of a command, for example:
 
