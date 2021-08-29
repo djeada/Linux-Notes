@@ -1,4 +1,4 @@
-<h1>Install and Update Software Packages from YUM repo</h1>
+<h1>Install and update software packages from YUM repo</h1>
 
 To check for update, use:
 
@@ -53,7 +53,7 @@ To clean cache, use:
 yum clean all
 ```
 
-<h1>Install and Update Software Packages from RPM repo</h1>
+<h1>Install and update software packages from RPM repo</h1>
 
 
 To download a rpm package, use:
