@@ -106,7 +106,7 @@ Columns of /etc/group
 * group id
 * members
 
-<h2>User ID</h2>
+<h2>User ID and group ID</h2>
 
 Each user has a distinct user id (uid). To check a user's id, use:
 
