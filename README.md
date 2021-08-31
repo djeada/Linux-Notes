@@ -41,3 +41,4 @@ Notes on Linux.
 * James Turnbull, Peter Lieverdink, Dennis Matotek "<i>Pro Linux System Administration</i>"
 * https://www.cs.columbia.edu/~smb/classes/s06-4118/lectures.html
 * http://www.doc.ic.ac.uk/~wjk/UnixIntro
+* https://manjusri.ucsc.edu/2017/09/08/environment-modules/
