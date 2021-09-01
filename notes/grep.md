@@ -23,26 +23,6 @@ Match two patterns, pattern1 and pattern2 in a file named file_name:
 grep -e 'pattern1' -e 'pattern2' file_name
 ```
 
-<h2>Quantifiers</h2>
-
-Quantifiers enable you to define the amount of instances of elements required for a match to occur.
-
-| Flag | Description |
-| --- | --- |
-| <i>*</i> | Match the preceding item zero or more times. |
-| <i>?</i> | Match the preceding item zero or one time. |
-| <i>+</i> | Match the preceding item one or more times. |
-| <i>{n}</i> | Match the preceding item exactly n times. |
-| <i>{n,}</i> | Match the preceding item at least n times. |
-| <i>{,m}</i> | Match the preceding item at most m times. |
-| <i>{n,m}</i> | Match the preceding item from n to m times. |
-
-The regex will match any word of 8-12 characters in length:
-
-```bash
-grep -nE "[[:alpha:]]{8,12}" file_name
-```
-
 <h2>Regex</h2>
 
 | Symbol | Description |
@@ -72,3 +52,25 @@ Display all the lines that contain 'abc' or 'abz' from the file /opt/test.txt us
 ```bash
 grep ab[cz] /opt/test.txt
 ```
+
+
+<h2>Quantifiers</h2>
+
+Quantifiers enable you to define the amount of instances of elements required for a match to occur.
+
+| Flag | Description |
+| --- | --- |
+| <i>*</i> | Match the preceding character zero or more times. |
+| <i>?</i> | Match the preceding character zero or one time. |
+| <i>+</i> | Match the preceding character one or more times. |
+| <i>{n}</i> | Match the preceding character exactly n times. |
+| <i>{n,}</i> | Match the preceding character at least n times. |
+| <i>{,m}</i> | Match the preceding character at most m times. |
+| <i>{n,m}</i> | Match the preceding character from n to m times. |
+
+The regex will match any word of 8-12 characters in length:
+
+```bash
+grep -nE "[[:alpha:]]{8,12}" file_name
+```
+
