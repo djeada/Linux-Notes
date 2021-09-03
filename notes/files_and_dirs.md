@@ -104,7 +104,7 @@ When used in conjunction with redirection, it will concatenate the files file_1 
 cat file_1.txt file_2.txt > new_file.txt
 ```
 
-You can also use wildcards:
+You can also use the wildcards:
 
 ```bash
 cat *.txt > new_file.txt
@@ -121,5 +121,25 @@ cat *.txt > new_file.txt
 | <i>/pattern</i> | to jump to the next occurrence of the text “pattern” |
 
 <h2>Expansion ang globs</h2>
-What is one major difference between brace expansion and globs?
-Brace expansion creates a list; globs match the list of pathnames.
+Brace expansion and globs are two comparable approaches for representing files with names that follow a pattern.
+However, there is a distinction between the two techniques.
+In a nutshell, brace expansion generates a list of strings that match a pattern, and globs correspond to the list of pathnames.
+
+To make matters even more confusing, globs use the same wildcards as regex, but their meaning is significantly different. 
+
+| Wildcard | Globs | Regex |
+| --- | --- | --- |
+| <i>*</i> | zero or more characters | zero or more instances of the preceding character |
+| <i>?</i> | a single instance of a character | zero or one instance of the preceding character |
+| <i>.</i> | dot as a literal character  | any single character |
+
+Globbing is used by the command shell to complete filenames. If you write ls \*.txt, you'll obtain a list of all the files in the current directory that end in.txt. If you type ls a*.csv, you'll get a list of all the files that begin with the letter a and end in.csv. The asterisk (\*) is a wildcard that allows you to rapidly filter which files you're looking for.
+
+If you only want to define one character, you can use a question mark in globbing. So, if you type ls abc??.txt, you'll get abcde.txt but not abcd.txt.
+
+As a result of brace expansion, any string can be generated. However, unlike filename expansion, the generated filenames do not have to exist in order for this mechanism to work properly. It is possible for patterns to be brace-expanded to include a preamble and optional postscript. To each string enclosed in braces, the preamble is appended, and to each resultant string, the postscript is appended, expanding from left to right. 
+
+```bash
+echo a{b,c}d
+#abd acd
+```
