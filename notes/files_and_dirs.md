@@ -120,7 +120,7 @@ cat *.txt > new_file.txt
 | <i>q</i> | to end |
 | <i>/pattern</i> | to jump to the next occurrence of the text “pattern” |
 
-<h2>Expansion ang globs</h2>
+<h2>Expansion and globs</h2>
 Brace expansion and globs are two comparable approaches for representing files with names that follow a pattern.
 However, there is a distinction between the two techniques.
 In a nutshell, brace expansion generates a list of strings that match a pattern, and globs correspond to the list of pathnames.
