@@ -20,7 +20,9 @@ cat /etc/mtab
 
 To mount a file system, use the following syntax:
 
+```bash
 mount -t file_system_type source_location target_location
+```
 
 The file system type must be the same as what is specified in source location.
 
