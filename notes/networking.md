@@ -1,3 +1,9 @@
+<h1>Network Interfaces </h1>
+
+* Loopback: The IP address of the loopback (lo) interface will be 127.0.0.1, which represents the host itself. Let's say you are hosting a website on your Linux machine. In your web browser, navigate to http://127.0.0.1 to access your website. That adress works only localy. You can't access it from other network.
+
+* Ethernet: The ethernet 0 (eth0) interface is commonly used to connect to a local network. Even if you run Linux in a virtual machine (VM), you will still have an eth0 interface that links to the host's actual network interface. Most often, you should verify that eth0 is turned on and has an IP address so that you may connect with the local network and the Internet.
+ 
 <h2>ifconfig</h2>
 
 Informations provided by ifconfig:
