@@ -1,3 +1,12 @@
+<h1>log files</h1>
+Log files are essential for successful administration of any sort of Linux system, since they include information on the system's health, such as any system or application problems. In spite of the fact that programs can place their log files wherever they like, the majority of Linux system log files are located in /var/log.
+
+If you list files located at /var/log, you'll see that there are a lot of Linux system log files:
+
+* syslog: You'll find messages relating to your kernel, apps, and more in  centralized logging system (syslog). It is used also as the consolidated log file for all Linux computers in a data center.
+* auth.log: contains authentication failures and successes
+* messages: contains general system messages of all types
+
 <h1>journald for systemd based systems</h1>
 
 <i>journald</i> is in charge of event logging. It records events from log files, kernel messages, etc.
