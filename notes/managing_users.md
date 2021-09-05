@@ -28,16 +28,22 @@ The script is designed to be lightweight, with just the most important commands 
 
 <h2>adding user</h2>
 
-<i>useradd</i> is a UNIX system tool for adding new users. It generates a new home directory for the user and adds new user information to the /etc/passwd file.
+<i>useradd</i> is a UNIX system tool for adding new users (<i>userdel</i> is its counterpart for deleting users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
 
 ```bash
-useradd adam
+useradd -m adam
 ```
 
 Flags:
 * <i>-m</i> create home dir. The template is located at /etc/skel.
 * <i>-u</i> specify UID (it has to be free).
 * <i>-G</i> add the user to the following groups.
+
+When adding new users from the command line, you should prefer using <i>adduser</i> (and <i>deluser</i> when deleting users). If you're developing a script, especially if portability is important, you might want to use the lowlevel utilities instead - because adduser/deluser may not be accessible on all distributions, such as SuSE.
+
+```bash
+adduser adam
+```
 
 <h2>passwd</h2>
 Use the <i>passwd</i> command to set or modify a user's password:
