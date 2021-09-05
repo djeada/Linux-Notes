@@ -167,7 +167,7 @@ systemctl restart network
 
 It would be difficult to remember the IP addresses of each machine to which you want to connect. DNS is a system that converts IP addresses to names. It allows you to use your internet browser to write a nice name like google.com or apple.com, and be taken to the company's website without ever having to input an IP address.
 
-* Prior to reaching out to a DNS server on the network, a local file called /etc/hosts is utilized as the initial point of query for any host name. No additional searches are carried out if the name is located there. You have the ability to change the hosts file and set a static name to IP address mapping.
+* Prior to reaching out to a DNS server on the network, a local file called /etc/hosts is utilized as the initial point of query for any host name. No additional searches are carried out if the name is located there. You can edit the hosts file and set a static name to IP address mapping.
 * The /etc/resolv.conf file specifies which local domains should be searched and which server names should be used for DNS resolution.
 
 DNS settings:
