@@ -9,7 +9,7 @@ As part of the OSI Model's layer 2—the Data Link layer—the media access cont
 Even if a network interface does not have an IP address, it will always have a MAC address (Media Access Control) address (also known as the hardware address). They appear as six groups of two hexadecimal digits each, and are assigned when a network adapter is manufactured or, in the case of a virtualized network adapter, when the adapter is created. It is also known as link or ether address.
 
 <h1>Ip address</h1>
-A single device can have more than one IP address, but they are always unique on the same network. IP addresses generally lie within the ranges of 1.1.1 to 255.255.255.255.
+A single device can have more than one IP address, but they are always unique on the same network. IP addresses generally lie within the ranges of 1.1.1.1 to 255.255.255.255.
 
 <h1>DHCP</h1>
 When a network has a large number of computers (hundreds or thousands), it becomes extremely difficult to assign IP addresses to each of them separately. The dynamic host configuration protocol (DHCP), which automates the procedure, is the answer.
