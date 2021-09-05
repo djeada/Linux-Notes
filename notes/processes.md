@@ -30,20 +30,6 @@ Another useful options include:
 top
 ```
 
-<h2>pgrep</h2>
-
-<i>pgerp</i> allows to find process id when process name is known:
-
-```bash
-pgrep chromium
-```
-
-Look for a process that was launched by a certain user:
-
-```bash
-pgrep -u adam chromium
-```
-
 <h2>Foreground and background</h2>
 
 Jobs can either be in the foreground or the background. Thus far, we have run commands at the prompt and waited for them to complete. We call this running in the “foreground.”
@@ -104,6 +90,20 @@ Properly killing processes:
 1. Send a SIGINT.
 2. Send a SIGTERM.
 3. Send a SIGKILL.
+
+<h2>pgrep</h2>
+
+<i>pgerp</i> allows to find process id when process name is known:
+
+```bash
+pgrep chromium
+```
+
+Look for a process that was launched by a certain user:
+
+```bash
+pgrep -u adam chromium
+```
 
 <h2>pkill vs killall</h2>
 
