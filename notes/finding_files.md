@@ -36,6 +36,18 @@ Find all file paths that start with "/usr", include the word "pixmaps", and end 
 locate --regexp '^/usr.*pixmaps.*jpg$'
 ```
 
+To mute error messages use <i>-q</i> flag: 
+
+```bash
+locate -q "*.py"
+```
+
+Use the <i>-i</i> flag to make the search case insensitive:
+
+```bash
+locate -i "*.CPP"
+```
+
 One drawback of <i>locate</i> is that it saves all filenames on the system in an index, which is often only updated once per day (/etc/cron.daily/mlocate). This indicates that locate will not detect newly created files.
 
 The database is normally stored at /var/lib/mlocate/mlocate.db.
