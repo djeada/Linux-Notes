@@ -24,6 +24,12 @@ Delete anything following and including a line that contains special_string:
 sed -n '/special_string/,$!p' file_name.txt
 ```
 
+Convert all letters in a directory's text files to uppercase:
+
+```bash
+sed -i 's/.*/\U&/' *
+```
+
 <h1>awk</h1>
 
 Extract fields 1, 5, and 3:
