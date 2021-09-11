@@ -1,5 +1,5 @@
 <h2>superuser</h2>
-The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account (the root password). Because the root account has the greatest potential for damage, the root password should be carefully crafted and only supplied to those who require it.
+The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
 
 !Keep in mind that the following command should not be used:
 
