@@ -1,16 +1,18 @@
 <h2>Navigating files</h2>
 
-* <i>pwd</i>: displays current directory.
+To show the complete absolute path to your current filesystem location, use:
 
-Shows the complete absolute path to your current filesystem location.
+```bash
+pwd
+```
 
-* <i>cd directoryname</i>: makes directoryname your current directory. 
+The <i>cd</i> command changes your location to another directory specified by the path you give as an argument. With no parameters, cd sends you to your home directory. To be taken to your home directory, use:
 
-With no arguments, cd changes your location to your home directory.
+```bash
+cd ~
+```
 
-* <i>ls directoryname</i>: lists contents of directories.
-
-Available flags:
+The <i>ls</i> command lists contents of directories. Available flags:
 
 | Flag | Description |
 | --- | --- |
@@ -38,7 +40,7 @@ Following info will be displayed:
 - <i>date</i> is the most recent modification date of the file or directory (written to). The -u option displays the last time the file was visited (read).
 - <i>name</i> is the file or directory name.
 
-You may narrow the list by using wildcards:
+You may use wildcards to limit the displayed list to a particular group of files:
 
 ```bash
 ls /home/mydirectory/*.txt
