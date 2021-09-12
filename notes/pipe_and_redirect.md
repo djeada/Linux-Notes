@@ -1,25 +1,27 @@
-<h2>Pipe</h2>
+<h1>Pipe</h1>
 Many Linux commands default to printing to “standard output,” which is the terminal screen. 
 The pipe character (|) is used to reroute or divert output to another program or filter.
 
+To display information about user_name, use the <i>w</i> command, but instead of his username, show admin:
+
 ```bash
-w # It shows who’s logged in.
-w | less # redirects the output to the ‘less’ pager
-w | grep ‘user’ | sed s/user/admin/g # replace all ‘user’ with ‘admin’
+w | grep user_name | sed s/user_name/admin/g
 ```
 
-What is the difference between piping into | and piping into |& in the Bash shell?
-Piping into | pipes stdout. Piping into |& pipes stdout and stderr.
-
-The following syntax is used to send an email to a remote client.
-The email's body will be the current time and date:
+The following syntax is used to send an email to a remote client. The email's body will be the current time and date:
 
 ```bash
 date | mail -s "This is a remote test" user1@rhhost1.localnet.com
 ```
 
-<h2> Redirect</h2>
-Program output is often shown on the screen, while program input is typically provided through the keyboard (if no file arguments are given). In technical terms, processes typically write to standard output (the screen) and receive input from standard input (the keyboard). In reality, there is another output channel called standard error where programs can post their error messages.
+<h2>stderr</h2>
+Program output is often shown on the screen, while program input is typically provided through the keyboard (if no file arguments are given). In technical terms, processes typically write to standard output (the screen) and receive input from standard input (the keyboard). In reality, there is another output channel called standard error where programs can post their error messages (stderr).
+
+What is the difference between piping into | and piping into |& in the Bash shell?
+* Piping into | pipes stdout. 
+* Piping into |& pipes stdout and stderr.
+
+<h1>Redirect</h1>
 
 The > operator is used to redirect standard output to a file rather than the screen:
 
