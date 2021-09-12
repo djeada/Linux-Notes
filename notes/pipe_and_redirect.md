@@ -44,9 +44,9 @@ less non_existent_file 2> file.txt
 
 <h2>Sort</h2>
 
-<i>sort</i> sorts lines contained in a group of files.
- 
- ```bash
+<i>sort</i> is a command that is frequently used with redirect. It sorts the lines from a collection of files.
+
+```bash
 sort file_1.txt file_2.txt > file_name.txt
 ```
 
