@@ -63,38 +63,63 @@ tree /tmp
 
 <h2>Creating files</h2>
 
-* <i>mkdir directoryname</i> : creates a new directory.
+The <i>mkdir</i> command creates a new directory. To create a directory called test in a current location, use:
+
+```bash
+mkdir test
+```
 
 <h2>Copying files</h2>
 
-* <i>cp source destination</i> : makes a copy of a file named “source” to “destination”.
+The <i>cp</i> command makes a copy of a source file in the destination directory.
 
 ```bash
-cp /path/to/source/foo.txt /path/to/target/folder/
+cp /path/to/source/foo.txt /path/to/target/dir/
 ```
-* To copy a directory and its content:
+
+To copy a directory and its content, use:
 
 ```bash
 cp –r source destination
 ```
 
-Use the -a flag to copy permissions as well.
-Use the -A option to copy all files (hidden and normal).
+Some other flags include:
+| Flag | Description |
+| --- | --- |
+| <i>-a</i> | used to copy permissions as well |
+| <i>-A</i> | used to copy all files (hidden and normal) |
 
 <h2>Moving files</h2>
 
-* <i>mv source destination</i>: moves a file or directory.
+The <i>mv</i> command moves a file or directory to the destination directory. 
+
+To rename file_1.txt to file_2.txt, use:
+
+```bash
+mv file_1.txt file_2.txt
+```
+
+To move big_dir from Downloads to Home directory, use:
+
+```bash
+mv ~/Download/big_dir ~/big_dir
+```
 
 <h2>Remove files</h2>
 
-* <i>rm filenamelist</i>: removes/deletes file(s). Be careful with wildcards.
-* To removy a directory and its content:
+The <i>rm</i> command removes file(s). By default Linux will prompt the user for confirmation before removing the file.
+
+```bash
+rm file_1.txt file_2.txt
+```
+
+To removy a directory and its content, use:
 
 ```bash
 rm –r directory
 ```
 
-If the rm command is used to remove a file, Linux will prompt the user for confirmation if it is set to do so.
+Be careful with wildcards.
 
 <h2>Reading files</h2>
 
