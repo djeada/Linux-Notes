@@ -20,7 +20,7 @@ ps -e --format uid,pid,ppid,%cpu,cmd
 
 Another useful options include:
 
-* <i>aux</i>: short summary of all activ processes
+* <i>aux</i>: short summary of all active processes
 * <i>fax</i>: shows the process hierarchy
 * <i>o</i>: allows to specify the column names
 
