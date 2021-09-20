@@ -126,7 +126,7 @@ rpm -e nano
 
 Configuration file for repos is located at: /etc/yum.repos.d
 
-To display enabled repo list, use:
+To display enabled repositories list, use:
 
 ```bash
 yum repolist all
@@ -149,3 +149,19 @@ To disable a repo, use:
 ```bash
 yum-config-manager --disable [repo_id]
 ```
+
+<h2>Description of the repository:</h2>
+
+* label - the label used as an identifier in the repository file 
+* name - the name of the repository 
+* mirrorlist - a link to information about mirror servers for this server
+* baseurl - the base url to which the rpm packages should be found.
+* gpgcheck - set to 1 if a gpg integrity check on the packages is required. 
+
+<h2>Labels for repositories:</h2>
+
+* base - the base repository including all essential Red Hat applications. Packages with full support.
+* updates - a repository containing just updates.
+* optional - open source software that Red Hat does not support.
+* supplemental - proprietary packages that Red Hat does not support.
+* extras - additional packages that Red Hat does not support. 
