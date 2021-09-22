@@ -20,12 +20,6 @@ The -c option enables you to run a command as another user account and redirect 
 su adam -c whoami
 ```
 
-<h2>bashrc</h2>
-
-The <i>\~/.bash_profile</i> file would only be utilized once, at login. Every time a shell is started, the  <i>\~/.bashrc</i> script is read. This is similar to  <i>\~/.cshrc</i>  in C Shell.
-
-The script is designed to be lightweight, with just the most important commands being run.
-
 <h2>adding user</h2>
 
 <i>useradd</i> is a UNIX system tool for adding new users (<i>userdel</i> is its counterpart for deleting users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
