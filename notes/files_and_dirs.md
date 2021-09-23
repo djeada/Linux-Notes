@@ -123,7 +123,13 @@ Be careful with wildcards.
 
 <h2>Reading files</h2>
 
-* <i>cat file</i>: prints the whole file on the screen. 
+<i>cat</i> command prints the whole file on the screen. 
+
+To display a file named "file.txt" located in the current working directory, use:
+
+```bash
+cat file.txt
+```
 
 When used in conjunction with redirection, it will concatenate the files file_1 and file_2 into a single file named new_file.
 
@@ -137,7 +143,7 @@ You can also use the wildcards:
 cat *.txt > new_file.txt
 ```
 
-* <i>more file</i>: shows a file page by page. 
+<i>more</i> shows a file page by page. A similar command is <i>less</i>, except that it shows more...
 
 | Command | Description |
 | --- | --- |
