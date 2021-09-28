@@ -15,6 +15,7 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/enviroment_modules.md">enviroment modules</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/disk_usage.md">disk usage</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/mounting.md">mounting</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/partitions.md">partitions</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/logical_volume_management.md">logical volume management</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/nfs.md">nfs</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/finding_files.md">finding files</a>
