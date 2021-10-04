@@ -33,6 +33,7 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/packet_managers.md">packet managers</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/performance_monitoring.md">performance monitoring</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/log_files_and_journals.md">log files and journals</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/kernel.md">kernel</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ldap.md">ldap</a>
 
 
