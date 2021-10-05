@@ -11,7 +11,7 @@ A kernel might be monolithic, microkernel, or hybrid in nature (like the OS X an
 * Kernel modules can be loaded dynamically in Linux.
 * Linux includes an object-oriented device model that includes device classes, hot-pluggable events, and a user-space device file-system.
 * Linux supports symmetrical multiprocessors.
-* Because of its open software nature, Linux is free.
+* Linux is both opensource and free.
 * Some basic Unix features are ignored by Linux because they are deemed "poorly conceived" by kernel engineers.
 * Preemption is built into the Linux kernel.
 * The Linux kernel does not distinguish between threads and regular processes.
