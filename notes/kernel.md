@@ -11,7 +11,7 @@ A kernel might be monolithic, microkernel, or hybrid in nature (like the OS X an
 * Kernel modules can be loaded dynamically in Linux.
 * Linux includes an object-oriented device model that includes device classes, hot-pluggable events, and a user-space device file-system.
 * Linux supports symmetrical multiprocessors.
-* Linux is both opensource and free.
+* Linux is both open source and free.
 * Some basic Unix features are ignored by Linux because they are deemed "poorly conceived" by kernel engineers.
 * Preemption is built into the Linux kernel.
 * The Linux kernel does not distinguish between threads and regular processes.
@@ -31,6 +31,14 @@ A kernel might be monolithic, microkernel, or hybrid in nature (like the OS X an
 * <i>dmesg</i> (alternatively <i>journalctl --dmesg</i>) allows to see kernel ring buffer. The kernel ring buffer holds information such as device driver initialization messages, hardware messages, and kernel module messages.
 * The /proc/ directory, commonly known as the <i>/proc filesystem</i>, includes a hierarchical set of special files that reflect the current state of the kernel, allowing programs and users to see what the kernel sees.
 * <i>uname</i>  provides users with important system information.
+
+| Flag | Description |
+| --- | --- |
+| <i>-s</i> | kernel name |
+| <i>-r</i> | kernel release |
+| <i>-v</i> | kernel version |
+| <i>-m</i> | machine architecture |
+| <i>-p</i> | processor architecture |
 
 <h1>Startup process</h1>
 The boot procedures (BIOS or UEFI, MBR, and GRUB) complete system startup by loading the kernel into memory and connecting it to the initial ramdisk (initrd or initramfs), after which systemd is launched.
