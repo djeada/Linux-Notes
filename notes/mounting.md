@@ -18,7 +18,7 @@ cat /etc/mtab
 
 <h2>Mounting a file system</h2>
 
-To mount a file system, use the following syntax:
+To mount a file system, use the following commands:
 
 ```bash
 mount -t file_system_type source_location target_location
@@ -50,7 +50,7 @@ mount -o loop myfiles.iso /mnt/iso
 
 <h2>Unmounting</h2>
 
-To unmount, use the following syntax:
+To unmount, use the following commands:
 
 ```bash
 unmount source_location
