@@ -46,3 +46,4 @@ Notes on Linux.
 * http://www.doc.ic.ac.uk/~wjk/UnixIntro
 * https://manjusri.ucsc.edu/2017/09/08/environment-modules/
 * http://www.cse.lehigh.edu/~brian/course/2012/sysadmin/notes/
+* https://github.com/imthenachoman/How-To-Secure-A-Linux-Server
