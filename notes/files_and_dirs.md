@@ -176,3 +176,19 @@ As a result of brace expansion, any string can be generated. However, unlike fil
 echo a{b,c}d
 #abd acd
 ```
+
+<h1>Challenges</h1>
+
+1. To navigate to various directories, use <i>cd</i>. Try: 
+  - your home directory 
+  - root directory (/)
+  - /var/log 
+  - your desktop
+  
+  Experiment with both relative and absolute paths. 
+ 
+2. Using <i>ls</i>, you may list the files in the current directory. Experiment with several options:
+  - Display hidden files
+  - Sort files by modification date 
+ 
+3. Using <i>mkdir</i>, create a temp directory in your home directory. Create three empty files in the newly created temp dir using the <i>touch</i> command. Save the results of the <i>ls</i> command to each of them using redirection. Use <i>cat</i> to display their contents to the terminal. 
