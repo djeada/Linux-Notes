@@ -27,9 +27,10 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/processes.md">processes</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/cron_jobs.md">cron jobs</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/services.md">services</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/ssh_and_scp.md">ssh and scp</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/networking.md">networking</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ports.md">ports</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/ssh_and_scp.md">ssh and scp</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/firewall.md">firewall</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/packet_managers.md">packet managers</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/performance_monitoring.md">performance monitoring</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/log_files_and_journals.md">log files and journals</a>
