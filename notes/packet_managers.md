@@ -165,3 +165,7 @@ yum-config-manager --disable [repo_id]
 * optional - open source software that Red Hat does not support.
 * supplemental - proprietary packages that Red Hat does not support.
 * extras - additional packages that Red Hat does not support. 
+
+<h1>Challenges</h1>
+
+1. Using your preferred package manager, look for the 0ad app. It's possible that you'll need to update the repositories first. Install the app if the search was successful. Try out the app. Using the same package manager, uninstall it. 
