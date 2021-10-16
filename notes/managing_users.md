@@ -125,3 +125,8 @@ To change GID of a group called <i>new_group</i> to 2500, use:
 ```bash
 groupmod -g 2500 new_group
 ```
+
+<h1>Challenges</h1>
+
+1. Show the contents of the /etc/shadow. You will need sudo privileges.
+2. Check the /var/log/auth.log file to check who is logged in. Use <i>grep</i> to see if someone is using sudo.
