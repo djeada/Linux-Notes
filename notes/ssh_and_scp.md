@@ -84,3 +84,4 @@ scp -P 80 -r root@192.168.2.105:/etc/passwd
 <h1>Challenges</h1>
 
 1. Use ssh to login to a remote server. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or a virtual machine installed on your PC. 
+2. Use a non-standard port (e.g. 6176) for ssh connection.
