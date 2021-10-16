@@ -51,6 +51,9 @@ The <i>ssh-copy-id</i> command copies the ssh public key to the remote host.
 ssh-copy-id -i ~/.ssh/mykey username@serverhost
 ```
 
+<h2>Using non-standard ports</h2>
+By default, ssh uses port 22. Changing it to a different number improves the security of most servers significantly. You must change the /etc/ssh/sshd file on the server to do this. 
+
 <h2>scp</h2>
 <i>scp</i> is a safe method of moving files from one computer to another. It functions similarly to the UNIX cp command, except that the parameters can specify a user, machine, and files.
 
