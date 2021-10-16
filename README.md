@@ -49,3 +49,5 @@ Notes on Linux.
 * http://www.cse.lehigh.edu/~brian/course/2012/sysadmin/notes/
 * https://github.com/imthenachoman/How-To-Secure-A-Linux-Server
 * https://www.linux.com/training-tutorials/beginners-guide-nmap/
+* https://linuxconfig.org/how-to-manage-acls-on-linux
+* https://craigmbooth.com/blog/selinux-for-mortals/
