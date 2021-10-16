@@ -50,7 +50,11 @@ What Linux does between the moment you press the power button and the time the l
 | 6 | reboot |
 
 <h2>Hostname</h2>
-You may change the system hostname on a systemd-based operating system by manually changing /etc/hostname.
+You may change the system hostname on a systemd-based operating system by manually changing /etc/hostname file or using:
+
+```bash
+hostnamectl set-hostname your_new_name
+```
 
 <h2>Uptime</h2>
 uptime
@@ -94,3 +98,7 @@ systemctl poweroff
 1. use passwd command to change the password
 1. touch /.autorelabel
 1. exit
+
+<h1>Challenges</h1>
+1. Run the <i>reboot</i> command. Use the <i>uptime</i> command to ensure that your server was restarted.
+2. Use <i>hostnamectl set-hostname</i> to rename your server. Run, <i>hostname</i>, to confirm that the operation was successful. 
