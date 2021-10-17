@@ -59,7 +59,17 @@ updatedb
 ```
 
 <h2>Which</h2>
-If you can launch an application program or system utility by typing its name at the shell prompt, you can use <i>which</i> to find out where it is stored on the disk.
+If you can run a program or system utility by typing its name in the terminal, you can use <i>which</i> to determine where it is located on the disk.
+
+Have you ever wondered where executables for common tools like <i>cat/i>, <i>sed/i>, and so on come from? The system will generally look through the places specified in your "path."
+
+To view the PATH environmental variable, use:
+
+```bash
+echo $PATH
+```
+
+To see path of <i>python</i>, use:
 
 ```bash
 which python
