@@ -130,3 +130,4 @@ groupmod -g 2500 new_group
 
 1. Show the contents of the /etc/shadow. You will need sudo privileges.
 2. Check the /var/log/auth.log file to check who is logged in. Use <i>grep</i> to see if someone is using sudo.
+3. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made. 
