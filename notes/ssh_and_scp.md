@@ -120,4 +120,4 @@ Configuring and use your preferred option should be simple. When prompted for se
 1. Use ssh to login to a remote server. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or a virtual machine installed on your PC. 
 2. Use a non-standard port (e.g. 6176) for ssh connection.
 3. Use <i>scp</i> to copy /var/log directory from your server to local machine.
-4. To upload the images directory to your server, use an <i>SFTP/i> GUI of your choice. Using <i>SFTP</i>, try creating various temporary folders, changing their location, and deleting them at the end. 
+4. To upload the images directory to your server, use an <i>SFTP</i> GUI of your choice. Using <i>SFTP</i>, try creating various temporary folders, changing their location, and deleting them at the end. 
