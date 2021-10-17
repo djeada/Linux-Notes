@@ -1,4 +1,5 @@
-<h2>superuser</h2>
+<h1>Users</h1>
+<h2>Superuser</h2>
 The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
 
 !Keep in mind that the following command should not be used:
@@ -7,7 +8,22 @@ The superuser is a privileged user with full access to all commands and files on
 rm –rf /*
 ```
 
-<h2>changing users</h2>
+<h2>Partially granted sudo privileges </h2>
+
+/etc/sudoers is a special file that allows users to be granted sudo privileges solely for specific tools.
+
+If you wish to provide Adam the ability to reboot, run <i>visudo /etc/sudoers</i> and add the following lines at the bottom of the file: 
+
+```bash
+# Allow user "adam" to run "sudo reboot"
+# ...and don't prompt for a password
+#
+adam ALL = NOPASSWD:/sbin/reboot
+```
+
+The visudo command will automatically verify your syntax and refuse to save if there are any errors. A faulty /etc/sudoers file may prevent you from accessing your server every again!
+
+<h2>Changing users</h2>
 <i>su</i> without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
 
 ```bash
@@ -20,7 +36,7 @@ The -c option enables you to run a command as another user account and redirect 
 su adam -c whoami
 ```
 
-<h2>adding user</h2>
+<h2>Adding user</h2>
 
 <i>useradd</i> is a UNIX system tool for adding new users (<i>userdel</i> is its counterpart for deleting users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
 
@@ -71,7 +87,7 @@ Columns of /etc/shadow
 * expiration date
 * unused
  
-<h2>Groups</h2>
+<h1>Groups</h1>
 
 All new users in RHEL/CENTOS are automatically added to the wheel group.
 
