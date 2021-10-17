@@ -122,7 +122,52 @@ To remove a package, use:
 rpm -e nano
 ```
 
-<h1>Managing Repositories</h1>
+<h1>Managing APT Repositories</h1>
+The apt software repositories are defined in the /etc/apt/sources.list file or in different files in the /etc/apt/sources.list.d/ directory on Ubuntu and all other Debian-based distributions. 
+
+<i>add-apt-repository</i> is a Python script that adds an APT repository to /etc/apt/sources.list. The command can also be used to delete a previously added repository.
+
+To install it, follow these steps: 
+
+```bash
+apt update
+apt install software-properties-common
+```
+
+Assume we want to install wine on our Debian-based system. We must take the following steps:
+
+Get the repository key and install it: 
+
+```bash
+wget -nc https://dl.winehq.org/wine-builds/winehq.key
+gpg -o /etc/apt/trusted.gpg.d/winehq.key.gpg --dearmor winehq.key
+```
+
+Add the repository:
+
+```bash
+add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main'
+```
+
+Update the package database:
+
+```bash
+apt update
+```
+
+Finally install wine:
+
+```bash
+sudo apt install --install-recommends winehq-stable
+```
+
+Verify that the installation was successful by running the following command: 
+
+```bash
+wine --version
+```
+
+<h1>Managing YUM Repositories</h1>
 
 Configuration file for repos is located at: /etc/yum.repos.d
 
