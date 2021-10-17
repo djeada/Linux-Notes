@@ -91,3 +91,14 @@ setfacl -k /opt/test
 ```bash
 getfacl /opt/test | setfacl --set-file= /opt/test2
 ```
+
+<h1>Challenges</h1>
+1. Make a temporary text file named temp.txt in your home directory. Using the <i>ls -l</i> command, check the permissions. You'll probably see something like this: 
+
+```bash
+-rw-rw-r-- 1 user_name user_group  8 Nov 21 18:02 temp.txt
+```
+
+As a result, the file is owned by the user "user name" and the group "user group," who are the only ones who can write to it - but any other user may read it.
+
+Let us now remove the "user group" group's permission to write to the file and read permission from others. 
