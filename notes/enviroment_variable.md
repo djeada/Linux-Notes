@@ -5,7 +5,7 @@ $PATH, for example, informs the system where to look for commands.
 
 Environment variables are shared by programs launched by the shell.
 
-Use printenv to examine all of the environment variables that are presently defined.
+Use printenv to display all of the environment variables that are presently defined.
 
 ```bash
 printenv
