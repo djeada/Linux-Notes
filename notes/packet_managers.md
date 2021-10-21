@@ -2,6 +2,8 @@
 
 Debian and Ubuntu are arguably the most well-known Linux distributions that use APT (Advanced Package Tool). Other distributions that use alternative package managers, such as DNF, YUM, Pacman, and so on, will be unable to utilize the apt commands at all. These package managers have their own functionalities and syntax, which may differ significantly from that of apt.
 
+Be cautious, as package managers frequently not only install software with all of its dependencies, but also interfere with your system's configuration!
+
 <h1>Install and update software packages from APT repo</h1>
 
 In general, you should obtain a list of the most recent versions of accessible packages from your update repository before you begin installing new applications. 
