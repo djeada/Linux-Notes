@@ -102,4 +102,5 @@ systemctl poweroff
 <h1>Challenges</h1>
 
 1. Run the <i>reboot</i> command. Use the <i>uptime</i> command to ensure that your server was restarted.
-2. Use <i>hostnamectl set-hostname</i> to rename your server. Run, <i>hostname</i>, to confirm that the operation was successful. 
+2. Use <i>hostnamectl set-hostname</i> to rename your server. Run, <i>hostname</i>, to confirm that the operation was successful.
+3. While the machine is booting up, interupt the process and change the root password.
