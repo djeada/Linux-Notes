@@ -116,3 +116,7 @@ pkill -SIGTERM -f chromium
 ```bash
 killall -15 chromium
 ```
+
+<h1>Challenges</h1>
+
+1. What is the difference between <i>ps -e</i> and <i>ps -eu</i> commands?
