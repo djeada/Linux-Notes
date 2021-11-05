@@ -44,7 +44,8 @@ Use <i>awk</i> when the text resembles rows and columns, or "records" and "field
 When compared to <i>sed</i>, it uses far more robust programming constructs like if/else, while, do/while and for loops.
 Variables and single-dimension associative arrays are fully supported, as are multi-dimension arrays.
 Mathematical procedures are similar to those used in C programming language.
-</br>
+
+
 Extract fields 1, 5, and 3:
 
 ```bash
