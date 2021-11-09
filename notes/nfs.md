@@ -34,6 +34,18 @@ Then, in /etc/exports, append the following line:
 * no_root_squash – enable root privilege
 * no_all_squash - enable user’s authority
 
+Export the changes:
+
+```bash
+exportfs -r
+```
+
+Check if everything was exported:
+
+```bash
+exportfs
+```
+
 You may now restart the nfs server using the command:
 
 ```bash
