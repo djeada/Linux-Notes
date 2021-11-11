@@ -1,6 +1,6 @@
 <h1>systemctl</h1>
 
-To display the status of a service, use:
+Some services are always running, whereas others run once and then stop. To display the status of a service, use:
 
 ```bash
 systemctl status httpd
@@ -37,4 +37,22 @@ Use the following command to determine which services are enabled on your system
 
 ```bash
 systemctl list-timers
+```
+
+<h1>Create a custom service</h1>
+
+Systemd services should be placed at /etc/systemd/system/.
+
+An example of a foo.service script:
+
+```bash
+[Unit]
+Description=Sample Script Startup
+
+[Service]
+Type=idle
+ExecStart=/valid/path/to/an/executable/file
+
+[Install]
+WantedBy=multi-user.target
 ```
