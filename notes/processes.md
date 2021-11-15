@@ -30,7 +30,25 @@ Another useful options include:
 top
 ```
 
-<h2>Foreground and background</h2>
+<h1>Monitor RAM usage per process</h1>
+RSS is an abbreviation for Resident Set Size, is used to indicate how much memory the process is currently using. Swap memory is not included. It contains the entire stack and heap memory. Memory from shared libraries is included as long as the pages from those libraries are physically present in memory. Because some of the memory is shared, other applications may use it, thus adding up all of the RSS numbers may result in more RAM than your machine actually has.
+
+VSS is an abbreviation for Virtual Set Size is a memory size allocated to a process during its first execution. It comprises all memory that the process may access, including swapped out memory, allocated but not utilized memory, and memory from shared libraries. 
+
+Let's say we have a process that:
+* currently have a process that has 450K of its own binary, 800K of shared libraries loaded, and 120K of stack/heap allocation in memory,
+* but initially it started with 600K reserved binaries, 2200K of shared libraries, and 150K of stack/heap allocations. 
+
+RSS: 450K + 800K + 120K = 1370K
+VSZ: 600K + 2200K + 150K = 2950K
+
+To find out which 10 processes use most of RAM:
+
+```bash
+ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head 10
+```
+
+<h1>Foreground and background</h1>
 
 Jobs can either be in the foreground or the background. Thus far, we have run commands at the prompt and waited for them to complete. We call this running in the “foreground.”
 
@@ -62,7 +80,7 @@ bg 1
 Another useful shortcut is <i>Ctrl+C</i>, which is used to terminate a running process.
 Note: background processes launched in the shell will continue to run when the shell is terminated.
   
-<h2>Terminate processes</h2>
+<h1>Terminate processes</h1>
 
 To kill a process, use the ‘kill’ command with the five-digit process id:
 
@@ -91,7 +109,7 @@ Properly killing processes:
 2. Send a SIGTERM.
 3. Send a SIGKILL.
 
-<h2>pgrep</h2>
+<h1>pgrep</h1>
 
 <i>pgerp</i> allows to find process id when process name is known:
 
@@ -105,7 +123,7 @@ Look for a process that was launched by a certain user:
 pgrep -u adam chromium
 ```
 
-<h2>pkill vs killall</h2>
+<h1>pkill vs killall</h1>
 
 Both pkill and killall offer distinct options. Killall provides an option to match processes based on their age, whereas pkill contains a flag to exclusively kill processes on a certain tty. Neither is superior. They simply specialize in different areas.
 
