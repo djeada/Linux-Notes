@@ -52,3 +52,5 @@ Notes on Linux.
 * https://linuxconfig.org/how-to-manage-acls-on-linux
 * https://craigmbooth.com/blog/selinux-for-mortals/
 * https://www.golinuxcloud.com/linux-commands-cheat-sheet/
+* https://www.linuxfromscratch.org/
+
