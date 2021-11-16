@@ -40,6 +40,7 @@ Let's say we have a process that:
 * but initially it started with 600K reserved binaries, 2200K of shared libraries, and 150K of stack/heap allocations. 
 
 a) RSS: 450K + 800K + 120K = 1370K
+
 b) VSZ: 600K + 2200K + 150K = 2950K
 
 To find out which 10 processes use most of RAM:
