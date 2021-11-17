@@ -58,3 +58,4 @@ apropos zip
 
 1. How to find the command that is used to create a file?
 2. Use the <code>man</code> command to display what does the command <code>cat</code> do.
+3. Change the maximum number of commands to remember in the command history to 3000.
