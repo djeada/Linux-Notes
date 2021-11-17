@@ -62,3 +62,7 @@ Use the following command to determine which services are enabled on your system
 ```bash
 systemctl list-timers
 ```
+
+<h1>Challenges</h1> 
+1. Look at the systemd timers and determine which services are enabled on your system.
+2. Write a custom service that starts MySql docker container when the system boots.
