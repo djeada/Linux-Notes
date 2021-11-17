@@ -1,9 +1,9 @@
-<h2>history</h2>
+<h1>History</h1>
 
-* To see the n most recently used commands, use the <i>history</i> command.
+* To see the n most recently used commands, use the <code>history</code> command.
 You can change the n number (which are generally between 1000 and 5000).
-* <i>Ctrl+R</i> looks for command alone, and pressing <i>Ctrl+R</i> again searches for next.
-* <i>!number</i> executes the command with the given number, while <i>!text</i> executes the command which starts with the given text.
+* <code>Ctrl+R</code> looks for command alone, and pressing <code>Ctrl+R</code> again searches for next.
+* <code>!number</code> executes the command with the given number, while <code>!text</code> executes the command which starts with the given text.
 
 To clear the history, execute the following commands:
 
@@ -11,28 +11,34 @@ To clear the history, execute the following commands:
 history -c
 ```
 
-To delete the contents of.bash history, run the following command:
+To delete the contents of bash history, run the following command:
 
 ```bash
 history -w
 ```
 
-<h2>man</h2>
+<h1>Navigating commands in the terminal</h1>
 
-The <i>man</i> command is an abbreviation for manual. 
-The <i>man</i> command displays the documentation for every command we execute on the terminal.
+* Uppwards arrow key: show the previous command from the history.
+* Downwards arrow key: show the next command from the history.
+* <code>tab</code> key: complete the command.
+
+<h1>The manual</h1>
+
+The <code>man</code> command is an abbreviation for manual. 
+The <code>man</code> command displays the documentation for every command we execute on the terminal.
 
 | Number | Description |
 | --- | --- |
-| <i><b>1</b></i> | executable programs or shell commands |
-| <i>2</i> | system calls |
-| <i>3</i> | library calls |
-| <i>4</i> | special files |
-| <i><b>5</b></i> | file formats and conventions |
-| <i>6</i> | games |
-| <i>7</i> | misc |
-| <i><b>8</b></i> | system administration (root) commands |
-| <i>9</i> | kernel routines |
+| <code><b>1</b></code> | executable programs or shell commands |
+| <code>2</code> | system calls |
+| <code>3</code> | library calls |
+| <code>4</code> | special files |
+| <code><b>5</b></code> | file formats and conventions |
+| <code>6</code> | games |
+| <code>7</code> | misc |
+| <code><b>8</b></code> | system administration (root) commands |
+| <code>9</code> | kernel routines |
 
 Use 'man -f command_name' to display a short description of a command, for example:
 
@@ -40,9 +46,15 @@ Use 'man -f command_name' to display a short description of a command, for examp
 man git
 ```
 
-<h2>apropos</h2>
-When a user does not recall the specific command but knows a few keywords linked to the command that characterize its uses or capabilities, <i>apropos</i> command can help them find it.
+<h1>Apropos</h1>
+
+When a user does not recall the specific command but knows a few keywords linked to the command that characterize its uses or capabilities, <code>apropos</code> command can help them to find the command they are looking for.
 
 ```bash
 apropos zip
 ```
+
+<h1>Challenges</h1>
+
+1. How to find the command that is used to create a file?
+2. Use the <code>man</code> command to display what does the command <code>cat</code> do.
