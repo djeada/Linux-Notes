@@ -1,10 +1,10 @@
-<h1>types of logging</h1>
+<h1>Types of logging</h1>
 
 1. Keeping information in text files. The sysadmin has complete control over what is stored.
 2. Journald - utilized by systemd-based systems. Binaries containing info about the boot procedure, services, and the kernel. Those files aren't preserved.
 3. Rsyslog - redirects different log files to /var/log. Those logs are persistent.
 
-<h1>log files at /var/log</h1>
+<h1>Log files at /var/log</h1>
 Log files are essential for successful administration of any sort of Linux system, since they include information on the system's health, such as any system or application problems. In spite of the fact that programs can place their log files wherever they like, the majority of Linux system log files are located in /var/log.
 
 If you list files located at /var/log, you'll see that there are a lot of Linux system log files:
@@ -36,8 +36,7 @@ It has its own scripting language.
 | 6 |  info | informational messages |
 | 7 |  debug | debug-level messages |
 
-<h1>logger</h1>
-
+<h1>Logger</h1>
 Logger is a command-line utility used to add logs to the local /var/log/syslog file or a remote syslog server.
 For adding logs, logger gives several choices such as selecting priority, specifying a remote system, and specifically defining the syslog port. 
 More information may be found at:
@@ -58,7 +57,7 @@ To send a log message to a remote server, do the following:
 logger -n 192.168.10.27 -P 1420 "An example of log message"
 ```
 
-<h1>logrotate</h1>
+<h1>Logrotate</h1>
 
 Logrotate is a system tool that automates log file rotation and compression.
 Log files might potentially absorb all available disk space on a system if they were not rotated, compressed, and pruned on a regular basis. 
@@ -67,7 +66,7 @@ Log files might potentially absorb all available disk space on a system if they 
 logrotate --version
 ```
 
-<h1>journald for systemd based systems</h1>
+<h1>Journald for systemd based systems</h1>
 
 <i>journald</i> is in charge of event logging. It records events from log files, kernel messages, etc.
 
