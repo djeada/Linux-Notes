@@ -1,15 +1,19 @@
-<h1>ssh</h1>
+<h1>SSH</h1>
 
-* <i>ssh</i> is a safe option for remote login as well as command execution on a remote system. 
+SSH is a network protocol for securely communicating with remote machines. It is used to securely log into a remote machine and execute commands on it.
+
+* <code>ssh</code> is a safe option for remote login as well as command execution on a remote system. 
 * It is a set of standards and a network protocol that allow a secure connection to be established between a local and a distant computer.
 * To authenticate the remote computer and allow the remote computer to authenticate the user, it employs public-key cryptography.
 
 Uses:
-* connect in to a distant system and run commands using tunneling
-* arbitrary TCP port forwarding through SOCKS proxy
-* SFTP or SCP protocols are used for secure file transmission
+* Allows to connect to a remote machines and run commands on it.
+* Supports arbitrary TCP port forwarding through SOCKS proxy.
+* SFTP or SCP protocols are used for secure file transmission.
 
 <h2>Connect with remote host</h2>
+
+In order to connect to a remote host, you need to know the host's IP address, the username and password or store the public key on the remote host.
 
 General syntax:
 
@@ -20,9 +24,9 @@ ssh username@serverhost
 Server will request a password if you don't use key authentication.
 
 There are number of flags:
-* <i>-l</i> to specify the user name.
-* <i>-i</i> path to key file (by default it is set to ~/.ssh/id_rsa).
-* <i>-F</i> path to connection config file (by default it is set to ~/.ssh/config).
+* <code>-l</code> to specify the user name.
+* <code>-i</code> path to key file (by default it is set to ~/.ssh/id_rsa).
+* <code>-F</code> path to connection config file (by default it is set to ~/.ssh/config).
 
 Each user has it's own connection config file, but there is also a global connection config file located at: /etc/ssh/ssh_config.
 
@@ -45,7 +49,7 @@ ls -a ~/.ssh/
 
 <h2>Upload the public key to remote host</h2>
 
-The <i>ssh-copy-id</i> command copies the ssh public key to the remote host.
+The <code>ssh-copy-id</code> command copies the ssh public key to the remote host.
 
 ```bash
 ssh-copy-id -i ~/.ssh/mykey username@serverhost
@@ -73,8 +77,8 @@ A Linux server can exchange files in a variety of methods, including:
 * rsync: File copying is a quick and fast process.
 * SMB: Microsoft's file-sharing protocol, which is helpful in a local network of Windows PCs. 
 
-<h2>scp</h2>
-<i>scp</i> is a safe method of moving files from one computer to another. It functions similarly to the UNIX cp command, except that the parameters can specify a user, machine, and files.
+<h2>Scp</h2>
+<code>scp</code> is a safe method of moving files from one computer to another. It functions similarly to the UNIX cp command, except that the parameters can specify a user, machine, and files.
 
 To transfer /opt/test from your machine to the /opt dir on the server with IP 192.168.2.105, use the following commands:
 
@@ -117,7 +121,8 @@ Configuring and use your preferred option should be simple. When prompted for se
 
 <h1>Challenges</h1>
 
-1. Use ssh to login to a remote server. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or a virtual machine installed on your PC. 
-2. Use a non-standard port (e.g. 6176) for ssh connection.
-3. Use <i>scp</i> to copy /var/log directory from your server to local machine.
-4. To upload the images directory to your server, use an <i>SFTP</i> GUI of your choice. Using <i>SFTP</i>, try creating various temporary folders, changing their location, and deleting them at the end. 
+1. Use SSH protocol to log into a remote server. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or create a virtual machine with Linux on your PC. 
+2. Use a non-standard port (e.g. 6176) for the SSH connection.
+3. Use <code>scp</code> to copy /var/log directory from the server to your desktop.
+4. To upload the images directory to your server, use an <code>SFTP</code> GUI of your choice. Using <code>SFTP</code>, try creating various temporary folders, changing their location, and deleting them at the end. 
+5. Use <code>scp</code> to copy the contents of the /etc/passwd file from your server to your local machine.
