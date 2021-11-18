@@ -1,4 +1,4 @@
-<h1>SSH</h1>
+<h1>ssh</h1>
 
 SSH is a network protocol for securely communicating with remote machines. It is used to securely log into a remote machine and execute commands on it.
 
@@ -126,3 +126,4 @@ Configuring and use your preferred option should be simple. When prompted for se
 3. Use <code>scp</code> to copy /var/log directory from the server to your desktop.
 4. To upload the images directory to your server, use an <code>SFTP</code> GUI of your choice. Using <code>SFTP</code>, try creating various temporary folders, changing their location, and deleting them at the end. 
 5. Use <code>scp</code> to copy the contents of the /etc/passwd file from your server to your local machine.
+6. Explain the difference between <code>SCP</code> and <code>SFTP</code>.
