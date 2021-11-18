@@ -93,6 +93,7 @@ getfacl /opt/test | setfacl --set-file= /opt/test2
 ```
 
 <h1>Challenges</h1>
+
 1. Make a temporary text file named temp.txt in your home directory. Using the <code>ls -l</code> command, check the permissions. You'll probably see something like this: 
 
 ```bash
