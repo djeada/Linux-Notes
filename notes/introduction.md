@@ -14,7 +14,7 @@ Your product or service may be built from the ground up leveraging Linux's open-
 
 4. Linux has a strong community and ecosystem.
 
-A large part of Linux's success may be attributed to the strong community and environment that surrounds it, as well as its open source nature. You'll find developers who contribute code to improve the product. There are online forums  and communities, Linux teachers, Linux training courses, Linux blogs, Linux third-party tools, numerous Linux distributions ad Linux conferences.
+A large part of Linux's success may be attributed to the strong community and environment that surrounds it, as well as its open source nature. Many developers voluntarily contribute code to improve Linux. There are online forums and communities, Linux teachers, Linux training courses, Linux blogs, Linux third-party tools, numerous Linux distributions ad Linux conferences.
 
 5. Linux is a great choice for a new business.
 
