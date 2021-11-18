@@ -1,5 +1,13 @@
 # Linux
-Notes on Linux.
+Notes on Linux. 
+
+* The notes are organized into sections. 
+* The sections are organized into subsections.
+* Topics covered incldue the basics of Linux, the command line, the file system, and the terminal.
+* Difficulty levels vary from beginner to advanced. 
+* Each section has a couple of challenges that can be used to assess the reader's level of understanding of a given topic. 
+* It is possible to skip a section, because not all sections are connected. 
+
 
 <h1>Available notes</h1>
 
@@ -53,4 +61,3 @@ Notes on Linux.
 * https://craigmbooth.com/blog/selinux-for-mortals/
 * https://www.golinuxcloud.com/linux-commands-cheat-sheet/
 * https://www.linuxfromscratch.org/
-
