@@ -1,4 +1,7 @@
-Because an encrypted file is typically smaller than a non-encrypted file, it transfers more quickly.
+<h1>Reasons for encryption</h1>
+
+* One of the most important reasons for using encryption is to protect your data. Encryption is a way to hide the data from unauthorized users.
+* Encrypted files are also usually smaller than the original files. This is because the data is encrypted and then compressed. Therefore they can be transferred over a network much more efficiently.
 
 <h1>Make public and private GPG keys.</h1>
 
@@ -56,3 +59,15 @@ Send the encrypted file to the receiver and ask them to decode it using the foll
 ```bash
 gpg2 -o example.txt -d example.txt.gpg
 ```
+
+<h1>Challenges</h1>
+
+1. Test the gpg2 command:
+- Create a public key and a private key.
+- Encrypt a file using the public key.
+- Decrypt the file using the private key.
+- Verify that the decrypted file is the same as the original.
+
+2. Is there a way to encrypt a file without using a public key?
+3. Should a password be used to encrypt a file?
+4. Can you share the private key with someone?
