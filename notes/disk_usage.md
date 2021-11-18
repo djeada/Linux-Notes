@@ -1,12 +1,26 @@
-<h2>df</h2>
-The <i>df</i> command shows where hard drive partitions, optical drives and other storage devices are mounted, their file system type and disk usage.
+
+
+<h1>The df command</h1>
+Monitoring disk usage is a common task for Linux systems administrators. The <code>df</code> command can be used to display disk usage information. You can use the <code>-h</code> option to display a human-readable output.
+
+| Filesystem | Size | Used | Available | Use% | Mounted on |
+| --- | --- | --- | --- | --- | --- |
+| /dev/sda1 | 2.00T | 1.00T | 1.00T | 100% | / |
+| /dev/sda2 | 2.00T | 1.00T | 1.00T | 100% | /boot |
+| /dev/sda3 | 2.00T | 1.00T | 1.00T | 100% | /home |
+| /dev/sda4 | 2.00T | 1.00T | 1.00T | 100% | /mnt/backup |
+| /dev/sda5 | 2.00T | 1.00T | 1.00T | 100% | /mnt/home |
+| /dev/sda6 | 2.00T | 1.00T | 1.00T | 100% | /mnt/media |
+
+The <code>df</code> command can also be used to display the disk usage of a specific file or directory.
 
 ```bash
-df -hT
+df -h /home
 ```
 
-<h2>du</h2>
-The <i>du</i> command is used to determine the amount of disk usage for a directory. Use the following command to determine how much space the current directory takes up:
+<h1>The du command</h1>
+
+The <code>du</code> command displays the disk usage of a file or directory. The <code>-h</code> option can be used to display a human-readable output. The <code>-s</code> option can be used to display the disk usage in bytes. 
 
 ```bash
 du -sh .
@@ -14,12 +28,12 @@ du -sh .
 To find the 10 largest directories in the entire system, use:
 
 ```bash
-du -x / | sort -nr | head -20
+du -x / | sort -nr | head -10
 ```
 
-<h2>lsof</h2>
+<h1>The lsof command</h1>
 
-The <i>lsof</i> command stands for List Of Open Files and provides information to determine which files are opened by which process.
+The <code>lsof</code> command stands for List Of Open Files and provides information to determine which files are opened by which process.
 
 ```bash
 sudo lsof | less
@@ -30,3 +44,9 @@ To check which process running on port 8080, use:
 ```bash
 lsof -i :8080
 ```
+
+<h1>Challenges</h1>
+
+1. Display the disk usage of the current directory.
+2. Display the disk usage of the /home directory.
+3. Find the 10 largest directories in the entire system.
