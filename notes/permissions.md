@@ -1,4 +1,4 @@
-<h2>Permissions</h2>
+<h1>Permissions</h1>
 
 | Command | Description | Description |
 | --- | --- | --- |
@@ -25,7 +25,7 @@ chmod u+x file
 | rw- | 6 |
 | rwx | 7 |
 
-<h2>Default permissions</h2>
+<h1>Default permissions</h1>
 
 * Files: rw-rw-rw- (666)
 * Directories: rwxrwxrwx (777)
@@ -48,39 +48,39 @@ then, we would use:
 umask u-x,g=r,o+w
 ```
 
-<h2>ACls</h2>
+<h1>ACls</h1>
 ACLs (access control lists) in Linux are discretionary access control system permissions that are built on top of regular Linux permissions.
 
 * not all tools support ACLs
 * a modern mke2fs now sets acl in default mount options automatically at filesystem creation time, at least in "enterprise" Linux distributions
 
-Set (replaces), modify, or remove the access control list using the <i>setfacl</i> command (ACL). It also updates and deletes ACL entries for each path-specified file and directory. If no path is given, the names of files and directories are taken from standard input (stdin). In this scenario, each line of input should have one path name.
+Set (replaces), modify, or remove the access control list using the <code>setfacl</code> command (ACL). It also updates and deletes ACL entries for each path-specified file and directory. If no path is given, the names of files and directories are taken from standard input (stdin). In this scenario, each line of input should have one path name.
 
-* use <i>-m</i> flag to modify the ACLs:
+* use <code>-m</code> flag to modify the ACLs:
 
 ```bash
 setfacl -m g:group_name:rw /opt/test
 ```
 
-* to have all new files in the directory inherit the ACLs, use the <i>-m</i> flag with the <i>d</i> option:
+* to have all new files in the directory inherit the ACLs, use the <code>-m</code> flag with the <code>d</code> option:
 
 ```bash
 setfacl -m d:g:group_name:rw /opt/test
 ```
 
-* use <i>-X</i> lag to remove a user or group:
+* use <code>-X</code> lag to remove a user or group:
 
 ```bash
 setfacl -X g:group_name /opt/test
 ```
 
-* use <i>-b</i> flag to remove everything: 
+* use <code>-b</code> flag to remove everything: 
 
 ```bash
 setfacl -b /opt/test
 ```
 
-* use <i>-k</i> flag to go back to default ACL's: 
+* use <code>-k</code> flag to go back to default ACL's: 
 
 ```bash
 setfacl -k /opt/test
@@ -93,7 +93,7 @@ getfacl /opt/test | setfacl --set-file= /opt/test2
 ```
 
 <h1>Challenges</h1>
-1. Make a temporary text file named temp.txt in your home directory. Using the <i>ls -l</i> command, check the permissions. You'll probably see something like this: 
+1. Make a temporary text file named temp.txt in your home directory. Using the <code>ls -l</code> command, check the permissions. You'll probably see something like this: 
 
 ```bash
 -rw-rw-r-- 1 user_name user_group  8 Nov 21 18:02 temp.txt
@@ -101,4 +101,9 @@ getfacl /opt/test | setfacl --set-file= /opt/test2
 
 As a result, the file is owned by the user "user name" and the group "user group," who are the only ones who can write to it - but any other user may read it.
 
-Now remove the "user group" group's permission to write to the file and read permission from others. 
+Now remove the "user group" group's permission to write to the file and read permission from others.
+
+2. Explain what happens when you try to remove the group's permission to write to the file and read permission from others.
+3. Explain the difference between permissions and ACLs.
+4. Can a user who is not the owner of a file or directory change the permissions of the file or directory?
+5. Should you use ACLs or permissions to control access to a file or directory?
