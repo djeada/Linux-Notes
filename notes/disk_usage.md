@@ -20,7 +20,7 @@ df -h /home
 
 <h1>The du command</h1>
 
-The <code>du</code> command displays the disk usage of a file or directory. The <code>-h</code> option can be used to display a human-readable output. The <code>-s</code> option can be used to display the disk usage in bytes. 
+The <code>du</code> command displays the disk usage of a file or directory. The <code>-h</code> option can be used to display output in a human-readable format. The <code>-s</code> option can be used to display the disk usage in bytes. 
 
 ```bash
 du -sh .
