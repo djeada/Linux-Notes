@@ -1,7 +1,7 @@
 <h1>History</h1>
 
 * To see the n most recently used commands, use the <code>history</code> command.
-You can change the n number (which are generally between 1000 and 5000).
+You can change the number n (it is generally between 1000 and 5000).
 * Use <code>Ctrl+R</code> to search the history.
 * <code>!number</code> executes the command with the given number, while <code>!text</code> executes the command which starts with the given text.
 
