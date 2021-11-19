@@ -1,7 +1,7 @@
 
 
 <h1>The df command</h1>
-Monitoring disk usage is a common task for Linux systems administrators. The <code>df</code> command can be used to display disk usage information. You can use the <code>-h</code> option to display a human-readable output.
+Monitoring disk usage is a common task for Linux systems administrators. The <code>df</code> command can be used to display disk usage information. You can use the <code>-h</code> option to display output in a human-readable format.
 
 | Filesystem | Size | Used | Available | Use% | Mounted on |
 | --- | --- | --- | --- | --- | --- |
