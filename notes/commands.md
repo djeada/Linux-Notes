@@ -2,7 +2,7 @@
 
 * To see the n most recently used commands, use the <code>history</code> command.
 You can change the n number (which are generally between 1000 and 5000).
-* <code>Ctrl+R</code> looks for command alone, and pressing <code>Ctrl+R</code> again searches for next.
+* Use <code>Ctrl+R</code> to search the history.
 * <code>!number</code> executes the command with the given number, while <code>!text</code> executes the command which starts with the given text.
 
 To clear the history, execute the following commands:
