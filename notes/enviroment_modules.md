@@ -9,7 +9,14 @@ Problems solved by enviroment modules:
 Environment modules have nothing to do with 'perl' or 'python' modules and should not be confused with them!
 
 <h1>Installation</h1>
-The module utility is available from CentOS base repo. So one can simply install it with:
+
+The install environment modules on Ubuntu, use the following command:
+
+```bash
+apt install -y environment-modules
+```
+
+The install environment modules on CentOS, use the following command:
 
 ```bash
 yum -y install environment-modules
