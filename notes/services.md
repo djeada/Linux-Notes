@@ -5,10 +5,10 @@
 systemctl -t help
 ```
 
-Thus, services are often used to run programs at boot time, but you can start and stop services at any time. An example of a systemd service is the <code>sshd</code> service. It starts the SSH server when the system boots. Anoter example is the <code>cron</code> service. It runs the cron daemon. A service usually responds to requests from other programs. It uses inter-process communication mechanisms,like sockets, to communicate with other programs. Web servers may provide serivces, like HTTP, HTTPS, FTP, and SSH.
+Thus, services are often used to run programs at boot time, but you can start and stop services at any time. An example of a systemd service is the <code>sshd</code> service. It starts the SSH server when the system boots. Anoter example is the <code>httpd</code> service. A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs. Web servers may provide serivces, like HTTP, HTTPS, FTP, and SSH.
 
 <h1>What is a daemon?</h1>
-A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but you can start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are configured with rc and init scripts, that are typically located in /etc/rc.d and /etc/init.d.
+A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but it is also possible to start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are configured with <code>rc</code> and <code>init</code> scripts, that are typically located in /etc/rc.d and /etc/init.d.
 
 <h1>Create a custom service</h1>
 
