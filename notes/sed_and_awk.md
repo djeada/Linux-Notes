@@ -1,4 +1,4 @@
-<h1>sed</h1>
+<h1>Sed</h1>
 
 <i>sed</i> is a command-line stream editor.
 Wherever there are patterns in the text that you wish to replace, use <i>sed</i> .
@@ -19,10 +19,10 @@ Delete all blank lines:
 sed '/^$/d' file_name.txt
 ```
 
-Replace all occurences of old_string with new_strings in every file in current directory and it's subdirectories.
+Convert all letters in a directory's text files to uppercase:
 
 ```bash
-find . -type f -exec sed -i -e "s/old_string/new_string/g" {} \;
+sed -i 's/.*/\U&/' *
 ```
 
 Delete anything following and including a line that contains special_string:
@@ -31,13 +31,13 @@ Delete anything following and including a line that contains special_string:
 sed -n '/special_string/,$!p' file_name.txt
 ```
 
-Convert all letters in a directory's text files to uppercase:
+Replace all occurences of old_string with new_strings in every file in current directory and it's subdirectories.
 
 ```bash
-sed -i 's/.*/\U&/' *
+find . -type f -exec sed -i -e "s/old_string/new_string/g" {} \;
 ```
 
-<h1>awk</h1>
+<h1>AWK</h1>
 On a per-line level, <i>awk</i> is geared toward delimited fields.
 Use <i>awk</i> when the text resembles rows and columns, or "records" and "fields," as <i>awk</i> calls them.
 When compared to <i>sed</i>, it uses far more robust programming constructs like if/else, while, do/while and for loops.
