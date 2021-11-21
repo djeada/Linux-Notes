@@ -1,4 +1,4 @@
-<h1>ssh</h1>
+<h1>SSH</h1>
 
 SSH is a network protocol for securely communicating with remote machines. It is used to securely log into a remote machine and execute commands on it.
 
@@ -58,6 +58,14 @@ ssh-copy-id -i ~/.ssh/mykey username@serverhost
 <h2>Using non-standard ports</h2>
 By default, ssh uses port 22. Changing it to a different number improves the security of most servers significantly. You must change the /etc/ssh/sshd file on the server to do this. 
 
+For example, if you want to use port 561, you would add the following line to the /etc/ssh/sshd file:
+
+```
+Port 561
+```
+
+When logging in to the server, you now need to specify the port number.
+
 <h1>Sharing files between the machines</h1>
 
 After you've mastered remote login with ssh, you could realize that simply connecting to the remote system isn't enough.
@@ -71,14 +79,14 @@ You might want to complete the following tasks:
 
 A Linux server can exchange files in a variety of methods, including:
 
-* scp: A simple file-copying utility.
+* Scp: A simple file-copying utility.
 * FTP: The standard Internet file sharing protocol.
 * SFTP: file access and copying over the SSH protocol 
-* rsync: File copying is a quick and fast process.
+* Rsync: File copying is a quick and fast process.
 * SMB: Microsoft's file-sharing protocol, which is helpful in a local network of Windows PCs. 
 
 <h2>Scp</h2>
-<code>scp</code> is a safe method of moving files from one computer to another. It functions similarly to the UNIX cp command, except that the parameters can specify a user, machine, and files.
+<code>Scp</code> is a safe method of moving files from one computer to another. It functions similarly to the UNIX cp command, except that the parameters can specify a user, machine, and files.
 
 To transfer /opt/test from your machine to the /opt dir on the server with IP 192.168.2.105, use the following commands:
 
