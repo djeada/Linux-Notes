@@ -1,6 +1,6 @@
 <h1>Permissions</h1>
 
-| Command | Description | Description |
+| Permission | Files | Dirs |
 | --- | --- | --- |
 | read | The file's contents can be seen by the user | The files in the directory can be listed by the user |
 | write | The file's contents can be changed by the user | The user can add new files to the directory and delete old ones |
