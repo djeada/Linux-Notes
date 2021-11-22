@@ -10,7 +10,6 @@ iptables -L
 <h1>UFW</h1>
 The "uncomplicated firewall" is a more user-friendly alternative to iptables. 
 
-
 <h2>Installation</h2>
 On most Linux distributions, UFW is installed by default.
 
@@ -21,7 +20,7 @@ apt install ufw
 ```
 
 <h2>Usage</h2>
-To check which ports are open, use:
+To see configured rules, use:
 
 ```bash
 ufw status numbered
