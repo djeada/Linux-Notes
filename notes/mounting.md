@@ -51,9 +51,8 @@ Now drive is available for use under /mnt/shared directory.
 Mounted disks will be lost when the system is rebooted. Add the following line to the /etc/fstab file to remount on system startup: 
  
 ```
-#device        mountpoint     fstype    options  dump   fsck
-
-/dev/sdb1      /mnt/shared    ext4    defaults    0    1
+#device        mountpoint     fstype    options     dump   fsck
+/dev/sdb1      /mnt/shared    ext4      defaults    0      1
 ```
 
 Be cautious while using this file, since it has the potential to cause your system to fail to boot!
