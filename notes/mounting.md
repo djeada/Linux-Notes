@@ -1,7 +1,13 @@
+<h1>Verify that the drive is visible</h1>
+Use the following command to list all accessible disks, including mounted and unmounted drives: 
+
+```bash
+fdisk -l
+```
+
+<h1>Mount command</h1>
+
 On Linux you have to mount partitions, file systems, dvds, usb drives before you can use them.
-
-<h2>Mount command</h2>
-
 The procedure for utilizing the mount command is quite simple.
 
 When no parameters are specified, mount will display all mounted file systems:
@@ -16,7 +22,7 @@ The same information may be found in /etc/mtab:
 cat /etc/mtab
 ```
 
-<h2>Mounting a file system</h2>
+<h1>Mounting a file system</h1>
 
 To mount a file system, use the following commands:
 
@@ -38,7 +44,27 @@ mount -a source_location target_location
 mount -a /dev/sdb1 /mnt/shared
 ```
 
-<h2> Mounting an iso image </h2>
+Now drive is available for use under /mnt/shared directory.
+
+<h1>Mounting at system startup</h1>
+
+Mounted disks will be lost when the system is rebooted. Add the following line to the /etc/fstab file to remount on system startup: 
+ 
+```
+#device        mountpoint             fstype    options  dump   fsck
+
+/dev/sdb1      /mnt/shared    ext4    defaults    0    1
+```
+
+Be cautious while using this file, since it has the potential to cause your system to fail to boot!
+
+Verify that the fstab settings were appropriately added by using the following command: 
+
+```bash
+mount -a
+```
+
+<h1>Mounting an iso image </h1>
 
 Why? You may then use it as if it were a DVD on your optical drive.
 
@@ -48,7 +74,7 @@ mount -o loop filename.iso mount_point
 mount -o loop myfiles.iso /mnt/iso
 ```
 
-<h2>Unmounting</h2>
+<h1>Unmounting</h1>
 
 To unmount, use the following commands:
 
