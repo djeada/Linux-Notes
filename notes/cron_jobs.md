@@ -35,5 +35,5 @@ You have 5 fields: minutes, hour, day of the month, month, day of the week.
 When creating a cron config in <code>/etc/cron.d/</code> or <code>/etc/crontab</code>, you must provide the username under whom the command should be performed. For example, to run a following command <code>tar -cvpzf archve.tar.gz --exclude=/mnt</code> every day at 1:00 AM under root, use:
 
 ```bash
-0 1 * * * root tar -cvpzf archve.tar.gz --exclude=/mnt /
+0 1 * * * root tar -cvpzf archve.tar.gz --exclude=/mnt
 ```
