@@ -98,5 +98,5 @@ kill 3528
 Retry unmounting. If nothing else works, the last resort is lazy unmounting:
 
 ```bash
-umount -l target_location
+umount -l source_location
 ```
