@@ -25,14 +25,14 @@ Put your script in the correct directory.
 
 <h2>What if your desired schedule is different?</h2>
 
-You create a cron tab file in /etc/cron.d
+You create a cron tab file in <code>/etc/cron.d</code>.
 
 You have 5 fields: minutes, hour, day of the month, month, day of the week.
 
 * Hours: 24 hour clock.
 * Days of the week: number with minus, e.g. 1-5.
 
-When creating a cron config in /etc/cron.d/ or /etc/crontab, you must provide the username under whom the command should be performed. For example, to run a following command <code>tar -cvpzf archve.tar.gz --exclude=/mnt</code> every day at 1:00 AM, use:
+When creating a cron config in <code>/etc/cron.d/</code> or <code>/etc/crontab</code>, you must provide the username under whom the command should be performed. For example, to run a following command <code>tar -cvpzf archve.tar.gz --exclude=/mnt</code> every day at 1:00 AM under root, use:
 
 ```bash
 0 1 * * * root tar -cvpzf archve.tar.gz --exclude=/mnt /
