@@ -83,3 +83,20 @@ unmount source_location
 
 When the source location is busy (someone is using it), the command will fail!
 
+To minimize damage, find the busy process, kill it, and then unmount the drive. We may use lsof to determine the ids of processes that are preventing us from unmounting the drive: 
+
+```bash
+lsof | grep target_location
+```
+
+If a process with the id 3528 appears, then use: 
+
+```bash
+kill 3528
+```
+
+Retry unmounting. If nothing else works, the last resort is lazy unmounting:
+
+```bash
+umount -l target_location
+```
