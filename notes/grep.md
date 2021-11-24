@@ -1,5 +1,5 @@
 <h1>The grep utility</h1>
-<code>grep</code> looks for lines that match a given pattern in the listed files (or standard input if no files are specified). <code>grep</code>'s default behavior is to print out the lines that match.
+<code>grep</code> looks for lines that match a given pattern in the listed files (or standard input if no files are specified). <code>grep</code>'s default behavior is to print out the lines that match the search pattern.
 
 Print all lines containing word <code>test</code> in a file named file_name:
 
