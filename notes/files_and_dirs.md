@@ -5,7 +5,7 @@ Whenever a script or program expects a path to be specified, it can be specified
 * Relative path: the path is specified with respect to the current working directory.
 
 An example of an absolute path:
-```bash
+```bashFc
 /home/user/notes/file_name.txt
 ```
 
@@ -86,7 +86,7 @@ The <code>mkdir</code> command creates a new directory. To create a directory ca
 mkdir test
 ```
 
-<h1>Copying files</h1>
+<h1>Copy files</h1>
 
 The <code>cp</code> command makes a copy of a source file in the destination directory.
 
@@ -106,7 +106,7 @@ Some other flags include:
 | <code>-a</code> | used to copy permissions as well |
 | <code>-A</code> | used to copy all files (hidden and normal) |
 
-<h1>Moving files</h1>
+<h1>Move files</h1>
 
 The <code>mv</code> command moves a file or directory to the destination directory. 
 
@@ -138,7 +138,7 @@ rm –r directory
 
 Be careful with wildcards.
 
-<h1>Reading files</h1>
+<h1>Read files</h1>
 
 <code>cat</code> command prints the whole file on the screen. 
 
