@@ -1,7 +1,7 @@
 <h1>The grep utility</h1>
-<code>grep</code> looks for lines that match a given pattern in the given files (or standard input if no files are specified). <code>grep</code>'s default behavior is to print out the lines that match the search pattern.
+<code>grep</code> looks for lines that match a given pattern in the given files or standard input if no files are specified. <code>grep</code>'s default behavior is to print out the lines that match the search pattern.
 
-To print all lines containing word <code>key</code> in a file named file_name.txt, use:
+To print all lines containing the word <code>key</code> in a file named file_name.txt, use:
 
 ```bash
 grep key file_name.txt
