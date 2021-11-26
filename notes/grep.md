@@ -1,7 +1,7 @@
 <h1>The grep utility</h1>
-<code>grep</code> looks for lines that match a given pattern in the listed files (or standard input if no files are specified). <code>grep</code>'s default behavior is to print out the lines that match the search pattern.
+<code>grep</code> looks for lines that match a given pattern in the given files (or standard input if no files are specified). <code>grep</code>'s default behavior is to print out the lines that match the search pattern.
 
-Print all lines containing word <code>key</code> in a file named file_name.txt:
+To print all lines containing word <code>key</code> in a file named file_name.txt, use:
 
 ```bash
 grep key file_name.txt
@@ -16,7 +16,7 @@ There are number of useful flags:
 | <code>-i</code> | ignore case |
 | <code>-v</code> | print the lines that do not match to the pattern |
 | <code>-n</code> | print out the number of lines before the match |
-| <code>-e</code> | pattern to match |
+| <code>-e</code> | a pattern to match |
 
 Match two patterns, pattern1 and pattern2 in a file named file_name:
 
