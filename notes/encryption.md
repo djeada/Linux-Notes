@@ -5,10 +5,10 @@
 
 <h1>Make public and private GPG keys.</h1>
 
-1. On Ubuntu/Mint:
+1. On debian based distributions:
 
 ```bash
-sudo apt install gnupg2
+apt install gnupg2
 ```
 
 2. GPG key generation.
