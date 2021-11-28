@@ -8,7 +8,7 @@ Internet-based services (such as web browsers, web pages, and file transfer serv
 
 Ports can be opened and closed. An open port is one that has been set to accept packets. A closed port, on the other hand, is one that rejects all connections. As the server administrator, you must know which ports are open on your servers since each open port is a potential target for hacker attacks. Closing unused ports minimizes the number of possible attacks.
 
-<h1>socket status</h1>
+<h1>Socket status</h1>
 
 Socket status is a newer tool replacing older <i>netstat</i>.
 
@@ -30,7 +30,7 @@ Use the following command to display all ports (UDP and TCP):
 ss -tul
 ```
 
-<h1>nmap</h1>
+<h1>Nmap</h1>
 
 <i>nmap</i> is probing 1,000 or more ports to see whether they are open.
 It's typically used to scan remote machines, however scanning your server may also be quite useful for checking your own configuration. 
