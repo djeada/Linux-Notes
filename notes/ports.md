@@ -43,7 +43,7 @@ nmap localhost
 
 Every open port presents a vulnerability. To defend yourself from attacks, use a firewall. 
 
-<h1>How can I find a process's PID if I know its port?</h1>
+<h1>Find the process knowing its port</h1>
 
 Sometimes you have a process whose PID you don't know and which you want to kill.
 
@@ -54,3 +54,10 @@ sudo lsof -i :80
 ```
 
 The PID of the process will be displayed in the second column.
+
+<h1>Challenges</h1>
+
+1. Some ports are reserve for some specific service. Does it mean, it can't be used for any other service?
+2. How to check which port numbers are free to use?
+3. How to find which process is running on a specific port?
+4. How to find which port is used by a given service?
