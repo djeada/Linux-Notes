@@ -1,5 +1,12 @@
 <h1>What are ports?</h1>
-If you use ssh with the default settings to connect to your server, you are utilizing TCP/IP port 22. The ports can be opened or closed. As a person responsible for your server, you must identify which ports are open on your servers since each open port is a possible target for hacker attacks.
+
+Whenever you want physically travel from one place to another you need a road.  Similarly, data is transferred between devices over specific roads known as ports. There are precisely 65535 roads for every pair of connected devices (such as computers, printers, and cameras). Each one is a two-way street (data can flow in both directions). In theory, all of them may be used at the same time. You may send and recive data simultaneously on as many ports as you wish.
+
+Furthermore, there are two methods for transfering data via the ports. One is known as TCP and is fast and dangerous, while the other is known as UDP and is slow and safe. You can imagine each road as having two lanes stacked on top of each other (actually, it's just one lane, but it's simpler to imagine it this way). 
+
+Internet-based services (such as web browsers, web pages, and file transfer services) rely on certain ports to transmit data. If you wish to visit a website, you most likely use the HTTP protocol. The data travels on the lane 80. When you open YouTube, you send a request to your router on lane 80, which passes it to the servers. The response comes on lane 80 as well, first from the servers to the router and then from the router to your PC. 
+
+Ports can be opened and closed. An open port is one that has been set to accept packets. A closed port, on the other hand, is one that rejects all connections. As the server administrator, you must know which ports are open on your servers since each open port is a potential target for hacker attacks. Closing unused ports minimizes the number of possible attacks.
 
 <h1>socket status</h1>
 
