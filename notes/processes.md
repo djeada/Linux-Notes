@@ -6,7 +6,7 @@ There two types of processes:
 1. shell job - A command written in the shell is used to launch the task. They are also known as interactive processes.
 2. daemons - They are utility applications that run silently in the background to monitor and maintain particular subsystems to ensure the operating system's proper functionality. They are often launched with root privileges.
 
-The <i>ps</i> command displays a list of all processes. To long listing of all processes on the system, use:
+The <code>ps</code> command displays a list of all processes. To long listing of all processes on the system, use:
 
 ```bash
 ps -ef 
@@ -20,11 +20,11 @@ ps -e --format uid,pid,ppid,%cpu,cmd
 
 Another useful options include:
 
-* <i>aux</i>: short summary of all active processes
-* <i>fax</i>: shows the process hierarchy
-* <i>o</i>: allows to specify the column names
+* <code>aux</code>: short summary of all active processes
+* <code>fax</code>: shows the process hierarchy
+* <code>o</code>: allows to specify the column names
 
-<i>top</i> shows the sorted list of active processes:
+<code>top</code> shows the sorted list of active processes:
 
 ```bash
 top
@@ -49,10 +49,10 @@ To find out which 10 processes use most of RAM:
 ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head 10
 ```
 
-<h1>Foreground and background</h1>
-Jobs can either be in the foreground or the background. Thus far, we have run commands at the prompt and waited for them to complete. We call this running in the “foreground.”
+<h1>Foreground and background jobs</h1>
+Jobs can either be in the foreground or in the background. Thus far, we have run commands at the prompt and waited for them to complete. We call this running in the “foreground.”
 
-Use the “&” operator, to run programs in the “background” (this is especially useful when the program will take a long time to execute):
+You can use the “&” operator, to run programs in the “background” (this is especially useful when the program will take a long time to execute):
 
 ```bash
 sleep 1000 &
@@ -64,20 +64,20 @@ This process should now be displayd in the list of processes running in the back
 jobs
 ```
 
-To bring a background program to foreground, use <i>fg</i> and it's number from <i>jobs</i> output:
+To bring a background job to foreground, use <code>fg</code> and it's number from <code>jobs</code> output:
 
 ```bash
 fg 1
 ```
 
-To stop a process without killing it, use <i>Ctrl+Z</i> (this will also display in the output of <i>jobs</i>).
-Use <i>bg</i> to make it run again (analogous to <i>fg</i>).
+To stop a process without killing it, use <code>Ctrl+Z</code> (this will also display in the output of <code>jobs</code>).
+Use <code>bg</code> to make it run again (analogous to <code>fg</code>).
 
 ```bash
 bg 1
 ```
 
-Another useful shortcut is <i>Ctrl+C</i>, which is used to terminate a running process.
+Another useful shortcut is <code>Ctrl+C</code>, which is used to terminate a running process.
 Note: background processes launched in the shell will continue to run when the shell is terminated.
   
 <h1>Terminate processes</h1>
@@ -101,13 +101,12 @@ Available signals:
 | <code>SIGINT</code> | (2) | Interruptanalogous toanalogous to from keyboard |
 | <code>SIGKILL</code> | (9) | Kill signal |
 | <code>SIGTERM</code> |  (15) | Termination signal |
-| <code>SIGSTP</code> |  (20) | analogous to <i>Ctrl+Z</i> |
+| <code>SIGSTP</code> |  (20) | analogous to <code>Ctrl+Z</code> |
   
 Properly killing processes:
 1. Send a SIGINT.
 2. Send a SIGTERM.
 3. Send a SIGKILL.
-
 
 <h2>pkill vs killall</h2>
 
@@ -121,7 +120,13 @@ pkill -SIGTERM -f chromium
 killall -15 chromium
 ```
 
-<h1>The pgrep command</h1>
+<h1>Spawning processes</h1>
+
+* PID 1 is assigned to the first process that is created when the system boots up.
+* This process is known as <code>systemd</code> or <code>init</code> depending on which Linux distribution you are using.
+* This process is the father of all other processes. 
+
+<h1>Search for processes</h1>
 
 <code>pgerp</code> allows to find process id when process name is known:
 
@@ -137,4 +142,4 @@ pgrep -u adam chromium
 
 <h1>Challenges</h1>
 
-1. What is the difference between <i>ps -e</i> and <i>ps -eu</i> commands?
+1. What is the difference between <code>ps -e</code> and <code>ps -eu</code> commands?
