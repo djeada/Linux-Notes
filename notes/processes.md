@@ -1,5 +1,5 @@
 <h1>Processes</h1>
-We create "processes" when we interact with Linux. A process is just a numbered instance of a running program.  Many processes can run concurrently on modern systems. The OS quickly swithces between various processes running on the CPU. Multicore CPU's can acutually execute many processes at the same time. Each core quickly switches between various processes. 
+We create "processes" when we interact with Linux. A new process is created every time you execute a command, open an application, or launch a system service. A process is just a numbered instance of a running program. Many processes can run concurrently on modern systems. The OS quickly swithces between various processes running on the CPU. Multicore CPU's can even execute many processes at the same time. On those machines each core quickly switches between various processes. 
 
 There two types of processes:
 
@@ -12,7 +12,7 @@ The <i>ps</i> command displays a list of all processes. To long listing of all p
 ps -ef 
 ```
 
-To see the user ID, process ID, parent process ID, CPU usage, and command name of a process, use:
+Processes have many properties associated with them. To see the user ID, process ID, parent process ID, CPU usage, and command name of a process, use:
 
 ```bash
 ps -e --format uid,pid,ppid,%cpu,cmd 
@@ -50,7 +50,6 @@ ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head 10
 ```
 
 <h1>Foreground and background</h1>
-
 Jobs can either be in the foreground or the background. Thus far, we have run commands at the prompt and waited for them to complete. We call this running in the “foreground.”
 
 Use the “&” operator, to run programs in the “background” (this is especially useful when the program will take a long time to execute):
@@ -82,7 +81,6 @@ Another useful shortcut is <i>Ctrl+C</i>, which is used to terminate a running p
 Note: background processes launched in the shell will continue to run when the shell is terminated.
   
 <h1>Terminate processes</h1>
-
 To kill a process, use the ‘kill’ command with the five-digit process id:
 
 ```bash
@@ -99,20 +97,33 @@ Available signals:
 
 | Signal | Value |  Description |
 | --- | --- | --- |
-| SIGHUP | (1) | Hangup |
-| SIGINT | (2) | Interruptanalogous toanalogous to from keyboard |
-| SIGKILL | (9) | Kill signal |
-| SIGTERM |  (15) | Termination signal |
-| SIGSTP |  (20) | analogous to <i>Ctrl+Z</i> |
+| <code>SIGHUP</code> | (1) | Hangup |
+| <code>SIGINT</code> | (2) | Interruptanalogous toanalogous to from keyboard |
+| <code>SIGKILL</code> | (9) | Kill signal |
+| <code>SIGTERM</code> |  (15) | Termination signal |
+| <code>SIGSTP</code> |  (20) | analogous to <i>Ctrl+Z</i> |
   
 Properly killing processes:
 1. Send a SIGINT.
 2. Send a SIGTERM.
 3. Send a SIGKILL.
 
-<h1>pgrep</h1>
 
-<i>pgerp</i> allows to find process id when process name is known:
+<h2>pkill vs killall</h2>
+
+Both <code>pkill</code> and <code>killall</code> offer distinct options. Killall provides an option to match processes based on their age, whereas pkill contains a flag to exclusively kill processes on a certain tty. Neither is superior. They simply specialize in different areas.
+
+```bash
+pkill -SIGTERM -f chromium
+```
+
+```bash
+killall -15 chromium
+```
+
+<h1>The pgrep command</h1>
+
+<code>pgerp</code> allows to find process id when process name is known:
 
 ```bash
 pgrep chromium
@@ -122,18 +133,6 @@ Look for a process that was launched by a certain user:
 
 ```bash
 pgrep -u adam chromium
-```
-
-<h1>pkill vs killall</h1>
-
-Both pkill and killall offer distinct options. Killall provides an option to match processes based on their age, whereas pkill contains a flag to exclusively kill processes on a certain tty. Neither is superior. They simply specialize in different areas.
-
-```bash
-pkill -SIGTERM -f chromium
-```
-
-```bash
-killall -15 chromium
 ```
 
 <h1>Challenges</h1>
