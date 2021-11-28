@@ -58,7 +58,7 @@ alias mv='mv -i'
 
 The <i>\~/.bash_profile</i> file is read every time a shell is started.
 
-<h2>bash_logout</h2>
+<h2>Bash_logout</h2>
 
 The <i>\~/.bash_logout</i> file is read when the user logs out.
 
