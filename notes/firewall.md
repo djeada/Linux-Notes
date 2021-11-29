@@ -42,6 +42,16 @@ ufw default allow outgoing
 ufw enable
 ```
 
+<h2>Blocking ping requests</h2>
+
+Additionally one can block ping requests by editing /etc/ufw/before.rules:
+
+```
+# Block all incoming ping requests
+-A ufw-before-input -p icmp --icmp-type echo-request -j DROP
+```
+
+
 <h1>Firewalld</h1>
 Firewalld is a Linux firewall that is used by Fedora and other distributions. It is a more advanced firewall than iptables. 
 
@@ -63,13 +73,4 @@ To put the rules in place, use:
 
 ```bash
 systemctl restart firewalld.service
-```
-
-<h1>Blocking ping requests</h1>
-
-Additionally one can block ping requests by editing /etc/ufw/before.rules:
-
-```
-# Block all incoming ping requests
--A ufw-before-input -p icmp --icmp-type echo-request -j DROP
 ```
