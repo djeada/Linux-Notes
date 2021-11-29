@@ -13,6 +13,19 @@ In /etc/shells you can find a list of all the shells that are available on your 
 /bin/zsh
 ```
 
+To see a default for the user, use:
+
+```
+echo "$SHELL"
+```
+
+Use the following command to determine which shell is currently in use: 
+
+
+```
+ps -cp "$$" -o command=""
+```
+
 To switch to <code>zsh</code> in your terminal, you can use the command:
 
 ```
