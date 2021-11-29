@@ -31,20 +31,6 @@ To find the 10 largest directories in the entire system, use:
 du -x / | sort -nr | head -10
 ```
 
-<h1>The lsof command</h1>
-
-The <code>lsof</code> command stands for List Of Open Files and provides information to determine which files are opened by which process.
-
-```bash
-sudo lsof | less
-```
-
-To check which process running on port 8080, use:
-
-```bash
-lsof -i :8080
-```
-
 <h1>Challenges</h1>
 
 1. Display the disk usage of the current directory.
