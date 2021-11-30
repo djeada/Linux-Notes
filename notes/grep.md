@@ -73,3 +73,7 @@ The regex will match any word of 8-12 characters in length:
 ```bash
 grep -nE "[[:alpha:]]{8,12}" file_name
 ```
+
+<h1>Challenges</h1>
+
+1. List all files and subdirectories in the current directory, then use grep to remove all of the listed files and subdirectories except those that contain the word <code>test</code>. 
