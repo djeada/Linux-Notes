@@ -122,6 +122,12 @@ Columns of /etc/group
 * group id
 * members
 
+To list all local groups on the system, use:
+
+```bash
+cut -d: -f1 /etc/group | sort
+```
+
 <h2>User ID and group ID</h2>
 
 Each user has a distinct user id (uid). To check a user's id, use:
