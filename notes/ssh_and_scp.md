@@ -30,6 +30,14 @@ There are number of flags:
 
 Each user has it's own connection config file, but there is also a global connection config file located at: /etc/ssh/ssh_config.
 
+Make sure that sshd service on your server up and running. For Debian based distros, you can use:
+
+```bash
+apt install openssh-server
+systemctl enable ssh
+systemctl start ssh
+```
+
 <h2>Key generation</h2>
 
 * Private key: You keep it on your machine.
