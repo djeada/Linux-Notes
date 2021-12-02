@@ -62,3 +62,4 @@ Notes on Linux.
 * https://craigmbooth.com/blog/selinux-for-mortals/
 * https://www.golinuxcloud.com/linux-commands-cheat-sheet/
 * https://www.linuxfromscratch.org/
+* https://docs.fedoraproject.org/en-US/Fedora/22/html/SELinux_Users_and_Administrators_Guide/index.html
