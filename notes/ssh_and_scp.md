@@ -49,7 +49,7 @@ To generate a new key pair, use:
 ssh-keygen  -t rsa
 ```
 
-In your.ssh directory, you should now have an RSA public and private key pair:
+In your .ssh directory, you should now have an RSA public and private key pair:
 
 ```bash
 ls -a ~/.ssh/
