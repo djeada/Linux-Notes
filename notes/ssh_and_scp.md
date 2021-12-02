@@ -64,9 +64,9 @@ ssh-copy-id -i ~/.ssh/mykey username@serverhost
 ```
 
 <h2>Using non-standard ports</h2>
-By default, ssh uses port 22. Changing it to a different number improves the security of most servers significantly. You must change the /etc/ssh/sshd file on the server to do this. 
+By default, ssh uses port 22. Changing it to a different number improves the security of most servers significantly. You must change the /etc/ssh/sshd_config file on the server to do this. 
 
-For example, if you want to use port 561, you would add the following line to the /etc/ssh/sshd file:
+For example, if you want to use port 561, you would add the following line to the /etc/ssh/sshd_config file:
 
 ```
 Port 561
