@@ -1,3 +1,6 @@
+//TODO:
+* /etc/sudoers
+
 <h1>Users</h1>
 <h2>Superuser</h2>
 The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
