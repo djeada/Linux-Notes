@@ -1,5 +1,6 @@
 //TODO:
 * /etc/sudoers
+* visudo
 
 <h1>Users</h1>
 <h2>Superuser</h2>
