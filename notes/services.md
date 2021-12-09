@@ -1,5 +1,6 @@
 <h1>What are services?</h1>
 You can use services, when you want to run a program:
+
 - In the background.
 - Start automatically when the computer boots up.
 - Run various applications in a specific order after the boot up.
