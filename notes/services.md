@@ -1,4 +1,10 @@
 <h1>What are services?</h1>
+You can use services, when you want to run a program:
+- In the background.
+- Start automatically when the computer boots up.
+- Run various applications in a specific order after the boot up.
+- Make it globally available within the system.
+
 <code>Systemd</code> executes different scripts at boot time, those scripts are known as <code>units</code>. Units include services, mounts and sockets. To display all of them, use:
 
 ```bash
