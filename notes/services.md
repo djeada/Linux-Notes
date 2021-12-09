@@ -31,7 +31,7 @@ An example of a foo.service script:
 
 ```bash
 [Unit]
-Description=Sample Script Startup
+Description=Sample Script
 
 [Service]
 Type=idle
@@ -98,7 +98,7 @@ systemctl list-dependencies multi-user.target | grep httpd
 ```
 
 <h1>Systemd timers</h1>
-<i>systemd</i> is currently included in all major Linux distributions. It may be used to start and stop services as well as perform activities at particular periods using "timers."
+<code>Systemd</code> is currently included in all major Linux distributions. It may be used to start and stop services as well as perform activities at particular periods using "timers."
 
 Use the following command to determine which services are enabled on your system: 
 
