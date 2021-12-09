@@ -17,7 +17,7 @@ Thus, services are often used to run programs at boot time, but you can start an
 1. An example of a systemd service is the <code>sshd</code> service. It starts the SSH server when the system boots. 
 2. Anoter example is the <code>httpd</code> service. It acts as a server in a client-server architecture, employing the HTTP and/or HTTPS network protocols. 
 
-A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs. Web servers may provide serivces, like HTTP, HTTPS, FTP, and SSH.
+A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs.
 
 <h1>What is a daemon?</h1>
 A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but it is also possible to start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are configured with <code>rc</code> and <code>init</code> scripts, that are typically located in /etc/rc.d and /etc/init.d.
