@@ -1,8 +1,8 @@
 <h1>Sed</h1>
 
-<i>sed</i> is a command-line stream editor.
-Wherever there are patterns in the text that you wish to replace, use <i>sed</i> .
-<i>sed</i> deals with character streams on a per-line basis.
+<i>Sed</i> is a command-line stream editor.
+Wherever there are patterns in the text that you wish to replace, use <i>sed</i>.
+<i>Sed</i> deals with character streams on a per-line basis.
 It uses a basic programming language with goto-style loops and simple conditionals (in addition to pattern matching and address matching).
 There are just two "variables" in this case: pattern space and hold space.
 Bare in mind that sed scripts might be tough to read.
