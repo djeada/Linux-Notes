@@ -1,17 +1,19 @@
-<h1>Network Interfaces </h1>
+## Basic terminology
+
+### Network Interfaces 
 
 * Loopback: The IP address of the loopback (lo) interface will be 127.0.0.1, which represents the host itself. Let's say you are hosting a website on your Linux machine. In your web browser, navigate to http://127.0.0.1 to access your website. That adress works only localy. You can't access it from other network.
 
 * Ethernet: The ethernet 0 (eth0) interface is commonly used to connect to a local network. Even if you run Linux in a virtual machine (VM), you will still have an eth0 interface that links to the host's actual network interface. Most often, you should verify that eth0 is turned on and has an IP address so that you may connect with the local network and the Internet.
 
-<h1>Mac address</h1>
+### Mac address
 As part of the OSI Model's layer 2—the Data Link layer—the media access control (MAC) address is used to identify a network interface.
 Even if a network interface does not have an IP address, it will always have a MAC address (Media Access Control) address (also known as the hardware address). They appear as six groups of two hexadecimal digits each, and are assigned when a network adapter is manufactured or, in the case of a virtualized network adapter, when the adapter is created. It is also known as link or ether address.
 
-<h1>Ip address</h1>
+### Ip address
 A single device can have more than one IP address, but they are always unique on the same network. IP addresses generally lie within the ranges of 1.1.1.1 to 255.255.255.255.
 
-<h1>DHCP</h1>
+### DHCP
 When a network has a large number of computers (hundreds or thousands), it becomes extremely difficult to assign IP addresses to each of them separately. The dynamic host configuration protocol (DHCP), which automates the procedure, is the answer.
 When a host or device initially connects to the network, DHCP is used to provide it an IP address.
 This protocol is used for client systems or devices that do not suffer any negative consequences from changing their IP address on a frequent basis. Administrators on server systems may manually configure static IP addresses or generate what are known as static DHCP reservations, which are connected to the MAC address of the network adapter.
@@ -29,9 +31,9 @@ The DHCP client's local configuration file is /etc/dhcp/dhclient.conf. Linux is 
 grep dhcp /var/log/syslog
 ```
 
-<h1>Commands</h1>
+## Commands
 
-<h2>ifconfig</h2>
+### ifconfig
 
 Informations provided by ifconfig:
 
@@ -50,7 +52,7 @@ To only display the info about the eth0 interface:
 ifconfig eth0
 ```
 
-<h2>ip</h2>
+### ip
 
 Old good <i>ifconfig</i> has now been deprecated. Using <i>ip</i> command is now recommended for changing IP addresses in the live configuration.
 
@@ -78,7 +80,7 @@ Use the following command to display network interfaces and info about sent pack
 ip -s link
 ```
 
-<h2>ping</h2>
+### ping
 
 The ping (Packet Internet Grouper) command is used to test the connection between the two computers.
 
@@ -88,7 +90,7 @@ ping google.com
 
 It sends an Internet Control Message Protocol (ICMP) packet over the network and informs you of any responses. An ICMP response will be returned if a host is accessible and capable of communicating on the network. If, on the other hand, a host is not accessible, you will receive a notification that the host was unavailable or timed out (indicating that the ping test failed).
 
-<h2>route</h2>
+### route
 
 This command above is used to examine the network route information and show the routing table. To display routing table in full numeric form, use:
 
@@ -114,7 +116,7 @@ To delete the default gateway, use:
 route del default
 ```
 
-<h1>Network Manager daemon</h1>
+## Network Manager daemon
 
 It is a command-line tool that manages network connections. To check if it running use:
 
@@ -150,8 +152,8 @@ nmcli con add con-name eth2 type ethernet ifname eth2 ipv4.method manual ipv4.ad
 
 To create a new ethernet connection and assign DHCP IP Address, use ipv4.mehod auto.
 
-<h2>nmtu</h2>
-<i>nmtui</i> is a file based version of <i>nmcli</i>. Use it to:
+### nmtu
+<i>nmtui</i> is a file based version of <i>nmcli</i>. Use it if you don't have the GUI version installed on your system. You can:
 
 * modify the connections
 * change the hostname
@@ -163,14 +165,19 @@ After you've made the necessary modifications, use the following command to re-e
 systemctl restart network
 ```
 
-<h1>DNS</h1>
+## DNS
 
 It would be difficult to remember the IP addresses of each machine to which you want to connect. DNS is a system that converts IP addresses to names. It allows you to write a nice name like google.com or apple.com in your internet browser and be taken to the company's website without ever having to input an actual IP address.
 
-* Prior to reaching out to a DNS server on the network, a local file called /etc/hosts is utilized as the initial point of query for any host name. No additional searches are carried out if the name is located there. You can edit the hosts file and set a static name to IP address mapping.
-* The /etc/resolv.conf file specifies which local domains should be searched and which server names should be used for DNS resolution.
+* Prior to reaching out to a DNS server on the network, a local file called /etc/hosts is utilized as the initial point of query for any host name. No additional searches are carried out if the name is located there. You can edit the hosts file and set a static name to IP address mapping. For example, if you connect google.com with the localhost ip address, no person on the system will be able to access google.com via a browser. 
 
-DNS settings:
+```
+127.0.0.1 google.com
+```
+
+* The /etc/resolv.conf file specifies which local domains should be searched and which server names should be used for DNS resolution. <code>Systemd</code> creates this file on the fly, so we usually don't edit it manually. However, you can verify which DNS server your computer is using. 
+
+### DNS settings
 
 * use nmtui to set the DNS name servers
 * set the DNS1 to DNS2 in the ifcf network connection configuration file in /etc/sysconfig/network-scripts
@@ -185,13 +192,58 @@ nmcli con up enps03
 
 The command 'nmcli con' can be used to find the name of a connection (for example, enps03).
 
-View the /etc/resolv.conf file to confirm the modifications. You should not manually change /etc/resolv.conf since it is created by the Network Manager daemon and is likely to be overwritten at any moment.
+View the /etc/resolv.conf file to confirm the modifications.
 
+### Troubleshooting DNS
 
-<h2>Packet analysis</h2>
+To gather DNS information you can use three simillar tools: <code>dig</code>, <code>nslookup</code> and <code>host</code>.
+
+```bash
+dig google.com
+nslookup google.com
+host google.com
+```
+
+## Packet analysis
 
 The tcpdump command allows you to do packet analysis from the command line.
 
 ```bash
 tcpdump
+```
+
+## Network troubleshooting
+
+1. Ping google.com (If works everything is ok). 
+
+```bash
+ping google.com
+```
+
+2. Ping google.com using its IP address (If works there is a problem with the DNS).
+
+```bash
+ping 8.8.8.8
+```
+
+3. Ping your own IP address (If works network stack is working).
+
+To determine your IP address, use the following command and look for the ethernet address in the output: 
+
+```bash
+ifconfig
+```
+
+Ping the address you found. Let's say it is 10.82.12.82:
+
+```bash
+ping 10.82.12.82
+```
+
+4. Ping other computers on your network.
+
+Let's say your default gateway is 10.82.12.1:
+
+```bash
+ping 10.82.12.1
 ```
