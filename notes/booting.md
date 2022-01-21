@@ -1,13 +1,24 @@
-What Linux does between the moment you press the power button and the time the login prompt appears?
+# Boot concepts
 
-<h2>BIOS</h2>
+What happens in Linux between the time you push the power button and the time you see the login prompt? 
+
+## Boot process
+
+### BIOS
 
 * Basic input output system.
 * Checks the integrity of the system.
 * The boot loader program is searched for, loaded, and executed.
 * To alter the boot sequence, hit a specific key (F12 or F2) during BIOS startup.
 
-<h2>MBR</h2>
+### BIOS vs UEFI
+
+* What is the difference? Which one should we support?
+* Both serve as the middle man between hardware and the OS.
+* UEFI is newer program.
+* Usually you have either BIOS or UEFI (Unified Extensible Firmware Interface).
+
+### MBR
 
 * Master boot record.
 * First sector of bootable disk (/dev/sda or /dev/hda).
@@ -16,28 +27,46 @@ What Linux does between the moment you press the power button and the time the l
 * Partition table info.
 * Mbr validation check. 
 
-<h2>GRUB</h2>
+### GRUB
+
+This is hwo the computer transitions from BIOS to the actual OS.
 
 * Grand unified bootloader.
 * Chooses which kernel image should be executed.
 * Displays the splash screen.
 * Has knowledge of the file system.
-* Configuration file: /boot/grub/grub.cfg
+* Newer version is GRUB2.
 
-<h2>Kernel</h2>
+| GRUB | GRUB2 |
+| ----------- | ----------- |
+| Legacy | Newer version |
+| menu.lst, grub.conf | /boot/grub/grub.cfg |
+| difficult to modify | customize with /etc/default/grub |
+| no live boot envrioments | can boot from ISO or USB |
+| boot menu usually displays ons boot | hidden boot menu (on boot, hold down SHIFT) |
 
+### Kernel
+
+The Linux kernel is efficient because it is modular.
+
+* Kernel is started from GRUB.
+* The files responsible for this part are called <code>vmlinux</code> or <code>vmlinuz</code>. Those are static files found on <code>/boot/</code>.
 * Mounts the root file system.
-* Executes init: /sbin/init
+* Executes init: /sbin/init.
+* Then it has access to all modules loaded into the kernel (such as usb or video card).
+* Modules are not part of the static kernel, they are usually placed at <code>/lib/modules/</code>.
 
-<h2>Init</h2>
+### Init
 
-* Chooses run level
-* Configuration file: /etc/inittab
+On Linux, init (short for initialization) is the program that starts all other processes. It is typically run as a daemon with PID 1. 
+
+* Chooses the run level.
+* Configuration file: /etc/inittab.
 * What programs will be loaded on startup.
 
-<h2>Run level</h2>
+### Run level
 
-* executes program for the current run level
+Executes program for the current run level.
 
 | Run level | Description |
 | --- | --- |
@@ -49,17 +78,29 @@ What Linux does between the moment you press the power button and the time the l
 | 5 | X11 |
 | 6 | reboot |
 
-<h2>Hostname</h2>
+## Kernel panic
+
+* If nothing was changed on the system, one of the hardware components might be defective.
+* If you recently updated the kernel, you can restore to a previous version. On the upgrade, Linux automatically backs up the old kernel. 
+
+## Useful Commands
+
+### Hostname
+
 You may change the system hostname on a systemd-based operating system by manually changing /etc/hostname file or using:
 
 ```bash
 hostnamectl set-hostname your_new_name
 ```
 
-<h2>Uptime</h2>
-uptime
+### Uptime
 
-<h2>Reboot</h2>
+```bash
+uptime
+```
+
+### Reboot
+
 Reboot system with systemctl:
 
 ```bash
@@ -72,7 +113,7 @@ To restart in 5 minutes, use the <i>shutdown</i> command:
 shutdown -r +5
 ```
 
-<h2>Shutdown</h2>
+### Shutdown
 
 To power off inmmediately, use the <i>shutdown</i> command:
 
@@ -86,7 +127,7 @@ To power off with systemctl, use:
 systemctl poweroff
 ```
 
-<h2>Recover root password</h2>
+## Recover root password
 
 1. reboot the machine
 1. interrupt grub process typing any key
@@ -99,7 +140,7 @@ systemctl poweroff
 1. touch /.autorelabel
 1. exit
 
-<h1>Challenges</h1>
+## Challenges
 
 1. Run the <i>reboot</i> command. Use the <i>uptime</i> command to ensure that your server was restarted.
 2. Use <i>hostnamectl set-hostname</i> to rename your server. Run, <i>hostname</i>, to confirm that the operation was successful.
