@@ -13,14 +13,13 @@ In /etc/shells you can find a list of all the shells that are available on your 
 /bin/zsh
 ```
 
-To see a default for the user, use:
+To see the default shell for the user, use:
 
 ```
 echo "$SHELL"
 ```
 
 Use the following command to determine which shell is currently in use: 
-
 
 ```
 ps -cp "$$" -o command=""
@@ -34,7 +33,7 @@ chsh -s /bin/zsh
 
 <h1>Bashrc</h1>
 
-Every time a shell is started, the  <i>\~/.bashrc</i> script is read. This is similar to  <i>\~/.cshrc</i>  in C Shell.
+Every time a shell is started, the  <i>\~/.bashrc</i> script is read. This is similar to  <i>\~/.cshrc</i> in C Shell.
 
 The script is designed to be lightweight, with just the most important commands being run.
 
