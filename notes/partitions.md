@@ -1,4 +1,4 @@
-<h1>Standards for the layout of partition tables</h1> 
+## Standards for the layout of partition tables 
 
 When configuring a hard drive, you have two options: 
 * MBR (Master Boot Record)
@@ -10,20 +10,21 @@ To see which one you are using, use:
 gdisk -l 
 ```
 
-<h1>MBR</h1>
+## MBR
 
 * In March 1983, IBM PC DOS 2.0 included MBR.
 * MBR is made up of three parts: master boot code, a partition table for the disk, and disk signature. 
 * It saves its data on the disk's first sector. 
 * MBR only supports disks up to 2TB in capacity and can store a maximum of four primary partition entries.
 
-<h1>GPT</h1>
+## GPT
 
+* It's newer and more advanced than MBR. It does all its predecessor can do and more.
 * GUID Partition Tables, is a format that differs from MBR in that it allows more than 2 TB and up to 128 partitions.
 * GPT is made up of a Protective MBR and additionally maintains cyclic redundancy check (CRC) values to ensure the integrity of its data.
-* To use it you must activate the Unified Extensible Firmware Interface (UEFI) in your system's bios settings.
+* To use it you must activate the UEFI in your system's BIOS settings.
 
-<h1>Common disk names</h1>
+## Common disk names
 
 The first two-three letters refer to the device type:
 
@@ -38,7 +39,7 @@ The last letter denotes the device order (it may alternatively be the last two),
 * /dev/sdc1 is the first (1) partition on your third (c) SATA disk.
 * /dev/hdb3 is the third (3) partition of the second (b) IDE hard drive.
 
-<h1>Creating and destroying partitions</h1>
+## Creating and destroying partitions
 You can use fdisk to create both MBR and GPT partitions. However it is adviced to used gdisk for GPT partitions, which has similar interface.
 
 To view all disk partitions, use:
