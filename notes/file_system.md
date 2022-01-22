@@ -1,4 +1,6 @@
-<h1>Types of items stored in UNIX filesystem </h1>
+## Types of files stored in UNIX filesystem
+  
+One way to classify the files is by their purpose: 
 
 1. Ordinary files: Text, data, and code information can all be found in ordinary files. 
   Files and folders can not be contained within other files or directories. 
@@ -12,29 +14,36 @@
 
 1. Links: A link is a reference to another file. There are two kinds of links: hard links and soft links. A hard link to a file is indistinguishable from the file itself. A soft link (also known as a symbolic link) is an indirect pointer or shortcut to a file. A soft link is created as a directory file entry with a pathname.
 
-<h2>Special directory names</h2> 
+Another approach is to categorize them according to how they are stored in the file system: 
+
+* Files that are directly placed in the file system.
+* Virtual files that are not files but rather interfaces to other programs or kernel itself (/proc and /sys).
+* Files from a remote NFS server that has been mounted on the file system. 
+
+### Special directory names 
 
 * “./” is a reference to the current directory;
 * “../” is a reference  to the directory one level above the current directory; 
 * “~/” is a reference  to your home directory.
 
-<h2>File names</h2> 
+### File names 
 Unlike Windows, Linux distinguishes between upper and lower case letters in file names.
 That is, the file names "Test," "TEST," and "test" all refer to distinct files.
 
-<h2>Hidden files</h2> 
+### Hidden files 
 Hidden files have filenames that begin with “.” (period). 
 These are generally system files that do not appear when you list the contents of a directory. 
 
-<h2>Permissions</h2>
+### Permissions
 Files are given "permissions" that specify who has access to them and what kind of access they have.
 The three most basic forms of access are read, write, and execute. 
 You can read the content of a file (e.g., make your own copy) if you have read access. 
 You can remove, edit, or replace files with write access.
 Execute access is necessary to run programs or access the contents of folders.
 
+## UNIX Directory Structure
 
-<h1>UNIX Directory Structure</h1>
+Everything in Linux is located in the root directory. Even if you have many hard disks or SSDs, their storage will be stacked under the root directory. 
 
 | Command | Description |
 | --- | --- |
@@ -52,9 +61,9 @@ Execute access is necessary to run programs or access the contents of folders.
 | <i>/root</i> | root user home directory |
 | <i>/boot</i> | files needed for the boot process |
 
-<h1>File system types</h1>
+## File system types
 
-<h2>Second Extended File System (ext2)</h2>
+### Second Extended File System (ext2)
 
 * Maximum file size: 2 TB
 * Maximum volume size: 4 TB
@@ -62,29 +71,42 @@ Execute access is necessary to run programs or access the contents of folders.
 * Supports: POSIX permissions and compression
 * If a system shuts down unexpectedly, it takes an EXTREMELY LONG TIME to recover.
 
-<h2>Second Extended File System (ext3)</h2>
+### Second Extended File System (ext3)
 
 * Does everything ext2 does (you can upgrade 2 to 3).
 * It comes with a journal (before making a transaction it will describe it in the journal and mark it as incomplete). It is a lifesaver.
 * Security over slightly slower I/O actions.
 
-<h2>Reiser File System </h2>
-
-* Uses journaling.
-* Maximum file size: 8 TB
-* Maximum volume size: 16 TB
-* Faster than ext2 and ext3.
-
-<h2>Fourth Extended File System (ext4)</h2>
+### Fourth Extended File System (ext4)
 
 * Maximum file size: 16 TB
 * Maximum volume size: 1 exabyte
 * Maximum number of files: 4 billion
 * Maximum file name length: 255 characters
-* Uses a journal.
+* Uses journaling.
 
-<h1>Creating a File System</h1>
-Assume we have a disk with defined partitions but no data stored on it.
+### Reiser File System 
+
+* Maximum file size: 8 TB
+* Maximum volume size: 16 TB
+* Faster than ext2 and ext3.
+* Uses journaling.
+
+### XFS
+
+* Older.
+* Used to be the only option for big drives.
+* Still used by CentOS.
+
+### DOS (windows world)
+
+* ntfs
+* vfat
+* fat32
+* linux can read and write to those file systems
+
+## Creating a File System
+Let's say <code>/dev/sdb</code> is a disk  with defined partitions but no data stored on it.
 
 To check the disk info and partitions, use:
 
@@ -92,7 +114,7 @@ To check the disk info and partitions, use:
 fdisk -l /dev/sdb 
 ```
 
-Assume the following partition exists on /dev/sdb: /dev/sdb1, /dev/sdb2, /dev/sdb3.
+Assume the following partition exists on <code>/dev/sdb</code>: <code>/dev/sdb1</code>, <code>/dev/sdb2</code>, <code>/dev/sdb3</code>.
 
 To create ext4 file system on each of them, use:
 
