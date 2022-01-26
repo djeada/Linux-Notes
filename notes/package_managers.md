@@ -1,19 +1,61 @@
-<h1>Package managers</h1>
+## Package managers
 
-Debian and Ubuntu are arguably the most well-known Linux distributions that use APT (Advanced Package Tool). Other distributions that use alternative package managers, such as DNF, YUM, Pacman, and so on, will be unable to utilize the apt commands at all. These package managers have their own functionalities and syntax, which may differ significantly from that of apt.
+Debian and Ubuntu are arguably the most well-known Linux distributions (at least for the home users). Those two distros (and their derivatives) use <code>APT</code> (Advanced Package Tool). Other distributions use alternative package managers, such as <code>DNF</code> <code>YUM</code>, <code>Pacman</code>, and so on. You will be unable to use the apt command on the machines using those distros. Those other package managers have their own functionalities and syntax, which may differ significantly from that of <code>apt</code>.
 
 Be cautious, as package managers frequently not only install software with all of its dependencies, but also interfere with your system's configuration!
 
-<h1>Install and update software packages from APT repo</h1>
+## Installing from tarballs
+
+You may install software directly from the tarball on your Linux machine, without using a package manager.
+This procedure consists of three steps: 
+
+1. Extract
+
+Go to the directory that contains your tarball and run the following commands: 
+
+```bash
+tar -zxvf path_to_tar.tar.gz
+cd path_to_tar
+```
+
+2. Compile
+
+<code>Make</code> is the standard Linux compilation tool: 
+
+```bash
+make
+```
+
+There may also be a <code>config</code> file with dependencies that must be installed before this application can be compiled. In this case run the config file first.
+
+3. Install
+
+If a <code>make install</code> is available, use: 
+
+```bash
+make install
+```
+
+If not, copy the executable manully to <code>usr/local/bin</code>:
+
+```bash
+mv exe_name usr/local/bin/exe_name
+```
+
+There is no mechanism to automatically update apps that have been installed in this manner. 
+
+## Install and update software packages from APT repo
+
+<code>apt-get</code> and <code>aptitude</code> are older versions of <code>apth</code>. That means that you should not use them!
 
 In general, you should obtain a list of the most recent versions of accessible packages from your update repository before you begin installing new applications. 
-To update your repos, use <i>apt update</i>. Executing this command will display a list of possible package versions, but no real software will be updated>:
+To update your repos, use <code>apt update</code>. Executing this command will display a list of possible package versions, but no real software will be updated>:
 
 ```bash
 apt update
 ```
 
-<i>apt upgrade</i>, on the other hand, may use this information to update all installed packages to their most recent versions:
+<code>apt upgrade</code>, on the other hand, may use this information to update all installed packages to their most recent versions:
 
 ```bash
 apt upgrade
@@ -31,7 +73,9 @@ You can use the following commands to ensure that a package has been successfull
 apt show httpd
 ```
 
-<h1>Install and update software packages from YUM repo</h1>
+## Install and update software packages from YUM repo
+
+In contrast to <code>apt</code>, there is no two-step process. It is not necessary to update the repositories before installing apps with <code>yum</code>.
 
 To check for update, use:
 
@@ -86,7 +130,7 @@ To clean cache, use:
 yum clean all
 ```
 
-<h1>Install and update software packages from RPM repo</h1>
+## Install and update software packages from RPM repo
 
 To download a rpm package, use:
 
@@ -124,10 +168,10 @@ To remove a package, use:
 rpm -e nano
 ```
 
-<h1>Managing APT Repositories</h1>
+## Managing APT Repositories
 The apt software repositories are defined in the /etc/apt/sources.list file or in different files in the /etc/apt/sources.list.d/ directory on Ubuntu and all other Debian-based distributions. 
 
-<i>add-apt-repository</i> is a Python script that adds an APT repository to /etc/apt/sources.list. The command can also be used to delete a previously added repository.
+<code>add-apt-repository</code> is a Python script that adds an APT repository to /etc/apt/sources.list. The command can also be used to delete a previously added repository.
 
 To install it, follow these steps: 
 
@@ -169,7 +213,7 @@ Verify that the installation was successful by running the following command:
 wine --version
 ```
 
-<h1>Managing YUM Repositories</h1>
+## Managing YUM Repositories
 
 Configuration file for repos is located at: /etc/yum.repos.d
 
@@ -197,7 +241,7 @@ To disable a repo, use:
 yum-config-manager --disable [repo_id]
 ```
 
-<h2>Description of the repository:</h2>
+<h2>Description of the repository:
 
 * label - the label used as an identifier in the repository file 
 * name - the name of the repository 
@@ -205,7 +249,7 @@ yum-config-manager --disable [repo_id]
 * baseurl - the base url to which the rpm packages should be found.
 * gpgcheck - set to 1 if a gpg integrity check on the packages is required. 
 
-<h2>Labels for repositories:</h2>
+<h2>Labels for repositories:
 
 * base - the base repository including all essential Red Hat applications. Packages with full support.
 * updates - a repository containing just updates.
@@ -213,7 +257,7 @@ yum-config-manager --disable [repo_id]
 * supplemental - proprietary packages that Red Hat does not support.
 * extras - additional packages that Red Hat does not support. 
 
-<h1>Challenges</h1>
+## Challenges
 
 1. Using your preferred package manager, look for the 0ad app. It's possible that you'll need to update the repositories first. Install the app if the search was successful. Try out the app. Using the same package manager, uninstall it. 
 2. Install MongoDB from their official repositories.
