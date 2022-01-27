@@ -12,6 +12,8 @@ You can use services, when you want to run a program:
 systemctl -t help
 ```
 
+Don't mix up <code>systemd</code> and <code>systemctl</code>; <code>systemd</code> is what all major distros use to manage their services, while <code>systemctl</code> is the command line tool used to communicate with <code>systemd</code>. 
+
 Thus, services are often used to run programs at boot time, but you can start and stop services at any time. 
 
 1. An example of a systemd service is the <code>sshd</code> service. It starts the SSH server when the system boots. 
