@@ -241,7 +241,7 @@ To disable a repo, use:
 yum-config-manager --disable [repo_id]
 ```
 
-<h2>Description of the repository:
+### Description of the repository:
 
 * label - the label used as an identifier in the repository file 
 * name - the name of the repository 
@@ -249,7 +249,7 @@ yum-config-manager --disable [repo_id]
 * baseurl - the base url to which the rpm packages should be found.
 * gpgcheck - set to 1 if a gpg integrity check on the packages is required. 
 
-<h2>Labels for repositories:
+### Labels for repositories:
 
 * base - the base repository including all essential Red Hat applications. Packages with full support.
 * updates - a repository containing just updates.
