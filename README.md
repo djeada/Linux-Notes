@@ -40,7 +40,7 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ports.md">ports</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/firewall.md">firewall</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/shells_and_bash_configuration.md">shells and their configuration</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/packet_managers.md">packet managers</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/package_managers.md">package managers</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/performance_monitoring.md">performance monitoring</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/log_files_and_journals.md">log files and journals</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/kernel.md">kernel</a>
