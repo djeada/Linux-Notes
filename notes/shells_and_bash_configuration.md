@@ -1,4 +1,4 @@
-<h1>Shells</h1>
+## Shells
 In Unix, shells are the programs that run on the command line. They are the programs that you use to execute commands.
 Most common shells include: <code>bash</code>, <code>zsh</code>, <code>ksh</code>, <code>tcsh</code> and <code>sh</code>.
 
@@ -31,7 +31,7 @@ To switch to <code>zsh</code> in your terminal, you can use the command:
 chsh -s /bin/zsh
 ```
 
-<h1>Bashrc</h1>
+## Bashrc
 
 Every time a shell is started, the  <i>\~/.bashrc</i> script is read. This is similar to  <i>\~/.cshrc</i> in C Shell.
 
@@ -53,11 +53,17 @@ alias cp='cp -i'
 alias mv='mv -i'
 ```
 
-<h2>Bash_profile</h2>
+### Bash_profile
 
 The <i>\~/.bash_profile</i> file is read every time a shell is started.
 
-<h2>Bash_logout</h2>
+### Bash_logout
 
 The <i>\~/.bash_logout</i> file is read when the user logs out.
 
+
+## Challenges
+
+1. Check if there is an existing alias for <code>cat</code>?
+1. List all currently defined aliases.
+1. Try adding some aliases to your <code>bashrc</code> and then removing them from the terminal. Reopen the terminal and check to see if the aliases are still active. 
