@@ -54,8 +54,8 @@ When a user does not recall the specific command but knows a few keywords linked
 apropos zip
 ```
 
-<h1>Challenges</h1>
+## Challenges</h1>
 
-1. How to find the command that is used to create a file?
-2. Use the <code>man</code> command to display what does the command <code>cat</code> do.
-3. Change the maximum number of commands to remember in the command history to 3000.
+1. Does the file /bin/echo exist? If so, how does it relate to <code>echo</code> command?
+1. Use /dev/random or /dev/urandom to create a file with 100 lines of random chars.
+1. Change the maximum number of commands to remember in the command history to 3000.
