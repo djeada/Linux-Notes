@@ -65,4 +65,7 @@ PATH=$PATH:/path/to/bin
 
 <h1>Challenges</h1>
 
-1. Create a bash script that echoes a message to the standard output. Give the script executable permission. Change the <code>$PATH</code> variable to include the directory where the script is located.
+1. Create a bash script that echoes a message to the standard output. Give the script executable permission. Change the <code>$PATH</code> variable to include the directory where the script is located. Try executing the script from some other location on the machine without using it's absolute path.
+1. Use <code>USERNAME</code> variable to display a hello message to the user.
+1. List all currently set shell variables and exported shell variables.
+1. In your terminal session, create a variable. Try setting it to a number and then printing the results of a few arithmetic operations to stdout. 
