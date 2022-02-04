@@ -1,4 +1,4 @@
-<h1>History</h1>
+## History
 
 * To see the n most recently used commands, use the <code>history</code> command.
 You can change the number n (it is generally between 1000 and 5000).
@@ -17,13 +17,13 @@ To delete the contents of bash history, run the following command:
 history -w
 ```
 
-<h1>Navigating commands in the terminal</h1>
+## Navigating commands in the terminal
 
 * Uppwards arrow key: show the previous command from the history.
 * Downwards arrow key: show the next command from the history.
 * <code>tab</code> key: complete the command.
 
-<h1>The manual</h1>
+## The manual
 
 The <code>man</code> command is an abbreviation for manual. 
 The <code>man</code> command displays the documentation for every command we execute on the terminal.
@@ -46,7 +46,7 @@ Use 'man -f command_name' to display a short description of a command, for examp
 man git
 ```
 
-<h1>Apropos</h1>
+## Apropos
 
 When a user does not recall the specific command but knows a few keywords linked to the command that characterize its uses or capabilities, <code>apropos</code> command can help them to find the command they are looking for.
 
@@ -54,8 +54,8 @@ When a user does not recall the specific command but knows a few keywords linked
 apropos zip
 ```
 
-## Challenges</h1>
+## Challenges
 
-1. Does the file /bin/echo exist? If so, how does it relate to <code>echo</code> command?
-1. Use /dev/random or /dev/urandom to create a file with 100 lines of random chars.
+1. How to find the command that is used to create a file?
+1. Use the <code>man</code> command to display what does the command <code>cat</code> do.
 1. Change the maximum number of commands to remember in the command history to 3000.
