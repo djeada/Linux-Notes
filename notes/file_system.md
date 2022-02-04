@@ -123,3 +123,12 @@ mkfs -t ext4 /dev/sdb1
 mkfs -t ext4 /dev/sdb2
 mkfs -t ext4 /dev/sdb3
 ```
+
+## Challenges
+
+1. Does the file /bin/echo exist? If so, how does it relate to <code>echo</code> command?
+1. Use /dev/random or /dev/urandom to create a file with 100 lines of random chars.
+1. Can you explain me what the /bin and /sbin directories are for?
+1. What is the difference between character and block device drivers in UNIX? Can we use <code>ls</code>  to determine which group the device belongs to?
+1. Can you deduce your CPU's model from the contents of /proc/cpuinfo? 
+1. What hidden files may be found in the /root directory? 
