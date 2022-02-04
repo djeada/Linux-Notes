@@ -58,4 +58,7 @@ apropos zip
 
 1. How to find the command that is used to create a file?
 1. Use the <code>man</code> command to display what does the command <code>cat</code> do.
-1. Change the maximum number of commands to remember in the command history to 3000.
+1. Increase the amount of commands your command history "remembers" to 3000.
+1. Show the last five commands you typed.
+1. When you close the shell, where do the history commands go?
+1. What happens to history when you have multiple terminals open?
