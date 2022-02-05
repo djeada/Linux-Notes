@@ -2,8 +2,8 @@
 * /etc/sudoers
 * visudo
 
-<h1>Users</h1>
-<h2>Superuser</h2>
+## Users
+### Superuser
 The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
 
 !Keep in mind that the following command should not be used:
@@ -12,7 +12,7 @@ The superuser is a privileged user with full access to all commands and files on
 rm –rf /*
 ```
 
-<h2>Partially granted sudo privileges </h2>
+### Partially granted sudo privileges 
 
 /etc/sudoers is a special file that allows users to be granted sudo privileges solely for specific tools.
 
@@ -27,7 +27,7 @@ adam ALL = NOPASSWD:/sbin/reboot
 
 The visudo command will automatically verify your syntax and refuse to save if there are any errors. A faulty /etc/sudoers file may prevent you from accessing your server every again!
 
-<h2>Changing users</h2>
+### Changing users
 <i>su</i> without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
 
 ```bash
@@ -40,7 +40,7 @@ The -c option enables you to run a command as another user account and redirect 
 su adam -c whoami
 ```
 
-<h2>Adding user</h2>
+### Adding user
 
 <i>useradd</i> is a UNIX system tool for adding new users (<i>userdel</i> is its counterpart for deleting users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
 
@@ -59,7 +59,7 @@ When adding new users from the command line, you should prefer using <i>adduser<
 adduser adam
 ```
 
-<h2>passwd</h2>
+### passwd
 Use the <i>passwd</i> command to set or modify a user's password:
 
 ```bash
@@ -91,7 +91,7 @@ Columns of /etc/shadow
 * expiration date
 * unused
  
-<h1>Groups</h1>
+## Groups
 
 All new users in RHEL/CENTOS are automatically added to the wheel group.
 
@@ -132,7 +132,7 @@ To list all local groups on the system, use:
 cut -d: -f1 /etc/group | sort
 ```
 
-<h2>User ID and group ID</h2>
+### User ID and group ID
 
 Each user has a distinct user id (uid). To check a user's id, use:
 
@@ -152,7 +152,7 @@ To change GID of a group called <i>new_group</i> to 2500, use:
 groupmod -g 2500 new_group
 ```
 
-<h1>Challenges</h1>
+## Challenges
 
 1. Show your user name as well as your unique user identity number (userid).
 1. Show the contents of the /etc/shadow. Can you find a reference to your user? Hint: you will need sudo privileges.
@@ -160,3 +160,4 @@ groupmod -g 2500 new_group
 1. Display a sorted list of all logged-in users, including the command they are now executing. 
 1. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made.
 1. Allow a user with no sudo privileges to execute the <code>reboot</code> command. Log in to that specific user account. Verify whether the system can be restarted.
+1. Create a user with a program set as his default logon shell. You might, for example, use /bin/tar. It's useful when a user should only be able to access one program on the server. 
