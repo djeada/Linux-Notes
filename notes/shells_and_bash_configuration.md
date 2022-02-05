@@ -66,4 +66,6 @@ The <i>\~/.bash_logout</i> file is read when the user logs out.
 
 1. Check if there is an existing alias for <code>cat</code>?
 1. List all currently defined aliases.
-1. Try adding some aliases to your <code>bashrc</code> and then removing them from the terminal. Reopen the terminal and check to see if the aliases are still active. 
+1. Try adding some aliases to your <code>bashrc</code> and then removing them from the terminal. Reopen the terminal and check to see if the aliases are still active.
+1. Make a list of every profile file on your system.
+1. Experiment with various shells. Check which of your custom variables, aliases, and functions are present in the new environment. 
