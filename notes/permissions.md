@@ -1,4 +1,4 @@
-<h1>Permissions</h1>
+## Permissions
 
 | Permission | Files | Dirs |
 | --- | --- | --- |
@@ -25,7 +25,7 @@ chmod u+x file
 | rw- | 6 |
 | rwx | 7 |
 
-<h1>Default permissions</h1>
+## Default permissions
 
 * Files: rw-rw-rw- (666)
 * Directories: rwxrwxrwx (777)
@@ -48,7 +48,7 @@ then, we would use:
 umask u-x,g=r,o+w
 ```
 
-<h1>ACls</h1>
+## ACls
 ACLs (access control lists) in Linux are discretionary access control system permissions that are built on top of regular Linux permissions.
 
 * not all tools support ACLs
@@ -92,7 +92,7 @@ setfacl -k /opt/test
 getfacl /opt/test | setfacl --set-file= /opt/test2
 ```
 
-<h1>Challenges</h1>
+## Challenges
 
 1. Make a temporary text file named temp.txt in your home directory. Using the <code>ls -l</code> command, check the permissions. You'll probably see something like this: 
 
@@ -104,7 +104,10 @@ As a result, the file is owned by the user "user name" and the group "user group
 
 Now remove the "user group" group's permission to write to the file and read permission from others.
 
-2. Explain what happens when you try to remove the group's permission to write to the file and read permission from others.
-3. Explain the difference between permissions and ACLs.
-4. Can a user who is not the owner of a file or directory change the permissions of the file or directory?
-5. Should you use ACLs or permissions to control access to a file or directory?
+2. Copy a root-owned file from /etc/ to your home directory; who now owns this file? 
+3. Show the umask of any file in both octal and symbolic form.
+4. What happens when the owner of a file does not have the necessary permissions to interact with it? Can he, at the very least, remove such a file? 
+5. Explain what happens when you try to remove the group's permission to write to the file and read permission from others.
+6. Explain the difference between permissions and ACLs.
+7. Can a user who is not the owner of a file or directory change the permissions of the file or directory?
+8. Should you use ACLs or permissions to restrict file and directory access? 
