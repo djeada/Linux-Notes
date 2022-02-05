@@ -30,22 +30,56 @@ chmod u+x file
 * Files: rw-rw-rw- (666)
 * Directories: rwxrwxrwx (777)
 
-Use umask to change the default permissions. With no options specified umask, displays which current default permissions are removed (masked).
+Use <code>umask</code> to change the default permissions. With no options specified, <code>umask</code> displays which current default permissions are removed (masked).
 Three numbers, for user, group and others.
-
-```bash
-umask
-```
 
 For example, let's say we want to:
 
 1. prevent the file's owner (user) from being granted the execute permission while leaving the rest of the owner permissions untouched;
 2. allow the group to read while restricting the group from writing or executing;
 3. allow write permission for others while not changing the other permissions.
-then, we would use:
+
+Then, we would use:
 
 ```bash
 umask u-x,g=r,o+w
+```
+
+## Setuid, Setgid, and the Sticky Bit
+
+* <code>setuid</code>: a bit that causes an executable to execute with the file's owner's privileges.
+* <code>setgid</code>: a bit that causes an executable to execute with the privileges of the file's group.
+* <code>sticky bit</code>: a directory bit that permits only the owner or root to remove files and subdirectories. 
+
+To set the <code>setuid</code> bit, use:
+
+```bash
+chmod u+s /path/to/file
+```
+To remove the <code>setuid</code> bit:
+
+```bash
+chmod u-s /path/to/file
+```
+To set the <code>setgid</code> bit:
+
+```bash
+chmod g+s /path/to/dir
+```
+To remove the <code>setgid</code> bit:
+
+```bash
+chmod g-s /path/to/dir
+```
+To set the <code>sticky bit</code>, use:
+
+```bash
+chmod +t /path/to/dir
+```
+To remove the <code>sticky bit</code>, use:
+
+```bash
+chmod -t /path/to/dir
 ```
 
 ## ACls
