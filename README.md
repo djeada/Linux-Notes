@@ -3,7 +3,6 @@ Notes on Linux.
 
 * The notes are organized into sections. 
 * The sections are organized into subsections.
-* Topics covered incldue the basics of Linux, the Unix file system, and networking.
 * Difficulty levels vary from beginner to advanced. 
 * Each section has a handful of challenges that may be used to evaluate the reader's level of comprehension of a given topic.
 * It is possible to skip a section, because not all sections are connected. 
