@@ -154,7 +154,9 @@ groupmod -g 2500 new_group
 
 <h1>Challenges</h1>
 
+1. Show your user name as well as your unique user identity number (userid).
 1. Show the contents of the /etc/shadow. Can you find a reference to your user? Hint: you will need sudo privileges.
-2. Check the /var/log/auth.log file to check who is logged in. Use <i>grep</i> to see if someone is using sudo.
-3. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made.
-4. Allow a user who does not have sudo privileges to run the reboot command. Log in to that particular user account. Check to see if you can reboot the system. 
+1. Check the /var/log/auth.log file to check who is logged in. Use <i>grep</i> to see if someone is using sudo.
+1. Display a sorted list of all logged-in users, including the command they are now executing. 
+1. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made.
+1. Allow a user with no sudo privileges to execute the <code>reboot</code> command. Log in to that specific user account. Verify whether the system can be restarted.
