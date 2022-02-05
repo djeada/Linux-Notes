@@ -1,13 +1,13 @@
-<h2>Find</h2>
+### Find
 
-If you know where the file may reside in the directory tree, you can use <i>find</i>. General syntax is: 
+If you know where the file may reside in the directory tree, you can use <code>find</code>. General syntax is: 
 
-<b>find WHERE_TO_LOOK_FOR -name REGEXP_WITH_FILE_NAME</b>
+    find WHERE_TO_LOOK_FOR -name REGEXP_WITH_FILE_NAME
 
 Flags:
 
-* <i>-type f/d/l</i> look for files, dirs or symlinks. 
-* <i>-user user_name</i> owner is user_name.
+* <code>-type f/d/l</code> look for files, dirs or symlinks. 
+* <code>-user user_name</code> owner is user_name.
 
 Find all files larger than 10 MB and long list them using the ls command:
 
@@ -26,9 +26,9 @@ Find all files larger than 2000 blocks and ask the user for permission to remove
 ```bash
 find $HOME -name '*' -type f -size +2000 -exec ls -s {} \; -ok rm -f {} \;
 ```
-<h2>Locate</h2>
+### Locate
 
-The <i>locate</i> command is a significantly quicker approach to find all files whose names match a certain search term.
+The <code>locate</code> command is a significantly quicker approach to find all files whose names match a certain search term.
 
 Find all file paths that start with "/usr", include the word "pixmaps", and end with ".jpg":
 
@@ -36,19 +36,19 @@ Find all file paths that start with "/usr", include the word "pixmaps", and end 
 locate --regexp '^/usr.*pixmaps.*jpg$'
 ```
 
-To mute error messages use <i>-q</i> flag: 
+To mute error messages use <code>-q</code> flag: 
 
 ```bash
 locate -q "*.py"
 ```
 
-Use the <i>-i</i> flag to make the search case insensitive:
+Use the <code>-i</code> flag to make the search case insensitive:
 
 ```bash
 locate -i "*.CPP"
 ```
 
-One drawback of <i>locate</i> is that it saves all filenames on the system in an index, which is often only updated once per day (/etc/cron.daily/mlocate). This indicates that locate will not detect newly created files.
+One drawback of <code>locate</code> is that it saves all filenames on the system in an index, which is often only updated once per day (/etc/cron.daily/mlocate). This indicates that locate will not detect newly created files.
 
 The database is normally stored at /var/lib/mlocate/mlocate.db.
 
@@ -58,10 +58,10 @@ You can force the update with:
 updatedb
 ```
 
-<h2>Which</h2>
-If you can run a program or system utility by typing its name in the terminal, you can use <i>which</i> to determine where it is located on the disk.
+### Which
+If you can run a program or system utility by typing its name in the terminal, you can use <code>which</code> to determine where it is located on the disk.
 
-Have you ever wondered where executables for common tools like <i>cat</i>, <i>sed</i>, and so on come from? The system will generally look through the places specified in your "path."
+Have you ever wondered where executables for common tools like <code>cat</code>, <code>sed</code>, and so on come from? The system will generally look through the places specified in your "path."
 
 To view the PATH environmental variable, use:
 
@@ -69,17 +69,16 @@ To view the PATH environmental variable, use:
 echo $PATH
 ```
 
-To see path of <i>python</i>, use:
+To see path of <code>python</code>, use:
 
 ```bash
 which python
 ```
 
-<h1>Challenges</h1>
+## Challenges
 
 1. Determine the location of the executable files for the following tools:
   - cat
   - ls
   - reboot
   - chmod
-
