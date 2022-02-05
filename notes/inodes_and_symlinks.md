@@ -1,4 +1,4 @@
-<h1>The Inode</h1>
+## The Inode
 
 The inode is a filesystem object that contains details about:
 * the user and group that owns a file, 
@@ -14,14 +14,14 @@ ls -li
 * first column - inode number
 * third column - hardlink counter
 
-<h1>Hardlink</h1>
+## Hardlink
 The same file can have different name and appear in different places.
 
 ```bash
 ln existing_file hardlink_name
 ```
 
-<h1>Symlink</h1>
+## Symlink
 
 It is a file that points to another file.
 
@@ -35,10 +35,17 @@ Identifying the source file of a symbolic link.
 readlink -f symlink_name
 ```
 
-<h1>Differences</h1>
+## Differences
 
 | Feature | Hardlink | Symlink |
 | --- | --- | --- |
 | can be pointed to a file on another filesystem  | no | yes | 
 | changing link's names and attributes affects the source | yes | no |
 | can link to any directory | no | yes |
+
+
+## Challanges
+
+1. Create a text file and a hard link to it in another directory. Remove the hard link. What has happened to the original file?
+1. Display the inode number of any file and its symlinks. Is there a difference?
+1. Look for any links in the /lib directory. Make use of the <code>ls</code> command. 
