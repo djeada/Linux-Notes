@@ -1,11 +1,11 @@
-<h1>Absolute and relative paths</h1>
+## Absolute and relative paths
 
 Whenever a script or program expects a path to be specified, it can be specified in two ways:
 * Absolute path: the path is specified with respect to the root of the file system <code>/</code>.
 * Relative path: the path is specified with respect to the current working directory.
 
 An example of an absolute path:
-```bashFc
+```bash
 /home/user/notes/file_name.txt
 ```
 
@@ -14,7 +14,7 @@ An example of a relative path:
 current_dir/notes/file_name.txt
 ```
 
-<h1>Navigating files</h1>
+## Navigating files
 
 To show the complete absolute path to your current filesystem location, use:
 
@@ -71,14 +71,14 @@ ls /home/mydirectory/*.txt
 | <code>*</code> | wildcard matching any filename |
 | <code>?</code> | wildcard matching any character |
 
-<h1>List files in a tree-like format</h1>
+## List files in a tree-like format
 The tree command displays a tree-like listing of the contents of a specified directory. If no directory is given, the contents of the current directory are displayed by default.
 
 ```bash
 tree /tmp
 ```
 
-<h1>Creating files</h1>
+## Creating files
 
 The <code>mkdir</code> command creates a new directory. To create a directory called test in a current location, use:
 
@@ -86,7 +86,7 @@ The <code>mkdir</code> command creates a new directory. To create a directory ca
 mkdir test
 ```
 
-<h1>Copy files</h1>
+## Copy files
 
 The <code>cp</code> command makes a copy of a source file in the destination directory.
 
@@ -106,7 +106,7 @@ Some other flags include:
 | <code>-a</code> | used to copy permissions as well |
 | <code>-A</code> | used to copy all files (hidden and normal) |
 
-<h1>Move files</h1>
+## Move files
 
 The <code>mv</code> command moves a file or directory to the destination directory. 
 
@@ -122,7 +122,7 @@ To move big_dir from Downloads to Home directory, use:
 mv ~/Download/big_dir ~/big_dir
 ```
 
-<h1>Remove files</h1>
+## Remove files
 
 The <code>rm</code> command removes file(s). By default Linux will prompt the user for confirmation before removing the file.
 
@@ -138,7 +138,7 @@ rm –r directory
 
 Be careful with wildcards.
 
-<h1>Read files</h1>
+## Read files
 
 <code>cat</code> command prints the whole file on the screen. 
 
@@ -170,7 +170,7 @@ cat *.txt > new_file.txt
 | <code>q</code> | to end |
 | <code>/pattern</code> | to jump to the next occurrence of the text “pattern” |
 
-<h1>Expansion and globs</h1>
+## Expansion and globs
 Brace expansion and globs are two comparable approaches for representing files with names that follow a pattern.
 However, there is a distinction between the two techniques.
 In a nutshell, brace expansion generates a list of strings that match a pattern, and globs correspond to the list of pathnames.
@@ -194,7 +194,7 @@ echo a{b,c}d
 #abd acd
 ```
 
-<h1>Challenges</h1>
+## Challenges
 
 1. To navigate to various directories, use <code>cd</code>. Try: 
   - your home directory 
@@ -215,3 +215,9 @@ echo a{b,c}d
 5. Using <code>cp</code>, copy the contents of the temp directory to your home directory.
 
 6. Using <code>mkdir</code>, create a temp directory in your home directory. Create three text files in the newly created temp dir using the <code>echo</code> command and redirecting some text to each of the created files. Using <code>mv</code>, move the temp directory to a new location.
+
+7. Try your hand at globbing:
+
+- Show all files in the current directory with filenames of precisely five characters.
+- List all files that do not begin with the letter b.
+- List all files that begin with abc and end with a number. 
