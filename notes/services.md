@@ -1,4 +1,4 @@
-<h1>What are services?</h1>
+## What are services?
 You can use services, when you want to run a program:
 
 - In the background.
@@ -21,10 +21,10 @@ Thus, services are often used to run programs at boot time, but you can start an
 
 A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs.
 
-<h1>What is a daemon?</h1>
+## What is a daemon?
 A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but it is also possible to start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are configured with <code>rc</code> and <code>init</code> scripts, that are typically located in /etc/rc.d and /etc/init.d.
 
-<h1>Create a custom service</h1>
+## Create a custom service
 
 Systemd services should be placed at /etc/systemd/system/.
 
@@ -48,7 +48,7 @@ ExecStart=/valid/path/to/an/executable/file
 WantedBy=multi-user.target
 ```
 
-<h1>Target types</h1>
+## Target types
 
 | Target type | Runlevel |
 | --- | --- |
@@ -59,7 +59,7 @@ WantedBy=multi-user.target
 | <code>graphical.target</b></code> | runlevel 5 |
 | <code>reboot.target</code> | runlevel 6 |
 
-<h1>Service statuses</h1>
+## Service statuses
 
 | Status | Description |
 | --- | --- |
@@ -72,7 +72,7 @@ WantedBy=multi-user.target
 | <code>Disabled</code> |The unit will not be started at boot time. |
 | <code>Static</code> | The unit can't be enabled, but can be started by another unit manually. |
 
-<h1>The systemctl command</h1>
+## The systemctl command
 
 Some services are always running, whereas others run once and then stop. To display the status of a service, use:
 
@@ -104,7 +104,7 @@ To check if service is dependent on a specific target, use:
 systemctl list-dependencies multi-user.target | grep httpd
 ```
 
-<h1>Systemd timers</h1>
+## Systemd timers
 <code>Systemd</code> is currently included in all major Linux distributions. It may be used to start and stop services as well as perform activities at particular periods using "timers."
 
 Use the following command to determine which services are enabled on your system: 
@@ -113,6 +113,7 @@ Use the following command to determine which services are enabled on your system
 systemctl list-timers
 ```
 
-<h1>Challenges</h1> 
+## Challenges
+
 1. Look at the systemd timers and determine which services are enabled on your system.
-2. Write a custom service that starts MySql docker container when the system boots.
+1. Write a custom service that starts MySql docker container when the system boots.
