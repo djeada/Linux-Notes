@@ -57,7 +57,7 @@ The PID of the process will be displayed in the second column.
 
 <h1>Challenges</h1>
 
-1. Some ports are reserve for some specific service. Does it mean, it can't be used for any other service?
+1. Some ports are reserved  for specific services. Is this to say they can't be used for anything else?
 2. How to check which port numbers are free to use?
 3. How to find which process is running on a specific port?
 4. How to find which port is used by a given service?
