@@ -46,7 +46,7 @@ There is no mechanism to automatically update apps that have been installed in t
 
 ## Install and update software packages from APT repo
 
-<code>apt-get</code> and <code>aptitude</code> are older versions of <code>apth</code>. That means that you should not use them!
+<code>apt-get</code> and <code>aptitude</code> are older versions of <code>apt</code>. That means that you should not use them!
 
 In general, you should obtain a list of the most recent versions of accessible packages from your update repository before you begin installing new applications. 
 To update your repos, use <code>apt update</code>. Executing this command will display a list of possible package versions, but no real software will be updated>:
