@@ -1,6 +1,6 @@
 ## Package managers
 
-Debian and Ubuntu are arguably the most well-known Linux distributions (at least for the home users). Those two distros (and their derivatives) use <code>APT</code> (Advanced Package Tool). Other distributions use alternative package managers, such as <code>DNF</code> <code>YUM</code>, <code>Pacman</code>, and so on. You will be unable to use the apt command on the machines using those distros. Those other package managers have their own functionalities and syntax, which may differ significantly from that of <code>apt</code>.
+Debian and Ubuntu are arguably the most well-known Linux distributions (at least for the home users). Those two distros (and their derivatives) use <code>APT</code> (Advanced Package Tool). Other distributions use alternative package managers, such as <code>DNF</code> <code>YUM</code>, <code>Pacman</code>, and so on. You will be unable to use the apt command on the machines using those distros. Those other package managers have their own functionalities and syntax, which may differ significantly from that of <code>APT</code>.
 
 Be cautious, as package managers frequently not only install software with all of its dependencies, but also interfere with your system's configuration!
 
