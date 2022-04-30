@@ -29,7 +29,7 @@ It is a file that points to another file.
 ln -s existing_file symlink_name
 ```
 
-Identifying the source file of a symbolic link.
+To identify the source file of a symbolic link, use:
 
 ```bash
 readlink -f symlink_name
