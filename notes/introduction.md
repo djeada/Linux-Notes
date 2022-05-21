@@ -1,22 +1,30 @@
 <h1>Why should you learn Linux?</h1>
 
-1. Linux is the future. 
+1. Future relevance. 
 
 Since its birth (30 years ago), it has seen a continuous growth in business-critical usage, and it is reasonable to assume that Linux will remain the most popular operating system in the foreseeable future.
 
-2. Linux is everywhere.
+2. Prelevance.
 
 Most webservers, 99 percent of the world's top supercomputers, numerous Internet of Things (IoT) devices, and Tesla cars all work on Linux. Android is a fork of Linux. Unix-like operating systems include Playstation OS, Mac OS, and OS X.
 
-3. Linux is adaptable.
+3. Hardware support.
+
+The Linux kernel is likely to run on every piece of hardware known to man. 
+
+4. Software availability. 
+
+When it comes to software availability, no system comes close. Even apps designed exclusively for Windows and Mac have been ported to Linux in recent years. 
+
+5. Adaptability.
 
 Your product or service may be built from the ground up leveraging Linux's open-source nature, as well as its modularity. For example, you may install miniature copies of Linux to control the water temperature, adapt it to run on appliances that transport packets over a big business network, or simply use it as your desktop OS.
 
-4. Linux has a strong community and ecosystem.
+6. Strong community and ecosystem.
 
 A large part of Linux's success may be attributed to the strong community and environment that surrounds it, as well as its open source nature. Many developers voluntarily contribute code to improve Linux. There are online forums and communities, Linux teachers, Linux training courses, Linux blogs, Linux third-party tools, numerous Linux distributions ad Linux conferences.
 
-5. Linux is a great choice for a new business.
+7. Affordability for a new business.
 
 A new business can use Linux to run their website, database, and other applications. Linux is a great choice for a new business because it is easy to install, easy to use, and easy to upgrade. It is also easy to deploy and matain applications with Linux.
 
