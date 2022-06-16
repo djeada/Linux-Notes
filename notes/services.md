@@ -116,4 +116,11 @@ systemctl list-timers
 ## Challenges
 
 1. Look at the systemd timers and determine which services are enabled on your system.
-1. Write a custom service that starts MySql docker container when the system boots.
+1. Set up the following services: 
+  - dhcpd, 
+  - NFS, 
+  - sshd, 
+  - DNS (bind), 
+  - mail (postfix, Sendmail), 
+  - web (Nginx, apache, caddy, traefik), 
+  - database(MySQL, Postgres);
