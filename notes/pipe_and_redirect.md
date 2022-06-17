@@ -59,6 +59,15 @@ Complete summary:
 | \|& tee    |   yes             |   yes             |   yes          |   yes          |  overwrite    |
 | \|& tee -a |   yes             |   yes             |   yes          |   yes          |  append       |  
 
+### A workaround for buffering 
+
+Some applications buffer their output, and you cannot just redirect it. A possible workaround is as follows:
+
+```bash
+output=$(script -c command_you_want_to_use /dev/null)
+echo "$output"
+```
+
 ## Filters
 
 Filters are commands that are designed to be used with a pipe.
