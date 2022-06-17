@@ -42,6 +42,23 @@ To capture standard error, prefix the > operator with a 2 (under UNIX, file numb
 less non_existent_file 2> file.txt
 ```
 
+Complete summary:
+  
+| Syntax     | StdOut visibility | StdErr visibility | StdOut in file | StdErr in file | existing file |
+| --------   | ----------------- | ----------------- | -------------- | -------------- | ------------- |
+| >          |   no              |   yes             |   yes          |   no           |  overwrite    |
+| >>         |   no              |   yes             |   yes          |   no           |  append       |
+| 2>         |   yes             |   no              |   no           |   yes          |  overwrite    |
+| 2>>        |   yes             |   no              |   no           |   yes          |  append       |  
+| &>         |   no              |   no              |   yes          |   yes          |  overwrite    |    
+| &>>        |   no              |   no              |   yes          |   yes          |  append       |  
+| tee        |   yes             |   yes             |   yes          |   no           |  overwrite    |  
+| tee -a     |   yes             |   yes             |   yes          |   no           |  append       |
+| n.e. (*)   |   yes             |   yes             |   no           |   yes          |  overwrite    |  
+| n.e. (*)   |   yes             |   yes             |   no           |   yes          |  append       |
+| \|& tee    |   yes             |   yes             |   yes          |   yes          |  overwrite    |
+| \|& tee -a |   yes             |   yes             |   yes          |   yes          |  append       |  
+
 ## Filters
 
 Filters are commands that are designed to be used with a pipe.
