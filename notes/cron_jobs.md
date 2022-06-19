@@ -1,4 +1,4 @@
-<h2>Cron jobs</h2>
+## Cron jobs
 If you wish to execute some scripts on a regular basis, use cron jobs.
 
 Cron daemon starts running when the system boots up. 
@@ -14,7 +14,7 @@ You can configure cron to run to different types of jobs:
 2. User jobs
 
 
-<h2>Cron directories</h2>
+## Cron directories
 
 Put your script in the correct directory.
 
@@ -23,7 +23,7 @@ Put your script in the correct directory.
 * /etc/cron.weekly <- those scripts run once per week
 * /etc/cron.monthly <- those scripts run once per month
 
-<h2>What if your desired schedule is different?</h2>
+## What if your desired schedule is different?
 
 You create a cron tab file in <code>/etc/cron.d</code>.
 
