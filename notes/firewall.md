@@ -1,4 +1,4 @@
-<h1>Iptables</h1>
+## Iptables
 Firewall is a security feature that protects your computer from unauthorized access. A command line utility called iptables is used to manage the firewall. There are other utilities that can be used to manage the firewall, but iptables is usually preinstalled on most Linux systems. It is advised to use only one utility to manage the firewall, so pick your poison and stick to it.
 
 To see what rules are in place, use:
@@ -7,7 +7,7 @@ To see what rules are in place, use:
 iptables -L
 ```
 
-<h1>UFW</h1>
+## UFW
 The "uncomplicated firewall" is a more user-friendly alternative to iptables. 
 
 <h2>Installation</h2>
@@ -52,7 +52,7 @@ Additionally one can block ping requests by editing /etc/ufw/before.rules:
 ```
 
 
-<h1>Firewalld</h1>
+## Firewalld
 Firewalld is a Linux firewall that is used by Fedora and other distributions. It is a more advanced firewall than iptables. 
 
 To see what rules are in place, use:
