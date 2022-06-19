@@ -1,9 +1,9 @@
-<h1>Reasons for encryption</h1>
+## Reasons for encryption
 
 * One of the most important reasons for using encryption is to protect your data. Encryption is a way to hide the data from unauthorized users.
 * Encrypted files are also usually smaller than the original files. This is because the data is encrypted and then compressed. Therefore they can be transferred over a network much more efficiently.
 
-<h1>Make public and private GPG keys.</h1>
+## Make public and private GPG keys.
 
 1. On debian based distributions:
 
@@ -31,7 +31,7 @@ gpg2 --list-keys
 gpg2 --list-secret-keys
 ```
 
-<h1>File encryption and decryption</h1>
+## File encryption and decryption
 You've obtained a public key from someone and want to use it to encrypt a file so that it may be safely sent.
 The public key is generally stored in a file with the extension .gpg or.asc.
 
@@ -60,7 +60,7 @@ Send the encrypted file to the receiver and ask them to decode it using the foll
 gpg2 -o example.txt -d example.txt.gpg
 ```
 
-<h1>Challenges</h1>
+## Challenges
 
 1. Test the gpg2 command:
 - Create a public key and a private key.
