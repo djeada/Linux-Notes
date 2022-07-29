@@ -37,3 +37,10 @@ When creating a cron config in <code>/etc/cron.d/</code> or <code>/etc/crontab</
 ```bash
 0 1 * * * root tar -cvpzf archve.tar.gz --exclude=/mnt
 ```
+
+There is also a very useful website for playing with cron times: https://crontab.guru/.
+
+## Challenges
+
+1. When would this system cron job run its task? <code>0 2 \* \* \*</code>
+2. When would this system cron job run its task? <code>0 13 * * 2-4</code>
