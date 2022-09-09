@@ -67,6 +67,12 @@ To install a package, use:
 apt install httpd
 ```
 
+If you have a local *.deb* file on your machine, you may use apt to install as well:
+
+```bash
+apt install /path/to/package/name.deb
+```
+
 You can use the following commands to ensure that a package has been successfully installed (and that you have installed what you believe you have installed):
 
 ```bash
