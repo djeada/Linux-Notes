@@ -1,3 +1,6 @@
+## Dynamic Window Manager
+
+![dwm](https://user-images.githubusercontent.com/37275728/189493108-20a94d0c-24fd-4b35-8b78-527a350abc0c.png)
 
 ## Installation
 
