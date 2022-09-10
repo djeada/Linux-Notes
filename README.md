@@ -45,7 +45,7 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/kernel.md">kernel</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ldap.md">ldap</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/selinux.md">selinux</a>
-
+* <a href="https://github.com/djeada/Linux/blob/main/notes/dwm.md">dynamic window manager</a>
 
 <h1>Bibliography</h1>
 
