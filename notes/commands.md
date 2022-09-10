@@ -4,6 +4,7 @@
 You can change the number n (it is generally between 1000 and 5000).
 * Use <code>Ctrl+R</code> to search the history.
 * <code>!number</code> executes the command with the given number, while <code>!text</code> executes the command which starts with the given text.
+* Important: Lines which begin with a space character are not saved in the history list! So, if you copy and paste a command into the terminal and it doesn't appear in history, it most likely had a space as the first character. 
 
 To clear the history, execute the following commands:
 
