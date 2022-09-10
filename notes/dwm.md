@@ -18,7 +18,11 @@ To move between the terminals, use:
 
 To change the position of the terminal on the screen, use:
     
-    [Shift] + [Alt]+ [Enter]
+    [Shift] + [Enter]
+
+To close the teminal, type:
+
+    exit + [Enter]
 
 To focus on another tag, use:
 
