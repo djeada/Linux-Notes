@@ -18,7 +18,7 @@ To move between the terminals, use:
 
 To change the position of the terminal on the screen, use:
     
-    [Shift] + [Enter]
+    [Alt] + [Enter]
 
 To close the teminal, type:
 
