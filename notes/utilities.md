@@ -16,4 +16,10 @@ Some more options:
 
 * The -b option instructs the program to include the window borders in the screenshot.
 * The -d option specifies a 3 second delay.
-* The command -e 'mv $f ~/Pictures/' instructs the utility to save the screenshot to the *~/Pictures* directory. 
+* The command `-e 'mv $f ~/Pictures/'` instructs the utility to save the screenshot to the *~/Pictures* directory. 
+
+## Preparing a bootable stick
+
+USBImager
+
+![Screenshot from 2022-09-06 22-47-32](https://user-images.githubusercontent.com/37275728/188735068-290204a3-e986-49e7-be72-3caf4fa95644.png)
