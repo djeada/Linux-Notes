@@ -4,12 +4,32 @@
 
 ## Users
 ### Superuser
-The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is root. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
+The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is `root`. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
 
-!Keep in mind that the following command should not be used:
+Keep in mind that the following command should not be used:
 
 ```bash
 rm –rf /*
+```
+
+### Granting a user sudo rights
+
+If you want to provide sudo privileges to user *adam*, you must first log in as root and execute the following command: 
+
+```bash
+usermod -aG sudo adam
+```
+
+On the RedHat and similar distributions this group is called *wheel* instead:
+
+```bash
+usermod -aG wheel adam
+```
+
+Then you need to run visudo and uncomment (remove the *%*) the following line:
+
+```bash
+%wheel ALL=(ALL)    ALL
 ```
 
 ### Partially granted sudo privileges 
