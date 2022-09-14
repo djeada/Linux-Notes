@@ -61,6 +61,10 @@ The <i>\~/.bash_profile</i> file is read every time a shell is started.
 
 The <i>\~/.bash_logout</i> file is read when the user logs out.
 
+## Terminals
+
+![terminal-shortcut](https://user-images.githubusercontent.com/37275728/190137189-f1abc2d9-fa15-43d8-8c27-ef11dde67db9.png)
+
 
 ## Challenges
 
