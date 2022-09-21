@@ -1,4 +1,4 @@
-## Taking Screenshots
+## Taking screenshots
 
 *Scrot* is a small program used for taking screenshots directly from the termianl.
 
