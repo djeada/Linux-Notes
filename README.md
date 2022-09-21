@@ -8,7 +8,7 @@ Notes on Linux.
 * It is possible to skip a section, because not all sections are connected. 
 
 
-<h1>Available notes</h1>
+## Available notes
 
 * <a href="https://github.com/djeada/Linux/blob/main/notes/introduction.md">introduction</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/commands.md">commands</a>
@@ -46,8 +46,9 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/ldap.md">ldap</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/selinux.md">selinux</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/dwm.md">dynamic window manager</a>
+* <a href="https://github.com/djeada/Linux-Notes/blob/main/notes/utilities.md">utilities</a>
 
-<h1>Bibliography</h1>
+## Bibliography
 
 * Evi Nemeth, Garth Snyder, Trent R. Hein, Ben Whaley "<i>UNIX and Linux System Administration Handbook</i>"
 * Æleen Frisch "<i>Essential System Administration</i>"
