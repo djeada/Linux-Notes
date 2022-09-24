@@ -26,6 +26,12 @@ A kernel might be monolithic, microkernel, or hybrid in nature (like the OS X an
 * Device drivers make a specific hardware device operational, make up a substantial portion of the source code in the Linux kernel. Tutorial on Device Drivers
 * Architecture-dependent code; those parts that rely on the architecture on which they operate and, as a result, must take the architectural design into account for proper functioning and efficiency.
 
+## Displaying info about the kernel
+
+To check the current kernel version, use:
+
+        uname -a
+
 ## Monitoring kernel
 
 * <i>dmesg</i> (alternatively <i>journalctl --dmesg</i>) allows to see kernel ring buffer. The kernel ring buffer holds information such as device driver initialization messages, hardware messages, and kernel module messages.
