@@ -43,10 +43,11 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/performance_monitoring.md">performance monitoring</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/log_files_and_journals.md">log files and journals</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/kernel.md">kernel</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/ldap.md">ldap</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/selinux.md">selinux</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/dwm.md">dynamic window manager</a>
-* <a href="https://github.com/djeada/Linux-Notes/blob/main/notes/utilities.md">utilities</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/selinux.md">SELinux</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/virtual_machines.md">Virtual Machines</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/ldap.md">LDAP</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/dwm.md">Dynamic Window Manager</a>
+* <a href="https://github.com/djeada/Linux-Notes/blob/main/notes/utilities.md">Utilities</a>
 
 ## Bibliography
 
