@@ -7,6 +7,8 @@ It uses a basic programming language with goto-style loops and simple conditiona
 There are just two "variables" in this case: pattern space and hold space.
 Bare in mind that sed scripts might be tough to read.
 
+### Examples
+
 Trim leading whitespaces and tabulations:
 
 ```bash
@@ -43,6 +45,8 @@ Use `awk` when the text resembles rows and columns, or "records" and "fields," a
 When compared to `sed`, it is much more advanced since it uses real programming constructs like `if/else`, `while`, `do/while` and `for` loops.
 Variables and single-dimension associative arrays are also fully supported, as are multi-dimension arrays.
 Available mathematical operations are similar to those used in the C programming language.
+
+### Examples
 
 By default, *awk* uses whitespace as delimiters. In the example below *awk* will extract the first word of the sentence:
 
