@@ -37,3 +37,17 @@ To start the app, you can simply type:
 *USBImager* can be used to prepare a bootable stick with a Linux image.
 
 ![Screenshot from 2022-09-06 22-47-32](https://user-images.githubusercontent.com/37275728/188735068-290204a3-e986-49e7-be72-3caf4fa95644.png)
+
+## Malware detection
+
+*LMD* is a great tool for malware detection
+
+### Installation
+
+    wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
+    tar xvfvz maldetect-current.tar.gz
+    cd maldetect-1.4.2
+    sudo ./install.sh
+    
+    
+sudo maldet --scan-all /home
