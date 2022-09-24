@@ -84,11 +84,11 @@ Let's say we want to install a network adapter *rtl8812au* distributed with dkms
 
 1. First we have to download the source code:
 
-      git clone https://github.com/aircrack-ng/rtl8812au.git
+        git clone https://github.com/aircrack-ng/rtl8812au.git
 
 2. Then from the project directory we build the module with *make* and install with *dkms*:
 
-      cd rtl8812au && sudo make dkms_install 
+        cd rtl8812au && sudo make dkms_install 
  
 To check which modules are currently installed with dkms, use:
 
