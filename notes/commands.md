@@ -27,7 +27,7 @@ history -w
 ## The manual
 
 The <code>man</code> command is an abbreviation for manual. 
-The <code>man</code> command displays the documentation for every command we execute on the terminal.
+It may be used to display the documentation for various built-in command line utilities.
 
 | Number | Description |
 | --- | --- |
