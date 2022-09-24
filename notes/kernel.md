@@ -59,18 +59,41 @@ The startup procedures then take up the baton and complete the operating system'
 
 ## DKMS
 
-Let us imagine a following scenario: you just bought some hardware part for your PC like graphics card or WIFI adapter and after plugining it in you find out that it is not recognised by your system. You have to now look for a drivers for that hardware. 
+Consider the following scenario: you recently purchased a hardware component for your PC, such as a graphics card or a WiFi adapter, and after plugging it in, you discover that it is not recognized by your system.
+You must now search for drivers for that hardware.
 
-* One option is to download the official source code of the device driver, compile it against the kernel and the install and activated it. 
-* If you are lucky everything will work fine till the next kernel update. You will then have to manually repeat the process.
-* Another option is to use DKMS (dynamic kernel module support). It will automatically re-build kernel modules on kernel upgrade.
-* Additionally it is good to notice that many hardware vendors already distribute their hardware's device driver as a DKMS packages.
+
+* One method is to download the device driver's official source code, compile it against the kernel, and then install and activate it.
+* If you're lucky, everything will continue to work normally until the next kernel upgrade. You must then manually repeat the operation. 
+* Another option is to use DKMS (dynamic kernel module support). When the kernel is upgraded, it will automatically rebuild kernel modules.
+* It is also worth noting that many hardware manufacturers already distribute their device drivers as DKMS packages.
 
 ### Installation
 
 On Debian based systems:
 
-sudo apt install dkms
+    sudo apt install dkms
 
 On Arch based systems:
 
+    sudo pacman -S dkms
+    
+### Usage
+
+Let's say we want to install a network adapter *rtl8812au* distributed with dkms support.
+
+1. First we have to download the source code:
+
+      git clone https://github.com/aircrack-ng/rtl8812au.git
+
+2. Then from the project directory we build the module with *make* and install with *dkms*:
+
+      cd rtl8812au && sudo make dkms_install 
+ 
+To check which modules are currently installed with dkms, use:
+
+    sudo dkms-status
+
+To uninstall a dkms module, you can use:
+
+    sudo dkms remove rtl8812AU/4.3.14 --all
