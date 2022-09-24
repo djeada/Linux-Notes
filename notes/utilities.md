@@ -44,10 +44,21 @@ To start the app, you can simply type:
 
 ### Installation
 
+Use the following commands to install the program:
+
     wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
     tar xvfvz maldetect-current.tar.gz
-    cd maldetect-1.4.2
-    sudo ./install.sh
+    cd maldetect-2.1.1 && sudo ./install.sh
+
+To scan your home directory, you can use:
+
+    maldet --scan-all ~/
     
-    
-sudo maldet --scan-all /home
+The report ID should be shown in the command output.
+You can now use the ID to view the report (in the example below, the report ID is 88498-3948.32983): 
+ 
+    maldet --report 88498-3948.32983
+
+Run the following command with the report ID to quarantine the affected files:
+
+    maldet -q 88498-3948.32983
