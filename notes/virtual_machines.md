@@ -45,6 +45,23 @@ The DHCP server on the bridged local network assigns an IP address to the VM.
 
         VBoxHeadless --startvm "vm_example" &
 
+## VMware
+
+### The IP address of a VM
+
+If you are using NAT networking, you will find the IP address in the following special file:
+
+        cat /etc/vmware/vmnet8/dhcpd/dhcpd.leases
+
+The MAC address of the VM is required for a bridged network. You can retrive it from VMs .vmx file:
+
+        cat path/to/example_vm.vmx
+
+Suppose you found the following MAC address: 01:1a:bb:32:12:99.
+You can now use it to find the IP address of a VM:
+
+        dhcpdump -i eth0 -h ^01:1a:bb:32:12:99
+
 ## KVM
 
 ### The IP address of a VM
@@ -56,4 +73,4 @@ If you're using NAT networking, you'll need to specify the network name (the def
 The name of the bridge is required for a bridged network.
 If your bridge is called *bridge1*, you can obtain the IP address of a VM by the following command: 
 
-        dhcpdump -i bridge1
+        dhcpdump -i eth0 -h ^00:0c:29:bd:81:01
