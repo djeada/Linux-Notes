@@ -2,6 +2,16 @@
 
 primarily KVM, also need to know the types of virtualization and other technologies;
 
+## Networking
+
+### NAT
+
+The disadvantage of NAT-based networking is that your guest VM is concealed behind the NAT bridge and is inaccessible outside of the hypervisor server unless you use complicated port forwarding or IP masquerading. 
+
+### Bridges
+
+The physical interface of the VM host connects the virtual interface of your VM to the outside local network.
+The DHCP server on the bridged local network assigns an IP address to the VM. 
 
 ## VirtualBox
 
@@ -34,3 +44,16 @@ primarily KVM, also need to know the types of virtualization and other technolog
 6. To start the VM, we simply use:
 
         VBoxHeadless --startvm "vm_example" &
+
+## KVM
+
+### The IP address of a VM
+
+If you're using NAT networking, you'll need to specify the network name (the default is simply *default*): 
+
+        virsh net-dhcp-leases default
+
+The name of the bridge is required for a bridged network.
+If your bridge is called *bridge1*, you can obtain the IP address of a VM by the following command: 
+
+        dhcpdump -i bridge1
