@@ -4,14 +4,30 @@ primarily KVM, also need to know the types of virtualization and other technolog
 
 ## Networking
 
+* VMs on the same host talking to each other.
+* VMs accessing external services.
+* External services acessing VM.
+
 ### NAT
 
-The disadvantage of NAT-based networking is that your guest VM is concealed behind the NAT bridge and is inaccessible outside of the hypervisor server unless you use complicated port forwarding or IP masquerading. 
+VMs can talk to outside world trough the host .
+External services can access VMs using the address translation.
 
-### Bridges
+The disadvantage of NAT-based networking is that your guest VM is concealed behind the NAT bridge and is inaccessible outside of the hypervisor server unless you use complicated port forwarding or IP masquerading.
 
-The physical interface of the VM host connects the virtual interface of your VM to the outside local network.
-The DHCP server on the bridged local network assigns an IP address to the VM. 
+### Bridge
+
+An extension of LAN network.
+The physical interface of the VM host connects the virtual interface of your VM to the outside of local network.
+The DHCP server on the bridged local network assigns an IP address to the VM.
+
+Any device on the LAN can see and access the VMs.
+
+### Host only
+
+Outside devices are inaccessible to VMs.
+
+Connection to the internet is only accessible trough port forwarding from the host (mapping a port from the host to port on the guest).
 
 ## VirtualBox
 
