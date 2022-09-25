@@ -16,7 +16,7 @@ Notes on Linux.
 * <a href="https://github.com/djeada/Linux/blob/main/notes/file_system.md">File system</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/permissions.md">Permissions</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/pipe_and_redirect.md">Pipe and Redirect</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/booting.md">boot concepts</a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/booting.md">Boot concepts</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/inodes_and_symlinks.md">Inodes and Symlinks</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/enviroment_variable.md">Enviroment variables</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/enviroment_modules.md">Enviroment modules</a>
