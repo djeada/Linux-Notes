@@ -15,7 +15,9 @@ ls -li
 * third column - hardlink counter
 
 ## Hardlink
-The same file can have different name and appear in different places.
+The same file can have different names and appear in different places.
+
+To create a hardlink, use:
 
 ```bash
 ln existing_file hardlink_name
