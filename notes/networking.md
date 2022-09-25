@@ -116,6 +116,17 @@ To delete the default gateway, use:
 route del default
 ```
 
+## The default gateway
+
+A default gateway in TCP/IP networking provides a default route for a host to use when sending traffic to external networks.
+Unless a host knows how to route traffic, "default" suggests that it will always rely on this gateway to send the traffic. 
+
+Use the following command to display the default gateway:
+
+```bash
+ip route show | grep 'default' | awk '{print $3}'
+```
+
 ## Network Manager daemon
 
 It is a command-line tool that manages network connections. To check if it running use:
@@ -211,6 +222,43 @@ The tcpdump command allows you to do packet analysis from the command line.
 ```bash
 tcpdump
 ```
+
+## IP forwarding
+
+To check if IP forwarding is enabled, you can use:
+
+    cat /proc/sys/net/ipv4/ip_forward
+
+To activate IPv4 forwarding in the current session, use:
+
+    sysctl -w net.ipv4.ip_forward=1
+
+To activate IPv6 forwarding in the current session, use:
+
+    sysctl -w net.ipv6.conf.all.forwarding=1
+
+If you want to enable IP forwarding permanently, you need to edit */etc/sysctl.conf*:
+
+```bash
+vi /etc/sysctl.conf
+```
+
+    net.ipv4.ip_forward=1           # IPv4
+    net.ipv6.conf.all.forwarding=1  # IPv6
+
+To reload the settings, use:
+
+    sysctl -p /etc/sysctl.conf
+
+Now you need to completely restart networking:
+
+1. RedHat based systems, use:
+
+        service network restart
+
+2. Debian based systems, use:
+
+        /etc/init.d/networking restart
 
 ## Network troubleshooting
 
