@@ -1,5 +1,5 @@
-## The grep utility>
-`grep` looks for lines that match a given pattern in the given files or standard input if no files are specified. `grep`'s default behavior is to print out the lines that match the search pattern.
+## The grep utility
+The command `grep` looks for lines that match a given pattern in the given files or standard input if no files are specified. `Grep`'s default behavior is to print out the lines that match the search pattern.
 
 To print all lines containing the word `key` in a file named file_name.txt, use:
 
@@ -74,7 +74,7 @@ The regex will match any word of 8-12 characters in length:
 grep -nE "[[:alpha:]]{8,12}" file_name
 ```
 
-## Challenges>
+## Challenges
 
 1. List all files and subdirectories in the current directory, then use grep to remove all of the listed files and subdirectories except those that contain the word `test`. 
 2. Search through your command history for any commands that contain the word *clone*.
