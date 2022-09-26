@@ -20,7 +20,7 @@ Columns of `/etc/passwd`:
 
 <empty line>
     
-    less /etc/passwd
+    less /etc/shadow
 
 Columns of `/etc/shadow`:
 
