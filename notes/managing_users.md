@@ -80,7 +80,7 @@ If you wish to provide Adam the ability to reboot, run `visudo /etc/sudoers` and
 adam ALL = NOPASSWD:/sbin/reboot
 ```
 
-The visudo command will automatically verify your syntax and refuse to save if there are any errors. A faulty /etc/sudoers file may prevent you from accessing your server every again!
+The `visudo` command will automatically verify your syntax and refuse to save if there are any errors. A faulty `/etc/sudoers` file may prevent you from accessing your server ever again!
 
 ### Changing users
 `su` without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
@@ -97,14 +97,14 @@ su adam -c whoami
 
 ### Adding user
 
-The UNIX system tool `useradd` is used to add new users (`userdel` is used to remove users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
+The UNIX system tool `useradd` is used to add new users (`userdel` is used to remove users). It generates a new home directory for the user and adds new user information to the `/etc/passwd` file.
 
 ```bash
 useradd -m adam
 ```
 
 Flags:
-* `-m` create home dir. The template is located at /etc/skel.
+* `-m` create home dir. The template is located at `/etc/skel`.
 * `-u` specify UID (it has to be free).
 * `-G` add the user to the following groups.
 
@@ -129,9 +129,9 @@ passwd adam
 
 ## Groups
 
-All new users in RHEL/CENTOS are automatically added to the wheel group.
+All new users in RHEL/CentOS are automatically added to the wheel group.
 
-`groupadd` creates a new group and saves its details to /etc/group:
+`groupadd` creates a new group and saves its details to `/etc/group`:
 
 ```bash
 groupadd new_group
