@@ -6,6 +6,7 @@ The inode is a filesystem object that contains details about:
 * size, 
 * timestamps with the last file's access and its modifications.
 
+To show the inodes, use:
 
 ```bash
 ls -li
@@ -26,6 +27,8 @@ ln existing_file hardlink_name
 ## Symlink
 
 It is a file that points to another file.
+
+To create a symlink, use:
 
 ```bash
 ln -s existing_file symlink_name
