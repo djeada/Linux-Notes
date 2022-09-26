@@ -104,8 +104,8 @@ Flags:
 * `-u` specify UID (it has to be free).
 * `-G` add the user to the following groups.
 
-When adding new users from the command line, you should prefer using `adduser` (and `deluser` when deleting users). It is said to be more user friendly.
-However, if you're writing a script, especially if portability is important, you may want to use the lowlevel utilities instead, because `adduser`/`deluser` may not be available on all distributions, such as SuSE. 
+When adding new users from the command line, you should instead prefer using `adduser` (and `deluser` when deleting users). It is said to be more user friendly, because it generates the full user profile. `adduser` may also prompt you for some additional information like password, which `useradd` omits.
+However, if you're writing a script, especially if portability is important, you may still want to use the lowlevel utilities instead, because `adduser`/`deluser` may not be available on all distributions, such as SuSE. 
 
 ```bash
 adduser adam
