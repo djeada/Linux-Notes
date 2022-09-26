@@ -49,7 +49,7 @@ readlink -f symlink_name
 | can link to any directory | no | yes |
 
 
-## Challanges
+## Challenges
 
 1. Create a text file and a hard link to it in another directory. Remove the hard link. What has happened to the original file?
 1. Display the inode number of any file and its symlinks. Is there a difference?
