@@ -8,7 +8,7 @@ There are many informations about the users that are stored on the system. You c
 
     less /etc/passwd
     
-Columns of */etc/passwd*:
+Columns of `/etc/passwd`:
 
 * username
 * password
@@ -22,7 +22,7 @@ Columns of */etc/passwd*:
     
     less /etc/passwd
 
-Columns of */etc/shadow*:
+Columns of `/etc/shadow`:
 
 * username
 * encrypted password
@@ -61,7 +61,7 @@ On the RedHat and similar distributions this group is called *wheel* instead:
 usermod -aG wheel adam
 ```
 
-Then you need to run visudo and uncomment (remove the *%*) the following line:
+Then you need to run `visudo` and uncomment (remove the *%*) the following line:
 
 ```bash
 %wheel ALL=(ALL)    ALL
@@ -69,9 +69,9 @@ Then you need to run visudo and uncomment (remove the *%*) the following line:
 
 ### Partially granted sudo privileges 
 
-/etc/sudoers is a special file that allows users to be granted sudo privileges solely for specific tools.
+`/etc/sudoers` is a special file that allows users to be granted sudo privileges solely for specific tools.
 
-If you wish to provide Adam the ability to reboot, run <i>visudo /etc/sudoers</i> and add the following lines at the bottom of the file: 
+If you wish to provide Adam the ability to reboot, run `visudo /etc/sudoers` and add the following lines at the bottom of the file: 
 
 ```bash
 # Allow user "adam" to run "sudo reboot"
@@ -83,7 +83,7 @@ adam ALL = NOPASSWD:/sbin/reboot
 The visudo command will automatically verify your syntax and refuse to save if there are any errors. A faulty /etc/sudoers file may prevent you from accessing your server every again!
 
 ### Changing users
-<i>su</i> without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
+`su` without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
 
 ```bash
 su adam
@@ -104,9 +104,9 @@ useradd -m adam
 ```
 
 Flags:
-* <i>-m</i> create home dir. The template is located at /etc/skel.
-* <i>-u</i> specify UID (it has to be free).
-* <i>-G</i> add the user to the following groups.
+* `-m` create home dir. The template is located at /etc/skel.
+* `-u` specify UID (it has to be free).
+* `-G` add the user to the following groups.
 
 When adding new users from the command line, you should prefer using `adduser` (and `deluser` when deleting users). It is said to be more user friendly.
 However, if you're writing a script, especially if portability is important, you may want to use the lowlevel utilities instead, because `adduser`/`deluser` may not be available on all distributions, such as SuSE. 
@@ -123,7 +123,7 @@ To set or change a user's password, use the *passwd* command:
 passwd adam
 ```
 
-* <i>passwd -l</i>  blocks user from chaning their password (-u flags unlocks). Why doesn't it keep a user from logging in via other methods?
+* `passwd -l`  blocks user from chaning their password (-u flags unlocks). Why doesn't it keep a user from logging in via other methods?
 - It locks only the password, not the account, so users can still authenticate with keys or other methods.
  
 
@@ -131,13 +131,13 @@ passwd adam
 
 All new users in RHEL/CENTOS are automatically added to the wheel group.
 
-<i>groupadd</i> creates a new group and saves its details to /etc/group:
+`groupadd` creates a new group and saves its details to /etc/group:
 
 ```bash
 groupadd new_group
 ```
 
-The command <i>group</i> displays which groups a user is a member of:
+The command `group` displays which groups a user is a member of:
 
 ```bash
 groups username
@@ -155,7 +155,7 @@ Change the primary group of adam to new_group:
 usermod -g new_group adam 
 ```
 
-Columns of /etc/group
+Columns of `/etc/group`:
 
 * group name
 * password
@@ -176,13 +176,13 @@ Each user has a distinct user id (uid). To check a user's id, use:
 id user_name
 ```
 
-To change UID of user <i>adam</i> to 1100, use:
+To change UID of user `adam` to 1100, use:
 
 ```bash
 usermod -u 1100 adam
 ```
 
-To change GID of a group called <i>new_group</i> to 2500, use:
+To change GID of a group called `new_group` to 2500, use:
 
 ```bash
 groupmod -g 2500 new_group
@@ -192,7 +192,7 @@ groupmod -g 2500 new_group
 
 1. Show your user name as well as your unique user identity number (userid).
 1. Show the contents of the /etc/shadow. Can you find a reference to your user? Hint: you will need sudo privileges.
-1. Check the /var/log/auth.log file to check who is logged in. Use <i>grep</i> to see if someone is using sudo.
+1. Check the /var/log/auth.log file to check who is logged in. Use `grep` to see if someone is using sudo.
 1. Display a sorted list of all logged-in users, including the command they are now executing. 
 1. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made.
 1. Allow a user with no sudo privileges to execute the <code>reboot</code> command. Log in to that specific user account. Verify whether the system can be restarted.
