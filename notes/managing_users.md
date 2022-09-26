@@ -1,7 +1,3 @@
-//TODO:
-* /etc/sudoers
-* visudo
-
 ## Users
 
 There are many informations about the users that are stored on the system. You can view some that info by opening */etc/passwd* and */etc/shadow*:
