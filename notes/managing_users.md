@@ -82,14 +82,14 @@ adam ALL = NOPASSWD:/sbin/reboot
 
 The `visudo` command will automatically verify your syntax and refuse to save if there are any errors. A faulty `/etc/sudoers` file may prevent you from accessing your server ever again!
 
-### Changing users
-`su` without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
+### Switching between users
+The `su` command without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
 
 ```bash
 su adam
 ```
 
-The -c option enables you to run a command as another user account and redirect the output to your terminal:
+The -c option enables you to run a command as another user and redirect the output to your terminal:
 
 ```bash
 su adam -c whoami
