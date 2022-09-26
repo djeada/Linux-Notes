@@ -95,7 +95,7 @@ The -c option enables you to run a command as another user account and redirect 
 su adam -c whoami
 ```
 
-### Adding user
+### Adding users
 
 The UNIX system tool `useradd` is used to add new users (`userdel` is used to remove users). It generates a new home directory for the user and adds new user information to the `/etc/passwd` file.
 
