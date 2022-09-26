@@ -4,19 +4,40 @@
 
 ## Users
 
-The following information about the users is stored on the system: 
-
-* Full Name
-* Username
-* Password
-* Groups (primary and secondary)
-* Home dir
-* Shell program
-
-You can view that info by opening */etc/passwd*:
+There are many informations about the users that are stored on the system. You can view some that info by opening */etc/passwd* and */etc/shadow*:
 
     less /etc/passwd
+    
+Columns of */etc/passwd*:
 
+* username
+* password
+* UID
+* GID
+* comment (GECOS filed)
+* home dir path
+* shell (e.g. /bin/bash)
+
+<empty line>
+    
+    less /etc/passwd
+
+Columns of */etc/shadow*:
+
+* username
+* encrypted password
+* number of days since last password change
+* number of days before password can be changed again (e.g. 0)
+* number of days before password must be changed
+* warning period
+* inactivity period
+* expiration date
+* unused
+
+To display all the users on the system use:
+    
+    awk -F: '{ print $1}' /etc/passwd | uniq
+    
 ### Superuser
 The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is `root`. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
 
@@ -93,8 +114,9 @@ When adding new users from the command line, you should prefer using <i>adduser<
 adduser adam
 ```
 
-### passwd
-Use the <i>passwd</i> command to set or modify a user's password:
+### Changing the password
+
+To set or change a user's password, use the *passwd* command: 
 
 ```bash
 passwd adam
@@ -103,28 +125,7 @@ passwd adam
 * <i>passwd -l</i>  blocks user from chaning their password (-u flags unlocks). Why doesn't it keep a user from logging in via other methods?
 - It locks only the password, not the account, so users can still authenticate with keys or other methods.
  
-Columns of /etc/passwd:
 
-* username
-* password
-* UID
-* GID
-* comment (GECOS filed)
-* home dir path
-* shell (e.g. /bin/bash)
-
-Columns of /etc/shadow
-
-* username
-* encrypted password
-* number of days since last password change
-* number of days before password can be changed again (e.g. 0)
-* number of days before password must be changed
-* warning period
-* inactivity period
-* expiration date
-* unused
- 
 ## Groups
 
 All new users in RHEL/CENTOS are automatically added to the wheel group.
