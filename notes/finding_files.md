@@ -82,3 +82,5 @@ which python
   - ls
   - reboot
   - chmod
+2. Find all files in your home directory that are larger than 1GB. 
+3. Find all files in your home directory with.mp3 extensions. 
