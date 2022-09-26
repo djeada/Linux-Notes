@@ -1,7 +1,7 @@
 ## The grep utility
 The command `grep` looks for lines that match a given pattern in the given files or standard input if no files are specified. `Grep`'s default behavior is to print out the lines that match the search pattern.
 
-To print all lines containing the word `key` in a file named file_name.txt, use:
+To print all lines containing the word `key` in a file named *file_name.txt*, use:
 
 ```bash
 grep key file_name.txt
