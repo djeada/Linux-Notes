@@ -97,7 +97,7 @@ su adam -c whoami
 
 ### Adding user
 
-<i>useradd</i> is a UNIX system tool for adding new users (<i>userdel</i> is its counterpart for deleting users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
+The UNIX system tool `useradd` is used to add new users (`userdel` is used to remove users). It generates a new home directory for the user and adds new user information to the /etc/passwd file.
 
 ```bash
 useradd -m adam
@@ -108,7 +108,8 @@ Flags:
 * <i>-u</i> specify UID (it has to be free).
 * <i>-G</i> add the user to the following groups.
 
-When adding new users from the command line, you should prefer using <i>adduser</i> (and <i>deluser</i> when deleting users). If you're developing a script, especially if portability is important, you might want to use the lowlevel utilities instead - because adduser/deluser may not be accessible on all distributions, such as SuSE.
+When adding new users from the command line, you should prefer using `adduser` (and `deluser` when deleting users). It is said to be more user friendly.
+However, if you're writing a script, especially if portability is important, you may want to use the lowlevel utilities instead, because `adduser`/`deluser` may not be available on all distributions, such as SuSE. 
 
 ```bash
 adduser adam
