@@ -78,3 +78,4 @@ grep -nE "[[:alpha:]]{8,12}" file_name
 
 1. List all files and subdirectories in the current directory, then use grep to remove all of the listed files and subdirectories except those that contain the word `test`. 
 2. Search through your command history for any commands that contain the word *clone*.
+3. Check if a user with name *adam* exists in the system.
