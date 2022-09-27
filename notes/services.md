@@ -1,15 +1,21 @@
 ## What are services?
-You can use services, when you want to run a program:
 
-- In the background.
-- Start automatically when the computer boots up.
-- Run various applications in a specific order after the boot up.
-- Make it globally available within the system.
+A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs.
+
+You can use services, when you want to have a program that:
+
+- Runs in the background.
+- Starts automatically when the computer boots up.
+- Is globally available within the system.
+
+Or perhaps you just want to execute various  programs in a specific order after booting up. 
 
 What can you do with services?
 
-- Start/stop (single time)
-- Enable/disable (starting and stopping automatically on system startup)
+- You can tell them to start or stop executing (single time).
+- You can enable or disable them (starting and stopping automatically on system startup).
+
+How it works internally?
 
 `SystemD` executes different scripts at boot time, those scripts are known as `units`. Units include services, mounts and sockets. To display all of them, use:
 
@@ -19,12 +25,10 @@ systemctl -t help
 
 Don't mix up `SystemD` and `systemctl`! `SystemD` is what all major distros use to manage their services, while `systemctl` is a command line tool used to communicate with `SystemD`. The `systemctl` utility is like a swiss knife for everything that has to do with services.
 
-Thus, services are often used to run programs at boot time, but you can start and stop services at any time. 
+What are some examples of services?
 
 1. An example of a `SystemD` service is the `sshd` service. It starts a `SSH` server when the system boots. 
 2. Anoter example is the `httpd` service. It acts as a server in a client-server architecture, employing the HTTP and/or HTTPS network protocols. 
-
-A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs.
 
 ## What is a daemon?
 A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but it is also possible to start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are configured with `rc` and `init` scripts, that are typically located in `/etc/rc.d` and `/etc/init.d`.
