@@ -1,8 +1,8 @@
-# Boot concepts
+# System startup concepts
 
 What happens in Linux between the time you push the power button and the time you see the login prompt? 
 
-## Boot process
+## Bootup process
 
 ### BIOS
 
@@ -87,7 +87,7 @@ To display the current runlevel, use:
 runlevel
 ```
 
-To switch to runlevel number 3, use:
+To switch runlevel to number 3, use:
 
 ```bash
 telinit 3
@@ -96,6 +96,61 @@ telinit 3
 To set the default, you have to edit `/etc/inittab`. For example, if you want to make number 3 your default, you must find and replace the following line: 
 
     id:3:initdefault:
+
+### Targets
+
+In `SystemD`-based distributions, `targets` replace `runlevels`.
+
+| Target type | Runlevel |
+| --- | --- |
+| `poweroff.target` | runlevel 0 |
+| `rescue.target` | runlevel 1 |
+| `emergency.target` | runlevel 2 |
+| `multi-user.target` | runlevel 3 |
+| `graphical.target` | runlevel 5 |
+| `reboot.target` | runlevel 6 |
+
+If you're using one of those distributions, try the following command: 
+
+```bash
+ls -ll /usr/lib/systemd/system/runlevel*.target
+```
+
+You should get output similar to the following:
+
+    /usr/lib/systemd/system/runlevel0.target -> poweroff.target
+    /usr/lib/systemd/system/runlevel1.target -> rescue.target
+    /usr/lib/systemd/system/runlevel2.target -> multi-user.target
+    /usr/lib/systemd/system/runlevel3.target -> multi-user.target
+    /usr/lib/systemd/system/runlevel4.target -> multi-user.target
+    /usr/lib/systemd/system/runlevel5.target -> graphical.target
+    /usr/lib/systemd/system/runlevel6.target -> reboot.target
+    
+`runlevel.target` files are soft-links to `SystemD` files. 
+
+To display the current target, use:
+
+```bash
+systemctl list-units --type target | egrep "eme|res|gra|mul" | head -1
+```
+
+To switch the target to `multi-user.target`, use: 
+
+```bash
+systemctl isolate multi-user
+```
+
+To display the default target, use:
+
+```bash
+systemctl get-default
+```
+
+To set the default target to `multi-user.target`, use: 
+
+```bash
+systemctl set-default multi-user.target
+```
 
 ## Kernel panic
 
@@ -106,7 +161,7 @@ To set the default, you have to edit `/etc/inittab`. For example, if you want to
 
 ### Hostname
 
-You may change the system hostname on a systemd-based operating system by manually changing /etc/hostname file or using:
+You may change the system hostname on a `SystemD`-based operating system by manually changing /etc/hostname file or using:
 
 ```bash
 hostnamectl set-hostname your_new_name
