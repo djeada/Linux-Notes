@@ -64,19 +64,38 @@ On Linux, init (short for initialization) is the program that starts all other p
 * Configuration file: /etc/inittab.
 * What programs will be loaded on startup.
 
-### Run level
+### Runlevel
 
-Executes program for the current run level.
+* There is a program associated with every runlevel (system mode).
+* It determines the current type of system (graphical or standalone network, for example).
+* You can switch between them and set the default.
+* Be aware that they differ across Debian and RedHat/Suse.
 
-| Run level | Description |
+| Runlevel | Description |
 | --- | --- |
 | 0 | halt |
 | 1 | single user mode |
-| 2 | multiuser, without nfs |
-| 3 | full multiuser mode |
+| 2 | multiuser, without nfs (network) |
+| 3 | full multiuser mode (with network) |
 | 4 | unused |
-| 5 | X11 |
+| 5 | multiuser gui |
 | 6 | reboot |
+
+To display the current runlevel, use:
+
+```bash
+runlevel
+```
+
+To switch to runlevel number 3, use:
+
+```bash
+telinit 3
+```
+
+To set the default, you have to edit `/etc/inittab`. For example, if you want to make number 3 your default, you must find and replace the following line: 
+
+    id:3:initdefault:
 
 ## Kernel panic
 
