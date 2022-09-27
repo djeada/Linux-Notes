@@ -22,27 +22,33 @@ Don't mix up `SystemD` and `systemctl`! `SystemD` is what all major distros use 
 Thus, services are often used to run programs at boot time, but you can start and stop services at any time. 
 
 1. An example of a `SystemD` service is the `sshd` service. It starts a `SSH` server when the system boots. 
-2. Anoter example is the `httpd` service. It acts as a server in a client-server architecture, employing the HTTP and/or HTTPS network protocols. 
+2. Another example is the `httpd` service. It acts as a server in a client-server architecture, employing the HTTP and/or HTTPS network protocols. 
 
 A service usually responds to requests from other programs. It uses inter-process communication mechanisms, like sockets, to communicate with other programs.
 
 ## What is a daemon?
-A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but it is also possible to start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are configured with `rc` and `init` scripts, that are typically located in `/etc/rc.d` and `/etc/init.d`.
+A daemon is a program that runs in the background. It is usually used to perform a task, like monitoring a system, or to provide a service. Daemons are usually started by the system, but it is also possible to start them manually. In constrasts to programs run by the user, a daemon is not under the direct control of a user. Daemons are usually configured with `rc` and `init` scripts, that are typically located in `/etc/rc.d` and `/etc/init.d`. 
 
-To list the services intalled on the current system, use:
-
-```bash
-ls /etc/init.d
-```
-
-The tools that you can use to edit those files include:
-
-* `systemctl` for `SystemD`
-* `service` or `chkconfig` for `SysV`
+Obviously, not all deamons are services, because we can write our own deamons and have them do whatever we want.
+However, deamons and services are closely connected concepts since most services use deamons internally. 
 
 ## Managing services
 
 Some services are always running, whereas others run once and then stop. 
+
+`SysV` uses `/etc/rc.d` and `/etc/init.d` for its services. It's worth mentioning that those directories are not obsolete in `SystemD`. There is a special program called `systemd-sysv-generator` that generates the service units that run scripts from those directories, if if there are no native `SystemD` services on that machine.
+
+The native directories for `SystemD` services include:
+
+- `/etc/systemd/system`, 
+- `/run/systemd/system`, 
+- `/usr/local/lib/systemd/system`,
+- `/usr/lib/systemd/system`
+
+You don't have to edit those files manually to manage services. Instead, use the tools that will do it for you: 
+
+* `systemctl` for `SystemD`
+* `service` or `chkconfig` for `SysV`
 
 To display the status of a service (in this example httpd), use one of the following:
 
