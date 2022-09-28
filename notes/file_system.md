@@ -7,7 +7,7 @@ One way to classify the files is by their purpose:
   Unlike other operating systems, UNIX filenames do not have a name and an extension .
 
 1. Directories: In Linux, files are arranged into directories (analogous to folders in Windows). 
-  The root directory is simply referred to as `/.`
+  The root directory is simply referred to as `/`.
   Users' files are stored in their home folders, which are located in `/home/.` For instance, `/home/adam/.`
 
 1. Devices: To provide applications simple access to hardware devices, UNIX permits them to be utilized in the same manner that regular files are. In UNIX, there are two sorts of devices: block-oriented devices that transport data in blocks (e.g., hard drives) and character-oriented devices that send data byte by byte (e.g. modems and terminals).
