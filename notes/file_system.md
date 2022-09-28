@@ -17,21 +17,21 @@ One way to classify the files is by their purpose:
 Another approach is to categorize them according to how they are stored in the file system: 
 
 * Files that are directly placed in the file system.
-* Virtual files that are not files but rather interfaces to other programs or kernel itself (/proc and /sys).
+* Virtual files that are not files but rather interfaces to other programs or kernel itself (`/proc` and `/sys`).
 * Files from a remote NFS server that has been mounted on the file system. 
 
 ### Special directory names 
 
-* “./” is a reference to the current directory;
-* “../” is a reference  to the directory one level above the current directory; 
-* “~/” is a reference  to your home directory.
+* `./` is a reference to the current directory;
+* `../` is a reference  to the directory one level above the current directory; 
+* `~/` is a reference  to your home directory.
 
 ### File names 
 Unlike Windows, Linux distinguishes between upper and lower case letters in file names.
 That is, the file names "Test," "TEST," and "test" all refer to different files. 
 
 ### Hidden files 
-Hidden files have filenames that begin with “.” (period). 
+Hidden files have filenames that begin with `.` (period). 
 These are generally system files that do not appear when you list the contents of a directory. 
 
 ### Permissions
@@ -41,7 +41,7 @@ You can read the content of a file (e.g., make your own copy) if you have read a
 You can remove, edit, or replace files with write access.
 Execute access is necessary to run programs or access the contents of folders.
 
-## UNIX Directory Structure
+## Directory structure
 
 Everything in Linux is located in the root directory. Even if you have many hard disks or SSDs, their storage will be stacked under the root directory. 
 
@@ -57,7 +57,7 @@ Everything in Linux is located in the root directory. Even if you have many hard
 | `/home` | Each user's home directory has personal file space. Each directory is named after the user's login. |
 | `/etc` | configuration files for programs and packages |
 | `/dev` | info about hardware devices (disks, webcams, keyboards etc.) |
-| `/var` | variable data specfic to the system |
+| `/var` | variable data specfic to the system, files that are expected to grow (like info about crashed processes). |
 | `/root` | root user home directory |
 | `/boot` | files needed for the boot up process |
 | `/media` and `/mnt` | other mounted devices (like USB stick) |
