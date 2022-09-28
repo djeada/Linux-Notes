@@ -7,8 +7,8 @@ One way to classify the files is by their purpose:
   Unlike other operating systems, UNIX filenames do not have a name and an extension .
 
 1. Directories: In Linux, files are arranged into directories (analogous to folders in Windows). 
-  The root directory is simply referred to as "/."
-  Users' files are stored in their home folders, which are located in "/home/." For instance, "/home/adam/."
+  The root directory is simply referred to as `/.`
+  Users' files are stored in their home folders, which are located in `/home/.` For instance, `/home/adam/.`
 
 1. Devices: To provide applications simple access to hardware devices, UNIX permits them to be utilized in the same manner that regular files are. In UNIX, there are two sorts of devices: block-oriented devices that transport data in blocks (e.g., hard drives) and character-oriented devices that send data byte by byte (e.g. modems and terminals).
 
@@ -28,14 +28,14 @@ Another approach is to categorize them according to how they are stored in the f
 
 ### File names 
 Unlike Windows, Linux distinguishes between upper and lower case letters in file names.
-That is, the file names "Test," "TEST," and "test" all refer to distinct files.
+That is, the file names "Test," "TEST," and "test" all refer to different files. 
 
 ### Hidden files 
 Hidden files have filenames that begin with “.” (period). 
 These are generally system files that do not appear when you list the contents of a directory. 
 
 ### Permissions
-Files are given "permissions" that specify who has access to them and what kind of access they have.
+Files are given `permissions` that specify who has access to them and what kind of access they have.
 The three most basic forms of access are read, write, and execute. 
 You can read the content of a file (e.g., make your own copy) if you have read access. 
 You can remove, edit, or replace files with write access.
@@ -45,21 +45,23 @@ Execute access is necessary to run programs or access the contents of folders.
 
 Everything in Linux is located in the root directory. Even if you have many hard disks or SSDs, their storage will be stacked under the root directory. 
 
-| Command | Description |
+| Directory | Description |
 | --- | --- |
-| <i>/</i> | root directory |
-| <i>/bin</i> | low-level system utilities |
-| <i>/usr/bin</i> | system utilities for normal users |
-| <i>/sbin</i> | system utilities for superusers |
-| <i>/lib</i> | low-level system utility program libraries |
-| <i>/usr/lib</i> | library programs for higher-level user programs |
-| <i>/tmp</i> | storage for temporary files (removed after 10 days) |
-| <i>/home</i> | Each user's home directory has personal file space. Each directory is named after the user's login. |
-| <i>/etc</i> |  configuration files for programs and packages |
-| <i>/dev</i> | info about hardware devices |
-| <i>/var</i> | variable data specfic to the system |
-| <i>/root</i> | root user home directory |
-| <i>/boot</i> | files needed for the boot process |
+| `/` | root directory |
+| `/bin` | low-level system utilities (like `bash`, `cat` or `ls`) |
+| `/usr/bin` | system utilities for normal users |
+| `/sbin` | system utilities for superusers |
+| `/lib` | low-level system utility program libraries |
+| `/usr/lib` | library programs for higher-level user programs |
+| `/tmp` | storage for temporary files (removed after 10 days) |
+| `/home` | Each user's home directory has personal file space. Each directory is named after the user's login. |
+| `/etc` | configuration files for programs and packages |
+| `/dev` | info about hardware devices (disks, webcams, keyboards etc.) |
+| `/var` | variable data specfic to the system |
+| `/root` | root user home directory |
+| `/boot` | files needed for the boot up process |
+| `/media` and `/mnt` | other mounted devices (like USB stick) |
+| `/proc` | ino about every process on the system |
 
 ## File system types
 
@@ -105,8 +107,8 @@ Everything in Linux is located in the root directory. Even if you have many hard
 * fat32
 * linux can read and write to those file systems
 
-## Creating a File System
-Let's say <code>/dev/sdb</code> is a disk  with defined partitions but no data stored on it.
+## Creating a file system
+Let's say `/dev/sdb` is a disk  with defined partitions but no data stored on it.
 
 To check the disk info and partitions, use:
 
@@ -114,7 +116,7 @@ To check the disk info and partitions, use:
 fdisk -l /dev/sdb 
 ```
 
-Assume the following partition exists on <code>/dev/sdb</code>: <code>/dev/sdb1</code>, <code>/dev/sdb2</code>, <code>/dev/sdb3</code>.
+Assume the following partition exists on `/dev/sdb`: `/dev/sdb1`, `/dev/sdb2`, `/dev/sdb3`.
 
 To create ext4 file system on each of them, use:
 
@@ -126,9 +128,9 @@ mkfs -t ext4 /dev/sdb3
 
 ## Challenges
 
-1. Does the file /bin/echo exist? If so, how does it relate to <code>echo</code> command?
-1. Use /dev/random or /dev/urandom to create a file with 100 lines of random chars.
-1. Can you explain me what the /bin and /sbin directories are for?
-1. What is the difference between character and block device drivers in UNIX? Can we use <code>ls</code>  to determine which group the device belongs to?
-1. Can you deduce your CPU's model from the contents of /proc/cpuinfo? 
-1. What hidden files may be found in the /root directory? 
+1. Does the file `/bin/echo` exist on your system? If so, how does it relate to the `echo` command?
+1. Use `/dev/random` or `/dev/urandom` to create a file with 100 lines of random chars.
+1. Can you explain the purpose of the `/bin` and `/sbin` directories? 
+1. What is the difference between character and block device drivers in UNIX? Can we use `ls`  to determine which group the device belongs to?
+1. Can you deduce your CPU's model from the contents of `/proc/cpuinfo`? 
+1. What hidden files may be found in the `/root` directory? 
