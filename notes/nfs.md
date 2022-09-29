@@ -1,6 +1,6 @@
-NFS (Network File System) is a server-client protocol used for file sharing between Unix computers. NFS allows you to mount a remote share on your local machine. You may then access any of the files on that remote share directly.
+NFS (Network File System) is a server-client protocol used for file sharing between different computers (there is support for Linux, Mac and Windows). NFS allows you to mount a remote share on your local machine. You may then access any of the files on that remote share directly.
 
-<h2>Server side</h2>
+## Server side
 
 Use the following commands on a Centos7 system:
 
@@ -52,7 +52,7 @@ You may now restart the nfs server using the command:
 systemctl restart nfs-server
 ```
 
-<h2>Client side</h2>
+## Client side
 
 Use the following commands on a Centos7 system:
 
