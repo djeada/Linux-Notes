@@ -117,3 +117,9 @@ To display information about the boot process:
 ```bash
 systemd-analyze
 ```
+
+## SNMP 
+
+* Simple network management protocol
+* Mainly used for pulling data from devices (some can have no storage like cameras)
+
