@@ -6,13 +6,13 @@ There two types of processes:
 1. shell job - A command written in the shell is used to launch the task. They are also known as interactive processes.
 2. daemons - They are utility applications that run silently in the background to monitor and maintain particular subsystems to ensure the operating system's proper functionality. They are often launched with root privileges.
 
-The <code>ps</code> command displays a list of all processes. To long listing of all processes on the system, use:
+The `ps` command displays a list of all processes. To long listing of all processes on the system, use:
 
 ```bash
 ps -ef 
 ```
 
-Processes have many properties associated with them. To see the user ID, process ID, parent process ID, CPU usage, and command name of a process, use:
+Processes have many properties associated with them. To see the user ID, process ID, parent process ID, CPU usage, and the path to the executable, use:
 
 ```bash
 ps -e --format uid,pid,ppid,%cpu,cmd 
@@ -20,11 +20,11 @@ ps -e --format uid,pid,ppid,%cpu,cmd
 
 Another useful options include:
 
-* <code>aux</code>: short summary of all active processes
-* <code>fax</code>: shows the process hierarchy
-* <code>o</code>: allows to specify the column names
+* `aux`: short summary of all active processes
+* `fax`: shows the process hierarchy
+* `o`: allows to specify the column names
 
-<code>top</code> shows the sorted list of active processes:
+`top` shows the sorted list of active processes:
 
 ```bash
 top
@@ -50,35 +50,42 @@ ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head 10
 ```
 
 ## Foreground and background jobs
-Jobs can either be in the foreground or in the background. Thus far, we have run commands at the prompt and waited for them to complete. We call this running in the “foreground.”
+Jobs can either be in the foreground or in the background. 
+Thus far, we have executed tools and programs from the terimanl and waited for them to complete. 
+We call this running in the “foreground.”
 
-You can use the “&” operator, to run programs in the “background” (this is especially useful when the program will take a long time to execute):
+You can use the *&* operator, to run programs in the “background” (this is especially useful when the program will take a long time to execute). The *sleep* command waits &n* seconds before closing itself. Let's put in the background:
 
 ```bash
 sleep 1000 &
 ```
 
-This process should now be displayd in the list of processes running in the background:
+The output will most likely look something like this: 
+
+    [1] 3241
+    
+The first number (in square brackets) represents the job number, while the second represents the process id.
+
+To see all jobs on the system, use:
 
 ```bash
 jobs
 ```
 
-To bring a background job to foreground, use <code>fg</code> and it's number from <code>jobs</code> output:
+To bring a background job to the foreground, use `fg` and it's job number. For example for a job number 3, we would use:
 
 ```bash
-fg 1
+fg 3
 ```
 
-To stop a process without killing it, use <code>Ctrl+Z</code> (this will also display in the output of <code>jobs</code>).
-Use <code>bg</code> to make it run again (analogous to <code>fg</code>).
+To move process that is currently running in the terminal to the background, use `Ctrl+Z`.
+Unfortunetelly the process will be stopped as well. Use `bg` to make it run again:
 
 ```bash
 bg 1
 ```
 
-Another useful shortcut is <code>Ctrl+C</code>, which is used to terminate a running process.
-Note: background processes launched in the shell will continue to run when the shell is terminated.
+Another useful shortcut is `Ctrl+C`, which is used to terminate a running process.
   
 ## Terminate processes
 To kill a process, use the ‘kill’ command with the five-digit process id:
@@ -97,11 +104,11 @@ Available signals:
 
 | Signal | Value |  Description |
 | --- | --- | --- |
-| <code>SIGHUP</code> | (1) | Hangup |
-| <code>SIGINT</code> | (2) | Analogous to <code>Ctrl+C</code>|
-| <code>SIGKILL</code> | (9) | Kill signal |
-| <code>SIGTERM</code> |  (15) | Termination signal |
-| <code>SIGSTP</code> |  (20) | Analogous to <code>Ctrl+Z</code> |
+| `SIGHUP` | (1) | Hangup |
+| `SIGINT` | (2) | Analogous to `Ctrl+C`|
+| `SIGKILL` | (9) | Kill signal |
+| `SIGTERM` |  (15) | Termination signal |
+| `SIGSTP` |  (20) | Analogous to `Ctrl+Z` |
   
 Properly killing processes:
 1. Send a SIGINT.
@@ -110,7 +117,7 @@ Properly killing processes:
 
 ### pkill vs killall
 
-Both <code>pkill</code> and <code>killall</code> offer distinct options. Killall provides an option to match processes based on their age, whereas pkill contains a flag to exclusively kill processes on a certain tty. Neither is superior. They simply specialize in different areas.
+Both `pkill` and `killall` offer distinct options. Killall provides an option to match processes based on their age, whereas pkill contains a flag to exclusively kill processes on a certain tty. Neither is superior. They simply specialize in different areas.
 
 ```bash
 pkill -SIGTERM -f chromium
@@ -123,12 +130,12 @@ killall -15 chromium
 ## Spawning processes
 
 * PID 1 is assigned to the first process that is created when the system boots up.
-* This process is known as <code>systemd</code> or <code>init</code> depending on which Linux distribution you are using.
+* This process is known as `systemd` or `init` depending on which Linux distribution you are using.
 * This process is the father of all other processes. 
 
 ## Search for processes
 
-<code>pgerp</code> allows to find process id when process name is known:
+`pgerp` allows to find process id when process name is known:
 
 ```bash
 pgrep chromium
@@ -142,4 +149,5 @@ pgrep -u adam chromium
 
 ## Challenges
 
-1. What is the difference between <code>ps -e</code> and <code>ps -eu</code> commands?
+1. What is the difference between `ps -e` and `ps -eu` commands?
+2. Launch the *sleep* command three times in the background. Then bring it to the foreground and terminate it.
