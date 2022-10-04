@@ -35,7 +35,7 @@ To display all the users on the system use:
     awk -F: '{ print $1}' /etc/passwd | uniq
     
 ### Superuser
-The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. Typically, the superuser's login is `root`. A password is required to access the root account. Because the root account has the greatest potential for damage, the root password should be carefully chosen and kept in secret.
+The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. This account is used for system administration. Typically, the superuser's login is `root`. A password is required to access the root account. Because the superuser has the greatest potential for damage, their password should be carefully chosen and kept in secret.
 
 Keep in mind that the following command should not be used:
 
