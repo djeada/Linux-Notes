@@ -86,4 +86,5 @@ There are equivalent global scripts that are applied to all users at a specific 
 1. List all currently defined aliases.
 1. Try adding some aliases to your `bashrc` and then removing them from the terminal. Reopen the terminal and check to see if the aliases are still active.
 1. Make a list of every profile file on your system.
-1. Experiment with various shells. Check which of your custom variables, aliases, and functions are present in the new environment. 
+1. Create a user with a program set as his default logon shell. You might, for example, use `/bin/tar`. It's useful when a user should only be able to access one program on the server. 
+13. Experiment with various shells. Check which of your custom variables, aliases, and functions are present in the new environment. 
