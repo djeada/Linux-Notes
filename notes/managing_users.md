@@ -187,11 +187,12 @@ groupmod -g 2500 new_group
 
 ## Challenges
 
-1. Show your user name as well as your unique user identity number (userid).
-1. Show the contents of the /etc/shadow. Can you find a reference to your user? Hint: you will need sudo privileges.
-1. Check the /var/log/auth.log file to check who is logged in. Use `grep` to see if someone is using sudo.
+1. Show your user name as well as your unique user identity number (`userid`).
+1. Why do we need a root `user`? 
+1. How to use the terminal to log in as root?
+1. Show the contents of the `/etc/shadow`. Can you find a reference to your user? Hint: you will need sudo privileges.
+1. Check the `/var/log/auth.log` file to check who is logged in. Use `grep` to see if someone is using sudo.
 1. Display a sorted list of all logged-in users, including the command they are now executing. 
 1. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made.
-1. Allow a user with no sudo privileges to execute the <code>reboot</code> command. Log in to that specific user account. Verify whether the system can be restarted.
-1. Create a user with a program set as his default logon shell. You might, for example, use /bin/tar. It's useful when a user should only be able to access one program on the server. 
-1. What's the difference between locking and disabling a user account's password? What are the consequences of using the commands <code>usermod -L</code> and <code>passwd -d</code>? 
+1. Allow a user with no sudo privileges to execute the `reboot` command. Log in to that specific user account. Verify whether the system can be restarted.
+1. What's the difference between locking and disabling a user account's password? What are the consequences of using the commands `usermod -L` and `passwd -d`? 
