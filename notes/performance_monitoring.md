@@ -14,3 +14,9 @@ The File System defines swap space.
 
 
 The preferred swap partition size is twice the amount of physical RAM available on the machine. 
+
+
+## Challenges
+
+1. How do you examine memory and CPU statistics? 
+2. How can you tell how much RAM the machine is using? 
