@@ -32,6 +32,6 @@ du -x / | sort -nr | head -10
 
 ## Challenges
 
-1. Display the disk usage of the current directory.
-2. Display the disk usage of the /home directory.
+1. Display the size of the current directory.
+2. Display the size of the `/home` directory.
 3. Find the 10 largest directories in the entire system.
