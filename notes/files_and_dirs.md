@@ -200,7 +200,7 @@ echo a{b,c}d
 2. What does a nameless directory represent?
 3. What are the many ways to display the contents of a file?
  
-5. To navigate to various directories, use `cd`. Try: 
+4. To navigate to various directories, use `cd`. Try: 
   - your home directory 
   - root directory (/)
   - /var/log 
@@ -208,19 +208,19 @@ echo a{b,c}d
   
   Experiment with both relative and absolute paths. 
  
-2. Using `ls`, you may list the files in the current directory. Experiment with several options:
+5. Using `ls`, you may list the files in the current directory. Experiment with several options:
   - Display hidden files
   - Sort files by modification date 
 
-3. Using `more`, `less` or `cat` display the contents of some hidden files from your home directory. You may find .bashrc particulary intresting.
+6. Using `more`, `less` or `cat` display the contents of some hidden files from your home directory. You may find .bashrc particulary intresting.
 
-4. Using `mkdir`, create a temp directory in your home directory. Create three empty files in the newly created temp dir using the `touch` command. Save the results of the `ls` command to each of the created files using redirection. Use `cat` to display their contents to the terminal.
+7. Using `mkdir`, create a temp directory in your home directory. Create three empty files in the newly created temp dir using the `touch` command. Save the results of the `ls` command to each of the created files using redirection. Use `cat` to display their contents to the terminal.
 
-5. Using `cp`, copy the contents of the temp directory to your home directory.
+8. Using `cp`, copy the contents of the temp directory to your home directory.
 
-6. Using `mkdir`, create a temp directory in your home directory. Create three text files in the newly created temp dir using the `echo` command and redirecting some text to each of the created files. Using `mv`, move the temp directory to a new location.
+9. Using `mkdir`, create a temp directory in your home directory. Create three text files in the newly created temp dir using the `echo` command and redirecting some text to each of the created files. Using `mv`, move the temp directory to a new location.
 
-7. Try your hand at globbing:
+10. Try your hand at globbing:
 
 - Show all files in the current directory with filenames of precisely five characters.
 - List all files that do not begin with the letter b.
