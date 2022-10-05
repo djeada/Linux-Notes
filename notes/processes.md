@@ -149,5 +149,6 @@ pgrep -u adam chromium
 
 ## Challenges
 
-1. What is the difference between `ps -e` and `ps -eu` commands?
-2. Launch the *sleep* command three times in the background. Then bring it to the foreground and terminate it.
+1. How to find the status of a process?
+2. What is the difference between `ps -e` and `ps -eu` commands?
+3. Launch the *sleep* command three times in the background. Then bring it to the foreground and terminate it.
