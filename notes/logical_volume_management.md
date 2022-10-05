@@ -74,3 +74,7 @@ Mount the logical volume:
 ```bash
 mount -t ext4 /dev/TEST/vol_name_1 mounting_point
 ```
+
+## Challenges
+
+1. How to reduce the size of LVM partition?
