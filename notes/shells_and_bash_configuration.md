@@ -1,8 +1,12 @@
 ## Shells
-In Unix, shells are the programs that run on the command line. They are the programs that you use to execute commands.
-Most common shells include: `bash`, `zsh`, `ksh`, `tcsh` and `sh`.
+In Unix, shells are the programs that user input and translate it to the OS commands. Whenever you open the terminal there is a shell repsonsible for the communication.
 
-In /etc/shells you can find a list of all the shells that are available on your system. The file contents should look like this:
+        user input -> shell -> kernel -> hardware
+
+Most common shells include: `bash`, `zsh`, `ksh`, `tcsh` and `sh`.
+`Bash` is the default shell on most distributions.
+
+In `/etc/shells` you can find a list of all the shells that are available on your system. After executing `cat /etc/shells` the output should look like this:
 
 ```
 /bin/bash
