@@ -78,9 +78,10 @@ which python
 ## Challenges
 
 1. Determine the location of the executable files for the following tools:
-  - cat
-  - ls
-  - reboot
-  - chmod
+  - `cat`
+  - `ls`
+  - `reboot`
+  - `chmod`
 2. Find all files in your home directory that are larger than 1GB. 
-3. Find all files in your home directory with.mp3 extensions. 
+3. Find all files in your home directory with ".mp3" extensions. 
+4. Look for files with the ".txt" extension that include the string "linux." 
