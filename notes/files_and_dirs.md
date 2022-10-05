@@ -1,7 +1,7 @@
 ## Absolute and relative paths
 
 Whenever a script or program expects a path to be specified, it can be specified in two ways:
-* Absolute path: the path is specified with respect to the root of the file system <code>/</code>.
+* Absolute path: the path is specified with respect to the root of the file system `/`.
 * Relative path: the path is specified with respect to the current working directory.
 
 An example of an absolute path:
@@ -22,22 +22,22 @@ To show the complete absolute path to your current filesystem location, use:
 pwd
 ```
 
-The <code>cd</code> command changes your location to another directory specified by the path you give as an argument. With no parameters, cd sends you to your home directory. To be taken to your home directory, use:
+The `cd` command changes your location to another directory specified by the path you give as an argument. With no parameters, cd sends you to your home directory. To be taken to your home directory, use:
 
 ```bash
 cd ~
 ```
 
-The <code>ls</code> command lists contents of directories. Available flags:
+The `ls` command lists contents of directories. Available flags:
 
 | Flag | Description |
 | --- | --- |
-| <code>-l</code> | newlines and all info |
-| <code>-a</code> | show hidden files |
-| <code>-t</code> | sort modification date |
-| <code>-r</code> | reverse order |
-| <code>-R</code> |  list subdirectories recursively |
-| <code>-i</code> | show inodes |
+| `-l` | newlines and all info |
+| `-a` | show hidden files |
+| `-t` | sort modification date |
+| `-r` | reverse order |
+| `-R` |  list subdirectories recursively |
+| `-i` | show inodes |
 
 Use the following command to view all files (-a) and display extra information about them (-l):
 
@@ -47,14 +47,14 @@ ls -al
 
 Following info will be displayed:
 
-- <code>type</code> is a single character that can be 'd' (directory), '-' (normal file), 'l' (symbolic link), 'b' (block-oriented device), or 'c' (character-oriented device).
-- <code>permissions</code> is a set of characters that describe access permissions. There are 9 permission characters that describe three sorts of access granted to three user groups. The three forms of access are read ('r'), write ('w'), and execute ('x'), and the three user categories are the user who owns the file, users in the file's group, and other users (the general public).
-- <code>links</code> refers to the number of filesystem links leading to the file/directory (see the hard/soft link discussion in the next section).
-- <code>owner</code> typically, this is the person who created the file or directory.
-- <code>group</code> identifies a group of users who have access to the file based on the group access privileges defined in the permissions field.
-- <code>size</code> is the length of a file, or the amount of bytes required by the operating system to hold a directory's list of files.
-- <code>date</code> is the most recent modification date of the file or directory (written to). The -u option displays the last time the file was visited (read).
-- <code>name</code> is the file or directory name.
+- `type` is a single character that can be 'd' (directory), '-' (normal file), 'l' (symbolic link), 'b' (block-oriented device), or 'c' (character-oriented device).
+- `permissions` is a set of characters that describe access permissions. There are 9 permission characters that describe three sorts of access granted to three user groups. The three forms of access are read ('r'), write ('w'), and execute ('x'), and the three user categories are the user who owns the file, users in the file's group, and other users (the general public).
+- `links` refers to the number of filesystem links leading to the file/directory (see the hard/soft link discussion in the next section).
+- `owner` typically, this is the person who created the file or directory.
+- `group` identifies a group of users who have access to the file based on the group access privileges defined in the permissions field.
+- `size` is the length of a file, or the amount of bytes required by the operating system to hold a directory's list of files.
+- `date` is the most recent modification date of the file or directory (written to). The -u option displays the last time the file was visited (read).
+- `name` is the file or directory name.
 
 You may use wildcards to limit the displayed list to a particular group of files:
 
@@ -64,12 +64,12 @@ ls /home/mydirectory/*.txt
 
 | Symbol | Description |
 | --- | --- |
-| <code>/</code> | root directory |
-| <code>~</code> | home directory |
-| <code>.</code> | current directory |
-| <code>..</code> | parent directory |
-| <code>*</code> | wildcard matching any filename |
-| <code>?</code> | wildcard matching any character |
+| `/` | root directory |
+| `~` | home directory |
+| `.` | current directory |
+| `..` | parent directory |
+| `*` | wildcard matching any filename |
+| `?` | wildcard matching any character |
 
 ## List files in a tree-like format
 The tree command displays a tree-like listing of the contents of a specified directory. If no directory is given, the contents of the current directory are displayed by default.
@@ -80,7 +80,7 @@ tree /tmp
 
 ## Creating files
 
-The <code>mkdir</code> command creates a new directory. To create a directory called test in a current location, use:
+The `mkdir` command creates a new directory. To create a directory called test in a current location, use:
 
 ```bash
 mkdir test
@@ -88,7 +88,7 @@ mkdir test
 
 ## Copy files
 
-The <code>cp</code> command makes a copy of a source file in the destination directory.
+The `cp` command makes a copy of a source file in the destination directory.
 
 ```bash
 cp /path/to/source/foo.txt /path/to/target/dir/
@@ -103,12 +103,12 @@ cp –r source destination
 Some other flags include:
 | Flag | Description |
 | --- | --- |
-| <code>-a</code> | used to copy permissions as well |
-| <code>-A</code> | used to copy all files (hidden and normal) |
+| `-a` | used to copy permissions as well |
+| `-A` | used to copy all files (hidden and normal) |
 
 ## Move files
 
-The <code>mv</code> command moves a file or directory to the destination directory. 
+The `mv` command moves a file or directory to the destination directory. 
 
 To rename file_1.txt to file_2.txt, use:
 
@@ -124,7 +124,7 @@ mv ~/Download/big_dir ~/big_dir
 
 ## Remove files
 
-The <code>rm</code> command removes file(s). By default Linux will prompt the user for confirmation before removing the file.
+The `rm` command removes file(s). By default Linux will prompt the user for confirmation before removing the file.
 
 ```bash
 rm file_1.txt file_2.txt
@@ -140,7 +140,7 @@ Be careful with wildcards.
 
 ## Read files
 
-<code>cat</code> command prints the whole file on the screen. 
+`cat` command prints the whole file on the screen. 
 
 To display a file named "file.txt" located in the current working directory, use:
 
@@ -160,15 +160,15 @@ You can also use the wildcards:
 cat *.txt > new_file.txt
 ```
 
-<code>more</code> shows a file page by page. A similar command is <code>less</code>, except that it shows more...
+`more` shows a file page by page. A similar command is `less`, except that it shows more...
 
 | Command | Description |
 | --- | --- |
-| <code>Enter</code> | to move forward one line |
-| <code>Space</code> | to move forward one page |
-| <code>b</code> | to move one page backward |
-| <code>q</code> | to end |
-| <code>/pattern</code> | to jump to the next occurrence of the text “pattern” |
+| `Enter` | to move forward one line |
+| `Space` | to move forward one page |
+| `b` | to move one page backward |
+| `q` | to end |
+| `/pattern` | to jump to the next occurrence of the text “pattern” |
 
 ## Expansion and globs
 Brace expansion and globs are two comparable approaches for representing files with names that follow a pattern.
@@ -179,9 +179,9 @@ To make matters even more confusing, globs use the same wildcards as regex, but 
 
 | Wildcard | Globs | Regex |
 | --- | --- | --- |
-| <code>*</code> | zero or more characters | zero or more instances of the preceding character |
-| <code>?</code> | a single instance of a character | zero or one instance of the preceding character |
-| <code>.</code> | dot as a literal character  | any single character |
+| `*` | zero or more characters | zero or more instances of the preceding character |
+| `?` | a single instance of a character | zero or one instance of the preceding character |
+| `.` | dot as a literal character  | any single character |
 
 Globbing is used by the command shell to complete filenames. If you write ls \*.txt, you'll obtain a list of all the files in the current directory that end in.txt. If you type ls a*.csv, you'll get a list of all the files that begin with the letter a and end in.csv. The asterisk (\*) is a wildcard that allows you to rapidly filter which files you're looking for.
 
@@ -196,7 +196,11 @@ echo a{b,c}d
 
 ## Challenges
 
-1. To navigate to various directories, use <code>cd</code>. Try: 
+1. Which type of files are prefixed with a dot?
+2. What does a nameless directory represent?
+3. What are the many ways to display the contents of a file?
+ 
+5. To navigate to various directories, use `cd`. Try: 
   - your home directory 
   - root directory (/)
   - /var/log 
@@ -204,17 +208,17 @@ echo a{b,c}d
   
   Experiment with both relative and absolute paths. 
  
-2. Using <code>ls</code>, you may list the files in the current directory. Experiment with several options:
+2. Using `ls`, you may list the files in the current directory. Experiment with several options:
   - Display hidden files
   - Sort files by modification date 
 
-3. Using <code>more</code>, <code>less</code> or <code>cat</code> display the contents of some hidden files from your home directory. You may find .bashrc particulary intresting.
+3. Using `more`, `less` or `cat` display the contents of some hidden files from your home directory. You may find .bashrc particulary intresting.
 
-4. Using <code>mkdir</code>, create a temp directory in your home directory. Create three empty files in the newly created temp dir using the <code>touch</code> command. Save the results of the <code>ls</code> command to each of the created files using redirection. Use <code>cat</code> to display their contents to the terminal.
+4. Using `mkdir`, create a temp directory in your home directory. Create three empty files in the newly created temp dir using the `touch` command. Save the results of the `ls` command to each of the created files using redirection. Use `cat` to display their contents to the terminal.
 
-5. Using <code>cp</code>, copy the contents of the temp directory to your home directory.
+5. Using `cp`, copy the contents of the temp directory to your home directory.
 
-6. Using <code>mkdir</code>, create a temp directory in your home directory. Create three text files in the newly created temp dir using the <code>echo</code> command and redirecting some text to each of the created files. Using <code>mv</code>, move the temp directory to a new location.
+6. Using `mkdir`, create a temp directory in your home directory. Create three text files in the newly created temp dir using the `echo` command and redirecting some text to each of the created files. Using `mv`, move the temp directory to a new location.
 
 7. Try your hand at globbing:
 
