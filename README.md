@@ -65,3 +65,11 @@ Notes on Linux.
 * https://www.golinuxcloud.com/linux-commands-cheat-sheet/
 * https://www.linuxfromscratch.org/
 * https://docs.fedoraproject.org/en-US/Fedora/22/html/SELinux_Users_and_Administrators_Guide/index.html
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
