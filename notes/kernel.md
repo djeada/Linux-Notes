@@ -1,105 +1,120 @@
-## What is kernel?
-Operating systems have kernels that manage the CPU hardware, allocate memory, access data and schedule processes. 
-They also execute programs and protect them from each other. As soon as a computer starts up, it is the first software to run. 
-In order to prevent the kernel's most essential code from being rewritten by other programs running in the operating system, it is loaded into protected memory regions. The kernel's functionality can be expanded by adding modules to it. As a result, by activating or removing modules, a user may fine-tune their kernel settings. This amount of granular control is one of the many reasons why Linux is so popular.
+## What is a kernel?
 
-## Kernel Architecture
-A kernel might be monolithic, microkernel, or hybrid in nature (like the OS X and Windows 11). The Linux kernel is a single monolithic computer operating system kernel that is similar to the UNIX system.  Unlike the microkernel, the monolithic kernel includes not only the Central Processing Unit, memory, and IPC, but also device drivers, system server calls, and file system administration. This Linux kernel is shared between Linux Distributions.
+A kernel is the central component of an operating system that manages the hardware and software resources of a computer. It is responsible for controlling the CPU, allocating memory, accessing data, and scheduling processes. The kernel is the first software to run when a computer starts up and is loaded into protected memory to prevent it from being rewritten by other programs. The functionality of the kernel can be extended by adding modules to it, allowing users to fine-tune their kernel settings.
 
-## Differences from other UNIX kernels
+## Kernel architecture
 
-* Kernel modules can be loaded dynamically in Linux.
-* Linux includes an object-oriented device model that includes device classes, hot-pluggable events, and a user-space device file-system.
-* Linux supports symmetrical multiprocessors.
-* Linux is both open source and free.
-* Some basic Unix features are ignored by Linux because they are deemed "poorly conceived" by kernel engineers.
-* Preemption is built into the Linux kernel.
-* The Linux kernel does not distinguish between threads and regular processes.
+There are several types of kernel architectures, including monolithic, microkernel, and hybrid. The Linux kernel is a monolithic kernel, similar to the UNIX system. Monolithic kernels include not only the CPU, memory, and interprocess communication (IPC) functions, but also device drivers, system server calls, and file system management. The Linux kernel is shared between different Linux distributions.
+Differences from other UNIX kernels
 
-## Components of Linux kernel
+* Linux allows kernel modules to be loaded dynamically.
+* Linux has an object-oriented device model that includes device classes, hot-pluggable events, and a user-space device file system.
+* Linux supports symmetrical multiprocessing.
+* Linux is both open-source and free.
+* Linux does not include certain basic Unix features that are deemed "poorly conceived" by kernel engineers.
+* Linux has built-in preemption.
+* Linux does not distinguish between threads and regular processes.
 
-* A system call interface (SCI) is a thin overlay that allows function calls from user space into the kernel. This interface may be architecture-specific.
-* Process management is primarily responsible for the execution of procedures. These are known as threads in a kernel and represent an individual virtualization of the specific processor.
-* Memory management; for efficiency, memory is handled in what are known as pages. Linux contains techniques for managing available memory as well as hardware capabilities for physical and virtual mappings. There is also swap space available.
-* Virtual file system provides a standard interface abstraction for file systems. It acts as a bridge between the system call interface and the file systems provided by the kernel.
-* The network stack is built as a tiered architecture based on the protocols.
-* Device drivers make a specific hardware device operational, make up a substantial portion of the source code in the Linux kernel. Tutorial on Device Drivers
-* Architecture-dependent code; those parts that rely on the architecture on which they operate and, as a result, must take the architectural design into account for proper functioning and efficiency.
+## Components of the Linux kernel
 
-## Displaying info about the kernel
+* A system call interface (SCI) is an overlay that enables function calls from user space into the kernel. This interface may be specific to the architecture.
+* Process management is responsible for the execution of processes, also known as threads in the kernel, which represent individual virtualizations of the processor.
+* Memory management involves techniques for managing available memory, as well as hardware capabilities for physical and virtual mappings. Linux also includes swap space.
+* The virtual file system provides a standard interface abstraction for file systems, serving as a bridge between the system call interface and the file systems provided by the kernel.
+* The network stack is a tiered architecture based on protocols.
+* Device drivers make specific hardware devices operational and make up a significant portion of the Linux kernel's source code.
+* Architecture-dependent code is dependent on the architecture on which it operates and must take the architectural design into account for proper functioning and efficiency.
 
-To check the current kernel version, use:
 
-        uname -a
+## Monitoring the kernel
 
-## Monitoring kernel
-
-* <i>dmesg</i> (alternatively <i>journalctl --dmesg</i>) allows to see kernel ring buffer. The kernel ring buffer holds information such as device driver initialization messages, hardware messages, and kernel module messages.
-* The /proc/ directory, commonly known as the <i>/proc filesystem</i>, includes a hierarchical set of special files that reflect the current state of the kernel, allowing programs and users to see what the kernel sees.
-* <i>uname</i>  provides users with important system information.
+* The dmesg command (alternatively `journalctl --dmesg`) allows users to view the kernel ring buffer. The kernel ring buffer holds information such as device driver initialization messages, hardware messages, and kernel module messages.
+* The `/proc` directory, also known as the `/proc` filesystem, contains a hierarchical set of special files that reflect the current state of the kernel, allowing users and programs to see what the kernel sees.
+* The `uname` command provides users with important system information. The following flags can be used with uname:
 
 | Flag | Description |
-| --- | --- |
-| <i>-s</i> | kernel name |
-| <i>-r</i> | kernel release |
-| <i>-v</i> | kernel version |
-| <i>-m</i> | machine architecture |
-| <i>-p</i> | processor architecture |
+| ---- | ----------- |
+| `-s` | kernel name |
+| `-r` | kernel release |
+| `-v` | kernel version |
+| `-m` | machine architecture |
+| `-p` | processor architecture |
+
+For example to check the current kernel version, use the following command:
+
+```
+uname -a
+```
 
 ## Startup process
 The boot procedures (BIOS or UEFI, MBR, and GRUB) complete system startup by loading the kernel into memory and connecting it to the initial ramdisk (initrd or initramfs), after which systemd is launched.
 
-The startup procedures then take up the baton and complete the operating system's setup. 
+After the kernel is loaded into memory and connected to the initial ramdisk (initrd or initramfs), the startup process continues with the launch of systemd.
 
-1. The kernel probes accessible hardware at boot.
-2. When a hardware component is detected, the systemd-udevd process loads the appropriate driver and makes the hardware device available.
-3. systemd-udevd examines the rules files in /usr/lib/udev/rules.d to determine how the deives are initialized. These are the udev rules files given by the system and should not be changed.
-4. After processing the system-supplied udev rules files, systemd-udevd searches the /etc/udev/rules.d directory for any custom rules that may be present.
-5. As a consequence, the appropriate kernel modules are automatically loaded, and information about the kernel modules and associated hardware is written to the sysfs file system, which is mounted in the /sys directory.
+1. Systemd initializes the system and loads system services.
+1. Systemd activates all enabled target units. Target units are high-level units that group together related services and are used to boot the system into a particular state.
+1. Systemd starts the default target unit, which is typically the graphical user interface (GUI) for desktop environments or a command-line interface for servers.
 
-## Working with kernel modules
+The startup process can be customized by modifying the target units and system services that are activated during boot. This can be done through the use of systemd configuration files, which are written in a declarative language and control the behavior of systemd and the services it manages.
 
-* <i>lsmod</i> shows all currently used modules.
-* <i>modinfo module_name</i> displays info about a specific kernel module.
-* <i>modprobe module_name</i> loads specified module (-r flag is used to unload a module).
+## Kernel modules
+Kernel modules are pieces of code that can be loaded and unloaded into the kernel at runtime, without the need to recompile the kernel. They provide additional functionality to the kernel and are used to support a wide range of hardware and software devices.
+
+To work with kernel modules, you can use the following commands:
+
+* `lsmod`: This command lists all currently loaded kernel modules.
+* `modprobe`: This command loads a kernel module into the kernel.
+* `rmmod`: This command unloads a kernel module from the kernel.
+* `depmod`: This command generates a list of dependencies for all installed kernel modules.
+* `dkms`: This command is used to manage DKMS-controlled kernel modules. It can be used to install, remove, and build kernel modules.
 
 ## DKMS
 
-Consider the following scenario: you recently purchased a hardware component for your PC, such as a graphics card or a WiFi adapter, and after plugging it in, you discover that it is not recognized by your system.
-You must now search for drivers for that hardware.
+The Dynamic Kernel Module Support (DKMS) is a system that allows kernel modules to be automatically rebuilt when a new kernel is installed. This is useful because it allows kernel modules to be used across different kernels without the need to manually rebuild them each time a new kernel is installed.
 
-
-* One method is to download the device driver's official source code, compile it against the kernel, and then install and activate it.
-* If you're lucky, everything will continue to work normally until the next kernel upgrade. You must then manually repeat the operation. 
-* Another option is to use DKMS (dynamic kernel module support). When the kernel is upgraded, it will automatically rebuild kernel modules.
-* It is also worth noting that many hardware manufacturers already distribute their device drivers as DKMS packages.
-
-### Installation
+To use DKMS, you need to have the dkms package installed on your system. 
 
 On Debian based systems:
 
-    sudo apt install dkms
+```
+sudo apt install dkms
+```
 
 On Arch based systems:
 
-    sudo pacman -S dkms
-    
-### Usage
+```
+sudo pacman -S dkms
+```
 
-Let's say we want to install a network adapter *rtl8812au* distributed with dkms support.
+You can then use the dkms command to manage kernel modules that are controlled by DKMS. For example, to install a kernel module using DKMS, you can use the following command:
 
-1. First we have to download the source code:
+```
+dkms install <module_name>
+```
 
-        git clone https://github.com/aircrack-ng/rtl8812au.git
+To remove a kernel module using DKMS, you can use the following command:
 
-2. Then from the project directory we build the module with *make* and install with *dkms*:
+```
+dkms remove <module_name> --all
+```
 
-        cd rtl8812au && sudo make dkms_install 
- 
-To check which modules are currently installed with dkms, use:
+To build a kernel module using DKMS, you can use the following command:
 
-    sudo dkms-status
+```
+dkms build <module_name>
+```
 
-To uninstall a dkms module, you can use:
+By working with kernel modules and DKMS, you can easily manage the additional functionality provided by kernel modules and ensure that they are properly rebuilt when a new kernel is installed.
 
-    sudo dkms remove rtl8812AU/4.3.14 --all
+## Challenges
+
+1. What is the primary function of the kernel in an operating system?
+1. How is the Linux kernel different from microkernel and hybrid kernels?
+1. What is a kernel module and how is it used in the Linux kernel?
+1. What is the purpose of DKMS and how is it used to manage kernel modules in Linux?
+1. How does the startup process work in a Linux system, and what role does systemd play in this process?
+1. What is the `/proc` filesystem and how is it used to monitor the kernel?
+1. How can you check the current kernel version on a Linux system?
+1. What is the difference between a thread and a regular process in the Linux kernel?
+1. How can you load and unload a kernel module in Linux using the `modprobe` and `rmmod` commands, respectively?
+1. How can you build a kernel module using DKMS?
