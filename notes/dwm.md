@@ -1,6 +1,8 @@
 ## Dynamic Window Manager
 Dynamic Window Manager (DWM) is a lightweight, tiling window manager that allows users to manage their windows efficiently and effectively. It is designed to be easy to use and customize, and it is based on the X Window System.
 
+![dwm](https://user-images.githubusercontent.com/37275728/189493108-20a94d0c-24fd-4b35-8b78-527a350abc0c.png)
+
 ## Installation
 
 To install DWM on a Debian-based system, you can use the following command:
