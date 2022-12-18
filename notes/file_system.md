@@ -108,9 +108,14 @@ Note that there are many different file system options available in Linux, and t
 
 ## Challenges
 
+1. What is the root directory in Linux?
 1. Does the file `/bin/echo` exist on your system? If so, how does it relate to the `echo` command?
 1. Use `/dev/random` or `/dev/urandom` to create a file with 100 lines of random chars.
 1. Can you explain the purpose of the `/bin` and `/sbin` directories? 
+1. What is the purpose of the `/usr/bin` directory in a Linux system?
 1. What is the difference between character and block device drivers in UNIX? Can we use `ls`  to determine which group the device belongs to?
 1. Can you deduce your CPU's model from the contents of `/proc/cpuinfo`? 
 1. What hidden files may be found in the `/root` directory? 
+1. What command can you use to create a new file system in Linux?
+1. How do you check the disk information and partitions on a device in Linux?
+1. How do you mount a file system in Linux?
