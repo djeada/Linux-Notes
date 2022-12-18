@@ -1,43 +1,39 @@
-<h1>What are enviroment modules?</h1>
-The environment modules are a technique for the user to have various versions of a single software available. They are especially common on supercomputers. The user can load only the apps that they need, rather than all of the applications that are available on the system.
-They may quickly unload apps they no longer need or switch to a different version of the application they are using.
+## Introduction to Environment Modules
 
-Problems solved by enviroment modules:
-1. There might be a lot of apps available on the system. The user might not need all of them. Different apps have different effects on environment variables (for example, <code>$PATH</code> and <code>$LD LIBRARY PATH</code>). They could even be incompatible with one another. There should be a way to load only the apps that the user needs.
-2. The user might want to switch to a different version of the application they are using. 
+Environment modules are a tool that allows users to manage multiple versions of software on a system, allowing them to easily switch between different versions or load only the software they need. This is particularly useful on supercomputers, where there may be a large number of software packages available and using all of them at once could lead to conflicts or compatibility issues.
 
-Environment modules have nothing to do with 'perl' or 'python' modules and should not be confused with them!
+## Installing Environment Modules
 
-<h1>Installation</h1>
-
-The install environment modules on Ubuntu, use the following command:
+To install environment modules on a Debian-based system, use the following command:
 
 ```bash
-apt install -y environment-modules
+apt install environment-modules
 ```
 
-The install environment modules on CentOS, use the following command:
+To install environment modules on a CentOS system, use the following command:
 
 ```bash
-yum -y install environment-modules
+yum install environment-modules
 ```
 
-<h1>Working with enviroment modules files</h1>
-The enviroment modules files are located in <code>/etc/modulefiles</code> directory. The files are named <code>modulefile</code> and they are used to specify the versions of the software that are available on the system. The files are used by the <code>module</code> command.
+## Working with Environment Module Files
 
-Create a directory /etc/modulefiles/my_app/ to hold modulefiles for different versions of the application.
+Environment module files are stored in the /etc/modulefiles directory and are used to specify the available versions of software on the system. These files are named modulefile and are used by the module command to manage the software.
+
+To create a directory to hold modulefiles for a specific application, use the following command:
 
 ```bash
 mkdir /etc/modulefiles/my_app
 ```
 
-Create a modulefile /etc/modulefiles/python/version1.0 for the version 1.0 of the application:
+To create a modulefile for a specific version of the application, use the following command:
 
 ```bash
 touch /etc/modulefiles/my_app/version1.0
 ```
 
-The file contains the following lines:
+The modulefile should contain the following lines:
+
 
 ```
 #%Module 1.0#####################################################################
@@ -65,36 +61,104 @@ prepend-path LD_LIBRARY_PATH /path/to/my/app/lib
 conflict my_app
 ```
 
-<h1>Using enviroment modules</h1>
+## Usage
 
-The <code>module</code> command is used whenver the user interacts with enviroment modules.
+There are several commands available for interacting with environment modules:
 
-To load the version 1.0 of the application, use:
+* `module load`: This command loads a specific version of an application. For example, module load python/3.9.0 would load version 3.9.0 of Python.
+* `module unload`: This command unloads a specific version of an application. For example, module unload python would unload the currently loaded version of Python.
+* `module avail`: This command lists the versions of a specific application that are available on the system. For example, module avail python would list all available versions of Python.
+* `module list`: This command lists all currently loaded modules.
+* `module purge`: This command unloads all currently loaded modules.
 
-```bash
-module load my_app/version1.0
+It's important to note that the module command should be used to interact with environment modules, rather than editing the module files directly. This ensures that the changes are properly recorded and applied.
+
+## Example
+
+Imagine that you have two versions of the Python programming language installed on your system: Python 2.7 and Python 3.8. You want to use Python 3.8 to run a script, but the default version of Python on your system is 2.7. You can use the environment modules to switch between the two versions of Python.
+
+First, create a directory to hold the modulefiles for Python:
+
+```
+mkdir /etc/modulefiles/python
 ```
 
-To unload the module, use:
+Then create a modulefile for Python 2.7:
 
-```bash
-module unload my_app
+```
+touch /etc/modulefiles/python/2.7
 ```
 
-To list the versions of the application available on the system, use:
+Add the following lines to the modulefile:
 
-```bash
-module avail my_app
+```
+#%Module 1.0#####################################################################
+##
+##  This is a modulefile for the Python 2.7 programming language.
+##
+##  To use this module, type:
+##    module load python/2.7
+##
+##  For more information on environment modules, see:
+##  http://modules.sourceforge.net/
+##
+proc ModulesHelp { } {
+    puts stderr "This is a modulefile for the Python 2.7 programming language."
+    puts stderr "To use this module, type:"
+    puts stderr "  module load python/2.7"
+    puts stderr "For more information on environment modules, see:"
+    puts stderr "http://modules.sourceforge.net/"
+}
+
+module-whatis "Python 2.7 programming language"
+
+prepend-path PATH /usr/local/python2.7/bin
+prepend-path LD_LIBRARY_PATH /usr/local/python2.7/lib
+conflict python
 ```
 
-To list all applications available on the system, use:
+Note that the prepend-path lines specify the paths to the Python 2.7 executable and library files on your system. You will need to adjust these paths according to the location of Python 2.7 on your system.
 
-```bash
-module avail
+Next, create a modulefile for Python 3.8:
+
+```
+touch /etc/modulefiles/python/3.8
 ```
 
-To unload all loaded modules, use:
+Add the following lines to the modulefile:
 
-```bash
-module purge
 ```
+#%Module 1.0
+##
+##  This is a modulefile for Python 3.8
+##
+##  It allows the user to switch between different versions of Python.
+##
+
+module-whatis "This is a modulefile for Python 3.8"
+
+prepend-path PATH /usr/local/python3.8/bin
+conflict python
+```
+
+Now you can use the module command to load and unload the different versions of Python as needed. To use Python 2.7, use:
+
+```
+module load python/2.7
+```
+
+To use Python 3.8, use:
+
+```
+module load python/3.8
+```
+
+## Challenges
+
+1. Install the environment modules on your system.
+1. Create a directory in /etc/modulefiles for a new application.
+1. Create a modulefile for a specific version of the application in the directory you just created.
+1. Use the module command to load the version of the application you just created a modulefile for.
+1. Use the module command to unload the module.
+1. Use the module command to list all available modules on the system.
+1. Use the module command to unload all loaded modules.
