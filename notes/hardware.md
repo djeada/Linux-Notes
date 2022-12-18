@@ -1,4 +1,4 @@
-In Linux, there are several commands that can be used to check hardware information. In general, these commands can be divided into two categories:
+There are several commands that can be used to check hardware information. In general, these commands can be divided into two categories:
 Information about the internal hardware
 
 * `lsusb`: displays a list of the USB devices that are connected to the system. It shows the vendor and product ID of each device, as well as its manufacturer and product name.
