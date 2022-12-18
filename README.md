@@ -9,7 +9,7 @@ This repository contains information that has been gathered over the years as th
 
 * <a href="https://github.com/djeada/Linux/blob/main/notes/introduction.md">Introduction to Linux</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/commands.md">Commands</a>
-* <a href="https://github.com/djeada/Linux/blob/main/notes/files_and_dirs.md">Files and directories/a>
+* <a href="https://github.com/djeada/Linux/blob/main/notes/files_and_dirs.md">Files and directories</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/file_system.md">File system</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/permissions.md">Permissions</a>
 * <a href="https://github.com/djeada/Linux/blob/main/notes/pipe_and_redirect.md">Pipe and redirect</a>
