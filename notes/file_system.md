@@ -67,15 +67,15 @@ A file system is a way of organizing and storing data on a storage device, such 
 
 There are several types of file systems that are used on Linux systems:
 
-1. Second Extended File System (ext2): This is the most widely used file system on Linux systems. It is simple and efficient, but does not support advanced features such as journaling or encryption.
-1. Third Extended File System (ext3): This file system is an improvement on the ext2 file system, adding support for journaling. This means that the file system keeps track of all changes made to the file system, which can help to recover the file system in the event of a crash.
-1. Fourth Extended File System (ext4): This file system is an improvement on the ext3 file system, adding support for larger file sizes and larger file systems. It also has improved performance and reliability.
-1. Journaling File System (JFS): This file system was developed by IBM and is designed for large file systems. It has a number of advanced features, including journaling, which helps to improve the reliability of the file system.
-1.  Network File System (NFS): This file system allows a Linux system to access files on a remote server over a network connection. It is commonly used to share files between systems on a local network.
-1. Virtual File System (VFS): This is not a file system in the traditional sense, but rather a layer that sits between the operating system and the file system. It allows different file systems to be used by the operating system, regardless of the underlying hardware.
-1. File Allocation Table (FAT): This file system is commonly used on USB drives and other removable storage devices. It is a simple file system that is supported by most operating systems, including Linux.
-1. New Technology File System (NTFS): This file system is commonly used on Windows systems. It can be accessed and used on Linux systems, but it is not a native file system.
-1.  ResiserFS: This file system is designed for use on large file systems, and is known for its good performance and reliability. It is often used on servers and other systems with large amounts of data.
+1. Second Extended File System (`ext2`): This is the most widely used file system on Linux systems. It is simple and efficient, but does not support advanced features such as journaling or encryption.
+1. Third Extended File System (`ext3`): This file system is an improvement on the ext2 file system, adding support for journaling. This means that the file system keeps track of all changes made to the file system, which can help to recover the file system in the event of a crash.
+1. Fourth Extended File System (`ext4`): This file system is an improvement on the ext3 file system, adding support for larger file sizes and larger file systems. It also has improved performance and reliability.
+1. Journaling File System (`JFS`): This file system was developed by IBM and is designed for large file systems. It has a number of advanced features, including journaling, which helps to improve the reliability of the file system.
+1.  Network File System (`NFS`): This file system allows a Linux system to access files on a remote server over a network connection. It is commonly used to share files between systems on a local network.
+1. Virtual File System (`VFS`): This is not a file system in the traditional sense, but rather a layer that sits between the operating system and the file system. It allows different file systems to be used by the operating system, regardless of the underlying hardware.
+1. File Allocation Table (`FAT`): This file system is commonly used on USB drives and other removable storage devices. It is a simple file system that is supported by most operating systems, including Linux.
+1. New Technology File System (`NTFS`): This file system is commonly used on Windows systems. It can be accessed and used on Linux systems, but it is not a native file system.
+1.  `ResiserFS`: This file system is designed for use on large file systems, and is known for its good performance and reliability. It is often used on servers and other systems with large amounts of data.
 
 ## Creating a File System
 You can use the `mkfs` command to create a new file system on a storage device.
