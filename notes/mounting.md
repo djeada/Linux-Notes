@@ -1,4 +1,4 @@
-## Introduction to Mounting and Unmounting on Linux
+## Introduction to Mounting and Unmounting
 
 In Linux, you must mount file systems, disks, DVDs, and USB drives before you can access them. The mount and umount commands are used to mount and unmount file systems, respectively. This article provides an overview of how to use these commands and some common scenarios for mounting and unmounting file systems in Linux.
 
