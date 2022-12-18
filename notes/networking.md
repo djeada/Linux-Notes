@@ -44,7 +44,7 @@ In summary, the dynamic host configuration protocol (DHCP) is a useful tool for 
 
 ## Networking Commands
 
-In Linux, there are a number of commands that are useful for managing and troubleshooting network connections. Below, we will discuss some of the most common ones:
+There are a number of commands that are useful for managing and troubleshooting network connections. Below, we will discuss some of the most common ones:
 
 ### ifconfig
 
@@ -74,8 +74,7 @@ To delete the default gateway, you can use the command `route del default`. This
 
 It is important to note that the route command only affects the routing table for the current session. If you want to make changes to the routing table that will persist after a reboot, you will need to modify the `/etc/network/interfaces` file or use a different method, such as the `ip` command or a graphical tool like the Network Manager.
 
-Overall, the route command is a useful tool for managing and troubleshooting network routes in Linux. By understanding how to use it, you can more easily control the path that network packets take through your network.
-
+Overall, the route command is a useful tool for managing and troubleshooting network routes. By understanding how to use it, you can more easily control the path that network packets take through your network.
 
 ## Network Manager daemon
 
