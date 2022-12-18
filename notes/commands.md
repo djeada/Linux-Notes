@@ -1,65 +1,54 @@
-## History
+# Command Information and Navigation
 
-* To see the n most recently used commands, use the <code>history</code> command.
-You can change the number n (it is generally between 1000 and 5000).
-* Use <code>Ctrl+R</code> to search the history.
-* <code>!number</code> executes the command with the given number, while <code>!text</code> executes the command which starts with the given text.
-* Important: Lines which begin with a space character are not saved in the history list! So, if you copy and paste a command into the terminal and it doesn't appear in history, it most likely had a space as the first character. 
+An overview of various commands and tools for finding and accessing information about command line utilities in Linux. It covers the history, man, and apropos commands, as well as tips for navigating and using the terminal. 
 
-To clear the history, execute the following commands:
+## History and Navigation
 
-```bash
-history -c
-```
+The history command allows you to view the most recently used commands. You can specify the number of commands to display (it is generally between 1000 and 5000). Use `Ctrl+R` to search through your command history. You can also execute a specific command from the history using `!number` (where number is the number of the command in the history) or `!text` (where text is the beginning of the command you want to execute). Note that lines that begin with a space character are not saved in the history list.
 
-To delete the contents of bash history, run the following command:
+To clear the history, use the `history -c` command. To delete the contents of the bash history, use `history -w`.
 
-```bash
-history -w
-```
+You can navigate through previously used commands in the terminal using the `up arrow key` and `down arrow key`. The `tab key` can also be used to complete a command.
 
-## Navigating commands in the terminal
+## The Manual
 
-* Uppwards arrow key: show the previous command from the history.
-* Downwards arrow key: show the next command from the history.
-* <code>tab</code> key: complete the command.
-
-## The manual
-
-The <code>man</code> command is an abbreviation for manual. 
-It may be used to display the documentation for various built-in command line utilities.
+The man command (short for manual) allows you to view the documentation for various built-in command line utilities. The manual is organized into sections, each corresponding to a different type of utility:
 
 | Number | Description |
 | --- | --- |
-| <code><b>1</b></code> | executable programs or shell commands |
-| <code>2</code> | system calls |
-| <code>3</code> | library calls |
-| <code>4</code> | special files |
-| <code><b>5</b></code> | file formats and conventions |
-| <code>6</code> | games |
-| <code>7</code> | misc |
-| <code><b>8</b></code> | system administration (root) commands |
-| <code>9</code> | kernel routines |
+| **`1`** | executable programs or shell commands |
+| `2` | system calls |
+| `3` | library calls |
+| `4` | special files |
+| **`5`** | file formats and conventions |
+| `6` | games |
+| `7` | misc |
+| **`8`** | system administration (root) commands |
+| `9` | kernel routines |
 
-Use 'man -f command_name' to display a short description of a command, for example:
+To display the man page for the `ls` command, you would enter the following in the terminal:
 
-```bash
-man git
+```
+man ls
+```
+
+This will display the documentation for the `ls` command in the terminal, with details about its options, usage, and examples. You can navigate the man page using the up and down arrow keys, and you can exit the man page by pressing `q`.
+
+You can also specify a specific section of the man pages to view using the `-s` flag followed by the section number. For example, to view the man page for the `ls` command in section 1 (executable programs or shell commands), you would use the following command:
+
+```
+man -s 1 ls
 ```
 
 ## Apropos
 
-When a user does not recall the specific command but knows a few keywords linked to the command that characterize its uses or capabilities, <code>apropos</code> command can help them to find the command they are looking for.
-
-```bash
-apropos zip
-```
+If you know a few keywords related to a command but can't remember the specific command, you can use the `apropos` command to search for it. For example, `apropos zip` will display a list of commands related to zip files.
 
 ## Challenges
 
-1. How to find the command that is used to create a file?
-1. Use the <code>man</code> command to display what does the command <code>cat</code> do.
-1. Increase the amount of commands your command history "remembers" to 3000.
+1. How can you find the command used to create a file?
+1. Use the man command to display the description of the `cat` command.
+1. Increase the number of commands your command history "remembers" to 3000.
 1. Show the last five commands you typed.
 1. When you close the shell, where do the history commands go?
-1. What happens to history when you have multiple terminals open?
+1. What happens to the history when you have multiple terminals open?
