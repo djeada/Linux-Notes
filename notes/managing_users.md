@@ -1,198 +1,212 @@
 ## Users
 
-There are many informations about the users that are stored on the system. You can view some that info by opening */etc/passwd* and */etc/shadow*:
+Users are individuals who have access to a system and are able to perform tasks and actions on it. In Linux, user information is stored in two main files: `/etc/passwd` and `/etc/shadow`.
 
-    less /etc/passwd
-    
-Columns of `/etc/passwd`:
+* The `/etc/passwd` file stores basic information about each user, including the username, user ID (UID), group ID (GID), home directory path, and default shell. It is a public file, meaning that the password is stored in a hashed format that is not easily reversible.
 
-* username
-* password
-* UID
-* GID
-* comment (GECOS filed)
-* home dir path
-* shell (e.g. /bin/bash)
+* The `/etc/shadow` file stores more sensitive information about users, including the encrypted password, password expiration details, and password history. This file is only accessible to the root user and is not publicly readable.
 
-<empty line>
-    
-    less /etc/shadow
+To view the user information stored in these files, you can use the less command:
 
-Columns of `/etc/shadow`:
-
-* username
-* encrypted password
-* number of days since last password change
-* number of days before password can be changed again (e.g. 0)
-* number of days before password must be changed
-* warning period
-* inactivity period
-* expiration date
-* unused
-
-To display all the users on the system use:
-    
-    awk -F: '{ print $1}' /etc/passwd | uniq
-    
-### Superuser
-The superuser is a privileged user with full access to all commands and files on a system, regardless of their permissions. There is no such thing a superuser without the access rights. This account is used for system administration. Typically, the superuser's login is `root`. A password is required to access the root account. Because the superuser has the greatest potential for damage, their password should be carefully chosen and kept in secret.
-
-Keep in mind that the following command should not be used:
-
-```bash
-rm –rf /*
+```
+less /etc/passwd
+less /etc/shadow
 ```
 
-### Granting a user sudo rights
+To display a list of all users on the system, you can use the following command:
 
-If you want to provide sudo privileges to user *adam*, you must first log in as root and execute the following command: 
+```
+awk -F: '{ print $1}' /etc/passwd | uniq
+```
 
-```bash
+## Superuser
+
+The superuser, also known as the root user, is a special user account with full access to all commands and files on the system, regardless of their permissions. The root user is typically used for system administration tasks and should be used with caution, as it has the greatest potential for causing damage to the system. The root user's login is usually root and a password is required to access the account.
+
+It is important to choose a strong and secure password for the root user and to keep it confidential. It is also important to avoid using dangerous commands, such as `rm -rf /*`, which can delete all files in the root directory.
+
+### Granting sudo privileges
+
+To grant a user, the ability to execute commands with superuser privileges, you can use the `usermod` command. To add the user to the sudo group on Debian-based systems, use the following command (user name is adam in the example below):
+
+```
 usermod -aG sudo adam
 ```
 
-On the RedHat and similar distributions this group is called *wheel* instead:
+On RedHat-based systems, the equivalent group is called `wheel`:
 
-```bash
+```
 usermod -aG wheel adam
 ```
 
-Then you need to run `visudo` and uncomment (remove the *%*) the following line:
+After adding the user to the appropriate group, you must also modify the `/etc/sudoers` file to allow members of the group to use sudo. To do this, you can use the `visudo` command to edit the file and uncomment the following line:
 
-```bash
-%wheel ALL=(ALL)    ALL
+```
+%wheel ALL=(ALL) ALL
 ```
 
-### Partially granted sudo privileges 
+### Partially granted sudo privileges
 
-`/etc/sudoers` is a special file that allows users to be granted sudo privileges solely for specific tools.
+It is also possible to grant a user the ability to use sudo only for specific commands or tools. To do this, you can edit the `/etc/sudoers` file using the visudo command and add a line granting the user the desired privileges. For example, to allow the user adam to execute the reboot command without a password prompt, you can add the following line to the file:
 
-If you wish to provide Adam the ability to reboot, run `visudo /etc/sudoers` and add the following lines at the bottom of the file: 
-
-```bash
-# Allow user "adam" to run "sudo reboot"
-# ...and don't prompt for a password
-#
+```
 adam ALL = NOPASSWD:/sbin/reboot
 ```
 
-The `visudo` command will automatically verify your syntax and refuse to save if there are any errors. A faulty `/etc/sudoers` file may prevent you from accessing your server ever again!
+It is important to use the `visudo` command to edit the `/etc/sudoers` file, as it checks the file for syntax errors and prevents you from saving if any are found. A faulty `/etc/sudoers` file can prevent you from accessing your system ever again.
 
-### Switching between users
-The `su` command without any arguments will launch the root user's subshell. If you want to access another user's account, you have to provide their username.
+## Switching between users
 
-```bash
+To switch to another user account, you can use the su command. Without any arguments, `su` will launch the root user's subshell. To access another user's account, you can provide the username as an argument:
+
+```
 su adam
 ```
 
-The -c option enables you to run a command as another user and redirect the output to your terminal:
+The `-c` option allows you to run a command as another user and display the output in your terminal:
 
-```bash
+```
 su adam -c whoami
 ```
 
-### Adding users
+## Adding users
 
-The UNIX system tool `useradd` is used to add new users (`userdel` is used to remove users). It generates a new home directory for the user and adds new user information to the `/etc/passwd` file.
+To add a new user to the system, you can use the useradd command. This command creates a new home directory for the user and adds the user's information to the `/etc/passwd` file.
 
-```bash
+```
 useradd -m adam
 ```
 
-Flags:
-* `-m` create home dir. The template is located at `/etc/skel`.
-* `-u` specify UID (it has to be free).
-* `-G` add the user to the following groups.
+The `-m` flag creates the home directory, and the `-u` flag allows you to specify a UID (it must be unique). The `-G` flag allows you to add the user to one or more groups.
 
-When adding new users from the command line, you should instead prefer using `adduser` (and `deluser` when deleting users). It is said to be more user friendly, because it generates the full user profile. `adduser` may also prompt you for some additional information like password, which `useradd` omits.
+Alternatively, you can use the `adduser` command, which is more user-friendly and prompts you for additional information, such as the password. However, `adduser` may not be available on all systems, so it is generally recommended to use `useradd` if you are writing a script that needs to be portable.
 
-```bash
+```
 adduser adam
 ```
-    
-However, if you're writing a script, especially if portability is important, you may still want to use the lowlevel utilities instead, because `adduser`/`deluser` may not be available on all distributions, such as SuSE. 
 
-### Changing the password
+## Changing the password
 
-To set or change a user's password, use the *passwd* command: 
+To change a user's password, you can use the passwd command. When you run the command, you will be prompted to enter the new password.
 
-```bash
+```
 passwd adam
 ```
 
-* `passwd -l`  blocks user from chaning their password (-u flags unlocks). Why doesn't it keep a user from logging in via other methods?
-- It locks only the password, not the account, so users can still authenticate with keys or other methods.
- 
+You can also use the passwd command to set the password for a new user when you create their account using the useradd or adduser command. To do this, you can use the `-p` flag followed by the encrypted password.
 
-## Groups
-
-All new users in RHEL/CentOS are automatically added to the wheel group.
-
-`groupadd` creates a new group and saves its details to `/etc/group`:
-
-```bash
-groupadd new_group
+```
+useradd -m -p encrypted_password adam
 ```
 
-The command `group` displays which groups a user is a member of:
+It is important to choose strong and secure passwords to protect your system and user accounts.
 
-```bash
-groups username
+## Group management
+
+Groups are collections of users who are granted certain permissions or privileges on the system. Groups can be used to manage access to resources and simplify the process of granting or revoking privileges for multiple users at once.
+
+To view the groups on the system, you can use the cat command to display the contents of the `/etc/group` file:
+
+```
+cat /etc/group
 ```
 
-Add the existing user adam to new_group:
+To add a new group, you can use the `groupadd` command:
 
-```bash
-usermod -a -G new_group adam 
+```
+groupadd admins
 ```
 
-Change the primary group of adam to new_group:
+To add a user to a group, you can use the `usermod` command with the `-aG` flag, followed by the group name:
 
-```bash
-usermod -g new_group adam 
+```
+usermod -aG admins adam
 ```
 
-Columns of `/etc/group`:
+To remove a user from a group, you can use the `gpasswd` command with the `-d` flag, followed by the username:
 
-* group name
-* password
-* group id
-* members
-
-To list all local groups on the system, use:
-
-```bash
-cut -d: -f1 /etc/group | sort
+```
+gpasswd -d adam admins
 ```
 
-### User ID and group ID
+### Changing the user and group ownership of a file
 
-Each user has a distinct user id (uid). To check a user's id, use:
+To change the owner of a file or directory, you can use the `chown` command, followed by the username and the file or directory name:
 
-```bash
-id user_name
+```
+chown adam file.txt
 ```
 
-To change UID of user `adam` to 1100, use:
+To change the group ownership of a file or directory, you can use the `chgrp` command, followed by the group name and the file or directory name:
 
-```bash
-usermod -u 1100 adam
+```
+chgrp admins file.txt
 ```
 
-To change GID of a group called `new_group` to 2500, use:
+You can also use the `chown` command to change both the owner and group ownership of a file or directory at the same time by specifying both the username and group name separated by a colon:
 
-```bash
-groupmod -g 2500 new_group
+```
+chown adam:admins file.txt
 ```
 
-## Challenges
+## User ID and Group ID
 
-1. Show your user name as well as your unique user identity number (`userid`).
-1. Why do we need a root `user`? 
-1. How to use the terminal to log in as root?
-1. Show the contents of the `/etc/shadow`. Can you find a reference to your user? Hint: you will need sudo privileges.
-1. Check the `/var/log/auth.log` file to check who is logged in. Use `grep` to see if someone is using sudo.
-1. Display a sorted list of all logged-in users, including the command they are now executing. 
-1. Create a group called "friends." Include your user in the newly formed group. Create two additional users and add them to the same group. Check the newly created accounts to see whether everything is in order. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be seen and edited by all users. Delete all new users you've made.
-1. Allow a user with no sudo privileges to execute the `reboot` command. Log in to that specific user account. Verify whether the system can be restarted.
-1. What's the difference between locking and disabling a user account's password? What are the consequences of using the commands `usermod -L` and `passwd -d`? 
+In a Unix system, every user and group is assigned a unique identifier known as a user ID (UID) or group ID (GID), respectively. These identifiers are used to identify and differentiate users and groups on the system.
+
+The `/etc/passwd` file stores the UIDs for each user, while the /etc/group file stores the GIDs for each group. When a user creates a file or directory, the system sets the ownership of the file to the user's UID and the user's default group's GID.
+
+The UID and GID can be used to set permissions on files and directories, allowing or restricting access to certain users or groups. For example, you can use the chown command to change the ownership of a file to a specific UID and GID, and the chmod command to set permissions for the owner, group, and other users based on their UIDs and GIDs.
+
+It is important to carefully manage UIDs and GIDs to ensure the security and integrity of your system. The root user, which has the UID 0 and the GID 0, has special privileges and can perform actions that other users may not be able to.
+
+To check a user's UID, you can use the `id` command followed by the username:
+
+```
+id adam
+```
+
+This will display output similar to the following:
+
+```
+uid=1000(adam) gid=1000(adam) groups=1000(adam),4(adm),24(cdrom),27(sudo),46(plugdev),113(lpadmin),128(sambashare)
+```
+
+The uid field indicates the user's UID, and the gid field indicates the user's primary group's GID. The groups field lists the GIDs of all groups that the user belongs to.
+
+To check a group's GID, you can use the `getent` command followed by the group name:
+
+```
+getent group admins
+```
+
+This will display output similar to the following:
+
+```
+admins:x:1001:adam
+```
+
+The second field, x, indicates that the group's password is stored in the `/etc/shadow` file. The third field indicates the group's GID, and the fourth field lists the names of all users who belong to the group.
+
+To change a user's UID, you can use the usermod command with the `-u` flag followed by the desired UID and the username:
+
+```
+usermod -u 1001 adam
+```
+
+To change a group's GID, you can use the groupmod command with the `-g` flag followed by the desired GID and the group name:
+
+```
+groupmod -g 1001 admins
+```
+
+## Challenges 
+
+1. Display your username and unique user identity number (UID).
+1. Explain the purpose of the root user.
+1. Provide instructions for logging in as root using the terminal.
+1. View the contents of the `/etc/shadow` file with the necessary privileges. Can you locate a reference to your user in this file?
+1. Consult the `/var/log/auth.log` file to check for currently logged-in users. Use grep to determine if anyone has used sudo.
+1. Generate a list of logged-in users, sorted alphabetically, including the command they are currently executing.
+1. Create a group called "friends" and include your user in it. Then, create two additional users and add them to the group as well. Verify that the new accounts have been set up correctly. Create a directory with read and write permissions for all members of the friends group. Create a few text files in this directory and test if they can be accessed and modified by all group members. Finally, delete the additional users you created.
+1. Allow a user without sudo privileges to execute the reboot command. Log in to that user account and confirm that the system can be restarted.
+1. Describe the difference between locking and disabling a user account's password. Explain the consequences of using the commands `usermod -L` and `passwd -d`.
