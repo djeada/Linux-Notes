@@ -1,67 +1,48 @@
-## Cron jobs
+## Cron
+Cron is a powerful tool for scheduling tasks in Linux systems. It allows you to execute scripts and commands at regular intervals, allowing you to automate tasks and keep your system running smoothly.
 
-* If you wish to execute some scripts on a regular basis, use cron jobs.
-* Cron daemon starts running when the system boots up. 
-* It runs in the background continuously and examines special files known as cron tabs every minute to see whether there is a script that should be running right now.
-* The file `/etc/crontab` contains the system crontabs.Those tasks are typically configured exclusively by the root user or daemons.
-
-You can configure cron to run to different types of jobs:
-1. System jobs.
-2. User jobs.
+The cron daemon is a background process that runs continuously, checking special files known as crontabs for scripts or commands that need to be executed. There are two types of crontabs: system crontabs, which are stored in the `/etc/crontab` file and are typically configured by the root user or daemons, and user crontabs, which are created and managed by individual users.
 
 ## Cron directories
 
-These are pre-created directories that are present on every Linux machine.
-If you place your script in one of those directories, it will run at the given intervals. 
+There are several directories on a Linux machine where you can place scripts to be run at regular intervals:
 
-* */etc/cron.hourly* - those scripts run once per hour.
-* */etc/cron.daily* - those scripts run once per day.
-* */etc/cron.weekly* - those scripts run once per week.
-* */etc/cron.monthly* - those scripts run once per month.
+* `/etc/cron.hourly`: scripts in this directory are run once per hour.
+* `/etc/cron.daily`: scripts in this directory are run once per day.
+* `/etc/cron.weekly`: scripts in this directory are run once per week.
+* `/etc/cron.monthly`: scripts in this directory are run once per month.
 
-## What if your desired schedule is different?
+## Custom schedule
 
-You create a cron tab file in `/etc/cron.d`. Every file in that directory is read by a *cron deamon*.
+If you need to schedule tasks with a more custom schedule, you can create a crontab file in the `/etc/cron.d` directory. Each file in this directory is read by the cron daemon and the scheduling is specified using five fields: minutes, hours, day of the month, month, and day of the week.
 
-To specify the scheduling, you must fill out five fields: minutes, hour, day of the month, month, and day of the week.
+To specify a schedule, you can use the following syntax:
 
-* Hours: 24 hour clock.
-* Days of the week: number with minus, e.g. 1-5.
-* \* means every (like every minute or every hour).
-* \*/n means every n'th (like every n'th minute).
+* Minutes: a range from 0 to 59, or an asterisk `(*)` to indicate every minute.
+* Hours: a range from 0 to 23 (using a 24 hour clock), or an asterisk (`*`) to indicate every hour.
+* Day of the month: a range from 1 to 31, or an asterisk (`*`) to indicate every day.
+* Month: a range from 1 to 12, or an asterisk (`*`) to indicate every month.
+* Day of the week: a range from 0 to 7 (with 0 or 7 representing Sunday), or an asterisk (`*`) to indicate every day of the week.
 
-Additionally when creating a cron config in `/etc/cron.d/` or `/etc/crontab`, you must provide the username under whom the command should be performed. For example, to run a following command `tar -cvpzf archve.tar.gz --exclude=/mnt` every day at 1:00 AM as a *root* user, use:
+To create a crontab file, you can use the `crontab -e` command to edit the current crontab, or use the `crontab -l` command to list all the current cron jobs. To delete the current crontab, you can use the `crontab -r` command.
 
-```bash
-0 1 * * * root tar -cvpzf archve.tar.gz --exclude=/mnt
+Here are some examples of cron schedules:
+
+* `0 2 * * *`: this cron job will run every day at 2:00 AM.
+* `0 13 * * 2-4`: this cron job will run every Tuesday, Wednesday, and Thursday at 1:00 PM.
+
+To create a script that will append the string "15 minutes have elapsed" to a log file every 15 minutes, you can use the following crontab entry:
+
+```
+*/15 * * * * echo "15 minutes have elapsed" >> /your timer.log
 ```
 
-To add a crontab trough a command, use:
-
-```bash
-crontab -e
-```
-
-To list all your cron jobs, use:
-
-```bash
-crontab -l
-```
-
-To delete the current cron jobs, use:
-
-```bash
-crontab -r
-```
-
-## Additional resources
-
-There is also an excellent website for experimenting with cron times: https://crontab.guru/.
+For more information about cron and how to use it, you can check out the crontab man page or visit the https://crontab.guru/ website, which provides a tool for experimenting with different cron schedules.
 
 ## Challenges
 
-1. Are there any system files located at `/etc/cron.d`?
-2. Is there any scheduling mentioned in the scripts located at `/etc/cron.monthly`? 
-3. When would this system cron job run its task? `0 2 \* \* \*`
-4. When would this system cron job run its task? `0 13 * * 2-4`
-5. Create a script that will append the string "15 minutes have elapsed" to the log file located at `/your timer.log` every 15 minutes. 
+1. Use the `ls` command to determine if there are any system files located in the `/etc/cron.d` directory.
+1. Use the `ls` command to list the scripts in the `/etc/cron.monthly` directory and examine their contents to determine if any scheduling is mentioned in the scripts.
+1. Given the cron job schedule `0 2 * * *`, determine when the task would be run.
+1. Given the cron job schedule `0 13 * * 2-4`, determine when the task would be run.
+1. Create a script that will append the string "15 minutes have elapsed" to a log file located at `~/your_timer.log` every 15 minutes. Use the `crontab -e` command to schedule the script to run at the desired interval.
