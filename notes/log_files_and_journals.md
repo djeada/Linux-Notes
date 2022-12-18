@@ -1,29 +1,28 @@
-<h1>Types of logging</h1>
+## Types of logging
 
-1. Keeping information in text files. The sysadmin has complete control over what is stored.
-2. Journald - utilized by systemd-based systems. Binaries containing info about the boot procedure, services, and the kernel. Those files aren't preserved.
-3. Rsyslog - redirects different log files to /var/log. Those logs are persistent.
+There are several types of logging methods that can be used on a Linux system:
 
-<h1>Log files at /var/log</h1>
-Log files are essential for successful administration of any sort of Linux system, since they include information on the system's health, such as any system or application problems. In spite of the fact that programs can place their log files wherever they like, the majority of Linux system log files are located in /var/log.
+* `Text files`: This is a basic method of logging, in which information is stored in plain text files. The sysadmin has complete control over what is stored in these files, and can choose to store any type of information that they wish.
 
-If you list files located at /var/log, you'll see that there are a lot of Linux system log files:
+* `Journald`: This logging method is utilized by systemd-based systems. It stores information about the boot procedure, services, and the kernel in binary files. These files are not meant to be preserved for long periods of time, as they are designed to be rotated out and deleted when no longer needed.
 
-* syslog: You'll find messages relating to your kernel, apps, and more in  centralized logging system (syslog). It is used also as the consolidated log file for all Linux computers in a data center.
-* auth.log: contains authentication failures and successes
-* messages: contains general system messages of all types
+* `Rsyslog:` This logging system redirects different log files to the `/var/log` directory. These logs are persistent, meaning they are meant to be stored and kept for longer periods of time.
 
-<h1>Rsyslog</h1>
-Rsyslog is a rocket-fast system for log processing.
+## Log files at /var/log
+Log files are essential for the successful administration of any Linux system, as they contain information on the system's health, including any system or application problems. While programs can store their log files in any location they choose, the majority of Linux system log files are located in the `/var/log` directory.
 
-Its characteristics include a modular design, great performance, and strong security features.
+If you list the files in the /var/log directory, you will see that there are many Linux system log files:
 
-While it began as a simple syslogd, rsyslog has evolved into a logging ninja, capable of receiving inputs from a variety of sources, modifying them, and sending the outputs to a variety of destinations. 
+* `syslog`: This file contains messages relating to the kernel, apps, and more in a centralized logging system (syslog). It is also often used as the consolidated log file for all Linux computers in a data center.
+* `auth.log`: This file contains information on authentication failures and successes.
+* `messages`: This file contains general system messages of all types.
 
-The primary configuration file should be located at: /etc/rsyslog.conf. Be warned that editing this file is not as simple as it appears.
-It has its own scripting language. 
+## Rsyslog
+Rsyslog is a high-performance system for log processing. It has a modular design, excellent performance, and strong security features. While it started as a simple syslogd, rsyslog has evolved into a logging tool that is capable of receiving input from a variety of sources, modifying it, and sending the output to a variety of destinations.
 
-<h2>Severity levels:</h2>	
+The primary configuration file for rsyslog can be found at: `/etc/rsyslog.conf`. However, be warned that editing this file can be complex, as it has its own scripting language.
+
+### Severity levels
 
 | Code | Severity |  Description |
 | --- | --- | --- |
@@ -36,90 +35,90 @@ It has its own scripting language.
 | 6 |  info | informational messages |
 | 7 |  debug | debug-level messages |
 
-<h1>Logger</h1>
-Logger is a command-line utility used to add logs to the local /var/log/syslog file or a remote syslog server.
-For adding logs, logger gives several choices such as selecting priority, specifying a remote system, and specifically defining the syslog port. 
-More information may be found at:
+## Logger
+Logger is a command-line utility used to add logs to the local `/var/log/syslog` file or a remote syslog server. It provides several options for adding logs, including the ability to select the priority, specify a remote system, and define the syslog port. 
 
-```bash
+For more information on logger, you can use the man pages:
+
+```
 man logger
 ```
 
-A simple example:
+A simple example of using logger is:
 
-```bash
+```
 logger "An example of log message"
 ```
 
-To send a log message to a remote server, do the following: 
+To send a log message to a remote server using logger, you can use the following command:
 
-```bash
+```
 logger -n 192.168.10.27 -P 1420 "An example of log message"
 ```
 
-<h1>Logrotate</h1>
+Here, the `-n` flag specifies the IP address of the remote syslog server, and the `-P` flag specifies the port number.
 
-Logrotate is a system tool that automates log file rotation and compression.
-Log files might potentially absorb all available disk space on a system if they were not rotated, compressed, and pruned on a regular basis. 
+## Logrotate
 
-```bash
+Logrotate is a system tool that automates the process of rotating and compressing log files. Log files can potentially consume all available disk space on a system if they are not rotated, compressed, and pruned on a regular basis.
+
+To check the version of logrotate installed on your system, you can use the following command:
+
+```
 logrotate --version
 ```
 
-<h1>Journald for systemd based systems</h1>
+## Journald for systemd based systems
 
-<i>journald</i> is in charge of event logging. It records events from log files, kernel messages, etc.
+Journald is responsible for event logging on systemd-based systems. It records events from log files, kernel messages, and other sources.
 
-Display man pages about <i>journald</i>:
+To display the man pages for journald, you can use the following command:
 
-```bash
+```
 man systemd-journald
 ```
 
-<i>journald</i> is volatile by default; to make it persistent, uncomment the following line: '# Storage=auto'. 
+By default, journald is volatile, meaning that its logs are not stored persistently. To make journald persistent, you can uncomment the following line in the configuration file: `'# Storage=auto'`. This file can be found at: `/etc/systemd/journald.conf`.
 
-```bash
-vim /etc/systemd/journald.conf
+To display the last 10 lines of journald logs, you can use the following command:
+
 ```
-
-To display the last 10 lines of <i>journalctl</i>, use:
-
-```bash
 journalctl -n
 ```
 
-To display the last 10 lines of <i>journalctl</i> and follow, use:
+To display the last 10 lines of journald logs and follow them as they are added in real-time, you can use the following command:
 
-```bash
+```
 journalctl -f
 ```
 
-To display the short status os specific service, use:
+To display the short status of a specific service, you can use the following command:
 
-```bash
+```
 systemctl status sshd
 ```
 
-To display see <i>journalctl</i> messages by priority, use:
+To display journald logs by priority, you can use the following command:
 
-```bash
-journalctl -p info
+```
+journalctl -p err
 ```
 
-To see <i>journalctl</i> messages that occurred after a certain time, use:
+This will display only logs with a priority of "err" or higher. You can also use other priority levels, such as "warning" or "notice", to filter the logs displayed.
 
-```bash
-journalctl --since yesterday
-```
+## Conclusion
 
-To display information about the boot process:
+In this article, we covered several types of logging methods that can be used on a Linux system, including text files, journald, and rsyslog. We also looked at log files located in the `/var/log` directory and discussed the tools logrotate and logger, which can be used to manage and manipulate log files. Finally, we looked at journald, the event logging system used on systemd-based systems. Understanding how logging works on a Linux system is essential for effective system administration and troubleshooting.
 
-```bash
-systemd-analyze
-```
+## Challenges
 
-## SNMP 
-
-* Simple network management protocol
-* Mainly used for pulling data from devices (some can have no storage like cameras)
-
+1. What is logging and why is it important?
+1. What is `Journald` and how does it differ from traditional logging systems?
+1. What is `Rsyslog` and how does it work?
+1. How can you use the logger command to send messages to the system logs?
+1. How can you configure log rotation to manage the size of log files?
+1. What are some common log file formats, and how do they differ from each other?
+1. How can you use log filters to selectively include or exclude certain log messages?
+1. How can you use log analysis tools to extract useful information from log files?
+1. What are some best practices for managing and maintaining logs in a production environment?
+1. How can you troubleshoot issues related to logging on a Linux system?
