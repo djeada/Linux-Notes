@@ -42,7 +42,7 @@ If you delete a hardlink, it does not affect the original file or any other hard
 
 A symlink (short for "symbolic link") is a special type of file that contains a reference to another file or directory. Unlike a hardlink, a symlink can point to a file or directory on another filesystem or even to a non-existent file.
 
-To create a symlink, you can use the ln -s command and specify the existing file or directory as the source and the desired symlink name as the target:
+To create a symlink, you can use the `ln -s` command and specify the existing file or directory as the source and the desired symlink name as the target:
 
 ```
 ln -s existing_file symlink_name
@@ -50,7 +50,7 @@ ln -s existing_file symlink_name
 
 If you delete a symlink, it does not affect the file or directory that it points to. However, if you delete the file or directory that the symlink points to, the symlink will become invalid, as it will no longer be able to access the target file or directory.
 
-To identify the source file or directory of a symbolic link, you can use the readlink -f command and specify the symlink name as the argument:
+To identify the source file or directory of a symbolic link, you can use the `readlink -f` command and specify the symlink name as the argument:
 
 ```
 readlink -f symlink_name
