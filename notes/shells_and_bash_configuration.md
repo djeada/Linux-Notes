@@ -1,12 +1,12 @@
 ## Shells
-In Unix, shells are the programs that user input and translate it to the OS commands. Whenever you open the terminal there is a shell repsonsible for the communication.
+
+In Unix, shells are programs that interpret user input and translate it into commands that the operating system can execute. When you open a terminal window, a shell is responsible for providing the interface between you and the operating system.
 
         user input -> shell -> kernel -> hardware
 
-Most common shells include: `bash`, `zsh`, `ksh`, `tcsh` and `sh`.
-`Bash` is the default shell on most distributions.
+There are several different shells available, including `bash`, `zsh`, `ksh`, `tcsh`, and `sh`. `Bash` is the default shell on most Linux distributions.
 
-In `/etc/shells` you can find a list of all the shells that are available on your system. After executing `cat /etc/shells` the output should look like this:
+You can view a list of available shells on your system by looking at the `/etc/shells` file. This file will contain a list of paths to all the shells installed on the system. For example, the output of `cat /etc/shells` might look like this:
 
 ```
 /bin/bash
@@ -17,31 +17,19 @@ In `/etc/shells` you can find a list of all the shells that are available on you
 /bin/zsh
 ```
 
-To see the default shell for the user, use:
+To find out which shell you are currently using, you can use the echo `"$SHELL"` command. Alternatively, you can use `ps -cp "$$" -o command=""` to see the current shell.
 
-```
-echo "$SHELL"
-```
+To switch to a different shell, such as zsh, you can use the `chsh -s /bin/zsh` command.
 
-Use the following command to determine which shell is currently in use: 
+## Bash Configuration Files
 
-```
-ps -cp "$$" -o command=""
-```
+When a shell is started, it reads certain configuration files to set up the environment and define any necessary variables or aliases. The main configuration files for bash are:
 
-To switch to `zsh` in your terminal, you can use the command:
+* `~/.bashrc`: This file is read every time a new shell is started. It is intended to be lightweight, with only the most essential commands being executed.
+* `~/.bash_profile`: This file is read every time a shell is started.
+* `~/.bash_logout`: This file is read when the user logs out.
 
-```
-chsh -s /bin/zsh
-```
-
-## Bashrc
-
-Every time a shell is started, the  `~/.bashrc` script is read. This is similar to  `\~/.cshrc` in C Shell.
-
-The script is designed to be lightweight, with just the most important commands being run.
-
-An example of a `~/.bashrc` script is:
+An example of a `~/.bashrc` script:
 
 ```
 # .bashrc
@@ -57,34 +45,25 @@ alias cp='cp -i'
 alias mv='mv -i'
 ```
 
-### Bash_profile
+There are also global configuration files that apply to all users at specific events:
 
-The `~/.bash_profile` file is read every time a shell is started.
-
-### Bash_logout
-
-The `~/.bash_logout` file is read when the user logs out.
-
-### Summary of configuration scripts
-
-There are equivalent global scripts that are applied to all users at a specific event.
-
-| Indvidual | Gloabl |
-| --------- | ------ |
-| - | /etc/enviroment |
-| /home/user/.bashrc | /etc/bashrc |
-| /home/user/profile | /etc/profile |
+* `/etc/environment`: This file is read by all shells when they start.
+* `/etc/bashrc`: This file is read by all bash shells when they start.
+* `/etc/profile`: This file is read by all shells when they start.
 
 ## Terminals
 
-![terminal-shortcut](https://user-images.githubusercontent.com/37275728/190137189-f1abc2d9-fa15-43d8-8c27-ef11dde67db9.png)
+A terminal window is a graphical interface to a shell. It allows you to enter commands and see the output of those commands in a text-based interface. Many terminals also support customization and provide features such as tabbed windows, split panes, and color schemes.
 
+To open a new terminal window, you can use the keyboard shortcut Ctrl + Alt + T on most systems.
+
+![terminal-shortcut](https://user-images.githubusercontent.com/37275728/190137189-f1abc2d9-fa15-43d8-8c27-ef11dde67db9.png)
 
 ## Challenges
 
-1. Check if there is an existing alias for `cat`?
+1. Check if there is an existing alias for `cat`.
 1. List all currently defined aliases.
-1. Try adding some aliases to your `bashrc` and then removing them from the terminal. Reopen the terminal and check to see if the aliases are still active.
+1. Add some aliases to your `bashrc` file and then remove them from the terminal. Reopen the terminal and check to see if the aliases are still active.
 1. Make a list of every profile file on your system.
-1. Create a user with a program set as his default logon shell. You might, for example, use `/bin/tar`. It's useful when a user should only be able to access one program on the server. 
-13. Experiment with various shells. Check which of your custom variables, aliases, and functions are present in the new environment. 
+1. Create a user with a specific program set as his default logon shell. You might, for example, use `/bin/tar`. It's useful when a user should only be able to access one program on the server. 
+1. Experiment with various shells. Check which of your custom variables, aliases, and functions are present in the new environment. 
