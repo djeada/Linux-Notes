@@ -1,145 +1,137 @@
-<h1>SSH</h1>
+## What is SSH?
 
-SSH is a network protocol for securely communicating with remote machines. It is used to securely log into a remote machine and execute commands on it.
+SSH (Secure Shell) is a network protocol and software suite that enables secure communication between computers over an unsecured network, such as the internet. It is commonly used to securely log into a remote machine and execute commands on it, as well as to transfer files between computers using secure protocols such as SFTP (SSH File Transfer Protocol) or SCP (Secure Copy Protocol).
 
-* <code>ssh</code> is a safe option for remote login as well as command execution on a remote system. 
-* It is a set of standards and a network protocol that allow a secure connection to be established between a local and a distant computer.
-* To authenticate the remote computer and allow the remote computer to authenticate the user, it employs public-key cryptography.
+SSH uses public-key cryptography to authenticate the remote computer and allow the remote computer to authenticate the user. This means that the user's machine generates a pair of keys (a private key and a public key), and the user's public key is stored on the remote machine. When the user attempts to log in to the remote machine, the remote machine uses the stored public key to authenticate the user and allow the connection.
 
-Uses:
-* Allows to connect to a remote machines and run commands on it.
-* Supports arbitrary TCP port forwarding through SOCKS proxy.
-* SFTP or SCP protocols are used for secure file transmission.
+## Connecting to a Remote Host with SSH
 
-<h2>Connect with remote host</h2>
+To connect to a remote host using SSH, you need to know the host's IP address, as well as the username and password (or have the private key that corresponds to the public key stored on the remote host). You can then use the ssh command with the appropriate flags to connect to the remote host.
 
-In order to connect to a remote host, you need to know the host's IP address, the username and password or store the public key on the remote host.
+Here is the general syntax for connecting to a remote host using SSH:
 
-General syntax:
-
-```bash
+```
 ssh username@serverhost
 ```
 
-Server will request a password if you don't use key authentication.
+If you are using password authentication, the server will request a password. If you are using key authentication, you will not be prompted for a password.
 
-There are number of flags:
-* <code>-l</code> to specify the user name.
-* <code>-i</code> path to key file (by default it is set to ~/.ssh/id_rsa).
-* <code>-F</code> path to connection config file (by default it is set to ~/.ssh/config).
+There are a number of flags that can be used with the ssh command to specify additional options:
 
-Each user has it's own connection config file, but there is also a global connection config file located at: /etc/ssh/ssh_config.
+* `-l`: Specifies the username to use for the connection.
+* `-i`: Specifies the path to the key file. By default, SSH looks for the key file in `~/.ssh/id_rsa`.
+* `-F`: Specifies the path to the connection config file. Each user has their own connection config file, located at `~/.ssh/config`, but there is also a global connection config file located at `/etc/ssh/ssh_config`.
 
-Make sure that sshd service on your server up and running. For Debian based distros, you can use:
+To ensure that the `sshd` service is running on your server, you can use the following commands on a Debian-based system:
 
-```bash
+```
 apt install openssh-server
 systemctl enable ssh
 systemctl start ssh
 ```
 
-<h2>Key generation</h2>
+## Key Generation
 
-* Private key: You keep it on your machine.
-* Public key: You send it to the machines you want to get remote access to.
+SSH uses a public-key cryptography system to authenticate the remote computer and allow the remote computer to authenticate the user. This means that each user generates a pair of keys (a private key and a public key) and the user's public key is stored on the remote machine. To generate a new key pair, use the `ssh-keygen` command with the `-t` flag to specify the type of key to generate, such as rsa:
 
-To generate a new key pair, use:
-
-```bash
+```
 ssh-keygen  -t rsa
 ```
 
-In your .ssh directory, you should now have an RSA public and private key pair:
+This will generate an RSA public and private key pair in the `~/.ssh` directory. You can use the `ls -a ~/.ssh/` command to list the files in this directory and see the new key pair.
 
-```bash
-ls -a ~/.ssh/
+## Uploading the Public Key to the Remote Host
+
+To allow a user to log in to the remote host using their private key, the user's public key must be stored on the remote host. This can be done using the ssh-copy-id command, which copies the user's public key to the remote host.
+
 ```
-
-<h2>Upload the public key to remote host</h2>
-
-The <code>ssh-copy-id</code> command copies the ssh public key to the remote host.
-
-```bash
 ssh-copy-id -i ~/.ssh/mykey username@serverhost
 ```
 
-<h2>Using non-standard ports</h2>
-By default, ssh uses port 22. Changing it to a different number improves the security of most servers significantly. You must change the /etc/ssh/sshd_config file on the server to do this. 
+## Using Non-Standard Ports
 
-For example, if you want to use port 561, you would add the following line to the /etc/ssh/sshd_config file:
+By default, SSH uses port 22 to establish connections. However, for improved security, you may want to change the port number to a different value. To do this, you must edit the `/etc/ssh/sshd_config` file on the server and specify the new port number. For example port 561. When logging in to the server using SSH, you will then need to specify the port number using the `-p` flag:
 
 ```
-Port 561
+ssh -p 561 username@serverhost
 ```
 
-When logging in to the server, you now need to specify the port number.
+## SCP
 
-<h1>Sharing files between the machines</h1>
+SCP (Secure Copy Protocol) is a simple command-line utility for transferring files between computers. It functions similarly to the UNIX cp command, but allows you to specify a user, machine, and files as parameters. To transfer a file from your local machine to the remote server, use the following syntax:
 
-After you've mastered remote login with ssh, you could realize that simply connecting to the remote system isn't enough.
-You might want to complete the following tasks:
-
-* Copying files from your server to your desktop computer
-* Adding pictures, audio files, or videos to your website
-* Copying some text or source code from your desktop computer to your server 
-
-<h2>Overview of the protocols</h2>
-
-A Linux server can exchange files in a variety of methods, including:
-
-* Scp: A simple file-copying utility.
-* FTP: The standard Internet file sharing protocol.
-* SFTP: file access and copying over the SSH protocol 
-* Rsync: File copying is a quick and fast process.
-* SMB: Microsoft's file-sharing protocol, which is helpful in a local network of Windows PCs. 
-
-<h2>Scp</h2>
-<code>Scp</code> is a safe method of moving files from one computer to another. It functions similarly to the UNIX cp command, except that the parameters can specify a user, machine, and files.
-
-To transfer /opt/test from your machine to the /opt dir on the server with IP 192.168.2.105, use the following commands:
-
-```bash
-scp /opt/test 192.168.2.105:/opt
+```
+scp /local/path/to/file username@server:/remote/path/to/file
 ```
 
-Using root credentials, copy /etc/passwd from the server:
+To transfer a file from the remote server to your local machine, use the following syntax:
 
-```bash
-scp root@192.168.2.105:/etc/passwd
+scp username@server:/remote/path/to/file /local/path/to/file
+
+You can use the `-r` flag to copy directories recursively, and the -P flag to specify the connection port (the default is 22). For example:
+
+```
+scp -P 80 -r root@server:/remote/path/to/directory /local/path/to/directory
 ```
 
-To recursively copy the whole directory, use:
+## SFTP
 
-```bash
-scp -r root@192.168.2.105:/etc/passwd
+SFTP (SSH File Transfer Protocol) is a secure file transfer protocol that runs over the SSH protocol. It offers a number of advantages over other file transfer protocols, including high-quality security and the ability to navigate the directory structure, create and delete folders, and perform other file operations. To use SFTP, you will need a client software such as WinSCP, FileZilla, CyberDuck, or others. These clients typically have a GUI interface that allows you to easily connect to the remote server and transfer files.
+
+To connect to a remote server using SFTP, you will need to know the server's IP address and specify the protocol as SFTP or SSH. The default port for SFTP is 22.
+
+To connect to a remote server using SFTP, use the sftp command followed by the username and server hostname or IP address:
+
+```
+sftp username@serverhost
 ```
 
-Use -P flag to specify the connection port (by default it set to 22):
+This will open an SFTP session and prompt you for the password for the specified user. Once you are authenticated, you will see the sftp> prompt, indicating that you are connected to the remote server and can start issuing SFTP commands.
 
-```bash
-scp -P 80 -r root@192.168.2.105:/etc/passwd
+To list the files and directories on the remote server, use the ls command:
+
+```
+sftp> ls
 ```
 
-<h2>SFTP</h2>
-SFTP offers a lot of significant advantages:
+This will display a list of files and directories in the current directory on the remote server.
 
-* High-quality security.
-* Allows you to navigate the directory structure.
-* Folders can be created and deleted.
-* On your server, no further configuration is necessary. 
+To change the current directory on the remote server, use the cd command followed by the path to the desired directory:
 
-Client software is required to use SFTP. If you're using a Linux desktop, your file manager has a built-in GUI client. Although neither Windows nor macOS offer a built-in GUI client, there are a plethora of third-party alternatives, both free and commercial, available:
+```
+sftp> cd /path/to/directory
+```
 
-* For Windows users, use WinSCP or FileZilla.
-* For macOS users, utilize CyberDuck or FileZilla.
+To transfer a file from the local machine to the remote server, use the put command followed by the path to the local file:
 
-Configuring and use your preferred option should be simple. When prompted for server, enter your server's IP address, port 22, and protocol as SFTP or SSH. 
+```
+sftp> put /local/path/to/file
+```
 
-<h1>Challenges</h1>
+This will transfer the specified file from the local machine to the current directory on the remote server.
 
-1. Use SSH protocol to log into a remote server. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or create a virtual machine with Linux on your PC. 
-2. Use a non-standard port (e.g. 6176) for the SSH connection.
-3. Use <code>scp</code> to copy /var/log directory from the server to your desktop.
-4. To upload the images directory to your server, use an <code>SFTP</code> GUI of your choice. Using <code>SFTP</code>, try creating various temporary folders, changing their location, and deleting them at the end. 
-5. Use <code>scp</code> to copy the contents of the /etc/passwd file from your server to your local machine.
-6. Explain the difference between <code>SCP</code> and <code>SFTP</code>.
+To transfer a file from the remote server to the local machine, use the get command followed by the path to the remote file:
+
+```
+sftp> get /remote/path/to/file
+```
+
+This will transfer the specified file from the remote server to the current directory on the local machine.
+
+
+## Other Protocols
+
+In addition to SCP and SFTP, there are several other protocols and tools that can be used for file sharing:
+
+* FTP (File Transfer Protocol) is the standard Internet protocol for transferring files. It is not as secure as SCP or SFTP, but is widely supported and easy to use.
+* Rsync is a fast and efficient file-copying tool that can be used to transfer files between computers. It allows you to transfer only the differences between two files, making it more efficient for transferring large files or frequently-updated files.
+* SMB (Server Message Block) is a file-sharing protocol used by Windows machines. It is commonly used in local networks of Windows PCs. To share files between Linux and Windows machines, you can install the Samba software on your Linux machine and connect to it from your Windows machine using SMB.
+
+## Challenges
+
+1. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or create a virtual machine with Linux on your PC. 
+1. Connect to a remote server using the SSH protocol. This can be done by running the ssh command and specifying the username and server hostname or IP address.
+1. Use a non-standard port for the SSH connection. To do this, you will need to specify the port number using the -p flag when running the ssh command.
+1. Copy a directory from the remote server to your local machine using the scp command. To do this, you will need to specify the path to the directory on the remote server and the destination directory on your local machine.
+1. Upload a directory to the remote server using an SFTP client. To do this, you will need to connect to the server using the server's IP address, port 22, and protocol as SFTP or SSH, and use the client's GUI interface to navigate the directories and transfer the directory to the desired location on the server.
+1. Describe the difference between SCP and SFTP.
