@@ -12,7 +12,22 @@ Permissions in Linux control who can access and manipulate files and directories
 | write | The file's contents can be changed by the user. | The user can add new files to the directory and delete old ones. |
 | execute | The filename can be used as a UNIX command by the user. | The user can go to the directory, but they cannot list the files unless they have read permission. |
 
-Permissions may be specified symbolically, using the symbols u (user), g (group), o (other), a (all), r (read), w (write), x (execute), + (add permission), - (take away permission) and = (assign permission).
+### Defining Permissions symbolically
+
+Permissions may be specified symbolically, using the symbols.
+
+| Symbol | Meaning |
+| --- | --- |
+| u  | user |
+| g  | group |
+| o  | other |
+| a  | all |
+| r  | read |
+| w  | write |
+| x  | execute |
+| +  | add permission |
+| -  | take away permission |
+| =  | assign permission |
 
 For example, the following command will grant the file's owner execution permission:
 
@@ -20,7 +35,11 @@ For example, the following command will grant the file's owner executi
 chmod u+x file
 ```
 
-| Permissions | Number |
+## Defining Permissions using digits
+
+Permissions for files and directories are represented by a series of three digits known as the permission mode. These digits specify the permissions for the file's owner (user), the file's group, and others.
+
+| Permissions | Digit |
 | --- | --- |
 | --- | 0 |
 | --x | 1 |
@@ -30,6 +49,20 @@ chmod u+x file
 | r-x | 5 |
 | rw- | 6 |
 | rwx | 7 |
+
+Each digit is made up of three bits, with each bit representing a particular permission: read (r), write (w), and execute (x). The permission mode is written as three octal digits, with each digit corresponding to the permissions for the user, group, and others, respectively.
+
+For example, the permission mode 771 specifies that:
+
+* the user has read, write, and execute permissions (7 = rwx)
+* the group has read, write, and execute permissions (7 = rwx)
+* others have execute permissions (1 = --x)
+
+You can use the `chmod` command to change the permission mode of a file or directory. For example:
+
+```
+chmod 771 path/to/file.txt
+```
 
 ## Default Permissions
 
