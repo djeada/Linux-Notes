@@ -1,48 +1,48 @@
 ## Package managers
 
-Debian and Ubuntu are arguably the most well-known Linux distributions (at least for the home users). Those two distros (and their derivatives) use <code>APT</code> (Advanced Package Tool). Other distributions use alternative package managers, such as <code>DNF</code> <code>YUM</code>, <code>Pacman</code>, and so on. You will be unable to use the apt command on the machines using those distros. Those other package managers have their own functionalities and syntax, which may differ significantly from that of <code>APT</code>.
+Debian and Ubuntu are arguably the most well-known Linux distributions (at least for the home users). Those two distros (and their derivatives) use Advanced Package Tool (`APT`). Other distributions use alternative package managers, such as `DNF`, `YUM`, `Pacman`, and so on. You will be unable to use the apt command on the machines using those distros. These other package managers have their own functionalities and syntax, which may differ significantly from that of `APT`.
 
-Be cautious, as package managers frequently not only install software with all of its dependencies, but also interfere with your system's configuration!
+Be cautious when using package managers, as they frequently not only install software with all of its dependencies, but also interfere with your system's configuration.
+
 
 ## Installing from tarballs
 
-You may install software directly from the tarball on your Linux machine, without using a package manager.
-This procedure consists of three steps: 
+You may install software directly from the tarball on your Linux machine, without using a package manager. This process consists of three steps:
 
 1. Extract
 
-Go to the directory that contains your tarball and run the following commands: 
+Go to the directory that contains your tarball and run the following commands:
 
-```bash
+```
 tar -zxvf path_to_tar.tar.gz
 cd path_to_tar
 ```
 
 2. Compile
 
-<code>Make</code> is the standard Linux compilation tool: 
+Make is the standard Linux compilation tool:
 
-```bash
+```
 make
 ```
 
-There may also be a <code>config</code> file with dependencies that must be installed before this application can be compiled. In this case run the config file first.
+There may also be a config file with dependencies that must be installed before this application can be compiled. In this case, run the config file first.
 
 3. Install
 
-If a <code>make install</code> is available, use: 
+If a make install is available, use:
 
-```bash
+```
 make install
 ```
 
-If not, copy the executable manully to <code>usr/local/bin</code>:
+If not, copy the executable manully to usr/local/bin:
 
-```bash
+```
 mv exe_name usr/local/bin/exe_name
 ```
 
-There is no mechanism to automatically update apps that have been installed in this manner. 
+There is no mechanism to automatically update apps that have been installed in this manner.
 
 ## Install and update software packages from APT repo
 
@@ -266,4 +266,13 @@ yum-config-manager --disable [repo_id]
 ## Challenges
 
 1. Using your preferred package manager, look for the 0ad app. It's possible that you'll need to update the repositories first. Install the app if the search was successful. Try out the app. Using the same package manager, uninstall it. 
-2. Install MongoDB from their official repositories.
+1. What is a package manager and why is it useful?
+1. How does YUM work and what types of software can it be used to install?
+1. What is APT and how does it differ from YUM?
+1. What is a tarball and how is it used in relation to package managers?
+1. How can you use a package manager to install software from a specific repository or to install a specific version of a package?
+1. How can you use a package manager to update or upgrade installed packages?
+1. How can you use a package manager to remove or uninstall packages?
+1. What are some common options or commands used with package managers such as YUM or APT?
+1. How can you use a package manager to search for available packages or to find information about installed packages?
+1. What are some potential challenges or drawbacks to using a package manager, and how can these be addressed?
