@@ -11,8 +11,13 @@ However, LVM does add some complexity to the setup process and requires addition
 
 ## LVM Components
 
-LVM is made up of several components: physical volumes, volume groups, and logical volumes. Physical volumes are actual disk storage devices, such as HDDs or SSDs. Volume groups are collections of physical volumes that can be treated as a single entity. Logical volumes are the storage areas within volume groups that can be formatted with a file system and mounted.
+LVM is made up of several components: 
 
+* physical volumes, 
+* volume groups, 
+* logical volumes. 
+
+Physical volumes are actual disk storage devices, such as HDDs or SSDs. Volume groups are collections of physical volumes that can be treated as a single entity. Logical volumes are the storage areas within volume groups that can be formatted with a file system and mounted.
 
 ## Creating LVM Volumes
 
