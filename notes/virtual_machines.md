@@ -112,3 +112,14 @@ dhcpdump -i eth0 -h ^00:0c:29:bd:81:01
 ```
 
 Replace 00:0c:29:bd:81:01 with the actual MAC address of the VM.
+
+## Challenges
+
+1. What is virtualization?
+1. What are some types of virtualization?
+1. What are some advantages of virtualization?
+1. What is a virtual machine (VM)?
+1. What are some options for networking VMs?
+1. What is VirtualBox/VMware/KVM and what is it used for?
+1. How do you find the IP address of a VM in VirtualBox, VMware, and KVM?
+1. What is the difference between NAT networking and bridged networking for VMs?
