@@ -1,3 +1,7 @@
+## Essential File Compression and Archiving Commands 
+
+An overview of two important tools for file compression and archiving: tar and gzip. It describes the flags and usage of these commands, and provides examples of how to create and extract archives. 
+
 ## The tar command
 The tar command is a useful tool for packing and unpacking files and directories on a Linux system. It allows you to create an archive file that contains multiple files and directories, as well as information about them such as filenames, owners, timestamps, and access rights. By default, tar does not do any compression, but it can be used in conjunction with other tools like gzip to compress the archive.
 
