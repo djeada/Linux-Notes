@@ -249,19 +249,23 @@ yum-config-manager --disable [repo_id]
 
 ### Description of the repository:
 
-* label - the label used as an identifier in the repository file 
-* name - the name of the repository 
-* mirrorlist - a link to information about mirror servers for this server
-* baseurl - the base url to which the rpm packages should be found.
-* gpgcheck - set to 1 if a gpg integrity check on the packages is required. 
+A repository is a collection of software packages that can be managed by a package manager. 
 
-### Labels for repositories:
+The following details describe the components of a repository:
 
-* base - the base repository including all essential Red Hat applications. Packages with full support.
-* updates - a repository containing just updates.
-* optional - open source software that Red Hat does not support.
-* supplemental - proprietary packages that Red Hat does not support.
-* extras - additional packages that Red Hat does not support. 
+* Label: a unique identifier for the repository.
+* Name: the name of the repository.
+* Mirrorlist: a list of mirrors (duplicate servers) that contain copies of the repository.
+* Base URL: the URL where the RPM packages for the repository can be found.
+* GPG check: a flag that indicates whether a GPG (GNU Privacy Guard) integrity check is required for the packages in the repository.
+
+There are several labels that are commonly used to categorize repositories:
+
+* Base: contains essential Red Hat applications with full support.
+* Updates: contains updates for packages.
+* Optional: contains open source software that is not supported by Red Hat.
+* Supplemental: contains proprietary packages that are not supported by Red Hat.
+* Extras: contains additional packages that are not supported by Red Hat."
 
 ## Challenges
 
