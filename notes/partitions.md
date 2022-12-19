@@ -1,28 +1,14 @@
-## Standards for the layout of partition tables 
+## Partitioning disks
 
-When configuring a hard drive, you have two options: 
-* MBR (Master Boot Record)
-* GPT (GUID Partition Table)
+Partitioning a disk is the process of dividing the disk into multiple storage areas, known as partitions. Each partition can be used to store different types of data or to provide additional storage space. There are two main types of partition tables: MBR (Master Boot Record) and GPT (GUID Partition Table).
 
-To see which one you are using, use:
- 
-```bash
-gdisk -l 
-```
+### MBR (Master Boot Record)
 
-## MBR
+MBR is the traditional partition table format used on most computers. It was first introduced in March 1983 with IBM PC DOS 2.0. MBR consists of three main parts: the master boot code, a partition table for the disk, and a disk signature. MBR stores its data on the first sector of the disk. It supports disks up to 2TB in capacity and can store a maximum of four primary partition entries.
 
-* In March 1983, IBM PC DOS 2.0 included MBR.
-* MBR is made up of three parts: master boot code, a partition table for the disk, and disk signature. 
-* It saves its data on the disk's first sector. 
-* MBR only supports disks up to 2TB in capacity and can store a maximum of four primary partition entries.
+### GPT (GUID Partition Table)
 
-## GPT
-
-* It's newer and more advanced than MBR. It does all its predecessor can do and more.
-* GUID Partition Tables, is a format that differs from MBR in that it allows more than 2 TB and up to 128 partitions.
-* GPT is made up of a Protective MBR and additionally maintains cyclic redundancy check (CRC) values to ensure the integrity of its data.
-* To use it you must activate the UEFI in your system's BIOS settings.
+GPT is a newer and more advanced partition table format than MBR. It supports disks larger than 2TB and up to 128 partitions. GPT is made up of a Protective MBR and also maintains cyclic redundancy check (CRC) values to ensure the integrity of its data. To use GPT, you must enable the UEFI in your system's BIOS settings.
 
 ## Common disk names
 
@@ -39,30 +25,70 @@ The last letter denotes the device order (it may alternatively be the last two),
 * /dev/sdc1 is the first (1) partition on your third (c) SATA disk.
 * /dev/hdb3 is the third (3) partition of the second (b) IDE hard drive.
 
-## Creating and destroying partitions
-You can use fdisk to create both MBR and GPT partitions. However it is adviced to used gdisk for GPT partitions, which has similar interface.
+## Viewing partition tables
 
-To view all disk partitions, use:
+To view the partition table of a disk, you can use the gdisk or fdisk command. The gdisk command is specifically for GPT partitions, while fdisk can be used for both MBR and GPT partitions. To view all disk partitions, use:
 
-```bash
+```
 fdisk -l
 ```
 
-To create a /dev/sda partition, use:  
+## Creating partitions
 
-```bash
+To create a partition on a disk, you can use the fdisk or gdisk command. To create a partition on the /dev/sda disk using fdisk, use:
+
+```
 fdisk /dev/sda
 ```
 
-Type n to access the creation menu.
-You will be asked to select the kind of partition. For a primary partition, use p, and for an extended or logical partition, use e.
+Press `n` to access the partition creation menu. You will be asked to select the type of partition (primary or extended). For a primary partition, use `p`, and for an extended or logical partition, use `e`.
 
-To remove a /dev/sda partition, use:  
+To create a partition on the `/dev/sda` disk using `gdisk`, use:
 
-```bash
-fdisk /dev/sda
+```
+gdisk /dev/sda
 ```
 
-Type d to access the deletion menu.
+1. Create a new partition by pressing `n`.
 
-After you've set up your partitions, you must create a filesystem to make your disk usable!
+2. Choose whether you want to create a primary or logical partition by pressing `p` or l, respectively.
+
+3. Choose the partition number by typing in a number from 1 to 128.
+
+4. Enter the starting and ending sectors for the partition, or press enter to use the default values.
+
+5. Choose a partition type by pressing `t` and entering the type code or type name.
+
+6. Type `w` to write the changes to the disk and exit `gdisk`.
+
+Note: If you are creating a partition on a disk that already has partitions, you may need to delete or resize existing partitions before creating the new one. To delete a partition, use the d command in gdisk, and to resize a partition, use the n command to create a new partition in the desired size, then delete the old partition.
+
+## Converting MBR to GPT using gdisk
+
+There are times when you might want to convert a disk from one partition table format to another. For example, you might have an MBR disk and want to convert it to GPT, or vice versa. This can be done using certain tools such as gdisk or parted.
+
+To convert an MBR disk to GPT using `gdisk`, follow these steps:
+
+1. First, check the current partition table of the disk using `gdisk -l /dev/sda`
+1. Backup the current partition table by creating a copy of it using `sgdisk -b /dev/sda`
+1. Now, run `gdisk /dev/sda` to open the `gdisk` tool for the `/dev/sda` disk
+1. Press `x` to enter the experts menu and then `z` to zap the GPT data structures on the disk
+1. Press `y` when prompted to confirm that you want to destroy the GPT data structures
+1. Press `n` to create a new GPT data structure on the disk
+1. Press `y` when prompted to confirm that you want to create a new GPT data structure
+1. Now, you can create the partitions on the disk as needed using the n command in the main menu
+1. When you are done creating the partitions, press `w` to write the changes to the disk
+1. Reboot the system and check the partition table using `gdisk -l /dev/sda` to confirm that the conversion was successful
+
+## Challenges
+
+1. What is the difference between MBR and GPT partition tables?
+1. How do you view all disk partitions in Linux?
+1. How do you create a new partition using fdisk?
+1. What is the difference between primary and extended partitions?
+1. How do you delete a partition using fdisk?
+1. What is the purpose of creating a filesystem on a disk?
+1. Can you convert an MBR partition table to a GPT partition table and vice versa? If so, how?
+1. What do the first two or three letters of common disk names represent?
+1. What do the last letter and digits of common disk names represent?
+1. What is the maximum capacity of a disk that can be partitioned with MBR and GPT, respectively?
