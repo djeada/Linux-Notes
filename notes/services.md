@@ -178,10 +178,10 @@ You can read more about targets <a href="https://github.com/djeada/Linux-Notes/b
 ## Challenges
 
 1. List all the SystemD timers on your system and determine which services are enabled.
-1. Set up a DHCP (Dynamic Host Configuration Protocol) server using the isc-dhcp-server package. This service allows clients to automatically obtain network configuration information, such as IP addresses, from a DHCP server.
-1. Set up an NFS (Network File System) server using the nfs-kernel-server package. This service allows clients to access files over a network as if they were stored locally.
-1. Set up an SSH (Secure Shell) server using the openssh-server package. This service allows you to remotely connect to a server over an encrypted connection.
-1. Set up a DNS (Domain Name System) server using the bind9 package. This service translates human-readable domain names into numerical IP addresses.
-1. Set up a mail server using either the postfix or sendmail package. This service handles the delivery of email messages.
-1. Set up a web server using one of the following packages: nginx, apache, caddy, or traefik. This service serves content over the HTTP or HTTPS protocol.
-1. Set up a database server using either the mysql or postgres package. This service allows you to store and manage data in a structured way.
+1. Set up a DHCP (Dynamic Host Configuration Protocol) server using the `isc-dhcp-server` package. This service allows clients to automatically obtain network configuration information, such as IP addresses, from a DHCP server.
+1. Set up an NFS (Network File System) server using the `nfs-kernel-server` package. This service allows clients to access files over a network as if they were stored locally.
+1. Set up an SSH (Secure Shell) server using the `openssh-server` package. This service allows you to remotely connect to a server over an encrypted connection.
+1. Set up a DNS (Domain Name System) server using the `bind9` package. This service translates human-readable domain names into numerical IP addresses.
+1. Set up a mail server using either the `postfix` or `sendmail` package. This service handles the delivery of email messages.
+1. Set up a web server using one of the following packages: `nginx`, `apache`, `caddy`, or `traefik`. This service serves content over the HTTP or HTTPS protocol.
+1. Set up a database server using either the `mysql` or `postgres` package. This service allows you to store and manage data in a structured way.
