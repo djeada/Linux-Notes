@@ -1,53 +1,52 @@
-<h1>tar</h1>
-The tar command can pack single files or all files in a directory tree into one file known as archive, which can be unpacked later.
-An archive is a file that contains other files as well as information about them such as filenames, owners, timestamps, and access rights. 
-By default, tar does not do any compression.
+## The tar command
+The tar command is a useful tool for packing and unpacking files and directories on a Linux system. It allows you to create an archive file that contains multiple files and directories, as well as information about them such as filenames, owners, timestamps, and access rights. By default, tar does not do any compression, but it can be used in conjunction with other tools like gzip to compress the archive.
+
+Here are some common options for using tar:
 
 | Flag | Description |
 | --- | --- |
-| <i>-c</i> | pack |
-| <i>-v</i> | list name of files |
-| <i>-f</i> | pack into file |
-| <i>-z</i> | compress |
-| <i>-x</i> | extract |
+| `-c` | pack |
+| `-v` | list name of files |
+| `-f` | pack into file |
+| `-z` | compress |
+| `-x` | extract |
 
-Important: -f flag should be put before the file name.
+It's important to note that the `-f` flag should be placed before the name of the archive file.
 
-To pack mytree file1 file2 into an archive called myfiles.tar, use:
+To create an archive called "myfiles.tar" that includes the "mytree" directory and the "file1" and "file2" files, you would use the following command:
 
 ```bash
 tar -cvf myfiles.tar mytree file1 file2
 ```
 
-To extract an archive called myfile.tar, use:
+To extract the files from the "myfiles.tar" archive, you would use the following command:
 
 ```bash
 tar -xvf myfiles.tar
 ```
 
-<h1>gzip</h1>
-It is a file compression tool that is used to reduce file size.
+## The gzip command
+
+gzip is a file compression tool that can be used to reduce the size of a file. It's commonly used in conjunction with tar to compress an archive file. Here are some common options for using gzip:
 
 | Flag | Description |
 | --- | --- |
-| <i>-d</i> | decompress files |
-| <i>-l</i> | list compression information |
+| `-d` | decompress files |
+| `-l` | list compression information |
 
-To compress a mytar.tar to  mytar.tar.gz, use:
+To compress the "mytar.tar" file and create a new file called "mytar.tar.gz", you would use the following command:
 
 ```bash
 gzip mytar.tar
 ```
 
-To unpack file_name.gz, use:
+To decompress the "file_name.gz" file, you would use the following command:
 
 ```bash
 gzip -d file_name.gz
 ```
 
-<h1>Challenges</h1>
+## Challenges
 
-1. Create an archive of your home directory with tar. To ensure that everything was included, copy your archives to /tmp and extract the files there. Remove the copies from /tmp.
-
-2. Use tar without and with the -z option to create an archive of any directory. Compare sizes of your original directory, archive, and compressed archive. 
-
+1. Create an archive of your home directory using tar. To ensure that everything was included, copy your archives to the "/tmp" directory and extract the files there. Remove the copies from "/tmp" when you're finished.
+1. Use tar with and without the `-z` option to create an archive of any directory. Compare the sizes of your original directory, the archive, and the compressed archive. 
