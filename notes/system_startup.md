@@ -1,41 +1,28 @@
 # System startup concepts
 
-What happens in Linux between the time you push the power button and the time you see the login prompt? 
+What happens between the time you push the power button and the time you see the login prompt?
 
 ## Bootup process
 
-### BIOS
+### First-stage boot loader
 
-* Basic input output system.
-* Checks the integrity of the system.
-* The boot loader program is searched for, loaded, and executed.
-* To alter the boot sequence, hit a specific key (F12 or F2) during BIOS startup.
+When a computer is turned on, the BIOS (Basic Input Output System) performs a power-on self-test (POST) to check the integrity of the system. The BIOS then searches for, loads, and executes the boot loader program. The boot loader is responsible for transitioning the computer from BIOS to the actual operating system.
 
-### BIOS vs UEFI
+To alter the boot sequence, you may need to press a specific key (such as F12 or F2) during BIOS startup.
 
-* What is the difference? Which one should we support?
-* Both serve as the middle man between hardware and the OS.
-* UEFI is newer program.
-* Usually you have either BIOS or UEFI (Unified Extensible Firmware Interface).
+There are two main types of first-stage boot loaders: BIOS and UEFI (Unified Extensible Firmware Interface). BIOS is the older boot loader program, while UEFI is the newer version. Most computers have either BIOS or UEFI, but not both.
 
 ### MBR
 
-* Master boot record.
-* First sector of bootable disk (/dev/sda or /dev/hda).
-* < 512 bytes.
-* Primary boot loader info.
-* Partition table info.
-* Mbr validation check. 
+The Master Boot Record (MBR) is the first sector of a bootable disk (such as /dev/sda or /dev/hda). It is typically 512 bytes in size and contains:
 
-### GRUB
+* Primary boot loader information.
+* Partition table information.
+* An MBR validation check.
+    
+### Second-stage boot loader
 
-This is hwo the computer transitions from BIOS to the actual OS.
-
-* Grand unified bootloader.
-* Chooses which kernel image should be executed.
-* Displays the splash screen.
-* Has knowledge of the file system.
-* Newer version is GRUB2.
+One of the most common second-stage boot loaders is GRUB (Grand Unified Bootloader). GRUB allows the user to choose which kernel image should be executed and displays a splash screen. It also has knowledge of the file system and is able to load modules, such as those for USB or video card support, into the kernel. The newer version of GRUB is called GRUB2.
 
 | GRUB | GRUB2 |
 | ----------- | ----------- |
@@ -47,29 +34,25 @@ This is hwo the computer transitions from BIOS to the actual OS.
 
 ### Kernel
 
+Once the boot loader has finished its job, the kernel is loaded and executed. The kernel is responsible for mounting the root file system and starting the init process, which is typically run as a daemon with PID 1. Init is responsible for choosing the run level and starting the programs associated with that run level.
+
 The Linux kernel is efficient because it is modular.
 
-* Kernel is started from GRUB.
-* The files responsible for this part are called <code>vmlinux</code> or <code>vmlinuz</code>. Those are static files found on <code>/boot/</code>.
 * Mounts the root file system.
-* Executes init: /sbin/init.
+* Executes init: `/sbin/init`.
 * Then it has access to all modules loaded into the kernel (such as usb or video card).
-* Modules are not part of the static kernel, they are usually placed at <code>/lib/modules/</code>.
+* Modules are not part of the static kernel, they are usually placed at `/lib/modules/`.
 
 ### Init
 
-On Linux, init (short for initialization) is the program that starts all other processes. It is typically run as a daemon with PID 1. 
+Init (short for initialization) is the first process that starts on a Linux system. It is usually run as a daemon with Process ID (PID) 1 and is responsible for:
 
-* Chooses the run level.
-* Configuration file: /etc/inittab.
-* What programs will be loaded on startup.
+* Choosing the runlevel.
+* Reading the configuration file (/etc/inittab) to determine which programs should be loaded on startup.
 
 ### Runlevel
 
-* There is a program associated with every runlevel (system mode).
-* It determines the current type of system (graphical or standalone network, for example).
-* You can switch between them and set the default.
-* Be aware that they differ across Debian and RedHat/Suse.
+A run level is a system mode that determines the type of system being used (e.g. graphical, standalone network). The user can switch between run levels and set the default run level. The available run levels differ between distributions. Common ones include:
 
 | Runlevel | Description |
 | --- | --- |
@@ -99,7 +82,7 @@ To set the default, you have to edit `/etc/inittab`. For example, if you want to
 
 ### Targets
 
-In `SystemD`-based distributions, `targets` replace `runlevels`.
+In `SystemD`-based distributions, `targets` replace `runlevels`.. Targets represent different states that the system can be in, and each target has a set of associated programs that are started or stopped to achieve that state. 
 
 | Target type | Runlevel |
 | --- | --- |
@@ -152,71 +135,93 @@ To set the default target to `multi-user.target`, use:
 systemctl set-default multi-user.target
 ```
 
+Once the programs associated with the chosen run level or target have been started, the system is ready for use and the login prompt is displayed.
+
 ## Kernel panic
+Kernel panic is a state of the operating system when it is unable to function properly, due to an unexpected and critical error in the kernel. This error can be caused by a variety of factors, such as a hardware malfunction, a software bug, or a security vulnerability.
 
-* If nothing was changed on the system, one of the hardware components might be defective.
-* If you recently updated the kernel, you can restore to a previous version. On the upgrade, Linux automatically backs up the old kernel. 
+* If you are not sure what caused the kernel panic, you can try booting the system in single user mode. This will allow you to access the system and run commands as the root user. You can then try to identify the cause of the kernel panic and fix it.
+* If the kernel panic is caused by a hardware issue, you may need to replace the faulty component.
+* If you are unable to boot the system at all due to a kernel panic, you may need to boot from a live CD or USB and try to fix the issue from there. You can also try booting into rescue mode or using a bootable system repair tool to diagnose and fix the issue.
+* It is always a good idea to keep a backup of your system in case of a kernel panic or other issues. This can save you time and effort in the event that you need to restore your system. 
 
-## Useful Commands
+
+## Useful commands
+
+The following commands can be useful when managing your system.
 
 ### Hostname
 
-You may change the system hostname on a `SystemD`-based operating system by manually changing /etc/hostname file or using:
+The hostname is a unique name that identifies your system on a network. You may change the system hostname on a SystemD-based operating system by manually changing `/etc/hostname` file or using:
 
-```bash
+```
 hostnamectl set-hostname your_new_name
+```
+
+To view the current hostname of the system, use:
+
+```
+hostname
 ```
 
 ### Uptime
 
-```bash
+The `uptime` command displays the amount of time that the system has been running. It shows the current time, how long the system has been up, how many users are currently logged in, and the system load averages for the past 1, 5, and 15 minutes.
+
+```
 uptime
 ```
 
 ### Reboot
 
-Reboot system with systemctl:
+To reboot the system, you can use the `reboot` command or the `systemctl reboot` command.
 
-```bash
+```
+# reboot command
+reboot
+
+# systemctl reboot command
 systemctl reboot
 ```
 
-To restart in 5 minutes, use the <i>shutdown</i> command:
+To schedule a reboot at a specific time, use the `shutdown` command with the `-r` flag and specify the time in minutes. For example, to reboot in 5 minutes, use the following command:
 
-```bash
+```
 shutdown -r +5
 ```
 
 ### Shutdown
 
-To power off inmmediately, use the <i>shutdown</i> command:
+To shut down the system, you can use the `shutdown` command or the `systemctl poweroff` command.
 
-```bash
+```
+# shutdown command
 shutdown now
+
+# systemctl poweroff command
+systemctl poweroff
 ```
 
-To power off with systemctl, use:
+To schedule a shutdown at a specific time, use the shutdown command with the `-h` flag and specify the time in minutes. For example, to shut down in 30 minutes, use the following command:
 
-```bash
-systemctl poweroff
+```
+shutdown -h +30
 ```
 
 ## Recover the root password
 
-1. reboot the machine
-1. interrupt grub process typing any key
-1. press 'e' to edit the kernel that you want to init
-1. locate 'linux16' line and add at the end of the line 'rd.break' and press Ctrl-x
-1. the sysroot is mounted as read only filesystem, remount with rw filesystem
-1. mount -o remount,rw /sysroot
-1. chroot /sysroot
-1. use passwd command to change the password
-1. touch /.autorelabel
-1. exit
+1. Reboot the machine.
+1. During the boot process, interrupt the Grub process by pressing any key.
+1. Press `e` to edit the kernel that you want to initialize.
+1. Locate the `linux16` line and add `rd.break` at the end of the line. Press `Ctrl-x` to continue booting.
+1. The sysroot will be mounted as a read-only filesystem. Use the following command to remount it with read-write permissions: `mount -o remount,rw /sysroot`
+1. Change into the sysroot filesystem with the `chroot /sysroot` command.
+1. Use the `passwd` command to change the root password.
+1. Run the command `touch /.autorelabel` to reset the SELinux context labels on the filesystem.
+1. Exit the chroot environment with the `exit` command.
 
 ## Challenges
 
-1. Run the <i>reboot</i> command. Use the <i>uptime</i> command to ensure that your server was restarted.
-1. Use <i>hostnamectl set-hostname</i> to rename your server. Run, <i>hostname</i>, to confirm that the operation was successful.
-1. While the machine is booting up, interupt the process and change the root password.
+1. Run the `reboot` command to restart your server. You can use the `uptime` command to verify that the machine has been restarted.
+1. Use the `hostnamectl set-hostname` command to rename your server. You can then use the `hostname` command to confirm that the operation was successful.
 1. Recover the root password.
