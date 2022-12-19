@@ -46,7 +46,7 @@ This repository contains information that has been gathered over the years as th
 * <a href="https://github.com/djeada/Linux/blob/main/notes/dwm.md">Dynamic window manager</a>
 * <a href="https://github.com/djeada/Linux-Notes/blob/main/notes/utilities.md">Utilities</a>
 
-## Bibliography
+## Refrences
 
 * Evi Nemeth, Garth Snyder, Trent R. Hein, Ben Whaley "<i>UNIX and Linux System Administration Handbook</i>"
 * Æleen Frisch "<i>Essential System Administration</i>"
