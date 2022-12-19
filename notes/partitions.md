@@ -75,8 +75,8 @@ To convert an MBR disk to GPT using `gdisk`, follow these steps:
 1. Press `x` to enter the experts menu and then `z` to zap the GPT data structures on the disk
 1. Press `y` when prompted to confirm that you want to destroy the GPT data structures
 1. Press `n` to create a new GPT data structure on the disk
-1. Press `y` when prompted to confirm that you want to create a new GPT data structure
-1. Now, you can create the partitions on the disk as needed using the n command in the main menu
+1. Press `y` when prompted to confirm 
+1. Now, you can create the partitions on the disk as needed using the `n` command in the main menu
 1. When you are done creating the partitions, press `w` to write the changes to the disk
 1. Reboot the system and check the partition table using `gdisk -l /dev/sda` to confirm that the conversion was successful
 
