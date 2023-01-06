@@ -1,3 +1,6 @@
+## Log files and journals
+Logging is a crucial aspect of system administration on Linux systems. With the right logging tools and techniques, you can track important events, troubleshoot issues, and ensure the smooth operation of your system. There are several types of logging methods available on Linux, including text files, Journald, and Rsyslog. These tools allow you to store and manage log messages with varying levels of severity, from critical errors to informative messages. The logger utility and logrotate can help you streamline your logging process, while Journald is a powerful logging tool specifically designed for systemd-based systems. By leveraging these logging tools, you can gain valuable insights into your system's performance and keep it running smoothly.
+
 ## Types of logging
 
 There are several types of logging methods that can be used on a Linux system:
