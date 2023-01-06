@@ -1,3 +1,7 @@
+## Files and dirs
+
+Are you ready to dive deeper into the Linux file system and learn how to navigate and manipulate files and directories like a pro? In this article, we'll cover the basics of absolute and relative paths, and how to use commands like `pwd`, `cd`, and `ls` to move around the file system. We'll also introduce the concept of expansion and globs. By the end of this article, you'll have a solid foundation for exploring and managing the Linux file system with confidence.
+
 ## Absolute and Relative Paths 
 
 A  path is a way to specify the location of a file or directory. There are two ways to specify a path:
@@ -39,7 +43,7 @@ The cd command allows you to change your current working directory to another di
 
 ```
 cd ~
-```
+```Are you ready to dive deeper into the Linux file system and learn how to navigate and manipulate files and directories like a pro? In this article, we'll cover the basics of absolute and relative paths, and how to use commands like pwd, cd, and ls to move around the file system. We'll also introduce the concept of hard and soft links, and show you how to create and delete them. Next, we'll delve into file permissions and how to modify them using the chmod command. Finally, we'll introduce the powerful find command, which allows you to search for files based on various criteria. By the end of this article, you'll have a solid foundation for exploring and managing the Linux file system with confidence.
 
 ### List Directory Contents (ls)
 
