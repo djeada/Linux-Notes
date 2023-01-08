@@ -4,7 +4,7 @@ In Unix, shells are programs that interpret user input and translate it into com
 
         user input -> shell -> kernel -> hardware
 
-There are several different shells available, including `bash`, `zsh`, `ksh`, `tcsh`, and `sh`. `Bash` is the default shell on most Linux distributions.
+There are several different shells available, including `zsh`, `ksh`, `tcsh`, and `sh`. `Bourne-Again Shell (bash)` is the default shell on most Linux distributions.
 
 You can view a list of available shells on your system by looking at the `/etc/shells` file. This file will contain a list of paths to all the shells installed on the system. For example, the output of `cat /etc/shells` might look like this:
 
