@@ -37,7 +37,7 @@ You may want to mount an ISO image as if it were a DVD on your optical drive. To
 mount -o loop myfiles.iso /mnt/iso
 ```
 
-<h1>Verify that the drive is visible</h1>
+## Verify that the drive is visible
 Use the following command to list all accessible disks, including mounted and unmounted drives: 
 
 ```bash
