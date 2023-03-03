@@ -1,5 +1,9 @@
 # Networking
-Networking is an essential part of modern computing, allowing devices to communicate and exchange data with each other. In this article, we'll dive into some of the key concepts and terms you need to know to navigate the world of networking. From understanding how network interfaces connect devices to networks, to learning how IP addresses and MAC addresses uniquely identify devices, to discovering how DHCP simplifies the process of assigning IP addresses, this article has you covered. Plus, we'll introduce some powerful networking commands that you can use to manage and troubleshoot your connections. Get ready to master the basics of networking!
+Networking is the backbone of modern computing, enabling devices to communicate and share data with each other. In this notes, we'll take a deep dive into the fascinating world of networking and explore some of the essential concepts and terms you need to know to navigate it like a pro.
+
+We'll start by discussing network interfaces, which are the physical or virtual connections that link devices to networks. We'll then explore IP addresses and MAC addresses, which are unique identifiers that allow devices to communicate with each other over the network. We'll show how to assign IP addresses manually, as well as how DHCP can automate the process and make your life easier.
+
+We'll also introduce some powerful networking commands that anyone can use to manage and troubleshoot your connections. From ping to traceroute, these tools are helpful to diagnose and fix network issues.
 
 ## Basic networking terms
 
