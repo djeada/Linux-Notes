@@ -5,7 +5,7 @@ In addition to the notes, each section includes a handful of challenges that can
 
 This repository contains information that has been gathered over the years as the author has practiced different topics in Linux. We hope these notes and resources are helpful as you learn about and work in DevOps industry. Let us know if you have any questions.
 
-![linux](https://user-images.githubusercontent.com/37275728/213444939-fe06f944-e30c-448d-b63e-57cd85ae8fd5.png)
+![linux](https://user-images.githubusercontent.com/37275728/222826212-fc2dea16-5926-4b22-9596-ec3cc5d6690d.png)
 
 ## Available notes
 
