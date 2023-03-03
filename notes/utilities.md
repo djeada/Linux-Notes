@@ -1,6 +1,6 @@
 ## Utilities in Linux
 
-This notes discuss various tools that can be used on Linux systems for tasks such as taking screenshots, recording screens, preparing bootable sticks, and detecting malware. It provides brief explanations of each tool and includes installation and usage instructions.
+These notes discuss various tools that can be used on Linux systems for tasks such as taking screenshots, recording screens, preparing bootable sticks, and detecting malware. It provides brief explanations of each tool and includes installation and usage instructions.
 
 ## Taking Screenshots with Scrot
 
