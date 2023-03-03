@@ -1,5 +1,5 @@
 ## The Ultimate Guide to Linux Disk Usage Management
-Are you tired of running out of disk space on your Linux system? Look no further! In this article, we'll introduce you to the `df` and `du` commands, the ultimate tools for managing disk usage on your system. With these powerful commands at your fingertips, you'll be able to keep track of your disk space usage, identify any bottlenecks, and take control of your system's storage like never before.
+In these notes, we'll cover the basics of the `df` and `du` commands, including how to use them to check disk usage, identify large files and directories, and free up disk space. Additionally, we'll provide some tips and tricks to help you optimize your disk space usage and avoid running out of space in the future.
 
 ## The df command
 
