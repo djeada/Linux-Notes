@@ -3,7 +3,7 @@ Networking is the backbone of modern computing, enabling devices to communicate 
 
 We'll start by discussing network interfaces, which are the physical or virtual connections that link devices to networks. We'll then explore IP addresses and MAC addresses, which are unique identifiers that allow devices to communicate with each other over the network. We'll show how to assign IP addresses manually, as well as how DHCP can automate the process and make your life easier.
 
-We'll also introduce some powerful networking commands that anyone can use to manage and troubleshoot your connections. From ping to traceroute, these tools are helpful to diagnose and fix network issues.
+We'll also introduce some powerful networking commands that anyone can use to manage and troubleshoot your connections. From `ping` to `traceroute`, these tools are helpful to diagnose and fix network issues.
 
 ## Basic networking terms
 
