@@ -1,54 +1,44 @@
-# Command Information and Navigation
+## Command Information and Navigation
 
-An overview of various commands and tools for finding and accessing information about command line utilities in Linux. It covers the history, man, and apropos commands, as well as tips for navigating and using the terminal. 
+Overview of commands and tools for finding information about command line utilities in Linux. Covers history, man, apropos commands, and terminal navigation tips.
 
 ## History and Navigation
 
-The history command allows you to view the most recently used commands. You can specify the number of commands to display (it is generally between 1000 and 5000). Use `Ctrl+R` to search through your command history. You can also execute a specific command from the history using `!number` (where number is the number of the command in the history) or `!text` (where text is the beginning of the command you want to execute). Note that lines that begin with a space character are not saved in the history list.
+- `history` command: view recent commands
+- `Ctrl+R`: search command history
+- `!number` or `!text`: execute specific command from history
+- Lines with space at beginning not saved in history
+- `history -c`: clear history
+- `history -w`: delete bash history contents
+- `up arrow key` and `down arrow key`: navigate previous commands
+- `tab key`: complete command
 
-To clear the history, use the `history -c` command. To delete the contents of the bash history, use `history -w`.
+## The Manual (man)
 
-You can navigate through previously used commands in the terminal using the `up arrow key` and `down arrow key`. The `tab key` can also be used to complete a command.
-
-## The Manual
-
-The man command (short for manual) allows you to view the documentation for various built-in command line utilities. The manual is organized into sections, each corresponding to a different type of utility:
-
-| Number | Description |
-| --- | --- |
-| **`1`** | executable programs or shell commands |
-| `2` | system calls |
-| `3` | library calls |
-| `4` | special files |
-| **`5`** | file formats and conventions |
-| `6` | games |
-| `7` | misc |
-| **`8`** | system administration (root) commands |
-| `9` | kernel routines |
-
-To display the man page for the `ls` command, you would enter the following in the terminal:
-
-```
-man ls
-```
-
-This will display the documentation for the `ls` command in the terminal, with details about its options, usage, and examples. You can navigate the man page using the up and down arrow keys, and you can exit the man page by pressing `q`.
-
-You can also specify a specific section of the man pages to view using the `-s` flag followed by the section number. For example, to view the man page for the `ls` command in section 1 (executable programs or shell commands), you would use the following command:
-
-```
-man -s 1 ls
-```
+- `man`: view documentation for command line utilities
+- Sections in manual:
+  - `1`: executable programs or shell commands
+  - `2`: system calls
+  - `3`: library calls
+  - `4`: special files
+  - `5`: file formats and conventions
+  - `6`: games
+  - `7`: miscellaneous
+  - `8`: system administration (root) commands
+  - `9`: kernel routines
+- `man ls`: display man page for `ls` command
+- `man -s 1 ls`: display man page for `ls` command in section 1
 
 ## Apropos
 
-If you know a few keywords related to a command but can't remember the specific command, you can use the `apropos` command to search for it. For example, `apropos zip` will display a list of commands related to zip files.
+- `apropos`: search for commands using keywords
+- Example: `apropos zip`
 
 ## Challenges
 
-1. How can you find the command used to create a file?
-1. Use the man command to display the description of the `cat` command.
-1. Increase the number of commands your command history "remembers" to 3000.
-1. Show the last five commands you typed.
-1. When you close the shell, where do the history commands go?
-1. What happens to the history when you have multiple terminals open?
+1. Find a way to determine the command used to create a file.
+2. Display the description of the `cat` command using the man command.
+3. Increase the number of commands your command history "remembers" to 3000.
+4. Show the last five commands you typed.
+5. When you close the shell, where do the history commands go?
+6. What happens to the history when you have multiple terminals open?
