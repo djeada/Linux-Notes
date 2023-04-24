@@ -1,8 +1,8 @@
 ## Standard Streams
 
-* `stdin` refers to the default source of input for a command. It is typically the keyboard, but it can also be a file or the output of another command.
-* `stdout` refers to the default destination for a command's output. It is typically the terminal screen, but it can also be a file or the input of another command.
-* `stderr` is a separate output stream for error messages. It is also typically the terminal screen, but it can also be redirected to a file or the input of another command.
+* `stdin`: Default input source, usually keyboard.
+* `stdout`: Default output destination, usually terminal screen.
+* `stderr`: Separate output stream for error messages.
 
 ## Pipe
 
@@ -98,13 +98,13 @@ Keep in mind that the script command has its own limitations and may not work wi
 
 Filters are commands that are designed to be used with a pipe (`|`) to process the output of another command. These filters are relatively small programs that accomplish one specific task very well. Some common filters include:
 
-* `sort`: Sorts the lines from a collection of files alphabetically or numerically. You can use the `-n` flag to sort numerically and the `-r` flag to sort in reverse order.
-* `uniq`: Removes adjacent duplicate lines from a sorted file. The `-c` flag prefixes the output with a count of the number of occurrences of each line.
-* `cut`: Selects specific columns or fields from each line of a file based on a delimiter (such as a tab or a comma) or a range of bytes, characters, or fields. The `-d` flag specifies the delimiter, and the `-f` flag specifies the fields to include.
-* `tr`: Replaces or deletes specific characters or ranges of characters in input text. You can use the `-d` flag to delete characters and the `-s` flag to squeeze multiple occurrences of the specified characters into a single instance.
-* `wc`: Counts the number of lines, words, and characters in input text. The `-l` flag counts lines, the `-w` flag counts words, and the `-c` flag counts characters.
-* `grep`: Searches for specific patterns or regular expressions in input text and prints lines that match the pattern. You can use the `-v` flag to invert the match and print lines that do not contain the pattern.
-* `awk`: Searches for patterns in input text and performs actions on the lines that match the pattern. You can use awk to extract specific fields from a file, perform calculations, and print custom output.
+- `sort`: Sort lines alphabetically or numerically.
+- `uniq`: Remove adjacent duplicate lines from a sorted file.
+- `cut`: Select specific columns or fields from each line.
+- `tr`: Replace or delete specific characters or ranges of characters.
+- `wc`: Count the number of lines, words, and characters.
+- `grep`: Search for specific patterns or regular expressions.
+- `awk`: Search for patterns and perform actions on matching lines.
     
 Here are some examples of how these filters can be used:
 
@@ -124,8 +124,8 @@ awk '/error/{print NR, $0}' deduped.txt
 
 ## Challenges
 
-1. Determine the number of users currently logged into the system.
-1. Generate a sorted list of all system users, including those who are not currently logged in.
-1. Create a list of all filenames ending in `.conf` located in the `/etc` directory, and sort them by string length.
-1. Print the first and seventh columns of the `/etc/passwd` file side by side.
-1. Display each word from the `/etc/fstab` file on a separate line, and count the number of lines in the file.
+1. Find the number of users currently logged in.
+2. Generate a sorted list of all system users.
+3. List `.conf` filenames in `/etc` directory, sorted by string length.
+4. Print first and seventh columns of `/etc/passwd` file.
+5. Display each word from the `/etc/fstab` file on a separate line, and count the number of lines in the file.
