@@ -8,27 +8,27 @@
 
 Many commands default to printing to "standard output," which is the terminal screen. The pipe character (`|`) is used to redirect or divert output to another program or filter.
 
-For example, to display information about a user named "user_name," you can use the w command, but instead of displaying their username, you can show "admin" by using grep and sed to filter and modify the output:
+For example, to show details about a person called "user_name," use the w command, and change "user_name" to "admin" like:
 
 ```bash
 w | grep user_name | sed s/user_name/admin/g
 ```
 
-You can also use the pipe to send the output of one command as the input of another command. For example, the following syntax is used to send an email to a remote client, with the email's body being the current time and date:
+You can also send the result of one command into another command. For example, this code sends an email with the current time and date:
 
 ```bash
 date | mail -s "This is a remote test" user1@rhhost1.localnet.com
 ```
 
-Besides standard piping of stdout (`|`) there is also option to pipe the stdout and stderr (`|&`).
+There are different ways to send results (`|` and `|&`).
 
-For example, to pipe both stdout and stderr to `grep` command, use:
+To send both normal and error results to `grep` command, use:
 
 ```bash
 ls -l |& grep "\.txt$"
 ```
 
-For example, to pipe both stdout and stderr to `tee` command, which writes to both the screen and a file, use:
+To send both normal and error results to `tee` command, which shows on the screen and saves to a file, use:
 
 ```bash
 ls -l |& tee output.txt
@@ -36,45 +36,50 @@ ls -l |& tee output.txt
 
 ## Redirect
 
-The `>` operator is used to redirect standard output to a file rather than the screen. For example:
+Use `>` to send results to a file instead of the screen:
 
 ```bash
 echo "hello" > file.txt
 ```
 
-If the file already exists, the contents of the file will be deleted. Instead, you can use the `>>` operator to append the command's output to the file:
+If the file is there already, the old contents will be deleted. You can use `>>` to add the new result to the file:
 
 ```bash
 echo "Hello" > file.txt
 echo "World!" >> file.txt
 ```
 
-To capture standard error, you can prefix the `>` operator with a 2 (under UNIX, file numbers 0, 1, and 2 are assigned to standard input, standard output, and standard error, respectively). For example:
+To save error results, use `2>`:
 
 ```bash
 less non_existent_file 2> file.txt
 ```
 
-You can also append standard error to a file using `2>>` instead of `>`.
+You can also add error results to a file using `2>>`.
 
-To redirect both standard output and standard error to a single file, you can use the `&>` operator to overwrite the file, or `&>>` to append to the file.
+To save both normal and error results to one file, use `&>` to overwrite the file, or `>>` to add to the file.
 
-To view the output of a command on the screen and save it to a file at the same time, you can use the `tee` command. For example, to overwrite the file output.txt, you can use `tee output.txt`, or to append to the file, you can use `tee -a output.txt`.
+To see the result on the screen and save it to a file at the same time, use the `tee` command:
+
+```bash
+command | tee output.txt
+command | tee -a output.txt
+```
 
 ### A workaround for buffering 
 
-Buffering occurs when a program holds onto its output in a buffer rather than immediately sending it to its destination. This can cause issues when trying to redirect the output of a command, as the buffered output may not be immediately available.
+Buffering is when a program keeps its result in a buffer before sending it. This can make problems when trying to save the result.
 
-A possible workaround for this is to use the script command, which allows you to capture the output of a command to a file or to a variable in your shell script. For example, to capture the output of a command to a variable called output, you can use the following syntax:
+You can use the script command to fix this. It lets you save the result of a command to a file or a variable. For example, to save the result of a command to a variable called output, do this:
 
 ```bash
 output=$(script -c command_you_want_to_use /dev/null)
 echo "$output"
 ```
 
-The -c option specifies the command to run, and the /dev/null argument redirects any input to the command to the null device, which discards it. The output of the command is captured in the output variable, which can then be displayed or processed as needed.
+The `-c` option tells what command to run. The `/dev/null` part sends any input to the command to a place that throws it away. The result is saved in the output variable, and you can show or use it as needed.
 
-Keep in mind that the script command has its own limitations and may not work with all programs. In these cases, you may need to use other techniques or tools to capture the output of the command.
+Remember that the script command might not work with all programs. In these cases, you might need to use other ways or tools to save the result.
 
 ## Complete summary
   
