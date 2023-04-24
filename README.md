@@ -1,9 +1,9 @@
 # Linux
-Welcome to the Linux Notes repository! Here you will find various notes and tutorials on different topics related to Linux. The notes are organized into sections, and the sections are further organized into subsections. The difficulty level of the notes varies from beginner to advanced.
+Welcome to the Linux Notes repository! Here, you will find many notes and simple guides about different Linux topics. The notes are put into parts, and those parts have smaller parts too. The notes can be for beginners or more advanced users.
 
-In addition to the notes, each section includes a handful of challenges that can be used to evaluate your comprehension of the topic. You can skip around to different sections as needed, as not all sections are connected.
+Besides the notes, each part has a few challenges to test how well you understand the topic. You can choose different parts as needed, because not all parts are linked.
 
-This repository contains information that has been gathered over the years as the author has practiced different topics in Linux. We hope these notes and resources are helpful as you learn about and work in DevOps industry. Let us know if you have any questions.
+This place has information collected over time by the author while learning Linux topics. We hope these notes and tools help you learn and work in the DevOps field. Ask us if you have any questions.
 
 ![linux](https://user-images.githubusercontent.com/37275728/222826212-fc2dea16-5926-4b22-9596-ec3cc5d6690d.png)
 
