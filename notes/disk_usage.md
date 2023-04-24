@@ -1,6 +1,6 @@
 ## Linux Disk Usage Management Guide
 
-Learn the basics of `df` and `du` commands for checking disk usage, finding large files and directories, and freeing up disk space. Also, get tips to optimize disk space usage and avoid running out of space.
+These notes go over the basics of `df` and `du` commands for checking disk usage, finding large files and directories, and freeing up disk space.
 
 ## The df command
 
