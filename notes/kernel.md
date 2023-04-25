@@ -1,10 +1,10 @@
 ## What is a kernel?
 
-A kernel is the central part of an operating system that manages computer hardware and software resources. It controls the CPU, allocates memory, accesses data, and schedules processes. The kernel is the first software to run when a computer starts and is protected in memory so other programs can't overwrite it. You can add modules to the kernel to customize its functions.
+A kernel is the main piece of a computer's system that handles the computer's parts and programs. It takes care of the computer's brain, sets aside memory, gets information, and organizes tasks. The kernel is the first thing to work when a computer turns on and is kept safe so other things can't mess with it. You can put extra pieces into the kernel to change how it works.
 
 ## Kernel architecture
 
-There are several types of kernel architectures, including monolithic, microkernel, and hybrid. The Linux kernel is a monolithic kernel, like the UNIX system. Monolithic kernels include CPU, memory, and interprocess communication (IPC) functions, as well as device drivers, system server calls, and file system management. The Linux kernel is shared between different Linux distributions.
+There are different ways to build a kernel, like monolithic, microkernel, and hybrid. The Linux kernel is a monolithic one, similar to the UNIX system. Monolithic kernels have parts for the computer's brain, memory, and talking between tasks. They also handle things like devices, system requests, and file organization. The Linux kernel is used in different versions of Linux.
 
 ### Differences from other UNIX kernels
 
@@ -55,9 +55,9 @@ uname -a
 1. Systemd starts the default target unit, typically a GUI for desktop environments or a command-line interface for servers.
 
 ## Kernel modules
-Kernel modules are pieces of code that can be loaded and unloaded into the kernel at runtime, without needing to recompile the kernel. They provide additional functionality to the kernel and support a wide range of hardware and software devices.
+Kernel modules are small chunks of code that you can insert or take out from the kernel while the computer is running, without having to modify the core kernel code. These modules extend the kernel's capabilities, allowing it to communicate with a wide variety of hardware and software devices more effectively.
 
-To work with kernel modules, you can use the following commands:
+To interact with kernel modules and manage them, you can use a set of specific commands designed for this purpose:
 
 * `lsmod`: This command lists all currently loaded kernel modules.
 * `modprobe`: This command loads a kernel module into the kernel.
@@ -66,10 +66,9 @@ To work with kernel modules, you can use the following commands:
 * `dkms`: This command is used to manage DKMS-controlled kernel modules. It can be used to install, remove, and build kernel modules.
 
 ## DKMS
+The Dynamic Kernel Module Support (DKMS) is a way to help kernel modules work with new kernels when they are added to the computer. This is helpful because you don't need to build the modules again every time you get a new kernel.
 
-The Dynamic Kernel Module Support (DKMS) is a system that allows kernel modules to be automatically rebuilt when a new kernel is installed. This is useful because it allows kernel modules to be used across different kernels without the need to manually rebuild them each time a new kernel is installed.
-
-To use DKMS, you need to have the dkms package installed on your system. 
+To use DKMS, you need to have the dkms package on your computer.
 
 On Debian based systems:
 
