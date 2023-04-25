@@ -123,6 +123,6 @@ module load python/3.8
 2. Create a directory in `/etc/modulefiles` for a new application.
 3. Create a modulefile for a specific version of the application in the new directory.
 4. Use the `module` command to load the application version from the created modulefile.
-5. Unload the module using the `module` command.
-6. List available modules on the system using the `module` command.
-7. Unload all loaded modules using the `module` command.
+5. Unload any loaded module.
+6. List available modules on the system.
+7. Unload all loaded modules.
