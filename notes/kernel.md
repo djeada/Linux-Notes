@@ -1,11 +1,12 @@
 ## What is a kernel?
 
-A kernel is the central component of an operating system that manages the hardware and software resources of a computer. It is responsible for controlling the CPU, allocating memory, accessing data, and scheduling processes. The kernel is the first software to run when a computer starts up and is loaded into protected memory to prevent it from being rewritten by other programs. The functionality of the kernel can be extended by adding modules to it, allowing users to fine-tune their kernel settings.
+A kernel is the central part of an operating system that manages computer hardware and software resources. It controls the CPU, allocates memory, accesses data, and schedules processes. The kernel is the first software to run when a computer starts and is protected in memory so other programs can't overwrite it. You can add modules to the kernel to customize its functions.
 
 ## Kernel architecture
 
-There are several types of kernel architectures, including monolithic, microkernel, and hybrid. The Linux kernel is a monolithic kernel, similar to the UNIX system. Monolithic kernels include not only the CPU, memory, and interprocess communication (IPC) functions, but also device drivers, system server calls, and file system management. The Linux kernel is shared between different Linux distributions.
-Differences from other UNIX kernels
+There are several types of kernel architectures, including monolithic, microkernel, and hybrid. The Linux kernel is a monolithic kernel, like the UNIX system. Monolithic kernels include CPU, memory, and interprocess communication (IPC) functions, as well as device drivers, system server calls, and file system management. The Linux kernel is shared between different Linux distributions.
+
+### Differences from other UNIX kernels
 
 * Linux allows kernel modules to be loaded dynamically.
 * Linux has an object-oriented device model that includes device classes, hot-pluggable events, and a user-space device file system.
@@ -17,20 +18,21 @@ Differences from other UNIX kernels
 
 ## Components of the Linux kernel
 
-* A system call interface (SCI) is an overlay that enables function calls from user space into the kernel. This interface may be specific to the architecture.
-* Process management is responsible for the execution of processes, also known as threads in the kernel, which represent individual virtualizations of the processor.
-* Memory management involves techniques for managing available memory, as well as hardware capabilities for physical and virtual mappings. Linux also includes swap space.
-* The virtual file system provides a standard interface abstraction for file systems, serving as a bridge between the system call interface and the file systems provided by the kernel.
-* The network stack is a tiered architecture based on protocols.
-* Device drivers make specific hardware devices operational and make up a significant portion of the Linux kernel's source code.
-* Architecture-dependent code is dependent on the architecture on which it operates and must take the architectural design into account for proper functioning and efficiency.
-
+* System call interface (SCI): An overlay that enables function calls from user space into the kernel.
+* Process management: Manages the execution of processes or threads in the kernel, which represent individual virtualizations of the processor.
+* Memory management: Manages available memory, physical and virtual mappings, and swap space.
+* Virtual file system: Provides a standard interface abstraction for file systems.
+* Network stack: A tiered architecture based on protocols.
+* Device drivers: Make specific hardware devices operational.
+* Architecture-dependent code: Code that depends on the architecture it operates on.
 
 ## Monitoring the kernel
 
-* The dmesg command (alternatively `journalctl --dmesg`) allows users to view the kernel ring buffer. The kernel ring buffer holds information such as device driver initialization messages, hardware messages, and kernel module messages.
-* The `/proc` directory, also known as the `/proc` filesystem, contains a hierarchical set of special files that reflect the current state of the kernel, allowing users and programs to see what the kernel sees.
-* The `uname` command provides users with important system information. The following flags can be used with uname:
+* Use `dmesg` or `journalctl --dmesg` to view the kernel ring buffer.
+* The `/proc` directory contains special files that reflect the current state of the kernel.
+* Use the `uname` command to get important system information, like kernel version.
+
+The following flags can be used with `uname`:
 
 | Flag | Description |
 | ---- | ----------- |
@@ -45,20 +47,15 @@ For example to check the current kernel version, use the following command:
 ```
 uname -a
 ```
-
 ## Startup process
-The boot procedures (BIOS or UEFI, MBR, and GRUB) complete system startup by loading the kernel into memory and connecting it to the initial ramdisk (initrd or initramfs), after which systemd is launched.
 
-After the kernel is loaded into memory and connected to the initial ramdisk (initrd or initramfs), the startup process continues with the launch of systemd.
-
+1. BIOS or UEFI, MBR, and GRUB complete system startup by loading the kernel into memory and connecting it to the initial ramdisk (initrd or initramfs).
 1. Systemd initializes the system and loads system services.
-1. Systemd activates all enabled target units. Target units are high-level units that group together related services and are used to boot the system into a particular state.
-1. Systemd starts the default target unit, which is typically the graphical user interface (GUI) for desktop environments or a command-line interface for servers.
-
-The startup process can be customized by modifying the target units and system services that are activated during boot. This can be done through the use of systemd configuration files, which are written in a declarative language and control the behavior of systemd and the services it manages.
+1. Systemd activates all enabled target units, which are high-level units that group together related services.
+1. Systemd starts the default target unit, typically a GUI for desktop environments or a command-line interface for servers.
 
 ## Kernel modules
-Kernel modules are pieces of code that can be loaded and unloaded into the kernel at runtime, without the need to recompile the kernel. They provide additional functionality to the kernel and are used to support a wide range of hardware and software devices.
+Kernel modules are pieces of code that can be loaded and unloaded into the kernel at runtime, without needing to recompile the kernel. They provide additional functionality to the kernel and support a wide range of hardware and software devices.
 
 To work with kernel modules, you can use the following commands:
 
