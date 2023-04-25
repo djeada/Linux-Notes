@@ -1,6 +1,6 @@
 ## Linux Firewalls
 
-A firewall is a security feature that protects your computer from unauthorized access. It controls incoming and outgoing network traffic based on predetermined security rules. In Linux, there are several utilities to manage your firewall, including `iptables`, `ufw`, and `firewalld`.
+A firewall is like a guard for your computer. It keeps your computer safe from others who shouldn't use it. It checks the information going in and out and follows safety rules. In Linux, there are several utilities to manage your firewall, including `iptables`, `ufw`, and `firewalld`.
 
 ## Iptables
 
@@ -24,7 +24,7 @@ To delete a rule, use the `-D` flag followed by the rule number (as displayed by
 iptables -D INPUT 2
 ```
 
-Remember that changes made to the firewall rules using iptables are not persistent, meaning they won't survive a reboot. To make the changes persistent, save the rules to a file and restore them on startup.
+Keep in mind that changes to the safety guard's rules with iptables don't last when you restart your computer. To keep the changes, save them in a file and bring them back when your computer starts.
 
 ## UFW
 
