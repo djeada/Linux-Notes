@@ -1,26 +1,26 @@
-## The grep Utility
+## The grep tool
 
-The grep command is a powerful tool for searching through text-based files for lines that match a specific pattern. It is commonly used to search for specific words or phrases within a file or group of files, but it is also capable of using regular expressions for more advanced searching. By default, grep prints out the lines that match the search pattern, but it has a variety of options for controlling its output.
+Grep helps to search for specific words or phrases in text files. It can also use regular expressions for advanced searching.
 
-To search for the word key in a file named `file_name.txt`, you can use the following command:
+To search for the word "key" in a file called `file_name.txt`, use this command:
 
 ```
 grep key file_name.txt
 ```
 
-## Flags
+## Options
 
-grep has a number of options, or "flags," that allow you to customize its behavior. Some useful flags include:
+Grep has options called "flags" that can change how it works. Some useful flags are:
 
-| Flag | Description |
-| ------ | ----------- |
-| `-c` | count the number of lines matching the pattern |
-| `-i` | ignore case when searching |
-| `-v` | print the lines that do not match the pattern |
-| `-n` | print the line number before each match |
-| `-e` | specify a pattern to match |
+| Flag | What it does |
+| ---- | ------------ |
+| `-c` | count lines that match |
+| `-i` | don't care about upper or lower case |
+| `-v` | show lines that don't match |
+| `-n` | show line number before each match |
+| `-e` | choose a pattern to match |
 
-For example, to search for either of the patterns `pattern1` and `pattern2` in the file file_name, you can use the following command:
+For example, to search for `pattern1` or `pattern2` in a file, use this command:
 
 ```
 grep -e 'pattern1' -e 'pattern2' file_name
@@ -55,17 +55,17 @@ grep -E 'a(bc|def)' file_name
 
 ## Regular Expressions
 
-grep can also use regular expressions to match patterns in the text. Regular expressions are a set of symbols that can be used to define a pattern for searching. Some common regular expression symbols include:
+Regular expressions are symbols that help define a pattern for searching. Some common symbols are:
 
-| Symbol | Description |
-| ------ | ----------- |
-| `.` | match any single character (except for a newline) |
-| `^` | match the start of the line |
-| `$` | match the end of the line |
-| `*` | match the preceding character zero or more times |
-| `\` | escape the following character |
+| Symbol | What it does |
+| ------ | ------------ |
+| `.` | match any character (except newline) |
+| `^` | match start of the line |
+| `$` | match end of the line |
+| `*` | match previous character many times |
+| `\` | escape next character |
 | `()` | match a set of regular expressions |
-| `?` | match the preceding character zero or one time |
+| `?` | match previous character once or not at all |
 
 For example, to search for lines in the file /opt/test.txt that begin with the character #, you could use the following command:
 
@@ -87,19 +87,19 @@ grep ab[cz] /opt/test.txt
 
 ## Quantifiers
 
-Regular expression quantifiers allow you to specify the number of instances of a character or pattern that should be matched. Some common quantifiers include:
+Quantifiers help specify how many times a character or pattern should match. Some common quantifiers are:
 
-| Symbol | Description |
-| ------ | ----------- |
-| `*` | match the preceding character zero or more times |
-| `?` | match the preceding character zero or one time |
-| `+` | match the preceding character one or more times |
-| `{n}` | match the preceding character exactly n times |
-| `{n,}` | match the preceding character at least n times |
-| `{,m}` | match the preceding character at most m times |
-| `{n,m}` | match the preceding character from n to m times |
+| Symbol | What it does |
+| ------ | ------------ |
+| `*` | match previous character many times |
+| `?` | match previous character once or not at all |
+| `+` | match previous character one or more times |
+| `{n}` | match previous character exactly n times |
+| `{n,}` | match previous character at least n times |
+| `{,m}` | match previous character at most m times |
+| `{n,m}` | match previous character from n to m times |
 
-For example, the following regular expression will match any word with 8 to 12 characters in length:
+For example, to find words with 8 to 12 letters, use this command:
 
 ```bash
 grep -nE "[[:alpha:]]{8,12}" file_name
@@ -107,8 +107,8 @@ grep -nE "[[:alpha:]]{8,12}" file_name
 
 ## Challenges
 
-1. List all files and subdirectories in the current directory, and use grep to filter out any hidden files or subdirectories that do not contain the word test.
-1. Search through your command history for any commands that contain the word clone and were executed within the last week.
-1. Check if a user with name `adam` exists in the system, and display their home directory and default shell if they do.
-1. Search for lines in a file called `file.txt` that contain the word "apple", and count the number of lines that match.
-1. Search for lines in a file called `file.txt` that match the regular expression pattern `[A-Z]{3}`, and print the lines in uppercase.
+1. Show files and folders in the current directory, but don't show hidden ones without the word "test".
+2. Find commands with the word "clone" that were used in the last week.
+3. Check if a user named adam exists, and show their home folder and default shell if they do.
+4. Find lines with the word "apple" in a file called `file.txt`, and count the lines.
+5. Find lines with the pattern `[A-Z]{3}` in a file called `file.txt`, and show the lines in uppercase.
