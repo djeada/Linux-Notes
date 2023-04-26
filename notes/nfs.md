@@ -125,13 +125,13 @@ mount
     
 ## Challenges
 
-1. What is NFS and how does it work?
-2. How do you set up NFS on a server?
-3. How do you turn on and start NFS services on a server?
-4. How do you add a folder to share on a server?
-5. What do the options in the exports file mean?
-6. How do you set up NFS on a client?
-7. How do you mount a shared directory on a client?
-8. How do you check if a shared directory is successfully mounted on a client?
-9. Can NFS be used to share directories between Windows, Linux, and Mac systems?
-10. Are there any security considerations to keep in mind when using NFS?
+1. Explain the purpose of NFS and how it enables file sharing between different computers.
+2. Describe the main components of an NFS server and their roles in the NFS system.
+3. Explain the purpose of the rpcbind service and how it is related to NFS.
+4. Describe the process of adding a shared directory on an NFS server, including the significance of the `/etc/exports` file.
+5. Explain the various options available when defining a shared directory in the `/etc/exports` file and their effects on the sharing configuration.
+6. Compare the steps required for setting up an NFS server and an NFS client. What similarities and differences do you observe?
+7. Explain the process of mounting a shared directory on an NFS client, and how the client can verify a successful connection.
+8. Describe the security considerations and potential risks when using NFS, and how you can mitigate them.
+9. Illustrate a use case where NFS can be helpful in sharing directories across different operating systems (Windows, Linux, and Mac).
+10. Explain the role of the `exportfs` command in managing shared directories on an NFS server, and demonstrate how to use it to view, update, and unshare directories.
