@@ -1,73 +1,73 @@
 ## Introduction to NFS
 
-NFS (Network File System) is a server-client protocol used for file sharing between different computers (there is support for Linux, Mac, and Windows). NFS allows to mount a remote shared directory on your local machine, allowing you to access any of the files on that remote share directly.
+NFS (Network File System) lets computers share files with other computers. It works on Linux, Mac, and Windows. You can use files on another computer like they are on your own computer.
 
 ## Setting up an NFS server
 
-Here are the steps to install and configure NFS on a CentOS 7 system:
+Follow these steps to set up NFS on CentOS 7:
 
-1. Install the necessary packages:
+1. Install needed packages:
 
 ```
 yum install nfs-utils nfs-utils-lib
 ```
 
-2. Enable and start the rpcbind service:
+2. Turn on and start rpcbind service:
 
 ```
 systemctl enable rpcbind
 systemctl start rpcbind
 ```
 
-3. Enable and start the NFS server:
+3. Turn on and start NFS server:
 
 ```
 systemctl enable nfs-server
 systemctl start nfs-server
 ```
 
-4. Enable and start the NFS lock service:
+4. Turn on and start NFS lock service:
 
 ```
 systemctl enable nfs-lock
 systemctl start nfs-lock
 ```
 
-6. Enable and start the NFS idmap service:
+5. Turn on and start NFS idmap service:
 
 ```bash
 systemctl enable nfs-idmap
 systemctl start nfs-idmap
 ```
 
-7. Add the desired shared directory to the `/etc/exports` file. For example, to share the `/opt/test` directory with clients in the IP range `192.168.2.0/24`, you would add the following line to the `/etc/exports` file:
+6. Add the folder you want to share in `/etc/exports`. For example, to share `/opt/test` with clients in the IP range `192.168.2.0/24`, add this line to `/etc/exports`:
 
 ```bash
 /opt/test/     192.168.1.0/24(rw,sync,no_root_squash,no_all_squash)
 ```
 
-Explanation:
+Meanings of the options:
 
-* /opt/test – shared dir
-* 192.168.2.0/24 – clients' IP range 
-* rw – dir's permissions
-* sync – synchronize shared directory
-* no_root_squash – enable root privilege
-* no_all_squash - enable user’s authority
-
-8. Export the changes:
+* `/opt/test` – folder to share
+* `192.168.2.0/24` – clients' IP range
+* `rw` – folder permissions
+* `sync` – sync shared folder
+* `no_root_squash` – allow root access
+* `no_all_squash` - keep user access
+    
+7. Apply changes:
 
 ```bash
 exportfs -r
 ```
 
-9. Check if everything was exported:
+8. Check if changes were applied:
 
 ```bash
 exportfs
 ```
 
-10. You may now restart the NFS server using the command:
+9. Restart NFS server:
 
 ```bash
 systemctl restart nfs-server
@@ -75,43 +75,43 @@ systemctl restart nfs-server
 
 ## Setting up an NFS client
 
-Here are the steps to install and configure NFS on a CentOS 7 system:
+Follow these steps to set up NFS on CentOS 7:
 
-1. Install the necessary packages:
+1. Install needed packages:
 
 ```
 yum install nfs-utils nfs-utils-lib
 ```
 
-2. Enable and start the rpcbind service:
+2. Turn on and start rpcbind service:
 
 ```
 systemctl enable rpcbind
 systemctl start rpcbind
 ```
 
-2. Enable and start the NFS client:
+3. Turn on and start NFS client:
 
 ```
 systemctl enable nfs-client
 systemctl start nfs-client
 ```
 
-4. Create a mount point on the client system to mount the shared directory:
+4. Make a folder on the client to use the shared folder:
 
 ```
 mkdir /opt/test_client
 ```
 
-5. Mount the shared directory on the client machine:
+5. Connect the shared folder to the client folder:
 
 ```
 mount -t nfs 192.168.2.111:/opt/test/ /opt/test_client/ 
 ```
 
-Replace `192.168.2.111` with the IP address of the NFS server and `/opt/test` with the desired shared directory.
+Replace `192.168.2.111` with the NFS server's IP address and `/opt/test` with the folder you want to share.
 
-6. Use the `mount` command to check if the shared directory is successfully mounted on the client:
+6. Use `mount` to check if the shared folder is connected to the client:
 
 ```
 mount
@@ -119,19 +119,19 @@ mount
 
 ## Additional considerations
 
-* NFS can be used to share directories between Windows, Linux, and Mac systems.
-* It is important to consider security when using NFS. For example, you may want to limit access to the shared directory to specific IP ranges or users.
-* You can also use the exportfs command to manage the shared directories on the server. For example, to view the currently exported directories, use `exportfs -v`. To unmount a shared directory, use `exportfs -u <directory>`.
+* NFS can share folders between Windows, Linux, and Mac.
+* Think about security when using NFS. You might want to limit access to certain IP ranges or users.
+* Use `exportfs` to manage shared folders on the server. To see current shared folders, use `exportfs -v`. To stop sharing a folder, use `exportfs -u <directory>`.
     
 ## Challenges
 
 1. What is NFS and how does it work?
-1. How do you install and configure NFS on a server?
-1. How do you enable and start the NFS services on a server?
-1. How do you add a shared directory to the exports file on a server?
-1. What are the options available in the exports file and what do they do?
-1. How do you install and configure NFS on a client?
-1. How do you mount a shared directory on a client?
-1. How do you check if a shared directory is successfully mounted on a client?
-1. Can NFS be used to share directories between Windows, Linux, and Mac systems?
-1. Are there any security considerations to keep in mind when using NFS?
+2. How do you set up NFS on a server?
+3. How do you turn on and start NFS services on a server?
+4. How do you add a folder to share on a server?
+5. What do the options in the exports file mean?
+6. How do you set up NFS on a client?
+7. How do you mount a shared directory on a client?
+8. How do you check if a shared directory is successfully mounted on a client?
+9. Can NFS be used to share directories between Windows, Linux, and Mac systems?
+10. Are there any security considerations to keep in mind when using NFS?
