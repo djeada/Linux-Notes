@@ -27,17 +27,6 @@ Example:
 
 To check if fstab settings are correct, use the `mount -a` command.
 
-## Mounting at System Startup
-
-By default, mounted disks will be lost when the system is rebooted. To remount a file system at system startup, you can add an entry to the `/etc/fstab` file. Each entry should contain the device, mount point, file system type, options, dump frequency, and fsck order, separated by tabs or spaces. For example:
-
-```
-#device        mountpoint     fstype    options     dump   fsck
-/dev/sdb1      /mnt/shared    ext4      defaults    0      1
-```
-
-To verify that the fstab settings have been properly applied, you can use the `mount -a` command.
-
 ## Mounting an ISO Image
 
 Use this command to mount an ISO image: `mount -o loop filename.iso mount_point`.
