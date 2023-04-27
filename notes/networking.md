@@ -58,7 +58,6 @@ These commands help manage and troubleshoot network connections:
 ```
 ping google.com
 ```
-perl
 
 ## Networking Commands
 
@@ -158,8 +157,35 @@ DNS (Domain Name System) translates human-friendly domain names (e.g., www.googl
 
 ### Change DNS settings
 
-- Use `nmtui` or edit configuration files in `/etc/sysconfig/network-scripts` to set DNS servers.
-- Review `/etc/resolv.conf` to see current DNS settings.
+Different DNS servers can provide various benefits, such as faster browsing, better security, or the ability to access blocked websites. By changing your DNS settings, you can switch to a DNS server that best meets your needs.
+
+#### How to change DNS settings:
+
+1. **Using `nmtui`:** Network Manager Text User Interface (nmtui) is an easy-to-use, text-based tool that allows you to configure network settings, including DNS servers. Launch `nmtui`, navigate to "Edit a connection," select the connection you want to modify, and set the desired DNS servers in the "IPv4 CONFIGURATION" or "IPv6 CONFIGURATION" sections.
+
+2. **Editing configuration files:** You can also manually edit the configuration files for your network connections located in the `/etc/sysconfig/network-scripts` directory. Each network interface has a corresponding file, such as `ifcfg-eth0` for the first Ethernet interface. Open the appropriate file for your connection and add or modify the `DNS1`, `DNS2`, etc., lines with the IP addresses of the DNS servers you want to use.
+
+Example:
+
+```
+DEVICE=eth0
+...
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+```
+
+After making changes to the configuration files, restart your network service for the changes to take effect.
+
+#### Review current DNS settings:
+
+You can check the current DNS settings on your system by examining the `/etc/resolv.conf` file. This file lists the DNS servers your computer is using in the `nameserver` lines.
+
+Example of `/etc/resolv.conf` content:
+
+```
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+```
 
 ### Troubleshoot DNS
 
