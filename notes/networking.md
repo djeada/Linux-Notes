@@ -117,26 +117,6 @@ These commands help manage and troubleshoot network connections:
 ping google.com
 ```
 
-## Networking Commands
-
-These commands help manage and troubleshoot network connections:
-
-### ifconfig
-
-`ifconfig` shows information about network interfaces (IP addresses, MAC addresses, etc.). To see all interfaces, run `ifconfig`. To see a specific interface, like eth0, use `ifconfig eth0`.
-
-### ip
-
-`ip` is now the recommended tool for changing IP addresses. Use `ip addr show` to see IP addresses and interfaces. `ip link show` shows interfaces, their status, and MAC addresses. `ip -s link` shows interfaces and sent packet information. `ip -6 route show` shows routing information for IPv6 networks.
-
-### ping
-
-`ping` tests the connection between two computers. It sends a message and waits for a response. If the host can communicate, it sends a response. If not, you get a notification.
-
-```
-ping google.com
-```
-
 ## route
 
 The `route` command is useful for displaying and modifying the routing table, which determines how network packets travel through a network. Some examples of using the `route` command include:
@@ -167,7 +147,6 @@ Here are some useful `nmcli` commands:
 - `nmcli con show`: Display all available connections.
 
 - `nmcli dev status`: List all available devices.
-
 
 ### Configuring a Static IP Address
 
