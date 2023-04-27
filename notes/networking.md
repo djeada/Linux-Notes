@@ -117,7 +117,7 @@ These commands help manage and troubleshoot network connections:
 ping google.com
 ```
 
-## route
+### route
 
 The `route` command is useful for displaying and modifying the routing table, which determines how network packets travel through a network. Some examples of using the `route` command include:
 
