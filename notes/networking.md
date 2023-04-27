@@ -111,13 +111,38 @@ Here are some useful `nmcli` commands:
 
 - `nmcli dev status`: List all available devices.
 
-To configure a network interface statically using `nmcli`, use the following command:
+
+### Configuring a Static IP Address
+
+To configure a network interface with a static IP address, you need to provide the interface name, IP address, network prefix, and default gateway. The command format is:
 
 ```
 nmcli con add con-name [interface] type ethernet ifname [interface] ipv4.method manual ipv4.address [IP address]/[network prefix] ipv4.gateway [default gateway]
 ```
 
-To create a new ethernet connection and assign it a dynamic IP address using DHCP, use the `ipv4.method auto` option.
+Replace `[interface]`, `[IP address]`, `[network prefix]`, and `[default gateway]` with the appropriate values for your network.
+
+For example, to configure the network interface `eth0` with a static IP address of `192.168.1.10`, a network prefix of `24` (corresponding to a subnet mask of `255.255.255.0`), and a default gateway of `192.168.1.1`, you would use the following command:
+
+```
+nmcli con add con-name eth0 type ethernet ifname eth0 ipv4.method manual ipv4.address 192.168.1.10/24 ipv4.gateway 192.168.1.1
+```
+
+### Configuring a Dynamic IP Address with DHCP
+
+To configure a network interface to obtain an IP address automatically from a DHCP server, you can use the `ipv4.method auto` option. The command format is:
+
+```
+nmcli con add con-name [interface] type ethernet ifname [interface] ipv4.method auto
+```
+
+Replace `[interface]` with the appropriate network interface name.
+
+For example, to configure the network interface `eth0` to obtain an IP address automatically using DHCP, you would use the following command:
+
+```
+nmcli con add con-name eth0 type ethernet ifname eth0 ipv4.method auto
+```
 
 If you don't have the GUI version of Network Manager installed, use the `nmtui` command to modify connections, change the hostname, and activate connections. After making changes, use the `systemctl restart network` command to restart Network Manager and apply the changes.
 
@@ -138,13 +163,29 @@ DNS (Domain Name System) translates human-friendly domain names (e.g., www.googl
 
 ### Troubleshoot DNS
 
-Use `dig`, `nslookup`, and `host` to investigate DNS resolution:
+DNS issues can occur for various reasons, such as misconfigured DNS settings, unreachable DNS servers, or DNS records not being updated correctly. When experiencing issues accessing websites or online resources, it's important to check if DNS could be the problem.
 
-```
-dig google.com
-nslookup google.com
-host google.com
-```
+#### Why DNS might be the problem:
+
+1. Cannot access websites or resources by domain name, but can access them using their IP addresses.
+2. The browser displays a "Server not found" or "DNS resolution error" message.
+3. You recently changed your DNS settings or switched to a new DNS server.
+
+#### Tools to help troubleshoot DNS:
+
+`dig`, `nslookup`, and `host` are command-line tools that can help you investigate DNS resolution issues. They allow you to query DNS servers to check if the domain names are correctly resolved to their respective IP addresses.
+
+1. `dig` - Performs a DNS lookup and provides detailed information about the query, such as the answer, authority, and additional sections.
+
+   Example: `dig google.com`
+
+2. `nslookup` - Queries DNS servers to obtain domain name or IP address mappings. It can also be used to display information about the DNS server being used.
+
+   Example: `nslookup google.com`
+
+3. `host` - A simple utility that performs DNS lookups and displays the results. It can be used to find the IP address of a domain or the domain name for an IP address.
+
+   Example: `host google.com`
 
 ## Default Gateway
 
