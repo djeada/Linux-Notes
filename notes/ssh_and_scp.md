@@ -1,14 +1,19 @@
-## What is SSH?
+## Simple Explanation of SSH
 
-SSH (Secure Shell) is a network protocol and software suite that enables secure communication between computers over an unsecured network, such as the internet. It is commonly used to securely log into a remote machine and execute commands on it, as well as to transfer files between computers using secure protocols such as SFTP (SSH File Transfer Protocol) or SCP (Secure Copy Protocol).
+SSH (Secure Shell) is a tool and method for safely connecting, controlling, and transferring files between computers over the internet. It is used for:
+- Logging into a remote computer
+- Running commands on a remote computer
+- Transferring files securely between computers
 
-SSH uses public-key cryptography to authenticate the remote computer and allow the remote computer to authenticate the user. This means that the user's machine generates a pair of keys (a private key and a public key), and the user's public key is stored on the remote machine. When the user attempts to log in to the remote machine, the remote machine uses the stored public key to authenticate the user and allow the connection.
+SSH uses public-key cryptography to make sure only authorized users can connect.
 
-## Connecting to a Remote Host with SSH
+## Connecting with SSH
 
-To connect to a remote host using SSH, you need to know the host's IP address, as well as the username and password (or have the private key that corresponds to the public key stored on the remote host). You can then use the ssh command with the appropriate flags to connect to the remote host.
+To connect using SSH, you need:
+1. The other computer's IP address
+2. Your username and password (or a special key)
 
-Here is the general syntax for connecting to a remote host using SSH:
+Use this command to connect:
 
 ```
 ssh username@serverhost
@@ -30,7 +35,7 @@ systemctl enable ssh
 systemctl start ssh
 ```
 
-## Key Generation
+## Generating SSH Keys
 
 SSH uses a public-key cryptography system to authenticate the remote computer and allow the remote computer to authenticate the user. This means that each user generates a pair of keys (a private key and a public key) and the user's public key is stored on the remote machine. To generate a new key pair, use the `ssh-keygen` command with the `-t` flag to specify the type of key to generate, such as rsa:
 
@@ -38,11 +43,11 @@ SSH uses a public-key cryptography system to authenticate the remote computer an
 ssh-keygen  -t rsa
 ```
 
-This will generate an RSA public and private key pair in the `~/.ssh` directory. You can use the `ls -a ~/.ssh/` command to list the files in this directory and see the new key pair.
+Your keys will be in the `~/.ssh` folder. You can use the `ls -a ~/.ssh/` command to list the files in this directory and see the new key pair.
 
-## Uploading the Public Key to the Remote Host
+## Sharing Your Public Key with Remote Host
 
-To allow a user to log in to the remote host using their private key, the user's public key must be stored on the remote host. This can be done using the ssh-copy-id command, which copies the user's public key to the remote host.
+To use your key to connect, the remote computer needs your public key. Send it using:
 
 ```
 ssh-copy-id -i ~/.ssh/mykey username@serverhost
@@ -50,31 +55,33 @@ ssh-copy-id -i ~/.ssh/mykey username@serverhost
 
 ## Using Non-Standard Ports
 
-By default, SSH uses port 22 to establish connections. However, for improved security, you may want to change the port number to a different value. To do this, you must edit the `/etc/ssh/sshd_config` file on the server and specify the new port number. For example port 561. When logging in to the server using SSH, you will then need to specify the port number using the `-p` flag:
+SSH usually uses port 22, but you can use another port for better security. To use a different port, like 561, do this:
 
 ```
 ssh -p 561 username@serverhost
 ```
 
-## SCP
+## Transferring Files with SCP
 
-SCP (Secure Copy Protocol) is a simple command-line utility for transferring files between computers. It functions similarly to the UNIX cp command, but allows you to specify a user, machine, and files as parameters. To transfer a file from your local machine to the remote server, use the following syntax:
+SCP (Secure Copy Protocol) is a way to move files between computers securely. To send a file to the other computer, use:
 
 ```
 scp /local/path/to/file username@server:/remote/path/to/file
 ```
 
-To transfer a file from the remote server to your local machine, use the following syntax:
+To get a file from the other computer, use:
 
+```
 scp username@server:/remote/path/to/file /local/path/to/file
+```
 
-You can use the `-r` flag to copy directories recursively, and the -P flag to specify the connection port (the default is 22). For example:
+You can use the `-r` flag to copy directories recursively, and the `-P` flag to specify the connection port (the default is 22). For example:
 
 ```
 scp -P 80 -r root@server:/remote/path/to/directory /local/path/to/directory
 ```
 
-## SFTP
+## Transferring Files with SFTP
 
 SFTP (SSH File Transfer Protocol) is a secure file transfer protocol that runs over the SSH protocol. It offers a number of advantages over other file transfer protocols, including high-quality security and the ability to navigate the directory structure, create and delete folders, and perform other file operations. To use SFTP, you will need a client software such as WinSCP, FileZilla, CyberDuck, or others. These clients typically have a GUI interface that allows you to easily connect to the remote server and transfer files.
 
@@ -123,15 +130,16 @@ This will transfer the specified file from the remote server to the current dire
 
 In addition to SCP and SFTP, there are several other protocols and tools that can be used for file sharing:
 
-* FTP (File Transfer Protocol) is the standard Internet protocol for transferring files. It is not as secure as SCP or SFTP, but is widely supported and easy to use.
-* Rsync is a fast and efficient file-copying tool that can be used to transfer files between computers. It allows you to transfer only the differences between two files, making it more efficient for transferring large files or frequently-updated files.
-* SMB (Server Message Block) is a file-sharing protocol used by Windows machines. It is commonly used in local networks of Windows PCs. To share files between Linux and Windows machines, you can install the Samba software on your Linux machine and connect to it from your Windows machine using SMB.
+- FTP: An older way to move files. Not very secure.
+- Rsync: Fast and efficient for moving lots of files.
+- SMB: Used by Windows computers to share files on a local network.
 
 ## Challenges
 
-1. If you don't already have a server, you may set one up using one of several free cloud options (for example, EC2 on Amazon Free Tier) or create a virtual machine with Linux on your PC. 
-1. Connect to a remote server using the SSH protocol. This can be done by running the ssh command and specifying the username and server hostname or IP address.
-1. Use a non-standard port for the SSH connection. To do this, you will need to specify the port number using the -p flag when running the ssh command.
-1. Copy a directory from the remote server to your local machine using the scp command. To do this, you will need to specify the path to the directory on the remote server and the destination directory on your local machine.
-1. Upload a directory to the remote server using an SFTP client. To do this, you will need to connect to the server using the server's IP address, port 22, and protocol as SFTP or SSH, and use the client's GUI interface to navigate the directories and transfer the directory to the desired location on the server.
-1. Describe the difference between SCP and SFTP.
+1. Set up your own server using a free cloud option or a virtual machine.
+2. Connect to it using SSH.
+3. Use a different port for SSH.
+4. Copy a folder from the server to your computer with SCP.
+5. Upload a folder to the server using SFTP.
+6. Explain the difference between SCP and SFTP.
+
