@@ -17,9 +17,67 @@ Network interfaces let devices connect to networks. There are different types, l
 
 A MAC address is a unique name for a network interface. It helps find a device on a network. The MAC address is set when a network adapter is made or when a virtual adapter is created. It looks like this: `aa:bb:cc:dd:ee:ff`.
 
+To check the MAC address of a network interface on a Linux system, you can use the `ip link` command.
+
+```
+ip link show
+```
+
+The output will display information about all network interfaces on your system. The MAC address is shown after the link/ether field.
+
+Example output:
+
+```
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
+```
+
+In this example, the MAC address for the eth0 interface is `00:11:22:33:44:55`.
+
 ### IP Addresses
 
 An IP address is a number for each device on a network using the Internet Protocol. IP addresses are between `1.1.1.1` and `255.255.255.255`. A device can have more than one IP address, but they must be unique on the same network.
+
+#### Private IP address
+
+Aprivate IP address is used within a local network and is not directly exposed to the internet. Devices on the same local network use private IP addresses to communicate with each other. Private IP addresses are assigned by your router and typically fall within specific reserved IP address ranges:
+
+* `10.0.0.0` to `10.255.255.255`
+* `172.16.0.0` to `172.31.255.255`
+* `192.168.0.0` to `192.168.255.255`
+
+To check your private IP address, open a terminal and enter the following command:
+
+```
+ip -4 address show
+```
+
+The output will display information about your network interfaces, including their IPv4 addresses. Look for the inet field followed by an IP address.
+
+Example output:
+
+```
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 192.168.1.10/24 brd 192.168.1.255 scope global dynamic noprefixroute eth0
+```
+
+In this example, the private IP address for the eth0 interface is `192.168.1.10`.
+
+#### Public IP address
+
+A public IP address is the IP address assigned to your router or modem by your Internet Service Provider (ISP). This IP address is used to identify your network on the internet. When you access a website or use an online service, your public IP address is what the remote server sees as the source of the connection.
+
+To check your public IP address, you can use a third-party service such as curl with an online service like `ifconfig.me`, `ipify.org`, or `icanhazip.com`. Open a terminal and enter one of the following commands:
+
+```
+curl ifconfig.me
+```
+
+The output will display your public IP address, for example:
+
+```
+203.0.113.10
+```
 
 ### DHCP
 
