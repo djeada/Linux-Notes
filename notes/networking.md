@@ -271,17 +271,43 @@ route del default
 
 ## Packet analysis
 
-Packet analysis, or packet sniffing, is the process of capturing, examining, and analyzing packets (small chunks of data) that pass through a network to troubleshoot network issues, monitor traffic, or detect security threats.
+Packet analysis, also known as packet sniffing, is a technique used to monitor and examine network traffic. It involves capturing, examining, and analyzing the small chunks of data, called packets, that are transmitted between devices on a network. Packet analysis can be helpful for:
+
+- Troubleshooting network issues
+- Monitoring network traffic
+- Detecting security threats
 
 ### tcpdump
 
-`tcpdump` is a command-line utility for capturing and analyzing network packets:
+`tcpdump` is a command-line utility that allows you to capture and analyze network packets on a Linux system. Here's an example of how to use `tcpdump`:
 
 ```
 tcpdump -i eth0 -w traffic.pcap
 ```
 
-Customize the packet capture process with options like `-c` (number of packets to capture), `-s` (snapshot length), and `-f` (packet filter).
+In this example:
+- `-i eth0` specifies the network interface (`eth0`) on which to capture packets
+- `-w traffic.pcap` saves the captured packets to a file called `traffic.pcap` for later analysis
+
+You can customize the packet capture process with different options, such as:
+
+- `-c`: Specify the number of packets to capture. For example, to capture only 10 packets, use `-c 10`:
+
+```
+tcpdump -i eth0 -w traffic.pcap -c 10
+```
+
+- `-s`: Set the snapshot length, which is the number of bytes of each packet to capture. For example, to capture the first 100 bytes of each packet, use `-s 100`:
+
+```
+tcpdump -i eth0 -w traffic.pcap -s 100
+```
+
+- `-f`: Apply a packet filter to capture only specific types of packets. For example, to capture only packets related to the HTTP protocol, use `-f "port 80"`:
+
+```
+tcpdump -i eth0 -w traffic.pcap -f "port 80"
+```
 
 ### Other packet analysis tools
 
