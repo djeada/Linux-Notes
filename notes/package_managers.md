@@ -1,17 +1,16 @@
-## Package managers
+## Package Managers
 
-Debian and Ubuntu are arguably the most well-known Linux distributions (at least for the home users). Those two distros (and their derivatives) use Advanced Package Tool (`APT`). Other distributions use alternative package managers, such as `DNF`, `YUM`, `Pacman`, and so on. You will be unable to use the apt command on the machines using those distros. These other package managers have their own functionalities and syntax, which may differ significantly from that of `APT`.
+Debian and Ubuntu are popular Linux distributions for home users. These distributions and their derivatives use the Advanced Package Tool (`APT`). Other distributions use alternative package managers, like `DNF`, `YUM`, `Pacman`, which have unique functionalities and syntax.
 
-Be cautious when using package managers, as they frequently not only install software with all of its dependencies, but also interfere with your system's configuration.
+Be cautious with package managers as they install software and dependencies and may affect your system's configuration.
 
+## Installing from Tarballs
 
-## Installing from tarballs
-
-You may install software directly from the tarball on your Linux machine, without using a package manager. This process consists of three steps:
+Tarballs allow software installation on Linux without package managers. The process involves three steps:
 
 1. Extract
 
-Go to the directory that contains your tarball and run the following commands:
+Navigate to the tarball directory and run:
 
 ```
 tar -zxvf path_to_tar.tar.gz
@@ -20,42 +19,35 @@ cd path_to_tar
 
 2. Compile
 
-Make is the standard Linux compilation tool:
+Use the standard Linux compilation tool, `make`:
 
 ```
 make
 ```
 
-There may also be a config file with dependencies that must be installed before this application can be compiled. In this case, run the config file first.
+If a config file with dependencies exists, run it before compiling.
 
 3. Install
 
-If a make install is available, use:
+Use `make install` if available, or manually copy the executable to `usr/local/bin`:
 
 ```
 make install
 ```
 
-If not, copy the executable manully to usr/local/bin:
+Automatic updates aren't available for apps installed this way.
 
-```
-mv exe_name usr/local/bin/exe_name
-```
+## Installing and Updating Software Packages with APT
 
-There is no mechanism to automatically update apps that have been installed in this manner.
+`apt-get` and `aptitude` are older versions of `apt`. Use `apt` instead.
 
-## Install and update software packages from APT repo
-
-<code>apt-get</code> and <code>aptitude</code> are older versions of <code>apt</code>. That means that you should not use them!
-
-In general, you should obtain a list of the most recent versions of accessible packages from your update repository before you begin installing new applications. 
-To update your repos, use <code>apt update</code>. Executing this command will display a list of possible package versions, but no real software will be updated>:
+Update your repositories with `apt update`. This command lists package versions without updating the software:
 
 ```bash
 apt update
 ```
 
-<code>apt upgrade</code>, on the other hand, may use this information to update all installed packages to their most recent versions:
+`apt upgrade` updates all installed packages to their latest versions:
 
 ```bash
 apt upgrade
@@ -67,23 +59,23 @@ To install a package, use:
 apt install httpd
 ```
 
-If you have a local *.deb* file on your machine, you may use apt to install as well:
+To install a local .deb file, use:
 
 ```bash
 apt install /path/to/package/name.deb
 ```
 
-You can use the following commands to ensure that a package has been successfully installed (and that you have installed what you believe you have installed):
+To confirm successful installation, use:
 
 ```bash
 apt show httpd
 ```
 
-## Install and update software packages from YUM repo
+## Installing and Updating Software Packages with YUM
 
-In contrast to <code>apt</code>, there is no two-step process. It is not necessary to update the repositories before installing apps with <code>yum</code>.
+Unlike `apt`, `yum` doesn't require repository updates before installing apps.
 
-To check for update, use:
+To check for updates, use:
 
 ```bash
 yum check-update
@@ -94,6 +86,7 @@ To update all packages, use:
 ```bash
 yum update
 ```
+
 To update a specific package, use:
 
 ```bash
@@ -136,9 +129,9 @@ To clean cache, use:
 yum clean all
 ```
 
-## Install and update software packages from RPM repo
+## Installing and Updating Software Packages with RPM
 
-To download a rpm package, use:
+To download an rpm package, use:
 
 ```bash
 wget http://some_website/sample_file.rpm
@@ -175,20 +168,18 @@ rpm -e nano
 ```
 
 ## Managing APT Repositories
-The apt software repositories are defined in the /etc/apt/sources.list file or in different files in the /etc/apt/sources.list.d/ directory on Ubuntu and all other Debian-based distributions. 
+APT repositories are defined in `/etc/apt/sources.list` or files in `/etc/apt/sources.list.d/` on Debian-based distributions.
 
-<code>add-apt-repository</code> is a Python script that adds an APT repository to /etc/apt/sources.list. The command can also be used to delete a previously added repository.
-
-To install it, follow these steps: 
+add-apt-repository adds or deletes APT repositories in `/etc/apt/sources.list`. Install it with:
 
 ```bash
 apt update
 apt install software-properties-common
 ```
 
-Assume we want to install wine on our Debian-based system. We must take the following steps:
+To install Wine on a Debian-based system, follow these steps:
 
-Get the repository key and install it: 
+Get the repository key and install it:
 
 ```bash
 wget -nc https://dl.winehq.org/wine-builds/winehq.key
@@ -207,13 +198,13 @@ Update the package database:
 apt update
 ```
 
-Finally install wine:
+Install `Wine`:
 
 ```bash
 sudo apt install --install-recommends winehq-stable
 ```
 
-Verify that the installation was successful by running the following command: 
+Verify the installation with:
 
 ```bash
 wine --version
@@ -221,7 +212,7 @@ wine --version
 
 ## Managing YUM Repositories
 
-Configuration file for repos is located at: /etc/yum.repos.d
+Configuration files for repos are located at `/etc/yum.repos.d`.
 
 To display enabled repositories list, use:
 
@@ -247,36 +238,34 @@ To disable a repo, use:
 yum-config-manager --disable [repo_id]
 ```
 
-### Description of the repository:
+### Repository Description
 
-A repository is a collection of software packages that can be managed by a package manager. 
+A repository is a collection of software packages managed by package managers. Components include:
 
-The following details describe the components of a repository:
+- Label: a unique identifier.
+- Name: the repository name.
+- Mirrorlist: a list of mirrors with repository copies.
+- Base URL: the URL for repository RPM packages.
+- GPG check: indicates if GPG integrity checks are needed.
 
-* Label: a unique identifier for the repository.
-* Name: the name of the repository.
-* Mirrorlist: a list of mirrors (duplicate servers) that contain copies of the repository.
-* Base URL: the URL where the RPM packages for the repository can be found.
-* GPG check: a flag that indicates whether a GPG (GNU Privacy Guard) integrity check is required for the packages in the repository.
+Common labels categorize repositories as:
 
-There are several labels that are commonly used to categorize repositories:
-
-* Base: contains essential Red Hat applications with full support.
-* Updates: contains updates for packages.
-* Optional: contains open source software that is not supported by Red Hat.
-* Supplemental: contains proprietary packages that are not supported by Red Hat.
-* Extras: contains additional packages that are not supported by Red Hat."
+- Base: essential applications with full support.
+- Updates: package updates.
+- Optional: unsupported open-source software.
+- Supplemental: unsupported proprietary packages.
+- Extras: additional unsupported packages.
 
 ## Challenges
 
-1. Using your preferred package manager, look for the 0ad app. It's possible that you'll need to update the repositories first. Install the app if the search was successful. Try out the app. Using the same package manager, uninstall it. 
-1. What is a package manager and why is it useful?
-1. How does YUM work and what types of software can it be used to install?
-1. What is APT and how does it differ from YUM?
-1. What is a tarball and how is it used in relation to package managers?
-1. How can you use a package manager to install software from a specific repository or to install a specific version of a package?
-1. How can you use a package manager to update or upgrade installed packages?
-1. How can you use a package manager to remove or uninstall packages?
-1. What are some common options or commands used with package managers such as YUM or APT?
-1. How can you use a package manager to search for available packages or to find information about installed packages?
-1. What are some potential challenges or drawbacks to using a package manager, and how can these be addressed?
+1. Use your preferred package manager to search, install, and uninstall the 0ad app. Update repositories if needed.
+2. Define a package manager and explain its purpose.
+3. Describe YUM and the software it can install.
+4. Explain APT and its differences from YUM.
+5. Define a tarball and its relation to package managers.
+6. Explain using package managers to install software from specific repositories or specific package versions.
+7. Describe using package managers to update or upgrade installed packages.
+8. Explain using package managers to remove or uninstall packages.
+9. List common options or commands for package managers like YUM or APT.
+10. Explain using package managers to search for available packages or find information about installed packages.
+11. Discuss potential challenges or drawbacks of using package managers and how to address them.
