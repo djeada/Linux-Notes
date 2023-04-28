@@ -1,26 +1,74 @@
-## Virtualization
+## Virtual Machines Notes
 
-Virtualization is the process of creating a virtual version of a computer, device, or network using software. One type of virtualization is called KVM (Kernel-based Virtual Machine), which allows a single physical server to run multiple virtual machines (VMs). There are several other types of virtualization, including:
+Virtualization is the process of creating a virtual version of a computer, device, or network using software. Virtual machines (VMs) are emulated computer systems that run on physical hardware, allowing multiple operating systems to run concurrently on a single physical host, providing isolation between different applications and services. VMs are widely used in cloud computing, data centers, and for testing and development purposes.
+
+One type of virtualization is called KVM (Kernel-based Virtual Machine), which allows a single physical server to run multiple virtual machines (VMs). There are several other types of virtualization, including:
 
 1. Hardware-level virtualization
-1. Operating system-level virtualization
-1. Application virtualization
+2. Operating system-level virtualization
+3. Application virtualization
+
+## Virtualization Technologies
+
+There are two main types of virtualization technologies used to create VMs:
+
+1. **Full virtualization**: This technology emulates an entire hardware system, including the CPU, memory, and other hardware components. The guest operating system runs unmodified on the virtual hardware. Examples of full virtualization solutions include VMware Workstation and Oracle VM VirtualBox.
+
+2. **Paravirtualization**: This technology provides a software interface that is similar, but not identical, to the underlying hardware. Guest operating systems must be modified to work with the paravirtualization interface. Paravirtualization typically offers better performance than full virtualization. An example of a paravirtualization solution is the Xen hypervisor.
+
+## Hypervisors
+
+A hypervisor is the software layer responsible for managing and controlling VMs. There are two types of hypervisors:
+
+1. **Type 1 (bare-metal) hypervisors**: These run directly on the host's hardware and provide better performance and security than Type 2 hypervisors. Examples include VMware ESXi, Microsoft Hyper-V, and Xen.
+
+2. **Type 2 (hosted) hypervisors**: These run as applications on a host operating system, and are more straightforward to install and use, but generally provide lower performance and security than Type 1 hypervisors. Examples include VMware Workstation, Oracle VM VirtualBox, and Parallels Desktop.
 
 ## Networking in Virtual Environments
 
 Networking in a virtual environment involves setting up communication between VMs on the same host, VMs accessing external services, and external services accessing VMs. There are several options for networking VMs, including:
 
-## NAT (Network Address Translation)
+### NAT (Network Address Translation)
 
 With NAT-based networking, VMs can communicate with the outside world through the host. External services can access VMs using address translation. However, NAT can make it difficult for guest VMs to be accessed outside the hypervisor server unless you use complicated port forwarding or IP masquerading.
 
-## Bridge
+### Bridge
 
 A bridged network extends the LAN network and connects the virtual interface of the VM to the outside local network via the physical interface of the host. A DHCP server on the bridged local network assigns an IP address to the VM. Any device on the LAN can access the VMs.
 
-## Host Only
+### Host Only
 
 In a host only configuration, VMs are inaccessible to outside devices, but can still access the internet via port forwarding from the host (mapping a port from the host to a port on the guest).
+
+## Creating Virtual Machines
+
+Creating a VM typically involves the following steps:
+
+1. Install a hypervisor on the host system.
+2. Create a new VM in the hypervisor.
+3. Allocate resources (CPU, memory, disk space, and network) to the VM.
+4. Install a guest operating system on the VM.
+5. Install any necessary drivers or tools for the guest operating system to communicate with the hypervisor.
+
+## Managing Virtual Machines
+
+Hypervisors provide various tools and features to manage VMs, such as:
+
+- Starting, stopping, and pausing VMs
+- Taking snapshots of VMs, which capture the current state of a VM, allowing you to revert to that state later
+- Cloning VMs to create exact copies
+- Migrating VMs between host systems
+- Configuring VM network settings and storage options
+- Monitoring VM performance and resource usage
+
+## Benefits of Virtual Machines
+
+Virtual machines offer several benefits, such as:
+
+- Isolation: VMs are isolated from each other and the host system, preventing potential security risks and conflicts between applications.
+- Resource efficiency: VMs allow you to make better use of your hardware resources by running multiple operating systems and applications on a single physical host.
+- Flexibility: VMs can be easily moved, copied, and backed up, providing flexibility and simplifying disaster recovery.
+- Scalability: VMs can be quickly provisioned and decommissioned, allowing you to scale your computing resources as needed.
 
 ## VirtualBox
 
@@ -42,7 +90,7 @@ VBoxManage createvm --name "vm_example" --register
 3. Configure the VM with desired settings, such as the amount of memory to allocate, the type of network connection to use, and the type of operating system to install:
 
 ```
- VBoxManage modifyvm "vm_example" --memory 1024 --acpi on --boot1 dvd --nic1 bridged --bridgeadapter1 eth0 --ostype Ubuntu
+VBoxManage modifyvm "vm_example" --memory 1024 --acpi on --boot1 dvd --nic1 bridged --bridgeadapter1 eth0 --ostype Ubuntu
 ```
 
 4. Assign some disk space to the VM:
@@ -116,10 +164,10 @@ Replace 00:0c:29:bd:81:01 with the actual MAC address of the VM.
 ## Challenges
 
 1. What is virtualization?
-1. What are some types of virtualization?
-1. What are some advantages of virtualization?
-1. What is a virtual machine (VM)?
-1. What are some options for networking VMs?
-1. What is VirtualBox/VMware/KVM and what is it used for?
-1. How do you find the IP address of a VM in VirtualBox, VMware, and KVM?
-1. What is the difference between NAT networking and bridged networking for VMs?
+2. What are some types of virtualization?
+3. What are some advantages of virtualization?
+4. What is a virtual machine (VM)?
+5. What are some options for networking VMs?
+6. What is VirtualBox/VMware/KVM and what is it used for?
+7. How do you find the IP address of a VM in VirtualBox, VMware, and KVM?
+8. What is the difference between NAT networking and bridged networking for VMs?
