@@ -171,13 +171,39 @@ gpg --send-keys --keyserver hkp://pgp.mit.edu your_key_id
 
 Beyond file or email encryption, GPG can be used for full disk encryption. Tools like LUKS can leverage GPG keys to provide disk encryption for Linux systems.
 
-## Challenges
+## Extended Challenges
 
-1. Try GPG commands by:
-  - Generating a public and private key.
-  - Encrypting a file with the public key.
-  - Decrypting the file with the private key.
-  - Confirming the decrypted file matches the original.
-2. Can you encrypt a file without a public key?
-3. Should a password be used for encryption?
-4. Is it safe to share a private key?
+1. Explore the basic functionalities of GPG by:
+   - Generating your own public and private GPG key pair.
+   - Encrypting a plaintext file with the public key you generated.
+   - Decrypting the resulting file with your private key.
+   - Confirming the contents of the decrypted file matches the original.
+
+2. Experiment with symmetric encryption:
+   - Try encrypting and decrypting a file using symmetric encryption in GPG.
+   - Consider the pros and cons of symmetric vs. asymmetric encryption.
+
+3. Explore GPG's use in email communication:
+   - Try to set up an encrypted email communication with another user.
+   - Experiment with sending, receiving, and verifying encrypted emails.
+
+4. Delve into key security practices:
+   - Evaluate why sharing a private key is or isn't safe.
+   - Research the purpose and importance of strong passwords and passphrases for encryption. 
+   - Reflect on how you would keep your private key secure.
+
+5. Explore the concept of key revocation:
+   - Generate a revocation certificate for your key.
+   - Contemplate under what circumstances you might need to use this certificate.
+
+6. Understand the use of key servers:
+   - Try uploading your public key to a key server.
+   - Download and import someone else's public key from a key server.
+
+7. Dive into disk encryption:
+   - Research how GPG can be used for disk encryption.
+   - Understand the steps and tools required to set up disk encryption on a Linux system.
+
+8. Understand subkeys and their purpose:
+   - Generate a subkey for your primary key.
+   - Reflect on the benefits and potential use-cases for using subkeys instead of a primary key.
