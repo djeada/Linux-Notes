@@ -2,6 +2,32 @@
 
 The kernel is the central part of an operating system (OS) that interfaces directly with the hardware. It acts as a bridge, mediating interactions between the software and the hardware. The kernel manages system resources, allocates memory, manages input and output requests from software, and organizes data for long-term non-volatile storage with file systems on disks. Because it operates at a low level, the kernel is protected from direct user interaction to prevent system instability or a security breach. In some cases, you can modify the kernel's behavior or capabilities by loading additional components, known as kernel modules.
 
+```
++-------------------------------------+
+|            User Space               |
+| +------------------+                |
+| |   Application    |                |
+| +------------------+                |
+|     ^       |                      |
+|     |       v                      |
+| +------------------+                |
+| |   System Call    |                |
+| +------------------+                |
+|     ^       |                      |
++-------------------------------------+
+|            Kernel Space             |
+|     |       v                      |
+| +------------------+                |
+| | Kernel Functions |                |
+| +------------------+                |
+|     ^       |                      |
+|     |       v                      |
+| +------------------+                |
+| |   Hardware Layer |                |
+| +------------------+                |
++-------------------------------------+
+```
+
 ## Kernel Architecture
 
 Kernels can be designed following different architectures such as monolithic, microkernel, and hybrid. Each approach has its own benefits and trade-offs in terms of performance, security, and complexity.
