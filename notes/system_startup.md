@@ -2,6 +2,21 @@
 
 What happens between the time you push the power button and the time you see the login prompt?
 
+```
++------------------+          +-------------------+            +----------------------+
+|    BIOS/UEFI     |   --->   |     Boot Loader   |    --->    |   Kernel & initrd    |
+| (Basic firmware) |          | (e.g., GRUB, LILO)|            |(Initializes hardware)|
++------------------+          +-------------------+            +----------------------+
+         |                              |                                  |
+         | System Startup               | Load the Kernel                  | Mount root filesystem
+         v                              v                                  v
++------------------+           +--------------------+           +---------------------+
+| Hardware Testing |   --->    | OS Selection (GRUB)|    --->   |    Systemd (init)   |
+| (POST sequence)  |           | and Kernel loading |           | (System & Service   |
++------------------+           +--------------------+           |  Management)        |
+                                                                +---------------------+
+```
+
 ## 1. Bootup Process
 
 The bootup process is a sequence of events that occurs when you power on a computer. It involves several stages including POST, boot loader execution, loading and initializing the operating system.
