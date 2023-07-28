@@ -1,6 +1,6 @@
 # System Startup Process
 
-This document seeks to explain what happens when you power on your computer until you see the login prompt. It encompasses concepts like the bootup process, first-stage boot loader, MBR, and second-stage boot loader.
+What happens between the time you push the power button and the time you see the login prompt?
 
 ## 1. Bootup Process
 
