@@ -8,20 +8,20 @@ The kernel is the central part of an operating system (OS) that interfaces direc
 | +------------------+                |
 | |   Application    |                |
 | +------------------+                |
-|     ^       |                      |
-|     |       v                      |
+|     ^       |                       |
+|     |       v                       |
 | +------------------+                |
 | |   System Call    |                |
 | +------------------+                |
-|     ^       |                      |
+|     ^       |                       |
 +-------------------------------------+
-|            Kernel Space             |
-|     |       v                      |
+|     |      Kernel Space             |
+|     |       v                       |
 | +------------------+                |
 | | Kernel Functions |                |
 | +------------------+                |
-|     ^       |                      |
-|     |       v                      |
+|     ^       |                       |
+|     |       v                       |
 | +------------------+                |
 | |   Hardware Layer |                |
 | +------------------+                |
