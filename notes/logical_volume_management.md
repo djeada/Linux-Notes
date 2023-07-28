@@ -81,36 +81,7 @@ lvcreate -L 12G -n vol_name_2 TEST
 
 4. **Creating a File System on the Logical Volume**: Before you can start storing data, you need to create a file system on the logical volume. You can do this using the mkfs command. In this example, an ext4 file system is created on `vol_name_1`:
 
-```ba|-----------------|     |-----------------|     |-----------------|
-|  Physical       |     |  Physical       |     |  Physical       |
-|  Volume (PV)    |     |  Volume (PV)    |     |  Volume (PV)    |
-|  /dev/sdb       |     |  /dev/sdc       |     |  /dev/sdd       |
-|-----------------|     |-----------------|     |-----------------|
-        |                      |                      |
-        |                      |                      |
-        ------------------------                      |
-                           |                           |
-                           ----------------------------
-                                       |
-                                       |
-|------------------------------------------------------------------|
-|                         Volume Group (VG)                        |
-|                              TEST                               |
-|                                                                  |
-|  |------------------|     |------------------|                  |
-|  | Logical Volume   |     | Logical Volume   |     Unallocated  |
-|  | (LV)             |     | (LV)             |     Space        |
-|  | vol_name_1       |     | vol_name_2       |                  |
-|  | Size: 20G        |     | Size: 12G        |                  |
-|  |------------------|     |------------------|                  |
-|                                                                  |
-|------------------------------------------------------------------|
-
-This diagram illustrates that:
-
-    Physical volumes /dev/sdb, /dev/sdc, and /dev/sdd are combined to create the TEST volume group.
-    Inside this volume group, two logical volumes (vol_name_1 and vol_name_2) are created, of size 20GB and 12GB respectively.
-    The remainder of the volume group's capacity is unallocated space, ready to be assigned to new or existing logical volumes as needed.sh
+```bash
 mkfs -t ext4 /dev/TEST/vol_name_1
 ```
 
