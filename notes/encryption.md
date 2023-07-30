@@ -1,4 +1,3 @@
-
 ## Importance of Encryption
 
 Encryption is paramount for preserving data confidentiality and integrity. It is a process that transforms clear text into coded, unintelligible text to prevent unauthorized access. Here are some reasons why encryption is essential:
@@ -171,7 +170,7 @@ gpg --send-keys --keyserver hkp://pgp.mit.edu your_key_id
 
 Beyond file or email encryption, GPG can be used for full disk encryption. Tools like LUKS can leverage GPG keys to provide disk encryption for Linux systems.
 
-## Extended Challenges
+## Challenges
 
 1. Explore the basic functionalities of GPG by:
    - Generating your own public and private GPG key pair.
