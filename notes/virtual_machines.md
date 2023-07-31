@@ -229,17 +229,17 @@ ipconfig
 
 VMware provides a graphical user interface for creating and managing VMs. However, for VMware ESXi, users can also use the vSphere Command-Line Interface (vSphere CLI).
 
-1. **Creating a VM in vSphere**:
+1. Creating a VM in vSphere:
 
 Please note that you'll need to use the vSphere Client (a web interface) to create a new VM.
 
-2. **Powering on a VM**:
+2. Powering on a VM:
 
 ```bash
 vim-cmd vmsvc/power.on <vmid>
 ```
 
-3. **Powering off a VM**:
+3. Powering off a VM:
 
 ```bash
 vim-cmd vmsvc/power.off <vmid>
@@ -247,19 +247,17 @@ vim-cmd vmsvc/power.off <vmid>
 
 Replace `<vmid>` with the ID of your VM.
 
-## Configuring VMs
-
 Configuration of VMs in VMware ESXi can be done through the vSphere Client. In VMware Workstation, users can directly modify VM settings through its GUI. For more advanced or automated tasks, VMware provides APIs and CLIs such as PowerCLI.
 
-- **Change allocated memory**:
+4. Change allocated memory:
 
 You'll need to power off the VM first. After that, you can go to the VM settings in the vSphere Client or VMware Workstation and modify the memory allocation.
 
-- **Change the number of CPU cores**:
+5. Change the number of CPU cores:
 
 This is also done in the VM settings after powering off the VM. You can modify the number of cores per CPU and the number of CPUs.
 
-- **Set up networking**:
+6. Set up networking:
 
 You can change the network configuration in the VM settings. You can choose between bridged, NAT, and host-only networking, or set up a custom network.
 
