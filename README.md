@@ -1,5 +1,5 @@
 # Linux
-We've compiled guides and notes on various Linux topics. This content is sorted into sections and subsections, making it easy to navigate regardless of your experience level - beginner or advanced.
+Compiled guides and notes on various topics related to Linux. The content is organized into sections and subsections, making it easy to navigate regardless of your experience level - beginner or advanced.
 
 To make learning more interactive, we've included challenges in each section, enabling you to test your understanding of the topics. The sections are designed to be independent so you can focus on areas that interest you most.
 
