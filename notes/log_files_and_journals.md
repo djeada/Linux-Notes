@@ -2,6 +2,18 @@
 
 Logging is an essential part of system administration. It provides crucial insights into the system's operation by keeping a record of significant events. System logs are valuable resources for troubleshooting issues, auditing security, and optimizing system performance. Linux utilizes various logging methods, including plain text files, `journald`, and `rsyslog`, each with its unique advantages and limitations.
 
+```
++-----------------------------------------------------------+
+| LOG FILE                                                  |
+|-----------------------------------------------------------|
+| TIMESTAMP        | SEVERITY  | SERVICE   | MESSAGE        |
+|-----------------------------------------------------------|
+| 2023-08-01 09:00 | INFO      | myapp     | Server started |
+| 2023-08-01 09:01 | WARNING   | myapp     | High CPU usage |
+| 2023-08-01 09:02 | ERROR     | myapp     | Server crashed |
++-----------------------------------------------------------+
+```
+
 ## Overview of Logging Methods
 
 Here are the most common logging methods used in Linux systems:
