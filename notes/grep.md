@@ -10,6 +10,22 @@ grep 'key' file_name.txt
 
 This command will output all lines in `file_name.txt` that contain the word 'key'.
 
+```
+User
+ |
+ | Uses 'grep' with arguments (pattern & file)
+ v
++-------------------------------+
+| grep Command                  |
+|  - Reads File                 |
+|  - Matches Lines with Pattern |
++-------------------------------+
+ |
+ | Outputs matching lines
+ v
+Terminal/Shell
+```
+
 ## Common Options for grep
 
 The `grep` command includes several options, also known as "flags", that modify its behavior. Here are some commonly used flags:
