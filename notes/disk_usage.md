@@ -15,12 +15,12 @@ For instance, executing `df -h` would yield an output similar to the following:
 
 This output details the following:
 
-* Filesystem: This column lists the name of each filesystem.
-* Size: This depicts the total size of each filesystem.
-* Used: This indicates the space used within each filesystem.
-* Available: This shows the remaining space within each filesystem.
-* Use%: This highlights the percentage of total space used in each filesystem.
-* Mounted on: This tells you the mount point of each filesystem, which is where the filesystem is accessible in the system's directory structure.
+* `Filesystem`: This column lists the name of each filesystem.
+* `Size`: This depicts the total size of each filesystem.
+* `Used`: This indicates the space used within each filesystem.
+* `Available`: This shows the remaining space within each filesystem.
+* `Use%`: This highlights the percentage of total space used in each filesystem.
+* `Mounted on`: This tells you the mount point of each filesystem, which is where the filesystem is accessible in the system's directory structure.
 
 ## Diving into the du command
 
