@@ -46,57 +46,6 @@ Example of a simple filter that will return all the entries that have the "objec
 
 5. **phpLDAPadmin, JXplorer, Apache Directory Studio**: These are examples of GUI-based LDAP browsers/managers, which can simplify interacting with the server.
 
-## Example Scenario: Centralized Employee Directory
-
-Let's consider Acme Corporation, a growing company with employees spread across multiple locations worldwide. They want a centralized system to store and manage the employee's contact information.
-
-### Step 1: Setting Up LDAP Directory
-
-First, they decide to deploy an LDAP server as a centralized employee directory. This directory will store data like first name, last name, email, phone number, and department details for each employee.
-
-For this, they define an LDAP schema that outlines the format and type of information to be stored. The schema will define entries for `People` and `Groups`. In the `People` entries, they'll store individual user information. The `Groups` entries will contain department-based groups for each department in Acme Corporation.
-
-### Step 2: Adding Employee Information
-
-Next, Acme Corporation's HR team begins populating the LDAP directory with employee information. Each employee is represented as an `Entry` in the `People` category with attributes like:
-
-```
-dn: uid=jdoe,ou=people,dc=acme,dc=com
-objectClass: top
-objectClass: person
-objectClass: organizationalPerson
-objectClass: inetOrgPerson
-uid: jdoe
-cn: John Doe
-givenName: John
-sn: Doe
-mail: jdoe@acme.com
-telephoneNumber: +1 123 456 7890
-ou: Engineering
-```
-
-This entry provides a range of information about John Doe, a member of the Engineering department.
-
-### Step 3: Interacting with the LDAP Directory
-
-For employees to interact with this directory, they are provided with an LDAP client tool. They can use this tool to search the directory for their colleagues' contact information using their unique `uid` or their common name `cn`.
-
-For instance, to find information about John Doe, an employee would execute a command similar to:
-
-```
-ldapsearch -x -H ldap://ldap.acme.com -b 'dc=acme,dc=com' '(uid=jdoe)'
-```
-
-This will return John Doe's contact information.
-
-### Step 4: Managing the Directory
-
-Acme Corporation appoints LDAP administrators who manage the directory. These administrators are responsible for adding new entries when new employees join, modifying existing entries when employees' details change, and deleting entries when employees leave the organization.
-
-### Step 5: Utilizing LDAP for Authentication and Authorization
-
-Beyond serving as an employee directory, Acme Corporation also uses their LDAP setup for authentication and authorization for their internal services. Employees can use their unique 'uid' and a corresponding password, which are stored securely in the LDAP directory, to log in to these services. Authorization is managed through `Group` entries that correspond to different access levels and departmental resources.
-
 ## Implementing LDAP for Centralized Authentication Across Multiple Servers
 
 Implementing LDAP for centralized authentication enables you to manage user credentials effectively across multiple servers. This setup not only provides consistent login information for users across all servers but also streamlines the administration of user accounts.
@@ -186,3 +135,62 @@ TLS_REQCERT demand
 
 6. **Manage and Update the Directory**: As users are added, removed, or have their credentials altered, you'll need to update your LDAP directory accordingly. LDAP utilities like `ldapadd`, `ldapmodify`, and `ldapsearch` will help administrators manage user entries effectively.
 
+## Example Scenario: Centralized Employee Directory
+
+Let's consider Acme Corporation, a growing company with employees spread across multiple locations worldwide. They want a centralized system to store and manage the employee's contact information.
+
+### Step 1: Setting Up LDAP Directory
+
+First, they decide to deploy an LDAP server as a centralized employee directory. This directory will store data like first name, last name, email, phone number, and department details for each employee.
+
+For this, they define an LDAP schema that outlines the format and type of information to be stored. The schema will define entries for `People` and `Groups`. In the `People` entries, they'll store individual user information. The `Groups` entries will contain department-based groups for each department in Acme Corporation.
+ You can find the IP address within the VM by running the following command in the VM's terminal:
+
+   ```bash
+   ip addr show
+
+or for Windows VMs:
+
+bash
+
+ipconfig
+### Step 2: Adding Employee Information
+
+Next, Acme Corporation's HR team begins populating the LDAP directory with employee information. Each employee is represented as an `Entry` in the `People` category with attributes like:
+
+```
+dn: uid=jdoe,ou=people,dc=acme,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: jdoe
+cn: John Doe
+givenName: John
+sn: Doe
+mail: jdoe@acme.com
+telephoneNumber: +1 123 456 7890
+ou: Engineering
+```
+
+This entry provides a range of information about John Doe, a member of the Engineering department.
+
+### Step 3: Interacting with the LDAP Directory
+
+For employees to interact with this directory, they are provided with an LDAP client tool. They can use this tool to search the directory for their colleagues' contact information using their unique `uid` or their common name `cn`.
+
+For instance, to find information about John Doe, an employee would execute a command similar to:
+
+```
+ldapsearch -x -H ldap://ldap.acme.com -b 'dc=acme,dc=com' '(uid=jdoe)'
+```
+
+This will return John Doe's contact information.
+
+### Step 4: Managing the Directory
+
+Acme Corporation appoints LDAP administrators who manage the directory. These administrators are responsible for adding new entries when new employees join, modifying existing entries when employees' details change, and deleting entries when employees leave the organization.
+
+### Step 5: Utilizing LDAP for Authentication and Authorization
+
+Beyond serving as an employee directory, Acme Corporation also uses their LDAP setup for authentication and authorization for their internal services. Employees can use their unique 'uid' and a corresponding password, which are stored securely in the LDAP directory, to log in to these services. Authorization is managed through `Group` entries that correspond to different access levels and departmental resources.
