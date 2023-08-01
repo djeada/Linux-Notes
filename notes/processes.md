@@ -1,119 +1,95 @@
 ## Processes
 
-In Linux, we make "processes" when we work with the system. A process is a numbered part of a running program, and it is made every time we do a command, open an app, or start a system service. Modern systems can run many processes at the same time, with the operating system (OS) quickly changing between them on the CPU. On multicore CPUs, each core can run multiple processes at the same time by quickly changing between them.
+Processes form the backbone of any operation that takes place within a system. In simplest terms, a process is a numbered component of a running program. It is instantiated every time a user executes a command, launches an application, or initiates a system service. Modern systems, leveraging the potential of powerful processors, can run numerous processes simultaneously. This is achieved through rapid context switching performed by the operating system (OS) on the Central Processing Unit (CPU). In multicore CPUs, each core has the capability to run multiple processes concurrently via swift context switching.
 
-There are two types of processes:
+There are essentially two categories of processes:
 
-* `Shell job`: A task that starts using a command written in the shell. These are also known as interactive processes.
-* `Daemon`: Utility apps that run quietly in the background to watch and maintain certain subsystems to make sure the operating system works properly. These processes are often started with root privileges.
+* **Shell Job**: A shell job refers to a task that is initiated through a command executed in the shell. These tasks are often referred to as interactive processes since they require direct user input.
 
-To see a list of all processes on the system, use the ps command:
+* **Daemon**: Daemons are utility applications that silently run in the background, monitoring and maintaining certain subsystems to ensure the smooth operation of the OS. Daemons are typically initiated with root privileges and serve a crucial role in system management.
 
-```
+### Process Management Commands
+
+To get an overview of all the currently running processes within your system, you can make use of the `ps` command:
+
+```bash
 ps -ef
 ```
 
-To see more detailed information about processes, such as the user ID, process ID, parent process ID, CPU usage, and the path to the executable, use the following command:
+If you require more comprehensive information about the processes, such as the User ID (UID), Process ID (PID), Parent Process ID (PPID), CPU usage, and the path to the executable, the following command can be used:
 
 ```bash
 ps -e --format uid,pid,ppid,%cpu,cmd
 ```
 
-Other useful options for the ps command include:
+In essence, understanding processes and how to manage them is key to gaining control over your system's operation and resources.
 
-* `aux`: A short summary of all active processes.
-* `fax`: Shows the process hierarchy.
-* `o`: Lets you choose the column names.
+* `aux`: Provides a condensed summary of all active processes.
+* `fax`: Displays the process hierarchy, revealing parent-child relationships between processes.
+* `o`: Allows you to customize the output by specifying column names.
 
-To see a sorted list of active processes, use the top command:
+For real-time process monitoring and management, the top command can be employed. This command will display a dynamically updated, sorted list of active processes:
 
 ```bash
 top
 ```
 
-## Foreground and background jobs
-When a process is running in the foreground, it means that it is currently being run and is using the terminal's input and output. When a process is running in the background, it means that it is being run in the background and doesn't use the terminal's input and output. This lets you run multiple processes at the same time without waiting for each one to finish before starting the next.
+## Process life cycle
 
-To run a program in the background, use the & operator after the command. For example:
+```
+                        +---------+
+                        |         |
+                        | Created |
+                        |         |
+                        +----+----+
+                             |
+                             | Schedule
+                             v
+                        +----+----+
+                        |         |
+                        | Running |
+                        |         |
+                        +----+----+
+           /Error             |               Complete\ 
+          v                   |                   v
+  +-------+-----+     +-------+-------+     +---------+
+  |             |     |               |     |         |
+  | Terminated  |<----| Interrupted   |<----|  Exit   |
+  |             |     |               |     |         |
+  +-------------+     +---------------+     +---------+
+```
+
+- `Created`: The process is created.
+- `Running`: The process has been scheduled and is executing.
+- `Interrupted`: The process is stopped or paused by the system, usually due to an interrupt from the system.
+- `Exit`: The process finishes its execution.
+- `Terminated`: The process is killed due to an error or an explicit kill command.
+
+## Process Spawning
+
+Process spawning is a fundamental aspect of any operating system. It's the action of creating a new process from an existing one. Whether it's running a command from a terminal or a process creating another, spawning processes is a routine operation in system workflows.
+
+* The first process that initiates when a system boots up is assigned Process ID (PID) 1. 
+
+* This initial process is known as `systemd` or `init`, based on the Linux distribution in use. 
+
+* Being the first process, it acts as the parent to all subsequently spawned processes.
+
+Spawning a process can be as straightforward as executing a command or running a program from the command line. For instance:
 
 ```bash
-sleep 1000 &
-```
-
-This will run the sleep command in the background, making it wait for 1000 seconds before closing. The output will usually look something like this:
-
-```bash
-[1] 3241
-```
-
-The number in square brackets (like `[1]`) is the job number, while the second number (like 3241) is the process ID.
-
-To see all jobs on the system, use the jobs command.
-
-To bring a background job to the foreground, use the `fg` command with the job number. For example, to bring job number 3 to the foreground, use:
-
-```bash
-fg 3
-```
-
-To move a process that is currently running in the terminal to the background, use `Ctrl+Z`. This will stop the process, but it can be started again in the background using the `bg` command with the job number. For example:
-
-```bash
-bg 1
-```
-
-## Terminate processes
-To stop a process using its process ID, use the kill command with the process ID. The process ID is a five-digit number that is given to each process when it is made. For example:
-
-```
-kill 12345
-```
-
-This will send a termination signal to the process with the specified process ID, making it stop.
-
-To stop a process using its name, use the `pkill` command with the process name. For example:
-
-```
-pkill process_name
-```
-
-This will send a termination signal to all processes with the specified name, making them stop.
-
-It is also possible to choose a signal to send to the process when using the `kill` or `pkill` commands. For example, to send the `SIGINT` signal (which is the same as pressing `Ctrl+C`) to a process, use:
-
-```
-kill -SIGINT 12345
-```
-
-There are many different signals that can be sent to processes, each with a specific purpose. Some common signals include:
-
-| Signal | Value |  Description |
-| --- | --- | --- |
-| `SIGHUP` | (1) | Hangup |
-| `SIGINT` | (2) | Stops the process, similar to pressing  `Ctrl+C` |
-| `SIGKILL` | (9) | Stops the process right away, no matter what cleanup it needs to do |
-| `SIGSTOP` |  (19) | Stops the process and doesn't let it run again until it is told to continue |
-| `SIGCONT` |  (18) | Starts a stopped process again |
-
-It is important to be careful when stopping processes, as some processes may be very important for the system to work or may have important data that could be lost if they are stopped unexpectedly. It is a good idea to use the ps and top commands to see the processes that are running on the system before trying to stop any of them.
-
-## Spawning processes
-
-* PID 1 is given to the first process that is made when the system starts up.
-* This process is known as `systemd` or `init` depending on which Linux distribution you are using.
-* This process is the father of all other processes.
-
-Spawning a process means making a new process. Processes are made when a program is run, either from the command line or by another process.
-
-There are several ways to spawn a process. One way is to simply do a command or run a program from the command line. For example:
-
-```
 echo "Hello, world!"
 ```
 
-This will create a new process that runs the `echo` command, which shows the specified text on the terminal.
+This command creates a new process that executes the echo command, resulting in the specified text being printed on the terminal.
 
-Another way to spawn a process is to use the `fork` and `exec` functions in a C program. The `fork` function makes a copy of the current process, while the `exec` function replaces the current process with a new one. For example:
+For more complex operations, you might need to spawn processes programmatically. In the C programming language, the fork and exec functions are frequently used for this purpose.
+
+- fork creates a copy of the currently executing process, generating a new child process.
+
+- exec replaces the current process with a new one.
+
+Consider the following example:
 
 ```C
 #include <stdio.h>
@@ -132,31 +108,163 @@ int main() {
 }
 ```
 
-This program makes a new process using the fork function, and then replaces the child process with the ls command using the exec function. The parent process just shows the child process ID on the terminal.
+In this program, a new process is created using the fork function, which then gets replaced by the ls command via the exec function. The parent process simply prints the child process ID on the terminal.
 
-There are many other ways to spawn processes in Linux, like using the system function, `popen`, or `spawn` from the `posix_spawn` library.
+There are several other methods to spawn processes in Linux. Functions like system, popen, or posix_spawn from the POSIX library also provide process spawning capabilities.
 
-It is important to be careful about how many processes are being made, as making too many processes can use up the system's resources and cause performance problems. It is a good idea to be careful when making processes and to make sure they are managed and stopped when they are not needed anymore.
+## Process Termination
 
-## Searching for processes
+To manage system resources effectively, it is sometimes necessary to terminate running processes. Depending on your needs, this can be accomplished in several ways.
 
-There are several ways to search for processes in Linux. The most common way is to use the ps command, which shows a list of running processes. To search for processes by their name, use the `ps` command together with `grep`. For example:
+### Terminating Processes by PID
 
+Each process, upon its creation, is assigned a unique Process ID (PID). To stop a process using its PID, the `kill` command is used. For instance:
+
+```bash
+kill 12345
 ```
+In this example, a termination signal is sent to the process with PID 12345, instructing it to stop execution.
+
+### Terminating Processes by Name
+
+If you don't know a process's PID, but you do know its name, the pkill command is handy. This command allows you to stop a process using its name:
+
+```bash
+pkill process_name
+```
+
+In this case, a termination signal is sent to all processes that share the specified name, effectively halting their execution.
+
+### Specifying Termination Signals
+
+The kill and pkill commands provide the option to specify the type of signal sent to a process. For example, to send a SIGINT signal (equivalent to Ctrl+C), you can use:
+
+```bash
+kill -SIGINT 12345
+```
+
+Linux supports a variety of signals, each designed for a specific purpose. Some common signals include:
+
+| Signal | Value |  Description |
+| --- | --- | --- |
+| `SIGHUP` | (1) | Hangup detected on controlling terminal or death of controlling process |
+| `SIGINT` | (2) | Interrupt from keyboard; typically, caused by  `Ctrl+C` |
+| `SIGKILL` | (9) | Forces immediate process termination; it cannot be ignored, blocked or caught |
+| `SIGSTOP` |  (19) | Pauses the process; cannot be ignored |
+| `SIGCONT` |  (18) | Resumes paused process |
+
+Terminating processes should be performed with caution. Some processes may be critical for system operation or hold valuable data that could be lost upon abrupt termination. Therefore, it's advisable to use commands such as ps and top to observe currently running processes before attempting to stop any of them. This approach allows for more controlled and careful system management, preventing unintended disruptions or data loss.
+
+## Methods for Searching Processes
+
+In a Linux environment, various methods are available to search for processes, depending on the granularity of information you require or your personal preference. The search can be done using commands such as `ps`, `grep`, `pgrep`, and `htop`.
+
+### Searching Processes with `ps` and `grep`
+
+The `ps` command displays a list of currently running processes. To search for processes by name, you can combine `ps` with the `grep` command. The following command:
+
+```bash
 ps -ef | grep process_name
 ```
 
-This will show a list of all processes with the specified name.
+searches and displays all processes containing the specified name (process_name in this example). Here, ps -ef lists all processes, and grep process_name filters the list to show only the processes with the specified name.
 
-Another way to search for processes is to use the `pgrep` command, which searches for processes by name and displays their process IDs. For example (to look for chromium):
+### Searching Processes with pgrep
 
-```
+The pgrep command offers a quick and direct method to search for processes by their names and display their PIDs. For instance, to find all running processes named chromium, you would use:
+
+```bash
 pgrep chromium
 ```
 
-This will display the process IDs of all processes with the specified name (chromium in our case).
+This command displays the PIDs for all instances of chromium currently running on the system.
 
-Additionally, you can use the `htop` command, which provides an interactive, real-time view of running processes. To search for processes in `htop`, press the `F4` key, type the process name or user you want to search for, and press `Enter`. The list will update to show only the matching processes.
+### Searching Processes with htop
+
+htop provides a real-time, interactive view of all running processes in a system. It's a robust tool for process management, offering capabilities like process searching, sorting, and termination.
+
+To search for processes in htop:
+
+1. Launch htop by typing htop in the terminal.
+
+```bash
+htop
+```
+
+2. Once htop is open, press F4 to activate the search bar.
+
+3. Type the name of the process or the user you're searching for, then press Enter.
+
+4. The list of processes will update to show only those matching your search criteria.
+
+## Foreground and Background Jobs
+
+The tasks running on your system can be in one of two states, either running in the 'foreground' or in the 'background'. These two states provide flexibility for multi-tasking and efficient system utilization.
+
+**Foreground Process**: A process is said to be running in the foreground if it is actively executing and interacting with the terminal's input and output. These are generally the tasks that you've initiated and are currently interacting with in your terminal.
+
+**Background Process**: On the contrary, a background process operates without directly interacting with the terminal's input and output. This ability allows you to run multiple processes simultaneously, without having to wait for each one to complete before starting another.
+
+```
++------------------------+
+|                        |
+| Start Job in Foreground|
+|                        |
++-----------+------------+
+            |
+            | Ctrl+Z or bg
+            v
++-----------+------------+
+|                        |
+|   Job Running in       |
+|   Background           |
+|                        |
++-----------+------------+
+            |
+            | fg or job completes
+            v
++-----------+------------+
+|                        |
+|   Job Completes        |
+|   or Returns to        |
+|   Foreground           |
+|                        |
++------------------------+
+```
+
+### Controlling Job Execution
+
+You can direct a program to run in the background right from its initiation by appending an ampersand `&` operator after the command. Consider the following example:
+
+```bash
+sleep 1000 &
+```
+
+Here, the sleep command will operate in the background, waiting for 1000 seconds before terminating. The output typically resembles this:
+
+```bash
+[1] 3241
+```
+
+The number enclosed in square brackets (like `[1]`) represents the job number, while the subsequent number (like 3241) is the process ID (PID).
+
+### Job and Process Management Commands
+
+To view all active jobs in the system, use the `jobs` command.
+
+If you wish to bring a background job to the foreground, utilize the fg command followed by the job number. For instance, to bring job number 3 to the foreground, you would use:
+
+```bash
+fg 3
+```
+
+To convert a foreground process to a background process, you can use Ctrl+Z. This operation pauses the process and allows you to resume it in the background using the bg command followed by the job number. For instance:
+
+```bash
+bg 1
+```
+
+This command will resume job number 1 in the background. Understanding and managing foreground and background jobs helps to increase productivity and efficiency when working in a shell environment.
 
 ## Challenges
 
