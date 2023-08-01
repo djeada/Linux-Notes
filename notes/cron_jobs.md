@@ -3,6 +3,39 @@ Cron is a tool for scheduling tasks on Linux systems. It lets you run scripts an
 
 Cron daemon is a background process that always runs, checking special files called crontabs for scripts or commands to run. There are two kinds of crontabs: system crontabs in `/etc/crontab` file, usually set up by root user or daemons, and user crontabs, managed by individual users.
 
+```
++------------------+
+| User sets up cron|
+| job with specific|
+| timing and script|
++------------------+
+           |
+           |
+           v
++------------------+
+| The cron daemon  |
+| reads the job    |
+| from crontab     |
++------------------+
+           |
+           |
+           v
++------------------+
+| Cron daemon      |
+| launches the     |
+| script/job at the|
+| specified time   |
++------------------+
+           |
+           |
+           v
++------------------+
+| Script/job executes|
+| as per the user's |
+| instructions      |
++------------------+
+```
+
 ## Cron directories
 
 These directories on a Linux machine hold scripts to run at regular times:
