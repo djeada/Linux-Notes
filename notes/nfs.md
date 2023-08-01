@@ -2,6 +2,34 @@
 
 NFS (Network File System) lets computers share files with other computers. It works on Linux, Mac, and Windows. You can use files on another computer like they are on your own computer.
 
+```
+     Client                      Server
+    +--------+                  +--------+
+    |        |   NFS Protocol   |        |
+    |  App   |<---------------->| NFS    |
+    |        |                  | Server |
+    +--------+                  +--------+
+       ||                          /|\
+       ||                          ||
+       ||                  +------------------+
+       ||                  |  File System     |
+    +--------+             | (ext4, XFS, etc) |
+    |  NFS   |             +------------------+
+    | Client |                      |
+    +--------+                      |
+       ||                           |
+    +--------+             +------------------+
+    | File   |             |   Disk           |
+    | System |             |   Storage        |
+    | (local)|             +------------------+
+    +--------+                    
+       ||                        
+    +--------+
+    | Disk   |
+    | Storage|
+    +--------+
+```
+
 ## Setting up an NFS server
 
 Follow these steps to set up NFS on CentOS 7:
