@@ -1,4 +1,4 @@
-## Introduction to Mounting and Unmounting
+## Mounting and Unmounting
 
 Mounting is the process of making a file system, disk, DVD, or USB drive accessible to the operating system so that you can read and write data on it. In Linux, you need to mount these devices before using them.
 
