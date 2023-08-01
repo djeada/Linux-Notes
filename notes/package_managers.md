@@ -4,6 +4,26 @@ Debian and Ubuntu are popular Linux distributions for home users. These distribu
 
 Be cautious with package managers as they install software and dependencies and may affect your system's configuration.
 
+```
+User
+  |
+  | uses
+  V
+Package Manager (e.g., apt, yum, pacman)
+  |
+  | fetches metadata from
+  V
+Package Repository
+  |
+  | downloads
+  V
+Package files (.deb, .rpm, .tar.xz, etc.)
+  |
+  | unpacks/installs to
+  V
+System directories (/usr/bin, /usr/lib, etc.)
+```
+
 ## Installing from Tarballs
 
 Tarballs allow software installation on Linux without package managers. The process involves three steps:
