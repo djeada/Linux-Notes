@@ -32,7 +32,51 @@ In Linux, filenames are case-sensitive. This means the operating system treats "
 
 ## Linux Directory Structure
 
-Linux organizes everything within a single directory hierarchy that starts with the root directory (`/`). Key directories within the Linux file system include:
+Linux organizes everything within a single directory hierarchy that starts with the root directory (`/`). 
+
+```
+/
+├── bin
+├── boot
+├── dev
+├── etc
+│   ├── network
+│   └── ssh
+├── home
+│   └── [user]
+│       ├── Documents
+│       ├── Downloads
+│       ├── Music
+│       ├── Pictures
+│       ├── Videos
+│       └── Desktop
+├── lib
+├── media
+├── mnt
+├── opt
+├── proc
+├── root
+├── run
+├── sbin
+├── srv
+├── sys
+├── tmp
+├── usr
+│   ├── bin
+│   ├── include
+│   ├── lib
+│   ├── local
+│   └── share
+└── var
+    ├── cache
+    ├── lib
+    ├── local
+    ├── lock
+    ├── log
+    └── tmp
+```
+
+Key directories within the Linux file system include:
 
 | Directory | Description |
 | --- | --- |
