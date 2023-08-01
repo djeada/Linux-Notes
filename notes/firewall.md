@@ -1,4 +1,4 @@
-## Linux Firewalls
+## Firewalls
 
 A firewall is like a guard for your computer. It keeps your computer safe from others who shouldn't use it. It checks the information going in and out and follows safety rules. In Linux, there are several utilities to manage your firewall, including `iptables`, `ufw`, and `firewalld`.
 
