@@ -144,16 +144,19 @@ Let's consider Acme Corporation, a growing company with employees spread across 
 First, they decide to deploy an LDAP server as a centralized employee directory. This directory will store data like first name, last name, email, phone number, and department details for each employee.
 
 For this, they define an LDAP schema that outlines the format and type of information to be stored. The schema will define entries for `People` and `Groups`. In the `People` entries, they'll store individual user information. The `Groups` entries will contain department-based groups for each department in Acme Corporation.
- You can find the IP address within the VM by running the following command in the VM's terminal:
 
-   ```bash
-   ip addr show
+You can find the IP address within the VM by running the following command in the VM's terminal:
+
+```bash
+ip addr show
+```
 
 or for Windows VMs:
 
-bash
-
+```bash
 ipconfig
+```
+
 ### Step 2: Adding Employee Information
 
 Next, Acme Corporation's HR team begins populating the LDAP directory with employee information. Each employee is represented as an `Entry` in the `People` category with attributes like:
