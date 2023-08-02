@@ -22,7 +22,7 @@ Now, you want to make this packed box lighter and easier to carry around. That's
                    |
                    v
 +--------------------------+
-|   Gzipped Tar Archive   |
+|   Gzipped Tar Archive    |
 +--------------------------+
 ```
 
