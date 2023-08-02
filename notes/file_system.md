@@ -166,24 +166,6 @@ Creating a new file system on a storage device in Linux involves several steps. 
 
   Choose an appropriate mount point or create a new directory for the mount point if needed.
 
-### Detailed Example
-
-In this example, we'll create a new `ext4` file system on a disk named `/dev/sdb` that has three partitions: `/dev/sdb1`, `/dev/sdb2`, and `/dev/sdb3`.
-
-- Start by checking the disk information and partitions using the `fdisk` command:
-
-  ```bash
-  fdisk -l /dev/sdb
-  ```
-
-- Next, create an `ext4` file system on each partition using the `mkfs` command:
-
-  ```bash
-  mkfs -t ext4 /dev/sdb1
-  mkfs -t ext4 /dev/sdb2
-  mkfs -t ext4 /dev/sdb3
-  ```
-
 ## Challenges
 
 1. Can you explain what the root directory is in Linux? How is it different from the root user's home directory?
