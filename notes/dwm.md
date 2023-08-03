@@ -87,5 +87,3 @@ If you're looking for additional information about configuring and using DWM, th
 - **DWM man page:** For a more in-depth understanding of DWM and its functionalities, you should consider consulting the DWM man page. It can be accessed in your terminal by running the command `man dwm`.
 
 - **DWM Config Archive:** The DWM Config Archive is a collection of user-submitted `config.h` files. It's a treasure trove of interesting and varied configurations. Exploring these files can provide you with new ideas for your own DWM setup or even a ready-to-use configuration that suits your needs. Check it out at [https://dwm.suckless.org/customisation/](https://dwm.suckless.org/customisation/).
-
-Remember, one of DWM's main selling points is its simplicity and flexibility. However, this also means that it anticipates its users to be comfortable with diving into and manipulating C source code. Happy tinkering!
