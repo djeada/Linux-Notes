@@ -1,8 +1,8 @@
-## Understanding Files and Directories in Linux
+## Understanding Files and Directories
 
 One of the fundamental skills is to navigate and manage files and directories effectively. Here, we focus on the crucial concepts that will facilitate your work within the Linux file system.
 
-## Types of File Paths in Linux
+## Types of File Paths
 
 File paths are essential to specify the location of files or directories within the file system. The two types of paths are:
 
