@@ -1,4 +1,4 @@
-## Variable Types in Unix-like Operating Systems
+## Variable Types
 
 In Unix-like operating systems, variables are used to store and manipulate data. Within a shell environment, there are two primary types of variables: environment variables and shell variables.
 
