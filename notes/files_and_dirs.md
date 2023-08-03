@@ -231,7 +231,8 @@ In this case, 'a{b,c}d' is expanded into 'abd' and 'acd', which are both echoed 
 Globs, on the other hand, serve to match existing filenames. They employ wildcard characters such as * and ? to represent patterns in filenames. This can be extremely handy when performing operations on multiple files with similar names or extensions using commands like ls or cp. For instance, the glob *.txt will match all files in the current directory with a .txt extension.
 
 While brace expansion generates a list of strings based on a provided pattern, globs match and retrieve names of actual existing files.
-Comparison to Regular Expressions
+
+### Comparison to Regular Expressions
 
 It's important to note that wildcard characters in globs interpret differently from their counterparts in regular expressions (regex).
 
