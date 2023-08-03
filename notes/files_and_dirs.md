@@ -1,267 +1,261 @@
-## Files and dirs
+## Understanding Files and Directories in Linux
 
-These notes cover essential concepts of navigating and managing files and directories in the Linux file system.
+One of the fundamental skills is to navigate and manage files and directories effectively. Here, we focus on the crucial concepts that will facilitate your work within the Linux file system.
 
-## Absolute and Relative Paths 
-Paths specify the location of files or directories:
+## Types of File Paths in Linux
 
-* Absolute path: Starts from the root of the file system (`/`).
-* Relative path: Starts from the current working directory.
+File paths are essential to specify the location of files or directories within the file system. The two types of paths are:
 
-Examples:
+* **Absolute Path**: This type of path begins from the root directory, denoted by a forward slash (`/`). It provides the full pathway from the root to the specified file or directory, without considering the current working directory. As a result, absolute paths remain constant, regardless of the current location within the file system.
 
-Absolute path:
+* **Relative Path**: Contrary to absolute paths, relative paths are dependent on the current working directory. They provide a route to the target file or directory, starting from where you are in the file system, not from the root.
+
+An example of an absolute path:
 
 ```bash
 /home/user/notes/file_name.txt
 ```
 
-Relative path:
+This absolute path directs us to the file file_name.txt, situated in the notes directory, which is in the user directory under home, starting from the root of the file system (/).
+
+An example of a relative path:
 
 ```bash
 notes/file_name.txt
 ```
 
-It's worth keeping in mind that using absolute paths is typically a better choice, as they provide more clarity and reduce the likelihood of mistakes. That being said, relative paths can come in handy when you need to define a path in relation to your current working directory.
+This relative path guides us to the file file_name.txt situated within a directory named notes that is directly under our current working directory.
 
-## Navigating Files
+While absolute paths provide a comprehensive and unchanging route to a file or directory, relative paths are flexible and concise, especially when working within a specific hierarchy of the file system. Nonetheless, using absolute paths can often prevent mistakes due to their consistency and clarity, whereas relative paths, though handy, require careful handling to avoid confusion.
 
-Commands to navigate and manipulate files and directories:
+## Navigation and File Manipulation 
 
-### Print Working Directory (pwd)
+Linux provides several commands to navigate through the file system and manipulate files and directories. Here are a few fundamental commands:
 
-Display the absolute path of the current directory:
+### Print Working Directory (`pwd`)
 
-```
+The `pwd` command displays the absolute path of the current directory.
+
+```bash
 pwd
 ```
 
 ### Change Directory (cd)
 
-Change the current directory to another directory:
+The cd command allows you to change your current working directory.
 
-```
+To move to a different directory, specify its path:
+
+```bash
 cd /path/to/directory
 ```
 
-Go to your home directory:
+To navigate to your home directory, use:
 
-```
+```bash
 cd ~
 ```
 
 ### List Directory Contents (ls)
 
-To view the contents of a directory, use:
+The ls command lists the contents of a directory.
 
-```
+To view the directory's contents, use:
+
+```bash
 ls
 ```
 
-For a more detailed list that includes hidden files and extra information, use:
+For a more detailed listing, including hidden files and additional information (file permissions, the number of links, the owner, the size, and the last modification date), use:
 
-```
+```bash
 ls -al
 ```
 
-Use wildcards to display specific file groups. For example, to list all .txt files in the /home/mydirectory directory, use:
-```
+To display specific file groups using wildcards, for example, to list all .txt files in the /home/mydirectory directory, use:
+
+```bash
 ls /home/mydirectory/*.txt
 ```
 
-These are some common flags for the ls command:
+## Managing Files and Directories
 
-| Flag | Description |
-| ---  | ---         |
-| `-l` | shows long format details like permissions, owner, group, size, and modification date|
-| `-a` | reveals hidden files |
-| `-t` | sorts by modification date |
-| `-r` | reverses the list order |
-| `-R` | lists subdirectories recursively |
-| `-i` | shows each file's inode number |
+Working with files and directories is a key aspect of Linux. Various commands facilitate the creation, manipulation, and inspection of these resources. 
 
-The `ls` command provides information on:
+### Creating Files and Directories
 
-* Type: a character indicating file or directory type ('d' for directory, '-' for normal file, 'l' for symbolic link, 'b' for block-oriented device, or 'c' for character-oriented device).
-* Permissions: nine characters representing access permissions for the file or directory (read ('r'), write ('w'), and execute ('x') for the owner, the file's group, and other users).
-* Links: the number of filesystem links to the file or directory.
-* Owner: usually the creator of the file or directory.
-* Group: a group of users with access based on group privileges defined in the permissions field.
-* Size: file length in bytes, or space needed by the OS to hold a directory's file list.
-* Date: the most recent file or directory modification date. The -u option shows the last access time (read).
-* Name: the file or directory name.
+In Linux, you can use the `touch` command to create an empty file. For example, to create a new file named `sample.txt`, you would type:
 
-### Display Files in a Tree Format
-The tree command is a Linux utility that presents directory contents in a tree format. It's useful for quickly understanding a directory's structure and subdirectories.
-
-Specify the directory path as an argument or use the default current directory:
-
-```
-tree /tmp
+```bash
+touch sample.txt
 ```
 
-This example shows the contents of the /tmp directory in a tree format, with subdirectories and files indented beneath their parent directories.
+Creating a new directory involves the mkdir command. To create a directory called example_dir, you would run:
 
-Use options to modify the tree command output:
-
-| Flag | Description |
-| ---  | ---         |
-| `-d` | shows only directories |
-| `-L` | sets the tree depth (e.g., -L 2 displays the first two directory levels) |
-| `-f` | shows the full path of files and directories |
-| `-i` | hides indentation lines |
-
-### Special Symbols
-
-Use these special symbols when specifying paths:
-
-| Symbol | Description |
-| ---    | ---         |
-| `/`    | root directory |
-| `~`    | home directory |
-| `.`    | current directory |
-| `..`   | parent directory |
-| `*`    | wildcard matching any filename |
-| `?`    | wildcard matching any character |
-
-## File operations
-
-Commands to create, copy, move, remove, and display files.
-
-### Creating files
-
-Create a new empty file:
-
-```
-touch new_file.txt
+```bash
+mkdir example_dir
 ```
 
-Create a new directory:
+### Copying Files and Directories
 
-```
-mkdir test
-```
+The cp command is employed to copy files and directories from one location to another. For instance, to copy a file named file.txt to a directory named directory, you would use:
 
-### Copying files
-
-Copy a file:
-
-```
-cp /path/to/source/file /path/to/target/dir/
+```bash
+cp file.txt directory/
 ```
 
-Copy a directory and its contents:
+If you need to copy a directory and its contents, the -r (recursive) option is crucial:
 
-```
-cp -r /path/to/source_directory/dir/ destination
-```
-
-Modify the cp command with these options:
-
-| Flag |	Description      |
-| ---- | ---------------  |
-| `-a`	| also copy permissions |
-| `-A`	| copy all files (hidden and normal) |
-
-### Moving files
-
-The mv command moves or renames a file or directory.
-
-To rename `file_1.txt` to `file_2.txt`, use:
-
-```
-mv file_1.txt file_2.txt
+```bash
+cp -r source_dir destination_dir
 ```
 
-To move big_dir from the Downloads directory to the home directory, use:
+There are several options that can modify the behavior of cp:
 
-```
-mv ~/Downloads/big_dir ~
-```
+| Option | Description |
+| ------ | ----------- |
+| `-a` | Also known as the archive option. This preserves the file attributes, and it also preserves symbolic links within the copied directories. |
+| `-v` | The verbose option. It provides detailed output of the operation. |
 
-### Removing files
+### Moving and Renaming Files and Directories
 
-The rm command deletes file(s). Linux prompts for confirmation before removal.
+The mv command helps with moving or renaming files and directories. To rename a file from oldname.txt to newname.txt, you would execute:
 
-```
-rm file_1.txt file_2.txt
-```
-
-To remove a directory and its contents, use:
-
-```
-rm -r directory
+```bash
+mv oldname.txt newname.txt
 ```
 
-Be cautious with wildcards.
+The same mv command helps you move a file from one directory to another. For instance, to move file.txt from the current directory to another directory called dir1, you would use:
 
-### Displaying files
-
-The cat command shows the entire contents of a file in the terminal.
-
-To display a file named file.txt in the current working directory, use:
-
+```bash
+mv file.txt dir1/
 ```
+
+### Removing Files and Directories
+
+Files and directories can be removed with the rm command. To remove a file named file.txt, you would type:
+
+```bash
+rm file.txt
+```
+
+To remove an entire directory and its contents, you need to include the -r (recursive) option:
+
+```bash
+rm -r directory_name
+```
+
+Warning: The rm command is powerful and potentially destructive, especially when used with the -r (recursive) and -f (force) options. Use it with caution.
+
+### Viewing and Inspecting File Contents
+
+There are various ways to view and inspect the contents of files in Unix-like operating systems. We can use the `cat`, `more`, `less`, `head`, and `tail` commands to achieve this. 
+
+#### Displaying File Content with `cat`
+
+The `cat` (concatenate) command is a standard tool used to display the entire contents of a file. It writes the contents of a file to standard output (the terminal). For instance, to display the content of a file named `file.txt`, use the following command:
+
+```bash
 cat file.txt
 ```
 
-The more and less commands display file contents page by page. more moves forward one page at a time, while less lets you scroll through the file contents.
+However, keep in mind that cat is not ideal for large files because it dumps all content to the terminal at once.
 
-```
+#### Paginating File Content with more and less
+
+For more manageable file viewing, particularly for larger files, the more and less commands are useful. They display content page by page, making it easier to digest.
+
+The more command shows the content of a file, pausing after each screenful:
+
+```bash
 more file.txt
+```
+
+On the other hand, the less command, which is a more advanced and flexible version of more, allows both forward and backward navigation through the file:
+
+```bash
 less file.txt
 ```
 
-The following commands might be useful:
+While viewing files with more or less, you can use these commands:
 
-| Command | Description |
-| ---     | ---         |
-| `Enter` | move forward one line |
-| `Space` | move forward one page |
-| `b`     | move one page backward |
-| `q`     | end |
-| `/pattern` | jump to the next occurrence of the text “pattern” |
+| Command	| Description |
+| ------- | ----------- |
+| `Enter` | Move forward by one line |
+| `Space` | Move forward by one page |
+| `b`	| Move one page backward (less only) |
+| `q` | Quit the pager (more or less) |
+| `/pattern` | Search for the next occurrence of the text “pattern” (less only) |
 
-Use the head and tail commands to view the beginning or end of a file, respectively.
+#### Viewing File Parts with head and tail
 
-```
+The head and tail commands are designed to output the beginning and the end of files, respectively.
+
+The head command outputs the first part of files. It writes the first ten lines of each file to standard output. If more than one file is specified, it precedes each set of output with a header identifying the file. For instance, to display the first ten lines of file.txt, use:
+
+```bash
 head file.txt
+```
+
+Conversely, the tail command outputs the last part of files. It writes the last ten lines of each file to standard output. If more than one file is specified, it precedes each set of output with a header identifying the file. For instance, to display the last ten lines of file.txt, use:
+
+```bash
 tail file.txt
 ```
 
-## Expansion and globs
-Brace expansion and globs are techniques for working with file names that follow patterns. They are different in the following ways:
+The number of lines can be adjusted using the -n option followed by the desired number of lines. For example, to view the last 20 lines of file.txt, you would use:
 
-Brace expansion creates a list of strings that match a pattern. It uses a list of comma-separated values in curly braces with a preamble and optional postscript for each value. For example:
+```bash
+tail -n 20 file.txt
+```
+
+## File Name Expansion Techniques: Brace Expansion and Globs
+
+Brace expansion and globs are powerful tools in Linux for dealing with filenames that conform to certain patterns or templates. They are conceptually different and serve different purposes, but both can be used to save time and effort when working with files.
+
+### Brace Expansion
+
+Brace expansion is a mechanism by which arbitrary strings may be generated. It uses a list of comma-separated values enclosed in curly braces with an optional preamble and postscript for each value.
+
+For instance, the following command will print the strings 'abd' and 'acd':
 
 ```bash
 $ echo a{b,c}d
 abd acd
 ```
 
-Globs match the names of existing files. They use wildcards like `*` and `?` to represent patterns in filenames and can be used with commands like `ls` or `cp`. For example, the glob `*.txt` will match all files in the current directory with a `.txt` extension.
+In this case, 'a{b,c}d' is expanded into 'abd' and 'acd', which are both echoed by the command.
 
-Brace expansion generates a list of strings based on the pattern in the curly braces, while globs match against the names of existing files.
+### Globs
 
-Additionally, wildcards in globs have different meanings than in regular expressions (regex):
+Globs, on the other hand, serve to match existing filenames. They employ wildcard characters such as * and ? to represent patterns in filenames. This can be extremely handy when performing operations on multiple files with similar names or extensions using commands like ls or cp. For instance, the glob *.txt will match all files in the current directory with a .txt extension.
 
-| Wildcard | Globs | Regex |
-| --- | --- | --- |
-| `*` | zero or more characters | zero or more instances of the preceding character |
-| `?` | a single instance of a character | zero or one instance of the preceding character |
-| `.` | dot as a literal character  | any single character |
+While brace expansion generates a list of strings based on a provided pattern, globs match and retrieve names of actual existing files.
+Comparison to Regular Expressions
 
-Understanding the differences between brace expansion and globs can help you use them effectively in the Linux command line.
+It's important to note that wildcard characters in globs interpret differently from their counterparts in regular expressions (regex).
 
-## Challenges
+| Wildcard | Globs Description | Regex Description |
+| -------- | ----------------- | ----------------- |
+| `*` |	Matches any number of characters |	Matches any number of preceding element |
+| `?` |	Matches any single character |	Makes preceding element optional | 
+| `.` |	Matches dot as a literal character	| Matches any single character |
 
-1. How do you identify hidden files in Linux?
-2. What symbol represents the top-most directory in the file system hierarchy?
-3. List several commands to display the contents of a file in the Linux command line.
-4. Use the `cd` command to navigate to different directories, like your home directory, the root directory (`/`), `/var/log`, and your desktop. Try using both relative and absolute paths.
-5. Use the `ls` command to list the files in the current directory, and try options to show hidden files and sort files by modification date.
-6. Display the contents of hidden files from your home directory using `more`, `less`, or `cat`.
-7. Create a temp directory in your home directory. Create three empty files in the temp directory using the touch command. Redirect the results of the ls command to each file. Display the contents of the files to the terminal.
-8. Copy the contents of the `temp` directory to your home directory.
-9. Create a temp directory in your home directory. Create three text files in the temp directory, redirecting text to each file using the `>` operator. Move the temp directory to a new location.
-10. Practice using globs to match against the names of existing files. For example, show all files in the current directory with filenames of precisely five characters.
+In globs, the * character matches any number of characters, and the ? character matches any single character. On the contrary, in regex, * matches any number of the preceding element and ? makes the preceding element optional.
+
+Understanding the subtle differences and capabilities of brace expansions, globs, and regular expressions can greatly improve your proficiency and efficiency when operating in the Linux command line environment.
+
+## Practical Exercises
+
+Test and expand your Linux command-line knowledge by completing the following tasks:
+
+1. In Linux, how can you recognize files that are hidden?
+2. What symbol is used to denote the top-most directory in the Linux file system hierarchy?
+3. List several commands that can be used to display the contents of a file in the Linux command line. Discuss the differences in their functionalities.
+4. Practice navigating through various directories such as your home directory, the root directory (`/`), `/var/log`, and your desktop using the `cd` command. Try employing both relative and absolute paths. Explain the differences between these two types of paths.
+5. Use the `ls` command to enumerate the files in your current directory. Try using different options to reveal hidden files, sort files by their modification dates, and list files in a long detailed format. Discuss the output in each case.
+6. Display the contents of hidden files from your home directory. Utilize commands like `more`, `less`, and `cat`. Discuss the differences between the outputs of these commands.
+7. Construct a temporary directory in your home directory. Create three empty files in the temporary directory using the `touch` command. Use the `ls` command and redirect its output into each of these files. Then, display the contents of the files on the terminal.
+8. Replicate the entire contents of the `temp` directory to your home directory. Explain the options you used with the `cp` command to accomplish this.
+9. Create another temporary directory in your home directory. Generate three text files in this temporary directory and redirect some text into each file using the `>` operator. Now, move this temporary directory to a new location. Discuss the steps you took to complete this task.
+10. Practice employing globs to match against the names of existing files. For example, construct a command that will display all files in your current directory with filenames consisting of exactly five characters. Discuss how you crafted your glob pattern to achieve this.
