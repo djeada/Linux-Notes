@@ -24,6 +24,19 @@ It's worth noting that these permissions apply in different contexts, including 
 - Group (g)
 - Others (o)
 
+```
+Owner       Group       Others
+  r w x     r w x      r w x
+  | | |     | | |      | | |
+  | | |     | | +--- Execute
+  | | |     | +----- Write
+  | | |     +------- Read
+  | | |
+  | | +--------- Execute
+  | +----------- Write
+  +------------- Read
+```
+
 ### Symbolic File Permissions
 
 Symbolic permissions use a set of specific symbols to represent different types of permissions, and who they apply to. The symbols used include:
@@ -136,6 +149,23 @@ This command configures the umask such that new files and directories will have 
 
 In addition to standard permissions, Linux offers special permissions known as setuid, setgid, and the sticky bit. These permissions provide additional control over access to files and directories and can be used to enhance both functionality and security.
 
+```
+Owner   Group   Others
+  rws    rws     rwt
+  |||    |||     |||
+  |||    |||     ||+---- Sticky Bit
+  |||    |||     |+----- Execute
+  |||    |||     +------ Write
+  |||    |||
+  |||    ||+------ Set Group ID (setgid)
+  |||    |+------- Execute
+  |||    +-------- Write
+  |||
+  ||+-------- Set User ID (setuid)
+  |+--------- Execute
+  +---------- Read
+```
+
 ### Setuid
 
 The setuid or 'Set User ID' permission allows a user to execute an executable file with the permissions of the file's owner. This is especially useful for allowing users to run specific programs with elevated privileges, even if they don't have direct access permissions to the file.
@@ -191,6 +221,16 @@ It's important to handle these special permissions with care. When misused, they
 Access Control Lists (ACLs) are an additional layer of discretionary access control provided by many Linux systems. They allow for more fine-grained control over file and directory access, extending beyond the standard user, group, and other permissions.
 
 ACLs are not supported by all tools, but modern 'mke2fs' typically enables ACLs in the default mount options during filesystem creation in enterprise Linux distributions. To utilize ACLs, the filesystem must be mounted with the 'acl' option.
+
+```
+  Type : Entity : Permissions
+    |      |         |
+    |      |         +---- Read (r), Write (w), Execute (x)
+    |      |
+    |      +-------------- User name or Group name
+    |
+    +--------------------- User (u), Group (g), Others (o), Mask (m)
+```
 
 ### Setting ACLs with `setfacl`
 
