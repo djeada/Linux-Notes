@@ -13,7 +13,8 @@ The installation of Environment Modules depends on the type of Linux system you'
 ```bash
 sudo apt install environment-modules
 ```
-    CentOS (or other RHEL-based distributions): Use the following command to install Environment Modules:
+
+* **CentOS (or other RHEL-based distributions):** Use the following command to install Environment Modules:
 
 ```bash
 sudo yum install environment-modules
