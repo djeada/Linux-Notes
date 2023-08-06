@@ -25,7 +25,7 @@ It's worth noting that these permissions apply in different contexts, including 
 - Others (o)
 
 ```
-Owner       Group       Others
+  Owner     Group      Others
   r w x     r w x      r w x
   | | |     | | |      | | |
   | | |     | | +--- Execute
