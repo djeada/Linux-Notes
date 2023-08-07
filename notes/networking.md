@@ -296,7 +296,35 @@ The changes made using the `route` command are temporary and will be lost after 
 
 ## Network Manager daemon
 
-Network Manager is a versatile service on Linux systems responsible for managing network configurations, making it easier to handle network resources on both desktops and servers. Here's a deeper dive into its capabilities:
+Network Manager is a versatile service on Linux systems responsible for managing network configurations, making it easier to handle network resources on both desktops and servers.
+
+```
++------------+      +-------------+     +------------+
+|            |      |             |     |            |
+|  User GUI  <------>  Network    <----->  Network   |
+|   Tools    |      |  Manager    |     | Interfaces |
+|  (nmtui,   |      |  Daemon     |     | (eth0, wlan0,..)
+| nm-applet) |      |             |     |            |
+|            |      |             |     |            |
++------------+      +------^------+     +------------+
+                           |
+                           |
+                      +----v----+
+                      |         |
+                      |  D-Bus  |
+                      |         |
+                      +----^----+
+                           |
+                           |
+                     +-----v------+
+                     |            |
+                     |  System    |
+                     |  Services  |
+                     |(DNS, DHCP, |
+                     |  VPN,...)  |
+                     |            |
+                     +------------+
+```
 
 ### Features:
 
