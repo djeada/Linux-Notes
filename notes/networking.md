@@ -168,8 +168,6 @@ Your public IP address will be displayed as an output. For instance:
 
 Note: Since public IP addresses are exposed to the internet, they're susceptible to malicious actors and potential cyber threats. It's crucial to ensure proper security measures like firewalls and VPNs to protect your network.
 
-This version provides a more comprehensive overview of IP addresses, detailing their significance, types, and methods to retrieve them.
-
 ### DHCP (Dynamic Host Configuration Protocol)
 
 As networks grow and accommodate more devices, manually assigning IP addresses to each one becomes cumbersome and inefficient. DHCP, or Dynamic Host Configuration Protocol, automates this process, enabling seamless IP address allocation.
