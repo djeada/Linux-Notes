@@ -174,6 +174,28 @@ This version provides a more comprehensive overview of IP addresses, detailing t
 
 As networks grow and accommodate more devices, manually assigning IP addresses to each one becomes cumbersome and inefficient. DHCP, or Dynamic Host Configuration Protocol, automates this process, enabling seamless IP address allocation.
 
+```
+Device (DHCP Client)                 DHCP Server
+      |                                  |
+      |                                  |
+      |    1. DHCPDISCOVER               |
+      |--------------------------------->|
+      |                                  |
+      |                                  |
+      |    2. DHCPOFFER                  |
+      |<---------------------------------|
+      |                                  |
+      |                                  |
+      |    3. DHCPREQUEST                |
+      |--------------------------------->|
+      |                                  |
+      |                                  |
+      |    4. DHCPACK                    |
+      |<---------------------------------|
+      |                                  |
+      |                                  |
+```
+
 When a device, often referred to as a DHCP client, joins a network, it sends out a broadcast message requesting an IP address. If a DHCP server is present within the network, it responds by assigning an available IP address to that device. To ensure no IP address conflicts arise, the DHCP server maintains a record of all allocated IP addresses, thus preventing the same address from being assigned to multiple devices.
 
 #### Benefits of DHCP:
@@ -392,6 +414,34 @@ systemctl restart NetworkManager
 
 The Domain Name System (DNS) serves as the internet's phonebook. It allows users to input human-friendly domain names, like www.example.com, and translates them into IP addresses that computers use for communication.
 
+
+```
+  User's Device               Local DNS Resolver       Root & Top-Level
+      |                               |                Domain (TLD) Servers
+      |                               |                          |
+      |    1. Request                 |                          |
+      |    "www.example.com"          |                          |
+      |------------------------------>|                          |
+      |                               |                          |
+      |    2. Ask Root Server         |                          |
+      |------------------------------>|                          |
+      |                               | 3. Reply with .com Server|
+      |                               |<-------------------------|
+      |                               |                          |
+      |                               |                          |
+      |    4. Ask .com Server         |                          |
+      |------------------------------>|                          |
+      |                               |  5. Reply with IP for    |
+      |                               |   "www.example.com"     |
+      |                               |<-------------------------|
+      |                               |                          |
+      |                               |                          |
+      |  6. Return IP to User's Device|                          |
+      |<------------------------------|                          |
+      |                               |                          |
+      |                               |                          |
+```
+
 ### Understanding DNS
 
 1. **Local Resolution**: Before resorting to DNS servers, a computer will first check its local `/etc/hosts` file to see if there's a stored mapping for the requested domain to an IP address.
@@ -462,6 +512,18 @@ Harnessing these tools will empower you to decode and tackle many common DNS-rel
 
 The default gateway is a critical networking concept, functioning as the intermediary device, typically a router, which forwards network traffic from the local network to other distant networks or the internet. It's the "gate" between two networks, and it acts as the default route when no specific path is defined for a data packet.
 
+```
++----------------+     +---------------+     +---------------------+
+| Local Device A |     |   Local       |     | External Device/    |
+| 192.168.1.2    |-----|   Network     |-----| Internet            |
++----------------+     | 192.168.1.0/24|     +---------------------+
+                       | Gateway:      |
++----------------+     | 192.168.1.1   |
+| Local Device B |     +---------------+
+| 192.168.1.3    |
++----------------+
+```
+
 ### Importance of a Default Gateway
 
 1. **Connectivity Outside Local Network**: Enables devices within a local network to communicate with devices on external networks, including the wider internet.
@@ -521,6 +583,26 @@ Packet analysis, often termed packet sniffing, delves into the observation and d
 - Identify and troubleshoot network anomalies or bottlenecks.
 - Understand regular network utilization and bandwidth consumption.
 - Detect potential security intrusions or breaches.
+  
+```
+                    +-----------------------+
+                    |       Internet        |
+                    +-----------------------+
+                               |
+                               |
+                               v
++--------------+        +-------+-------+        +---------------+
+| Source       |  ====> | Packet River  |  ====> | Destination  |
+| Device       |  <==== |               |  <==== | Device       |
++--------------+        +-------+-------+        +---------------+
+                                ^
+                                |
+                    [Packet Analysis Tool]
+                         /      |     \
+                        /       |      \
+                    Source    Data    Destination
+                   Address            Address
+```
 
 ### A Command-Line Packet Analyzer tcpdump
 
@@ -569,6 +651,20 @@ IP forwarding, sometimes referred to as packet forwarding or routing, facilitate
 - Establishing communication between devices sprawled across various networks.
 - Enabling devices to access external networks, including the internet.
 - Activating and Verifying IP Forwarding
+
+```
++-------------+       +------------+       +-------------+
+| Network A   |       |            |       | Network B   |
+| 192.168.1.0 |-------|  IP        |-------| 10.0.1.0    |
+|   /24       |       | Forwarding |       |   /24       |
++-------------+       |  Device    |       +-------------+
+                      | (Router)   |
++-------------+       |            |       +-------------+
+| Network C   |       |            |       | Network D   |
+| 10.0.2.0    |-------|            |-------| 172.16.1.0  |
+|   /24       |       +------------+       |   /24       |
++-------------+                            +-------------+
+```
 
 1. **Check the current IP forwarding status**:
 
