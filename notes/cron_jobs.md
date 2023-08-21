@@ -1,4 +1,5 @@
 ## Cron
+
 Cron is a utility in Unix-like operating systems, including Linux, that automates the execution of scripts or commands. This automation can be scheduled to occur at fixed times, dates, or intervals. The utility is commonly used for system maintenance tasks such as log rotation, backups, and system updates. 
 
 Cron operates through a daemon, which is a background process that is always running. The cron daemon periodically checks for scheduled tasks in special files called crontabs. 
@@ -11,36 +12,36 @@ There are two types of crontabs:
 The process of scheduling and executing a cron job can be illustrated with the following steps:
 
 ```
-+------------------+
-| User sets up cron|
-| job with specific|
-| timing and script|
-+------------------+
++---------------------+
+| User sets up cron   |
+| job with specific   |
+| timing and script   |
++---------------------+
            |
            |
            v
-+------------------+
-| The cron daemon  |
-| reads the job    |
-| from crontab     |
-+------------------+
++---------------------+
+| The cron daemon     |
+| reads the job       |
+| from crontab        |
++---------------------+
            |
            |
            v
-+------------------+
-| Cron daemon      |
-| launches the     |
-| script/job at the|
-| specified time   |
-+------------------+
++---------------------+
+| Cron daemon         |
+| launches the        |
+| script/job at the   |
+| specified time      |
++---------------------+
            |
            |
            v
-+------------------+
-| Script/job executes|
-| as per the user's |
-| instructions      |
-+------------------+
++---------------------+
+| Script/job executes |
+| as per the user's   |
+| instructions        |
++---------------------+
 ```
 
 ## Cron Directories
