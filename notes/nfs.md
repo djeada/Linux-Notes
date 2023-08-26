@@ -209,13 +209,14 @@ exportfs -u <directory_path>
 
 ## Challenges
 
-1. Explain the purpose of NFS and how it enables file sharing between different computers.
-2. Describe the main components of an NFS server and their roles in the NFS system.
-3. Explain the purpose of the rpcbind service and how it is related to NFS.
-4. Describe the process of adding a shared directory on an NFS server, including the significance of the `/etc/exports` file.
-5. Explain the various options available when defining a shared directory in the `/etc/exports` file and their effects on the sharing configuration.
-6. Compare the steps required for setting up an NFS server and an NFS client. What similarities and differences do you observe?
-7. Explain the process of mounting a shared directory on an NFS client, and how the client can verify a successful connection.
-8. Describe the security considerations and potential risks when using NFS, and how you can mitigate them.
-9. Illustrate a use case where NFS can be helpful in sharing directories across different operating systems (Windows, Linux, and Mac).
-10. Explain the role of the `exportfs` command in managing shared directories on an NFS server, and demonstrate how to use it to view, update, and unshare directories.
+1. **NFS Fundamentals**: Elaborate on the core purpose of NFS. How does it facilitate file sharing across disparate computers?
+2. **Server Components**: Break down the primary components of an NFS server. How does each component contribute to the overall NFS system's operation?
+3. **Role of rpcbind**: Delve into the `rpcbind` service. Why is it pivotal to NFS, and how does it function in relation to the entire system?
+4. **Setting up a Shared Directory**: Outline the step-by-step procedure for designating a directory as "shared" on an NFS server. Highlight the importance of the `/etc/exports` file in this context.
+5. **Deep Dive into `/etc/exports` Options**: Enumerate and explain the variety of options available in the `/etc/exports` file. How do these choices influence the sharing configuration?
+6. **Server vs. Client Setup**: Compare and contrast the procedures involved in setting up an NFS server and an NFS client. Are there any notable similarities or disparities?
+7. **Mounting Mechanics**: Detail the process of mounting an NFS-shared directory on a client. How can the client ascertain the connection's success?
+8. **Safety First**: Discuss the potential security vulnerabilities inherent to NFS. What measures can one adopt to reduce these risks?
+9. **Cross-Platform Sharing with NFS**: Illustrate a scenario wherein NFS proves invaluable for sharing directories across diverse operating systems, such as Windows, Linux, and macOS.
+10. **Mastering `exportfs`**: Dive into the functionalities of the `exportfs` command within the NFS ecosystem. Demonstrate its application in viewing, amending, and ceasing the sharing of directories.
+
