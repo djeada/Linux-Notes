@@ -6,7 +6,7 @@ Unmounting is the process of disconnecting a mounted file system from the operat
 
 Use the `mount` and `umount` commands to mount and unmount file systems.
  
-## Verifying Drive Visibility in Linux
+## Verifying Drive Visibility
 
 When working with different drives on a Linux-based system, it's important to verify whether these drives are visible to the operating system. Checking drive visibility helps confirm that the drive is properly connected and recognized by the system, which is a prerequisite for actions like mounting or partitioning.
 
@@ -28,7 +28,7 @@ If the drive you're interested in appears in this list, it means it's visible to
 
 However, keep in mind that visibility doesn't necessarily mean the drive is in a healthy state. Tools like `smartctl` from the smartmontools package can be used for checking drive health and SMART (Self-Monitoring, Analysis, and Reporting Technology) status.
 
-## Mounting File Systems in Linux
+## Mounting File Systems
 
 Mounting a file system is an essential process in Linux, making the file system or a storage device (like a hard disk, CD-ROM, or USB drive) accessible for reading and writing data. Once a file system is mounted, it's integrated into the system's directory tree and can be accessed from the assigned mount point (a directory on your system).
 
@@ -88,7 +88,7 @@ To see a list of all currently mounted file systems, you can use the mount comma
 mount
 ```
 
-### Unmounting File Systems in Linux
+### Unmounting File Systems
 
 Unmounting a file system is the process of detaching it from the system's directory tree. Once a file system is unmounted, files cannot be accessed from that file system until it is mounted again.
 
@@ -132,7 +132,7 @@ umount -l /mnt/shared
 
 This is a powerful option and should be used with caution. When used, it might appear as if files have been unmounted, but in reality, their unmounting is only deferred until they are no longer in use.
 
-## Mounting an ISO Image in Linux
+## Mounting an ISO Image
 
 An ISO image is a disk image of an optical disc. In other words, it is a file that contains the exact contents, including the file system, of an optical disc such as a CD, DVD, or Blu-ray Disc. ISO images are often used for archival purposes, distribution of media, or for creating a backup copy of a disc.
 
