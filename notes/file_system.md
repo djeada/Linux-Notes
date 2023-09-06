@@ -30,7 +30,7 @@ UNIX and UNIX-like systems, including Linux, organize files in a hierarchical st
 
 In Linux, filenames are case-sensitive. This means the operating system treats "Test," "TEST," and "test" as different files. Also, most file types in Linux are determined by file content and not by the file extension, unlike systems like Windows.
 
-## Linux Directory Structure
+## Directory Structure
 
 Linux organizes everything within a single directory hierarchy that starts with the root directory (`/`). 
 
@@ -78,21 +78,22 @@ Linux organizes everything within a single directory hierarchy that starts with 
 
 Key directories within the Linux file system include:
 
-| Directory | Description |
-| --- | --- |
-| `/bin` | Contains essential low-level system utilities, executable by all users. |
-| `/usr/bin` | Stores most user commands and applications that are used after the system boot process. |
-| `/sbin` | Contains system binaries essential for booting, restoring, recovering, and/or repairing the system in addition to the binaries in `/bin`. |
-| `/lib` | Houses shared libraries for the binaries in `/bin` and `/sbin`. |
-| `/usr/lib` | Contains libraries for `/usr/bin` binaries and applications. |
-| `/tmp` | Provides space for storing temporary files. Files in this directory are typically cleared upon reboot. |
-| `/home` | Contains the personal directories of each user, where they can store their own files. |
-| `/etc` | Stores system-wide configuration files and scripts used during the boot process. |
-| `/dev` | Contains device nodes that correspond to hardware devices connected to the system. |
-| `/var` | Stores variable data like system logs, mail and printer spool directories, and transient and temporary files. |
-| `/root` | The home directory of the root (superuser) account, not to be confused with the root directory (`/`). |
-| `/boot` | Contains files needed for the boot process, including the Linux kernel and boot loader. |
-| `/media` and `/mnt` | Host directories for mounted file systems and removable devices like CDs, USB drives, etc. |
+| Directory       | Description |
+| --------------- | ----------- |
+| `/`             | The root directory: the starting point of the file system hierarchy, all other directories branch off from here. |
+| `/bin`          | Essential low-level system utilities, executable by all users. |
+| `/usr/bin`      | A place for user commands and applications typically used after the system boot process. |
+| `/sbin`         | Contains system binaries crucial for booting, restoring, recovering, and/or repairing the system, supplementing the binaries in `/bin`. |
+| `/lib`          | Contains shared libraries essential for the binaries found in `/bin` and `/sbin`. |
+| `/usr/lib`      | Libraries necessary for `/usr/bin` binaries and applications. |
+| `/tmp`          | A directory for storing temporary files, which are usually cleared at each reboot. |
+| `/home`         | The home ground for personal directories of each user, where they can store their personal files. |
+| `/etc`          | A repository for system-wide configuration files and scripts utilized during the boot process. |
+| `/dev`          | A space hosting device nodes that correspond to hardware devices connected to the system. |
+| `/var`          | Manages variable data such as system logs, mail and printer spool directories, alongside transient and temporary files. |
+| `/root`         | Serves as the home directory for the root (superuser) account, distinct from the root directory (`/`). |
+| `/boot`         | Stores files vital for the boot process, including the Linux kernel and the boot loader. |
+| `/media` and `/mnt` | Serve as mount points for file systems and removable devices like CDs, USB drives, etc. |
 
 ## Special Directory Names 
 
