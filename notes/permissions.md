@@ -3,26 +3,27 @@
 File permissions are crucial in any Unix-like operating systems, including Linux, which employ several mechanisms for controlling access to files and directories. These mechanisms include standard permissions, special permissions, and access control lists (ACLs).
 
 ### Standard Permissions
+The primary set of file permissions, commonly known as standard permissions, governs the fundamental access levels for files and directories. These permissions fall into three categories:
 
-The most common type of file permissions in Linux are the standard permissions. These permissions control the basic levels of access to files and directories. There are three types of standard permissions:
+- Read (`r`)
+- Write (`w`)
+- Execute (`x`)
 
-- Read (r)
-- Write (w)
-- Execute (x)
+Each permission category confers specific capabilities for users, as detailed in the following table:
 
-Each of these permissions grants different capabilities to the user, as outlined in the table below:
+| Permission | Effect on Files                                 | Effect on Directories                                      |
+|------------|-------------------------------------------------|------------------------------------------------------------|
+| Read (`r`) | Allows viewing and reading the contents of files.| Enables the listing of directory contents.                 |
+| Write (`w`)| Permits modification or deletion of file contents.| Allows adding, deleting, or renaming files in the directory.|
+| Execute (`x`)| Enables running the file as a program or script. | Grants the ability to enter the directory and execute commands within it, or access files therein.|
 
-| Permission Type | Impact on Files                                  | Impact on Directories                             |
-| --------------- | ------------------------------------------------ | ------------------------------------------------- |
-| Read (r)        | The user can read or view the file's content.    | The user can list the files in the directory.     |
-| Write (w)       | The user can modify or change the file's content.| The user can add, remove, or rename files within the directory.|
-| Execute (x)     | The user can run the file as a command or a program.| The user can change to the directory and execute commands within it or access contained files.|
+These permissions can be set for different classes of users, each with varying levels of access:
 
-It's worth noting that these permissions apply in different contexts, including the owner of the file, the group that owns the file, and others (everyone else). These contexts are often referred to as:
+- User (`u`): The owner of the file.
+- Group (`g`): Users who are part of the file's group.
+- Others (`o`): All other users.
 
-- User (u)
-- Group (g)
-- Others (o)
+The arrangement of these permissions is typically presented as follows:
 
 ```
   Owner     Group      Others
