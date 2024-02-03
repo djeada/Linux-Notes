@@ -4,17 +4,26 @@ What happens between the time you push the power button and the time you see the
 
 ```
 +------------------+          +-------------------+            +----------------------+
-|    BIOS/UEFI     |   --->   |     Boot Loader   |    --->    |   Kernel & initrd    |
+|    BIOS/UEFI     |   --->   |     Boot Loader   |    --->    |   Kernel & Initramfs |
 | (Basic firmware) |          | (e.g., GRUB, LILO)|            |(Initializes hardware)|
 +------------------+          +-------------------+            +----------------------+
          |                              |                                  |
-         | System Startup               | Load the Kernel                  | Mount root filesystem
+         | System Startup               | Load the Kernel                  | Unpack Initramfs
          v                              v                                  v
 +------------------+           +--------------------+           +---------------------+
-| Hardware Testing |   --->    | OS Selection (GRUB)|    --->   |    Systemd (init)   |
-| (POST sequence)  |           | and Kernel loading |           | (System & Service   |
-+------------------+           +--------------------+           |  Management)        |
+| Hardware Testing |   --->    | OS Selection (GRUB)|    --->   |    Kernel Execution  |
+| (POST sequence)  |           | and Kernel loading |           | (Mounts root FS and  |
++------------------+           +--------------------+           |  starts Init process)|
                                                                 +---------------------+
+                                                                          |
+                                                                          | Launches System Services
+                                                                          v
+                                                                  +---------------------+
+                                                                  |      Systemd        |
+                                                                  | (or another init)   |
+                                                                  | (System & Service   |
+                                                                  |  Management)        |
+                                                                  +---------------------+
 ```
 
 ## 1. Bootup Process
