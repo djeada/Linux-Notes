@@ -44,7 +44,7 @@ Physical Hardware
       |---- Virtual Machine 3 ---- Operating System 3 ---- Application 3
 ```
 
-# Networking in Virtual Environments: A Detailed Look
+# Networking in Virtual Environments
 
 In the context of virtualization, networking is a critical aspect, enabling communication between virtual machines (VMs) on the same host, between VMs and external services, and from external services to VMs. The design of this network can impact system performance, security, and functionality. Here's an overview of the key networking options in virtual environments:
 
@@ -56,11 +56,63 @@ NAT-based networking enables VMs to communicate with external services via the h
 
 However, this method can pose challenges for external services trying to access guest VMs. It often requires the configuration of complex port forwarding or IP masquerading rules to enable external access to the VMs. Despite these challenges, NAT offers an added layer of protection as VMs are not directly exposed to the network.
 
+```
++---------------------------------+
+|           External Network      |
+|                                 |
+|     +--------+                  |
+|     | Router |                  |
+|     +--------+                  |
+|         ^                       |
+|         |                       |
+|         | Public IP Address     |
+|         v                       |
++--------+------------------------+
+|          Host Machine           |
+|       (Acts as Gateway)         |
+|                                 |
+|  +---------------------------+  |
+|  |  NAT Network              |  |
+|  |                           |  |
+|  |  +-------------------+    |  |
+|  |  | VM1               |    |  |
+|  |  | Private IP        |    |  |
+|  |  +-------------------+    |  |
+|  |  +-------------------+    |  |
+|  |  | VM2               |    |  |
+|  |  | Private IP        |    |  |
+|  |  +-------------------+    |  |
+|  |                           |  |
+|  |  (Port Forwarding for     |  |
+|  |   inbound traffic)        |  |
+|  +---------------------------+  |
++---------------------------------+
+```
+
 ### Bridged Networking
 
 In a bridged network setup, the virtual network interface of the VM is connected to the physical network of the host. Essentially, the VM is an equal participant in the network, much like a physical machine. The VM is assigned an IP address by a Dynamic Host Configuration Protocol (DHCP) server on the network or manually set with a static IP. 
 
 This setup enables any device on the Local Area Network (LAN) to access the VM, provided network permissions and firewall rules allow it. While bridged networking enhances connectivity and simplifies the network setup, it can expose the VMs to potential security risks.
+
+```
++------------------+              +------------------+               +------------------+
+|                  |              |                  |               |                  |
+|    Physical      |              |    Virtual       |               |    Virtual       |
+|    Network       |              |    Machine (VM1) |               |    Machine (VM2) |
+|                  |              |                  |               |                  |
+|    +--------+    |     +------> |    +--------+    |    +------>   |    +--------+    |
+|    | Router |--------|          |    |  vNIC1 |    |               |    |  vNIC2 |    |
+|    +--------+    |     <------+ |    +--------+    |    <------+   |    +--------+    |
++------------------+              +------------------+               +------------------+
+        ^                                   ^                               ^
+        |                                   |                               |
+        |          +----------------+       |                               |
+        +----------| Host Machine   |-------+                               |
+                   | with Bridged   |---------------------------------------+
+                   | Networking     |
+                   +----------------+
+```
 
 ### Host-Only Networking
 
@@ -69,6 +121,48 @@ The host-only network configuration creates a network connection between the VM 
 However, VMs can still access the internet if port forwarding is set up on the host. Port forwarding involves mapping a port from the host to a corresponding port on the guest VM. This setup is particularly useful in development or testing environments where network isolation is desirable for security reasons.
 
 Each of these networking options provides a different level of accessibility, performance, and security, and can be chosen based on the specific requirements of the virtual environment.
+
+```
++---------------------------------+
+|           External Network      |
+|                                 |
+|     +--------+                  |
+|     | Router |                  |
+|     +--------+                  |
++--------^------------------------+
+         | (No Direct Connection
+         |  to the VM)
++--------+--------------------------+
+|          Host Machine             |
+|                                   |
+|    +--------------------------+   |
+|    |  Host-Only Network       |   |
+|    |                          |   |
+|    |  +-------------------+   |   |
+|    |  | Virtual Machine   |   |   |
+|    |  |       (VM)        |   |   |
+|    |  +-------------------+   |   |
+|    |                          |   |
+|    |  (Isolated from External |   |
+|    |   Network but can        |   |
+|    |   access internet via    |   |
+|    |   Port Forwarding)       |   |
+|    +--------------------------+   |
++-----------------------------------+
+```
+
+### Comparison
+
+| Feature                       | Bridged Networking      | Host-Only Networking     | NAT Networking           |
+|-------------------------------|-------------------------|--------------------------|--------------------------|
+| **Network Accessibility**     | Full network access     | No external access       | Access through host      |
+| **Isolation from LAN**        | None                    | Complete                 | Complete                 |
+| **External Devices Access**   | Yes                     | No                       | Via port forwarding      |
+| **IP Address Assignment**     | DHCP/static from LAN    | Static or DHCP by host   | Private IP by host       |
+| **Visibility in Network**     | Visible like physical   | Only to host             | Only to host             |
+| **Security Risk**             | Higher (direct access)  | Lower (isolated)         | Moderate (controlled)    |
+| **Complexity**                | Simple                  | Moderate                 | Complex (port forwarding)|
+| **Use Case**                  | Production environments | Testing/Development      | Controlled external access|
 
 ## Creating Virtual Machines
 
