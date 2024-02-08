@@ -134,7 +134,6 @@ Here are some commonly used options with the which command:
 | Option | Description |
 | --- | --- |
 | -a |	Print all matching pathnames of each argument. |
-| -s |	Silent mode. Nothing is printed, only the exit status is returned. |
 
 ### Examples
 
@@ -150,11 +149,6 @@ To find all the locations of the python command:
 which -a python
 ```
 
-To check if python3 is installed and suppress output:
-
-```bash
-which -s python3
-```
 Note: The which command only searches for executables in directories specified in the PATH variable. If an executable is located elsewhere, which will not be able to find it.
 
 ## Challenges
