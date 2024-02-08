@@ -44,11 +44,9 @@ Physical Hardware
       |---- Virtual Machine 3 ---- Operating System 3 ---- Application 3
 ```
 
-# Networking in Virtual Environments
+## Networking Methods
 
 In the context of virtualization, networking is a critical aspect, enabling communication between virtual machines (VMs) on the same host, between VMs and external services, and from external services to VMs. The design of this network can impact system performance, security, and functionality. Here's an overview of the key networking options in virtual environments:
-
-## Networking Methods
 
 ### Network Address Translation (NAT)
 
@@ -319,7 +317,7 @@ or for Windows VMs:
 ipconfig
 ```
 
-## Creating, Configuring, Starting, and Stopping VMs
+### Creating, Configuring, Starting, and Stopping VMs
 
 VMware provides a graphical user interface for creating and managing VMs. However, for VMware ESXi, users can also use the vSphere Command-Line Interface (vSphere CLI).
 
@@ -359,7 +357,7 @@ You can change the network configuration in the VM settings. You can choose betw
 
 Kernel-based Virtual Machine (KVM) is a full virtualization solution for Linux systems. It's a Type 1 hypervisor integrated into the Linux kernel. KVM requires a processor with hardware virtualization extensions, such as Intel VT or AMD-V.
 
-## Networking in KVM
+### Networking in KVM
 
 KVM networking is highly customizable. Some common configurations include:
 
@@ -375,7 +373,7 @@ If you're using the default networking mode (NAT), you can use the virsh domifad
 virsh domifaddr "VM Name"
 ```
 
-## Creating, Configuring, Starting, and Stopping VMs with Commands
+### Creating, Configuring, Starting, and Stopping VMs with Commands
 
 KVM operations are usually performed using the `virsh` command-line interface provided by the libvirt library.
 
