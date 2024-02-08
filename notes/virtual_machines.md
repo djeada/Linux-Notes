@@ -21,8 +21,52 @@ A commonly used virtualization type is **KVM (Kernel-based Virtual Machine)**. K
 The creation of VMs is commonly achieved using one of the two main types of virtualization technologies:
 
 1. **Full Virtualization**: This technology duplicates an entire hardware environment, including the CPU, memory, and other hardware components. It enables the guest operating system to run unmodified on the virtual hardware. VMware Workstation and Oracle VM VirtualBox are among the solutions that utilize full virtualization.
+   
+```
++-----------------------------------------+
+|        Full Virtualization              |
++-----------------------------------------+
+| +-----------+ +-----------+ +---------+ |
+| |   CPU     | |   Memory  | | Others  | |
+| | Emulation | | Emulation | | Emulate | |
+| +-----------+ +-----------+ +---------+ |
+|         |           |            |      |
+| +-------------------------------------+ |
+| |   Virtual Hardware Environment      | |
+| +-------------------------------------+ |
+|                   |                     |
+| +-------------------------------------+ |
+| | Guest OS (Unmodified) Running on    | |
+| | Virtual Hardware                    | |
+| +-------------------------------------+ |
+| Examples: VMware Workstation, Oracle VM |
+| VirtualBox                              |
++-----------------------------------------+
+```
 
 2. **Paravirtualization**: Rather than emulating an entire hardware system, paravirtualization creates a similar, albeit not identical, software interface to the underlying hardware. To function with the paravirtualization interface, guest operating systems must be modified. Generally, this technology offers superior performance than full virtualization. The Xen hypervisor is an example of a solution employing paravirtualization.
+
+```
++-------------------------------------------+
+|        Paravirtualization                 |
++-------------------------------------------+
+| +-----------+ +-----------+ +-----------+ |
+| |   CPU     | |   Memory  | | Others    | |
+| | Interface | | Interface | | Interface | |
+| +-----------+ +-----------+ +-----------+ |
+|         |           |            |        |
+| +---------------------------------------+ |
+| |   Similar Software Interface to       | |
+| |   Underlying Hardware                 | |
+| +---------------------------------------+ |
+|                   |                       |
+| +---------------------------------------+ |
+| | Modified Guest OS for                 | |
+| | Paravirtualization Interface          | |
+| +---------------------------------------+ |
+| Example: Xen Hypervisor                   |
++-------------------------------------------+
+```
 
 ## Understanding Hypervisors
 
@@ -30,18 +74,53 @@ The hypervisor, also known as a virtual machine monitor, is a software layer tas
 
 1. **Type 1 (Bare-Metal) Hypervisors**: These hypervisors operate directly on the host's hardware, providing enhanced performance and security compared to Type 2 hypervisors. Examples include VMware ESXi, Microsoft Hyper-V, and Xen.
 
+```
++--------------------------------------------------+
+|        Type 1 (Bare-Metal) Hypervisors           |
++--------------------------------------------------+
+| +----------------------------------------------+ |
+| |                   Hardware                   | |
+| +----------------------------------------------+ |
+|                       |                          |
+| +----------------------------------------------+ |
+| |        Hypervisor Layer (Direct Control)     | |
+| |         Examples: VMware ESXi, Microsoft     | |
+| |         Hyper-V, Xen                         | |
+| +----------------------------------------------+ |
+|                       |                          |
+| +----------------------------------------------+ |
+| |       Virtual Machines and Guest OSes        | |
+| +----------------------------------------------+ |
+| Enhanced Performance and Security               |
++--------------------------------------------------+
+```
+
 2. **Type 2 (Hosted) Hypervisors**: These hypervisors run as applications within a host operating system, offering easier installation and usability. However, they generally have reduced performance and security compared to Type 1 hypervisors. VMware Workstation, Oracle VM VirtualBox, and Parallels Desktop are examples of Type 2 hypervisors.
 
 ```
-Physical Hardware
-|
-|---- Hypervisor (Type 1 or Type 2)
-      |
-      |---- Virtual Machine 1 ---- Operating System 1 ---- Application 1
-      |
-      |---- Virtual Machine 2 ---- Operating System 2 ---- Application 2
-      |
-      |---- Virtual Machine 3 ---- Operating System 3 ---- Application 3
++--------------------------------------------------+
+|        Type 2 (Hosted) Hypervisors               |
++--------------------------------------------------+
+| +----------------------------------------------+ |
+| |                   Hardware                   | |
+| +----------------------------------------------+ |
+|                       |                          |
+| +----------------------------------------------+ |
+| |           Host Operating System              | |
+| +----------------------------------------------+ |
+|                       |                          |
+| +----------------------------------------------+ |
+| |     Hypervisor as an Application Layer       | |
+| |     Examples: VMware Workstation, Oracle VM  | |
+| |     VirtualBox, Parallels Desktop            | |
+| +----------------------------------------------+ |
+|                       |                          |
+| +----------------------------------------------+ |
+| |       Virtual Machines and Guest OSes        | |
+| +----------------------------------------------+ |
+| Easier Installation, Usability, with Generally   |
+| Reduced Performance and Security                 |
++--------------------------------------------------+
 ```
 
 ## Networking Methods
@@ -293,7 +372,7 @@ Replace "My VM" with your VM's name and adjust the settings as needed.
 
 VMware is a leading provider of virtualization software. The company offers various products, such as VMware Workstation and VMware ESXi. The former is a Type 2 hypervisor for running VMs on a desktop or laptop, while the latter is a Type 1, bare-metal hypervisor designed for servers.
 
-## Networking in VMware
+### Networking in VMware
 
 VMware products provide several networking options:
 
