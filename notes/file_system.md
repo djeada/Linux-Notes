@@ -132,6 +132,7 @@ Several types of file systems can be used on Linux systems, each designed with s
 10. **`Btrfs` (B-tree File System)**: This is a copy-on-write (CoW) file system for Linux aimed at implementing advanced features while also focusing on fault tolerance, repair, and easy administration. It provides features like snapshots, subvolumes, and built-in RAID.
 
 11. **`XFS`**: This is a high-performance journaling file system created by Silicon Graphics, Inc. It is particularly proficient at parallel I/O, making it a good choice for applications that use large files and workloads that require high-performance I/O.
+
 | Category                     | ext2                       | ext3                        | ext4                        | JFS                        | NFS                        | VFS                        | FAT                        | NTFS                       | ReiserFS                   | Btrfs                      | XFS                        |
 |------------------------------|----------------------------|-----------------------------|-----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|
 | **Design Purpose**           | Simple Linux file system   | Improved ext2 with journaling | Default Linux file system  | Large file systems         | Network file access        | Common interface for FS    | Removable storage          | Windows file system        | Small files, servers       | Advanced Linux features    | High-performance, large files |
@@ -143,7 +144,6 @@ Several types of file systems can be used on Linux systems, each designed with s
 | **Data Recovery**            | Harder                     | Easier than ext2            | Easier than ext3            | Good                       | Depends on implementation  | N/A                        | Simpler but riskier        | Good                       | Good                       | Very good                  | Good                       |
 | **Use in Large Servers**     | Less common                | Common                      | Very common                 | Yes                        | Yes, for shared storage    | N/A                        | Less common                | Less common                | Yes                        | Yes                        | Yes                        |
 | **Use in Personal Devices**  | Less common                | Less common                 | Common                      | Less common                | Less common                | N/A                        | Very common                | Common in Windows          | Less common                | Growing                    | Less common                |
-
 
 ## Creating a File System in Linux
 
