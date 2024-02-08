@@ -50,7 +50,7 @@ To find all files larger than 2000 blocks (approximately 1MB) and ask the user f
 find $HOME -type f -size +2000 -exec ls -s {} \; -ok rm -f {} \;
 ```
 
-Remember that find command can be a very powerful tool, but it also poses risk of unintentional file deletion or modification, especially when combined with -exec or -delete. Always double-check your commands and use -ok instead of -exec when performing critical operations.
+🔴 **Caution**: Remember that find command can be a very powerful tool, but it also poses risk of unintentional file deletion or modification, especially when combined with -exec or -delete. Always double-check your commands and use -ok instead of -exec when performing critical operations.
 
 ## Locate
 
