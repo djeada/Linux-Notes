@@ -102,7 +102,7 @@ Monitoring disk usage proactively can prevent potential issues related to low di
 
 ### Bash Script Example for Disk Usage Monitoring
 
-```
+```bash
 #!/bin/bash
 
 # Script to monitor disk usage and report
