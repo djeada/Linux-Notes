@@ -5,6 +5,29 @@ Mounting is the process of making a file system, disk, DVD, or USB drive accessi
 Unmounting is the process of disconnecting a mounted file system from the operating system. This should be done before physically disconnecting a device to prevent data loss or corruption.
 
 Use the `mount` and `umount` commands to mount and unmount file systems.
+
+```
++-------------------------------------+        +--------------------------------------+
+|          Operating System           |        |            File System              |
+|          (Linux Environment)        |        | (e.g., Disk, DVD, USB Drive)        |
++-------------------------------------+        +--------------------------------------+
+        | ^                                         | ^
+        | | Mounting                                | | Data Access
+        | | (make accessible)                       | | (read/write)
+        | |                                         | |
+        v |                                         v |
++-------------------------------------+        +--------------------------------------+
+|            mount command            | <----> |           Mounted State             |
++-------------------------------------+        +--------------------------------------+
+        | ^                                         | ^
+        | | Unmounting                              | | Data Protection
+        | | (disconnect safely)                     | | (prevent loss/corruption)
+        | |                                         | |
+        v |                                         v |
++-------------------------------------+        +--------------------------------------+
+|           umount command            | <----> |          Unmounted State            |
++-------------------------------------+        +--------------------------------------+
+```
  
 ## Verifying Drive Visibility
 
@@ -88,13 +111,31 @@ To see a list of all currently mounted file systems, you can use the mount comma
 mount
 ```
 
-### Unmounting File Systems
+Example Output:
+
+```
+/dev/sda1 on / type ext4 (rw,relatime,data=ordered)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+/dev/sdb1 on /mnt/external type vfat (rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,errors=remount-ro)
+```
+
+Output Explanation:
+- **Device**: `/dev/sda1`, `tmpfs`, `/dev/sdb1` - These are the device names or identifiers.
+- **Mount Point**: `/`, `/dev/shm`, `/mnt/external` - These are the directories where the file systems are mounted.
+- **File System Type**: `ext4`, `tmpfs`, `vfat` - This indicates the type of file system.
+- **Mount Options**: `(rw,relatime,data=ordered)`, etc. - These are options used while mounting, like read-write mode, permissions, etc.
+
+Why It's Useful:
+- **System Monitoring and Diagnostics**: Understanding what file systems are mounted, and where, is crucial for system monitoring, troubleshooting, and managing storage devices.
+- **Configuration Verification**: It helps verify if certain file systems are mounted as expected, which is useful after system changes or reboots.
+
+## Unmounting File Systems
 
 Unmounting a file system is the process of detaching it from the system's directory tree. Once a file system is unmounted, files cannot be accessed from that file system until it is mounted again.
 
 This is an essential process because it ensures that all pending read/write operations are completed and all data cached in memory is written to disk. This helps prevent potential data loss or corruption.
 
-## How to Unmount a File System
+### How to Unmount a File System
 
 To unmount a file system, you use the `umount` command followed by the mount point or the device name:
 
