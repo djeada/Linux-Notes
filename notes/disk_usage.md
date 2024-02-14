@@ -100,6 +100,39 @@ For ongoing disk usage monitoring, consider setting up automated tasks. For inst
 
 Monitoring disk usage proactively can prevent potential issues related to low disk space, such as application errors, slow performance, or system crashes.
 
+### Bash Script Example for Disk Usage Monitoring
+
+```
+#!/bin/bash
+
+# Script to monitor disk usage and report
+
+# Set the path for the log file
+LOG_FILE="/var/log/disk_usage_report.log"
+
+# Get disk usage with df
+echo "Disk Usage Report - $(date)" >> "$LOG_FILE"
+echo "---------------------------------" >> "$LOG_FILE"
+df -h >> "$LOG_FILE"
+
+# Get top 10 directories consuming space
+echo "" >> "$LOG_FILE"
+echo "Top 10 Directories by Size:" >> "$LOG_FILE"
+du -x / | sort -nr | head -10 >> "$LOG_FILE"
+
+# Optionally, you can send this log via email instead of writing to a file
+# For email, you can use: mail -s "Disk Usage Report" recipient@example.com < "$LOG_FILE"
+
+# End of script
+```
+
+- Save it as `disk_usage_monitor.sh`.
+- If you prefer to move the script to a standard location for cron jobs and set it up with a single command, you can use a system directory like `/etc/cron.daily`. This directory is used for scripts that should be run daily by the system's cron daemon. Here's how you can do it:
+
+```
+sudo chmod +x /path/to/disk_usage_monitor.sh && sudo mv /path/to/disk_usage_monitor.sh /etc/cron.daily/
+```
+
 ## Challenges
 
 1. Show free space available on a specific filesystem, like the root filesystem (`/`).
