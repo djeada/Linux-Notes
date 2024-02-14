@@ -32,6 +32,21 @@ If you want to identify the top 10 largest directories starting from the root di
 du -x / | sort -nr | head -10
 ```
 
+Here's an example of what the output might look like:
+
+```
+10485760    /usr
+5120000     /var
+2097152     /lib
+1024000     /opt
+524288      /boot
+256000      /home
+128000      /bin
+64000       /sbin
+32000       /etc
+16000       /tmp
+```
+
 In this command, `du -x /` estimates the size of each directory in the root filesystem. `sort -nr` sorts these estimates in numerical order and reverses the output to display the largest sizes first. Finally, `head -10` truncates the output to only the top 10 lines, thereby showing the 10 largest directories.
 
 ## The ncdu Command
@@ -39,6 +54,31 @@ In this command, `du -x /` estimates the size of each directory in the root file
 For a more visual representation of disk usage, you might consider using `ncdu` (NCurses Disk Usage). `ncdu` is a ncurses-based tool that provides a fast and easy-to-use interface to find out what directories are using your disk space. If it's not pre-installed, you can easily install it using your package manager, such as `apt` or `yum`. 
 
 The command `ncdu -x /` will start at the root directory (`/`) and present an interactive interface where you can browse directories and see their sizes.
+
+An example output might look like this in a non-interactive, textual representation:
+
+```
+ncdu 1.15 ~ Use the arrow keys to navigate, press ? for help
+--- / -----------------------------------------------------------------------
+    4.6 GiB [##########] /usr
+    2.1 GiB [####      ] /var
+  600.0 MiB [#         ] /lib
+  500.0 MiB [#         ] /opt
+  400.0 MiB [          ] /boot
+  300.0 MiB [          ] /sbin
+  200.0 MiB [          ] /bin
+  100.0 MiB [          ] /etc
+   50.0 MiB [          ] /tmp
+   20.0 MiB [          ] /home
+   10.0 MiB [          ] /root
+    5.0 MiB [          ] /run
+    1.0 MiB [          ] /srv
+    0.5 MiB [          ] /dev
+    0.1 MiB [          ] /mnt
+    0.0 MiB [          ] /proc
+    0.0 MiB [          ] /sys
+ Total disk usage: 8.8 GiB  Apparent size: 8.8 GiB  Items: 123456
+```
 
 ## Cleaning Up Disk Space
 
