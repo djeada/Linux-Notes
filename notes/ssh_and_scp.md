@@ -154,38 +154,69 @@ scp -P 80 -r root@server:/remote/path/to/directory /local/path/to/directory
 
 ## Transferring Files with SFTP
 
-SFTP (SSH File Transfer Protocol) is another secure file transfer protocol that operates over SSH, providing benefits like heightened security and capabilities to navigate and manipulate the remote directory structure. Many SFTP clients with graphical user interfaces are available, including WinSCP, FileZilla, and CyberDuck, which facilitate easier file transfers and management.
+Secure File Transfer Protocol (SFTP) is a secure method for transferring files between a local and a remote computer. It operates over the SSH protocol, providing encrypted network communication. SFTP is preferred over older protocols like FTP due to its enhanced security features, including secure data transfer and manipulation capabilities within the remote file system.
 
-### Connecting to a Remote Server
+###  Server Setup
 
-To initiate a connection to a remote server via SFTP, use the following command:
+1. SSH as the Underlying Protocol:
+   - SFTP works over the SSH protocol. This means that it uses the same port and encryption mechanisms as SSH.
+   - If you have SSH access to a server, it typically implies that you can use SFTP as well, as long as the SFTP subsystem is enabled on the server.
+
+2. Configure SSH Server:
+   - SFTP depends on the SSH server configuration. It uses the SSH server's settings for port numbers, encryption types, and authentication methods.
+   - The SSH configuration file (usually `/etc/ssh/sshd_config`) should have an entry like `Subsystem sftp /usr/lib/openssh/sftp-server` to enable SFTP service.
+
+3. Apply the changes by restarting the SSH service (`sudo systemctl restart ssh`).
+
+### Client Setup
+
+- For command-line usage, no additional installation is required as SFTP comes with most SSH clients.
+- For a GUI, install clients like WinSCP, FileZilla, or CyberDuck.
+
+### Connecting to a Remote Server via SFTP
+
+To connect to a remote server using SFTP, follow these steps:
+
+1. Open Terminal or Command Line:
+   - On Unix-like systems, open your terminal.
+   - On Windows, you can use PowerShell, CMD, or an SSH client like PuTTY.
+
+2. Use the command `sftp username@serverhost` where `username` is your account on the remote server, and `serverhost` is the hostname or IP address of the server.
 
 ```sh
 sftp username@serverhost
 ```
 
-Upon executing this command, you will be prompted to enter the password for the specified user account. After successful authentication, you will encounter the sftp> prompt, indicating that you are connected and can commence with issuing SFTP commands.
+3. Authenticate:
+   - Enter your password when prompted.
+   - If you've set up SSH key authentication, you might not need to enter a password.
 
 ### Basic SFTP Commands
 
-Here are some basic commands you can use during your SFTP session:
+Once connected, you can use several commands to manage files:
 
-- `ls`: Lists files and directories in the current directory on the remote server.
-- `cd`: Changes the current directory on the remote server.
-- `put`: Uploads a file from your local machine to the remote server.
-- `get`: Downloads a file from the remote server to your local machine.
+ - `ls`: Z Lists files and directories in the current directory on the remote server.
+ - `cd`: Changes the current directory on the remote server.
+ - `put local_file`: Uploads a file from your local machine to the current directory on the remote server.
+ - `get remote_file`: Downloads a file from the current directory on the remote server to your local machine.
+ - `mkdir directory_name`: Creates a new directory on the remote server.
+ - `rmdir directory_name`: Removes a directory on the remote server.
+ - `rm file_name`: Deletes a file on the remote server.
+ - `exit`: Closes the SFTP session.
 
-### Example Usage
+Here's how you might use these commands in a session:
 
-Here are some example usages of the commands:
-
-```sh
+```bash
 sftp> ls
 sftp> cd /path/to/directory
 sftp> put /local/path/to/file
 sftp> get /remote/path/to/file
+sftp> mkdir new_directory
+sftp> rmdir old_directory
+sftp> rm unwanted_file
+sftp> exit
 ```
-
+   
 ## Other Protocols for File Transfers
 
 Aside from SCP and SFTP, numerous other protocols and tools can be utilized for transferring files, each with their own characteristics:
