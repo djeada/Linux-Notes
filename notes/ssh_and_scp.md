@@ -173,8 +173,6 @@ Secure File Transfer Protocol (SFTP) is a secure method for transferring files b
 - For command-line usage, no additional installation is required as SFTP comes with most SSH clients.
 - For a GUI, install clients like WinSCP, FileZilla, or CyberDuck.
 
-### Connecting to a Remote Server via SFTP
-
 To connect to a remote server using SFTP, follow these steps:
 
 1. Open Terminal or Command Line:
