@@ -5,7 +5,7 @@ To make learning more interactive, we've included challenges in each section, en
 
 This repository represents the author's accumulated knowledge about Linux, gathered over time. Our goal is to support your learning journey and your work in the DevOps field with these resources. If you have any questions, feel free to reach out.
 
-![linux](https://user-images.githubusercontent.com/37275728/222826212-fc2dea16-5926-4b22-9596-ec3cc5d6690d.png)
+![linux](https://github.com/djeada/Linux-Notes/assets/37275728/b383696f-241a-4285-ac57-e0d576ecdb1e)
 
 ## Available notes
 
