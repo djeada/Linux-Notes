@@ -77,49 +77,44 @@ readlink -f symlink_name
 
 ## Challenges
 
-1. **Hard Link Exploration**:
+1. Hard Link Exploration:
     - Create a text file named `myfile.txt` in a directory.
     - Inside another directory, create a hard link to `myfile.txt` named `myhardlink`.
     - Delete `myhardlink`.
     - What happened to the original `myfile.txt`? Is it still accessible?
 
-2. **Inode Investigation**:
+2. Inode Investigation:
     - Create a text file named `inodefile.txt`.
     - Make a symlink to `inodefile.txt` in the same directory and name it `symlink_to_inodefile`.
     - Display the inode number for both `inodefile.txt` and `symlink_to_inodefile` using the `ls -li` command.
     - Compare the inode numbers. Are they the same or different?
 
-3. **Library Links Search**:
+3. Library Links Search:
     - Navigate to the `/lib` folder.
     - Use the `ls` command to list all the files and identify which ones are links. Can you differentiate between hard links and symlinks?
     - *Hint*: Hard links will have a link count greater than 1 in the second column, while symlinks will be highlighted differently (often in cyan) and show the path they link to.
 
-4. **Dangling Symlinks**:
+4. Dangling Symlinks:
     - Create a text file named `original.txt`.
     - Create a symlink to `original.txt` named `dangling_symlink`.
     - Delete `original.txt`.
     - What happens when you try to access `dangling_symlink`? Why?
 
-5. **Inode Limits**:
-    - Can a filesystem run out of inodes even if there's still disk space available? Research and explain.
+5. Can a filesystem run out of inodes even if there's still disk space available? Research and explain.
 
-6. **Hard Links and Directories**:
-    - Try creating a hard link to a directory. What happens and why?
+6. Try creating a hard link to a directory. What happens and why?
 
-7. **Multiple Hard Links**:
+7. Multiple Hard Links:
     - Create a text file named `multi.txt`.
     - Make three hard links to this file in different locations or directories.
     - Modify the content of `multi.txt`.
     - Check the content of all three hard links. What do you observe?
 
-8. **Identifying File Types**:
-    - Use the `ls` command with a flag that indicates the type of file (file, directory, symlink, etc.) for each item in the `/etc` directory. Which flag should you use, and what are the indicators for each type?
+8. Use the `ls` command with a flag that indicates the type of file (file, directory, symlink, etc.) for each item in the `/etc` directory. Which flag should you use, and what are the indicators for each type?
 
-9. **Changing Symlink Targets**:
+9. Changing Symlink Targets:
     - Create two text files, `fileA.txt` and `fileB.txt`.
     - Create a symlink named `mylink` pointing to `fileA.txt`.
     - Without deleting `mylink`, make it point to `fileB.txt`. How would you do this?
 
-10. **Space Usage**:
-    - How much space does an inode typically consume on a filesystem? Research and provide your findings.
-
+10. How much space does an inode typically consume on a filesystem? Research and provide your findings.
