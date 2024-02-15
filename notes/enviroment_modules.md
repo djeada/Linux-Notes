@@ -162,8 +162,7 @@ module load python/3.8
 
 These commands modify your shell environment to set the appropriate version of Python as the default. You can verify the active Python version using the `python --version` command.
 
-
-## Challenges: Exploring Environment Modules
+## Challenges
 
 1. Install environment modules on your system, using the appropriate command for your operating system (e.g., `apt install environment-modules` for Debian-based systems, `yum install environment-modules` for CentOS, etc.).
 2. Create a directory in `/etc/modulefiles` for a new application. For example, create a directory for Python by executing `sudo mkdir /etc/modulefiles/python`.
