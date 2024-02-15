@@ -129,15 +129,19 @@ du -x / | sort -nr | head -10 >> "$LOG_FILE"
 - Save it as `disk_usage_monitor.sh`.
 - If you prefer to move the script to a standard location for cron jobs and set it up with a single command, you can use a system directory like `/etc/cron.daily`. This directory is used for scripts that should be run daily by the system's cron daemon. Here's how you can do it:
 
-```
+```bash
 sudo chmod +x /path/to/disk_usage_monitor.sh && sudo mv /path/to/disk_usage_monitor.sh /etc/cron.daily/
 ```
 
 ## Challenges
 
-1. Show free space available on a specific filesystem, like the root filesystem (`/`).
-2. Display percentage of space used for each mounted filesystem.
-3. Show information about all filesystems, including unmounted ones.
-4. Check the size of the current directory.
-5. Check the size of the `/home` directory.
-6. Find the 10 largest directories in the system.
+1. Display the free space available on the root filesystem (`/`).
+2. For each mounted filesystem, show the percentage of space used.
+3. Provide information about all filesystems, including those that are not currently mounted.
+4. Determine the size of the directory you're currently in.
+5. Check and report the size of the `/home` directory.
+6. Identify the 10 largest directories in the system.
+7. Track and report the amount of data being written to the disk in real-time.
+8. Locate individual files that are taking up the most space on the disk.
+9. Take snapshots of disk usage at different times and compare them to identify growth trends.
+10. Break down disk usage statistics by the types of files (e.g., `.txt`, `.jpg`, `.log`).
