@@ -55,6 +55,44 @@ The Master Boot Record is the first sector of a bootable disk (e.g., /dev/sda or
 - **Partition Table Information**: Defines the organization of the disk into partitions.
 - **MBR Validation Check**: A magic number for error checking.
 
+```
+                    Computer Starts
+                         |
+                         v
+              +---------------------+
+              |     BIOS/UEFI       |
+              | (Basic Input/Output |
+              |   System/Unified    |
+              | Extensible Firmware |
+              |     Interface)      |
+              +---------------------+
+                         |
+                         | Reads MBR
+                         v
+              +---------------------+
+              |                     |
+              |   Master Boot       |
+              |       Record        |
+              |                     |
+              +---------------------+
+                         |
++------------------------+-----------------------+
+|                        |                       |
+|   Boot Loader Info     |   Partition Table     |
+|     (loads second      |  (organizes disk into |
+|     stage boot loader) |    partitions)        |
+|                        |                       |
++------------------------+-----------------------+
+                         |
+                         | MBR Validation Check
+                         v
+              +---------------------+
+              |     Second Stage    |
+              |      Boot Loader    |
+              |   (e.g., GRUB, LILO)|
+              +---------------------+
+```
+
 ## 3. Second-Stage Boot Loader
 
 This stage takes over after the first stage. One of the most common second-stage boot loaders is GRUB (Grand Unified Bootloader). GRUB allows users to choose which kernel image should be executed and displays a splash screen.
@@ -68,6 +106,36 @@ In addition, GRUB understands file system layouts and can load modules, such as 
 | **Ease of Modification** | More Difficult | Customize with /etc/default/grub |
 | **Live Boot Environments** | No Support | Can Boot from ISO or USB |
 | **Boot Menu Display** | Usually Displays on Boot | Hidden Boot Menu (Hold down SHIFT during boot) |
+
+```
++-------------------+                  +-------------------+
+|                   |                  |                   |
+|    MBR / EFI      |                  |   Configuration   |
+| (Boot Instructions|----------------->|      Files        |
+|     from BIOS)    |   Input Stage    |  (e.g., grub.cfg) |
+|                   |                  |                   |
++-------------------+                  +-------------------+
+                           |
+                           |
+                           v
+              +-------------------------------+
+              |        Boot Loader            |
+              |-------------------------------|
+              | Initializes and Checks Config |
+              | Identifies OS Options         |
+              | Displays Menu (if multi-boot) |
+              | Loads Selected OS Kernel      |
+              | Transfers Control to OS       |
+              +-------------------------------+
+                           |
+                           |
+                           v
+              +-------------------------------+
+              |          Operating            |
+              |           System              |
+              |   (Loaded and Ready to Run)   |
+              +-------------------------------+
+```
 
 ### 4. Kernel Initialization
 
@@ -302,32 +370,32 @@ touch /.autorelabel
 
 ## Challenges
 
-1. **Reboot your system:**
+1. Reboot your system:
     - Use the `reboot` command to restart your system. 
     - Check the output of the `uptime` command to verify that the system has been restarted. 
-    - You should see the system uptime is very short, indicating a recent restart.
+    - You should see that system uptime is very short, indicating a recent restart.
 
-2. **Change your system's hostname:**
+2. Change your system's hostname:
     - First, check the current hostname using the `hostname` command.
     - Use the `hostnamectl set-hostname your_new_name` command to rename your server, replacing `your_new_name` with the new name you want to assign.
     - Run the `hostname` command again to confirm that the operation was successful. The name displayed should match the new name you assigned.
 
-3. **Recover the root password:**
+3. Recover the root password:
     - Without logging out of your current session, simulate a situation where you've lost the root password by opening a new terminal session or SSH connection where you aren't logged in as root.
     - Follow the steps provided in the "Recovering the Root Password" section above to reset the root password.
     - After rebooting, ensure that you can successfully log in with the new root password.
 
-4. **Practice handling kernel panic:**
+4. Practice handling kernel panic:
     - Although simulating a kernel panic scenario isn't recommended on a production machine, understanding the steps needed to resolve a kernel panic is valuable.
     - Review the "Kernel panic" section and take note of the steps you would take to diagnose and resolve a kernel panic.
 
-5. **Manage system runlevels/targets:**
+5. Manage system runlevels/targets:
     - Check your current runlevel or target.
     - If you are using an init-based system, try changing the runlevel and verify the change.
     - If you are using a systemd-based system, try switching between targets and confirm that the change took effect.
-    - Remember to switch back to your default runlevel or target after you've completed the challenge.
+    - 🔴 Remember to switch back to your default runlevel or target after you've completed the challenge.
 
-6. **Schedule system tasks:**
+6. Schedule system tasks:
     - Try to schedule a system shutdown using the `shutdown` command, then cancel it before it takes effect.
     - Do the same with a system reboot.
-    - Remember: make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
+    - 🔴 Remember: make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
