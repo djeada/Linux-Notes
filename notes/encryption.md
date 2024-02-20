@@ -10,15 +10,19 @@ Encryption is paramount for preserving data confidentiality and integrity. It is
 
 * **Regulatory Compliance**: Many regulations, like HIPAA or GDPR, require the encryption of certain types of data.
 
+```
+[ Plain Text ]  -> +---------------------+ -> [ Encrypted Data ]
+    "Hello"        | Encrypt with a Key  |        "6hj7!#f&"
+                   +---------------------+
+```
+
 ## GPG (GNU Privacy Guard)
 
 GPG, or GNU Privacy Guard, is a public key cryptography implementation that allows secure communication and data storage. It enables users to encrypt, decrypt, and sign their data and communications. GPG uses a combination of symmetric and public key cryptography.
 
-## GPG Key Management
-
 GPG works based on a pair of keys - public and private. The public key is used to encrypt the data, while the private key decrypts it.
 
-**Generating GPG Keys:**
+### Generating GPG Keys
 
 You can install GPG and generate a new set of keys on a Debian-based system with:
 
@@ -29,108 +33,45 @@ gpg --gen-key
 
 Follow the instructions to set your key pair, including setting a secure passphrase.
 
-**Listing GPG Keys:**
+### Listing GPG Keys
 
-You can list your public and private keys with:
+GPG provides commands to list and manage keys in your keyring:
 
 ```
 gpg --list-keys        # Lists public keys
 gpg --list-secret-keys # Lists private keys
 ```
 
-## Encrypting and Decrypting with GPG
+### Importing a Public Key
 
-**Importing Public Key:**
-
-To encrypt a file for a specific recipient, you need to import their public key:
+To send an encrypted file to someone, you must first import their public key into your GPG keyring:
 
 ```
 gpg --import recipient_public_key.asc
 ```
 
-**Trusting a Public Key:**
+### Trusting an Imported Public Key
 
-Before you can use an imported key, you need to trust it:
+After importing a public key, establish trust to confirm the key genuinely belongs to your intended recipient:
 
 ```
 gpg --edit-key recipient_email@example.com
 gpg> trust
 ```
 
-Choose the trust level and save the changes.
+Select the appropriate level of trust and save the changes.
 
-**Encrypting a File:**
+### Encrypting a File
 
-To encrypt a file using the recipient's public key:
+Encrypt a file with the recipient's public key to ensure only they can decrypt it with their private key:
 
 ```
 gpg -e -r recipient_email@example.com file.txt
 ```
 
-This command creates an encrypted `file.txt.gpg`.
+This command generates an encrypted version named `file.txt.gpg`.
 
-**Decrypting a File:**
-
-The recipient can decrypt the file using their private key:
-
-```
-gpg -d -o file.txt file.txt.gpg
-```
-
-This command creates a decrypted `file.txt` from `file.txt.gpg`.
-
-**Signatures:**
-
-GPG also allows for digital signatures which verify the author of the message:
-
-```
-gpg --sign file.txt
-```
-
-This command creates a `file.txt.gpg` which is the signed version of `file.txt`.
-
-**Verifying Signatures:**
-
-To verify a signed file:
-
-```
-gpg --verify file.txt.gpg
-```
-
-This command checks the signature on `file.txt.gpg` and reports whether it was signed with a trusted key.
-
-## Advanced GPG Features
-
-Beyond basic encryption, decryption, and signing, GPG also includes some more advanced features:
-
-**Creating an ASCII Armored Public Key:**
-
-Sometimes, you'll want to share your public key in a text-safe format. You can do this with GPG's ASCII armor option:
-
-```
-gpg --armor --export your_email@example.com > public_key.asc
-```
-
-**Revocation Certificates:**
-
-It's important to create a revocation certificate for your GPG key. This allows you to inform others that your keys should no longer be used, in case they are lost or compromised.
-
-```
-gpg --gen-revoke --armor --output=revoke.asc your_email@example.com
-```
-
-Store the `revoke.asc` file in a secure, reliable place. 
-
-**Subkeys:**
-
-GPG allows you to create subkeys, which can be used instead of your primary key for encrypting, decrypting or signing data. This way, you can store your primary key in a secure offline location and use a revocable subkey for day-to-day tasks.
-
-```
-gpg --edit-key your_email@example.com
-gpg> addkey
-```
-
-## Symmetric Encryption
+### Symmetric Encryption
 
 GPG also supports symmetric encryption, where the same key is used for encryption and decryption. This is useful for encrypting data where no other parties need to be involved.
 
@@ -138,37 +79,154 @@ GPG also supports symmetric encryption, where the same key is used for encryptio
 gpg --symmetric file.txt
 ```
 
+### Decrypting a File
+
+The recipient uses their private key to decrypt the file:
+
+```
+gpg -d -o file.txt file.txt.gpg
+```
+
+This recreates the original `file.txt` from its encrypted version `file.txt.gpg`.
+
+### Creating Digital Signatures
+
+Digital signatures authenticate the source of a message or file:
+
+```
+gpg --sign file.txt
+```
+
+This produces `file.txt.gpg`, a signed version of `file.txt`, ensuring its integrity and source.
+
+### Verifying Digital Signatures
+
+To confirm the authenticity of a signed file:
+
+```
+gpg --verify file.txt.gpg
+```
+
+This checks and reports whether `file.txt.gpg` was signed with a trusted key, verifying the sender's identity.
+
+### Exporting Your Public Key
+
+To allow others to encrypt messages for you or verify your signatures, share your public key:
+
+```
+gpg --export -a your_email@example.com > your_public_key.asc
+```
+
+This creates a file `your_public_key.asc` containing your public key.
+
+### Revoking a Key
+
+In case of key compromise or loss, revoke the key to inform others it's no longer secure:
+
+```
+gpg --gen-revoke your_email@example.com
+```
+
+Follow the prompts to generate a revocation certificate.
+
+## Advanced GPG Features
+
+Beyond basic encryption, decryption, and signing, GPG also includes some more advanced features:
+
+### Creating an ASCII Armored Public Key
+
+Sometimes, you'll want to share your public key in a text-safe format. You can do this with GPG's ASCII armor option:
+
+```
+gpg --armor --export your_email@example.com > public_key.asc
+```
+
+### Revocation Certificates
+It's important to create a revocation certificate for your GPG key. This allows you to inform others that your keys should no longer be used, in case they are lost or compromised.
+
+```
+gpg --gen-revoke --armor --output=revoke.asc your_email@example.com
+```
+Store the `revoke.asc` file in a secure, reliable place.
+
+### Subkeys
+GPG allows you to create subkeys, which can be used instead of your primary key for encrypting, decrypting, or signing data. This way, you can store your primary key in a secure offline location and use a revocable subkey for day-to-day tasks.
+
+```
+gpg --edit-key your_email@example.com
+gpg> addkey
+```
+
+### Advanced Encryption Options
+For additional security, consider using symmetric encryption or adjusting encryption algorithms:
+
+```
+gpg --symmetric file.txt            # Symmetric encryption
+gpg --cipher-algo AES256 -e file.txt # Specifying an encryption algorithm
+```
+
 ## Working with Encrypted Emails
 
 Many email clients, like Thunderbird with Enigmail, support GPG encryption natively. This allows you to send and receive encrypted emails with other GPG users.
 
-**Encrypting an Email:**
+### Encrypting an Email
 
 ```
 gpg --armor --encrypt --recipient 'recipient_email@example.com' --output message.asc message.txt
 ```
 
-**Decrypting an Email:**
+### Decrypting an Email
 
 ```
 gpg --decrypt message.asc > message.txt
 ```
 
-## Passwords and Passphrases
-
-The security of your private keys heavily relies on having a strong passphrase. Ensure to create a unique, long passphrase and consider using a password manager to help manage this.
-
 ## Key Servers
 
-Key servers are public repositories of GPG keys which you can use to easily distribute and retrieve public keys. They use the HKP (HTTP Keyserver Protocol), which is an HTTP-based protocol.
+Key servers play a crucial role in the GPG ecosystem, acting as centralized repositories for public GPG keys. They facilitate easy distribution and retrieval of these keys, essential for public key cryptography. Key servers operate using the HKP (HTTP Keyserver Protocol), a specialized HTTP-based protocol designed for the publishing and retrieval of cryptographic keys.
+
+### Sending Keys to a Key Server
+
+To make your public key accessible to others, you can upload it to a key server:
 
 ```
 gpg --send-keys --keyserver hkp://pgp.mit.edu your_key_id
 ```
 
+Replace `your_key_id` with your actual key ID. This command uploads your key to a key server like `pgp.mit.edu`, making it available for others to import and use for encrypted communication.
+
+### Searching for Keys on a Key Server
+
+You can also search for and import others' public keys from key servers:
+
+```
+gpg --search-keys --keyserver hkp://pgp.mit.edu email@example.com
+```
+
+This searches the specified key server for the public key associated with the given email.
+
+### Updating Key Information
+
+If you've made changes to your key (like adding a subkey or changing expiration dates), update the key server:
+
+```
+gpg --refresh-keys --keyserver hkp://pgp.mit.edu
+```
+
+This ensures your key remains current and trustworthy.
+
 ## Disk Encryption
 
-Beyond file or email encryption, GPG can be used for full disk encryption. Tools like LUKS can leverage GPG keys to provide disk encryption for Linux systems.
+GPG's versatility extends to disk encryption, where it's used to secure entire storage devices. Disk encryption is particularly valuable for protecting sensitive data on laptops or external drives that might be lost or stolen.
+
+### Integration with Disk Encryption Tools
+While GPG itself doesn't provide disk encryption, it can be integrated with tools like LUKS (Linux Unified Key Setup) on Linux systems. LUKS leverages GPG keys for encrypting and decrypting entire disk volumes, offering a high level of security.
+
+### Setting up GPG with LUKS
+The setup involves creating a LUKS-encrypted volume and then using a GPG-encrypted keyfile to unlock it. This method combines the strength of LUKS disk encryption with the versatility of GPG key management.
+
+### Advantages
+This approach provides strong encryption for your entire filesystem, protecting against unauthorized access. It also allows for flexible key management, as you can easily revoke, renew, or change keys managed by GPG without re-encrypting the entire disk.
 
 ## Challenges
 
