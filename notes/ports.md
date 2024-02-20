@@ -2,6 +2,26 @@
 
 Ports are integral to the functioning of computer networks, acting as endpoints in the communication process between devices. They can be visualized as doors through which data enters or exits a computer.
 
+```
++-----------------------------------+
+|                                   |
+|          Server/Computer          |
+|                                   |
++------------------+----------------+
+                   |
+            Network Interface
+                   |
++------------------+----------------+
+|       Port 80    |    Port 443    |
+| (HTTP traffic)   | (HTTPS traffic)|
++------------------+----------------+
+|       Port 22    |    Port 21     |
+|  (SSH traffic)   | (FTP traffic)  |
++------------------+----------------+
+|        ...       |       ...      |
++------------------+----------------+
+```
+
 ### Key Facts
 
 - **Total Ports**: There are 65,536 ports, ranging from 0 to 65,535.
