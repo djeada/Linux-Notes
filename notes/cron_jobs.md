@@ -1,6 +1,6 @@
 ## Cron
 
-Cron is a utility in Unix-like operating systems, including Linux, that automates the execution of scripts or commands. This automation can be scheduled to occur at fixed times, dates, or intervals. The utility is commonly used for system maintenance tasks such as log rotation, backups, and system updates. 
+Cron is a utility that automates the execution of scripts or commands. This automation can be scheduled to occur at fixed times, dates, or intervals. The utility is commonly used for system maintenance tasks such as log rotation, backups, and system updates. 
 
 Cron operates through a daemon, which is a background process that is always running. The cron daemon periodically checks for scheduled tasks in special files called crontabs. 
 
