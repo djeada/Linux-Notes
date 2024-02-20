@@ -1,14 +1,15 @@
 ## Services
 
-A service is a background program that talks to other programs. Services use communication methods, like sockets, to talk to other programs. You usually use a service to:
+A service in computing is a background process that performs specific tasks or offers various functionalities to other programs. These services typically communicate using methods such as sockets or inter-process communication (IPC). The primary purposes of a service include:
 
-* Run in the background.
-* Start when the computer starts.
-* Be available for the whole system.
+- Running in the background without user intervention.
+- Automatically starting during the system's boot process.
+- Being accessible system-wide, providing functionalities to various components.
 
-You can control services by starting or stopping them (one time) or enabling or disabling them (starting and stopping when the computer starts). Examples of common services are the `sshd` service, which starts an SSH server, and the `httpd` service, which acts as a server using the HTTP and/or HTTPS network.
+Services can be managed through various actions like starting or stopping them on demand, or enabling or disabling them to automatically start or stop during system boot. Common examples of services include the `sshd` service, which initiates an SSH server, and the `httpd` service, responsible for web server functionalities using HTTP and/or HTTPS protocols.
 
-In modern Unix-like systems, the most common tool for managing services is SystemD. SystemD is a manager used to run various scripts when the computer starts. These scripts, called units, include services, mounts, and sockets. To list all units managed by SystemD, use the command `systemctl -t help`. The systemctl utility is a command-line tool used to talk to SystemD and is often used to start, stop, and manage services.
+In modern Unix-like operating systems, `SystemD` is a prevalent tool for managing services. SystemD orchestrates the system's startup sequence by handling various scripts known as units. These units encompass services, mount points, sockets, and more. To view all units managed by SystemD, use the command `systemctl list-units`. The `systemctl` utility, a command-line interface, interacts with SystemD to manage these units, including starting, stopping, and configuring services.
+
 
 ```
 +--------------------------------------------------+
@@ -25,7 +26,6 @@ In modern Unix-like systems, the most common tool for managing services is Syste
 |         v         |             +-------------+  |
 |    +------------------------+                    |
 |    |      Linux Service     |                    |
-|    |         (Daemon)       |                    |
 |    |                        |                    |
 |    | - Runs in background   |                    |
 |    | - Performs tasks       |                    |
@@ -40,101 +40,112 @@ In modern Unix-like systems, the most common tool for managing services is Syste
 
 ## Daemons
 
-A daemon is a background program used to do a task or provide a service. Daemons are usually started by the system but can also be started manually. Unlike programs run by a user, a daemon is not directly controlled by a user.
+Daemons are specialized background processes designed to perform tasks or provide services autonomously. They are typically launched during the system's startup process but can also be initiated manually. Unlike interactive user programs, daemons operate independently of user control.
 
-Daemons are set up using rc and init scripts, usually found in `/etc/rc.d` and `/etc/init.d`. On systems using `init.d` scripts, you can list all services by using the command `ls /etc/init.d`. Several tools can be used to edit rc and init scripts, including systemctl for SystemD, service, and chkconfig for SysV.
+Daemons are traditionally managed using `rc` (run commands) and `init` (initialization) scripts, commonly located in `/etc/rc.d` and `/etc/init.d` directories. On systems utilizing `init.d` scripts, you can list all services using `ls /etc/init.d`. Tools like `systemctl` (for SystemD-based systems), `service`, and `chkconfig` (for SysV-init systems) are used to manage these scripts.
 
-SystemD is the most common tool for managing services and daemons in modern Unix-like systems, but some older systems may still use rc and init scripts. A program can also act as both a service and a daemon, depending on its configuration and use.
+While `SystemD` has become the standard for service and daemon management in modern Unix-like systems, some older systems still rely on `rc` and `init` scripts. A program can function as both a service and a daemon, depending on its configuration and role.
 
 ## Daemons vs services
 
-A daemon is a background program used to do a task or provide a service. Daemons are usually started by the system and can also be started manually. They are not directly controlled by a user and are set up using rc and init scripts.
+The distinction between daemons and services primarily lies in their roles and operational contexts. Daemons are designed for specific tasks or to provide particular services autonomously. They are generally system-started and can also be manually initiated, operating independently of direct user control, managed via `rc` and `init` scripts.
 
-A service is a background program that talks to other programs. Services are usually used when you want a program to run in the background, start when the computer starts, or be available for the whole system. Services can be controlled by starting or stopping them (one time), or enabling or disabling them (starting and stopping when the computer starts).
+In contrast, services are background processes that interface with other programs, often necessitating system-wide availability, starting with the system boot, and running continuously in the background. They are managed by starting, stopping, enabling, or disabling them as needed.
 
-The main difference between a daemon and a service is how they are used and the tasks they do. Daemons usually do specific tasks or provide services, while services talk to other programs.
+The fundamental difference lies in their operational scope and interaction: daemons typically perform dedicated tasks or services autonomously, while services facilitate interactions with other system components.
 
 ## Managing Services
 
-Services are background programs that provide specific functions or services to other programs. Services can be controlled by starting, stopping, enabling, or disabling them. The tools and commands used to manage services depend on the type of service and the operating system being used.
-
-### Checking the Status of a Service
-
-To check the status of a service, you can use the status command. The way this command is used depends on the tool being used. Here are some examples:
-
-Using chkconfig:
-
-```
-chkconfig httpd status
-```
-
-Using systemd:
-
-```
-systemctl status httpd.service
-```
+Services, being integral background processes, offer functionalities or services to other programs or the system. Their management involves starting, stopping, enabling, or disabling them, with the specific commands and tools varying based on the service type and the operating system.
 
 ### Enabling and Disabling Services
 
-To enable a service, you can use the enable command. This will make the service start when the system starts. The way this command is used depends on the tool being used. Here are some examples:
+Enabling and disabling services are crucial tasks in system administration, determining whether a service starts automatically during the system boot process.
 
-Using chkconfig:
+#### Enabling Services
 
-```
+To enable a service means to configure it to start automatically when the system boots up. This is particularly useful for services that are essential for system operations or that provide critical functionalities. The command to enable a service varies depending on the system's initialization system. Here are common examples:
+
+- Using `chkconfig` for SysV-init systems:
+
+```bash
 chkconfig httpd on
 ```
 
-Using systemd:
+This command sets the httpd service to start automatically.
 
-```
+- Using `systemctl` for SystemD-based systems:
+
+```bash
 systemctl enable httpd.service
 ```
 
-To disable a service, you can use the disable command. This will stop the service from starting when the system starts. The way this command is used depends on the tool being used. Here are some examples:
+This command creates a symbolic link for the httpd.service unit file, ensuring it's activated on boot.
 
-Using chkconfig: 
+#### Disabling Services
 
-```
+Disabling a service prevents it from starting automatically during system boot, which is useful for non-essential services or for troubleshooting conflicts. The specific command also depends on the system's initialization system:
+
+- Using `chkconfig` for SysV-init systems:
+
+```bash
 chkconfig httpd off
 ```
 
-Using systemd: 
+This command removes the httpd service from the system's startup sequence.
 
-```
+- Using `systemctl` for SystemD-based systems:
+
+```bash
 systemctl disable httpd.service
 ```
 
+This command removes the symbolic link for the httpd.service, preventing it from starting at boot.
+
 ### Starting and Stopping Services
 
-To start a service, you can use the start command. This will make the service run right away. The way this command is used depends on the tool being used. Here are some examples:
+Apart from enabling or disabling services for automatic startup, you might need to manually start or stop a service for immediate effect, testing, or troubleshooting.
 
-Using chkconfig:
+#### Starting Services
+
+To start a service means to initiate its operation immediately. This is often done after installing a new service or making configuration changes.
+
+- Using `chkconfig` for SysV-init systems:
 
 ```bash
 service httpd start
 ```
 
-Using systemd:
+This command triggers the immediate start of the httpd service.
+
+- Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl start httpd.service
 ```
+This command tells systemd to start the httpd service right away.
 
-To stop a service, you can use the stop command. This will make the service stop running. The way this command is used depends on the tool being used. Here are some examples:
+#### Stopping Services
 
-Using chkconfig:
+Conversely, stopping a service halts its operation. This can be necessary for maintenance, updates, or to resolve performance issues.
+
+- Using `chkconfig` for SysV-init systems:
 
 ```bash
 service httpd stop
 ```
- 
-Using systemd:
+
+This command stops the httpd service immediately, freeing up resources.
+
+- Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl stop httpd.service
 ```
 
-## Checking the Status of a Service
+This command instructs systemd to terminate the httpd service.
+
+### Checking the Status of a Service
 
 The status of a service shows its current state and if it is active or not. Some common service statuses include:
 
@@ -151,48 +162,60 @@ The status of a service shows its current state and if it is active or not. Some
 
 To check the status of a service, you can use the status command. The way this command is used depends on the tool being used. Here are some examples:
 
-Using chkconfig:
+- Using `chkconfig` for SysV-init systems:
 
-```bash
-chkconfig httpd status
+```
+chkconfig --list httpd
 ```
 
-Using systemd:
+- Using `systemctl` for SystemD-based systems:
 
-```bash
+```
 systemctl status httpd.service
 ```
 
-### Checking service dependencies
+### Checking Service Dependencies
 
-To check if a service depends on a specific target, you can use the `list-dependencies` command with `grep`. For example, to check if the httpd service depends on the `multi-user.target`, use:
+Understanding service dependencies is crucial for effective system administration, particularly when managing startup sequences and troubleshooting service issues. To check whether a particular service is dependent on a specific target or another service, the `systemctl` command can be utilized in conjunction with `grep`. Here's how to do it:
+
+```bash
+systemctl list-dependencies [target/service] | grep [service-name]
+```
+
+For example to determine if the httpd service depends on `multi-user.target`:
 
 ```bash
 systemctl list-dependencies multi-user.target | grep httpd
 ```
 
-If the httpd service depends on the `multi-user.target`, it will be listed in the output. If the service does not depend on the target, the command will not show any output.
+Interpretation of Results:
+
+- **Output Present**: If the httpd service is listed in the output, this indicates that it indeed has a dependency on the specified `multi-user.target`.
+- **No Output**: If there is no output, it implies that httpd does not depend on `multi-user.target`.
 
 Note that the syntax of the list-dependencies command and the target you specify may vary depending on the operating system and the version of systemctl being used.
 
 ## Creating a Custom Service with SystemD
 
-To create a custom service with SystemD, you need to create a service script and put it in the /etc/systemd/system/ directory. The service script is a configuration file that tells SystemD how to manage the service. It has several sections, each with a specific purpose.
+Creating a custom service in SystemD involves writing a service unit file. This file is a configuration script that provides instructions to SystemD on how to manage and execute the service. These scripts are typically placed in the `/etc/systemd/system/` directory. A service script is divided into several sections, each serving a specific purpose.
 
-Common Sections in a Service Script
+### Common Sections in a Service Script
 
-There are three common sections in most service scripts:
+Most service scripts include the following sections:
 
-* `[Unit]`: This section describes the unit and defines dependencies. It may include options such as Description, Documentation, and After.
-* `[Service]`: This section describes how to start and stop the service and request status installation. It may include options such as Type, ExecStart, ExecStop, ExecReload, and Restart.
-* `[Install]`: This section tells SystemD when the service should start during the boot process. It may include options such as WantedBy and RequiredBy.
+- `[Unit]`: This section provides a description of the service and defines its dependencies. Key directives in this section can include `Description`, which gives a brief description of the service, `Documentation`, providing links to the relevant documentation, and `After`, specifying the order of service startup relative to other units.
 
+- `[Service]`: This section details how the service should be started, stopped, and how it should respond under various conditions. Common directives here include `Type`, defining the startup behavior of the service; `ExecStart`, specifying the command to run when the service starts; `ExecStop` and `ExecReload`, defining the commands to stop and reload the service; and `Restart`, specifying the service's restart behavior.
 
-Here is an example of a simple service script that runs a sample script at startup:
+- `[Install]`: This section is used to define how the service integrates into the system's boot process. It typically includes directives like `WantedBy` and `RequiredBy`, which specify the targets that should include this service during their initialization.
 
-```
+### Example of a Simple Service Script
+
+Below is an example of a basic service script. This script configures SystemD to run a specific executable file at startup:
+
+```systemd
 [Unit]
-Description=Sample Script
+Description=Sample Script Service
 
 [Service]
 Type=idle
@@ -202,9 +225,29 @@ ExecStart=/valid/path/to/an/executable/file
 WantedBy=multi-user.target
 ```
 
-In this example, the `[Unit]` section includes a Description option that provides a brief description of the service. The `[Service]` section includes a Type option that specifies the type of service (in this case, idle) and an ExecStart option that specifies the path to the executable file that will be run when the service starts. The `[Install]` section includes a WantedBy option that specifies the target (`multi-user.target`) that the service should be started with.
+This script includes:
+
+- `Description`: A brief explanation of the service.
+- `Type=idle`: Indicates that the service should be started after all jobs are dispatched.
+- `ExecStart`: The path to the executable file that will be run when the service starts.
+- `WantedBy=multi-user.target`: Specifies that the service should be started under the `multi-user.target`, which is a standard target for creating a multi-user environment.
 
 You can read more about targets <a href="https://github.com/djeada/Linux-Notes/blob/main/notes/system_startup.md">here</a>.
+
+### Additional Notes
+
+After creating or modifying a service script, use `systemctl daemon-reload` to reload the SystemD configuration and `systemctl enable [service-name].service` to enable the service.
+
+In the context of SystemD service management, `[service-name]` refers to the name of your service unit file, minus the `.service` extension. It's a unique identifier for your service within the SystemD framework. When you create a custom service script:
+
+1. The file is named with a `.service` extension, for example, `my_custom_service.service`.
+2. The `[service-name]` is the filename without the `.service` extension, i.e., `my_custom_service` in this example.
+
+So, when enabling, starting, or checking the status of your service with SystemD commands, you reference it by this `[service-name]`. For example:
+
+- To enable the service: `systemctl enable my_custom_service.service`
+- To start the service: `systemctl start my_custom_service.service`
+- To check the service status: `systemctl status my_custom_service.service`
 
 ## Challenges
 
