@@ -10,6 +10,34 @@ You can control services by starting or stopping them (one time) or enabling or 
 
 In modern Unix-like systems, the most common tool for managing services is SystemD. SystemD is a manager used to run various scripts when the computer starts. These scripts, called units, include services, mounts, and sockets. To list all units managed by SystemD, use the command `systemctl -t help`. The systemctl utility is a command-line tool used to talk to SystemD and is often used to start, stop, and manage services.
 
+```
++--------------------------------------------------+
+|                Linux Operating System            |
+|                                                  |
+|    +------------------------+   +-------------+  |
+|    |     Service Manager    |   |             |  |
+|    |     (e.g., systemd)    |<--|  User       |  |
+|    +------------------------+   |  Commands   |  |
+|         |         ^             | (e.g.,      |  |
+|         |         |             |  systemctl  |  |
+|    Start|         |Stop/Restart |  start/stop |  |
+|     /Enable       | /Disable    |  /status)   |  |
+|         v         |             +-------------+  |
+|    +------------------------+                    |
+|    |      Linux Service     |                    |
+|    |         (Daemon)       |                    |
+|    |                        |                    |
+|    | - Runs in background   |                    |
+|    | - Performs tasks       |                    |
+|    | - Listens to events    |                    |
+|    | - Logs activity        |                    |
+|    | - Responds to          |                    |
+|    |   service manager      |                    |
+|    +------------------------+                    |
+|                                                  |
++--------------------------------------------------+
+```
+
 ## Daemons
 
 A daemon is a background program used to do a task or provide a service. Daemons are usually started by the system but can also be started manually. Unlike programs run by a user, a daemon is not directly controlled by a user.
