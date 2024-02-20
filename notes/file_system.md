@@ -26,9 +26,19 @@ UNIX and UNIX-like systems, including Linux, organize files in a hierarchical st
 
 2. **Hidden Files**: These files aren't displayed when listing a directory's contents in a standard way. They start with a period (`.`) and typically store configuration data or system files. They can be revealed using the `ls -a` command.
 
-## Understanding File Names
+### Note About File Names
 
-In Linux, filenames are case-sensitive. This means the operating system treats "Test," "TEST," and "test" as different files. Also, most file types in Linux are determined by file content and not by the file extension, unlike systems like Windows.
+Filenames are case-sensitive. This means the operating system treats "Test," "TEST," and "test" as different files. Also, most file types in Linux are determined by file content and not by the file extension, unlike systems like Windows.
+
+### Special Directory Names 
+
+Certain directory names have a special meaning:
+
+1. `./` refers to the current directory. This is often used when running a script or binary in the current directory, like `./script.sh`.
+
+2. `../` refers to the parent directory, the directory above the current one in the filesystem hierarchy.
+
+3. `~/` is a shortcut that refers to the current user's home directory. For example, `~/Documents` would lead to the Documents directory in the current user's home directory.
 
 ## Directory Structure
 
@@ -94,16 +104,6 @@ Key directories within the Linux file system include:
 | `/root`         | Serves as the home directory for the root (superuser) account, distinct from the root directory (`/`). |
 | `/boot`         | Stores files vital for the boot process, including the Linux kernel and the boot loader. |
 | `/media` and `/mnt` | Serve as mount points for file systems and removable devices like CDs, USB drives, etc. |
-
-## Special Directory Names 
-
-In a UNIX file system, certain directory names have a special meaning:
-
-1. `./` refers to the current directory. This is often used when running a script or binary in the current directory, like `./script.sh`.
-
-2. `../` refers to the parent directory, the directory above the current one in the filesystem hierarchy.
-
-3. `~/` is a shortcut that refers to the current user's home directory. For example, `~/Documents` would lead to the Documents directory in the current user's home directory.
 
 ## File System Types
 
