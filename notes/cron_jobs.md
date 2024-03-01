@@ -12,36 +12,20 @@ There are two types of crontabs:
 The process of scheduling and executing a cron job can be illustrated with the following steps:
 
 ```
-+---------------------+
-| User sets up cron   |
-| job with specific   |
-| timing and script   |
-+---------------------+
-           |
-           |
-           v
-+---------------------+
-| The cron daemon     |
-| reads the job       |
-| from crontab        |
-+---------------------+
-           |
-           |
-           v
-+---------------------+
-| Cron daemon         |
-| launches the        |
-| script/job at the   |
-| specified time      |
-+---------------------+
-           |
-           |
-           v
-+---------------------+
-| Script/job executes |
-| as per the user's   |
-| instructions        |
-+---------------------+
++------------+      +--------------+      +-------------+
+|            |      |              |      |             |
+| cron daemon|----->| crontab file |----->| Execute     |
+| (crond)    |      |              |      | cron job    |
+|            |      |              |      | at scheduled|
++------------+      +--------------+      | time        |
+     ^                                 +--|             |
+     |                                 |  +-------------+
+     |                                 |
+     |    +------------------------+   |
+     +----| Every minute, check for|<--+
+          | scheduled tasks in     |
+          | crontab file           |
+          +------------------------+
 ```
 
 ## Cron Directories
@@ -56,21 +40,31 @@ These directories provide a convenient way to schedule scripts or commands at th
 
 ## Custom Schedules
 
-For more specific or unique scheduling needs, users can create a custom crontab file in the `/etc/cron.d` directory. The cron daemon reads each file in this directory and schedules tasks based on the five fields in each entry: minutes, hours, day of the month, month, and day of the week.
+Creating custom schedules with crontab allows users to automate tasks based on specific time criteria. To configure these, place a custom crontab file in `/etc/cron.d`. The cron daemon processes each file in this directory, executing tasks as per the specified schedule, which consists of five time-and-date fields.
 
-The general syntax for scheduling is as follows:
+To manage crontab entries, several commands are available:
+
+- `crontab -e`: Opens an editor to modify the current crontab, where you can insert your desired cron schedule.
+- `crontab -l`: Displays a list of all active cron jobs.
+- `crontab -r`: Removes the current crontab, effectively deleting all scheduled jobs.
+
+A crontab entry is structured as follows, where each asterisk can be replaced with a specific time value:
+
+```
++---------------- minute (0 - 59)
+|  +------------- hour (0 - 23)
+|  |  +---------- day of month (1 - 31)
+|  |  |  +------- month (1 - 12)
+|  |  |  |  +---- day of week (0 - 7) (Sunday=0 or 7)
+|  |  |  |  |
+*  *  *  *  *  command to be executed
+```
 
 * Minutes: Specify values from 0 to 59, or use `*` for every minute.
 * Hours: Specify values from 0 to 23 (24-hour clock), or use `*` for every hour.
 * Day of the month: Specify values from 1 to 31, or use `*` for every day.
 * Month: Specify values from 1 to 12, or use `*` for every month.
 * Day of the week: Specify values from 0 to 7 (both 0 and 7 represent Sunday), or use `*` for every day of the week.
-
-Users can interact with the crontab through various commands:
-
-* Use `crontab -e` to edit the current crontab.
-* Use `crontab -l` to list current cron jobs.
-* Use `crontab -r` to delete the current crontab.
 
 Here are some examples of cron schedules:
 
