@@ -1,6 +1,6 @@
 ## Ports
 
-Ports are integral to the functioning of computer networks, acting as endpoints in the communication process between devices. They can be visualized as doors through which data enters or exits a computer.
+In computer networking, ports serve as crucial endpoints for communication between devices, similar to doors through which data flows in and out of a computer.
 
 ```
 +-----------------------------------+
@@ -24,22 +24,24 @@ Ports are integral to the functioning of computer networks, acting as endpoints 
 
 ### Key Facts
 
-- **Total Ports**: There are 65,536 ports, ranging from 0 to 65,535.
-- **Port Types**: Ports can be classified as:
-  - **Well-Known Ports**: Range from 0 to 1023 and are used by widely-recognized services (e.g., HTTP, FTP).
-  - **Registered Ports**: Range from 1024 to 49,151 and are less commonly used.
-  - **Dynamic/Private Ports**: Range from 49,152 to 65,535 and are typically used for private purposes.
-  
-### Protocols Using Ports
-Computers use multiple protocols to communicate over the internet, and the two most prominent are:
-  
+- **Differentiation**: While IP addresses distinguish machines on a network, ports differentiate the services running on a single machine.
+- **Total Number of Ports**: The total range of ports extends from 0 to 65,535, making up 65,536 unique ports.
+- **Types of Ports**:
+  - **Well-Known Ports**: Spanning from 0 to 1023, these ports are reserved for widely-acknowledged services such as HTTP (port 80) and FTP (port 21).
+  - **Registered Ports**: Ranging from 1024 to 49,151, these ports are designated for less common services.
+  - **Dynamic/Private Ports**: Occupying the range from 49,152 to 65,535, these ports are typically used for private or dynamic purposes.
+
+### Protocols and Ports
+
+There are two primary protocols employed in internet communication, each with its own set of 65,536 ports:
+
 - **TCP (Transmission Control Protocol)**:
-  - **Features**: Reliable, connection-oriented.
-  - **Drawbacks**: Potentially more vulnerable to attacks if not properly secured.
-  
+  - **Characteristics**: Offers reliable, connection-oriented communication. It establishes a connection before data transfer and ensures that all packets arrive at the destination.
+  - **Considerations**: Requires careful security measures as it can be more susceptible to attacks.
+
 - **UDP (User Datagram Protocol)**:
-  - **Features**: Connectionless, often faster because it doesn't establish a formal connection.
-  - **Drawbacks**: Less reliable than TCP since it doesn't guarantee data delivery.
+  - **Characteristics**: Provides a connectionless service, often resulting in faster data transmission because it doesn't necessitate a formal connection setup.
+  - **Considerations**: Less reliable compared to TCP as it does not guarantee the delivery or order of data packets.
 
 ### Common Services and Their Ports
 
@@ -52,11 +54,27 @@ Several standard services are associated with specific ports:
 
 ### Port Statuses
 
-Ports can have various statuses, but the most common ones are:
+Below is a table detailing some of the most commonly used services and their associated port numbers:
 
-- **Open**: This status means the port is actively accepting incoming connections.
-- **Closed**: Ports in this state reject all connections.
-- **Filtered**: This state indicates that the port is being protected by a firewall, making it hard to determine if it's open or closed.
+| Service            | Port Number | Protocol |
+|--------------------|-------------|----------|
+| HTTP (Web Server)  | 80          | TCP      |
+| HTTPS (Secure Web) | 443         | TCP      |
+| FTP (File Transfer)| 21          | TCP      |
+| SSH (Secure Shell) | 22          | TCP      |
+| Telnet             | 23          | TCP      |
+| SMTP (Email Send)  | 25          | TCP      |
+| DNS (Domain Name)  | 53          | TCP/UDP  |
+| DHCP (Dynamic IP)  | 67, 68      | UDP      |
+| TFTP (Trivial FTP) | 69          | UDP      |
+| POP3 (Email Receive)| 110        | TCP      |
+| IMAP (Email Access)| 143         | TCP      |
+| SNMP (Network Manage)| 161       | UDP      |
+| LDAP (Directory Access)| 389     | TCP/UDP  |
+| SFTP (Secure File Transfer)| 22  | TCP      |
+| SQL (Database Access)| Varied*   | TCP      |
+
+Note: *SQL services vary in port numbers based on the specific SQL database being used (e.g., MySQL, MSSQL, PostgreSQL, etc.).
 
 ### Security Considerations
 
@@ -106,10 +124,6 @@ Always be cautious about unexpected processes binding to known ports. Such anoma
 ## Socket Status
 
 In networking, a socket represents an endpoint for sending or receiving data. When a program wants to communicate over the Internet, it creates a socket. To monitor these sockets and the status of their connections, we can use the `ss` (socket status) tool, which is a utility to investigate sockets. This tool is especially helpful for understanding current network configurations, active/inactive connections, and diagnosing various network-related issues.
-
-### Key Commands
-
-Below are some fundamental `ss` commands to view different socket details:
 
 - **Display All Active Connections**:
 
@@ -175,7 +189,7 @@ If you're specifically interested in SSH connections, this command is handy.
 
 Nmap, short for "Network Mapper," is a revered tool in the cybersecurity and network administration arenas. Its primary purpose is to scan IP networks for host discovery, port scanning, and service identification.
 
-### Key Features:
+Key Features:
 
 - **Host Discovery**: Find which hosts are available on a network.
 - **Port Scanning**: Determine which ports are open on those hosts.
