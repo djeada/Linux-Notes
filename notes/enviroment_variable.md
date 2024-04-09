@@ -87,33 +87,39 @@ Understanding and effectively managing these variables is key to harnessing the 
 
 ## Challenges
 
-1. Create and Execute a Script `greetings.sh`:
-   - Write a Bash script named `greetings.sh` that prints a welcome message.
-   - Ensure it has executable permissions (`chmod +x greetings.sh`).
-   - Modify the `PATH` environment variable to include the script's directory (`export PATH=$PATH:/path/to/script`).
-   - Test executing the script from a different directory without its absolute path.
+I. Create and Execute a Script `greetings.sh`
 
-2. Write a command or script using the `USER` environment variable to print a personalized message like "Hello, $USER! Welcome back!".
+- Write a Bash script named `greetings.sh` that prints a welcome message.
+- Ensure it has executable permissions (`chmod +x greetings.sh`).
+- Modify the `PATH` environment variable to include the script's directory (`export PATH=$PATH:/path/to/script`).
+- Test executing the script from a different directory without its absolute path.
 
-3. Use a command to display all currently set shell and environment variables (e.g., `set` or `env`).
+II. Write a command or script using the `USER` environment variable to print a personalized message like "Hello, $USER! Welcome back!".
 
-4. Arithmetic Operations with a Shell Variable:
-   - Create a variable in your terminal session and assign a numeric value to it.
-   - Perform and print a few arithmetic operations on this variable.
+III. Use a command to display all currently set shell and environment variables (e.g., `set` or `env`).
 
-5. Create and Display a New Environment Variable:
-   - Use the `export` command to create a new environment variable.
-   - Print its value using `echo`.
+IV. Arithmetic Operations with a Shell Variable
 
-6. Display Environment Variables and Start a Clean Shell:
-   - Use `env` to display all current environment variables.
-   - Start a new shell with a clean environment using `env -i`.
+- Create a variable in your terminal session and assign a numeric value to it.
+- Perform and print a few arithmetic operations on this variable.
 
-7. Increment a Number in a Script with Environment Variable:
-   - Write a shell script that increments a number stored in a variable each time it is run.
-   - Store this number in an environment variable for persistence across executions.
+V. Create and Display a New Environment Variable
 
-8. Find and Execute Files Using `PATH`:
-   - Use the `PATH` variable to locate an executable file on your system.
-   - Add a new directory to the `PATH` (`export PATH=$PATH:/new/directory`).
-   - Test executing a command from this new directory without its full path.
+- Use the `export` command to create a new environment variable.
+- Print its value using `echo`.
+
+VI. Display Environment Variables and Start a Clean Shell
+
+- Use `env` to display all current environment variables.
+- Start a new shell with a clean environment using `env -i`.
+
+VII. Increment a Number in a Script with Environment Variable
+
+- Write a shell script that increments a number stored in a variable each time it is run.
+- Store this number in an environment variable for persistence across executions.
+
+VIII. Find and Execute Files Using `PATH`
+
+- Use the `PATH` variable to locate an executable file on your system.
+- Add a new directory to the `PATH` (`export PATH=$PATH:/new/directory`).
+- Test executing a command from this new directory without its full path.
