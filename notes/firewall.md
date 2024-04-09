@@ -215,23 +215,32 @@ systemctl restart firewalld.service
 
 ## Challenges
 
-1. Configure Firewall for Specific Port Traffic:
-   - Block all incoming traffic on port 80 (HTTP).
-   - Allow all incoming traffic on port 22 (SSH).
+I. Configure Firewall for Specific Port Traffic
 
-2. Set Up Default Firewall Policies:
-   - Configure the firewall to deny all incoming traffic by default.
-   - Allow all outgoing traffic.
+- Block all incoming traffic on port 80 (HTTP).
+- Allow all incoming traffic on port 22 (SSH).
 
-3. Create a firewall rule to deny incoming ICMP echo requests, effectively blocking ping requests.
-4. Configure the firewall to allow incoming traffic on port 80 (HTTP) only from a specific IP address.
-5. Set up a rule to block all incoming HTTP traffic on port 80 from a specific IP address.
-6. Modify firewall rules to allow SSH access (port 22) only from a set of predefined IP addresses.
-7. Implement a rule to limit the rate of incoming connections to a specific port (e.g., 100 connections per minute) to mitigate potential DoS attacks.
-8. Set up the firewall to log details of all dropped packets for analysis and monitoring purposes.
-9. Create a rule to forward traffic incoming on a specific port (e.g., 8080) to another port (e.g., 80).
-10. Configure the firewall to block all outgoing traffic to certain domains or IP addresses.
-11. Implement firewall rules that specifically target IPv6 traffic for both incoming and outgoing connections.
-12. Configure rules that are active only during certain hours of the day, for instance, allowing certain traffic only during business hours.
+II. Set Up Default Firewall Policies
 
+- Configure the firewall to deny all incoming traffic by default.
+- Allow all outgoing traffic.
 
+III. Create a firewall rule to deny incoming ICMP echo requests, effectively blocking ping requests.
+
+IV. Configure the firewall to allow incoming traffic on port 80 (HTTP) only from a specific IP address.
+
+V. Set up a rule to block all incoming HTTP traffic on port 80 from a specific IP address.
+
+VI. Modify firewall rules to allow SSH access (port 22) only from a set of predefined IP addresses.
+
+VII. Implement a rule to limit the rate of incoming connections to a specific port (e.g., 100 connections per minute) to mitigate potential DoS attacks.
+
+VIII. Set up the firewall to log details of all dropped packets for analysis and monitoring purposes.
+
+IX. Create a rule to forward traffic incoming on a specific port (e.g., 8080) to another port (e.g., 80).
+
+X. Configure the firewall to block all outgoing traffic to certain domains or IP addresses.
+
+XI. Implement firewall rules that specifically target IPv6 traffic for both incoming and outgoing connections.
+
+XII. Configure rules that are active only during certain hours of the day, for instance, allowing certain traffic only during business hours.
