@@ -370,32 +370,38 @@ touch /.autorelabel
 
 ## Challenges
 
-1. Reboot your system:
-    - Use the `reboot` command to restart your system. 
-    - Check the output of the `uptime` command to verify that the system has been restarted. 
-    - You should see that system uptime is very short, indicating a recent restart.
+I. Reboot your system
 
-2. Change your system's hostname:
-    - First, check the current hostname using the `hostname` command.
-    - Use the `hostnamectl set-hostname your_new_name` command to rename your server, replacing `your_new_name` with the new name you want to assign.
-    - Run the `hostname` command again to confirm that the operation was successful. The name displayed should match the new name you assigned.
+- Use the `reboot` command to restart your system. 
+- Check the output of the `uptime` command to verify that the system has been restarted. 
+- You should see that system uptime is very short, indicating a recent restart.
 
-3. Recover the root password:
-    - Without logging out of your current session, simulate a situation where you've lost the root password by opening a new terminal session or SSH connection where you aren't logged in as root.
-    - Follow the steps provided in the "Recovering the Root Password" section above to reset the root password.
-    - After rebooting, ensure that you can successfully log in with the new root password.
+II. Change your system's hostname
 
-4. Practice handling kernel panic:
-    - Although simulating a kernel panic scenario isn't recommended on a production machine, understanding the steps needed to resolve a kernel panic is valuable.
-    - Review the "Kernel panic" section and take note of the steps you would take to diagnose and resolve a kernel panic.
+- First, check the current hostname using the `hostname` command.
+- Use the `hostnamectl set-hostname your_new_name` command to rename your server, replacing `your_new_name` with the new name you want to assign.
+- Run the `hostname` command again to confirm that the operation was successful. The name displayed should match the new name you assigned.
 
-5. Manage system runlevels/targets:
-    - Check your current runlevel or target.
-    - If you are using an init-based system, try changing the runlevel and verify the change.
-    - If you are using a systemd-based system, try switching between targets and confirm that the change took effect.
-    - 🔴 Remember to switch back to your default runlevel or target after you've completed the challenge.
+III. Recover the root password
 
-6. Schedule system tasks:
-    - Try to schedule a system shutdown using the `shutdown` command, then cancel it before it takes effect.
-    - Do the same with a system reboot.
-    - 🔴 Remember: make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
+- Without logging out of your current session, simulate a situation where you've lost the root password by opening a new terminal session or SSH connection where you aren't logged in as root.
+- Follow the steps provided in the "Recovering the Root Password" section above to reset the root password.
+- After rebooting, ensure that you can successfully log in with the new root password.
+
+IV. Practice handling kernel panic
+
+- Although simulating a kernel panic scenario isn't recommended on a production machine, understanding the steps needed to resolve a kernel panic is valuable.
+- Review the "Kernel panic" section and take note of the steps you would take to diagnose and resolve a kernel panic.
+
+V. Manage system runlevels/targets
+
+- Check your current runlevel or target.
+- If you are using an init-based system, try changing the runlevel and verify the change.
+- If you are using a systemd-based system, try switching between targets and confirm that the change took effect.
+- 🔴 Remember to switch back to your default runlevel or target after you've completed the challenge.
+
+VI. Schedule system tasks
+
+- Try to schedule a system shutdown using the `shutdown` command, then cancel it before it takes effect.
+- Do the same with a system reboot.
+- 🔴 Remember: make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
