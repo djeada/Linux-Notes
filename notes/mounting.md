@@ -120,14 +120,16 @@ tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
 ```
 
 Output Explanation:
-- **Device**: `/dev/sda1`, `tmpfs`, `/dev/sdb1` - These are the device names or identifiers.
-- **Mount Point**: `/`, `/dev/shm`, `/mnt/external` - These are the directories where the file systems are mounted.
-- **File System Type**: `ext4`, `tmpfs`, `vfat` - This indicates the type of file system.
-- **Mount Options**: `(rw,relatime,data=ordered)`, etc. - These are options used while mounting, like read-write mode, permissions, etc.
+
+- `/dev/sda1`, `tmpfs`, `/dev/sdb1` - These are the device names or identifiers.
+- `/`, `/dev/shm`, `/mnt/external` - These are the directories where the file systems are mounted.
+- `ext4`, `tmpfs`, `vfat` - This indicates the type of file system.
+- `(rw,relatime,data=ordered)`, etc. - These are options used while mounting, like read-write mode, permissions, etc.
 
 Why It's Useful:
-- **System Monitoring and Diagnostics**: Understanding what file systems are mounted, and where, is crucial for system monitoring, troubleshooting, and managing storage devices.
-- **Configuration Verification**: It helps verify if certain file systems are mounted as expected, which is useful after system changes or reboots.
+
+- Understanding what file systems are mounted, and where, is crucial for system monitoring, troubleshooting, and managing storage devices.
+- It helps verify if certain file systems are mounted as expected, which is useful after system changes or reboots.
 
 ## Unmounting File Systems
 
@@ -242,23 +244,28 @@ umount /mnt/iso
 
 ## Challenges
 
-1. Recognize Devices:
-   - Plug a USB drive into your system.
-   - Use the `fdisk -l` command to recognize the device name of the USB drive.
+I. Recognize Devices
 
-2. Manual Mounting:
-   - Create a new directory under `/mnt`.
-   - Mount your USB drive to this new directory.
+- Plug a USB drive into your system.
+- Use the `fdisk -l` command to recognize the device name of the USB drive.
 
-3. Accessing Mounted Files
-   - Navigate to the mount point of your USB drive.
-   - Create, read, and delete a file in this directory.
+II. Manual Mounting
 
-4. Unmounting:
-   - Unmount the USB drive from the directory you previously mounted it to.
-   - Confirm that the device has been unmounted successfully.
+- Create a new directory under `/mnt`.
+- Mount your USB drive to this new directory.
 
-5. Create a Virtual Disk File:
-   - Create a new file in your home directory using the `dd` command. This file will simulate a new disk drive.
-   - Format this file with an `ext4` filesystem using the `mkfs.ext4` command.
-   - Mount this virtual disk file to a directory in your system.
+III. Accessing Mounted Files
+
+- Navigate to the mount point of your USB drive.
+- Create, read, and delete a file in this directory.
+
+IV. Unmounting
+
+- Unmount the USB drive from the directory you previously mounted it to.
+- Confirm that the device has been unmounted successfully.
+
+V. Create a Virtual Disk File
+
+- Create a new file in your home directory using the `dd` command. This file will simulate a new disk drive.
+- Format this file with an `ext4` filesystem using the `mkfs.ext4` command.
+- Mount this virtual disk file to a directory in your system.
