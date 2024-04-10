@@ -46,15 +46,18 @@ target     prot opt source               destination
 
 Explanation:
 
-- **Chain Names**: `INPUT`, `FORWARD`, `OUTPUT` are the default chains in iptables.
-- **Policies**: Set to `ACCEPT`, `DROP`, or `REJECT`. For example, the default policy for `FORWARD` is `DROP`.
-- **Rules**: Listed under each chain.
-    - **Target**: The action to take, e.g., `ACCEPT`, `DROP`, `LOG`.
-    - **Prot**: The protocol, e.g., `tcp`, `udp`, `icmp`, or `all`.
-    - **Opt**: Options, often includes flags like `--`.
-    - **Source and Destination**: IP addresses or ranges for source and/or destination.
-    - **Additional Conditions**: For example, `tcp dpt:ssh` means TCP packets destined for SSH port.
-    - **Logging**: The `LOG` rule can specify logging of packets, including a prefix for log messages.
+I. **Chain Names**: `INPUT`, `FORWARD`, `OUTPUT` are the default chains in iptables.
+
+II. **Policies**: Set to `ACCEPT`, `DROP`, or `REJECT`. For example, the default policy for `FORWARD` is `DROP`.
+
+III. **Rules**: Listed under each chain.
+
+- **Target**: The action to take, e.g., `ACCEPT`, `DROP`, `LOG`.
+- **Prot**: The protocol, e.g., `tcp`, `udp`, `icmp`, or `all`.
+- **Opt**: Options, often includes flags like `--`.
+- **Source and Destination**: IP addresses or ranges for source and/or destination.
+- **Additional Conditions**: For example, `tcp dpt:ssh` means TCP packets destined for SSH port.
+- **Logging**: The `LOG` rule can specify logging of packets, including a prefix for log messages.
 
 To add a new rule, use the `-A` flag followed by the rule itself. For example, to allow incoming traffic on port 80 (used for HTTP), use:
 
@@ -70,7 +73,7 @@ iptables -D INPUT 2
 
 🔴 Caution: Keep in mind that changes to the safety guard's rules with iptables don't last when you restart your computer. To keep the changes, save them in a file and bring them back when your computer starts.
 
-1. On Debian-based systems, you can save the current iptables configuration with:
+I. On Debian-based systems, you can save the current iptables configuration with:
 
 ```bash
 iptables-save > /etc/iptables/rules.v4
@@ -78,7 +81,7 @@ iptables-save > /etc/iptables/rules.v4
 
 And ensure they are reloaded on boot by installing the `iptables-persistent` package.
 
-2. On Red Hat-based systems, you can save the configuration with:
+II. On Red Hat-based systems, you can save the configuration with:
 
 ```bash
 service iptables save
@@ -112,16 +115,17 @@ Status: active
 
 Explanation:
 
-- **Status**: Indicates whether the firewall is active or inactive. In this case, it's `active`.
+I. **Status**: Indicates whether the firewall is active or inactive. In this case, it's `active`.
 
-- **Columns in the Output**:
-  - **To**: This column shows the port or port range and protocol (like `22/tcp`) for which the rule is applied.
-  - **Action**: Specifies the action (`ALLOW IN`, `DENY`, etc.) taken by the firewall for matching traffic.
-  - **From**: This column indicates the source of the traffic for which the rule is applicable. It can be an IP address, a subnet, or `Anywhere`.
+II. **Columns in the Output**:
 
-- **Numbered Rules**: Each rule is prefixed with a number in square brackets (e.g., `[ 1]`). This numbering is crucial for modifying or deleting specific rules, as it allows you to reference them easily.
+- **To**: This column shows the port or port range and protocol (like `22/tcp`) for which the rule is applied.
+- **Action**: Specifies the action (`ALLOW IN`, `DENY`, etc.) taken by the firewall for matching traffic.
+- **From**: This column indicates the source of the traffic for which the rule is applicable. It can be an IP address, a subnet, or `Anywhere`.
 
-- **IPv4 and IPv6 Rules**: The rules apply to both IPv4 and IPv6 traffic if suffixed with `(v6)`.
+III. **Numbered Rules**: Each rule is prefixed with a number in square brackets (e.g., `[ 1]`). This numbering is crucial for modifying or deleting specific rules, as it allows you to reference them easily.
+
+IV. **IPv4 and IPv6 Rules**: The rules apply to both IPv4 and IPv6 traffic if suffixed with `(v6)`.
 
 To allow incoming traffic on a specific port, use the allow command followed by the protocol and port number. For example, to allow incoming `SSH` connections (which use port 22 by default), use:
 
