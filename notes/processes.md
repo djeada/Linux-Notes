@@ -1,40 +1,125 @@
 ## Processes
 
-Processes form the backbone of any operation that takes place within a system. In simplest terms, a process is a numbered component of a running program. It is instantiated every time a user executes a command, launches an application, or initiates a system service. Modern systems, leveraging the potential of powerful processors, can run numerous processes simultaneously. This is achieved through rapid context switching performed by the operating system (OS) on the Central Processing Unit (CPU). In multicore CPUs, each core has the capability to run multiple processes concurrently via swift context switching.
+Processes are fundamental elements in any computing system. They represent an instance of a running program and are essential for the execution of various tasks. A process is more than just the program code (often referred to as the text section in Unix); it also includes the current activity, including the program counter, the contents of the processor's registers, and the variable storage (stack and heap). Each process is assigned a unique process identifier (PID).
 
-There are essentially two categories of processes:
+When a user executes a command, launches an application, or initiates a system service, a new process is instantiated. Modern computing systems, with their powerful processors, can handle a multitude of processes at the same time. This parallel execution is managed through a technique known as rapid context switching, where the operating system's scheduler assigns CPU time slices to each process and switches between them so quickly that it gives the illusion of simultaneous execution.
 
-* **Shell Job**: A shell job refers to a task that is initiated through a command executed in the shell. These tasks are often referred to as interactive processes since they require direct user input.
+In the context of multicore CPUs, each core can handle its own set of processes independently. This multi-core processing enables even more efficient and faster handling of multiple processes.
 
-* **Daemon**: Daemons are utility applications that silently run in the background, monitoring and maintaining certain subsystems to ensure the smooth operation of the OS. Daemons are typically initiated with root privileges and serve a crucial role in system management.
+Processes in a system can be broadly categorized into two types:
 
-### Process Management Commands
+* **Shell Job**: A shell job is a process that is started from a user's command line interface, or shell. It is often interactive, requiring input from the user, and provides output directly to the user's console. Examples include editing a document in a text editor or running a custom script.
 
-To get an overview of all the currently running processes within your system, you can make use of the `ps` command:
+* **Daemon**: In contrast, a daemon is a background process, usually initiated at system startup and runs with elevated privileges. It does not interact directly with the user interface but operates silently, performing system-related tasks. Common examples include the print spooler daemon and the network daemon, which handle printing jobs and network connections, respectively.
+
+## Process Management Commands
+
+Process management is integral to system administration. The `ps` and `top` commands are pivotal for this purpose.
+
+### The ps Command
+
+The `ps` command displays information about active processes. Here are some variants of the command:
+
+I. Basic Process Listing
 
 ```bash
 ps -ef
 ```
 
-If you require more comprehensive information about the processes, such as the User ID (UID), Process ID (PID), Parent Process ID (PPID), CPU usage, and the path to the executable, the following command can be used:
+This outputs a list of all currently running processes, showing the process ID (PID), terminal associated with the process (TTY), CPU time (TIME), and the executable name (CMD).
 
-```bash
+Sample Output:
+
+```
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 03:15 ?        00:00:01 /sbin/init
+...
+```
+
+II. Detailed Process Information
+
+```
 ps -e --format uid,pid,ppid,%cpu,cmd
 ```
 
-In essence, understanding processes and how to manage them is key to gaining control over your system's operation and resources.
+This provides detailed information including User ID (UID), Process ID (PID), Parent Process ID (PPID), CPU usage (%CPU), and the command path (CMD).
 
-* `aux`: Provides a condensed summary of all active processes.
-* `fax`: Displays the process hierarchy, revealing parent-child relationships between processes.
-* `o`: Allows you to customize the output by specifying column names.
+Sample Output:
 
-For real-time process monitoring and management, the top command can be employed. This command will display a dynamically updated, sorted list of active processes:
+```
+UID     PID  PPID %CPU CMD
+1000   2176  2145  0.0 /usr/bin/bash
+...
+```
 
-```bash
+III. Enhanced Process Summaries
+
+One option:
+
+```
+ps aux
+```
+
+This gives a condensed summary of all active processes, including details like user, PID, CPU, and memory usage.
+
+Sample Output:
+
+```
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1 169560  5892 ?        Ss   Apr10   0:01 /sbin/init
+...
+```
+
+Another option:
+
+```
+ps fax
+```
+
+This displays the process hierarchy in a tree structure, showing parent-child relationships.
+
+Sample Output:
+
+```
+PID TTY      STAT   TIME COMMAND
+  2 ?        S      0:00 [kthreadd]
+/-+- 3951 ?        S      0:07  \_ [kworker/u8:2]
+...
+```
+
+```
+ps -o
+```
+
+Customizes the output by specifying column names, tailored for specific requirements.
+
+### The top Command
+
+For real-time process monitoring, top is used:
+
+```
 top
 ```
 
+This shows a dynamic list of processes, usually sorted by CPU usage. It includes system summary information (like CPU and memory usage) and a detailed list of processes.
+
+Sample Output:
+
+```
+top - 03:16:10 up 1 day,  6:37,  2 users,  load average: 1.20, 0.45, 0.15
+Tasks: 287 total,   1 running, 286 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  2.0 us,  0.5 sy,  0.0 ni, 97.4 id,  0.0 wa,  0.0 hi,  0.1 si,  0.0 st
+KiB Mem : 16316412 total,  3943404 free,  8450008 used,  3923016 buff/cache
+KiB Swap:  8388604 total,  8388604 free,        0 used. 11585756 avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND   
+ 1297 root      20   0  457472  56080  36924 S   5.6  0.3   0:03.89 Xorg     
+...
+```
+
 ## Process life cycle
+
+The life cycle of a process in an operating system is a critical concept. The provided diagram illustrates the various stages a process goes through:
 
 ```
                         +---------+
@@ -59,11 +144,11 @@ top
   +-------------+     +---------------+     +---------+
 ```
 
-- `Created`: The process is created.
-- `Running`: The process has been scheduled and is executing.
-- `Interrupted`: The process is stopped or paused by the system, usually due to an interrupt from the system.
-- `Exit`: The process finishes its execution.
-- `Terminated`: The process is killed due to an error or an explicit kill command.
+- `Created`: The process enters the system. It's allocated with necessary resources but is not yet running.
+- `Running`: The process is actively executing on the CPU.
+- `Interrupted`: The process is temporarily stopped, either to let other processes run or because it is waiting for an input or an event.
+- `Exit`: The process has completed execution and is ready to be removed from the system.
+- `Terminated`: An error or an explicit kill command leads to the process being forcefully stopped.
 
 ## Process Spawning
 
@@ -85,9 +170,9 @@ This command creates a new process that executes the echo command, resulting in 
 
 For more complex operations, you might need to spawn processes programmatically. In the C programming language, the fork and exec functions are frequently used for this purpose.
 
-- fork creates a copy of the currently executing process, generating a new child process.
+- `fork()` creates a copy of the currently executing process, generating a new child process.
 
-- exec replaces the current process with a new one.
+- `exec()` replaces the current process with a new one.
 
 Consider the following example:
 
@@ -108,9 +193,9 @@ int main() {
 }
 ```
 
-In this program, a new process is created using the fork function, which then gets replaced by the ls command via the exec function. The parent process simply prints the child process ID on the terminal.
+In this program, a new process is created using the fork function, which then gets replaced by the `ls` command via the exec function. The parent process simply prints the child process ID on the terminal.
 
-There are several other methods to spawn processes in Linux. Functions like system, popen, or posix_spawn from the POSIX library also provide process spawning capabilities.
+There are several other methods to spawn processes in Linux. Functions like `system`, `popen`, or `posix_spawn` from the POSIX library also provide process spawning capabilities.
 
 ## Process Termination
 
@@ -201,9 +286,9 @@ htop
 
 The tasks running on your system can be in one of two states, either running in the 'foreground' or in the 'background'. These two states provide flexibility for multi-tasking and efficient system utilization.
 
-**Foreground Process**: A process is said to be running in the foreground if it is actively executing and interacting with the terminal's input and output. These are generally the tasks that you've initiated and are currently interacting with in your terminal.
+- **Foreground Process**: A process is said to be running in the foreground if it is actively executing and interacting with the terminal's input and output. These are generally the tasks that you've initiated and are currently interacting with in your terminal.
 
-**Background Process**: On the contrary, a background process operates without directly interacting with the terminal's input and output. This ability allows you to run multiple processes simultaneously, without having to wait for each one to complete before starting another.
+- **Background Process**: On the contrary, a background process operates without directly interacting with the terminal's input and output. This ability allows you to run multiple processes simultaneously, without having to wait for each one to complete before starting another.
 
 ```
 +------------------------+
