@@ -136,7 +136,8 @@ Sometimes, there's a need to change a disk from one partition table format to an
 11. Restart the system to ensure all changes take effect.
 12. Verify the new partition table: `gdisk -l /dev/sda`.
 
-🔴 **Caution:**: 
+🔴 **Caution**
+
 - It's crucial to back up any important data before proceeding with this operation, as changing the partition table format can lead to data loss.
 - Ensure that your system supports GPT and UEFI (if you're planning to boot from the disk), as older systems with BIOS may not support GPT.
 
