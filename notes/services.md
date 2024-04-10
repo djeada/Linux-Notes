@@ -251,11 +251,11 @@ So, when enabling, starting, or checking the status of your service with SystemD
 
 ## Challenges
 
-1. List all the SystemD timers on your system and determine which services are enabled.
-2. Set up a DHCP (Dynamic Host Configuration Protocol) server using the `isc-dhcp-server` package. This service allows clients to automatically obtain network configuration information, such as IP addresses, from a DHCP server.
-3. Set up an NFS (Network File System) server using the `nfs-kernel-server` package. This service allows clients to access files over a network as if they were stored locally.
-4. Set up an SSH (Secure Shell) server using the `openssh-server` package. This service allows you to remotely connect to a server over an encrypted connection.
-5. Set up a DNS (Domain Name System) server using the `bind9` package. This service translates human-readable domain names into numerical IP addresses.
-6. Set up a mail server using either the `postfix` or `sendmail` package. This service handles the delivery of email messages.
-7. Set up a web server using one of the following packages: `nginx`, `apache`, `caddy`, or `traefik`. This service serves content over the HTTP or HTTPS protocol.
-8. Set up a database server using either the `mysql` or `postgres` package. This service allows you to store and manage data in a structured way.
+1. Use SystemD to list all timers and determine which corresponding services are enabled on your system.
+2. Install and configure a DHCP server using the `isc-dhcp-server` package. This service should be set up to automatically provide network configuration to client devices.
+3. Use the `nfs-kernel-server` package to set up an NFS server. Ensure it allows clients to access files over the network seamlessly.
+4. Install the `openssh-server` package and configure an SSH server for secure, remote connections to your server.
+5. Utilize the `bind9` package to set up a DNS server. This server should effectively translate human-readable domain names into IP addresses.
+6. Choose between the `postfix` or `sendmail` packages to set up a mail server, capable of handling email delivery and management.
+7. Select and configure one of these packages - `nginx`, `apache`, `caddy`, or `traefik`, to establish a web server. This server should be able to serve content over HTTP or HTTPS.
+8. Install and configure a database server using either `mysql` or `postgres`. This server should provide robust data storage and management capabilities.
