@@ -75,8 +75,11 @@ When troubleshooting SELinux issues, the following tools and logs can be helpful
 
 ## Challenges
 
-1. Explain the difference between discretionary access control (DAC) and mandatory access control (MAC).
-2. What are the three modes of SELinux, and when would you use each?
-3. How do you change the SELinux context of a file or directory?
-4. What tools and logs can help you troubleshoot SELinux issues?
-5. Describe a scenario where SELinux could help the security?
+1. Research and write a brief comparison between Discretionary Access Control (DAC) and Mandatory Access Control (MAC). Include how each is implemented in Linux and their roles in system security. Prepare a document detailing your findings and insights.
+2. Create a short guide that explains the three modes of SELinux: Enforcing, Permissive, and Disabled. In your guide, include scenarios or use cases for each mode, explaining why and when each mode is best utilized.
+3. Find or create a file and directory on a Linux system with SELinux enabled. Change their SELinux contexts using the `chcon` or `semanage fcontext` commands. Document the process and explain why changing contexts might be necessary in real-world scenarios.
+4. Simulate or identify a common SELinux issue on a Linux system (such as a denied service start-up). Utilize SELinux logs (like `/var/log/audit/audit.log`) and tools (like `sealert`) to diagnose and suggest a solution. Write a troubleshooting report detailing your steps and findings.
+5. Devise a hypothetical scenario where a Linux system is at risk (e.g., a web server exposed to the internet). Propose an SELinux policy implementation that would mitigate the risks. Outline your policy decisions, including the types and rules you would enforce, and explain how these choices contribute to system security.
+6. On a test Linux system, switch between different SELinux modes (Enforcing, Permissive, Disabled) and observe the system behavior and logs. Document how the system's security posture changes with each mode and the implications of these changes.
+7. Write a basic custom SELinux policy module for a specific application or service. Compile and apply this policy to your Linux system, and then test its effectiveness and impact on the application's functionality.
+8. Analyze a set of audit logs from an SELinux-enabled system. Identify any policy violations or anomalies and propose adjustments to SELinux policies or system configuration to address these issues.
