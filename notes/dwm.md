@@ -54,13 +54,17 @@ Unlike other window managers that use configuration files, DWM is customized by 
 
 Follow these steps to customize DWM to your preferences:
 
-1. **Download the DWM source code:** You can clone the source code from the official suckless git repository using the following command:
+I. Download the DWM source code
+
+You can clone the source code from the official suckless git repository using the following command:
 
 ```bash
 git clone https://git.suckless.org/dwm
 ```
 
-2. **Navigate to the dwm directory and create a config.h file**: The config.def.h file contains the default settings. To customize DWM, you should first copy config.def.h to config.h. Then, you can edit the config.h file with your preferred text editor (e.g., nano, vim, emacs). Here's how to do that:
+II. Navigate to the dwm directory and create a config.h file
+
+The config.def.h file contains the default settings. To customize DWM, you should first copy config.def.h to config.h. Then, you can edit the config.h file with your preferred text editor (e.g., nano, vim, emacs). Here's how to do that:
 
 ```bash
 cd dwm
@@ -68,15 +72,21 @@ cp config.def.h config.h
 nano config.h
 ```
 
-3. **Customize the config.h file**: In the config.h file, you can change various settings according to your preferences. For example, you can modify key bindings, set custom colors, define the status bar's appearance, and select the default font. Save your changes and exit the text editor when you're finished.
+III. Customize the config.h file
 
-4. **Compile and install the modified DWM**: After modifying the config.h file, you need to compile the DWM source code and install the new binary:
+In the config.h file, you can change various settings according to your preferences. For example, you can modify key bindings, set custom colors, define the status bar's appearance, and select the default font. Save your changes and exit the text editor when you're finished.
+
+IV. Compile and install the modified DWM
+
+After modifying the config.h file, you need to compile the DWM source code and install the new binary:
 
 ```bash
 sudo make clean install
 ```
 
-5. **Apply the changes**: Log out and log back in, or restart your X session to apply the changes. The updated DWM should now be in effect.
+V. Apply the changes
+
+Log out and log back in, or restart your X session to apply the changes. The updated DWM should now be in effect.
 
 ## Further Resources
 
