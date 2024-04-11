@@ -41,15 +41,24 @@ The first two-three letters mean the device type:
 - `/dev/xvda`: Represents a disk in a Xen virtual machine using the Xen virtual disk driver.
 
 The last letter tells the device order, and the numbers tell how many partitions the device has, starting with zero:
-- The last letter (before any numbers) shows the order of the device. For example:
-  - `a` in `/dev/sda` indicates it's the first SCSI/SATA disk.
-  - `b` in `/dev/hdb` shows it's the second IDE disk.
-- The numbers denote the partition index on the device, starting from 1. For example:
-  - `/dev/sda2` is the second partition (`2`) on the first SATA disk (`sda`).
-  - `/dev/sdc1` refers to the first partition (`1`) on the third SATA disk (`sdc`).
-  - `/dev/hdb3` is the third partition (`3`) on the second IDE hard drive (`hdb`).
 
-**Note**: 
+I. The last letter (before any numbers) shows the order of the device. 
+
+For example:
+
+- `a` in `/dev/sda` indicates it's the first SCSI/SATA disk.
+- `b` in `/dev/hdb` shows it's the second IDE disk.
+
+II. The numbers denote the partition index on the device, starting from 1. 
+
+For example:
+
+- `/dev/sda2` is the second partition (`2`) on the first SATA disk (`sda`).
+- `/dev/sdc1` refers to the first partition (`1`) on the third SATA disk (`sdc`).
+- `/dev/hdb3` is the third partition (`3`) on the second IDE hard drive (`hdb`).
+
+**Note**:
+
 - Modern systems predominantly use the `/dev/sdX` naming convention due to the shift towards SATA interfaces.
 - In virtualized environments, `/dev/vdX` and `/dev/xvdX` are more common, depending on the virtualization technology used.
 
