@@ -149,35 +149,43 @@ Several types of file systems can be used on Linux systems, each designed with s
 
 Creating a new file system on a storage device in Linux involves several steps. Below are the necessary steps, along with commands to execute them:
 
-1. **Identify the Device**: Use the `lsblk` command to list all available block devices along with their names. This will aid in determining the exact device you want to format. An example command and its output are as follows:
+I. Identify the Device
 
-  ```bash
-  lsblk
-  ```
-  
-  This will return a list of devices and their mount points, sizes, and types.
+Use the `lsblk` command to list all available block devices along with their names. This will aid in determining the exact device you want to format. An example command and its output are as follows:
 
-2. **Unmount the Device (if applicable)**: If the device is currently mounted, it must be unmounted before you can create a new file system on it. Use the `umount` command followed by the device name. For example:
+```bash
+lsblk
+```
 
-  ```bash
-  umount /dev/sda1
-  ```
+This will return a list of devices and their mount points, sizes, and types.
 
-3. **Create the File System**: Use the `mkfs` command followed by the desired file system type and the device name. For instance, to create an `ext4` file system on `/dev/sda1`, you would use:
+II. Unmount the Device (if applicable)
 
-  ```bash
-  mkfs.ext4 /dev/sda1
-  ```
+If the device is currently mounted, it must be unmounted before you can create a new file system on it. Use the `umount` command followed by the device name. For example:
 
-  Various file system types are available such as `ext4`, `ext3`, `ext2`, `xfs`, and `btrfs`. The choice depends on your specific needs and preferences. However, `ext4` is the most common and recommended for general use.
+```bash
+umount /dev/sda1
+```
 
-4. **Mount the New File System**: Finally, mount the new file system using the `mount` command, followed by the device name and mount point. For example:
+III. Create the File System
 
-  ```bash
-  mount /dev/sda1 /mnt/new_fs
-  ```
+Use the `mkfs` command followed by the desired file system type and the device name. For instance, to create an `ext4` file system on `/dev/sda1`, you would use:
 
-  Choose an appropriate mount point or create a new directory for the mount point if needed.
+```bash
+mkfs.ext4 /dev/sda1
+```
+
+Various file system types are available such as `ext4`, `ext3`, `ext2`, `xfs`, and `btrfs`. The choice depends on your specific needs and preferences. However, `ext4` is the most common and recommended for general use.
+
+IV. Mount the New File System
+
+Finally, mount the new file system using the `mount` command, followed by the device name and mount point. For example:
+
+```bash
+mount /dev/sda1 /mnt/new_fs
+```
+
+Choose an appropriate mount point or create a new directory for the mount point if needed.
 
 ## Challenges
 
