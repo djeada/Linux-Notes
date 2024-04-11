@@ -30,19 +30,19 @@ The structure of a modulefile directory usually reflects the software and its ve
 
 Here's how you can create a directory for a specific application's modulefiles and a modulefile for a specific version of the application:
 
-1. Create a directory for your application's modulefiles:
+I. Create a directory for your application's modulefiles:
 
 ```bash
 sudo mkdir /etc/modulefiles/my_app
 ```
 
-2. Create a modulefile for a specific version of the application:
+II. Create a modulefile for a specific version of the application:
 
 ```bash
 sudo touch /etc/modulefiles/my_app/1.0
 ```
 
-3. Edit the modulefile: Open the created modulefile in a text editor:
+III. Edit the modulefile: Open the created modulefile in a text editor:
 
 ```bash
 sudo nano /etc/modulefiles/my_app/1.0
@@ -97,20 +97,20 @@ You should use the `module` command to interact with Environment Modules, as thi
 
 Environment Modules is especially useful when you need to switch between different versions of the same software. For example, you may need to switch between Python 2.7 and Python 3.8 for different projects. The steps below illustrate how you can use Environment Modules to handle this task.
 
-1. Create a directory for Python modulefiles
+I. Create a directory for Python modulefiles
 
 ```bash
 sudo mkdir /etc/modulefiles/python
 ```
 
-2. Create and configure a modulefile for Python 2.7:
+II. Create and configure a modulefile for Python 2.7:
 
 ```bash
 sudo touch /etc/modulefiles/python/2.7
 sudo nano /etc/modulefiles/python/2.7
 ```
 
-3. In the opened nano editor, add the necessary lines to the modulefile (adjust prepend-path lines based on your system's Python 2.7 location).
+III. In the opened nano editor, add the necessary lines to the modulefile (adjust prepend-path lines based on your system's Python 2.7 location).
 
 ```bash
 #%Module 1.0
@@ -125,7 +125,7 @@ prepend-path LD_LIBRARY_PATH /usr/local/python2.7/lib
 conflict python
 ```
 
-4. Create and configure a modulefile for Python 3.8:
+IV. Create and configure a modulefile for Python 3.8:
 
 ```bash
 sudo touch /etc/modulefiles/python/3.8
@@ -147,7 +147,7 @@ prepend-path LD_LIBRARY_PATH /usr/local/python3.8/lib
 conflict python
 ```
 
-5. Switch between the Python versions: Now you can use the module command to load and unload the different versions of Python as needed. For instance, if you want to use Python 2.7, use:
+V. Switch between the Python versions: Now you can use the module command to load and unload the different versions of Python as needed. For instance, if you want to use Python 2.7, use:
 
 ```bash
 module load python/2.7
