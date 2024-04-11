@@ -179,7 +179,7 @@ dkms status
 1. Download the latest Linux kernel source code from the official repository. Configure and compile it for a specific system. Document the steps and choices made during configuration.
 2. Develop a simple kernel module, such as a 'Hello World' module. Load and unload it from your Linux kernel, and inspect the system log to verify its functioning.
 3. Tune a Linux kernel for enhanced performance on a specific hardware setup. Modify parameters such as scheduler settings, file system support, and networking options. Benchmark the system before and after the optimization.
-4. Identify a kernel patch (for a bug fix or improvement) and apply it to your kernel source. Re-compile and test the kernel to ensure the patch functions as expected.
+4. Find on the internet a kernel patch (for a bug fix or improvement) and apply it to your kernel source. Re-compile and test the kernel to ensure the patch functions as expected.
 5. Simulate a kernel panic using tools or commands (like `sysrq` trigger). Capture and analyze the output to understand the cause of the panic and how to recover from such situations.
 6. Create a custom kernel configuration for a specific use case, like a gaming system, server, or embedded device. Tailor features and modules for the chosen application, and explain your configuration choices.
 7. Write a script to automate the deployment of a newly compiled kernel, including copying it to the `/boot` directory, updating the boot loader configuration, and rebooting the system.
