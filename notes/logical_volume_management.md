@@ -154,7 +154,7 @@ This command creates a 1GB snapshot named `snap_vol_name_1` of `vol_name_1`. If 
 lvconvert --merge /dev/TEST/snap_vol_name_1
 ```
 
-# Challenges and Exercises
+## Challenges
 
 1. How would you reduce the size of an LVM partition? Remember, you can only reduce a logical volume's size if there's enough free space within it. Also, ensure that you back up any crucial data on the partition before resizing. Describe the command(s) you'd use and the process you'd follow.
 2. How would you extend an LVM partition to utilize more free space within the volume group? What command(s) would you use for this purpose?
