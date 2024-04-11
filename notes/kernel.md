@@ -50,9 +50,9 @@ The Linux kernel, like the UNIX system it was inspired by, follows a monolithic 
 
 * **Unified Process Model:** Unlike some other kernels, Linux does not distinguish between threads and regular processes in its scheduling, instead treating all as schedulable entities. This simplifies the process model and provides more uniform behavior.
 
-## Key Components of the Linux Kernel
+## Key Components of the Kernel
 
-The Linux Kernel is complex and consists of several major components, each of which plays a specific role in the operating system's functionality.
+The Kernel is complex and consists of several major components, each of which plays a specific role in the operating system's functionality.
 
 * **System Call Interface (SCI):** This serves as a gateway that allows applications in user space to request services from the kernel. The system call interface translates these function calls into instructions that the kernel can understand and process.
 
@@ -70,7 +70,7 @@ The Linux Kernel is complex and consists of several major components, each of wh
 
 ## Kernel Monitoring and Management Tools
 
-The Linux Kernel provides several utilities and filesystems to monitor and manage its operations:
+There are several utilities and filesystems to monitor and manage kernel operations:
 
 * **dmesg and journalctl:** You can use the `dmesg` command or `journalctl --dmesg` to view the messages output by the kernel, which are stored in a ring buffer. These messages often contain valuable information about the system's hardware and any issues the kernel encounters.
 
@@ -92,22 +92,6 @@ For instance, to display all available system information, use the following com
 uname -a
 ```
 
-## Understanding the Linux Startup Process
-
-The Linux startup process involves multiple stages, each with a specific function:
-
-1. **BIOS or UEFI:** The first step in the startup process is handled by the system's BIOS (Basic Input Output System) or UEFI (Unified Extensible Firmware Interface). These firmware interfaces test the system's hardware, initialize the hardware components, and then select a boot device (such as a hard drive, a CD/DVD drive, a USB drive, or the network).
-
-2. **Master Boot Record (MBR) and GRUB:** The selected boot device contains a Master Boot Record (MBR) which is read to load the GRUB (GRand Unified Bootloader). GRUB presents a menu for selecting different operating systems or kernel configurations and then loads the selected kernel into memory.
-
-3. **Initial RAM Disk (initrd or initramfs):** The initial RAM disk is a temporary root file system loaded into memory by the GRUB. It contains programs and drivers essential for the kernel to communicate with the hardware until the real root file system can be mounted.
-
-4. **Systemd:** Once the kernel is loaded, it starts the systemd init system. Systemd is responsible for initializing the system and starting all system services. 
-
-5. **Target Units:** After systemd has initialized the system, it activates all enabled target units. These high-level units group related services together.
-
-6. **Default Target:** Finally, systemd starts the default target unit. This is typically a graphical user interface (GUI) for desktop environments or a command-line interface (CLI) for server environments.
-
 ## Working with Kernel Modules
 
 Kernel modules are pieces of code that can be loaded into or removed from the kernel at runtime, allowing the functionality of the kernel to be extended or modified without rebooting the system. This capability is particularly useful when dealing with hardware drivers, filesystem drivers, and system calls.
@@ -128,15 +112,17 @@ Here are some commands for managing and interacting with kernel modules:
 
 The Dynamic Kernel Module Support (DKMS) is a program/framework that enables generating Linux kernel modules whose sources generally reside outside the kernel source tree. It helps maintain module version compatibility with different kernel versions, so you don't have to manually recompile each module every time a new kernel is installed or updated. This is particularly valuable for kernels that are updated frequently, or for distributing drivers that need to work across many different kernel versions and distributions.
 
+I. Installation
+
 To utilize DKMS, it is necessary to have the `dkms` package installed on your system.
 
-**Installation on Debian-based systems** (like Ubuntu or Mint), you can use the following command:
+- Installation on Debian-based systems** (like Ubuntu or Mint), you can use the following command:
 
 ```bash
 sudo apt install dkms
 ```
 
-Installation on Arch-based systems:
+- Installation on Arch-based systems:
 
 ```bash
 sudo pacman -S dkms
@@ -144,31 +130,41 @@ sudo pacman -S dkms
 
 DKMS simplifies kernel module management with a set of specific commands:
 
-**Adding a module to DKMS**: Before you can manage a module using DKMS, you have to add it to the DKMS tree. For instance, if the module source is in /usr/src/module-version/, use the following command:
+II. Adding a module to DKMS
+
+Before you can manage a module using DKMS, you have to add it to the DKMS tree. For instance, if the module source is in /usr/src/module-version/, use the following command:
 
 ```bash
 dkms add -m module -v version
 ```
 
-**Building a module with DKMS**: After adding a module, you can build it using DKMS. It's a necessary step before installation:
+III. Building a module with DKMS
+
+After adding a module, you can build it using DKMS. It's a necessary step before installation:
 
 ```bash
 dkms build -m module -v version
 ```
 
-**Installing a module with DKMS**: After the module is built, you can install it to your system:
+III. Installing a module with DKMS
+
+After the module is built, you can install it to your system:
 
 ```bash
 dkms install -m module -v version
 ```
 
-**Removing a module from DKMS**: If you no longer need a module or want to install a different version, you can remove the module from the DKMS tree and uninstall it from your system:
+IV. Removing a module from DKMS
+
+If you no longer need a module or want to install a different version, you can remove the module from the DKMS tree and uninstall it from your system:
 
 ```bash
 dkms remove -m module -v version --all
 ```
 
-**Checking the status of modules**: You can also use DKMS to check the status of all modules that it's currently managing:
+V. Checking the status of modules
+
+You can also use DKMS to check the status of all modules that it's currently managing:
 
 ```bash
 dkms status
