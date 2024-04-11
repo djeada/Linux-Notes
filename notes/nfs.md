@@ -34,14 +34,7 @@ Client                      Server
 
 If you want to create NFS shares from a CentOS 7 machine, you'll need to set it up as an NFS server. Here's a step-by-step guide.
 
-### Prerequisites
-
-- A CentOS 7 server
-- Sudo or root access
-
-### Step-by-step Guide
-
-1. **Install Required Packages**
+I. Install Required Packages
 
 To set up NFS on CentOS 7, first install the necessary packages:
 
@@ -49,21 +42,21 @@ To set up NFS on CentOS 7, first install the necessary packages:
 yum install nfs-utils nfs-utils-lib
 ```
 
-2. **Enable and Start rpcbind Service**
+II. Enable and Start rpcbind Service
 
 ```bash
 systemctl enable rpcbind
 systemctl start rpcbind
 ```
 
-3. **Enable and Start NFS Server Service**
+III. Enable and Start NFS Server Service
 
 ```bash
 systemctl enable nfs-server
 systemctl start nfs-server
 ```
 
-4. **Enable and Start NFS Lock Service**
+IV. Enable and Start NFS Lock Service
 
 NFS uses the locking service to lock files and directories:
 
@@ -72,7 +65,7 @@ systemctl enable nfs-lock
 systemctl start nfs-lock
 ```
 
-5. **Enable and Start NFS Idmap Service**
+V. Enable and Start NFS Idmap Service
 
 This service maps user and group IDs from the server to the client:
 
@@ -81,7 +74,7 @@ systemctl enable nfs-idmap
 systemctl start nfs-idmap
 ```
 
-6. **Configuring NFS Exports**
+VI. Configuring NFS Exports
 
 Edit the /etc/exports file to specify which directories to share and with which options. For instance, to share /opt/test with clients in the IP range 192.168.1.0/24:
 
@@ -98,7 +91,7 @@ Here's a breakdown of the options:
 - `no_root_squash`: Allows the root user on the client to have root privileges on the shared directory.
 - `no_all_squash`: Preserves the UIDs and GIDs.
 
-7. **Apply Configuration Changes**
+VII. Apply Configuration Changes
 
 To let NFS know about your configuration changes:
 
@@ -106,7 +99,7 @@ To let NFS know about your configuration changes:
 exportfs -r
 ```
 
-8. **Verify Your Exports**
+VIII. Verify Your Exports
 
 To confirm the shared directories:
 
@@ -114,7 +107,7 @@ To confirm the shared directories:
 exportfs
 ```
 
-9. **Restart NFS Server**
+IX. Restart NFS Server
 
 To ensure all changes are applied and services are in the correct state:
 
@@ -126,15 +119,7 @@ systemctl restart nfs-server
 
 If you want to access NFS shares from a CentOS 7 machine, you'll need to set it up as an NFS client. Here's a step-by-step guide.
 
-### Prerequisites
-
-- A CentOS 7 machine
-- An NFS server already set up and sharing directories
-- Sudo or root access
-
-### Step-by-step Guide
-
-1. **Install Required Packages**
+I. Install Required Packages
 
 The necessary tools for accessing NFS shares can be installed with:
 
@@ -142,7 +127,7 @@ The necessary tools for accessing NFS shares can be installed with:
 yum install nfs-utils nfs-utils-lib
 ```
 
-2. **Enable and Start rpcbind Service**
+II. Enable and Start rpcbind Service
 
 NFS requires the rpcbind service:
 
@@ -151,7 +136,7 @@ systemctl enable rpcbind
 systemctl start rpcbind
 ```
 
-3. **Enable and Start NFS Client Services**
+III. Enable and Start NFS Client Services
 
 Ensure the NFS client is running:
 
@@ -160,7 +145,7 @@ systemctl enable nfs-client.target
 systemctl start nfs-client.target
 ```
 
-4. **Create a Mount Point**
+IV. Create a Mount Point
 
 Prepare a directory on the client where the NFS share will be mounted:
 
@@ -168,7 +153,7 @@ Prepare a directory on the client where the NFS share will be mounted:
 mkdir /opt/test_client
 ```
 
-5. **Mount the NFS Share**
+V. Mount the NFS Share
 
 Connect to the NFS share by mounting it:
 
@@ -181,7 +166,7 @@ Here:
 - Replace `192.168.2.111` with your NFS server's IP address.
 - Replace `/opt/test` with the directory shared from the server.
 
-6. **Verify the Mount**
+VI. Verify the Mount
 
 Check that the shared directory is successfully mounted:
 
@@ -195,13 +180,13 @@ mount | grep nfs
 - **Security**: Be cautious with NFS configurations; always consider security. Restrict access based on IP addresses, users, or other criteria.
 - **Managing Shared Folders on Server**:
 
-a) To view currently shared folders with their respective options, use:
+I. To view currently shared folders with their respective options, use:
    
 ```bash
 exportfs -v
 ```
 
-b) To unshare a directory:
+II. To unshare a directory:
 
 ```bash
 exportfs -u <directory_path>
@@ -209,14 +194,13 @@ exportfs -u <directory_path>
 
 ## Challenges
 
-1. **NFS Fundamentals**: Elaborate on the core purpose of NFS. How does it facilitate file sharing across disparate computers?
-2. **Server Components**: Break down the primary components of an NFS server. How does each component contribute to the overall NFS system's operation?
-3. **Role of rpcbind**: Delve into the `rpcbind` service. Why is it pivotal to NFS, and how does it function in relation to the entire system?
-4. **Setting up a Shared Directory**: Outline the step-by-step procedure for designating a directory as "shared" on an NFS server. Highlight the importance of the `/etc/exports` file in this context.
-5. **Deep Dive into `/etc/exports` Options**: Enumerate and explain the variety of options available in the `/etc/exports` file. How do these choices influence the sharing configuration?
-6. **Server vs. Client Setup**: Compare and contrast the procedures involved in setting up an NFS server and an NFS client. Are there any notable similarities or disparities?
-7. **Mounting Mechanics**: Detail the process of mounting an NFS-shared directory on a client. How can the client ascertain the connection's success?
-8. **Safety First**: Discuss the potential security vulnerabilities inherent to NFS. What measures can one adopt to reduce these risks?
-9. **Cross-Platform Sharing with NFS**: Illustrate a scenario wherein NFS proves invaluable for sharing directories across diverse operating systems, such as Windows, Linux, and macOS.
-10. **Mastering `exportfs`**: Dive into the functionalities of the `exportfs` command within the NFS ecosystem. Demonstrate its application in viewing, amending, and ceasing the sharing of directories.
-
+1. Elaborate on the core purpose of NFS. How does it facilitate file sharing across disparate computers?
+2. Break down the primary components of an NFS server. How does each component contribute to the overall NFS system's operation?
+3. Delve into the `rpcbind` service. Why is it pivotal to NFS, and how does it function in relation to the entire system?
+4. Outline the step-by-step procedure for designating a directory as "shared" on an NFS server. Highlight the importance of the `/etc/exports` file in this context.
+5. Enumerate and explain the variety of options available in the `/etc/exports` file. How do these choices influence the sharing configuration?
+6. Compare and contrast the procedures involved in setting up an NFS server and an NFS client. Are there any notable similarities or disparities?
+7. Detail the process of mounting an NFS-shared directory on a client. How can the client ascertain the connection's success?
+8. Discuss the potential security vulnerabilities inherent to NFS. What measures can one adopt to reduce these risks?
+9. Illustrate a scenario wherein NFS proves invaluable for sharing directories across diverse operating systems, such as Windows, Linux, and macOS.
+10. Dive into the functionalities of the `exportfs` command within the NFS ecosystem. Demonstrate its application in viewing, amending, and ceasing the sharing of directories.
