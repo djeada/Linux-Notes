@@ -197,3 +197,16 @@ Acme Corporation appoints LDAP administrators who manage the directory. These ad
 ### Step 5: Utilizing LDAP for Authentication and Authorization
 
 Beyond serving as an employee directory, Acme Corporation also uses their LDAP setup for authentication and authorization for their internal services. Employees can use their unique 'uid' and a corresponding password, which are stored securely in the LDAP directory, to log in to these services. Authorization is managed through `Group` entries that correspond to different access levels and departmental resources.
+
+## Challenges
+
+1. Install and configure an LDAP server on a Linux system. Set up the basic directory structure and include at least three organizational units (OUs).
+2. Add entries to the LDAP directory, including users and groups. Practice creating at least 10 user entries and 3 groups, assigning users to different groups.
+3. Configure a Linux system to use LDAP for user authentication. Test this by logging into the system with user credentials stored in the LDAP directory.
+4. Develop a strategy for backing up the LDAP directory. Perform a backup, then restore from this backup to ensure the integrity and completeness of your backup method.
+5. Use the `ldapsearch` command to perform various queries on the LDAP directory. Try to search for specific users, groups, and other entities based on different attributes.
+6. Secure your LDAP communications with TLS/SSL. Configure the server for encrypted connections and verify the security by connecting to it with an LDAP client.
+7. Choose an application or service (such as email or web service) that supports LDAP integration. Configure it to authenticate users against your LDAP directory.
+8. Design and implement a custom LDAP schema for a specific use case (like managing inventory or tracking software licenses). Add attributes and object classes that are not available in the default schema.
+9. Set up LDAP replication. Configure a secondary LDAP server and ensure that it synchronizes correctly with your primary LDAP server.
+10. Simulate common LDAP connectivity issues and practice troubleshooting. Document each issue simulated, your diagnostic process, and the steps taken to resolve the issues.
