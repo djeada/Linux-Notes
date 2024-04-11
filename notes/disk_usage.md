@@ -86,7 +86,7 @@ Once you've identified what's using your disk space, the next step is often to f
 
 1. **Remove Unnecessary Packages and Dependencies**: Over time, your system may accumulate packages that are no longer needed. These can be safely removed to free up space. On a Debian-based system like Ubuntu, you can use `apt-get autoremove` to remove unnecessary packages.
 
-2. **Clear Package Manager Cache**: Most package managers store package files in a cache that can take up a lot of space. For example, to clear the cache in a system using `apt`, use the command `apt-get clean`.
+2. **Clear Package Manager Cache**: Most package managers store package files in a cache that can take up a lot of space. For example, to clear the cache in a system using `apt`, use the command `apt clean`.
 
 3. **Find and Remove Large Files**: You can use the `find` command to locate files over a certain size and then decide if they need to be kept. For example, `find / -type f -size +100M` will find files larger than 100 MB.
 
