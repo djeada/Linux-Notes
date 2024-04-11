@@ -158,15 +158,17 @@ Secure File Transfer Protocol (SFTP) is a secure method for transferring files b
 
 ###  Server Setup
 
-1. SSH as the Underlying Protocol:
-   - SFTP works over the SSH protocol. This means that it uses the same port and encryption mechanisms as SSH.
-   - If you have SSH access to a server, it typically implies that you can use SFTP as well, as long as the SFTP subsystem is enabled on the server.
+I. SSH as the Underlying Protocol
 
-2. Configure SSH Server:
-   - SFTP depends on the SSH server configuration. It uses the SSH server's settings for port numbers, encryption types, and authentication methods.
-   - The SSH configuration file (usually `/etc/ssh/sshd_config`) should have an entry like `Subsystem sftp /usr/lib/openssh/sftp-server` to enable SFTP service.
+- SFTP works over the SSH protocol. This means that it uses the same port and encryption mechanisms as SSH.
+- If you have SSH access to a server, it typically implies that you can use SFTP as well, as long as the SFTP subsystem is enabled on the server.
 
-3. Apply the changes by restarting the SSH service (`sudo systemctl restart ssh`).
+II. Configure SSH Server
+
+- SFTP depends on the SSH server configuration. It uses the SSH server's settings for port numbers, encryption types, and authentication methods.
+- The SSH configuration file (usually `/etc/ssh/sshd_config`) should have an entry like `Subsystem sftp /usr/lib/openssh/sftp-server` to enable SFTP service.
+
+III. Apply the changes by restarting the SSH service (`sudo systemctl restart ssh`).
 
 ### Client Setup
 
@@ -175,19 +177,21 @@ Secure File Transfer Protocol (SFTP) is a secure method for transferring files b
 
 To connect to a remote server using SFTP, follow these steps:
 
-1. Open Terminal or Command Line:
-   - On Unix-like systems, open your terminal.
-   - On Windows, you can use PowerShell, CMD, or an SSH client like PuTTY.
+I. Open Terminal or Command Line
 
-2. Use the command `sftp username@serverhost` where `username` is your account on the remote server, and `serverhost` is the hostname or IP address of the server.
+ - On Unix-like systems, open your terminal.
+ - On Windows, you can use PowerShell, CMD, or an SSH client like PuTTY.
+
+II. Use the command `sftp username@serverhost` where `username` is your account on the remote server, and `serverhost` is the hostname or IP address of the server.
 
 ```sh
 sftp username@serverhost
 ```
 
-3. Authenticate:
-   - Enter your password when prompted.
-   - If you've set up SSH key authentication, you might not need to enter a password.
+III. Authenticate
+
+- Enter your password when prompted.
+- If you've set up SSH key authentication, you might not need to enter a password.
 
 ### Basic SFTP Commands
 
@@ -225,33 +229,39 @@ Aside from SCP and SFTP, numerous other protocols and tools can be utilized for 
 
 ## Challenges
 
-- Server Setup
-  - Setup your own server environment using a free cloud provider option such as AWS, Google Cloud, or Azure. Alternatively, you can use a virtualization solution like VirtualBox to set up a virtual machine (VM).
-  - Install a Linux distribution (like Ubuntu or CentOS) on your server or VM, ensuring that it is configured with a static IP address.
-  - Secure your server by setting up a firewall, disabling root login, and installing necessary security updates.
+I. Server Setup
 
-- Connecting via SSH
-  - Connect to your server using the SSH protocol.
-  - Try to connect using both password authentication and key-based authentication, understanding the pros and cons of each method.
-  - Document any errors or issues you encounter during the connection process and research how to resolve them.
+- Setup your own server environment using a free cloud provider option such as AWS, Google Cloud, or Azure. Alternatively, you can use a virtualization solution like VirtualBox to set up a virtual machine (VM).
+- Install a Linux distribution (like Ubuntu or CentOS) on your server or VM, ensuring that it is configured with a static IP address.
+- Secure your server by setting up a firewall, disabling root login, and installing necessary security updates.
 
-- SSH Port Configuration
-  - Modify the SSH configuration to allow connections on a non-standard port (other than 22).
-  - Reconnect to the server using the newly specified port, verifying that the connection is successful.
-  - Discuss the security implications of using a non-standard port for SSH.
+II. Connecting via SSH
 
-- Utilizing SCP for File Transfer
-  - Copy a folder containing several files from the server to your local computer using the SCP protocol.
-  - Experiment with different SCP options, such as recursive copy and specifying a different port.
-  - Log the transfer times and any other notable observations during the transfer process.
+- Connect to your server using the SSH protocol.
+- Try to connect using both password authentication and key-based authentication, understanding the pros and cons of each method.
+- Document any errors or issues you encounter during the connection process and research how to resolve them.
 
-- Leveraging SFTP for File Management
-  - Connect to the server using an SFTP client.
-  - Upload a folder containing multiple files and subdirectories to the server using SFTP.
-  - Use the SFTP client to navigate the remote file system, creating and deleting folders as necessary.
-  - Test the file permissions settings by trying to access files with different user accounts.
+III. SSH Port Configuration
 
-- Understanding Transfer Protocols
-  - Write a detailed explanation of the differences between SCP and SFTP, highlighting their underlying protocols and use cases.
-  - Compare the transfer speed, security, and versatility of SCP and SFTP by transferring various types of files of different sizes.
-  - Research and discuss other file transfer protocols like FTP and Rsync, comparing them to SCP and SFTP in terms of security and functionality.
+- Modify the SSH configuration to allow connections on a non-standard port (other than 22).
+- Reconnect to the server using the newly specified port, verifying that the connection is successful.
+- Discuss the security implications of using a non-standard port for SSH.
+
+IV. Utilizing SCP for File Transfer
+
+- Copy a folder containing several files from the server to your local computer using the SCP protocol.
+- Experiment with different SCP options, such as recursive copy and specifying a different port.
+- Log the transfer times and any other notable observations during the transfer process.
+
+V. Leveraging SFTP for File Management
+
+- Connect to the server using an SFTP client.
+- Upload a folder containing multiple files and subdirectories to the server using SFTP.
+- Use the SFTP client to navigate the remote file system, creating and deleting folders as necessary.
+- Test the file permissions settings by trying to access files with different user accounts.
+
+VI. Understanding Transfer Protocols
+
+- Write a detailed explanation of the differences between SCP and SFTP, highlighting their underlying protocols and use cases.
+- Compare the transfer speed, security, and versatility of SCP and SFTP by transferring various types of files of different sizes.
+- Research and discuss other file transfer protocols like FTP and Rsync, comparing them to SCP and SFTP in terms of security and functionality.
