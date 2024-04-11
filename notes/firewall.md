@@ -193,17 +193,23 @@ Explanation:
 - **Protocols, Masquerade, Forward-ports, Source-ports, Icmp-blocks**: Other network settings and rules.
 - **Rich Rules**: More complex rules defined, like allowing specific IP ranges on certain ports. For example, the rule allowing all traffic from the `192.168.0.0/24` subnet, and allowing TCP traffic on port `443` from the `10.0.0.0/8` subnet.
 
+I. Adding Rules
+
 To add a new rule, use the `--add-service` flag followed by the service name. For example, to allow incoming `SSH` connections, use:
 
 ```bash
 firewall-cmd --permanent --add-service=ssh
 ```
 
+II. Removing Rules
+
 To remove a rule, use the `--remove-service` flag followed by the service name. For example, to block incoming `HTTP` connections, use:
 
 ```bash
 firewall-cmd --permanent --remove-service=http
 ```
+
+III. Applying Changes
 
 To apply the changes and reload the firewall, use the `--reload` flag:
 
