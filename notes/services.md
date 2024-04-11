@@ -66,7 +66,7 @@ Enabling and disabling services are crucial tasks in system administration, dete
 
 To enable a service means to configure it to start automatically when the system boots up. This is particularly useful for services that are essential for system operations or that provide critical functionalities. The command to enable a service varies depending on the system's initialization system. Here are common examples:
 
-- Using `chkconfig` for SysV-init systems:
+I. Using `chkconfig` for SysV-init systems:
 
 ```bash
 chkconfig httpd on
@@ -74,7 +74,7 @@ chkconfig httpd on
 
 This command sets the httpd service to start automatically.
 
-- Using `systemctl` for SystemD-based systems:
+II. Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl enable httpd.service
@@ -86,7 +86,7 @@ This command creates a symbolic link for the httpd.service unit file, ensuring i
 
 Disabling a service prevents it from starting automatically during system boot, which is useful for non-essential services or for troubleshooting conflicts. The specific command also depends on the system's initialization system:
 
-- Using `chkconfig` for SysV-init systems:
+I. Using `chkconfig` for SysV-init systems:
 
 ```bash
 chkconfig httpd off
@@ -94,7 +94,7 @@ chkconfig httpd off
 
 This command removes the httpd service from the system's startup sequence.
 
-- Using `systemctl` for SystemD-based systems:
+II. Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl disable httpd.service
@@ -110,7 +110,7 @@ Apart from enabling or disabling services for automatic startup, you might need 
 
 To start a service means to initiate its operation immediately. This is often done after installing a new service or making configuration changes.
 
-- Using `chkconfig` for SysV-init systems:
+I. Using `chkconfig` for SysV-init systems:
 
 ```bash
 service httpd start
@@ -118,18 +118,19 @@ service httpd start
 
 This command triggers the immediate start of the httpd service.
 
-- Using `systemctl` for SystemD-based systems:
+II. Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl start httpd.service
 ```
+
 This command tells systemd to start the httpd service right away.
 
 #### Stopping Services
 
 Conversely, stopping a service halts its operation. This can be necessary for maintenance, updates, or to resolve performance issues.
 
-- Using `chkconfig` for SysV-init systems:
+I. Using `chkconfig` for SysV-init systems:
 
 ```bash
 service httpd stop
@@ -137,7 +138,7 @@ service httpd stop
 
 This command stops the httpd service immediately, freeing up resources.
 
-- Using `systemctl` for SystemD-based systems:
+II. Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl stop httpd.service
@@ -162,13 +163,13 @@ The status of a service shows its current state and if it is active or not. Some
 
 To check the status of a service, you can use the status command. The way this command is used depends on the tool being used. Here are some examples:
 
-- Using `chkconfig` for SysV-init systems:
+I. Using `chkconfig` for SysV-init systems:
 
 ```
 chkconfig --list httpd
 ```
 
-- Using `systemctl` for SystemD-based systems:
+II. Using `systemctl` for SystemD-based systems:
 
 ```
 systemctl status httpd.service
@@ -177,7 +178,7 @@ systemctl status httpd.service
 ### Checking Service Dependencies
 
 Understanding service dependencies is crucial for effective system administration, particularly when managing startup sequences and troubleshooting service issues. To check whether a particular service is dependent on a specific target or another service, the `systemctl` command can be utilized in conjunction with `grep`. Here's how to do it:
-
+Using this command sets Adam as the owner and assigns the "admins" group to the file.txt.
 ```bash
 systemctl list-dependencies [target/service] | grep [service-name]
 ```
