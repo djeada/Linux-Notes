@@ -398,10 +398,12 @@ V. Manage system runlevels/targets
 - Check your current runlevel or target.
 - If you are using an init-based system, try changing the runlevel and verify the change.
 - If you are using a systemd-based system, try switching between targets and confirm that the change took effect.
-- 🔴 Remember to switch back to your default runlevel or target after you've completed the challenge.
+
+🔴 Remember to switch back to your default runlevel or target after you've completed the challenge.
 
 VI. Schedule system tasks
 
 - Try to schedule a system shutdown using the `shutdown` command, then cancel it before it takes effect.
 - Do the same with a system reboot.
-- 🔴 Remember: make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
+
+🔴 Remember to make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
