@@ -117,9 +117,9 @@ Various terminal emulators are available, each offering a different set of featu
 
 ## Challenges
 
-1. Use the `alias` command followed by the name of the command you're interested in. For example, `alias cat` will display any existing aliases for the `cat` command.
-2. Use the `alias` command without any arguments. This will display all aliases currently defined in your shell.
-3. Open `~/.bashrc` in your preferred text editor and add an alias in the following format: `alias ll='ls -la'`. Save and exit the file, then reopen the terminal to verify the alias has been added. To remove the alias, delete or comment out the corresponding line in the `~/.bashrc` file, then save, exit, and reopen the terminal.
-4. Use the `find` command to search for profile files: `find / -name '*profile*'`. This will display all files that include 'profile' in the filename.
-5. Use the `useradd` command followed by the `-s` option and the path to the desired program. For example, `useradd -s /bin/tar username` will create a new user with `/bin/tar` as their default shell. Remember, this is a significant change and could limit the user's ability to interact with the system beyond the specified program.
-6. Switch your shell using the `chsh -s /path/to/shell` command, replacing '/path/to/shell' with the path of the desired shell (for example, `/bin/zsh`). Open a new terminal window and explore the environment. Use commands like `alias`, `set`, and `declare -f` to inspect any custom variables, aliases, and functions.
+1. Find if there are any existing aliases for a command, like `cat`. Use `alias cat` to see the aliases for `cat`.
+2. Display all aliases currently defined in your shell. Simply execute `alias` without any arguments.
+3. Open `~/.bashrc` in a text editor, add a new alias like `alias ll='ls -la'`. Save the file, reopen your terminal, and verify the new alias. To remove it, delete or comment out the line in `~/.bashrc`, then save and restart your terminal.
+4. Use the `find` command to search your system for files containing 'profile' in their name. Try `find / -name '*profile*'`.
+5. Create a new user whose default shell is a non-standard program. For example, `useradd -s /bin/tar username` creates a user with `/bin/tar` as their shell. Be aware of the implications this may have on user interaction with the system.
+6. Change your default shell using `chsh -s /path/to/shell`, then open a new terminal session and explore the new environment. Experiment with commands like `alias`, `set`, and `declare -f` to inspect custom variables, aliases, and functions.
