@@ -57,7 +57,9 @@ This diagram illustrates that:
 
 Creating and managing LVM volumes involve a series of steps that utilize different commands. Here is a brief walkthrough:
 
-1. **Creating Physical Volumes**: This is the initial step, where you use the `pvcreate` command to set up physical volumes on your disks. This command turns the entire disk into a single LVM physical volume. Here's an example using three devices (`/dev/sdb`, `/dev/sdc`, and `/dev/sdd`):
+I. Creating Physical Volumes
+
+This is the initial step, where you use the `pvcreate` command to set up physical volumes on your disks. This command turns the entire disk into a single LVM physical volume. Here's an example using three devices (`/dev/sdb`, `/dev/sdc`, and `/dev/sdd`):
 
 ```bash
 pvcreate /dev/sdb
@@ -65,27 +67,35 @@ pvcreate /dev/sdc
 pvcreate /dev/sdd
 ```
 
-2. **Defining Volume Groups**: Next, you create a volume group using the vgcreate command and add your physical volumes to it. The volume group allows you to manage multiple physical volumes as one. Here's an example of creating a volume group named TEST and extending it with additional physical volumes:
+II. Defining Volume Groups
+
+Next, you create a volume group using the vgcreate command and add your physical volumes to it. The volume group allows you to manage multiple physical volumes as one. Here's an example of creating a volume group named TEST and extending it with additional physical volumes:
 
 ```bash
 vgcreate TEST /dev/sdb
 vgextend TEST /dev/sdc /dev/sdd
 ```
 
-3. **Creating Logical Volumes**: After your volume group is set, you can create logical volumes within this group using the `lvcreate` command. These logical volumes will be your actual storage areas. In this example, two logical volumes (`vol_name_1` and `vol_name_2`) of sizes 20GB and 12GB respectively, are created within the TEST volume group:
+III. Creating Logical Volumes
+
+After your volume group is set, you can create logical volumes within this group using the `lvcreate` command. These logical volumes will be your actual storage areas. In this example, two logical volumes (`vol_name_1` and `vol_name_2`) of sizes 20GB and 12GB respectively, are created within the TEST volume group:
 
 ```bash
 lvcreate -L 20G -n vol_name_1 TEST
 lvcreate -L 12G -n vol_name_2 TEST
 ```
 
-4. **Creating a File System on the Logical Volume**: Before you can start storing data, you need to create a file system on the logical volume. You can do this using the mkfs command. In this example, an ext4 file system is created on `vol_name_1`:
+IV. Creating a File System on the Logical Volume
+
+Before you can start storing data, you need to create a file system on the logical volume. You can do this using the mkfs command. In this example, an ext4 file system is created on `vol_name_1`:
 
 ```bash
 mkfs -t ext4 /dev/TEST/vol_name_1
 ```
 
-5. **Mounting the Logical Volume**: Finally, you mount the logical volume to a designated mounting point using the mount command. This allows you to start storing and accessing data. In this example, `vol_name_1` is mounted at `/mounting_point`:
+V. Mounting the Logical Volume
+
+Finally, you mount the logical volume to a designated mounting point using the mount command. This allows you to start storing and accessing data. In this example, `vol_name_1` is mounted at `/mounting_point`:
 
 ```bash
 mount -t ext4 /dev/TEST/vol_name_1 /mounting_point
