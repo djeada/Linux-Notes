@@ -1,6 +1,6 @@
 ## Disk Usage Management
 
-The ability to manage and monitor disk usage is crucial when maintaining Linux systems. Disk usage is often checked when diagnosing system issues, planning for future storage requirements, or cleaning up unused files and directories.
+The ability to manage and monitor disk usage is crucial when maintaining servers. Disk usage is often checked when diagnosing system issues, planning for future storage requirements, or cleaning up unused files and directories.
 
 ## Understanding the df command
 
