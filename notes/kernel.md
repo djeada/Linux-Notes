@@ -176,13 +176,13 @@ dkms status
 
 ## Challenges
 
-1. Describe the primary role and function of the kernel in an operating system.
-2. Compare and contrast the Linux kernel with microkernel and hybrid kernel architectures. Highlight the unique aspects of the Linux kernel.
-3. Explain the concept of a kernel module. Detail how it is used in the Linux kernel, its benefits, and give an example of its use.
-4. Explain the purpose of Dynamic Kernel Module Support (DKMS) and its role in managing kernel modules in Linux. Provide an example of how to add, build, install, and remove a module using DKMS.
-5. Describe the Linux startup process, starting from BIOS or UEFI, through the bootloader (MBR, GRUB), kernel initialization, and finally, systemd. Explain the role systemd plays in this process and how it manages system services.
-6. Explain the role of the `/proc` filesystem in Linux. Describe how it can be used to monitor the kernel and provide an example of its use.
-7. Show how you can check the current kernel version on a Linux system. Explain what each piece of information means in the output of the `uname -a` command.
-8. Detail the difference between a thread and a regular process in the Linux kernel. Explain how they are handled by the Linux kernel.
-9. Demonstrate how to load and unload a kernel module in Linux using the `modprobe` and `rmmod` commands, respectively. Explain what each command does in the background.
-10. Provide a step-by-step guide on how to build a kernel module using DKMS. Explain what happens during the build process.
+1. Download the latest Linux kernel source code from the official repository. Configure and compile it for a specific system. Document the steps and choices made during configuration.
+2. Develop a simple kernel module, such as a 'Hello World' module. Load and unload it from your Linux kernel, and inspect the system log to verify its functioning.
+3. Tune a Linux kernel for enhanced performance on a specific hardware setup. Modify parameters such as scheduler settings, file system support, and networking options. Benchmark the system before and after the optimization.
+4. Identify a kernel patch (for a bug fix or improvement) and apply it to your kernel source. Re-compile and test the kernel to ensure the patch functions as expected.
+5. Simulate a kernel panic using tools or commands (like `sysrq` trigger). Capture and analyze the output to understand the cause of the panic and how to recover from such situations.
+6. Create a custom kernel configuration for a specific use case, like a gaming system, server, or embedded device. Tailor features and modules for the chosen application, and explain your configuration choices.
+7. Write a script to automate the deployment of a newly compiled kernel, including copying it to the `/boot` directory, updating the boot loader configuration, and rebooting the system.
+8. Use the `git bisect` tool to identify a regression in the kernel. Document the process of finding the offending commit in the kernel source.
+9. Configure and compile a real-time Linux kernel. Test its real-time capabilities with appropriate benchmarks or tools, and discuss the implications and challenges of using a real-time kernel.
+10. Explore kernel security modules like SELinux or AppArmor. Set up a module, create custom security policies, and test their effectiveness in enhancing system security.
