@@ -79,7 +79,7 @@ Uncomment (or add) the following line to grant the group sudo access:
 %wheel ALL=(ALL) ALL
 ```
 
-#### Granting Limited sudo Privileges
+### Granting Limited sudo Privileges
 
 For enhanced security, you might want to allow a user to execute only specific commands as the superuser.
 
@@ -219,7 +219,7 @@ Each line represents a group, detailing the group name, password (usually not us
 
 I. Adding a New Group
 
-To introduce a new group, utilize the groupadd command:
+To introduce a new group, utilize the `groupadd` command:
 
 ```bash
 groupadd admins
@@ -227,7 +227,7 @@ groupadd admins
 
 II. Adding a User to a Group
 
-To associate a user with a group, the usermod command, combined with the -aG flags, proves effective:
+To associate a user with a group, use the `usermod` command combined with the `-aG` flags:
 
 ```bash
 usermod -aG admins adam
@@ -237,21 +237,21 @@ Here, adam is added to the admins group.
 
 III. Removing a User from a Group
 
-The gpasswd command, paired with the -d flag, facilitates the removal of a user from a group:
+To remove a user from a group, use the `gpasswd` command paired with the `-d` flag:
 
 ```bash
 gpasswd -d adam admins
 ```
 
-With this, adam is disassociated from the admins group.
+Now, adam is removed from the admins group.
 
 ### Adjusting File or Folder Ownership
 
-Permissions in Linux link closely with ownership. Therefore, understanding how to modify the ownership of files and directories is crucial.
+Permissions are closely associated with ownership. Therefore, understanding how to modify the ownership of files and directories is crucial.
 
 I. Changing the Owner
 
-To reassign the ownership of a file or directory, use the chown command:
+To reassign the ownership of a file or directory, use the `chown` command:
 
 ```bash
 chown adam file.txt
@@ -261,7 +261,7 @@ Here, adam becomes the new owner of file.txt.
 
 II. Altering Group Ownership
 
-The chgrp command lets you redefine the group associated with a file or directory:
+The `chgrp` command lets you redefine the group associated with a file or directory:
 
 ```bash
 chgrp admins file.txt
@@ -271,13 +271,13 @@ Now, file.txt belongs to the admins group.
 
 III. Simultaneous Ownership Changes
 
-The chown command can also modify both user and group ownership simultaneously. Separate the user and group by a colon:
+The `chown` command can also modify both user and group ownership simultaneously. Separate the user and group by a colon:
 
 ```bash
 chown adam:admins file.txt
 ```
 
-With this, adam is designated as the owner, and admins as the group for file.txt.
+Using this command sets adam as the owner and assigns the "admins" group to the file.txt.
 
 ## User ID and Group ID
 
@@ -319,7 +319,7 @@ This shows the user's UID (uid), primary group GID (gid), and secondary group me
 
 II. For a Group
 
-The getent command reveals a group's GID:
+The `getent` command reveals a group's GID:
 
 ```bash
 getent group admins
@@ -335,17 +335,17 @@ Here, the GID is the third field, while the group members are listed in the last
 
 ### Modifying UID and GID
 
-Change User's UID:
+I. Change User's UID
 
-The usermod command, combined with the -u flag, allows for changing a user's UID:
+The `usermod` command, combined with the `-u` flag, allows to change a user's UID:
 
 ```bash
 usermod -u 1001 adam
 ```
 
-Change Group's GID:
+II. Change Group's GID
 
-The groupmod command, paired with the -g flag, facilitates GID modification:
+The `groupmod` command, paired with the `-g` flag, facilitates GID modification:
 
 ```bash
 groupmod -g 1001 admins
