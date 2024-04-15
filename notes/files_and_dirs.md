@@ -1,6 +1,6 @@
 ## Understanding Files and Directories
 
-One of the fundamental skills is to navigate and manage files and directories effectively. Here, we focus on the crucial concepts that will facilitate your work within the Linux file system.
+One of the fundamental skills is to navigate and manage files and directories effectively. Here, we focus on the crucial concepts that will facilitate your work within the file system.
 
 ## Types of File Paths
 
