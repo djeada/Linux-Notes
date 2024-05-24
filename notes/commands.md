@@ -6,37 +6,48 @@ This guide provides an overview of commands and tools used to retrieve informati
 
 The command-line interface provides several features to aid navigation and recall of previous commands:
 
-- `history`: This command displays the list of recent commands you've executed.
-- `Ctrl+R`: This keyboard shortcut allows you to search through your command history.
-- `!number` or `!text`: These expressions allow you to execute a specific command from your history. Replace `number` with the line number from the `history` command, or `text` with the start of the command you want to repeat.
+- `history`: Displays the list of recent commands you've executed.
+- `Ctrl+R`: Initiates a reverse search through your command history.
+- `!number` or `!text`: Executes a specific command from your history. Replace `number` with the line number from the `history` command, or `text` with the start of the command you want to repeat.
 - Adding a space before your command will prevent it from being saved in your history.
-- `history -c`: This command clears your current session history.
-- `history -w`: This command writes the current history to the history file (`~/.bash_history` by default in bash), overwriting its contents.
-- The `up arrow key` and `down arrow key` allow you to navigate through your previously used commands.
-- The `tab key` will attempt to auto-complete the command or file name you're typing.
+- `history -c`: Clears your current session history.
+- `history -w`: Writes the current history to the history file (e.g., `~/.bash_history` by default in bash), overwriting its contents.
+- `Up arrow key` and `Down arrow key`: Navigate through your previously used commands.
+- `Tab key`: Attempts to auto-complete the command or file name you're typing.
 
 ## The Manual (man) Pages
 
 The `man` command is used to view the manual, the built-in documentation for command-line utilities:
 
-- `man <command>`: This will display the manual page for the specified command. For example, `man ls` will display the manual page for the `ls` command.
-- Manual pages are divided into sections, with each section covering a specific topic.
-  - `1`: executable programs or shell commands
-  - `2`: system calls
-  - `3`: library calls
-  - `4`: special files
-  - `5`: file formats and conventions
-  - `6`: games
-  - `7`: miscellaneous
-  - `8`: system administration (root) commands
-  - `9`: kernel routines
-- `man -s <section_number> <command>`: This command will display the man page for the specific section of the specified command. For example, `man -s 1 ls` will display the man page for the `ls` command in section 1, which covers executable programs or shell commands.
+- `man <command>`: Displays the manual page for the specified command. For example, `man ls` shows the manual page for the `ls` command.
+- Manual pages are divided into sections, each covering a specific topic:
+  - `1`: Executable programs or shell commands
+  - `2`: System calls
+  - `3`: Library calls
+  - `4`: Special files
+  - `5`: File formats and conventions
+  - `6`: Games
+  - `7`: Miscellaneous
+  - `8`: System administration (root) commands
+  - `9`: Kernel routines
+- `man -s <section_number> <command>`: Displays the man page for the specific section of the specified command. For example, `man -s 1 ls` shows the man page for the `ls` command in section 1.
 
 ## The apropos Command
 
 The `apropos` command is used to search the man pages for commands related to the provided keywords:
 
-- `apropos <keyword>`: This command will display a list of commands and a brief description for each that is related to the keyword. For example, `apropos zip` will list commands related to compression or decompression.
+- `apropos <keyword>`: Displays a list of commands and a brief description for each related to the keyword. For example, `apropos zip` lists commands related to compression or decompression.
+
+## Additional Commands and Tips
+
+Here are a few more useful commands and tips for navigating and utilizing the command line effectively:
+
+- `whatis <command>`: Provides a brief description of the specified command.
+- `type <command>`: Indicates how the specified command would be interpreted if run (e.g., alias, built-in, file path).
+- `which <command>`: Displays the path to the executable that would be run for the specified command.
+- `alias <name>=<command>`: Creates an alias for a command, allowing you to define shortcuts for frequently used commands. For example, `alias ll='ls -lah'` creates an alias `ll` for `ls -lah`.
+- `unalias <name>`: Removes a previously defined alias.
+- `clear`: Clears the terminal screen.
 
 ## Challenges
 
