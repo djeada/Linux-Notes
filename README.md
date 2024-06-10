@@ -70,3 +70,7 @@ If you have suggestions for improving the notes or have found a mistake, please 
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=djeada/Linux-Notes&type=Date)](https://star-history.com/#djeada/Linux-Notes&Date)
