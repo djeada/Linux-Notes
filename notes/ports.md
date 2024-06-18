@@ -282,7 +282,7 @@ nmap -F <IP-address>
 11. What is a firewall, and why is it crucial for protecting ports? Can you configure a basic firewall rule to allow or block traffic on a specific port?
 12. What happens if two applications try to bind to the same port? How would you resolve such a conflict?
 13. What is the range for dynamic or private ports, and why are they essential? Can you provide a real-world scenario where they might be used?
-14. How might you configure rate limiting on a specific port to prevent potential DDoS attacks?
+14. How you might configure rate limiting on a specific port to prevent potential DDoS attacks?
 15. What are some of the most commonly targeted ports for cyberattacks in the history of the internet? Why do you think they were targeted?
 16. If you suspect a port is vulnerable or has been exploited, how would you secure it? What tools and strategies would you deploy?
 17. How does Network Address Translation (NAT) relate to ports, and why is it significant for modern networks, especially in the context of private and public IP addresses?
