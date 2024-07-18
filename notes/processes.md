@@ -212,7 +212,7 @@ In this example, a termination signal is sent to the process with PID 12345, ins
 
 ### Terminating Processes by Name
 
-If you don't know a process's PID, but you do know its name, the pkill command is handy. This command allows you to stop a process using its name:
+If you don't know a process's PID, but you do know its name, the `pkill` command is handy. This command allows you to stop a process using its name:
 
 ```bash
 pkill process_name
@@ -222,7 +222,7 @@ In this case, a termination signal is sent to all processes that share the speci
 
 ### Specifying Termination Signals
 
-The kill and pkill commands provide the option to specify the type of signal sent to a process. For example, to send a SIGINT signal (equivalent to Ctrl+C), you can use:
+The `kill` and `pkill` commands provide the option to specify the type of signal sent to a process. For example, to send a SIGINT signal (equivalent to Ctrl+C), you can use:
 
 ```bash
 kill -SIGINT 12345
@@ -230,15 +230,38 @@ kill -SIGINT 12345
 
 Linux supports a variety of signals, each designed for a specific purpose. Some common signals include:
 
-| Signal | Value |  Description |
+| Signal | Value | Description |
 | --- | --- | --- |
 | `SIGHUP` | (1) | Hangup detected on controlling terminal or death of controlling process |
-| `SIGINT` | (2) | Interrupt from keyboard; typically, caused by  `Ctrl+C` |
-| `SIGKILL` | (9) | Forces immediate process termination; it cannot be ignored, blocked or caught |
-| `SIGSTOP` |  (19) | Pauses the process; cannot be ignored |
-| `SIGCONT` |  (18) | Resumes paused process |
+| `SIGINT` | (2) | Interrupt from keyboard; typically, caused by `Ctrl+C` |
+| `SIGKILL` | (9) | Forces immediate process termination; it cannot be ignored, blocked, or caught |
+| `SIGSTOP` | (19) | Pauses the process; cannot be ignored |
+| `SIGCONT` | (18) | Resumes paused process |
 
-Terminating processes should be performed with caution. Some processes may be critical for system operation or hold valuable data that could be lost upon abrupt termination. Therefore, it's advisable to use commands such as ps and top to observe currently running processes before attempting to stop any of them. This approach allows for more controlled and careful system management, preventing unintended disruptions or data loss.
+Terminating processes should be performed with caution. Some processes may be critical for system operation or hold valuable data that could be lost upon abrupt termination. Therefore, it's advisable to use commands such as `ps` and `top` to observe currently running processes before attempting to stop any of them. This approach allows for more controlled and careful system management, preventing unintended disruptions or data loss.
+
+### Special PID Values in `kill`
+
+When using the `kill` command, special PID values can be used to target multiple processes:
+
+- **`-1`**: Sends the signal to all processes the user has permission to signal, except the process itself and process ID 1 (the init process).
+- **`0`**: Sends the signal to all processes in the same process group as the calling process.
+- **Negative values less than -1**: Sends the signal to all processes in the process group with the absolute value of the given number. For example, `kill -2 -SIGTERM` sends the SIGTERM signal to all processes in the process group with PGID 2.
+
+These special values allow for more flexible management of processes and process groups, especially in scenarios where you need to signal multiple related processes at once. Here are examples of using these special values:
+
+```bash
+# Sending SIGTERM to all processes the user can signal
+kill -1 -SIGTERM
+
+# Sending SIGTERM to all processes in the same process group as the current process
+kill 0 -SIGTERM
+
+# Sending SIGTERM to all processes in the process group with PGID 2
+kill -2 -SIGTERM
+```
+
+Using these special values carefully can help manage and control process groups effectively.
 
 ## Methods for Searching Processes
 
