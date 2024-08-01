@@ -21,7 +21,7 @@ Unix and Unix-like systems, including Linux, organize files in a hierarchical st
 2. **Virtual files** provide an interface to other programs or the kernel. They do not contain traditional data but rather information about processes and system parameters, typically found in directories like `/proc` and `/sys`.
 3. **Remote files** are stored on a remote Network File System (NFS) server. They can be accessed and manipulated as if they were stored locally.
 
-### Classification Based on Visibility
+#### Classification Based on Visibility
 
 1. **Visible files** are displayed when you list the contents of a directory using commands like `ls`.
 2. **Hidden files** are not displayed in a standard directory listing. They start with a period (`.`) and typically store configuration data or system files. They can be revealed using the `ls -a` command.
@@ -135,7 +135,7 @@ Several types of file systems can be used on Linux systems, each designed with s
 | **Use in Large Servers**     | Less common                | Common                      | Very common                 | Yes                        | Yes, for shared storage    | N/A                        | Less common                | Less common                | Yes                        | Yes                        | Yes                        |
 | **Use in Personal Devices**  | Less common                | Less common                 | Common                      | Less common                | Less common                | N/A                        | Very common                | Common in Windows          | Less common                | Growing                    | Less common                |
 
-### Creating a File System in Linux: A Comprehensive Guide
+### Creating a File System
 
 Creating a new file system on a storage device in Linux is a fundamental task that involves several critical steps. This guide will walk you through the process, from identifying the device to mounting the new file system. Each step includes specific commands and detailed explanations to ensure a successful setup.
 
