@@ -81,15 +81,11 @@ The `module` command is your primary interface for interacting with Environment 
 
 Here are some of the most commonly used `module` sub-commands:
 
-- **`module load [module_name]`:** This command loads the specified module, making the software available in your shell environment. If multiple versions of a software package are available, you can specify the version as well, e.g., `module load my_app/1.0`.
-
-- **`module unload [module_name]`:** This command unloads the specified module, removing its environment settings from your shell. Like the `load` command, you can specify the version to unload.
-
-- **`module avail`:** This command lists all available modules. If you want to find available versions of a specific application, you can pass the application name as an argument, e.g., `module avail my_app`.
-
-- **`module list`:** This command lists all currently loaded modules. This can be helpful to see which software packages and versions are active in your current environment.
-
-- **`module purge`:** This command unloads all currently loaded modules. Be careful when using this command, as it could potentially disrupt your working environment by removing all loaded software.
+- Loading a specified module and making the software available in your shell environment is done with the command `module load [module_name]`. If there are multiple versions of a software package, you can specify the version, such as `module load my_app/1.0`.
+- To unload a specific module and remove its environment settings from your shell, use the command `module unload [module_name]`. You can also specify the version to unload.
+- Listing all available modules can be achieved with the command `module avail`. To find available versions of a specific application, include the application name as an argument, like `module avail my_app`.
+- The command `module list` shows all currently loaded modules, which is useful for seeing which software packages and versions are active in your current environment.
+- Unloading all currently loaded modules is done with the command `module purge`. This command should be used cautiously, as it could disrupt your working environment by removing all loaded software.
 
 You should use the `module` command to interact with Environment Modules, as this tool ensures that all environment changes are correctly and consistently applied. Manual editing of module files should be avoided unless you are defining a new module or modifying the behavior of an existing one.
 
