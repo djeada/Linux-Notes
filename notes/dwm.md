@@ -24,29 +24,18 @@ Remember that DWM is highly customizable, but changes typically require modifyin
 
 ## Usage
 
-After installing DWM, you primarily interact with it through keyboard shortcuts, which are much quicker and more efficient than using a mouse in a tiling window manager environment. Here's a list of the basic DWM commands and shortcuts you'll use to manage windows and tags:
-
-* **Spawn a new terminal:** Open a new terminal by pressing `Shift + Alt + Enter`. This is typically bound to spawn the `st` terminal or `xterm` if `st` is not installed.
-
-* **Switch between windows:** To move your focus between different windows, use `Alt + j` and `Alt + k`. These commands cycle your focus through the windows in the currently visible tag.
-
-* **Change window position:** To promote a window from the stack to the master area (and vice versa), press `Alt + Enter`.
-
-* **Close a window:** To close the currently focused window, you could click the close button or type `exit` and press `Enter` in terminal windows.
-
-* **Switch between tags:** DWM uses tags (similar to virtual desktops or workspaces). To switch your view to another tag, press `Alt + [tag number]`. Tag numbers are from 1 to 9.
-
-* **Log out:** When you want to quit DWM, press `Shift + Alt + q`. This will close the window manager and return you to your display manager or console.
-
-* **Move window to another tag:** If you want to move a window to another tag, first focus on the window, then press `Shift + Alt + [tag number]`.
-
-* **Toggle window between tiled and floating modes:** If you need a window to float above the tiled layout, focus on it and press `Alt + t`. Press the same shortcut to return the window to the tiled layout.
-
-* **Resize a floating window:** You can resize a floating window by holding `Alt`, then right-clicking and dragging the window.
-
-* **Move a floating window:** Similarly, you can move a floating window by holding `Alt`, then left-clicking and dragging the window.
-
-Remember that one of the beauties of DWM is its customizability, so you're not limited to these defaults. If you're comfortable with C programming, you can edit `config.h`, recompile, and reinstall DWM to change the bindings to your liking.
+- After installing DWM, interaction is mainly through keyboard shortcuts, making it quicker and more efficient than using a mouse in a tiling window manager environment.
+- Opening a new terminal can be done by pressing `Shift + Alt + Enter`, which typically launches the `st` terminal or `xterm` if `st` isn't installed.
+- To move focus between different windows, you use `Alt + j` and `Alt + k`, which cycle through the windows in the currently visible tag.
+- Promoting a window from the stack to the master area or vice versa is done by pressing `Alt + Enter`.
+- Closing the currently focused window can be achieved by either clicking the close button or typing `exit` and pressing `Enter` in terminal windows.
+- DWM uses a concept called tags, similar to virtual desktops or workspaces, and switching views to another tag is done by pressing `Alt + [tag number]`, with tag numbers ranging from 1 to 9.
+- To quit DWM, you press `Shift + Alt + q`, which will close the window manager and return you to your display manager or console.
+- Moving a window to another tag involves focusing on the window and then pressing `Shift + Alt + [tag number]`.
+- Toggling a window between tiled and floating modes is done by focusing on it and pressing `Alt + t`. This shortcut can also be used to revert the window back to the tiled layout.
+- Resizing a floating window can be accomplished by holding `Alt`, then right-clicking and dragging the window.
+- Moving a floating window similarly requires holding `Alt` and then left-clicking and dragging the window.
+- One of the key features of DWM is its customizability. If you are comfortable with C programming, you can modify `config.h`, recompile, and reinstall DWM to change key bindings and other settings to suit your preferences.
 
 ## Configuration
 
@@ -90,10 +79,6 @@ Log out and log back in, or restart your X session to apply the changes. The upd
 
 ## Further Resources
 
-If you're looking for additional information about configuring and using DWM, the following resources could be quite helpful:
-
-- **DWM Tutorial:** The official DWM Tutorial provided by the suckless community is an excellent starting point. It delivers a comprehensive walkthrough of basic DWM usage and configuration. You can access the tutorial at [https://dwm.suckless.org/tutorial/](https://dwm.suckless.org/tutorial/).
-
-- **DWM man page:** For a more in-depth understanding of DWM and its functionalities, you should consider consulting the DWM man page. It can be accessed in your terminal by running the command `man dwm`.
-
-- **DWM Config Archive:** The DWM Config Archive is a collection of user-submitted `config.h` files. It's a treasure trove of interesting and varied configurations. Exploring these files can provide you with new ideas for your own DWM setup or even a ready-to-use configuration that suits your needs. Check it out at [https://dwm.suckless.org/customisation/](https://dwm.suckless.org/customisation/).
+- If you are seeking additional information about configuring and using DWM, the official DWM Tutorial provided by the suckless community is an excellent starting point. It offers a comprehensive walkthrough of basic DWM usage and configuration, available at [https://dwm.suckless.org/tutorial/](https://dwm.suckless.org/tutorial/).
+- For a more in-depth understanding of DWM and its functionalities, the DWM man page is an invaluable resource. You can access it in your terminal by running the command `man dwm`.
+- The DWM Config Archive is a collection of user-submitted `config.h` files, serving as a treasure trove of interesting and varied configurations. Exploring these files can provide new ideas for your own DWM setup or even a ready-to-use configuration that suits your needs. Visit the archive at [https://dwm.suckless.org/customisation/](https://dwm.suckless.org/customisation/).
