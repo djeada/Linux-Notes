@@ -3,13 +3,15 @@
 Partitioning a disk means dividing the disk into smaller areas called partitions. Each partition can store different types of data or provide extra storage. There are two main partition tables: MBR (Master Boot Record) and GPT (GUID Partition Table).
 
 ```
-+------------------+------------------+------------------+-----------------+
-| Partition 1      | Partition 2      | Partition 3      | Free Space      |
-| /dev/sda1        | /dev/sda2        | /dev/sda3        |                 |
-| Filesystem: ext4 | Filesystem: ext4 | Filesystem: swap |                 |
-| Mount: /         | Mount: /home     |                  |                 |
-| Size: 50GB       | Size: 100GB      | Size: 8GB        | Size: 42GB      |
-+------------------+------------------+------------------+-----------------+
++------------------+------------------+------------------+-----------------+-----------------+
+| Partition        | /dev/sda1        | /dev/sda2        | /dev/sda3       | Free Space      |
++------------------+------------------+------------------+-----------------+-----------------+
+| Filesystem       | ext4             | ext4             | swap            |                 |
++------------------+------------------+------------------+-----------------+                 |
+| Mount Point      | /                | /home            |                 |                 |
++------------------+------------------+------------------+-----------------+                 |
+| Size             | 50GB             | 100GB            | 8GB             | 42GB            |
++------------------+------------------+------------------+-----------------+-----------------+
 ```
 
 ### MBR (Master Boot Record)
@@ -31,7 +33,7 @@ GPT is a newer and better partition table format than MBR. It supports disks lar
 | **Advantages** | Higher limits on partition sizes and counts, better data resilience, required for modern hardware (like larger hard drives). | Universal compatibility, simplicity, and well-tested over time. |
 | **Disadvantages** | Not compatible with older systems that only support BIOS. | Limited partition size and count, less resilient against data corruption. |
 
-## Common disk names
+### Common disk names
 
 The first two-three letters mean the device type:
 
@@ -57,12 +59,12 @@ For example:
 - `/dev/sdc1` refers to the first partition (`1`) on the third SATA disk (`sdc`).
 - `/dev/hdb3` is the third partition (`3`) on the second IDE hard drive (`hdb`).
 
-**Note**:
+Note:
 
 - Modern systems predominantly use the `/dev/sdX` naming convention due to the shift towards SATA interfaces.
 - In virtualized environments, `/dev/vdX` and `/dev/xvdX` are more common, depending on the virtualization technology used.
 
-## Looking at partition tables
+### Looking at partition tables
 
 To look at a disk's partition table, use the gdisk or fdisk command. The gdisk command is for GPT partitions, while fdisk can be used for MBR and GPT partitions. To see all disk partitions, use:
 
@@ -98,11 +100,11 @@ Explanation:
 - *Disk Information*: Provides details about each disk (`/dev/sda`, `/dev/sdb`, etc.), including size, sector information, and disk label type (GPT or MBR).
 - *Partition Information*: For each disk, it lists all partitions, their start and end sectors, total sectors, size, and type (e.g., EFI System, Linux filesystem).
     
-## Making Partitions on a Disk
+### Making Partitions on a Disk
 
 Creating partitions on a disk allows you to logically divide it into segments, each of which can be used independently. This can be done using either the `fdisk` or `gdisk` command in Linux, depending on whether your disk uses MBR (Master Boot Record) or GPT (GUID Partition Table) partitioning scheme, respectively.
 
-### MBR Partitioning
+#### MBR Partitioning
 
 To partition a disk (e.g., `/dev/sda`) with `fdisk`:
 1. Start `fdisk`: `fdisk /dev/sda`.
@@ -111,7 +113,7 @@ To partition a disk (e.g., `/dev/sda`) with `fdisk`:
 4. Optionally, set the partition type by pressing `t` and entering the type code.
 5. To save the changes and exit `fdisk`, press `w`.
 
-### GPT Partitioning
+#### GPT Partitioning
 
 For disks with GPT, use `gdisk`:
 1. Open `gdisk` on your target disk: `gdisk /dev/sda`.
@@ -121,14 +123,14 @@ For disks with GPT, use `gdisk`:
 5. Set the partition type by pressing `t` and entering the type code or name.
 6. Write the changes to disk and exit by pressing `w`.
 
-### Important Notes
+#### Important Notes
 
-- **Backup Data**: Always back up important data before modifying disk partitions, as there is a risk of data loss.
-- **Resizing and Deleting Partitions**: If the disk already has partitions, you may need to delete or resize them to create space for the new partition. Use `d` in `gdisk` or `fdisk` to delete a partition. To resize, you can create a new partition with the desired size (`n` command) and then delete the old one.
-- **Partition Types**: The choice of partition type depends on your needs (e.g., Linux filesystem, swap). Each type has a unique identifier or code.
-- **Administrative Privileges**: Partitioning tools usually require root access, so you might need to use `sudo`.
+- **Backup Data** before modifying disk partitions to prevent data loss, as altering partitions can sometimes lead to accidental loss of important information.
+- When managing disk partitions, **Resizing and Deleting Partitions** may be necessary if existing partitions occupy the space needed for new ones. To delete a partition, use the `d` command in tools like `gdisk` or `fdisk`. For resizing, you might need to create a new partition with the desired size using the `n` command and then delete the old partition.
+- The **Partition Types** you select depend on specific needs, such as using a Linux filesystem or creating a swap space. Each partition type is identified by a unique code or identifier that defines its purpose and structure.
+- **Administrative Privileges** are typically required when using partitioning tools, as these actions need root access. Therefore, commands are often prefixed with `sudo` to grant the necessary permissions.
 
-## Changing MBR to GPT using gdisk
+### Changing MBR to GPT using gdisk
 
 Sometimes, there's a need to change a disk from one partition table format to another. For instance, converting an MBR disk to a GPT format can be done using tools like `gdisk` or `parted`. Here's how to do it with `gdisk`:
 
@@ -145,12 +147,12 @@ Sometimes, there's a need to change a disk from one partition table format to an
 11. Restart the system to ensure all changes take effect.
 12. Verify the new partition table: `gdisk -l /dev/sda`.
 
-🔴 **Caution**
+🔴 Caution:
 
 - It's crucial to back up any important data before proceeding with this operation, as changing the partition table format can lead to data loss.
 - Ensure that your system supports GPT and UEFI (if you're planning to boot from the disk), as older systems with BIOS may not support GPT.
 
-## Challenges
+### Challenges
 
 1. What are the key differences in terms of capacity, partition limits, and compatibility between MBR (Master Boot Record) and GPT (GUID Partition Table) partition tables?
 2. How can you list all the disk partitions on a Linux system?
