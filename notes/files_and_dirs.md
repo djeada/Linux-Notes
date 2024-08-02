@@ -119,10 +119,8 @@ cp -r source_dir destination_dir
 
 There are several options that can modify the behavior of cp:
 
-| Option | Description |
-| ------ | ----------- |
-| `-a` | Also known as the archive option. This preserves the file attributes, and it also preserves symbolic links within the copied directories. |
-| `-v` | The verbose option. It provides detailed output of the operation. |
+- The `-a` option, also known as the archive option, preserves file attributes and symbolic links within the copied directories.
+- The `-v` option, known as the verbose option, provides detailed output of the operation.
 
 #### Moving and Renaming Files and Directories
 
@@ -154,11 +152,11 @@ rm -r directory_name
 
 Warning: The rm command is powerful and potentially destructive, especially when used with the -r (recursive) and -f (force) options. Use it with caution.
 
-#### Viewing and Inspecting File Contents
+### Viewing and Inspecting File Contents
 
 There are various ways to view and inspect the contents of files in Unix-like operating systems. We can use the `cat`, `more`, `less`, `head`, and `tail` commands to achieve this. 
 
-##### Displaying File Content with `cat`
+#### Displaying File Content with `cat`
 
 The `cat` (concatenate) command is a standard tool used to display the entire contents of a file. It writes the contents of a file to standard output (the terminal). For instance, to display the content of a file named `file.txt`, use the following command:
 
@@ -168,7 +166,7 @@ cat file.txt
 
 However, keep in mind that cat is not ideal for large files because it dumps all content to the terminal at once.
 
-##### Paginating File Content with more and less
+#### Paginating File Content with more and less
 
 For more manageable file viewing, particularly for larger files, the more and less commands are useful. They display content page by page, making it easier to digest.
 
@@ -186,15 +184,13 @@ less file.txt
 
 While viewing files with more or less, you can use these commands:
 
-| Command	| Description |
-| ------- | ----------- |
-| `Enter` | Move forward by one line |
-| `Space` | Move forward by one page |
-| `b`	| Move one page backward (less only) |
-| `q` | Quit the pager (more or less) |
-| `/pattern` | Search for the next occurrence of the text “pattern” (less only) |
+- The `Enter` command moves forward by one line.
+- The `Space` command moves forward by one page.
+- The `b` command moves one page backward, applicable in the "less" pager only.
+- The `q` command quits the pager, usable in both "more" and "less" pagers.
+- The `/pattern` command searches for the next occurrence of the specified text "pattern," available in the "less" pager only.
 
-##### Viewing File Parts with head and tail
+#### Viewing File Parts with head and tail
 
 The head and tail commands are designed to output the beginning and the end of files, respectively.
 
