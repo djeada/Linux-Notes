@@ -30,7 +30,7 @@ Client                      Server
 +--------+
 ```
 
-## Setting up an NFS Server on CentOS 7
+### Setting up an NFS Server on CentOS 7
 
 If you want to create NFS shares from a CentOS 7 machine, you'll need to set it up as an NFS server. Here's a step-by-step guide.
 
@@ -115,7 +115,7 @@ To ensure all changes are applied and services are in the correct state:
 systemctl restart nfs-server
 ```
 
-## Setting up an NFS Client on CentOS 7
+### Setting up an NFS Client on CentOS 7
 
 If you want to access NFS shares from a CentOS 7 machine, you'll need to set it up as an NFS client. Here's a step-by-step guide.
 
@@ -174,11 +174,11 @@ Check that the shared directory is successfully mounted:
 mount | grep nfs
 ```
 
-## Additional Considerations
+### Additional Considerations
 
-- **Cross-Platform Sharing**: NFS can be utilized to share directories between a variety of operating systems, including Windows, Linux, and macOS.
-- **Security**: Be cautious with NFS configurations; always consider security. Restrict access based on IP addresses, users, or other criteria.
-- **Managing Shared Folders on Server**:
+- NFS can be utilized to share directories between a variety of operating systems, including Windows, Linux, and macOS.
+- Be cautious with NFS configurations; always consider security. Restrict access based on IP addresses, users, or other criteria.
+- Managing Shared Folders on Server:
 
 I. To view currently shared folders with their respective options, use:
    
@@ -192,15 +192,15 @@ II. To unshare a directory:
 exportfs -u <directory_path>
 ```
 
-## Challenges
+### Challenges
 
-1. Elaborate on the core purpose of NFS. How does it facilitate file sharing across disparate computers?
-2. Break down the primary components of an NFS server. How does each component contribute to the overall NFS system's operation?
-3. Delve into the `rpcbind` service. Why is it pivotal to NFS, and how does it function in relation to the entire system?
-4. Outline the step-by-step procedure for designating a directory as "shared" on an NFS server. Highlight the importance of the `/etc/exports` file in this context.
-5. Enumerate and explain the variety of options available in the `/etc/exports` file. How do these choices influence the sharing configuration?
-6. Compare and contrast the procedures involved in setting up an NFS server and an NFS client. Are there any notable similarities or disparities?
-7. Detail the process of mounting an NFS-shared directory on a client. How can the client ascertain the connection's success?
-8. Discuss the potential security vulnerabilities inherent to NFS. What measures can one adopt to reduce these risks?
-9. Illustrate a scenario wherein NFS proves invaluable for sharing directories across diverse operating systems, such as Windows, Linux, and macOS.
-10. Dive into the functionalities of the `exportfs` command within the NFS ecosystem. Demonstrate its application in viewing, amending, and ceasing the sharing of directories.
+1. Explain the main purpose of NFS. How does it enable file sharing between different computers?
+2. Describe the key components of an NFS server. How does each component contribute to the operation of the NFS system?
+3. What is the role of the rpcbind service in NFS? Why is it important, and how does it interact with the rest of the system?
+4. Detail the steps to share a directory on an NFS server. Why is the `/etc/exports` file crucial in this process?
+5. List and explain the various options available in the `/etc/exports` file. How do these options affect the configuration of shared directories?
+6. Compare the setup processes for an NFS server and an NFS client. What are the similarities and differences?
+7. Explain how to mount an NFS-shared directory on a client. How can the client verify that the connection is successful?
+8. Discuss the potential security risks associated with NFS. What measures can be taken to mitigate these risks?
+9. Provide an example of how NFS can be useful for sharing directories across different operating systems, such as Windows, Linux, and macOS.
+10. Describe the function of the exportfs command in NFS. How is it used to view, modify, and stop sharing directories?
