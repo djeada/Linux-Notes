@@ -193,7 +193,7 @@ In this program, a new process is created using the fork function, which then ge
 
 There are several other methods to spawn processes in Linux. Functions like `system`, `popen`, or `posix_spawn` from the POSIX library also provide process spawning capabilities.
 
-## Process Termination
+### Process Termination
 
 To manage system resources effectively, it is sometimes necessary to terminate running processes. Depending on your needs, this can be accomplished in several ways.
 
