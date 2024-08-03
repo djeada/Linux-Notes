@@ -14,6 +14,13 @@ Partitioning a disk means dividing the disk into smaller areas called partitions
 +------------------+------------------+------------------+-----------------+-----------------+
 ```
 
+You can perform the following operations with partitions:
+
+- You can **create** new partitions if there is sufficient physical space available on the disk.
+- **Deleting** a partition will remove all data stored within that partition, so it is important to back up any important information before performing this operation.
+- **Resizing** a partition involves either **shrinking** or **growing** it, depending on your needs and available unallocated space on the disk.
+- When resizing partitions, be aware that the **file system** may need to be adjusted to match the new partition size, and this operation may require additional tools or steps to complete successfully.
+
 ### MBR (Master Boot Record)
 
 MBR is the older partition table format, used on most computers. It started in March 1983 with IBM PC DOS 2.0. MBR has three parts: the main boot code, a partition table for the disk, and a disk signature. MBR stores its data in the first sector of the disk. It supports disks up to 2TB and can have up to four primary partitions.
@@ -72,7 +79,7 @@ This naming convention helps to identify and manage disks and partitions in vari
 
 ### Looking at partition tables
 
-To look at a disk's partition table, use the gdisk or fdisk command. The gdisk command is for GPT partitions, while fdisk can be used for MBR and GPT partitions. To see all disk partitions, use:
+To look at a disk's partition table, use the gdisk or `fdisk` command. The `gdisk` command is for GPT partitions, while `fdisk` can be used for both MBR and GPT partitions. To see all disk partitions, use:
 
 ```
 fdisk -l
@@ -81,31 +88,39 @@ fdisk -l
 Here's an example of what this output might look like:
 
 ```
-Disk /dev/sda: 240.0 GB, 240057409536 bytes, 468862128 sectors
+Disk /dev/sda: 500 GiB, 536870912000 bytes, 1048576000 sectors
+Disk model: Samsung SSD 860
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disk label type: gpt
+Disklabel type: gpt
+Disk identifier: 2F3C4D5E-6F7A-4B8B-9C7D-2E1F12345678
 
 Device       Start       End   Sectors  Size Type
-/dev/sda1     2048   1050623   1048576  512M EFI System
-/dev/sda2  1050624 468862127 467811504  223G Linux filesystem
-
-Disk /dev/sdb: 1.0 TB, 1000204886016 bytes, 1953525168 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 4096 bytes
-I/O size (minimum/optimal): 4096 bytes / 4096 bytes
-Disk label type: mbr
-
-Device       Start       End   Sectors  Size Type
-/dev/sdb1     2048 1953525167 1953523120 931.5G Linux filesystem
+/dev/sda1     2048    534527    532480  260M EFI System
+/dev/sda2   534528   1050623    515096  251M Linux filesystem
+/dev/sda3  1050624 209715199 208664576 99.5G Linux filesystem
+/dev/sda4 209715200 419430399 209715200  100G Linux filesystem
+/dev/sda5 419430400 1048575967 628145568 299.5G Linux filesystem
 ```
 
 Explanation:
 
-- *Disk Information*: Provides details about each disk (`/dev/sda`, `/dev/sdb`, etc.), including size, sector information, and disk label type (GPT or MBR).
-- *Partition Information*: For each disk, it lists all partitions, their start and end sectors, total sectors, size, and type (e.g., EFI System, Linux filesystem).
-    
+- The system currently has five partitions, which are labeled as `/dev/sda1` through `/dev/sda5`.
+- The disk uses the GPT partitioning scheme, which supports more than four primary partitions and is suitable for disks larger than **2 TB**.
+- The first partition, `/dev/sda1`, is an EFI System Partition and is **260M** in size. This partition is typically used to store the bootloader and related files necessary for booting the operating system.
+- The second partition, `/dev/sda2`, is a Linux filesystem partition with a size of **251M**. This might be used for a small dedicated function, such as a `/boot` partition.
+- The third partition, `/dev/sda3`, is also a Linux filesystem partition and has a size of **99.5G**. This could be the primary partition used for the operating system and user data.
+- The fourth partition, `/dev/sda4`, is another Linux filesystem partition with a size of **100G**. It might be used for storing additional data or another operating system.
+- The fifth partition, `/dev/sda5`, is the largest, with a size of **299.5G**, and is also a Linux filesystem. This partition could be used for extensive data storage or other applications.
+- The total size of all the partitions combined is approximately **499.511 GiB**. This value is slightly less than the total physical disk size due to the space reserved for partition tables and alignment overhead.
+- The physical disk, identified as `/dev/sda`, has a total size of **500 GiB**, which corresponds to **536870912000** bytes.
+- The difference between the total physical disk size and the sum of all partition sizes is minimal, indicating efficient use of disk space with only minor overhead.
+- Since the disk uses GPT, it supports creating additional partitions beyond the existing five. GPT allows for up to **128 partitions** on most systems, far exceeding the four primary partitions limitation of MBR.
+- Options for managing partitions include resizing existing partitions if there is unallocated space or if certain partitions can be shrunk to make room for others.
+- New partitions can be created using the unallocated space on the disk, if available, using command-line tools like `fdisk`, `gdisk`, or graphical utilities such as `GParted`.
+- It is possible to change the type of an existing partition, for example, converting a Linux filesystem partition to a swap partition, depending on system requirements.
+
 ### Making Partitions on a Disk
 
 Creating partitions on a disk allows you to logically divide it into segments, each of which can be used independently. This can be done using either the `fdisk` or `gdisk` command in Linux, depending on whether your disk uses MBR (Master Boot Record) or GPT (GUID Partition Table) partitioning scheme, respectively.
@@ -113,6 +128,7 @@ Creating partitions on a disk allows you to logically divide it into segments, e
 #### MBR Partitioning
 
 To partition a disk (e.g., `/dev/sda`) with `fdisk`:
+
 1. Start `fdisk`: `fdisk /dev/sda`.
 2. To create a new partition, press `n`. You'll then be prompted to choose between creating a primary (`p`) or an extended (`e`) partition. Most use cases will require a primary partition.
 3. Specify the partition size by entering the starting and ending sectors. You can press Enter to accept the default values.
@@ -122,6 +138,7 @@ To partition a disk (e.g., `/dev/sda`) with `fdisk`:
 #### GPT Partitioning
 
 For disks with GPT, use `gdisk`:
+
 1. Open `gdisk` on your target disk: `gdisk /dev/sda`.
 2. Create a new partition by pressing `n`. 
 3. Choose the partition number (1 to 128).
@@ -139,19 +156,137 @@ For disks with GPT, use `gdisk`:
 ### Changing MBR to GPT using gdisk
 
 Sometimes, there's a need to change a disk from one partition table format to another. For instance, converting an MBR disk to a GPT format can be done using tools like `gdisk` or `parted`. Here's how to do it with `gdisk`:
+### Steps to Repartition a Disk Using gdisk with Expected Outputs
 
-1. First, check the current partition table of the disk: `gdisk -l /dev/sda`.
-2. Backup the current partition table: `sgdisk -b /dev/sda`.
-3. Run `gdisk` for the disk: `gdisk /dev/sda`.
-4. In `gdisk`, press `x` to enter the experts menu.
-5. Then, press `z` to zap (remove) the GPT data structures on the disk.
-6. Confirm the action by pressing `y` when prompted about destroying the GPT data structures.
-7. Press `n` to create a new GPT data structure on the disk.
-8. Confirm the creation of a new empty GPT by pressing `y`.
-9. Create the required partitions by using the `n` command in the main menu.
-10. After partitioning, save the changes and exit `gdisk` by pressing `w`.
-11. Restart the system to ensure all changes take effect.
-12. Verify the new partition table: `gdisk -l /dev/sda`.
+- To **check the current partition table**, use the command `gdisk -l /dev/sda`. The expected output will list the current partitions, including details such as partition number, start and end sectors, size, and type. For example:
+
+```
+GPT fdisk (gdisk) version 1.0.6
+
+Partition table scan:
+MBR: protective
+BSD: not present
+APM: not present
+GPT: present
+
+Found valid GPT with protective MBR; using GPT.
+Disk /dev/sda: 20971520 sectors, 10.0 GiB
+Logical sector size: 512 bytes
+Disk identifier (GUID): B7D5F9E3-3A74-4F56-B0D7-FB65DE571EC7
+Partition table holds up to 128 entries
+First usable sector is 34, last usable sector is 20971486
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 10265 sectors (5.0 MiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+ 1          2048         20951039   10.0 GiB    8300  Linux filesystem
+```
+
+- **Backing up the current partition table** is essential and can be done with `sgdisk -b /backup/path/partition-table-backup /dev/sda`. A backup file should be created at the specified path, like `/backup/path/partition-table-backup`. This action does not produce a direct console output but ensures a backup is available for recovery.
+
+- To **start gdisk for disk management**, execute `gdisk /dev/sda`. The initial prompt will indicate readiness for commands:
+
+```
+GPT fdisk (gdisk) version 1.0.6
+
+Type device filename, or press <Enter> to exit: /dev/sda
+Command (? for help):
+```
+
+- Access the **experts menu** by pressing 'x' at the prompt, which changes to:
+
+```
+Expert command (? for help):
+```
+
+- **Removing the GPT data structures** involves pressing 'z' in the experts menu. This action prompts:
+
+```
+About to wipe out GPT on /dev/sda. Proceed? (Y/N):
+```
+
+Confirm with 'y', then decide on blanking out the MBR:
+
+```
+Blank out MBR? (Y/N): 
+```
+
+After confirming with 'y', the result will be:
+
+```
+GPT data structures destroyed! You may now partition the disk using the 'n' command.
+```
+
+- **Creating a new GPT data structure** requires pressing 'n' and confirming the action:
+
+```
+Expert command (? for help): n
+
+Creating new GPT data structure
+Confirm creation of a new GPT by pressing 'y': Y
+```
+
+The system will acknowledge:
+
+```
+GPT data structures created successfully.
+```
+
+- During **partition creation**, use the 'n' command to define each partition. The prompt guides through the process:
+
+```
+Command (? for help): n
+Partition number (1-128, default 1): 1
+First sector (34-20971486, default = 2048) or {+-}size{KMGTP}:
+Last sector (2048-20971486, default = 20971486) or {+-}size{KMGTP}: +1G
+Current type is 'Linux filesystem'
+Hex code or GUID (L to show codes, Enter = 8300): 
+```
+
+After defining the partitions, the prompt returns to:
+
+```
+Command (? for help):
+```
+
+- To **save changes and exit gdisk**, press 'w'. The command confirms the write operation:
+
+```
+Do you want to proceed? (Y/N): Y
+Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING PARTITIONS!!
+
+Do you want to proceed? (Y/N): Y
+
+OK; writing new GUID partition table (GPT) to /dev/sda.
+The operation has completed successfully.
+```
+
+- **Verifying the new partition table** after a system restart can be done with `gdisk -l /dev/sda`. The output should reflect the newly created partitions, similar to:
+
+```
+GPT fdisk (gdisk) version 1.0.6
+
+Partition table scan:
+MBR: protective
+BSD: not present
+APM: not present
+GPT: present
+
+Found valid GPT with protective MBR; using GPT.
+Disk /dev/sda: 20971520 sectors, 10.0 GiB
+Logical sector size: 512 bytes
+Disk identifier (GUID): 12345678-1234-1234-1234-1234567890AB
+Partition table holds up to 128 entries
+First usable sector is 34, last usable sector is 20971486
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 1048576 sectors (512.0 MiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+ 1          2048           2099199   1.0 GiB    8300  Linux filesystem
+ 2       2099200          20971519   9.0 GiB    8300  Linux filesystem
+```
+
+This output confirms that the new partitions are correctly set up.
 
 🔴 Caution:
 
