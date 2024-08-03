@@ -10,11 +10,11 @@ What happens between the time you push the power button and the time you see the
          |                              |                                  |
          | System Startup               | Load the Kernel                  | Unpack Initramfs
          v                              v                                  v
-+------------------+           +--------------------+           +---------------------+
-| Hardware Testing |   --->    | OS Selection (GRUB)|    --->   |    Kernel Execution  |
++------------------+           +--------------------+           +----------------------+
+| Hardware Testing |           | OS Selection (GRUB)|           |    Kernel Execution  |
 | (POST sequence)  |           | and Kernel loading |           | (Mounts root FS and  |
 +------------------+           +--------------------+           |  starts Init process)|
-                                                                +---------------------+
+                                                                +----------------------+
                                                                           |
                                                                           | Launches System Services
                                                                           v
