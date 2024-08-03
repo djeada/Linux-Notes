@@ -233,7 +233,7 @@ which [option] program_name
 - `[option]` refers to additional parameters that can be passed to which.
 - `program_name` is the name of the executable you want to locate.
 
-#### Commonly Used Options with `which`
+#### Commonly Used Options
 
 The `which` command is used to locate the executable file associated with a given command by searching through the directories listed in the `PATH` environment variable.
 
