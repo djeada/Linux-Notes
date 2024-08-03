@@ -26,109 +26,251 @@ User
 Terminal/Shell
 ```
 
-## Common Options for grep
+### Common Options for `grep`
 
-The `grep` command includes several options, also known as "flags", that modify its behavior. Here are some commonly used flags:
+The `grep` command includes various options, or "flags," that modify its behavior. Below are some commonly used flags:
 
 | Flag | Description |
 | ---- | ----------- |
-| `-c` | Counts and prints the number of lines that match the pattern |
-| `-i` | Makes the search case-insensitive |
-| `-v` | Inverts the search, displaying lines that do not match the pattern |
-| `-n` | Displays the line numbers along with lines that match the pattern |
-| `-e` | Allows you to specify multiple patterns for the grep command to search |
-| `-E` | You can use enhanced features of regular expressions, such as the `+`, `?`, and `\|` operators, and you don't need to escape them with a backslash (`\`). |
+| `-c` | Counts and prints the number of lines that match the pattern. |
+| `-i` | Makes the search case-insensitive. |
+| `-r` | Recursively searches directories for the pattern. |
+| `-v` | Inverts the search, displaying lines that do not match the pattern. |
+| `-n` | Displays the line numbers along with the lines that match the pattern. |
+| `-e` | Allows specifying multiple patterns for `grep` to search. |
+| `-E` | Enables the use of extended regular expressions, allowing operators like `+`, `?`, and `\|` without escaping them. |
 
-For example, if you want to search for either 'pattern1' or 'pattern2' in a file, you can use the `-e` flag like so:
+#### Using the `-e` Flag
+
+To search for either 'pattern1' or 'pattern2' in a file:
 
 ```bash
 grep -e 'pattern1' -e 'pattern2' file_name
 ```
 
-Suppose you have a file called `file_name` with the following content:
+Suppose the file `file_name` contains the following lines:
 
-```bash
+```
 This is a line containing abc.
 This is another line with def.
 This line does not contain either pattern.
 ```
 
-To find lines that contain either 'abc' or 'def', you can use the following grep command:
+To find lines containing either 'abc' or 'def', use:
 
 ```bash
 grep -e 'abc' -e 'def' file_name
 ```
 
-The output will be the lines that match either pattern:
+Output:
 
-```bash
+```
 This is a line containing abc.
 This is another line with def.
 ```
 
-You can also use regular expressions for more advanced pattern matching. For instance, the following grep command uses a regular expression to find lines containing either 'abc' or 'def':
+#### Using Extended Regular Expressions with `-E`
+
+For more advanced pattern matching, use regular expressions. For example, to find lines containing either 'abc' or 'def':
 
 ```bash
 grep -E 'a(bc|def)' file_name
 ```
 
-In this case, `-E` allows for the use of extended regular expressions.
+#### Recursive Search with `-r`
 
-## Understanding Regular Expressions
+To search for a string across all files and directories starting from the current directory:
 
-Regular expressions (RegEx) are powerful tools that help in defining search patterns for text manipulation and retrieval. They are not exclusive to `grep` but are used in many programming and scripting languages. Here's an overview of some common RegEx symbols:
+```bash
+grep -r '192.45.92.0' *
+```
+
+Explanation:
+
+- The command starts in the current directory.
+- It recursively searches all files and subdirectories.
+- It looks for the string `192.45.92.0`.
+- It prints lines containing the string, along with the file names and paths.
+
+Example Output:
+
+If `log.txt` contains the line `Connecting to server at 192.45.92.0`, the output will be:
+
+```
+log.txt:Connecting to server at 192.45.92.0
+```
+
+This indicates that the string `192.45.92.0` was found in `log.txt`, along with the line where it was found.
+
+### Understanding Regular Expressions
+
+Regular expressions (RegEx) are versatile tools used for defining search patterns, making them useful in text manipulation and retrieval. They are commonly utilized in various programming and scripting languages, not just with `grep`. Here's an overview of some essential RegEx symbols:
 
 | Symbol | Description |
-| ------ | ------------ |
-| `.` | Matches any single character except newline |
-| `^` | Matches the start of the line |
-| `$` | Matches the end of the line |
-| `*` | Matches zero or more occurrences of the previous character or group |
-| `\` | Escapes the next character, nullifying any special meaning it may have |
-| `()` | Groups several characters as a single unit or to capture groups |
-| `?` | Matches zero or one occurrence of the previous character or group |
+| ------ | ----------- |
+| `.`    | Matches any single character except newline |
+| `^`    | Matches the start of a line |
+| `$`    | Matches the end of a line |
+| `*`    | Matches zero or more occurrences of the preceding character or group |
+| `\`    | Escapes the next character, nullifying any special meaning it may have |
+| `()`   | Groups several characters as a single unit, also used to capture groups |
+| `?`    | Matches zero or one occurrence of the preceding character or group |
 
-For instance, to find all lines in the file /opt/test.txt that begin with the character #, use:
+#### Using `^` (Start of Line)
+
+To find all lines in a file that begin with the character `#`:
 
 ```bash
 grep '^#' /opt/test.txt
 ```
 
-Searching for lines that end with the string 'xxx' would involve:
+This will match lines like `# This is a comment`.
+
+#### Using `$` (End of Line)
+
+To search for lines that end with the string 'xxx':
 
 ```bash
 grep 'xxx$' /opt/test.txt
 ```
 
-To find lines containing 'abc' or 'abz', the following can be used:
+This matches lines like `This is a line with xxx`.
+
+#### Using `.` (Any Character)
+
+To find lines containing "a" followed by any character and then "c":
+
+```bash
+grep 'a.c' /opt/test.txt
+```
+
+This matches "abc", "a-c", "a3c", etc., but not "ac".
+
+#### Using `\` (Escape Character)
+
+To search for a literal dot `.` in the text, you must escape it:
+
+```bash
+grep '\.' /opt/test.txt
+```
+
+This matches lines containing a period, such as "This is a line."
+
+#### Using `()` (Grouping)
+
+To capture groups or apply operators to a group of characters:
+
+```bash
+grep '\(abc\)*' /opt/test.txt
+```
+
+This searches for zero or more occurrences of the sequence "abc".
+
+#### Using `?` (Zero or One)
+
+To find lines containing "color" or "colour":
+
+```bash
+grep 'colou?r' /opt/test.txt
+```
+
+This matches both "color" and "colour".
+
+#### Using Character Classes
+
+To find lines containing either 'abc' or 'abz':
 
 ```bash
 grep 'ab[cz]' /opt/test.txt
 ```
 
-## RegEx Quantifiers
+This matches lines with "abc" or "abz", as `[cz]` specifies either 'c' or 'z'.
 
-Quantifiers determine how many times a character, group, or character class must appear for the match to succeed.
+### RegEx Quantifiers
 
-| Symbol | Description |
-| ------ | ------------ |
-| `*` | Matches zero or more occurrences of the preceding element |
-| `?` | Makes the preceding element optional (matches zero or one times) |
-| `+` | Matches one or more occurrences of the preceding element |
-| `{n}` | Matches exactly n occurrences of the preceding element |
-| `{n,}` | Matches n or more occurrences of the preceding element |
-| `{,m}` | Matches up to m occurrences of the preceding element |
-| `{n,m}` | Matches at least n and at most m occurrences of the preceding element |
+Quantifiers in regular expressions specify how many times an element (character, group, or character class) must appear for a match to be successful.
 
-For example, to find words containing between 8 to 12 alphabetic characters, you can use the following command:
+| Symbol   | Description                                                     |
+| -------- | --------------------------------------------------------------- |
+| `*`      | Matches zero or more occurrences of the preceding element       |
+| `?`      | Matches zero or one occurrence of the preceding element (optional) |
+| `+`      | Matches one or more occurrences of the preceding element        |
+| `{n}`    | Matches exactly `n` occurrences of the preceding element        |
+| `{n,}`   | Matches `n` or more occurrences of the preceding element        |
+| `{,m}`   | Matches up to `m` occurrences of the preceding element          |
+| `{n,m}`  | Matches at least `n` and at most `m` occurrences of the preceding element |
+
+#### Using `*` (Zero or More)
+
+To find lines containing "hello" followed by any number of "o"s:
 
 ```bash
-grep -nE '[[:alpha:]]{8,12}' file_name
+grep -E 'hello*' file_name
 ```
 
-This uses the `-E` flag to interpret the pattern as an extended regular expression and the `-n` flag to display the line numbers with the output. `[[:alpha:]]` is a character class matching any letter, and `{8,12}` is a quantifier indicating match count between 8 to 12, inclusive.
+This will match "hell", "hello", "helloooo", etc.
 
-## Challenges
+#### Using `?` (Zero or One)
+
+To find lines containing "color" or "colour":
+
+```bash
+grep -E 'colou?r' file_name
+```
+
+This matches both "color" and "colour".
+
+#### Using `+` (One or More)
+
+To find lines containing one or more digits:
+
+```bash
+grep -E '[0-9]+' file_name
+```
+
+This matches "1", "123", "42", etc.
+
+#### Using `{n}` (Exactly n)
+
+To find lines containing exactly three consecutive digits:
+
+```bash
+grep -E '[0-9]{3}' file_name
+```
+
+This matches "123", "456", but not "12" or "1234".
+
+#### Using `{n,}` (n or More)
+
+To find lines containing at least two vowels in a row:
+
+```bash
+grep -E '[aeiou]{2,}' file_name
+```
+
+This matches "ooze", "queue", but not "hat" or "red".
+
+#### Using `{,m}` (Up to m)
+
+To find lines with at most three consecutive letters "a":
+
+```bash
+grep -E 'a{,3}' file_name
+```
+
+This matches "a", "aa", "aaa", but not "aaaa".
+
+#### Using `{n,m}` (Between n and m)
+
+To find words containing between 4 to 6 alphabetic characters:
+
+```bash
+grep -E '\b[[:alpha:]]{4,6}\b' file_name
+```
+
+This matches words like "word", "hello", "grep", but not "a" or "complex".
+
+### Challenges
 
 1. Enumerate the visible files and directories within the current working directory. However, do not include those that are hidden or contain the word "test" in their name. 
 2. Track down all the commands involving the word "clone" that have been executed in the last week. Bear in mind that command-line histories vary depending on the shell and user configurations.
