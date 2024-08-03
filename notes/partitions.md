@@ -33,36 +33,42 @@ GPT is a newer and better partition table format than MBR. It supports disks lar
 | **Advantages** | Higher limits on partition sizes and counts, better data resilience, required for modern hardware (like larger hard drives). | Universal compatibility, simplicity, and well-tested over time. |
 | **Disadvantages** | Not compatible with older systems that only support BIOS. | Limited partition size and count, less resilient against data corruption. |
 
-### Common disk names
+### Common Disk Naming Conventions
 
-The first two-three letters mean the device type:
+Disk names in Linux typically follow a specific naming pattern to indicate the type of device, its order, and its partitions. Here's a breakdown:
 
-- `/dev/sda`: This represents a hard drive using the SCSI or SATA interface driver. It's commonly used in both physical servers and virtual machines.
-- `/dev/hda`: Refers to the older IDE disk device type. This was more common in older systems and is less frequently seen in modern setups.
-- `/dev/vda`: Indicates a disk in a KVM (Kernel-based Virtual Machine) virtual machine using the virtio disk driver.
-- `/dev/xvda`: Represents a disk in a Xen virtual machine using the Xen virtual disk driver.
+#### I Device Type Indicators
 
-The last letter tells the device order, and the numbers tell how many partitions the device has, starting with zero:
+The first few letters of the disk name indicate the type of device:
 
-I. The last letter (before any numbers) shows the order of the device. 
+- **`/dev/sdX`**: Represents a hard drive using the SCSI or SATA interface. Commonly used in physical servers and virtual machines.
+- **`/dev/hdX`**: Refers to an older IDE disk. This type is less common in modern systems.
+- **`/dev/vdX`**: Indicates a disk in a KVM (Kernel-based Virtual Machine) using the virtio disk driver.
+- **`/dev/xvdX`**: Represents a disk in a Xen virtual machine using the Xen virtual disk driver.
 
-For example:
+#### II Device Order
 
-- `a` in `/dev/sda` indicates it's the first SCSI/SATA disk.
-- `b` in `/dev/hdb` shows it's the second IDE disk.
+The last letter before any numbers denotes the order of the device:
 
-II. The numbers denote the partition index on the device, starting from 1. 
+- **`/dev/sda`**: The first SCSI/SATA disk.
+- **`/dev/sdb`**: The second SCSI/SATA disk.
+- **`/dev/hda`**: The first IDE disk.
+- **`/dev/hdb`**: The second IDE disk.
 
-For example:
+#### III Partition Number
 
-- `/dev/sda2` is the second partition (`2`) on the first SATA disk (`sda`).
-- `/dev/sdc1` refers to the first partition (`1`) on the third SATA disk (`sdc`).
-- `/dev/hdb3` is the third partition (`3`) on the second IDE hard drive (`hdb`).
+Numbers following the device identifier indicate the partition index:
 
-Note:
+- **`/dev/sda1`**: The first partition on the first SATA disk.
+- **`/dev/sdc2`**: The second partition on the third SATA disk.
+- **`/dev/hdb3`**: The third partition on the second IDE disk.
 
-- Modern systems predominantly use the `/dev/sdX` naming convention due to the shift towards SATA interfaces.
-- In virtualized environments, `/dev/vdX` and `/dev/xvdX` are more common, depending on the virtualization technology used.
+#### Additional Remarks
+
+- Modern systems predominantly use the `/dev/sdX` naming convention due to the widespread adoption of SATA interfaces.
+- In virtualized environments, `/dev/vdX` and `/dev/xvdX` are commonly used, depending on the virtualization technology.
+
+This naming convention helps to identify and manage disks and partitions in various systems and environments efficiently.
 
 ### Looking at partition tables
 
