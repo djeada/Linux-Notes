@@ -25,6 +25,7 @@ User
  v
 Terminal/Shell
 ```
+Understood, I'll keep the structure consistent with the existing examples:
 
 ### Common Options for `grep`
 
@@ -39,6 +40,8 @@ The `grep` command includes various options, or "flags," that modify its behavio
 | `-n` | Displays the line numbers along with the lines that match the pattern. |
 | `-e` | Allows specifying multiple patterns for `grep` to search. |
 | `-E` | Enables the use of extended regular expressions, allowing operators like `+`, `?`, and `\|` without escaping them. |
+| `-l` | Lists the filenames that contain the matching pattern. |
+| `--color` | Highlights the matching strings in the output. |
 
 #### Using the `-e` Flag
 
@@ -101,6 +104,70 @@ log.txt:Connecting to server at 192.45.92.0
 ```
 
 This indicates that the string `192.45.92.0` was found in `log.txt`, along with the line where it was found.
+
+#### Using `-l` Flag
+
+To find all files containing the word 'nginx' in the `/var/log/` directory:
+
+```bash
+grep -l 'nginx' /var/log/*
+```
+
+If the directory contains `access.log` with the word 'nginx', the output will be:
+
+```
+/var/log/access.log
+```
+
+#### Using `-v` Flag to Exclude Patterns
+
+To exclude comment and empty lines from the SSH configuration file:
+
+```bash
+grep -v ^# /etc/ssh/sshd_config | grep -v ^$
+```
+
+If the file contains commented lines and empty lines, this command will filter them out, displaying only active configuration lines.
+
+#### Using `-E` Flag with Extended Regular Expressions
+
+To exclude comment and empty lines using a single command with extended regular expressions:
+
+```bash
+grep -EV "^(#|$)" /etc/ssh/sshd_config
+```
+
+This command achieves the same result as using `grep -v ^# | grep -v ^$` but in a more concise way.
+
+#### Case-Insensitive Recursive Search
+
+To search for the IP address `10.0.0.1` in all files under `/var/log/`, ignoring case sensitivity:
+
+```bash
+grep -ri '10.0.0.1' /var/log/ 2> /dev/null
+```
+
+If the IP address appears in multiple log files, the output will list each occurrence along with the file name and line content.
+
+#### Matching Group Names in `/etc/group`
+
+To search for lines in the `/etc/group` file containing 'rw.':
+
+```bash
+grep 'rw.' /etc/group
+```
+
+This will list all group entries with 'rw.' in their name or properties.
+
+#### Highlighting Matching Patterns
+
+To highlight numeric user IDs in the `/etc/group` file:
+
+```bash
+grep --color ':[0-9]*:' /etc/group
+```
+
+This command will highlight numeric sequences, typically representing user IDs, in the output.
 
 ### Understanding Regular Expressions
 
