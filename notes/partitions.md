@@ -40,6 +40,56 @@ GPT is a newer and better partition table format than MBR. It supports disks lar
 | **Advantages** | Higher limits on partition sizes and counts, better data resilience, required for modern hardware (like larger hard drives). | Universal compatibility, simplicity, and well-tested over time. |
 | **Disadvantages** | Not compatible with older systems that only support BIOS. | Limited partition size and count, less resilient against data corruption. |
 
+### Relationship between Physical Disks and Partitions 
+
+In Linux, the relationship between physical disks (like hard drives or SSDs) and partitions is managed through a device naming convention and a series of abstractions that allow the operating system to handle storage efficiently. Physical disks are the actual hardware components where data is stored. They can be hard disk drives (HDDs), solid-state drives (SSDs), or other storage devices. These disks are identified by device names such as `/dev/sda`, `/dev/sdb`, etc.
+
+```
++-------------------+
+| Physical Disk 1  |
+|    (/dev/sda)     |
+|                   |
+|  +-------------+  |
+|  | Partition 1 |  |
+|  | (/dev/sda1) |  |
+|  +-------------+  |
+|  | Partition 2 |  |
+|  | (/dev/sda2) |  |
+|  +-------------+  |
++-------------------+
+
++-------------------+
+| Physical Disk 2  |
+|    (/dev/sdb)     |
+|                   |
+|  +-------------+  |
+|  | Partition 1 |  |
+|  | (/dev/sdb1) |  |
+|  +-------------+  |
+|  | Partition 2 |  |
+|  | (/dev/sdb2) |  |
+|  +-------------+  |
++-------------------+
+
++-------------------+
+| Physical Disk 3  |
+|    (/dev/sdc)     |
+|                   |
+|  +-------------+  |
+|  | Partition 1 |  |
+|  | (/dev/sdc1) |  |
+|  +-------------+  |
+|  | Partition 2 |  |
+|  | (/dev/sdc2) |  |
+|  +-------------+  |
++-------------------+
+```
+
+Partitions are divisions of a physical disk, each of which can be formatted with a file system and used for different purposes. Each partition is also represented as a device file but with an additional number indicating the partition:
+
+- `/dev/sda1` refers to the first partition on the first disk (`/dev/sda`).
+- `/dev/sda2` refers to the second partition on the first disk, and so forth.
+
 ### Common Disk Naming Conventions
 
 Disk names in Linux typically follow a specific naming pattern to indicate the type of device, its order, and its partitions. Here's a breakdown:
