@@ -21,28 +21,9 @@ You can perform the following operations with partitions:
 - **Resizing** a partition involves either **shrinking** or **growing** it, depending on your needs and available unallocated space on the disk.
 - When resizing partitions, be aware that the **file system** may need to be adjusted to match the new partition size, and this operation may require additional tools or steps to complete successfully.
 
-### MBR (Master Boot Record)
-
-MBR is the older partition table format, used on most computers. It started in March 1983 with IBM PC DOS 2.0. MBR has three parts: the main boot code, a partition table for the disk, and a disk signature. MBR stores its data in the first sector of the disk. It supports disks up to 2TB and can have up to four primary partitions.
-
-### GPT (GUID Partition Table)
-
-GPT is a newer and better partition table format than MBR. It supports disks larger than 2TB and up to 128 partitions. GPT has a Protective MBR and also checks (CRC) values to make sure its data is correct. To use GPT, you must enable UEFI in your computer's BIOS settings.
-
-| Feature        | GPT (GUID Partition Table)                 | MBR (Master Boot Record)           |
-|----------------|--------------------------------------------|------------------------------------|
-| **Maximum Partition Size** | 18.8 million TB (with 512B sector size) | 2 TB (with 512B sector size)       |
-| **Maximum Number of Partitions** | 128 partitions per disk (typically)   | 4 primary partitions per disk     |
-| **Data Recovery** | Stores multiple copies of the partitioning and boot data across the disk for resilience. | Stores only one copy of the partitioning and boot data at the beginning of the disk, making it more prone to data loss. |
-| **Compatibility** | Supported by newer operating systems and modern hardware (UEFI). | Universally compatible with all operating systems and BIOS. |
-| **Boot Process** | Works with UEFI (Unified Extensible Firmware Interface) which is a modern method of booting. | Works with BIOS (Basic Input/Output System) which is traditional and older. |
-| **Partition Scheme** | Uses globally unique identifiers (GUIDs) for partitions. | Uses a traditional partition table. |
-| **Advantages** | Higher limits on partition sizes and counts, better data resilience, required for modern hardware (like larger hard drives). | Universal compatibility, simplicity, and well-tested over time. |
-| **Disadvantages** | Not compatible with older systems that only support BIOS. | Limited partition size and count, less resilient against data corruption. |
-
 ### Relationship between Physical Disks and Partitions 
 
-In Linux, the relationship between physical disks (like hard drives or SSDs) and partitions is managed through a device naming convention and a series of abstractions that allow the operating system to handle storage efficiently. Physical disks are the actual hardware components where data is stored. They can be hard disk drives (HDDs), solid-state drives (SSDs), or other storage devices. These disks are identified by device names such as `/dev/sda`, `/dev/sdb`, etc.
+The relationship between physical disks (like hard drives or SSDs) and partitions is managed through a device naming convention and a series of abstractions that allow the operating system to handle storage efficiently. Physical disks are the actual hardware components where data is stored. They can be hard disk drives (HDDs), solid-state drives (SSDs), or other storage devices. These disks are identified by device names such as `/dev/sda`, `/dev/sdb`, etc.
 
 ```
 +-------------------+
@@ -92,7 +73,7 @@ Partitions are divisions of a physical disk, each of which can be formatted with
 
 ### Common Disk Naming Conventions
 
-Disk names in Linux typically follow a specific naming pattern to indicate the type of device, its order, and its partitions. Here's a breakdown:
+Disk names typically follow a specific naming pattern to indicate the type of device, its order, and its partitions. Here's a breakdown:
 
 #### I Device Type Indicators
 
@@ -126,6 +107,47 @@ Numbers following the device identifier indicate the partition index:
 - In virtualized environments, `/dev/vdX` and `/dev/xvdX` are commonly used, depending on the virtualization technology.
 
 This naming convention helps to identify and manage disks and partitions in various systems and environments efficiently.
+
+### Partition Types
+
+### Primary Partitions
+
+- **Primary** partitions are one of the basic types of partitions on a hard drive. They are used to store **data** and can be directly accessed by the system.
+- When a **primary partition** is created, it is given a specific portion of the hard drive's **storage space** and can be formatted with a file system such as **NTFS**, **FAT32**, or **ext4**. This process involves initializing the partition, setting a file system, and making it ready for data storage.
+- Upon creation, one of the primary partitions can be marked as "**active**," indicating that it contains the operating system that the computer should **boot** from.
+- If a primary partition is **removed**, the data within that partition is typically lost unless **backed up**. The space occupied by the partition becomes **unallocated**, and it can be reused to create a new partition. The removal process involves deleting the partition table entry and possibly wiping the data, depending on the tools and methods used.
+
+#### Extended Partitions
+
+- An **extended partition** is a special type of partition that acts as a **container** for logical partitions, used when more than four partitions are needed on a system.
+- When an extended partition is created, it occupies one of the four primary partition slots but does not directly hold **data**. Instead, it provides a framework within which **logical partitions** can be created. The creation process involves defining the size and boundaries of the extended partition, which can then be subdivided into logical partitions.
+- The creation of an extended partition allows for greater **flexibility** in partitioning schemes, as multiple logical partitions can be set up within it, effectively bypassing the limit of four primary partitions.
+- Removing an extended partition results in the loss of all **logical partitions** contained within it. The process of removal includes deleting the partition table entry for the extended partition and all its associated logical partitions. The freed space becomes **unallocated** and available for new partitions.
+
+#### Logical Partitions
+
+- **Logical partitions** are subdivisions within an extended partition. They function similarly to primary partitions in that they can store **data** and be formatted with a file system.
+- When a logical partition is created, it is defined within the space of an extended partition. The process involves setting up a specific area within the extended partition, formatting it with a file system, and preparing it for **data storage**.
+- Logical partitions allow users to create more than four partitions on a system, providing additional **organizational** options for different types of data or multiple **operating systems**.
+- Removing a logical partition involves deleting its partition table entry within the extended partition. The data in the logical partition is lost unless **backed up**. The space occupied by the deleted logical partition becomes **unallocated** within the extended partition and can be reused for new logical partitions.
+
+### MBR and GPT
+
+- **MBR** is the older partition table format, used on most computers. It started in March 1983 with IBM PC DOS 2.0. MBR has three parts: the main boot code, a partition table for the disk, and a disk signature. MBR stores its data in the first sector of the disk. It supports disks up to 2TB and can have up to four primary partitions.
+- **GPT** is a newer and better partition table format than MBR. It supports disks larger than 2TB and up to 128 partitions. GPT has a Protective MBR and also checks (CRC) values to make sure its data is correct. To use GPT, you must enable UEFI in your computer's BIOS settings.
+
+Below is a table comparing both formats:
+
+| Feature        | GPT (GUID Partition Table)                 | MBR (Master Boot Record)           |
+|----------------|--------------------------------------------|------------------------------------|
+| **Maximum Partition Size** | 18.8 million TB (with 512B sector size) | 2 TB (with 512B sector size)       |
+| **Maximum Number of Partitions** | 128 partitions per disk (typically)   | 4 primary partitions per disk     |
+| **Data Recovery** | Stores multiple copies of the partitioning and boot data across the disk for resilience. | Stores only one copy of the partitioning and boot data at the beginning of the disk, making it more prone to data loss. |
+| **Compatibility** | Supported by newer operating systems and modern hardware (UEFI). | Universally compatible with all operating systems and BIOS. |
+| **Boot Process** | Works with UEFI (Unified Extensible Firmware Interface) which is a modern method of booting. | Works with BIOS (Basic Input/Output System) which is traditional and older. |
+| **Partition Scheme** | Uses globally unique identifiers (GUIDs) for partitions. | Uses a traditional partition table. |
+| **Advantages** | Higher limits on partition sizes and counts, better data resilience, required for modern hardware (like larger hard drives). | Universal compatibility, simplicity, and well-tested over time. |
+| **Disadvantages** | Not compatible with older systems that only support BIOS. | Limited partition size and count, less resilient against data corruption. |
 
 ### Looking at partition tables
 
