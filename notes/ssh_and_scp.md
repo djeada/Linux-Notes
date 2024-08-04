@@ -1,4 +1,4 @@
-## Secure Communication Protocols
+## Secure Server Access
 
 SSH, SFTP, and SCP are network protocols that provide secure data communication and file transfer over insecure networks. Here's a brief overview of each:
 
