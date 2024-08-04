@@ -168,11 +168,11 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 Disklabel type: gpt
 Disk identifier: 2F3C4D5E-6F7A-4B8B-9C7D-2E1F12345678
 
-Device       Start       End   Sectors  Size Type
-/dev/sda1     2048    534527    532480  260M EFI System
-/dev/sda2   534528   1050623    515096  251M Linux filesystem
-/dev/sda3  1050624 209715199 208664576 99.5G Linux filesystem
-/dev/sda4 209715200 419430399 209715200  100G Linux filesystem
+Device        Start        End   Sectors   Size Type
+/dev/sda1      2048     534527    532480   260M EFI System
+/dev/sda2    534528    1050623    515096   251M Linux filesystem
+/dev/sda3   1050624  209715199 208664576  99.5G Linux filesystem
+/dev/sda4 209715200  419430399 209715200   100G Linux filesystem
 /dev/sda5 419430400 1048575967 628145568 299.5G Linux filesystem
 ```
 
@@ -193,39 +193,482 @@ Explanation:
 - New partitions can be created using the unallocated space on the disk, if available, using command-line tools like `fdisk`, `gdisk`, or graphical utilities such as `GParted`.
 - It is possible to change the type of an existing partition, for example, converting a Linux filesystem partition to a swap partition, depending on system requirements.
 
-### Making Partitions on a Disk
+### Managing Disk Partitions 
 
-Creating partitions on a disk allows you to logically divide it into segments, each of which can be used independently. This can be done using either the `fdisk` or `gdisk` command in Linux, depending on whether your disk uses MBR (Master Boot Record) or GPT (GUID Partition Table) partitioning scheme, respectively.
+To manage disk partitions in Linux, you can use tools like `fdisk`, `parted`, or `lsblk`. Here's a guide on how to handle the tasks you've mentioned, with examples and explanations:
 
-#### MBR Partitioning
+#### Checking Partition Types
 
-To partition a disk (e.g., `/dev/sda`) with `fdisk`:
+To differentiate between primary, extended, and logical partitions, we need to check for the partition number and consider that extended partitions are typically numbered within 1-4 but are treated separately from primary partitions. Here's a command that will list all the partitions on your system along with their types:
 
-1. Start `fdisk`: `fdisk /dev/sda`.
-2. To create a new partition, press `n`. You'll then be prompted to choose between creating a primary (`p`) or an extended (`e`) partition. Most use cases will require a primary partition.
-3. Specify the partition size by entering the starting and ending sectors. You can press Enter to accept the default values.
-4. Optionally, set the partition type by pressing `t` and entering the type code.
-5. To save the changes and exit `fdisk`, press `w`.
+```bash
+lsblk -o NAME,TYPE | awk '
+$2 == "part" {
+    if ($1 ~ /[1-4]$/) {
+        if ($1 ~ /[0-9]p[0-9]$/) {
+            part_type = "primary"
+        } else {
+            part_type = "extended"
+        }
+    } else {
+        part_type = "logical"
+    }
+    print "/dev/" $1, part_type
+}'
+```
 
-#### GPT Partitioning
+Example output:
 
-For disks with GPT, use `gdisk`:
+```
+/dev/├─sda1 primary
+/dev/└─sda2 primary
+```
 
-1. Open `gdisk` on your target disk: `gdisk /dev/sda`.
-2. Create a new partition by pressing `n`. 
-3. Choose the partition number (1 to 128).
-4. Enter the starting and ending sectors, or press Enter to use defaults.
-5. Set the partition type by pressing `t` and entering the type code or name.
-6. Write the changes to disk and exit by pressing `w`.
+To determine whether a specific partition is primary, extended, or logical, you can use the following script. This script takes a partition path (like `/dev/sda1`) and outputs its type:
 
-#### Important Notes
+```bash
+partition_path="/dev/sda1"  # Replace with user-provided partition path
+lsblk -no TYPE $partition_path | awk '
+/part/ {
+    if ("'"$partition_path"'" ~ /[0-9]p?[1-4]$/) {
+        if ("'"$partition_path"'" ~ /[0-9]p[1-4]$/) {
+            print "primary"
+        } else {
+            print "extended"
+        }
+    } else if ("'"$partition_path"'" ~ /[0-9]p?[5-9][0-9]*$/) {
+        print "logical"
+    } else {
+        print "unknown"
+    }
+}'
+```
 
-- **Backup Data** before modifying disk partitions to prevent data loss, as altering partitions can sometimes lead to accidental loss of important information.
-- When managing disk partitions, **Resizing and Deleting Partitions** may be necessary if existing partitions occupy the space needed for new ones. To delete a partition, use the `d` command in tools like `gdisk` or `fdisk`. For resizing, you might need to create a new partition with the desired size using the `n` command and then delete the old partition.
-- The **Partition Types** you select depend on specific needs, such as using a Linux filesystem or creating a swap space. Each partition type is identified by a unique code or identifier that defines its purpose and structure.
-- **Administrative Privileges** are typically required when using partitioning tools, as these actions need root access. Therefore, commands are often prefixed with `sudo` to grant the necessary permissions.
+Replace `/dev/sda1` with the specific partition path the user provides. The script will output "primary," "extended," or "logical" accordingly.
 
-### Changing MBR to GPT using gdisk
+#### Checking Free Space
+
+To check how much free space is available on the disk run `sudo parted /dev/sda print free`.
+
+Example output:
+
+```
+Model: ATA Disk (scsi)
+Disk /dev/sda: 500GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name                  Flags
+        17,4kB  1049kB  1031kB  Free Space
+ 1      1049kB  538MB   537MB   fat32        EFI System Partition  boot, esp
+ 2      538MB   500GB   500GB   ext4
+        500GB   500GB   1056kB  Free Space
+```
+
+The `Free Space` line indicates unallocated space. In this case **1056kB**.
+
+#### Creating a New Partition
+
+Let's assume we currently have the following primary partitions: `/dev/sda1` and `/dev/sda2`. We want to create a new partition layout with /dev/sda3 as a primary partition, `/dev/sda4` as an extended partition, and `/dev/sda5` through `/dev/sda7` as logical partitions within the extended partition. To accomplish this, you can use partitioning tools such as `parted`, `fdisk`, or `gdisk`. Below are the steps for each tool:
+
+##### Using `parted`
+
+I. Start `parted`
+
+```bash
+sudo parted /dev/sda
+```
+
+II. Create the Third Primary Partition (`/dev/sda3`)**
+
+```bash
+(parted) mkpart primary ext4 40GiB 60GiB
+```
+
+- This creates `/dev/sda3` as a primary partition of type ext4, starting at 40GiB and ending at 60GiB. Adjust the sizes as needed.
+- There should be confirmation of the partition creation.
+
+III. Create the Extended Partition (`/dev/sda4`)
+
+```bash
+(parted) mkpart extended 60GiB 100%
+```
+
+- This creates `/dev/sda4` as an extended partition, starting at 60GiB and occupying the rest of the disk.
+- There should be confirmation of the extended partition creation.
+
+IV. Create Logical Partitions (`/dev/sda5`, `/dev/sda6`, `/dev/sda7`)
+
+```bash
+(parted) mkpart logical ext4 60GiB 70GiB
+(parted) mkpart logical ext4 70GiB 80GiB
+(parted) mkpart logical ext4 80GiB 90GiB
+```
+
+- This creates logical partitions `/dev/sda5`, `/dev/sda6`, and `/dev/sda7` within the extended partition, each with 10GiB of space.
+- There should be confirmation for each logical partition creation.
+
+V. Exit `parted`
+
+```bash
+(parted) quit
+```
+
+##### Using `fdisk`
+
+I. Start `fdisk`
+
+```bash
+sudo fdisk /dev/sda
+```
+
+II. Create the Third Primary Partition (`/dev/sda3`)
+
+```bash
+Command (m for help): n
+```
+
+- Select `primary` and choose partition number `3`.
+- There should be a prompt to enter the start and end sectors.
+- Define Start and End for `/dev/sda3`
+  - Start: +40G
+  - End: +60G
+- There should be confirmation of `/dev/sda3` creation.
+
+III. Create the Extended Partition (`/dev/sda4`)**
+
+```bash
+Command (m for help): n
+```
+
+- Select `extended` and choose partition number `4`.
+- There should be a prompt to enter the start and end sectors.
+
+- Define Start and End for `/dev/sda4`
+  - Start: +60G
+  - End: (use default or specify end manually, e.g., 100G for the entire disk)
+- There should be confirmation of `/dev/sda4` creation.
+
+IV. Create Logical Partitions (`/dev/sda5`, `/dev/sda6`, `/dev/sda7`)
+
+```bash
+Command (m for help): n
+```
+
+- Select `logical` and create each partition one by one.
+- Define Start and End for `/dev/sda5`
+  - Start: +60G
+  - End: +70G
+- Define Start and End for `/dev/sda6`
+  - Start: +70G
+  - End: +80G
+- Define Start and End for `/dev/sda7`
+  - Start: +80G
+  - End: +90G
+- There should be confirmation of each logical partition creation.
+
+V. Write Changes
+
+```bash
+Command (m for help): w
+```
+
+- Writes the changes to the disk and exits `fdisk`.
+
+##### Using `gdisk`
+
+I. Start `gdisk`
+
+```bash
+sudo gdisk /dev/sda
+```
+
+II. Create the Third Primary Partition (`/dev/sda3`)
+
+```bash
+Command (? for help): n
+```
+
+- Follow prompts to set partition number `3`, starting sector, and ending sector.
+- Example Input:
+  - Partition number: 3
+  - First sector: +40G
+  - Last sector: +60G
+- There should be confirmation of `/dev/sda3` creation.
+
+III. Create the Extended Partition (`/dev/sda4`)**
+
+```bash
+Command (? for help): n
+```
+
+- Follow prompts to set partition number `4`, starting sector, and ending sector.
+- Example Input:
+  - Partition number: 4
+  - First sector: +60G
+  - Last sector: +100G (or end of disk)
+- There should be confirmation of `/dev/sda4` creation.
+
+IV. Create Logical Partitions (`/dev/sda5`, `/dev/sda6`, `/dev/sda7`)
+
+```bash
+Command (? for help): n
+```
+
+- Follow prompts to create logical partitions within the extended partition.
+- Example Input:
+  - `/dev/sda5`: +60G to +70G
+  - `/dev/sda6`: +70G to +80G
+  - `/dev/sda7`: +80G to +90G
+- There should be confirmation of each logical partition creation.
+
+V. Write Changes
+
+```bash
+Command (? for help): w
+```
+
+This writes changes to disk and exits `gdisk`.
+
+#### Resizing Partitions
+
+Resizing partitions involves either expanding or shrinking an existing partition. This can be done using tools like `parted`, `fdisk`, and `gdisk`, though some tools are better suited for certain tasks. Here are the detailed steps and considerations for each tool:
+
+##### Using `parted`
+
+I. Start `parted`
+
+```bash
+sudo parted /dev/sda
+```
+
+II. Check Partition Table
+
+```bash
+(parted) print
+```
+
+This lists all partitions and their details.
+
+III. Resize Partition
+
+```bash
+(parted) resizepart PARTITION_NUMBER END
+```
+
+- `PARTITION_NUMBER` is the number of the partition to resize, and `END` specifies the new end point (e.g., `50GiB`).
+- To resize `/dev/sda3` to end at 50GiB: `(parted) resizepart 3 50GiB`
+- Confirm the resizing action. If the new size is smaller than the used space, `parted` will issue a warning or error.
+
+IV. Exit `parted`
+
+```bash
+(parted) quit
+```
+
+##### Using `fdisk`
+
+**Note:** `fdisk` does not support resizing partitions directly. You need to delete the partition and recreate it with the new size. This can be risky and should be done with caution.
+
+I. Start `fdisk`
+
+```bash
+sudo fdisk /dev/sda
+```
+
+II. List Partitions
+
+```bash
+Command (m for help): p
+```
+
+This displays the current partition table.
+
+III. Delete the Partition
+
+```bash
+Command (m for help): d
+```
+
+- Enter the number of the partition you want to delete.
+- This deletes the specified partition. This action does not delete the data but removes the partition table entry.
+
+IV. Recreate the Partition with New Size
+
+```bash
+Command (m for help): n
+```
+
+- Follow prompts to create a new partition, specifying the new start and end sectors.
+- If recreating `/dev/sda3`:
+  - Start: Same as the previous start sector
+  - End: New desired end sector
+
+V. Write Changes
+
+```bash
+Command (m for help): w
+```
+
+This writes the new partition table and exits `fdisk`.
+
+VI. Resize Filesystem (if needed)
+
+After resizing the partition, you may need to resize the filesystem to fill the new partition size using tools like `resize2fs` for ext4 filesystems.
+
+##### Using `gdisk`
+
+I. Start `gdisk`**
+
+```bash
+sudo gdisk /dev/sda
+```
+
+II. List Partitions
+
+```bash
+Command (? for help): p
+```
+
+This lists current partitions.
+
+III. Delete the Partition
+
+```bash
+Command (? for help): d
+```
+
+- Enter the partition number to delete.
+- This deletes the specified partition entry.
+
+IV. Recreate the Partition with New Size
+
+```bash
+Command (? for help): n
+```
+
+- Follow prompts to recreate the partition with the desired new size.
+- Recreate `/dev/sda3` with a different end sector.
+- Confirm the creation of the new partition.
+
+V. Write Changes
+
+```bash
+Command (? for help): w
+```
+
+This writes changes to disk and exits `gdisk`.
+
+VI. Resize Filesystem (if needed)
+
+Use appropriate filesystem tools (e.g., `resize2fs`) to resize the filesystem to fit the new partition size.
+
+#### Removing Partitions
+
+Removing partitions is a critical task that should be done carefully to avoid data loss. The process varies slightly depending on the tool you use (`parted`, `fdisk`, or `gdisk`). Below are the instructions for each tool, along with notes on the expected outputs.
+
+##### Using `parted`
+
+I. Start `parted`
+
+```bash
+sudo parted /dev/sda
+```
+
+II. Check Partition Table
+
+```bash
+(parted) print
+```
+
+This lists all partitions and their details.
+
+III. Remove Partition
+
+```bash
+(parted) rm PARTITION_NUMBER
+```
+
+- Replace `PARTITION_NUMBER` with the number of the partition you want to delete (e.g., `3` for `/dev/sda3`).
+- To remove `/dev/sda3`: `(parted) rm 3`
+- There should be confirmation that the partition has been removed.
+
+IV. Exit `parted`
+
+```bash
+(parted) quit
+```
+
+##### Using `fdisk`
+
+I. Start `fdisk`
+
+```bash
+sudo fdisk /dev/sda
+```
+
+II. List Partitions
+
+```bash
+Command (m for help): p
+```
+
+This displays the current partition table.
+
+III. Delete Partition
+
+```bash
+Command (m for help): d
+```
+
+- Enter the number of the partition you want to delete.
+- To delete `/dev/sda3`, use `Partition number: 3`
+- Confirm the deletion of the partition.
+
+IV. Write Changes
+
+```bash
+Command (m for help): w
+```
+
+This writes the changes to the partition table and exits `fdisk`.
+
+##### Using `gdisk`
+
+I. Start `gdisk`
+
+```bash
+sudo gdisk /dev/sda
+```
+
+II. List Partitions
+
+```bash
+Command (? for help): p
+```
+
+This lists the current partitions.
+
+III. Delete Partition
+
+```bash
+Command (? for help): d
+```
+
+- Enter the partition number to delete.
+- To delete `/dev/sda3`, use `Partition number: 3`
+- There should be confirmation of the partition deletion.
+
+IV. Write Changes
+
+```bash
+Command (? for help): w
+```
+
+This writes the changes to the disk and exits `gdisk`.
+
+#### Changing MBR to GPT using gdisk
 
 Sometimes, there's a need to change a disk from one partition table format to another. For instance, converting an MBR disk to a GPT format can be done using tools like `gdisk` or `parted`. Here's how to do it with `gdisk`:
 ### Steps to Repartition a Disk Using gdisk with Expected Outputs
@@ -364,6 +807,13 @@ This output confirms that the new partitions are correctly set up.
 
 - It's crucial to back up any important data before proceeding with this operation, as changing the partition table format can lead to data loss.
 - Ensure that your system supports GPT and UEFI (if you're planning to boot from the disk), as older systems with BIOS may not support GPT.
+
+#### Important Notes
+
+- **Backup Data** before modifying disk partitions to prevent data loss, as altering partitions can sometimes lead to accidental loss of important information.
+- When managing disk partitions, **Resizing and Deleting Partitions** may be necessary if existing partitions occupy the space needed for new ones. To delete a partition, use the `d` command in tools like `gdisk` or `fdisk`. For resizing, you might need to create a new partition with the desired size using the `n` command and then delete the old partition.
+- The **Partition Types** you select depend on specific needs, such as using a Linux filesystem or creating a swap space. Each partition type is identified by a unique code or identifier that defines its purpose and structure.
+- **Administrative Privileges** are typically required when using partitioning tools, as these actions need root access. Therefore, commands are often prefixed with `sudo` to grant the necessary permissions.
 
 ### Challenges
 
