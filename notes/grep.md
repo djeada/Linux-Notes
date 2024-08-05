@@ -25,7 +25,6 @@ User
  v
 Terminal/Shell
 ```
-Understood, I'll keep the structure consistent with the existing examples:
 
 ### Common Options for `grep`
 
