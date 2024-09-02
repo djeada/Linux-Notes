@@ -57,7 +57,7 @@ Unlike other window managers that use configuration files, DWM is customized by 
 
 Follow these steps to customize DWM to your preferences:
 
-I. Download the DWM source code
+### I. Download the DWM Source Code
 
 You can clone the source code from the official suckless git repository using the following command:
 
@@ -65,9 +65,9 @@ You can clone the source code from the official suckless git repository using th
 git clone https://git.suckless.org/dwm
 ```
 
-II. Navigate to the dwm directory and create a config.h file
+### II. Navigate to the `dwm` Directory and Create a `config.h` File
 
-The config.def.h file contains the default settings. To customize DWM, you should first copy config.def.h to config.h. Then, you can edit the config.h file with your preferred text editor (e.g., nano, vim, emacs). Here's how to do that:
+The `config.def.h` file contains the default settings. To customize DWM, you should first copy `config.def.h` to `config.h`. Then, you can edit the `config.h` file with your preferred text editor (e.g., nano, vim, emacs). Here's how to do that:
 
 ```bash
 cd dwm
@@ -75,21 +75,73 @@ cp config.def.h config.h
 nano config.h
 ```
 
-III. Customize the config.h file
+### III. Customize the `config.h` File
 
-In the config.h file, you can change various settings according to your preferences. For example, you can modify key bindings, set custom colors, define the status bar's appearance, and select the default font. Save your changes and exit the text editor when you're finished.
+In the `config.h` file, you can change various settings according to your preferences. For example, you can modify key bindings, set custom colors, define the status bar's appearance, and select the default font. 
 
-IV. Compile and install the modified DWM
+#### Changing the Border Configuration:
 
-After modifying the config.h file, you need to compile the DWM source code and install the new binary:
+1. Within `config.h`, locate the section where the border settings are defined. It typically looks like this:
+
+```c
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
+```
+
+`borderpx` controls the width of the border around each window. The default value is usually `1` pixel.
+
+2. To increase or decrease the border width, change the value of `borderpx`. For example, to set the border width to 2 pixels, change the line to:
+
+```c
+static const unsigned int borderpx  = 2;
+```
+
+If you want to remove the border entirely, you can set `borderpx` to `0`:
+
+```c
+static const unsigned int borderpx  = 0;
+```
+
+3. The border color for both focused and unfocused windows is defined in the color scheme section of `config.h`. Look for the following lines:
+
+```c
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#bbbbbb";
+static const char col_gray4[]       = "#eeeeee";
+static const char col_cyan[]        = "#005577";
+static const char *colors[][3]      = {
+   /*               fg         bg         border   */
+   [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+   [SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+};
+```
+
+Here, `col_cyan` is used for the border of the focused window, and `col_gray2` is used for the unfocused windows. To change the border color, replace the hex color code with your preferred color. For example, to change the focused window border to red:
+
+```c
+static const char col_red[]         = "#ff0000";
+static const char *colors[][3]      = {
+   /*               fg         bg         border   */
+   [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+   [SchemeSel]  = { col_gray4, col_red,   col_red   },
+};
+```
+
+4. After adjusting the border settings and any other customizations, save your changes and exit the text editor.
+
+### IV. Compile and Install the Modified DWM
+
+After modifying the `config.h` file, you need to compile the DWM source code and install the new binary:
 
 ```bash
 sudo make clean install
 ```
 
-V. Apply the changes
+This command will clean up any previous builds and compile your customized version of DWM.
 
-Log out and log back in, or restart your X session to apply the changes. The updated DWM should now be in effect.
+### V. Apply the Changes
+
+To apply your changes, you need to restart DWM. You can do this by logging out and logging back in, or by restarting your X session. Once you log back in, the updated DWM with your new border settings and other customizations should be in effect.
 
 ## Further Resources
 
