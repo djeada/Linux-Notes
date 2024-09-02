@@ -2,6 +2,9 @@
 
 One of the fundamental skills is to navigate and manage files and directories effectively. Here, we focus on the crucial concepts that will facilitate your work within the file system.
 
+TODO:
+- rsync
+
 ### Types of File Paths
 
 The two main types of paths are **Absolute Path** and **Relative Path**. 
