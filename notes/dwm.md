@@ -33,9 +33,23 @@ Remember that DWM is highly customizable, but changes typically require modifyin
 - To quit DWM, you press `Shift + Alt + q`, which will close the window manager and return you to your display manager or console.
 - Moving a window to another tag involves focusing on the window and then pressing `Shift + Alt + [tag number]`.
 - Toggling a window between tiled and floating modes is done by focusing on it and pressing `Alt + t`. This shortcut can also be used to revert the window back to the tiled layout.
+- Toggling a window to full-screen mode within the current layout is done by pressing `Alt + m`, which switches to the monocle layout, making the focused window occupy the entire screen. This is particularly useful when you want to focus on a single window.
 - Resizing a floating window can be accomplished by holding `Alt`, then right-clicking and dragging the window.
 - Moving a floating window similarly requires holding `Alt` and then left-clicking and dragging the window.
-- One of the key features of DWM is its customizability. If you are comfortable with C programming, you can modify `config.h`, recompile, and reinstall DWM to change key bindings and other settings to suit your preferences.
+- Launching an application launcher like `dmenu` can be done by pressing `Alt + p`, allowing you to start applications by typing their name, making for a quick and efficient workflow.
+- Cycling through different layouts (e.g., tiling, floating, monocle) is done by pressing `Alt + Space`. This is useful when you want to experiment with different ways of arranging your windows.
+- Viewing all windows across all tags simultaneously can be achieved by pressing `Alt + 0`. This allows you to quickly access any open window without switching tags.
+- Moving a window to the scratchpad (a hidden, floating workspace) is done by pressing `Shift + Alt + s`. This is useful for keeping a window handy without cluttering your main workspace.
+- Switching between the last used tags is quickly done by pressing `Alt + Tab`, allowing for fast toggling between workspaces.
+- Focusing on the master area window directly can be done by pressing `Alt + l`. This is handy when you want to quickly shift your attention to the main application you're working on.
+- Adjusting the master area size can be done dynamically by holding `Alt` and pressing `h` or `l`. This allows you to give more screen space to the master window or the stack area as needed.
+- Restarting DWM without logging out is possible by pressing `Shift + Alt + r`, which reloads DWM with any new configurations applied, making it easier to test changes without disrupting your session.
+- Taking a screenshot can be done by integrating tools like `scrot` or `maim` and binding them to a key combination in your `config.h`. For example, `Alt + Shift + s` could be used to take a screenshot of your current screen.
+- Adjusting gaps between windows (if you've patched DWM with gaps support) can be done with custom keybindings, allowing you to increase or decrease spacing dynamically, tailoring your workspace to your visual preferences.
+- Killing a non-responsive window can be done by focusing on it and pressing `Shift + Alt + c`, force-closing the application without needing to open a task manager.
+- Checking the system status (like CPU usage, memory, or battery) can be enhanced by adding a custom status bar script to DWM, providing real-time system information directly on your screen.
+- Locking your screen for security can be done by setting up a keybinding like `Alt + Shift + l` to launch a screen locker like `slock`, ensuring your system is protected when you step away.
+- Navigating between monitors in a multi-monitor setup is done by pressing `Alt + Shift + [arrow key]`, allowing you to quickly move focus or windows across different screens.
 
 ## Configuration
 
