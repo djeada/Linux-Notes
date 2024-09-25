@@ -62,7 +62,7 @@ In Linux, hardware devices are represented as files within the `/dev` directory,
 - Programs use standard **system calls** (`open`, `read`, `write`, `ioctl`) to interact with devices.
 - Utilities like `dd`, `cat`, or specialized tools can read from or write to device files for testing or configuration.
 
-**Example: Reading from a Device File**
+Example: Reading from a Device File
 
 ```bash
 # Read the first 512 bytes from a disk
@@ -879,7 +879,7 @@ Use open-source `amdgpu` driver or proprietary `amdgpu-pro`.
 sudo apt install xserver-xorg-video-amdgpu
 ```
 
-**Example Output (`lspci | grep VGA`):**
+Example Output (`lspci | grep VGA`):
 
 ```plaintext
 01:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 [Radeon RX 5600 OEM/5600 XT / 5700/5700 XT] (rev c1)
@@ -1122,7 +1122,7 @@ If a module is causing issues, blacklist it to prevent loading.
 echo "blacklist faulty_module" | sudo tee /etc/modprobe.d/blacklist-faulty_module.conf
 ```
 
-**Example Usage:**
+Example Usage:
 
 ```bash
 echo "blacklist nouveau" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
