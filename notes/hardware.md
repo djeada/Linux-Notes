@@ -841,7 +841,7 @@ echo "options e1000e InterruptThrottleRate=3000" | sudo tee /etc/modprobe.d/e100
 - **InterruptThrottleRate:** Adjusts how frequently the network card interrupts the CPU.
 - **Persistent Configuration:** Settings will apply on boot or when the module is loaded.
 
-#### Graphics Drivers
+##### Graphics Drivers
 
 I. **NVIDIA:**
 
