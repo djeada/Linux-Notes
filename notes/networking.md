@@ -2,6 +2,12 @@
 
 Networking is the practice of connecting computers and devices so that they can communicate and exchange data. It forms the backbone of the internet, local area networks, and even small home networks. To grasp the intricacies of networking, it's imperative to familiarize oneself with key terminologies and concepts.
 
+TODO:
+
+- change ip address
+- change routes
+- restart network interfaces
+
 ## Basic Networking Terms
 
 Understanding the fundamentals can pave the way for more advanced networking tasks. Here's a breakdown of basic networking terms:
