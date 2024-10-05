@@ -2,6 +2,33 @@
 
 SELinux, or Security-Enhanced Linux, is a mandatory access control (MAC) security mechanism implemented in the Linux kernel. It enforces security policies on a system to limit the access and capabilities of users and applications, preventing unauthorized access to system resources.
 
+```
++-------------------------+
+|        User Process     |
+|   (e.g., SSH Daemon)    |
++-----------+-------------+
+            |
+            | Access Request (e.g., Read File)
+            v
++-------------------------+
+|     SELinux Policy      |
+|  (Rules and Definitions)|
++-----------+-------------+
+            |
+            | Decision (Allow/Deny)
+            v
++-------------------------+
+|    Linux Kernel (MAC)   |
+|   Enforces Decision     |
++-------------------------+
+```
+
+Explanation:
+
+1. **User Process**: Attempts an action (e.g., reading a file).
+2. **SELinux Policy**: The kernel consults the policy to determine if the action is permitted based on the security contexts of the process and the file.
+3. **Enforcement**: The kernel allows or denies the action accordingly.
+
 ## SELinux Modes
 
 SELinux can operate in three modes:
