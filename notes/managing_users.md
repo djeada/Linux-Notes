@@ -215,6 +215,34 @@ cat /etc/group
 
 Each line represents a group, detailing the group name, password (usually not used), Group ID (GID), and a list of users belonging to that group.
 
+### Visualization of Users and Groups
+
+**Example Users and Groups:**
+
+```
+Users:
+- alice (UID 1001)
+- bob (UID 1002)
+- charlie (UID 1003)
+
+Groups:
+- staff (GID 2001)
+- developers (GID 2002)
+- admins (GID 2003)
+```
+
+**User to Group Mapping:**
+
+```
++--------+-------------------+
+| User   | Groups            |
++--------+-------------------+
+| alice  | staff, developers |
+| bob    | staff             |
+| charlie| admins            |
++--------+-------------------+
+```
+
 ### Creating and Managing Groups
 
 I. Adding a New Group
