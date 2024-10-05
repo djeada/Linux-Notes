@@ -2,27 +2,7 @@
 
 In computer networking, ports serve as crucial endpoints for communication between devices, similar to doors through which data flows in and out of a computer.
 
-```
-+-----------------------------------+
-|                                   |
-|          Server/Computer          |
-|                                   |
-+------------------+----------------+
-                   |
-            Network Interface
-                   |
-+------------------+----------------+
-|       Port 80    |    Port 443    |
-| (HTTP traffic)   | (HTTPS traffic)|
-+------------------+----------------+
-|       Port 22    |    Port 21     |
-|  (SSH traffic)   | (FTP traffic)  |
-+------------------+----------------+
-|        ...       |       ...      |
-+------------------+----------------+
-```
-
-Key Facts:
+Main idea:
 
 - Ports control how data is directed in and out of a computer or server, ensuring proper communication between devices and services.
 - They make it possible for multiple services to run simultaneously on a single device by assigning specific ports to each service, thereby organizing traffic effectively.
@@ -31,6 +11,28 @@ Key Facts:
 - **Well-Known Ports** range from 0 to 1023 and are reserved for standard services like HTTP (port 80), HTTPS (port 443), FTP (port 21), and SSH (port 22).
 - **Registered Ports**, ranging from 1024 to 49151, are assigned to non-standard, less common applications, allowing for a diverse set of services beyond the well-known ones.
 - **Dynamic/Private Ports**, ranging from 49152 to 65535, are typically used for temporary purposes or private communications, often assigned dynamically for short-term needs.
+
+Example:
+
+```
++-----------------------------------------------+
+|                  Server                       |
+|        IP Address: 192.168.1.10               |
+|                                               |
+|  +---------+     +---------+     +----------+ |
+|  | Port 22 |     | Port 80 |     | Port 443 | |
+|  |  SSH    |     |  HTTP   |     |  HTTPS   | |
+|  +----+----+     +----+----+     +----+-----+ |
+|       |               |               |       |
++-------+---------------+---------------+-------+
+        |               |               |
+        |               |               |
+         Client Connections over Network
+```
+
+- The server at IP `192.168.1.10` is running services on ports 22 (SSH), 80 (HTTP), and 443 (HTTPS).
+- Clients connect to these services by specifying the IP address and the port number.
+- The server distinguishes incoming traffic based on the port number.
 
 ### Protocols and Their Associated Ports
 
@@ -47,6 +49,26 @@ II. UDP (User Datagram Protocol)
 - Faster, connectionless.
 - Suited for streaming, real-time communication where speed is key.
 - Lower security needs than TCP, as it doesn't guarantee delivery or order.
+
+Ports in the OSI Model:
+
+```
++-----------------------+
+|       Application     |
++-----------------------+
+|      Presentation     |
++-----------------------+
+|        Session        |
++-----------------------+
+| Transport (TCP/UDP)   |  <-- Ports operate here
++-----------------------+
+|         Network       |
++-----------------------+
+|       Data Link       |
++-----------------------+
+|        Physical       |
++-----------------------+
+```
 
 ### Common Services and Their Ports
 
