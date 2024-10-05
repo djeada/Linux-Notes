@@ -196,6 +196,273 @@ Interpretation of Results:
 
 Note that the syntax of the list-dependencies command and the target you specify may vary depending on the operating system and the version of systemctl being used.
 
+### Hands On example operating ftp server
+
+### 1. **Installing FTP Server using Package Managers (RPM and YUM)**
+
+#### **1.1. Using YUM Package Manager**
+
+**Step 1: Search for FTP packages**
+```bash
+yum list | grep ftp
+```
+
+**Expected Output**:
+```bash
+vsftpd.x86_64      3.0.2-29.el7   @base
+lftp.x86_64        4.4.8-9.el7    @base
+```
+
+**Interpretation**: 
+- `vsftpd` is the FTP server package we are interested in.
+- `lftp` is a command-line FTP client package.
+- The `@base` indicates that these packages are from the base repository.
+
+**Step 2: Install vsftpd (FTP server)**
+```bash
+yum install vsftpd
+```
+
+**Expected Output**:
+```bash
+Dependencies Resolved
+================================================================================
+ Package             Arch               Version                  Repository
+================================================================================
+Installing:
+ vsftpd              x86_64             3.0.2-29.el7             base
+...
+Is this ok [y/d/N]: y
+```
+
+**Interpretation**: 
+- It resolves dependencies and asks for confirmation to proceed with the installation. Press `y` to install.
+
+#### **1.2. Using RPM Package Manager**
+
+**Step 1: Search for FTP package using RPM**
+```bash
+rpm -qa | grep ftp
+```
+
+**Expected Output**:
+```bash
+vsftpd-3.0.2-29.el7.x86_64
+lftp-4.4.8-9.el7.x86_64
+```
+
+**Interpretation**: 
+- This lists already installed FTP-related packages.
+- `vsftpd` is the FTP server; if it's listed, you don’t need to install it again.
+
+**Step 2: Install vsftpd using RPM**
+```bash
+rpm -ivh vsftpd-3.0.2-29.el7.x86_64.rpm
+```
+
+**Expected Output**:
+```bash
+Preparing...                     ################################# [100%]
+Updating / installing...
+   1:vsftpd-3.0.2-29.el7         ################################# [100%]
+```
+
+**Interpretation**:
+- The package installs successfully if no errors appear.
+
+### 2. **Configuring and Starting the FTP Server**
+
+**Step 1: Edit the configuration file**
+```bash
+vi /etc/vsftpd/vsftpd.conf
+```
+
+- Look for these key options:
+    - `anonymous_enable=YES` or `NO` (depends on if you want anonymous access).
+    - `local_enable=YES` (to allow local users).
+    - `write_enable=YES` (if you want to allow file uploads).
+
+**Step 2: Enable and start vsftpd service**
+```bash
+systemctl enable vsftpd
+systemctl start vsftpd
+```
+
+**Expected Output (Enable command)**:
+```bash
+Created symlink from /etc/systemd/system/multi-user.target.wants/vsftpd.service to /usr/lib/systemd/system/vsftpd.service.
+```
+
+**Interpretation**: 
+- The `systemctl enable` command sets the service to start on boot. The symlink confirmation indicates success.
+
+**Expected Output (Start command)**:
+```bash
+No output (command completes silently)
+```
+
+**Interpretation**: 
+- No output means the service started successfully. Use `systemctl status` to verify.
+
+**Step 3: Check service status**
+```bash
+systemctl status vsftpd
+```
+
+**Expected Output**:
+```bash
+● vsftpd.service - Vsftpd ftp daemon
+   Loaded: loaded (/usr/lib/systemd/system/vsftpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Mon 2024-10-05 12:30:50 UTC; 5min ago
+```
+
+**Interpretation**: 
+- `Active: active (running)` indicates that the FTP service is running.
+
+### 3. **Checking on Which Port FTP Operates**
+
+**Step 1: Check the port being used**
+```bash
+netstat -tulnp | grep ftp
+```
+
+**Expected Output**:
+```bash
+tcp   0  0 0.0.0.0:21     0.0.0.0:*       LISTEN      1234/vsftpd
+tcp6  0  0 :::21          :::*            LISTEN      1234/vsftpd
+```
+
+**Interpretation**: 
+- This shows that the FTP server is listening on port `21` (the standard FTP port).
+- `1234` is the process ID (PID) of the vsftpd service.
+- `LISTEN` means it’s actively waiting for incoming connections.
+
+### 4. **Checking if the Port is Free**
+
+**Step 1: Check if port 21 is in use**
+```bash
+netstat -an | grep 21
+```
+
+**Expected Output**:
+```bash
+tcp   0  0 0.0.0.0:21     0.0.0.0:*       LISTEN
+```
+
+**Interpretation**: 
+- If you see `LISTEN` on port `21`, it means the port is in use by FTP. If there's no output, the port is free.
+
+**Alternative:**
+```bash
+ss -an | grep 21
+```
+
+**Expected Output**:
+```bash
+LISTEN     0      100    0.0.0.0:21      0.0.0.0:*
+```
+
+### 5. **Testing the FTP Server**
+
+**Step 1: Verify that the FTP service is running**
+```bash
+ps -ef | grep vsftpd
+```
+
+**Expected Output**:
+```bash
+root     1234     1  0 12:30 ?        00:00:00 /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
+```
+
+**Interpretation**:
+- This output shows that vsftpd is running with PID `1234`.
+
+**Step 2: Test FTP connection on localhost**
+```bash
+ftp localhost
+```
+
+**Expected Output**:
+```bash
+Connected to localhost (127.0.0.1).
+220 (vsFTPd 3.0.2)
+Name (localhost:user):
+```
+
+**Interpretation**: 
+- The `220 (vsFTPd 3.0.2)` message indicates the FTP server is ready.
+- You can enter a username to continue, or test anonymous access with `anonymous`.
+
+**Step 3: Test FTP connection from another machine**
+```bash
+ftp <server_ip>
+```
+
+**Expected Output**:
+```bash
+Connected to <server_ip>.
+220 (vsFTPd 3.0.2)
+Name (<server_ip>:user):
+```
+
+**Interpretation**: 
+- This output shows that the FTP server is accessible from the network.
+
+**Step 4: Upload and download test files**
+1. **Upload file**:
+   ```bash
+   put testfile.txt
+   ```
+   **Expected Output**:
+   ```bash
+   200 PORT command successful.
+   150 Ok to send data.
+   226 Transfer complete.
+   ```
+
+   **Interpretation**: The file `testfile.txt` was successfully uploaded.
+
+2. **Download file**:
+   ```bash
+   get testfile.txt
+   ```
+   **Expected Output**:
+   ```bash
+   200 PORT command successful.
+   150 Opening BINARY mode data connection.
+   226 Transfer complete.
+   ```
+
+   **Interpretation**: The file was successfully downloaded.
+
+**Step 5: Exit the FTP session**
+```bash
+bye
+```
+
+**Expected Output**:
+```bash
+221 Goodbye.
+```
+
+### 6. **Check FTP Server Logs**
+
+```bash
+tail -f /var/log/vsftpd.log
+```
+
+**Expected Output**:
+```
+Mon Oct  5 12:35:15 2024 [pid 1235] CONNECT: Client "::1"
+Mon Oct  5 12:35:16 2024 [pid 1235] [anonymous] OK LOGIN: Client "::1"
+Mon Oct  5 12:36:20 2024 [pid 1236] [user] UPLOAD: Client "::1", "/home/user/testfile.txt"
+```
+
+**Interpretation**: 
+- This shows connection and file transfer logs, which can be helpful for debugging.
+
+
+
 ## Creating a Custom Service with SystemD
 
 Creating a custom service in SystemD involves writing a service unit file. This file is a configuration script that provides instructions to SystemD on how to manage and execute the service. These scripts are typically placed in the `/etc/systemd/system/` directory. A service script is divided into several sections, each serving a specific purpose.
