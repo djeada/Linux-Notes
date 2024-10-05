@@ -1,8 +1,31 @@
-### Task-State Analysis for Monitoring Application Processes
+## Task-State Analysis for Monitoring Application Processes
 
 Task-State Analysis is a methodology used to monitor and understand the performance and behavior of application processes and threads over time. Instead of relying on traditional resource utilization metrics like CPU usage or memory consumption, this approach focuses on the actual states of threads within an application. By observing how threads transition between various states—such as running, sleeping, or waiting—we can gain deeper insights into the application's performance, identify bottlenecks, and diagnose issues more effectively.
 
 This analysis is particularly valuable because it is non-intrusive. It does not require attaching debuggers, enabling tracing, or using other invasive methods that could degrade application performance. Instead, it relies on periodically sampling thread states, providing a lightweight yet informative snapshot of the system's behavior at any given moment.
+
+### Visualizing the Differences
+
+**Threads within a Process**
+
+```
++------------------------------+
+|          Process A           |
+|   (Application in Memory)    |
+|                              |
+|  +-----------+  +-----------+|
+|  | Thread 1  |  | Thread 2  ||
+|  +-----------+  +-----------+|
+|       |              |       |
+|       | Shared Memory|       |
+|       +--------------+       |
+|                              |
++------------------------------+
+```
+
+- **Process A** runs in its own memory space.
+- **Thread 1** and **Thread 2** are executing concurrently within **Process A**.
+- Threads share the same memory space, allowing for efficient communication but requiring synchronization.
 
 #### Initialization and Setup
 
