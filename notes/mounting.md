@@ -126,10 +126,119 @@ Output Explanation:
 - `ext4`, `tmpfs`, `vfat` - This indicates the type of file system.
 - `(rw,relatime,data=ordered)`, etc. - These are options used while mounting, like read-write mode, permissions, etc.
 
-Why It's Useful:
+### Visualization of Mounting
 
-- Understanding what file systems are mounted, and where, is crucial for system monitoring, troubleshooting, and managing storage devices.
-- It helps verify if certain file systems are mounted as expected, which is useful after system changes or reboots.
+**Initial Filesystem Structure:**
+
+```
+/
+├── bin
+├── etc
+├── home
+│   ├── alice
+│   └── bob
+├── usr
+└── var
+```
+
+**Mounting a New Device at `/mnt/backup`:**
+
+1. **Before Mounting:**
+
+```
+/
+├── bin
+├── etc
+├── home
+│   ├── alice
+│   └── bob
+├── mnt
+│   └── backup (empty directory)
+├── usr
+└── var
+```
+
+2. **Mount Command:**
+
+```bash
+sudo mount /dev/sdb1 /mnt/backup
+```
+
+- **`/dev/sdb1`**: Device file representing the storage device.
+- **`/mnt/backup`**: Mount point.
+
+3. **After Mounting:**
+
+```
+/
+├── bin
+├── etc
+├── home
+│   ├── alice
+│   └── bob
+├── mnt
+│   └── backup
+│       ├── documents
+│       ├── photos
+│       └── music
+├── usr
+└── var
+```
+
+**Explanation:**
+
+- **Mount Point `/mnt/backup`**: The contents of `/dev/sdb1` are now accessible under `/mnt/backup`.
+- **Accessing Files**: Users can navigate to `/mnt/backup` and interact with files as part of the directory tree.
+
+### The Mounting Process Flow
+
+```
++-----------------------+
+|     Storage Device    |
+|    (/dev/sdb1)        |
++-----------+-----------+
+            |
+            | Mount Command
+            v
++-----------------------+
+|   Kernel's VFS Layer  |
+|  (Virtual Filesystem) |
++-----------+-----------+
+            |
+            | Mounts the Filesystem
+            v
++----------------------------+
+|   Directory Tree           |
+| (Mount Point: /mnt/backup) |
++----------------------------+
+```
+
+### Mounting Types
+
+- **Manual Mounting**: Using the `mount` command.
+- **Automatic Mounting**:
+  - **At Boot**: Specified in `/etc/fstab`.
+  - **On Demand**: Using automount daemons.
+
+### `/etc/fstab` File
+
+Defines filesystems to be mounted at boot time.
+
+**Sample Entry:**
+
+```
+/dev/sdb1   /mnt/backup   ext4    defaults    0   2
+```
+
+- **Fields Explained**:
+  1. **Device**: `/dev/sdb1`
+  2. **Mount Point**: `/mnt/backup`
+  3. **Filesystem Type**: `ext4`
+  4. **Options**: `defaults`
+  5. **Dump**: `0` (backup utility dump)
+  6. **Pass**: `2` (fsck order)
+
+
 
 ## Unmounting File Systems
 
