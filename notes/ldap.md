@@ -2,15 +2,68 @@
 
 LDAP is an open, vendor-neutral, industry standard application protocol that is used for accessing and maintaining distributed directory information services over an Internet Protocol (IP) network. It is predominantly employed for user authentication and authorization, as well as other directory-based services.
 
-### Fundamental Concepts
+Main idea:
 
-1. **Directory**: The directory is akin to a database, but it tends to contain more descriptive and attribute-based information. The data is stored in a hierarchical and logical format, such as users, groups, and departments.
+- A **directory** functions similarly to a database, but it primarily holds descriptive and attribute-based information rather than transactional data. It is structured in a hierarchical format, which typically organizes data into categories such as users, groups, and departments.
+- Each **entry** within a directory serves as a unique record that represents an object, like a user, group, or computer. These entries are comprised of various attributes that define the characteristics and identity of the object being represented.
+- An **attribute** is a specific data point associated with an entry that provides detailed information about that object. For example, attributes for a user might include an email address, full name, or password, all of which give context to the entry.
+- The **schema** is essential for defining the structure of a directory’s data. It specifies what kinds of objects (such as users or devices) the directory can store, what attributes each object type can have, and the rules governing how these objects and attributes interact within the directory.
 
-2. **Entry**: Entries are individual records in the directory. They represent objects such as users, groups, computers, or other resources. An entry is composed of attributes.
+### LDAP Directory Structure
 
-3. **Attribute**: These are specific pieces of data that define the characteristics of an entry, such as a user's email address, full name, password, and so on.
+LDAP directories are hierarchical and follow a tree structure, similar to a file system.
 
-4. **Schema**: This defines the structure of the directory's data. It establishes the kinds of objects that it contains, the attributes of those objects, and the rules for interactions with that data.
+**LDAP Directory Information Tree (DIT)**
+
+```
+                (Root)
+                  |
+         +--------+--------+
+         |                 |
+       dc=com           dc=org
+         |                 |
+    +----+----+            |
+    |         |            |
+  dc=example  dc=company   ...
+    |
++---+---+
+|       |
+ou=People ou=Groups
+   |          |
+   |          +----------------+
+   |                           |
++--+--+                    +---+---+
+|     |                    |       |
+uid=alice              cn=admins  cn=users
+uid=bob
+```
+
+- **dc**: Domain Component (e.g., `dc=example,dc=com` represents `example.com`).
+- **ou**: Organizational Unit (e.g., `ou=People`).
+- **uid**: User ID (e.g., `uid=alice`).
+- **cn**: Common Name (used for groups, e.g., `cn=admins`).
+
+### LDAP Authentication Flow
+
+```
+[ Client Application ]
+         |
+         v
+[ LDAP Library ]
+         |
+         v
+[ LDAP Server ]
+         |
+         v
+[ LDAP Directory (DIT) ]
+```
+
+**Steps:**
+
+1. **Client Application**: Initiates a connection to authenticate a user.
+2. **LDAP Library**: Handles communication with the LDAP server using the LDAP protocol.
+3. **LDAP Server**: Processes the request and searches the DIT.
+4. **LDAP Directory**: Retrieves the user entry and verifies credentials.
 
 ### Common LDAP Operations
 
