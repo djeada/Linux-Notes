@@ -42,6 +42,42 @@ The specific logs available and their locations can vary between distributions.
 
 `systemd` is the default system and service manager for many popular distributions. It comes with a robust and centralized logging system called the journal. Unlike traditional text-based logs, the journal stores log data in binary format, providing several advantages such as metadata support, data integrity through hashing, compression for efficient storage, and indexing for quick searching.
 
+### The systemd Journal
+
+**systemd-journald** is a logging service that collects and stores log data.
+
+- **Features**:
+  - Centralized logging for all services.
+  - Structured, indexed logs.
+  - Persistent or volatile storage.
+
+### Visualizing the Journal
+
+```
++--------------------------------+
+|        systemd-journald        |
++---------------+----------------+
+                |
+                | Collects Logs from:
+                |
++---------------+----------------+
+|               |                |
+|           Systemd Units        |
+|          (Services, etc.)      |
+|               |                |
+|           Kernel Messages      |
+|               |                |
+|           Applications         |
+|               |                |
++---------------+----------------+
+                |
+                v
++--------------------------------+
+|          Journal Files         |
+|   (/run/log/journal/ or /var/log/journal/) |
++--------------------------------+
+```
+
 ### Viewing Journal Entries with journalctl
 
 The `journalctl` command is used to query and display entries from the systemd journal. By default, it lists all the journal entries in chronological order, starting from the oldest:
