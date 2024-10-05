@@ -381,6 +381,8 @@ For tasks that may take longer than the scheduling interval, prevent overlapping
 
 For further exploration and to test cron expressions, consider using online tools like [Crontab Guru](https://crontab.guru/). Always refer to the man pages (`man cron`, `man crontab`) for comprehensive documentation.
 
+### Challenges
+
 1. Use the `ls` command to list any system files in the `/etc/cron.d` directory. Explore the contents of a few of these files using the `cat` command to see how they are structured.
 2. Use the `ls` command to list scripts in the `/etc/cron.monthly` directory. Pick a few scripts and look at their contents using the `cat` command to understand what tasks they perform and how they are scheduled.
 3. For a cron job with the schedule `0 2 * * *`, find out what time and how often this task runs. Explain how you arrived at your conclusion.
