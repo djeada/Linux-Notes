@@ -310,13 +310,13 @@ sudo umount /dev/sdb1
 
 If you receive a "device is busy" error:
 
-- Find processes using the device:
+Find processes using the device:
 
-  ```bash
-  sudo lsof /dev/sdb1
-  ```
+```bash
+sudo lsof /dev/sdb1
+```
 
-- Kill the processes or stop services as needed.
+Kill the processes or stop services as needed.
 
 ### V. Creating a File System
 
