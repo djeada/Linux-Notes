@@ -1,24 +1,24 @@
 ## Disk I/O Analysis for Monitoring System Performance
 
-Disk Input/Output (I/O) operations are a critical component of system performance, especially in applications that handle large amounts of data or require frequent access to storage devices. Understanding and monitoring disk I/O is essential for diagnosing performance bottlenecks, optimizing resource utilization, and ensuring that applications run efficiently. Disk I/O analysis involves examining how data is read from and written to storage devices, identifying patterns, and pinpointing areas where performance can be improved.
+Disk I/O operations directly impact performance in applications requiring frequent or large-scale data access. Understanding and monitoring disk I/O is essential for diagnosing performance bottlenecks, optimizing resource utilization, and ensuring that applications run efficiently. Disk I/O analysis involves examining how data is read from and written to storage devices, identifying patterns, and pinpointing areas where performance can be improved.
 
-This comprehensive guide delves into the methods and tools used for disk I/O analysis, providing detailed explanations and practical steps for monitoring and interpreting disk I/O activities. By focusing on both high-level concepts and low-level technical details, this guide aims to equip system administrators, developers, and performance engineers with the knowledge needed to effectively monitor and optimize disk I/O performance.
+We will delve into the methods and tools used for disk I/O analysis, providing detailed explanations and practical steps for monitoring and interpreting disk I/O activities.
 
 ### Disk I/O Process
 
 **Read Operation**:
 
-- **Application** requests data.
-- **File System** checks cache; if not present, requests from disk.
-- **Disk Driver** retrieves data from physical storage.
-- Data is passed back up to the **Application**.
+- Application requests data.
+- File System checks cache; if not present, requests from disk.
+- Disk Driver retrieves data from physical storage.
+- Data is passed back up to the application.
 
 **Write Operation**:
 
-- **Application** sends data to be written.
-- **File System** may cache writes for efficiency.
-- **Disk Driver** writes data to physical storage.
-- Acknowledgment is sent back to the **Application**.
+- Application sends data to be written.
+- File System may cache writes for efficiency.
+- Disk Driver writes data to physical storage.
+- Acknowledgment is sent back to the application.
 
 Example: 
 
@@ -58,12 +58,12 @@ Example:
 
 Explanation:
 
-1. **Application Layer**: An application requests to read or write data.
-2. **File System API**: System calls like `read()`, `write()` are used.
-3. **File System**: Translates file operations to block operations.
-4. **Block Device**: Represents the disk in terms of blocks.
-5. **Disk Driver**: Handles communication with the physical device.
-6. **Physical Storage**: Actual hardware where data is stored or retrieved.
+- The **application layer** is where an application initiates a request to read or write data, starting the file operation process.
+- A **file system API** is then utilized, with system calls like `read()` and `write()` to interact with the underlying file system for data access.
+- The **file system** translates these file operations into specific block-level operations, bridging the gap between high-level requests and lower-level storage processes.
+- The **block device** represents the disk in terms of addressable blocks, which are the units of data that the file system operates on.
+- A **disk driver** manages the communication between the operating system and the physical storage device, ensuring proper data transfer.
+- At the lowest level, **physical storage** refers to the actual hardware, such as a hard disk or SSD, where data is stored or retrieved based on the instructions received from the higher layers.
 
 ### Factors Affecting Disk I/O Performance
 
@@ -99,64 +99,59 @@ Disk arm starts at position 20, moves towards higher cylinders:
 6. Moves to 2
 ```
 
-
 #### Initialization and Setup
 
 Implementing disk I/O analysis begins with setting up a monitoring environment that can capture and interpret disk I/O activities without significantly impacting system performance. This involves selecting appropriate tools and configuring them to collect relevant data at regular intervals.
 
-The key considerations during initialization and setup include:
+Some considerations during initialization and setup:
 
-- **Non-Intrusive Monitoring**: Choose tools and methods that have minimal overhead to avoid introducing performance degradation during monitoring.
-- **Comprehensive Data Collection**: Ensure that the monitoring setup captures all necessary metrics, including read/write operations, I/O wait times, and queue lengths.
-- **Regular Sampling**: Configure the system to collect data at intervals that provide sufficient granularity for analysis without overwhelming system resources.
-
-By carefully planning the monitoring setup, you can achieve a balance between data richness and system performance.
+- Choose tools and methods that have minimal overhead to avoid introducing performance degradation during monitoring.
+- Ensure that the monitoring setup captures all necessary metrics, including read/write operations, I/O wait times, and queue lengths.
+- Configure the system to collect data at intervals that provide sufficient granularity for analysis without overwhelming system resources.
 
 #### Conceptual Overview
 
 Disk I/O operations involve transferring data between the system's memory and storage devices, such as hard drives, solid-state drives (SSDs), or network-attached storage (NAS). Understanding the fundamentals of disk I/O is crucial for effective analysis.
 
-Key concepts include:
+Main idea:
 
-- **Read and Write Operations**: Basic I/O operations where data is read from or written to the disk.
-- **I/O Scheduling**: The method by which the operating system prioritizes and orders I/O requests to optimize performance.
-- **I/O Wait Times**: The time processes spend waiting for I/O operations to complete, which can be a significant factor in overall system performance.
-- **I/O Queue Lengths**: The number of outstanding I/O requests waiting to be processed, indicating potential bottlenecks.
-- **Synchronous vs. Asynchronous I/O**:
-  - **Synchronous I/O**: The process waits for the I/O operation to complete before proceeding.
-  - **Asynchronous I/O**: The process initiates the I/O operation and continues execution without waiting for completion.
-
-Understanding these concepts provides the foundation for interpreting disk I/O metrics and their impact on system performance.
+- **Read and write** operations are the fundamental I/O actions where data is either retrieved from or written to the disk, enabling storage and retrieval processes.
+- **I/O scheduling** is the method used by the operating system to prioritize and order incoming I/O requests, aiming to optimize disk performance and minimize latency.
+- **I/O wait times** refer to the time processes spend waiting for their I/O operations to complete, which can significantly impact overall system responsiveness and performance.
+- The **I/O queue lengths** measure the number of outstanding I/O requests waiting to be processed, with longer queues indicating potential performance bottlenecks.
+- In **synchronous I/O**, the process must wait for the completion of the I/O operation before continuing execution, leading to potential delays.
+- With **asynchronous I/O**, the process can initiate an I/O operation and continue executing other tasks without waiting for the operation to finish, improving system efficiency in some scenarios.
 
 #### Sampling Disk I/O Over Time
 
 Monitoring disk I/O involves periodically sampling various metrics to capture the system's behavior over time. This can be achieved using built-in Linux tools and utilities that provide real-time statistics.
 
-**Key Tools for Sampling Disk I/O**:
+**Tools for Sampling Disk I/O**:
 
-- **`iostat`**: Part of the `sysstat` package, `iostat` reports CPU statistics and input/output statistics for devices and partitions.
-- **`vmstat`**: Provides information about processes, memory, paging, block I/O, traps, and CPU activity.
-- **`dstat`**: A versatile tool that combines the functionality of `iostat`, `vmstat`, `netstat`, and others.
-- **`sar`**: Collects, reports, and saves system activity information.
-- **`blktrace`**: Provides detailed information about block layer I/O operations.
-- **`iotop`**: Displays I/O usage information per process or thread.
+| Command      | Description                                                                                   |
+|--------------|-----------------------------------------------------------------------------------------------|
+| **`iostat`** | Part of the `sysstat` package, `iostat` reports CPU statistics and input/output statistics for devices and partitions. |
+| **`vmstat`** | Provides information about processes, memory, paging, block I/O, traps, and CPU activity.      |
+| **`dstat`**  | A versatile tool that combines the functionality of `iostat`, `vmstat`, `netstat`, and others. |
+| **`sar`**    | Collects, reports, and saves system activity information.                                      |
+| **`blktrace`** | Provides detailed information about block layer I/O operations.                              |
+| **`iotop`**  | Displays I/O usage information per process or thread.                                          |
 
 **Sampling Methods**:
 
-- **Periodic Sampling**: Collect data at regular intervals (e.g., every second) to monitor trends and identify spikes in I/O activity.
-- **Event-Based Sampling**: Trigger data collection based on specific events, such as high I/O wait times or queue lengths exceeding a threshold.
-- **Continuous Monitoring**: Use tools that provide real-time updates to monitor I/O activities as they happen.
-
-By sampling disk I/O over time, you can identify patterns, correlate I/O activity with system performance issues, and detect anomalies that may indicate problems.
+- **Periodic sampling** involves collecting data at regular intervals, such as every second, to monitor trends and detect any sudden spikes or unusual patterns in I/O activity.
+- **Event-based sampling** triggers data collection in response to specific events, like when I/O wait times become excessive or queue lengths surpass a predefined threshold.
+- **Continuous monitoring** relies on tools that provide real-time updates, allowing users to observe I/O activities as they occur and promptly respond to any performance issues. 
+- These methods help administrators track and optimize system performance by identifying potential bottlenecks and ensuring efficient I/O operations.
 
 #### Application for Performance Optimization
 
 Disk I/O analysis is essential for applications that are sensitive to storage performance, such as databases, file servers, and virtualization platforms. By monitoring disk I/O, you can:
 
-- **Identify Bottlenecks**: Determine if disk I/O is a limiting factor in application performance.
-- **Optimize I/O Operations**: Adjust application configurations or system settings to improve I/O efficiency.
-- **Plan for Scalability**: Assess whether the current storage infrastructure can handle increased load.
-- **Detect Hardware Issues**: Identify failing disks or storage devices that may be causing I/O errors or slowdowns.
+- Determine if disk I/O is a limiting factor in application performance.
+- Adjust application configurations or system settings to improve I/O efficiency.
+- Assess whether the current storage infrastructure can handle increased load.
+- Identify failing disks or storage devices that may be causing I/O errors or slowdowns.
 
 For example, a database experiencing high latency might be suffering from slow disk I/O due to insufficient disk speeds or high contention. By analyzing disk I/O metrics, you can decide whether to implement caching mechanisms, upgrade storage hardware, or optimize database queries to reduce I/O load.
 
@@ -166,238 +161,166 @@ Traditional performance monitoring often focuses on high-level metrics like CPU 
 
 Shifting the focus to disk I/O analysis involves:
 
-- **Examining I/O Wait Times**: High I/O wait times can indicate that processes are frequently waiting for disk operations, leading to reduced performance.
-- **Analyzing I/O Patterns**: Understanding whether the workload is sequential or random, read-heavy or write-heavy, can inform optimization strategies.
-- **Investigating Queue Lengths**: Long I/O queues suggest that the disk subsystem cannot keep up with the workload, necessitating hardware upgrades or workload redistribution.
-
-By adopting advanced disk I/O analysis, you can uncover hidden performance issues that traditional metrics might overlook.
+- High I/O wait times can indicate that processes are frequently waiting for disk operations, leading to reduced performance.
+- Understanding whether the workload is sequential or random, read-heavy or write-heavy, can inform optimization strategies.
+- Long I/O queues suggest that the disk subsystem cannot keep up with the workload, necessitating hardware upgrades or workload redistribution.
 
 #### Action Plan
 
 To effectively monitor and optimize disk I/O performance, follow this action plan:
 
-1. **Establish Baseline Metrics**:
-   - Use tools like `iostat` and `vmstat` to collect baseline data on disk I/O performance under normal operating conditions.
-   - Record metrics such as average read/write speeds, I/O wait times, and queue lengths.
+I. Establish Baseline Metrics:
 
-2. **Implement Regular Monitoring**:
-   - Set up continuous monitoring using tools like `dstat` or `sar` to collect data over time.
-   - Configure alerts for abnormal I/O activity, such as spikes in wait times or significant deviations from the baseline.
+- Use tools like `iostat` and `vmstat` to collect baseline data on disk I/O performance under normal operating conditions.
+- Record metrics such as average read/write speeds, I/O wait times, and queue lengths.
 
-3. **Analyze Collected Data**:
-   - Examine trends and patterns in the data to identify periods of high I/O activity.
-   - Correlate I/O metrics with application performance to determine the impact of disk I/O on overall system behavior.
+II. Implement Regular Monitoring:
 
-4. **Identify and Address Bottlenecks**:
-   - Investigate high I/O wait times or long queues to pinpoint bottlenecks.
-   - Consider hardware upgrades, such as moving to SSDs, increasing RAID levels, or adding more disks to distribute the load.
-   - Optimize applications to reduce unnecessary I/O operations, such as caching frequently accessed data in memory.
+- Set up continuous monitoring using tools like `dstat` or `sar` to collect data over time.
+- Configure alerts for abnormal I/O activity, such as spikes in wait times or significant deviations from the baseline.
 
-5. **Optimize System Settings**:
-   - Tune kernel parameters related to disk I/O, such as elevator algorithms or readahead settings.
-   - Adjust filesystem mount options to improve performance, like enabling write-back caching or adjusting journaling modes.
+III. Analyze Collected Data:
 
-6. **Validate Improvements**:
-   - After making changes, monitor the system to ensure that performance has improved.
-   - Compare new metrics against the baseline to quantify the impact of optimizations.
+- Examine trends and patterns in the data to identify periods of high I/O activity.
+- Correlate I/O metrics with application performance to determine the impact of disk I/O on overall system behavior.
 
-By following this plan, you can systematically improve disk I/O performance and enhance overall system efficiency.
+IV. Identify and Address Bottlenecks:
+
+- Investigate high I/O wait times or long queues to pinpoint bottlenecks.
+- Consider hardware upgrades, such as moving to SSDs, increasing RAID levels, or adding more disks to distribute the load.
+- Optimize applications to reduce unnecessary I/O operations, such as caching frequently accessed data in memory.
+
+V. Optimize System Settings:
+
+- Tune kernel parameters related to disk I/O, such as elevator algorithms or readahead settings.
+- Adjust filesystem mount options to improve performance, like enabling write-back caching or adjusting journaling modes.
+
+VI. Validate Improvements:
+
+- After making changes, monitor the system to ensure that performance has improved.
+- Compare new metrics against the baseline to quantify the impact of optimizations.
 
 #### Tools for Disk I/O Analysis
 
 Several tools are available for monitoring and analyzing disk I/O performance. Each tool offers different levels of detail and functionality.
 
-**Basic Monitoring Tools**:
-
-- **`iostat`**:
-  - **Usage**: `iostat -x 1`
-  - **Description**: Provides extended I/O statistics for devices, including utilization, read/write rates, and average request sizes.
-  - **Benefits**: Offers a quick overview of disk performance with minimal impact on system resources.
-
-- **`vmstat`**:
-  - **Usage**: `vmstat 1`
-  - **Description**: Displays virtual memory statistics, including process states, memory usage, paging, block I/O, and CPU activity.
-  - **Benefits**: Helps correlate disk I/O with memory and CPU usage.
-
-- **`dstat`**:
-  - **Usage**: `dstat -dny`
-  - **Description**: Monitors disk I/O, network activity, and system resources in real-time.
-  - **Benefits**: Combines multiple monitoring capabilities into one tool, making it convenient for comprehensive analysis.
-
-**Advanced Monitoring Tools**:
-
-- **`blktrace`**:
-  - **Usage**: `blktrace -d /dev/sda -o - | blkparse -i -`
-  - **Description**: Traces block I/O operations at the kernel level, providing detailed information about each I/O request.
-  - **Benefits**: Ideal for in-depth analysis of I/O patterns and diagnosing complex issues.
-
-- **`fio`**:
-  - **Usage**: Configured via job files to simulate various I/O workloads.
-  - **Description**: A flexible I/O workload generator used for benchmarking and testing disk I/O performance.
-  - **Benefits**: Allows you to simulate specific workloads to test system performance under controlled conditions.
-
-- **`perf`**:
-  - **Usage**: `perf record -e block:block_rq_issue -a`
-  - **Description**: A powerful profiling tool that can monitor various performance events, including block I/O operations.
-  - **Benefits**: Useful for correlating disk I/O events with CPU usage and other system activities.
-
-**Visualization Tools**:
-
-- **`GNOME System Monitor`**:
-  - **Usage**: GUI-based tool accessible in desktop environments.
-  - **Description**: Provides graphical representation of system performance, including disk I/O.
-  - **Benefits**: User-friendly interface for quick visual assessment of system health.
-
-- **`Collectd`** and **`Grafana`**:
-  - **Usage**: Collect metrics using `collectd` and visualize them in `Grafana` dashboards.
-  - **Description**: A combination of tools for collecting system statistics and displaying them in customizable dashboards.
-  - **Benefits**: Ideal for long-term monitoring and trend analysis.
-
-By selecting the appropriate tools for your needs, you can effectively monitor disk I/O and gain insights into system performance.
-
-#### Commands and Usage Examples
-
-Understanding how to use various commands is crucial for effective disk I/O analysis. Here are some commonly used commands with explanations and examples.
-
-**Using `iostat`**:
-
-- **Command**: `iostat -xz 1`
-  - **Explanation**: Displays extended statistics (`-x`) for all devices, suppresses output for devices with no activity (`-z`), and updates every second (`1`).
-  - **Example Output**:
-    ```
-    Device:         rrqm/s wrqm/s   r/s   w/s  rMB/s  wMB/s avgrq-sz avgqu-sz await r_await w_await  svctm  %util
-    sda               0.00   5.00  0.00 10.00   0.00   0.05     10.00     0.05   0.50    0.00    0.50   0.50   0.50
-    ```
-  - **Interpretation**: Provides detailed metrics like read/write requests per second, throughput, average queue size, and device utilization.
-
-**Using `vmstat`**:
-
-- **Command**: `vmstat 2`
-  - **Explanation**: Displays system performance statistics every 2 seconds.
-  - **Example Output**:
-    ```
-    procs -----------memory---------- ---swap-- -----io---- -system-- ----cpu----
-     r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa
-     1  0      0  50000  10000 200000    0    0    50    20  100  200 10  5 80  5
-    ```
-  - **Interpretation**: Shows processes waiting for runtime (`r`), processes in uninterruptible sleep (`b`), block I/O (`bi`, `bo`), and CPU usage (`us`, `sy`, `id`, `wa`).
-
-**Using `dstat`**:
-
-- **Command**: `dstat -cdngy`
-  - **Explanation**: Monitors CPU (`c`), disk (`d`), network (`n`), page cache (`g`), and system stats (`y`).
-  - **Example Output**:
-    ```
-    ----total-cpu-usage---- -dsk/total- -net/total- ---paging--
-    usr sys idl wai hiq siq| read  writ| recv  send|  in   out
-     10   5  80   5   0   0|  50k  100k| 200k  100k|  0     0
-    ```
-  - **Interpretation**: Provides a comprehensive view of system performance, including disk read/write rates and CPU utilization.
-
-**Using `iotop`**:
-
-- **Command**: `sudo iotop -o`
-  - **Explanation**: Runs `iotop` showing only processes or threads actually doing I/O (`-o`).
-  - **Example Output**:
-    ```
-    Total DISK READ: 50.00 K/s | Total DISK WRITE: 100.00 K/s
-    PID  PRIO  USER     DISK READ  DISK WRITE  COMMAND
-    1234 be/4  user     50.00 K/s  100.00 K/s  myapp
-    ```
-  - **Interpretation**: Displays processes with their current disk read/write rates, helping identify I/O-intensive processes.
-
-**Using `blktrace` and `blkparse`**:
-
-- **Command**: `sudo blktrace -d /dev/sda -o - | blkparse -i -`
-  - **Explanation**: Traces block I/O operations on `/dev/sda` and parses the output.
-  - **Example Output**:
-    ```
-    8,0    0        1     0.000000000  145  Q  WS 123456 + 8 [myapp]
-    8,0    0        2     0.000010000  145  G  WS 123456 + 8 [myapp]
-    ```
-  - **Interpretation**: Provides detailed information about each I/O request, including the type (`Q` for queued, `G` for get request), operation (`WS` for write synchronous), and associated process.
-
-These commands offer powerful ways to monitor and analyze disk I/O activities, enabling you to diagnose issues and optimize performance.
+| Command                    | Usage                                       | Description                                                                                 | Benefits                                                                            |
+|----------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| **`iostat`**                | `iostat -x 1`                               | Provides extended I/O statistics for devices, including utilization, read/write rates, and average request sizes. | Offers a quick overview of disk performance with minimal impact on system resources. |
+| **`vmstat`**                | `vmstat 1`                                  | Displays virtual memory statistics, including process states, memory usage, paging, block I/O, and CPU activity.   | Helps correlate disk I/O with memory and CPU usage.                                |
+| **`dstat`**                 | `dstat -dny`                                | Monitors disk I/O, network activity, and system resources in real-time.                     | Combines multiple monitoring capabilities into one tool for comprehensive analysis. |
+| **`blktrace`**              | ```blktrace -d /dev/sda -o - \| blkparse -i -``` | Traces block I/O operations at the kernel level, providing detailed information about each I/O request. | Ideal for in-depth analysis of I/O patterns and diagnosing complex issues.         |
+| **`fio`**                   | Configured via job files                    | A flexible I/O workload generator used for benchmarking and testing disk I/O performance.    | Allows you to simulate specific workloads to test system performance under controlled conditions. |
+| **`perf`**                  | `perf record -e block:block_rq_issue -a`    | A powerful profiling tool that can monitor various performance events, including block I/O operations. | Useful for correlating disk I/O events with CPU usage and other system activities.  |
+| **`GNOME System Monitor`**   | GUI-based tool                             | Provides graphical representation of system performance, including disk I/O.                | User-friendly interface for quick visual assessment of system health.              |
+| **`Collectd`** and **`Grafana`** | Collect metrics using `collectd` and visualize in `Grafana` dashboards | Collects system statistics and displays them in customizable dashboards.                    | Ideal for long-term monitoring and trend analysis.                                 |
 
 #### Understanding Disk I/O States
 
 Processes and threads in a system can be in various states related to disk I/O. Understanding these states is crucial for interpreting monitoring data.
 
-**Common Disk I/O States**:
+##### Common Disk I/O States
 
-- **Uninterruptible Sleep (`D` State)**:
-  - Processes waiting for I/O operations to complete are often in an uninterruptible sleep state.
-  - **Implications**: A high number of processes in this state can indicate I/O bottlenecks.
+I. **Uninterruptible Sleep (`D` State)**:
 
-- **I/O Wait (`wa` in CPU Usage)**:
-  - Represents the percentage of time the CPU is idle while the system has pending disk I/O operations.
-  - **Implications**: High I/O wait times suggest that the CPU is often idle waiting for disk operations, indicating potential disk performance issues.
+- Processes waiting for I/O operations to complete are often in an uninterruptible sleep state.
+- A high number of processes in this state can indicate I/O bottlenecks.
 
-- **Blocked Processes**:
-  - Processes that cannot proceed because they are waiting for I/O resources.
-  - **Implications**: May lead to increased load averages and reduced system responsiveness.
+II. **I/O Wait (`wa` in CPU Usage)**:
 
-**Analyzing Process States**:
+- Represents the percentage of time the CPU is idle while the system has pending disk I/O operations.
+- High I/O wait times suggest that the CPU is often idle waiting for disk operations, indicating potential disk performance issues.
 
-- **Command**: `ps -eo pid,state,cmd | grep "^D"`
-  - **Explanation**: Lists processes in the uninterruptible sleep state.
-  - **Example Output**:
-    ```
-    PID S CMD
-    5678 D /usr/bin/myapp
-    ```
-  - **Interpretation**: Identifies processes that are waiting on disk I/O.
+III. **Blocked Processes**:
 
-- **Command**: `top -o %WA`
-  - **Explanation**: Runs `top` sorted by I/O wait percentage.
-  - **Example Output**:
-    ```
-    PID USER  PR  NI  VIRT  RES  SHR S %CPU %MEM %WA  TIME+ COMMAND
-    5678 user 20   0  100m  10m 5000 D  0.0  0.5 50.0 1:00.00 myapp
-    ```
-  - **Interpretation**: Shows processes contributing to high I/O wait times.
+- Processes that cannot proceed because they are waiting for I/O resources.
+- May lead to increased load averages and reduced system responsiveness.
 
-Understanding these states helps in diagnosing whether performance issues are due to disk I/O and which processes are affected.
+##### Analyzing Process States
 
+I. **Identifying Processes in Uninterruptible Sleep State**
+
+The command `ps -eo pid,state,cmd | grep "^D"` is used to list processes that are in the **uninterruptible sleep** state, commonly represented by the letter `D` in the process state. This state typically occurs when a process is waiting on disk I/O (Input/Output) and cannot be interrupted until the I/O operation completes. 
+
+Command breakdown:
+
+- `ps`: Displays information about active processes.
+- `-eo pid,state,cmd`: Specifies the output format to include the process ID (`pid`), state (`state`), and command (`cmd`).
+- `grep "^D"`: Filters the output to only show processes in the `D` state (uninterruptible sleep).
+
+**Example Output**:
+
+```
+PID S CMD
+5678 D /usr/bin/myapp
+```
+
+The process with PID `5678` is in the uninterruptible sleep state (`D`), indicating that it is likely waiting for disk-related operations to complete. This state can be a sign of a disk I/O bottleneck or issues with file systems or storage devices. If too many processes are stuck in this state, it might point to problems with disk performance or disk saturation.
+
+II. **Monitoring I/O Wait with `top` Command Sorted by %WA**
+
+The `top -o %WA` command is used to run the `top` utility with the output sorted by I/O wait time (represented as `%WA`). The I/O wait percentage tells you the amount of time the CPU is waiting for disk I/O operations to complete, which can indicate whether disk operations are slowing down the system.
+
+Command breakdown:
+
+- `top`: Displays real-time system activity, including CPU, memory, and process usage.
+- `-o %WA`: Sorts the process list by I/O wait percentage (`%WA`), which is the percentage of CPU time spent waiting for I/O operations.
+
+**Example Output**:
+
+```
+PID USER  PR  NI  VIRT  RES  SHR S %CPU %MEM %WA  TIME+ COMMAND
+5678 user 20   0  100m  10m 5000 D  0.0  0.5 50.0 1:00.00 myapp
+```
+
+- The process with PID `5678` (`myapp`) has a high I/O wait time, shown by `%WA = 50.0`, meaning 50% of the CPU's time is spent waiting on this process's I/O operations.
+- The state column (`S`) indicates the process is in an uninterruptible sleep state (`D`), further reinforcing that the process is waiting on disk I/O.
+- If several processes are contributing to high I/O wait times, it could signal that the system's storage subsystem is under strain, leading to performance bottlenecks.
+  
 #### Scheduler and I/O Priorities
 
 The Linux I/O scheduler plays a critical role in managing how disk I/O requests are handled. Understanding how the scheduler works can help optimize I/O performance.
 
-**I/O Schedulers**:
+##### I/O Schedulers
 
-- **Completely Fair Queuing (CFQ)**:
-  - Attempts to distribute I/O bandwidth evenly among all processes.
-  - Suitable for general-purpose workloads.
+| I/O Scheduler              | Description                                                    | Benefits                                                      | Considerations/Drawbacks                                        |
+|----------------------------|----------------------------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------|
+| **Completely Fair Queuing (CFQ)** | Distributes I/O bandwidth evenly among all processes.          | Suitable for general-purpose workloads.                        | May not be optimal for high-performance or specialized workloads. |
+| **Deadline**               | Focuses on meeting deadlines for I/O requests to prevent starvation. | Good for systems requiring predictable I/O latency.            | Can be less efficient for non-time-sensitive workloads.         |
+| **Noop**                   | Performs minimal scheduling, simply merging requests when possible. | Ideal for SSDs where seek times are negligible.                | Not ideal for HDDs where seek time optimization is important.   |
 
-- **Deadline**:
-  - Focuses on meeting deadlines for I/O requests to prevent starvation.
-  - Good for systems requiring predictable I/O latency.
+##### Changing I/O Scheduler
 
-- **Noop**:
-  - Performs minimal scheduling, simply merging requests when possible.
-  - Ideal for SSDs where seek times are negligible.
+The command `echo deadline > /sys/block/sda/queue/scheduler` changes the I/O scheduler for the device `/dev/sda` to the `deadline` scheduler.
 
-**Changing I/O Scheduler**:
+Explanation:
 
-- **Command**: `echo deadline > /sys/block/sda/queue/scheduler`
-  - **Explanation**: Sets the I/O scheduler for `/dev/sda` to `deadline`.
-  - **Note**: Changes are temporary and revert on reboot unless configured in boot parameters.
+- This command writes the value `deadline` to the scheduler configuration file of the device `/dev/sda`, instantly changing the scheduling algorithm for that device.
+- The `deadline` scheduler ensures that disk I/O requests are completed within a specific timeframe, making it well-suited for environments where I/O predictability is critical.
+- Changes made this way are **temporary** and will revert back to the default scheduler on reboot. To make the change permanent, you would need to configure the boot parameters in the system's bootloader configuration, such as in GRUB, by adding the scheduler setting to the kernel boot options.
 
-**I/O Priorities**:
+##### Understanding I/O Priorities
 
-- Processes can have I/O priorities set using the `ionice` command.
-- **Classes**:
-  - **Idle**: Only gets I/O time when no other process needs it.
-  - **Best-Effort**: Default class with priorities from 0 (highest) to 7 (lowest).
-  - **Real-Time**: Highest priority, can starve other processes.
+Processes can be assigned I/O priorities to control how much disk access they get relative to other processes. This is managed using the `ionice` command. There are three main I/O scheduling classes:
 
-**Setting I/O Priority**:
+- Processes with an **idle** priority only receive I/O time when no other process is using the disk, making it suitable for background tasks that do not require urgent disk access.
+- The **best-effort** class is the default I/O priority, with priorities ranging from 0 (highest priority) to 7 (lowest priority), ensuring a balance where processes with higher priorities get faster disk access, but no process is starved.
+- In the **real-time** class, processes are given the highest priority for disk access, allowing them to monopolize the disk if needed, which can potentially starve other processes, so it is recommended for critical, time-sensitive operations only.
+- **Idle** class processes are least intrusive, while **real-time** processes are the most demanding, highlighting the importance of using real-time priority only when absolutely necessary to avoid affecting overall system performance.
 
-- **Command**: `ionice -c2 -n0 -p 5678`
-  - **Explanation**: Sets process with PID 5678 to best-effort class with highest priority.
-  - **Example Usage**: Prioritize critical processes that require faster disk access.
+##### Setting I/O Priority
 
-By tuning the I/O scheduler and priorities, you can influence how disk I/O requests are handled, potentially improving performance for critical applications.
+To manually set the I/O priority of a process, you use the `ionice` command. For example, to assign a process with PID `5678` to the **best-effort** class with the highest priority (`0`), you would use the following command:
+
+```
+ionice -c2 -n0 -p 5678
+```
+
+Explanation:
+
+- `-c2`: Specifies the **best-effort** class.
+- `-n0`: Sets the highest priority within the best-effort class (0 is highest, 7 is lowest).
+- `-p 5678`: Targets the process with the PID `5678`.
 
 #### Filesystem and Storage Optimization
 
@@ -405,59 +328,33 @@ Optimizing the filesystem and storage configuration can have a significant impac
 
 **Filesystem Choices**:
 
-- **Ext4**:
-  - General-purpose filesystem with journaling.
-  - Supports large files and volumes, suitable for most applications.
-
-- **XFS**:
-  - High-performance filesystem designed for parallel I/O.
-  - Good for large files and high-throughput environments.
-
-- **Btrfs**:
-  - Modern filesystem with advanced features like snapshots and pooling.
-  - Still under heavy development; may not be ideal for production systems requiring stability.
+| Filesystem   | Description                                                        | Benefits                                          | Drawbacks                                                    |
+|--------------|--------------------------------------------------------------------|--------------------------------------------------|--------------------------------------------------------------|
+| **Ext4**     | General-purpose filesystem with journaling.                        | Supports large files and volumes, suitable for most applications. | None specific, widely supported and stable.                   |
+| **XFS**      | High-performance filesystem designed for parallel I/O.             | Good for large files and high-throughput environments. | May require more tuning for certain workloads.                |
+| **Btrfs**    | Modern filesystem with advanced features like snapshots and pooling. | Advanced features like snapshots and pooling.     | Still under heavy development; may not be ideal for production systems requiring stability. |
 
 **Mount Options**:
 
-- **`noatime`**:
-  - Disables updating the access time of files on read.
-  - **Benefits**: Reduces unnecessary write operations, improving read performance.
-
-- **`data=writeback`**:
-  - Writes data and metadata asynchronously.
-  - **Benefits**: Increases performance at the risk of data integrity during crashes.
-
-- **`discard`**:
-  - Enables TRIM operations on SSDs.
-  - **Benefits**: Helps maintain SSD performance over time.
+| Option               | Description                                              | Benefits                                               | Drawbacks                                       |
+|----------------------|----------------------------------------------------------|--------------------------------------------------------|------------------------------------------------|
+| **`noatime`**         | Disables updating the access time of files on read.      | Reduces unnecessary write operations, improving read performance. | None specific to general performance.          |
+| **`data=writeback`**  | Writes data and metadata asynchronously.                | Increases performance.                                 | Risk of data integrity loss during crashes.     |
+| **`discard`**         | Enables TRIM operations on SSDs.                        | Helps maintain SSD performance over time.              | Not all SSDs may benefit equally from this option. |
 
 **RAID Configurations**:
 
-- **RAID 0 (Striping)**:
-  - Distributes data across multiple disks for increased performance.
-  - **Drawback**: No redundancy; a single disk failure leads to data loss.
-
-- **RAID 1 (Mirroring)**:
-  - Duplicates data across disks for redundancy.
-  - **Drawback**: No performance gain in write operations.
-
-- **RAID 5/6 (Parity)**:
-  - Balances performance and redundancy using parity bits.
-  - **Drawback**: Write performance can be affected due to parity calculations.
-
-- **RAID 10 (Striping + Mirroring)**:
-  - Combines the benefits of RAID 0 and RAID 1.
-  - **Benefits**: High performance and redundancy.
+| RAID Level                  | Description                                                              | Benefits                                          | Drawbacks                                                   |
+|-----------------------------|--------------------------------------------------------------------------|--------------------------------------------------|--------------------------------------------------------------|
+| **RAID 0 (Striping)**        | Distributes data across multiple disks for increased performance.         | High performance.                                | No redundancy; a single disk failure leads to data loss.      |
+| **RAID 1 (Mirroring)**       | Duplicates data across disks for redundancy.                             | Redundancy; protection from data loss.           | No performance gain in write operations.                     |
+| **RAID 5/6 (Parity)**        | Balances performance and redundancy using parity bits.                   | Balanced performance and redundancy.             | Write performance can be affected due to parity calculations. |
+| **RAID 10 (Striping + Mirroring)** | Combines the benefits of RAID 0 and RAID 1.                          | High performance and redundancy.                 | Requires more disks, increasing cost.                        |
 
 **Storage Technologies**:
 
-- **SSD vs. HDD**:
-  - SSDs offer significantly faster read/write speeds and lower latency.
-  - **Consideration**: Cost per GB is higher for SSDs compared to HDDs.
-
-- **NVMe Drives**:
-  - Provide even higher performance over PCIe interfaces.
-  - **Ideal For**: Applications requiring ultra-fast storage, such as high-frequency trading platforms.
-
-By selecting the appropriate filesystem, tuning mount options, and choosing the right storage technology, you can optimize disk I/O performance to meet application needs.
-
+| Storage Technology        | Description                                                    | Benefits                                                      | Considerations/Drawbacks                                        |
+|---------------------------|----------------------------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------|
+| **SSD**                   | Solid-state drives offering significantly faster read/write speeds and lower latency compared to HDDs. | Faster performance, reduced latency, and no moving parts.      | Higher cost per GB compared to HDDs.                           |
+| **HDD**                   | Traditional mechanical drives with slower read/write speeds.   | More affordable per GB and widely available in large capacities. | Slower performance and higher latency compared to SSDs.        |
+| **NVMe Drives**           | Non-Volatile Memory Express (NVMe) drives that provide ultra-fast performance via PCIe interfaces. | Ideal for applications requiring high-speed storage, such as high-frequency trading platforms. | More expensive than both SSDs and HDDs.                        |
