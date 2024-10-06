@@ -1,6 +1,6 @@
 ## Utilities
 
-These notes discuss various tools that can be used on Linux systems for tasks such as taking screenshots, recording screens, preparing bootable sticks, and detecting malware. It provides brief explanations of each tool and includes installation and usage instructions.
+We will discuss various tools that can be used on Linux systems for tasks such as taking screenshots, recording screens, preparing bootable sticks, and detecting malware. It provides brief explanations of each tool and includes installation and usage instructions.
 
 ## Taking Screenshots with Scrot
 
@@ -114,5 +114,3 @@ maldet -q ID
 ```
 
 Replace ID with the report ID of the scan you want to quarantine the infected files for. This will move the infected files to a quarantine directory, where they can be safely removed or further examined.
-
-It is important to regularly scan for malware and take appropriate action to prevent it from infecting your system. Maldet is a powerful tool that can help you do this effectively and efficiently on Linux systems.
