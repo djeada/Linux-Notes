@@ -446,14 +446,6 @@ If Nginx requires additional permissions (e.g., connecting to the network):
 sudo setsebool -P httpd_can_network_connect on
 ```
 
-### Common Troubleshooting Steps
-
-- When addressing system denials, you can **identify issues** by using tools such as `ausearch` or inspecting the `audit.log` to locate specific denials.
-- To gain further clarity and **understand the reasons** behind these denials, you can utilize utilities like `sealert` or `audit2why`, which help explain the causes.
-- If a denial is caused by incorrect file contexts, you should **adjust contexts** using commands like `restorecon` to restore default file contexts or `semanage fcontext` to modify the file context definitions as needed.
-- In cases where the denial is due to a restriction that can be relaxed, you can **enable relevant Booleans** by modifying the SELinux policy through commands such as `setsebool` to allow certain actions without creating custom policies.
-- When necessary, you may need to **create custom policies** using `audit2allow`, which generates custom policy modules to specifically allow certain actions blocked by SELinux without disabling other protections.
-
 ### Challenges
 
 1. Research and write a brief comparison between Discretionary Access Control (DAC) and Mandatory Access Control (MAC). Include how each is implemented in Linux and their roles in system security. Prepare a document detailing your findings and insights.
