@@ -27,7 +27,7 @@ When you run top, the output is divided into two sections:
 - **System Summary** is displayed at the top, showing key metrics such as CPU usage, memory usage, swap usage, load average, and system uptime.
 - **Process List** appears below the summary, listing individual processes, typically sorted by CPU usage, with the most resource-intensive processes displayed at the top by default.
 
-Key Features:
+Main idea:
 
 - **Dynamic Update** ensures that the display refreshes in real-time, providing an up-to-date snapshot of system performance.
 - **Sorting Options** allow processes to be sorted by CPU usage by default, but pressing Shift + M enables sorting by memory usage instead.
@@ -128,7 +128,7 @@ To start htop, simply type:
 htop
 ```
 
-Key Features:
+Main idea:
 
 - Displays all running processes. Unlike top, it updates in real-time and uses color to provide additional information.
 - Shows CPU, memory, and swap usage along with load average.
