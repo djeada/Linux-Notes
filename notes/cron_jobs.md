@@ -60,7 +60,7 @@ Cron uses two main types of crontab files to schedule tasks:
 
 Runs `apt update` every hour as the `root` user.
 
-### User Crontabs
+#### User Crontabs
 
 - The location of crontab files is typically stored in `/var/spool/cron/crontabs/`, although this location can *vary* depending on the system configuration.
 - The *purpose* of these files is to provide each user with an individual crontab file, enabling them to schedule personal tasks independently.
@@ -70,11 +70,11 @@ Runs `apt update` every hour as the `root` user.
 - If necessary, users can *remove* their crontab with the command `crontab -r`, deleting all scheduled tasks at once.
 - Crontab files serve as a way for users to *define* automated actions, whether for personal maintenance tasks or regular system checks.
 
-## Understanding Crontab Syntax
+### Understanding Crontab Syntax
 
 A crontab file consists of lines with six fields: five time fields and a command field.
 
-### Crontab Field Structure
+#### Crontab Field Structure
 
 ```
 ┌───────────── Minute (0 - 59)
@@ -86,15 +86,17 @@ A crontab file consists of lines with six fields: five time fields and a command
 * * * * * command_to_execute
 ```
 
-### Field Descriptions
+#### Field Descriptions
 
-- **Minute**: `0` to `59`
-- **Hour**: `0` to `23`
-- **Day of Month**: `1` to `31`
-- **Month**: `1` to `12` or abbreviated month names (`Jan`, `Feb`, etc.)
-- **Day of Week**: `0` to `7` (both `0` and `7` are Sunday) or abbreviated day names (`Sun`, `Mon`, etc.)
+| Field           | Values                                          |
+|-----------------|-------------------------------------------------|
+| **Minute**      | `0` to `59`                                     |
+| **Hour**        | `0` to `23`                                     |
+| **Day of Month**| `1` to `31`                                     |
+| **Month**       | `1` to `12` or abbreviated month names (`Jan`, `Feb`, etc.) |
+| **Day of Week** | `0` to `7` (both `0` and `7` are Sunday) or abbreviated day names (`Sun`, `Mon`, etc.) | 
 
-### Special Characters
+#### Special Characters
 
 | Symbol        | Description                                |
 |---------------|--------------------------------------------|
@@ -103,7 +105,7 @@ A crontab file consists of lines with six fields: five time fields and a command
 | **Hyphen (`-`)**   | Defines a range.                           |
 | **Slash (`/`)**    | Specifies step values.                     |
 
-### Examples
+#### Examples
 
 I. Run a command every day at 2:00 AM:
 
@@ -141,7 +143,7 @@ VI. Run a command every 5 minutes:
 */5 * * * * /path/to/command
 ```
 
-### Visualizing Time Fields
+#### Visualizing Time Fields
 
 Here's an ASCII table to help visualize how the time fields correspond to scheduling:
 
@@ -157,7 +159,7 @@ Here's an ASCII table to help visualize how the time fields correspond to schedu
 +-----------+-----------+--------------+--------------+-----------------+
 ```
 
-## Cron Directories for Regular Intervals
+### Cron Directories for Regular Intervals
 
 For tasks that need to run at regular intervals without custom scheduling, cron provides specific directories:
 
@@ -190,33 +192,34 @@ For tasks that need to run at regular intervals without custom scheduling, cron 
 | **`/etc/cron.weekly/`**  | Scripts execute once a week.         |
 | **`/etc/cron.monthly/`** | Scripts run once a month.            |
 
-### How These Directories Work
+#### How These Directories Work
 
-- The system crontab (`/etc/crontab`) includes entries that trigger the execution of scripts in these directories.
-- Example entry from `/etc/crontab`:
+The system crontab (`/etc/crontab`) includes entries that trigger the execution of scripts in these directories.
 
-  ```
-  # Run hourly jobs
-  01 * * * * root run-parts /etc/cron.hourly
-  ```
+Example entry from `/etc/crontab`:
 
-- **`run-parts`**: A utility that executes all scripts in the specified directory.
+```
+# Run hourly jobs
+01 * * * * root run-parts /etc/cron.hourly
+```
 
-## Creating Custom Schedules with Crontab
+`run-parts` is a utility that executes all scripts in the specified directory.
+
+### Creating Custom Schedules with Crontab
 
 To schedule tasks at specific times, you can create custom crontab entries.
 
-### Editing the Crontab File
+#### Editing the Crontab File
 
-- Open the crontab editor:
+Open the crontab editor:
 
-  ```
-  crontab -e
-  ```
+```
+crontab -e
+```
 
-- Add your scheduled tasks using the crontab syntax.
+Add your scheduled tasks using the crontab syntax.
 
-### Example: Append a Message Every 15 Minutes
+#### Example: Append a Message Every 15 Minutes
 
 To add "15 minutes have elapsed" to a log file every 15 minutes:
 
@@ -224,7 +227,7 @@ To add "15 minutes have elapsed" to a log file every 15 minutes:
 */15 * * * * echo "15 minutes have elapsed" >> /path/to/your/timer.log
 ```
 
-### Using Environment Variables
+#### Using Environment Variables
 
 You can set environment variables in your crontab:
 
