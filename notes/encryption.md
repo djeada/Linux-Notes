@@ -669,7 +669,7 @@ shred -u /root/luks-keyfile
 
 The decrypted keyfile is securely deleted to prevent unauthorized access.
 
-### Advantages
+#### Advantages
 
 - Combining GPG with LUKS offers **enhanced** security by providing multiple layers of encryption, ensuring data is protected from unauthorized access.
 - The integration of GPG simplifies **key** management, making it easier to revoke or rotate keys without the need to re-encrypt the entire disk.
