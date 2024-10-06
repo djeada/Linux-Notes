@@ -1,6 +1,6 @@
 ## Performance Monitoring
 
-Performance monitoring is essential for maintaining the health of your system. It helps you identify bottlenecks or issues that may be affecting your system's performance. We'll now explore some tools and techniques available for monitoring performance and explain some usage statistics, such as CPU and RAM usage.
+Performance monitoring helps you identify bottlenecks or issues that may be affecting your system's performance. We'll now explore some tools and techniques available for monitoring performance and explain some usage statistics, such as CPU and RAM usage.
 
 ### Understanding Usage Statistics
 
@@ -73,7 +73,7 @@ Tips for using  `top`:
 - **Renicing Processes**: Press `r` to change the priority (nice value) of a process.
 - **Refreshing and Exiting**: The display updates automatically. Press `q` to quit `top`.
 
-## Htop
+### Htop
 
 `htop` is an interactive system-monitor process viewer for Linux. It is a more advanced and user-friendly alternative to the traditional `top` command. `htop` provides a colorful and visually appealing interface, along with various features that enhance process management and system monitoring.
 
@@ -132,7 +132,7 @@ Understanding the Output
 - The next bar provides a summary of memory (Mem) and swap (Swp) usage.
 - The main panel lists processes with details like PID, user, priority (PRI), nice value (NI), virtual memory size (VIRT), resident set size (RES), shared memory size (SHR), status (S), and the percentage of CPU and memory used.
 
-## Swap space
+### Swap space
 
 Swap space is an area on your hard drive used as virtual memory when your system runs out of physical RAM. It allows your system to continue running even when it has exhausted all available RAM, but it can negatively impact performance, as accessing data from the hard drive is slower than accessing it from RAM.
 
@@ -172,7 +172,7 @@ Key Takeaways from the Example:
 - The swap space is relatively small compared to the total RAM, and a significant portion (1.2 GB) is in use, which could indicate heavy memory usage or potential memory pressure on the system.
 - The 'available' memory (4.4 GB) is a more relevant indicator than 'free' memory for understanding how much memory is readily available for new applications. This is because Linux tends to use free memory for buffers and cache.
 
-## Monitor RAM usage
+### Monitor RAM usage
 
 Monitoring RAM usage is essential for managing system resources efficiently. To do this on Linux systems, the `free -h` command is commonly used. It provides information on the total amount of RAM, along with how much is used and free. If the used memory approaches the total amount of RAM, this could signal a need for more RAM or optimization of current usage.
 
@@ -189,7 +189,7 @@ II. Virtual Set Size (VSZ)
 - It encompasses memory that might be swapped out, unused, or shared from libraries.
 - This is a broader measure of a process's memory footprint.
 
-### Example: Calculating RSS and VSZ
+#### Example: Calculating RSS and VSZ
 
 Consider a process with these details:
 
@@ -208,7 +208,7 @@ II. **VSZ:** Total memory allocation at start.
 - VSZ = Initial Binary Code + Initial Shared Libraries + Initial Stack/Heap
 - VSZ = 600K + 2200K + 150K = 2950K
 
-### Identifying Top Memory-Consuming Processes
+#### Identifying Top Memory-Consuming Processes
 
 To list the 10 processes consuming the most RAM, you can use the command:
 
@@ -216,7 +216,7 @@ To list the 10 processes consuming the most RAM, you can use the command:
 ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head 10
 ```
 
-### Finding RAM Usage of a Specific Process
+#### Finding RAM Usage of a Specific Process
 
 In addition to monitoring overall RAM usage, it's often necessary to track the memory usage of a specific process. 
 
@@ -226,19 +226,30 @@ For example to check the memory usage of a process named nginx:
 ps -o %mem,rss,vsize,cmd -C nginx
 ```
 
-## Vmstat
+### Vmstat
 
 `vmstat` displays information about system memory, swap, and CPU usage. It provides a snapshot of the current state of the system, as well as the average statistics over a period of time.
 
 To view the current state of the system, use vmstat without any arguments. To view the average statistics over a period of time, use `vmstat [interval] [count]`, where interval is the time in seconds between each snapshot and count is the number of snapshots to take.
 
 ```
-vmstat 5 10
+vmstat 5 3
 ```
 
-This command will display 10 snapshots at 5-second intervals.
+This command will display 3 snapshots at 5-second intervals.
 
-## Challenges
+Example output:
+
+```
+$ vmstat 5 3
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 1  0      0 2723288 844288 5670316    0    0    14    42   49   39  7  5 88  0  0
+ 2  0      0 2729716 844296 5670332    0    0     0   387 8888 12065  3  6 90  0  0
+ 1  0      0 2735688 844304 5670364    0    0     0   436 9379 13069  4  6 90  0  0
+```
+
+### Challenges
 
 1. Run `top` during peak load times and identify any processes consistently using over 50% CPU. Document these processes and research ways to optimize or replace them for better performance.
 2. Use `iotop` to monitor disk I/O. Select an application you suspect is causing high I/O, run it, and document its I/O usage pattern. Determine if the usage is justifiable or if it needs optimization.
