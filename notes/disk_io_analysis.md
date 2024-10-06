@@ -99,7 +99,7 @@ Disk arm starts at position 20, moves towards higher cylinders:
 6. Moves to 2
 ```
 
-#### Initialization and Setup
+### Initialization and Setup
 
 Implementing disk I/O analysis begins with setting up a monitoring environment that can capture and interpret disk I/O activities without significantly impacting system performance. This involves selecting appropriate tools and configuring them to collect relevant data at regular intervals.
 
@@ -109,7 +109,7 @@ Some considerations during initialization and setup:
 - Ensure that the monitoring setup captures all necessary metrics, including read/write operations, I/O wait times, and queue lengths.
 - Configure the system to collect data at intervals that provide sufficient granularity for analysis without overwhelming system resources.
 
-#### Conceptual Overview
+### Conceptual Overview
 
 Disk I/O operations involve transferring data between the system's memory and storage devices, such as hard drives, solid-state drives (SSDs), or network-attached storage (NAS). Understanding the fundamentals of disk I/O is crucial for effective analysis.
 
@@ -122,7 +122,7 @@ Main idea:
 - In **synchronous I/O**, the process must wait for the completion of the I/O operation before continuing execution, leading to potential delays.
 - With **asynchronous I/O**, the process can initiate an I/O operation and continue executing other tasks without waiting for the operation to finish, improving system efficiency in some scenarios.
 
-#### Sampling Disk I/O Over Time
+### Sampling Disk I/O Over Time
 
 Monitoring disk I/O involves periodically sampling various metrics to capture the system's behavior over time. This can be achieved using built-in Linux tools and utilities that provide real-time statistics.
 
@@ -144,7 +144,7 @@ Monitoring disk I/O involves periodically sampling various metrics to capture th
 - **Continuous monitoring** relies on tools that provide real-time updates, allowing users to observe I/O activities as they occur and promptly respond to any performance issues. 
 - These methods help administrators track and optimize system performance by identifying potential bottlenecks and ensuring efficient I/O operations.
 
-#### Application for Performance Optimization
+### Application for Performance Optimization
 
 Disk I/O analysis is essential for applications that are sensitive to storage performance, such as databases, file servers, and virtualization platforms. By monitoring disk I/O, you can:
 
@@ -155,7 +155,7 @@ Disk I/O analysis is essential for applications that are sensitive to storage pe
 
 For example, a database experiencing high latency might be suffering from slow disk I/O due to insufficient disk speeds or high contention. By analyzing disk I/O metrics, you can decide whether to implement caching mechanisms, upgrade storage hardware, or optimize database queries to reduce I/O load.
 
-#### Shift From Traditional Metrics to Advanced Analysis
+### Shift From Traditional Metrics to Advanced Analysis
 
 Traditional performance monitoring often focuses on high-level metrics like CPU utilization or memory usage. While these are important, they may not reveal issues related to disk I/O, which can be a significant performance bottleneck.
 
@@ -165,7 +165,7 @@ Shifting the focus to disk I/O analysis involves:
 - Understanding whether the workload is sequential or random, read-heavy or write-heavy, can inform optimization strategies.
 - Long I/O queues suggest that the disk subsystem cannot keep up with the workload, necessitating hardware upgrades or workload redistribution.
 
-#### Action Plan
+### Action Plan
 
 To effectively monitor and optimize disk I/O performance, follow this action plan:
 
@@ -200,7 +200,7 @@ VI. Validate Improvements:
 - After making changes, monitor the system to ensure that performance has improved.
 - Compare new metrics against the baseline to quantify the impact of optimizations.
 
-#### Tools for Disk I/O Analysis
+### Tools for Disk I/O Analysis
 
 Several tools are available for monitoring and analyzing disk I/O performance. Each tool offers different levels of detail and functionality.
 
@@ -215,11 +215,11 @@ Several tools are available for monitoring and analyzing disk I/O performance. E
 | **`GNOME System Monitor`**   | GUI-based tool                             | Provides graphical representation of system performance, including disk I/O.                | User-friendly interface for quick visual assessment of system health.              |
 | **`Collectd`** and **`Grafana`** | Collect metrics using `collectd` and visualize in `Grafana` dashboards | Collects system statistics and displays them in customizable dashboards.                    | Ideal for long-term monitoring and trend analysis.                                 |
 
-#### Understanding Disk I/O States
+### Understanding Disk I/O States
 
 Processes and threads in a system can be in various states related to disk I/O. Understanding these states is crucial for interpreting monitoring data.
 
-##### Common Disk I/O States
+#### Common Disk I/O States
 
 I. **Uninterruptible Sleep (`D` State)**:
 
@@ -236,7 +236,7 @@ III. **Blocked Processes**:
 - Processes that cannot proceed because they are waiting for I/O resources.
 - May lead to increased load averages and reduced system responsiveness.
 
-##### Analyzing Process States
+#### Analyzing Process States
 
 I. **Identifying Processes in Uninterruptible Sleep State**
 
@@ -277,11 +277,11 @@ PID USER  PR  NI  VIRT  RES  SHR S %CPU %MEM %WA  TIME+ COMMAND
 - The state column (`S`) indicates the process is in an uninterruptible sleep state (`D`), further reinforcing that the process is waiting on disk I/O.
 - If several processes are contributing to high I/O wait times, it could signal that the system's storage subsystem is under strain, leading to performance bottlenecks.
   
-#### Scheduler and I/O Priorities
+### Scheduler and I/O Priorities
 
 The Linux I/O scheduler plays a critical role in managing how disk I/O requests are handled. Understanding how the scheduler works can help optimize I/O performance.
 
-##### I/O Schedulers
+#### I/O Schedulers
 
 | I/O Scheduler              | Description                                                    | Benefits                                                      | Considerations/Drawbacks                                        |
 |----------------------------|----------------------------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------|
@@ -289,7 +289,7 @@ The Linux I/O scheduler plays a critical role in managing how disk I/O requests 
 | **Deadline**               | Focuses on meeting deadlines for I/O requests to prevent starvation. | Good for systems requiring predictable I/O latency.            | Can be less efficient for non-time-sensitive workloads.         |
 | **Noop**                   | Performs minimal scheduling, simply merging requests when possible. | Ideal for SSDs where seek times are negligible.                | Not ideal for HDDs where seek time optimization is important.   |
 
-##### Changing I/O Scheduler
+#### Changing I/O Scheduler
 
 The command `echo deadline > /sys/block/sda/queue/scheduler` changes the I/O scheduler for the device `/dev/sda` to the `deadline` scheduler.
 
@@ -299,7 +299,7 @@ Explanation:
 - The `deadline` scheduler ensures that disk I/O requests are completed within a specific timeframe, making it well-suited for environments where I/O predictability is critical.
 - Changes made this way are **temporary** and will revert back to the default scheduler on reboot. To make the change permanent, you would need to configure the boot parameters in the system's bootloader configuration, such as in GRUB, by adding the scheduler setting to the kernel boot options.
 
-##### Understanding I/O Priorities
+#### Understanding I/O Priorities
 
 Processes can be assigned I/O priorities to control how much disk access they get relative to other processes. This is managed using the `ionice` command. There are three main I/O scheduling classes:
 
@@ -308,7 +308,7 @@ Processes can be assigned I/O priorities to control how much disk access they ge
 - In the **real-time** class, processes are given the highest priority for disk access, allowing them to monopolize the disk if needed, which can potentially starve other processes, so it is recommended for critical, time-sensitive operations only.
 - **Idle** class processes are least intrusive, while **real-time** processes are the most demanding, highlighting the importance of using real-time priority only when absolutely necessary to avoid affecting overall system performance.
 
-##### Setting I/O Priority
+#### Setting I/O Priority
 
 To manually set the I/O priority of a process, you use the `ionice` command. For example, to assign a process with PID `5678` to the **best-effort** class with the highest priority (`0`), you would use the following command:
 
@@ -322,7 +322,7 @@ Explanation:
 - `-n0`: Sets the highest priority within the best-effort class (0 is highest, 7 is lowest).
 - `-p 5678`: Targets the process with the PID `5678`.
 
-#### Filesystem and Storage Optimization
+### Filesystem and Storage Optimization
 
 Optimizing the filesystem and storage configuration can have a significant impact on disk I/O performance.
 
