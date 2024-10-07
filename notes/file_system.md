@@ -292,7 +292,7 @@ sdb      8:16   0  200G  0 disk
 
 The `lsblk` output lists all block devices and their partitions, along with their sizes and mount points. This lets you identify the device you intend to work with (e.g., `/dev/sdb`).
 
-#### 2. Detailed Device Information
+**2. Detailed Device Information**
 
 To gather further details about each device and its partitions, use `fdisk`:
 
@@ -346,7 +346,7 @@ sudo umount /dev/sdb1
 
 No output indicates the device was unmounted successfully.
 
-#### 3. Handle Busy Devices
+**3. Handle Busy Devices**
 
 If you encounter a “device is busy” error, identify processes using the device:
 
