@@ -233,7 +233,7 @@ H/W path        Device      Class          Description
 
 Monitoring connected devices and system events:
 
-I. **`dmesg`:** Prints kernel ring buffer messages, useful for viewing system events and hardware-related messages.
+I. `dmesg` prints kernel ring buffer messages, useful for viewing system events and hardware-related messages.
 
 ```bash
 dmesg | tail -50
@@ -269,7 +269,7 @@ Example Output:
 - Shows device detection steps, including driver assignments and storage allocations.
 - Use this to troubleshoot hardware recognition and driver issues.
 
-II. **`udevadm monitor`:** Monitors udev events for real-time hardware changes.
+II. `udevadm monitor` monitors udev events for real-time hardware changes.
 
 ```bash
 sudo udevadm monitor --environment --udev
@@ -391,7 +391,7 @@ sda              1.00    2.00     50.00  100.00    0.00    0.00   0.15
 
 Helps in identifying disk I/O bottlenecks.
 
-IV. **`netstat` and `ss` provide network statistics and socket information.
+IV. `netstat` and `ss` provide network statistics and socket information.
 
 ```bash
 netstat -tulnp
@@ -565,9 +565,7 @@ RCD      (Read Cache Disable): 0
 - **Caching Mode Page** displays cache settings like write cache enable (WCE).
 - **Parameters** can be adjusted to optimize performance or behavior.
 
-**Display Configuration:**
-
-I. **`xrandr`:** Configure display settings on systems using X11.
+III. `xrandr` configures display settings on systems using X11.
 
 ```bash
 xrandr --output HDMI-1 --mode 1920x1080 --rate 60 --primary
@@ -595,7 +593,7 @@ HDMI-1 connected primary 1920x1080+0+0 (normal left inverted right x axis y axis
 - Lists resolutions and refresh rates; an asterisk (*) indicates the current mode.
 - Confirms which display is set as primary.
 
-III. `alsamixer` is an interactive command-line mixer for ALSA sound system.
+IV. `alsamixer` is an interactive command-line mixer for ALSA sound system.
 
 ```bash
 alsamixer
@@ -632,7 +630,7 @@ Example Output:
 - **Mic** adjusts the microphone input level.
 - **Bars** are visual representation of volume levels; the filled areas represent the current setting.
 
-IV. `amixer` is a scriptable mixer for automation and scripting.
+V. `amixer` is a scriptable mixer for automation and scripting.
 
 ```bash
 amixer set Master unmute
@@ -655,7 +653,7 @@ Front Right: Playback 49152 [75%] [on]
 - **Limits and Levels** shows the range and current volume setting.
 - **[on]/[off]** indicates whether the channel is muted.
 
-V. `ip` is a modern tool to configure network interfaces.
+VI. `ip` is a modern tool to configure network interfaces.
 
 ```bash
 sudo ip addr show
@@ -673,7 +671,7 @@ link/ether 00:0a:95:9d:68:16 brd ff:ff:ff:ff:ff:ff
 - Indicates the interface is not active.
 - `ip link set eth0 up` brings the interface up.
 
-VI. `iwconfig` configures wireless network interfaces.
+VII. `iwconfig` configures wireless network interfaces.
 
 ```bash
 sudo iwconfig wlan0 essid "YourSSID" key s:YourPassword
@@ -694,7 +692,7 @@ Link Quality=70/70  Signal level=-40 dBm  Noise level=-96 dBm
 - **Mode** indicates the operation mode (Managed means it's a client).
 - **Signal Level** shows the strength of the connection.
 
-VII. `rfkill` is used to enable or disable wireless devices.
+VIII. `rfkill` is used to enable or disable wireless devices.
 
 ```bash
 rfkill list
