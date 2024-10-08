@@ -79,7 +79,7 @@ Efficient hardware management ensures optimal system performance and stability. 
 
 To obtain detailed information about the system's hardware components:
 
-I. **`lspci`:** Lists all PCI devices and details.
+I. `lspci` lists all PCI devices and details.
 
 ```bash
 lspci -vvv
@@ -87,8 +87,8 @@ lspci -vvv
 
 Options:
 
-- `-v`: Increase verbosity (up to `-vvv` for maximum detail).
-- `-k`: Show kernel drivers and modules handling each device.
+- `-v` increases verbosity (up to `-vvv` for maximum detail).
+- `-k` shows kernel drivers and modules handling each device.
 
 Example Output:
 
@@ -110,7 +110,7 @@ Capabilities: [40] Vendor Specific Information: Len=0c <?>
 - Details like `Flags`, `Subsystem`, and `Memory` offer insights into device features and configurations.
 - Useful for identifying hardware components and verifying driver installations.
 
-II. **`lsusb`:** Displays information about USB buses and connected devices.
+II. `lsusb` displays information about USB buses and connected devices.
 
 ```bash
 lsusb -v
@@ -118,7 +118,7 @@ lsusb -v
 
 Options:
 
-- `-v`: Verbose output.
+- `-v` makes output verbose.
 
 Example Output:
 
@@ -140,7 +140,7 @@ iProduct                2 Integrated Webcam
 - `iManufacturer` and `iProduct` provide human-readable names.
 - Use this to verify connected USB devices and troubleshoot recognition issues.
 
-III. **`lscpu`:** Shows CPU architecture information.
+III. `lscpu` shows CPU architecture information.
 
 ```bash
 lscpu
@@ -171,7 +171,7 @@ L3 cache:                8192K
 - `Model name`: Specific CPU model installed.
 - Cache sizes impact performance; larger caches can improve speed for certain tasks.
 
-IV. **`lsblk`:** Lists block devices (storage devices) and their mount points.
+IV. `lsblk` lists block devices (storage devices) and their mount points.
 
 ```bash
 lsblk -a
@@ -179,7 +179,7 @@ lsblk -a
 
 Options:
 
-- `-a`: Include empty devices.
+- `-a` includes empty devices.
 
 Example Output:
 
@@ -197,7 +197,7 @@ sr0     11:0    1  1024M  0 rom
 - `MOUNTPOINT` shows where partitions are mounted in the filesystem.
 - Useful for understanding disk layout and managing storage.
 
-V. **`lshw`:** Provides comprehensive hardware details (CPU, memory, disks, network, etc.).
+V. `lshw` provides comprehensive hardware details (CPU, memory, disks, network, etc.).
 
 ```bash
 sudo lshw -short
@@ -241,7 +241,7 @@ dmesg | tail -50
 
 Options:
 
-- `-T`: Show human-readable timestamps.
+- `-T` shows human-readable timestamps.
 
 Example Output:
 
@@ -277,9 +277,9 @@ sudo udevadm monitor --environment --udev
 
 Options:
 
-- `--kernel`: Monitor kernel events.
-- `--udev`: Monitor udev events.
-- `--environment`: Print the environment for each event.
+- `--kernel` monitors kernel events.
+- `--udev` monitors udev events.
+- `--environment` prints the environment for each event.
 
 Example Output:
 
@@ -311,7 +311,7 @@ DEVTYPE=usb_interface
 
 Monitoring hardware performance and system health is crucial for proactive maintenance.
 
-I. **`top` and `htop`:** Display real-time system processes and resource usage.
+I. `top` and `htop` display real-time system processes and resource usage.
 
 ```bash
 htop
@@ -335,7 +335,7 @@ PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 
 Use this to identify resource-intensive processes and manage them accordingly.
 
-II. **`vmstat`:** Reports virtual memory statistics and system processes.
+II. `vmstat` reports virtual memory statistics and system processes.
 
 ```bash
 vmstat 5
@@ -361,7 +361,7 @@ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
 
 Monitor overall system performance and identify bottlenecks.
 
-III. **`iostat`:** Provides CPU and I/O statistics for devices and partitions.
+III. `iostat` provides CPU and I/O statistics for devices and partitions.
 
 ```bash
 iostat -xz 1
@@ -391,7 +391,7 @@ sda              1.00    2.00     50.00  100.00    0.00    0.00   0.15
 
 Helps in identifying disk I/O bottlenecks.
 
-IV. **`netstat` and `ss`:** Network statistics and socket information.
+IV. **`netstat` and `ss` provide network statistics and socket information.
 
 ```bash
 netstat -tulnp
@@ -421,7 +421,7 @@ udp        0      0 0.0.0.0:68              0.0.0.0:*                           
 - `PID/Program name`: Process ID and associated program.
 - Use this to ensure that only intended services are running.
 
-V. `sensors` (from `lm_sensors` package):** Monitors system temperatures, voltages, and fan speeds.
+V. `sensors` (from `lm_sensors` package) monitors system temperatures, voltages, and fan speeds.
 
 ```bash
 sensors
@@ -443,7 +443,7 @@ Core 1:        +53.0°C  (high = +80.0°C, crit = +100.0°C)
 - `high` and `crit` values indicate warning and critical temperature thresholds.
 - Useful for monitoring system thermals and preventing overheating.
 
-VI. **`glances`:** Cross-platform monitoring tool integrating various system metrics.
+VI. `glances` is a cross-platform monitoring tool integrating various system metrics.
 
 ```bash
 glances
@@ -464,7 +464,7 @@ Example Output:
 - Color-coded indicators help identify potential issues quickly.
 - Use keyboard shortcuts to navigate and customize the display.
 
-VII. **`nmon`:** Performance monitoring tool providing detailed statistics.
+VII. `nmon` is a performance monitoring tool providing detailed statistics.
 
 ```bash
 nmon
@@ -489,7 +489,7 @@ Example Output:
 
 Proper configuration ensures hardware devices operate efficiently and according to system requirements.
 
-I. **`hdparm`:** Get/set SATA/IDE device parameters.
+I. `hdparm` can be used to get/set SATA/IDE device parameters.
 
 ```bash
 sudo hdparm -I /dev/sda
@@ -497,7 +497,7 @@ sudo hdparm -I /dev/sda
 
 Options:
 
-- `-I`: Display detailed device information.
+- `-I` displays detailed device information.
 
 Example Output:
 
@@ -535,7 +535,7 @@ device size with M = 1000*1000:      500107 MBytes (500 GB)
 | **Device Size**           | Confirms the storage capacity                                           |
 | **Sector Sizes**          | Important for alignment when partitioning disks                         |
 
-II. **`sdparm`:** Control SCSI device parameters.
+II. `sdparm` controls SCSI device parameters.
 
 ```bash
 sudo sdparm --all /dev/sdb
@@ -561,9 +561,9 @@ MF       (Multiplication Factor): 0
 RCD      (Read Cache Disable): 0
 ```
 
-- **Peripheral Device Type:** Confirms the type (disk).
-- **Caching Mode Page:** Displays cache settings like write cache enable (WCE).
-- **Parameters:** Can be adjusted to optimize performance or behavior.
+- **Peripheral Device Type** confirms the type (disk).
+- **Caching Mode Page** displays cache settings like write cache enable (WCE).
+- **Parameters** can be adjusted to optimize performance or behavior.
 
 **Display Configuration:**
 
@@ -575,10 +575,10 @@ xrandr --output HDMI-1 --mode 1920x1080 --rate 60 --primary
 
 Options:
 
-- `--output`: Specify the display output.
-- `--mode`: Set the resolution.
-- `--rate`: Set the refresh rate.
-- `--primary`: Set as primary display.
+- `--output` specifies the display output.
+- `--mode` sets the resolution.
+- `--rate` sets the refresh rate.
+- `--primary` sets as primary display.
 
 Example Output:
 
@@ -591,13 +591,11 @@ HDMI-1 connected primary 1920x1080+0+0 (normal left inverted right x axis y axis
 1024x768      75.03    70.07    60.00
 ```
 
-- **Connected Outputs:** Shows which display outputs are connected (e.g., HDMI-1).
-- **Available Modes:** Lists resolutions and refresh rates; an asterisk (*) indicates the current mode.
-- **Primary Display:** Confirms which display is set as primary.
+- Shows which display outputs are connected (e.g., HDMI-1).
+- Lists resolutions and refresh rates; an asterisk (*) indicates the current mode.
+- Confirms which display is set as primary.
 
-III. **Audio Configuration:**
-
-- **`alsamixer`:** Interactive command-line mixer for ALSA sound system.
+III. `alsamixer` is an interactive command-line mixer for ALSA sound system.
 
 ```bash
 alsamixer
@@ -612,29 +610,29 @@ Navigation:
 Example Output:
 
 ```plaintext
-┌────────────────────────────── AlsaMixer v1.2.2 ──────────────────────────────┐
-│ Card: PulseAudio                                      F1:  Help               │
-│ Chip: PulseAudio                                      F2:  System information │
-│ View: F3:[Playback] F4: Capture  F5: All              F6:  Select sound card  │
-│ Item: Master [dB gain: 0.00]                          Esc: Exit               │
-│                                                                              │
-│     ┌──┐     ┌──┐     ┌──┐                                                           │
-│     │▐▐│     │▐▐│     │▐▐│                                                           │
-│     │▐▐│     │▐▐│     │▐▐│                                                           │
-│     │▐▐│     │▐▐│     │▐▐│                                                           │
-│     │▐▐│     │▐▐│     │▐▐│                                                           │
-│     └──┘     └──┘     └──┘                                                           │
-│      100       100       100                                                          │
-│     Master     PCM      Mic                                                           │
-└───────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────── AlsaMixer v1.2.2 ──────────────────────────────────┐
+│ Card: PulseAudio                                      F1:  Help                  │
+│ Chip: PulseAudio                                      F2:  System information    │
+│ View: F3:[Playback] F4: Capture  F5: All              F6:  Select sound card     │
+│ Item: Master [dB gain: 0.00]                          Esc: Exit                  │
+│                                                                                  │
+│     ┌──┐     ┌──┐     ┌──┐                                                       │
+│     │▐▐│     │▐▐│     │▐▐│                                                       │
+│     │▐▐│     │▐▐│     │▐▐│                                                       │
+│     │▐▐│     │▐▐│     │▐▐│                                                       │
+│     │▐▐│     │▐▐│     │▐▐│                                                       │
+│     └──┘     └──┘     └──┘                                                       │
+│      100       100       100                                                     │
+│     Master     PCM      Mic                                                      │
+└──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Master:** Controls the overall system volume.
-- **PCM:** Adjusts the volume for digital audio.
-- **Mic:** Adjusts the microphone input level.
-- **Bars:** Visual representation of volume levels; the filled areas represent the current setting.
+- **Master** controls the overall system volume.
+- **PCM** adjusts the volume for digital audio.
+- **Mic** adjusts the microphone input level.
+- **Bars** are visual representation of volume levels; the filled areas represent the current setting.
 
-IV. **`amixer`:** Scriptable mixer for automation and scripting.
+IV. `amixer` is a scriptable mixer for automation and scripting.
 
 ```bash
 amixer set Master unmute
@@ -653,11 +651,11 @@ Front Left: Playback 49152 [75%] [on]
 Front Right: Playback 49152 [75%] [on]
 ```
 
-- **Playback Channels:** Indicates stereo channels (Front Left and Front Right).
-- **Limits and Levels:** Shows the range and current volume setting.
-- **[on]/[off]:** Indicates whether the channel is muted.
+- **Playback Channels** indicates stereo channels (Front Left and Front Right).
+- **Limits and Levels** shows the range and current volume setting.
+- **[on]/[off]** indicates whether the channel is muted.
 
-V. **`ip`:** Modern tool to configure network interfaces.
+V. `ip` is a modern tool to configure network interfaces.
 
 ```bash
 sudo ip addr show
@@ -671,11 +669,11 @@ Example Output (`ip addr show`):
 link/ether 00:0a:95:9d:68:16 brd ff:ff:ff:ff:ff:ff
 ```
 
-- **Interface Name:** `eth0` is the network interface.
-- **State DOWN:** Indicates the interface is not active.
-- **Commands:** `ip link set eth0 up` brings the interface up.
+- `eth0` is the network interface.
+- Indicates the interface is not active.
+- `ip link set eth0 up` brings the interface up.
 
-VI. **`iwconfig`:** Configure wireless network interfaces.
+VI. `iwconfig` configures wireless network interfaces.
 
 ```bash
 sudo iwconfig wlan0 essid "YourSSID" key s:YourPassword
@@ -692,11 +690,11 @@ Power Management:off
 Link Quality=70/70  Signal level=-40 dBm  Noise level=-96 dBm
 ```
 
-- **ESSID:** The name of the wireless network you're connected to.
-- **Mode:** Indicates the operation mode (Managed means it's a client).
-- **Signal Level:** Shows the strength of the connection.
+- **ESSID** is the name of the wireless network you're connected to.
+- **Mode** indicates the operation mode (Managed means it's a client).
+- **Signal Level** shows the strength of the connection.
 
-VII. **`rfkill`:** Enable or disable wireless devices.
+VII. `rfkill` is used to enable or disable wireless devices.
 
 ```bash
 rfkill list
@@ -714,15 +712,15 @@ Soft blocked: yes
 Hard blocked: no
 ```
 
-- **Soft Blocked:** Software-level block (can be toggled via `rfkill`).
-- **Hard Blocked:** Physical switch or BIOS setting (cannot be changed via software).
-- **Unblocking Device:** `rfkill unblock bluetooth` removes the software block.
+- **Soft Blocked** is a software-level block (can be toggled via `rfkill`).
+- **Hard Blocked** is a physical switch or BIOS setting (cannot be changed via software).
+- `rfkill unblock bluetooth` removes the software block.
 
 #### Managing Drivers in Linux
 
 Drivers in Linux are typically part of the kernel, either built-in or as loadable kernel modules (LKMs). Understanding how to manage these modules is essential for hardware management.
 
-I. **`lsmod`:** Displays currently loaded modules.
+I. `lsmod` displays currently loaded modules.
 
 ```bash
 lsmod | grep modulename
@@ -735,11 +733,11 @@ e1000e                245760  0
 intel_cstate           20480  0
 ```
 
-- **Module Name:** `e1000e` is the module for Intel network cards.
-- **Size:** The memory footprint of the module.
-- **Usage Count:** Number of instances using the module (0 means it's not in use).
+- `e1000e` is the module for Intel network cards.
+- 245760 is the memory footprint of the module.
+- Last column shows the number of instances using the module (0 means it's not in use).
 
-II. **`modprobe`:** Adds modules to the kernel, resolving dependencies.
+II. `modprobe` adds modules to the kernel, resolving dependencies.
 
 ```bash
 sudo modprobe modulename
@@ -754,7 +752,7 @@ sudo modprobe e1000e
 - Loads the `e1000e` network driver module.
 - Automatically handles any dependencies required.
 
-III. **`modprobe -r`:** Removes modules from the kernel.
+III. `modprobe -r` removes modules from the kernel.
 
 ```bash
 sudo modprobe -r modulename
@@ -769,13 +767,13 @@ sudo modprobe -r e1000e
 - Unloads the `e1000e` module.
 - Will fail if the module is currently in use.
 
-IV. **`insmod`:** Inserts a module into the kernel.
+IV. `insmod` inserts a module into the kernel.
 
 ```bash
 sudo insmod /path/to/module.ko
 ```
 
-- **Note:** Does not resolve dependencies; prefer `modprobe` when possible.
+**Note:** Does not resolve dependencies; prefer `modprobe` when possible.
 
 Example Usage:
 
@@ -786,7 +784,7 @@ sudo insmod /lib/modules/$(uname -r)/kernel/drivers/net/e1000e/e1000e.ko
 - Manually loads a specific module file.
 - Use when testing custom or third-party modules.
 
-V. **`rmmod`:** Removes a module from the kernel.
+V. `rmmod` removes a module from the kernel.
 
 ```bash
 sudo rmmod modulename
@@ -801,7 +799,7 @@ sudo rmmod e1000e
 - Forcefully removes the module.
 - Should be used with caution as it doesn't handle dependencies.
 
-VI. **`modinfo`:** Displays information about a kernel module.
+VI. `modinfo` displays information about a kernel module.
 
 ```bash
 modinfo modulename
@@ -817,13 +815,11 @@ description:    Intel(R) PRO/1000 Network Driver
 author:         Intel Corporation, <e1000-devel@lists.sourceforge.net>
 ```
 
-- **Filename:** Location of the module.
-- **Version and License:** Useful for compatibility checks.
-- **Description and Author:** Provides context about the module's purpose.
+- **Filename** is the location of the module.
+- **Version and License** may be useful for compatibility checks.
+- **Description and Author** provides context about the module's purpose.
 
-- **Kernel Module Configuration:**
-
-- **Persistent Options:**
+VII. Kernel Module Configuration
 
 - Place configuration files in `/etc/modprobe.d/`.
 - To set options for a module:
@@ -838,12 +834,12 @@ Example Usage:
 echo "options e1000e InterruptThrottleRate=3000" | sudo tee /etc/modprobe.d/e1000e.conf
 ```
 
-- **InterruptThrottleRate:** Adjusts how frequently the network card interrupts the CPU.
-- **Persistent Configuration:** Settings will apply on boot or when the module is loaded.
+- **InterruptThrottleRate** adjusts how frequently the network card interrupts the CPU.
+- Settings will apply on boot or when the module is loaded.
 
 ##### Graphics Drivers
 
-I. **NVIDIA:**
+I. **NVIDIA**
 
 - Install via package manager or download from NVIDIA's website.
 - Use `ubuntu-drivers devices` (Ubuntu) to identify the appropriate driver.
@@ -867,11 +863,11 @@ Example Output (`nvidia-smi`):
 +-------------------------------+----------------------+----------------------+
 ```
 
-- **Driver Version:** Confirms the installed NVIDIA driver.
-- **GPU Details:** Provides information about the GPU's status and usage.
-- **Memory Usage:** Shows how much GPU memory is in use.
+- **Driver Version** confirms the installed NVIDIA driver.
+- **GPU Details** provides information about the GPU's status and usage.
+- **Memory Usage** shows how much GPU memory is in use.
 
-II. **AMD:**
+II. **AMD**
 
 Use open-source `amdgpu` driver or proprietary `amdgpu-pro`.
 
@@ -885,8 +881,8 @@ Example Output (`lspci | grep VGA`):
 01:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 [Radeon RX 5600 OEM/5600 XT / 5700/5700 XT] (rev c1)
 ```
 
-- **Device Identification:** Confirms the AMD GPU model.
-- **Driver Installation:** Ensures that the appropriate driver is installed for the GPU.
+- **Device Identification** confirms the AMD GPU model.
+- **Driver Installation** ensures that the appropriate driver is installed for the GPU.
 
 #### Troubleshooting Hardware Issues
 
