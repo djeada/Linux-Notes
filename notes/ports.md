@@ -1,6 +1,6 @@
 ## Ports
 
-In computer networking, ports serve as crucial endpoints for communication between devices, similar to doors through which data flows in and out of a computer.
+In computer networking, ports serve as endpoints for communication between devices, similar to doors through which data flows in and out of a computer.
 
 Main idea:
 
