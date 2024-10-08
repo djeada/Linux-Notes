@@ -1,6 +1,6 @@
 ## Ports
 
-In computer networking, ports serve as endpoints for communication between devices, similar to doors through which data flows in and out of a computer.
+In computer networking, ports serve as endpoints for communication between devices, similar to doors through which data flows in and out of a computer. In today's interconnected digital landscape, network security is paramount. Network ports are critical points that require diligent management and security measures. Unsecured ports can become vulnerabilities, exposing systems to unauthorized access, data breaches, and various cyber threats. 
 
 Main idea:
 
@@ -25,9 +25,9 @@ Example:
 |  +----+----+     +----+----+     +----+-----+ |
 |       |               |               |       |
 +-------+---------------+---------------+-------+
-        |               |               |
-        |               |               |
-         Client Connections over Network
+|               |               |
+|               |               |
+Client Connections over Network
 ```
 
 - The server at IP `192.168.1.10` is running services on ports 22 (SSH), 80 (HTTP), and 443 (HTTPS).
@@ -94,200 +94,555 @@ Below is a table detailing some of the most commonly used services and their ass
 
 Note: SQL services vary in port numbers based on the specific SQL database being used (e.g., MySQL, MSSQL, PostgreSQL, etc.).
 
-### Security Considerations
+### The Importance of Securing Network Ports
 
-When it comes to system security, managing and securing network ports is a fundamental aspect. This involves a range of strategies and tools to prevent unauthorized access and to mitigate potential vulnerabilities. Here's a more detailed look at each consideration:
+Securing network ports is a fundamental aspect of network security. Unsecured or misconfigured ports can lead to:
 
-I. Firewalls
+- Attackers may gain access to systems by exploiting open ports associated with vulnerable services.
+- Sensitive information can be compromised if services handling confidential data are accessible through open ports.
+- Denial-of-service (DoS) attacks can target open ports to overwhelm services, causing interruptions.
+- Open ports can be entry points for malware, including worms and trojans, which can spread across networks.
 
-- Firewalls are essential for managing and monitoring access to network ports. They act as a barrier, controlling the traffic based on security rules.
-- Use tools like `ufw` (Uncomplicated Firewall) or `iptables` for Linux systems. These allow you to configure firewall rules that are specific to each port, thereby enhancing security.
-- For example use, `sudo ufw allow 80` to allow HTTP traffic on port 80.
+### Security Measures for Network Ports
 
-II. Open Ports
+#### Implementing Firewalls
 
-- Ports that are open on your network can serve as potential entry points for unauthorized access or cyber attacks.
-- Regularly check for open ports using commands like `sudo netstat -tuln` or `sudo ss -tuln`. This helps in identifying and managing open ports.
+Firewalls are essential security devices or software that monitor and control incoming and outgoing network traffic based on predetermined security rules. They establish a barrier between trusted internal networks and untrusted external networks.
 
-III. Unused Ports
+#### Managing Open Ports
 
-- Ports that are open but not in use can be a security liability. Attackers often exploit these unused ports.
-- It's advisable to close unused ports. You can do this using commands like `sudo ufw deny [port number]`.
-- For example, `sudo ufw deny 8080` to block any traffic on port 8080.
+Monitoring and managing open ports is crucial to prevent unauthorized access.
 
-IV. Default Ports
-
-- Default ports, like port 22 for SSH, are commonly known and often targeted by attackers.
-- It's recommended to change commonly used default ports to non-standard ports. This can reduce the risk of automated attacks.
-- Changing the SSH port from 22 to a non-standard port can significantly decrease the risk of brute-force attacks.
-
-V. Port Forwarding
-
-- Improperly configured port forwarding can unintentionally expose internal services to the public internet.
-- Ensure that port forwarding rules are necessary and securely configured. Avoid unnecessary port forwarding, which can create vulnerabilities.
-- Regularly review and update port forwarding configurations to ensure they reflect current needs and security standards.
-
-### Identify the Process Associated with a Specific Port
-
-In network management and security assessments, understanding which processes are binding to specific ports is crucial. For instance, you might need to verify that the intended service is running on its designated port or to diagnose port conflicts. The `lsof` (List Open Files) command, combined with certain flags, can help identify which process is using a specific port.
-
-I. Using the `lsof` Command
-
-Find Processes Using a Specific Port:
+**Using `netstat`:**
 
 ```bash
-sudo lsof -i :<port-number>
+sudo netstat -tuln
 ```
 
-For instance, to see which process is using port 80:
+**Expected Output:**
+
+```
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+tcp6       0      0 :::80                   :::*                    LISTEN
+udp        0      0 0.0.0.0:68              0.0.0.0:*
+```
+
+- **Proto:** Protocol used (tcp, tcp6, udp).
+- **Local Address:** The IP and port on the local machine. `0.0.0.0` means all IPv4 addresses on the local machine.
+- **Foreign Address:** The remote IP and port; `*` indicates any.
+- **State:** The state of the socket (e.g., `LISTEN` for servers).
+
+**Using `ss`:**
+
+```bash
+sudo ss -tuln
+```
+
+**Expected Output:**
+
+```
+Netid State      Recv-Q Send-Q Local Address:Port               Peer Address:Port
+udp   UNCONN     0      0      0.0.0.0:68                      0.0.0.0:*
+tcp   LISTEN     0      128    0.0.0.0:22                      0.0.0.0:*
+tcp   LISTEN     0      128    [::]:80                         [::]:*
+```
+
+Similar to `netstat`, but `ss` provides faster and more detailed socket information.
+
+#### Evaluating Services
+
+Determine if the services running on open ports are required for your system's operation.
+
+**Stopping a Service:**
+
+```bash
+sudo systemctl stop service_name
+```
+
+The service `service_name` has been stopped.
+
+**Disabling a Service:**
+
+```bash
+sudo systemctl disable service_name
+```
+
+**Expected Output:**
+
+```
+Removed /etc/systemd/system/multi-user.target.wants/service_name.service.
+```
+
+The service `service_name` has been disabled and will not start at boot.
+
+#### Closing Unused Ports
+
+Closing ports that are not in use reduces the attack surface.
+
+**Using Nmap to Scan for Open Ports:**
+
+```bash
+nmap -sT localhost
+```
+
+**Expected Output:**
+
+```
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-10-08 12:34 UTC
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000012s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+631/tcp open  ipp
+
+Nmap done: 1 IP address (1 host up) scanned in 0.03 seconds
+```
+
+Nmap found that ports 22 (SSH), 80 (HTTP), and 631 (Internet Printing Protocol) are open on localhost.
+
+**Using `ufw` to Deny Access:**
+
+```bash
+sudo ufw deny 631/tcp
+```
+
+**Expected Output:**
+
+```
+Rule added
+Rule added (v6)
+```
+
+Incoming TCP traffic on port 631 is now blocked.
+
+**Verifying Port Closure:**
+
+```bash
+sudo ss -tuln | grep :631
+```
+
+If there's no output, it indicates that port 631 is no longer listening.
+
+####  Changing Default Ports
+
+Changing default ports can help obscure services from automated scans and reduce the likelihood of attacks targeting default port numbers.
+
+##### Example: Changing SSH Port
+
+**Editing the SSH Configuration:**
+
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+
+Find the line:
+
+```
+#Port 22
+```
+
+Uncomment and change it to:
+
+```
+Port 2222
+```
+
+**Restarting the SSH Service:**
+
+```bash
+sudo systemctl restart sshd
+```
+
+**Updating Firewall Rules:**
+
+```bash
+sudo ufw allow 2222/tcp
+sudo ufw delete allow 22/tcp
+```
+
+**Expected Output:**
+
+```
+Rule added
+Rule added (v6)
+Deleting...
+Rule deleted
+Rule deleted (v6)
+```
+
+The firewall now allows traffic on port 2222 and blocks port 22.
+
+**Verifying SSH on New Port:**
+
+```bash
+sudo ss -tuln | grep :2222
+```
+
+**Expected Output:**
+
+```
+tcp   LISTEN 0      128    0.0.0.0:2222      0.0.0.0:*
+tcp   LISTEN 0      128    [::]:2222         [::]:*
+```
+
+SSH is now listening on port 2222.
+
+When connecting via SSH, specify the new port:
+
+```bash
+ssh -p 2222 user@hostname
+```
+
+While changing default ports can reduce noise from automated scans, it is not a substitute for proper security measures like strong authentication and encryption.
+
+##### Securing Port Forwarding
+
+Port forwarding can expose internal services to external networks if not properly configured.
+
+**Using `iptables` to List NAT Rules:**
+
+```bash
+sudo iptables -t nat -L -n -v
+```
+
+**Expected Output:**
+
+```
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+pkts bytes target     prot opt in     out     source               destination
+
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+pkts bytes target     prot opt in     out     source               destination
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+pkts bytes target     prot opt in     out     source               destination
+
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+pkts bytes target     prot opt in     out     source               destination
+```
+
+If there are no entries under the chains, it indicates that no port forwarding rules are set up.
+
+Only forward necessary ports and restrict access using firewall rules.
+
+**Example of Adding a Port Forwarding Rule:**
+
+Forward external port 8080 to internal port 80 on a specific internal IP:
+
+```bash
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 192.168.1.10:80
+sudo iptables -A FORWARD -p tcp -d 192.168.1.10 --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+```
+
+**Expected Output:**
+
+*(No output if successful)*
+
+Traffic arriving on port 8080 will be forwarded to port 80 on the internal IP `192.168.1.10`.
+
+Limit port forwarding to specific external IP addresses.
+
+**Enable Logging for Port Forwarding:**
+
+```bash
+sudo iptables -A FORWARD -j LOG --log-prefix "PORT_FORWARDING: "
+```
+
+**Expected Output:**
+
+*(No output if successful)*
+
+This rule logs forwarded packets with the prefix "PORT_FORWARDING:" to the system logs.
+
+### Monitoring Ports and Processes
+
+Proactive monitoring of network ports and associated processes is essential for detecting anomalies and potential security threats.
+
+#### Using `lsof` (List Open Files)
+
+**Finding Processes Using a Specific Port:**
 
 ```bash
 sudo lsof -i :80
 ```
 
-This will return a list of processes bound to port 80. The output includes essential details like the process name, user running the process, the associated PID (Process ID), and more.
+**Expected Output:**
 
-If you want a more concise output showing just the PID, process name, and the user running the process, use:
-
-``` bash
-sudo lsof -i :<port-number> -n -P | awk 'NR==1 || /LISTEN/ {print $2, $1, $3}'
+```
+COMMAND   PID   USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+apache2  1234   root    4u  IPv6  12345      0t0  TCP *:http (LISTEN)
+apache2  1235 www-data 4u  IPv6  12345      0t0  TCP *:http (LISTEN)
+apache2  1236 www-data 4u  IPv6  12345      0t0  TCP *:http (LISTEN)
 ```
 
-Replace `<port-number>` with the desired port number. This version filters out the non-listening states and formats the output for clarity.
+- **COMMAND:** The name of the process (`apache2`).
+- **PID:** Process ID.
+- **USER:** The user running the process.
+- **FD:** File descriptor.
+- **TYPE:** Type of network (IPv4 or IPv6).
+- **DEVICE/SIZE/OFF:** Device and size/offset.
+- **NODE:** Network node (TCP).
+- **NAME:** The port and state (e.g., `*:http (LISTEN)`).
 
-II. Using the netstat command
-
-In systems where lsof might not be available, the netstat command, combined with grep, can also help in identifying processes associated with ports:
+- **Filtering for Listening Processes:**
 
 ```bash
-sudo netstat -tulnp | grep :<port-number>
+sudo lsof -i TCP -sTCP:LISTEN
 ```
 
-Always be cautious about unexpected processes binding to known ports. Such anomalies could indicate misconfigurations or potential security threats, like backdoors or unauthorized services.
-
-### Socket Status
-
-In networking, a socket represents an endpoint for sending or receiving data. When a program wants to communicate over the Internet, it creates a socket. To monitor these sockets and the status of their connections, we can use the `ss` (socket status) tool, which is a utility to investigate sockets. This tool is especially helpful for understanding current network configurations, active/inactive connections, and diagnosing various network-related issues.
-
-I. Display All Active Connections
+**Expected Output:**
 
 ```
-ss -tuln
+COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd     2345     root    3u  IPv4  67890      0t0  TCP *:ssh (LISTEN)
+sshd     2345     root    4u  IPv6  67891      0t0  TCP *:ssh (LISTEN)
+apache2  1234     root    4u  IPv6  12345      0t0  TCP *:http (LISTEN)
 ```
 
-This command lists all UDP and TCP connections, without resolving hostnames (due to `-n`).
+Lists all processes that are in a `LISTEN` state for TCP connections.
 
-II. Display Only TCP Ports
+#### Using `netstat`
 
-```
-ss -tln
-```
+**Listing Processes by Port:**
 
-This restricts the output to only TCP connections and avoids resolving hostnames.
-
-III. Display Only UDP Ports
-  
-```
-ss -uln
+```bash
+sudo netstat -tulpn | grep :22
 ```
 
-This shows just the UDP connections, also without resolving hostnames.
-
-IV. Display Listening Sockets
+**Expected Output:**
 
 ```
-ss -tuln state listening
+tcp   0    0 0.0.0.0:22    0.0.0.0:*    LISTEN   2345/sshd
+tcp6  0    0 :::22         :::*         LISTEN   2345/sshd
 ```
 
-This will display all listening TCP and UDP sockets.
+- **Proto:** Protocol (`tcp` or `tcp6`).
+- **Local Address:** IP and port (`0.0.0.0:22` means listening on all IPv4 interfaces on port 22).
+- **Foreign Address:** `*` indicates any.
+- **State:** `LISTEN` indicates it's waiting for incoming connections.
+- **PID/Program name:** Process ID and name (`2345/sshd`).
 
-V. Display Established Connections
+#### Using `ss` (Socket Statistics)
 
-```
-ss -tuln state established
-```
+- **Listing Sockets for a Specific Port:**
 
-This focuses on showing only the established connections, helping you identify active data exchanges.
-
-### Filtering the Output
-
-`ss` can be combined with other command-line utilities for more specific results:
-
-I. Count Active TCP Connections
-
-```
-ss -tan | grep ESTAB | wc -l
+```bash
+sudo ss -tulwn | grep :80
 ```
 
-This sequence counts the number of established TCP connections.
-
-II. List All SSH Connections
+**Expected Output:**
 
 ```
-ss -tan state established '( dport = :22 or sport = :22 )'
+tcp   LISTEN 0      128    0.0.0.0:80      0.0.0.0:*
+tcp   LISTEN 0      128    [::]:80         [::]:*
 ```
 
-If you're specifically interested in SSH connections, this command is handy.
+- **State:** `LISTEN` indicates the socket is listening for connections.
+- **Recv-Q/Send-Q:** Receive and send queue sizes.
+- **Local Address:Port:** The IP and port on the local machine.
+- **Peer Address:Port:** The remote IP and port; `*` indicates any.
 
-### Nmap
+### Checking Socket Status with `ss`
 
-Nmap, short for "Network Mapper," is a revered tool in the cybersecurity and network administration arenas. Its primary purpose is to scan IP networks for host discovery, port scanning, and service identification.
+`ss` provides detailed information about network sockets.
 
-Key Features:
+- **Display Summary Statistics:**
 
-- **Host Discovery** allows users to find which hosts are available on a network, helping identify active devices.
-- **Port Scanning** determines which ports are open on those hosts, providing insight into the services that are accessible.
-- **Version Detection** helps detect the services and their versions running on open ports, enabling a deeper understanding of the network's software landscape.
-- **OS Detection** allows for determining the operating system and its version on a host, which is crucial for security assessments and system management.
+```bash
+ss -s
+```
 
-Common Scenarios:
-
-- In **Security Audits**, network administrators use Nmap to identify open ports that could be potential security vulnerabilities, helping to strengthen the network's defenses.
-- For **Network Inventory**, companies might utilize Nmap for regular checks, discovering devices on a network and cataloging the services they run, ensuring accurate asset management.
-- **Network Troubleshooting** involves using Nmap to determine unreachable hosts, closed ports, or service disruptions, aiding in diagnosing and resolving network issues.
-- During **Penetration Testing**, ethical hackers and penetration testers employ Nmap to gather intelligence about a target, providing crucial information that helps in crafting sophisticated attacks for security assessments.
-
-Basic Commands:
-
-I. Scan a Single Host
+**Expected Output:**
 
 ```
+Total: 100 (kernel 110)
+TCP:   50 (estab 10, closed 30, orphaned 0, synrecv 0, timewait 30/0), ports 0
+
+Transport Total     IP        IPv6
+*         110       -         -
+RAW       0         0         0
+UDP       20        15        5
+TCP       20        10        10
+INET      40        25        15
+FRAG      0         0         0
+```
+
+Provides a summary of socket usage, including the number of TCP connections in different states.
+
+**List Established TCP Connections:**
+
+```bash
+ss -tan state established
+```
+
+**Expected Output:**
+
+```
+State      Recv-Q Send-Q Local Address:Port               Peer Address:Port
+ESTAB      0      0      192.168.1.5:22                   192.168.1.10:54321
+ESTAB      0      0      192.168.1.5:80                   192.168.1.20:12345
+```
+
+Shows TCP connections that are currently established, including the local and peer addresses and ports.
+
+**Count Established Connections:**
+
+```bash
+ss -tan state established | wc -l
+```
+
+**Expected Output:**
+
+```
+3
+```
+
+The output number indicates the total established TCP connections (including the header line).
+
+### Network Scanning with Nmap
+
+Nmap (Network Mapper) is a powerful open-source tool for network exploration and security auditing. It allows you to discover hosts and services on a computer network, thereby creating a "map" of the network.
+
+Main idea:
+
+- Identifies live hosts on a network.
+- Discovers open ports on target hosts.
+- Determines the application name and version running on each port.
+- Estimates the operating system and hardware characteristics of network devices.
+- Extensible with scripts for advanced discovery and vulnerability detection.
+
+Common Use Cases:
+
+- Identify open ports and vulnerabilities.
+- Map network devices and services.
+- Ensure systems meet security policies.
+- Gather information for ethical hacking.
+- Diagnose network issues.
+
+#### Basic Nmap Commands
+
+I. **Default TCP Scan:**
+
+```bash
 nmap <IP-address>
 ```
 
-Replace `<IP-address>` with the IP of the host you wish to scan.
-
-II. Scan Multiple Hosts
+**Expected Output:**
 
 ```
-nmap <IP-address1,IP-address2,...>
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-10-08 13:00 UTC
+Nmap scan report for example.com (93.184.216.34)
+Host is up (0.10s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE
+80/tcp  open  http
+443/tcp open  https
+8080/tcp open  http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 5.23 seconds
 ```
 
-Separate the IPs with commas for scanning multiple hosts.
+Nmap scanned the target IP and found that ports 80, 443, and 8080 are open.
 
-III. Scan a Range of Hosts
+II. **TCP SYN Scan (Stealth Scan):**
 
-```
-nmap <IP-address-start>-<IP-address-end>
-```
-
-For instance, `nmap 192.168.1.1-20` would scan hosts from `192.168.1.1` through `192.168.1.20`.
-
-IV. Scan a Subnet
-   
-```
-nmap <IP-address/CIDR>
+```bash
+sudo nmap -sS <IP-address>
 ```
 
-For instance, `nmap 192.168.1.0/24` would scan all 256 hosts in the `192.168.1.0` subnet.
+**Expected Output:**
 
-V. Fast Scan
+Similar to the default scan but may find additional ports due to different scanning technique.
 
-The `-F` flag makes Nmap scan fewer ports than the default, making the scan faster.
+III. **Ping Scan (Discover Live Hosts):**
+
+```bash
+nmap -sn 192.168.1.0/24
+```
+
+**Expected Output:**
 
 ```
-nmap -F <IP-address>
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-10-08 13:05 UTC
+Nmap scan report for 192.168.1.1
+Host is up (0.0010s latency).
+Nmap scan report for 192.168.1.5
+Host is up (0.0015s latency).
+Nmap scan report for 192.168.1.10
+Host is up (0.0012s latency).
+Nmap done: 256 IP addresses (3 hosts up) scanned in 2.50 seconds
 ```
+
+Nmap found that hosts at IP addresses `192.168.1.1`, `192.168.1.5`, and `192.168.1.10` are up.
+
+IV. **Enable Version Detection:**
+
+```bash
+nmap -sV <IP-address>
+```
+
+**Expected Output:**
+
+```
+PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp  open  http     Apache httpd 2.4.29 ((Ubuntu))
+443/tcp open  ssl/http Apache httpd 2.4.29 ((Ubuntu))
+```
+
+Nmap detected the services running on the open ports and identified their versions.
+
+V. **Enable OS Detection:**
+
+```bash
+sudo nmap -O <IP-address>
+```
+
+**Expected Output:**
+
+```
+OS details: Linux 3.10 - 4.11
+Network Distance: 1 hop
+```
+
+Nmap estimates the target is running a Linux operating system with a kernel version between 3.10 and 4.11.
+
+VI. **Combining Multiple Scans:**
+
+```bash
+sudo nmap -A <IP-address>
+```
+
+**Expected Output:**
+
+Provides detailed information including open ports, services, versions, OS detection, and traceroute.
+
+VII. **Saving Output to a File:**
+
+```bash
+nmap -oN output.txt <IP-address>
+```
+
+**Expected Output:**
+
+The scan results are saved in `output.txt`.
+
+**Interpreting Nmap Output**
+
+| **Category**         | **Description**                                                                                          |
+|----------------------|----------------------------------------------------------------------------------------------------------|
+| **Host Status**      | Indicates if the host is **up** or **down**.                                                              |
+| **Port State**       | - **open**: Accepting connections. <br> - **closed**: Not accepting connections but reachable. <br> - **filtered**: Status undetermined due to packet filtering. |
+| **Service Detection**| Displays the **service name** and **version** running on each open port.                                 |
+
+**Legal Implications:**
+
+- Scanning networks without permission is illegal and unethical.
+- Only scan networks and systems you own or have explicit permission to scan.
 
 ### Challenges
 
