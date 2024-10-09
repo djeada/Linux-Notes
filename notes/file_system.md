@@ -132,17 +132,17 @@ A file system is a method of organizing, storing, and retrieving data on a stora
 
 Several types of file systems can be used on Linux systems, each designed with specific use-cases and features:
 
-1. **`ext2` (Second Extended Filesystem)** is one of the first file systems specifically designed for Linux. It is simple and efficient but lacks advanced features like journaling or encryption.
-2. **`ext3` (Third Extended Filesystem)** is an improved version of `ext2` with added support for journaling, which helps protect against data loss by keeping a log of changes that are yet to be committed to the file system.
-3. **`ext4` (Fourth Extended Filesystem)** is currently the default Linux file system. It supports larger file sizes and file systems, has improved performance and reliability, and includes features like delayed allocation and journal checksumming.
-4. **`JFS` (Journaled File System)** was originally developed by IBM for its own operating systems. It is designed to handle large file systems efficiently and features journaling.
-5. **`NFS` (Network File System)** is not a file system for storing data on disk but rather a protocol that allows a system to access files over a network as if they were on its local hard drive.
-6. **`VFS` (Virtual File System)** is a software layer in the kernel that provides a common interface to various file systems, allowing the operating system to access and manage different types of file systems uniformly.
-7. **`FAT` (File Allocation Table)** is an old and simple file system common on removable storage devices and used by most operating systems, making it a good choice for interoperability.
-8. **`NTFS` (New Technology File System)** is the standard file system of Windows NT and its later versions, such as Windows 2000, XP, Server 2003, Server 2008, Vista, and 7. It can be accessed on Linux but is not native, so it may lack full functionality.
-9. **`ReiserFS` (Reiser File System)** is a general-purpose, journaled computer file system known for good performance and reliability. It efficiently handles a large number of small files and is often used on servers.
-10. **`Btrfs` (B-tree File System)** is a copy-on-write (CoW) file system for Linux aimed at implementing advanced features with a focus on fault tolerance, repair, and easy administration. It provides features like snapshots, subvolumes, and built-in RAID.
-11. **`XFS`** is a high-performance journaling file system created by Silicon Graphics, Inc. It is particularly proficient at parallel I/O, making it a good choice for applications that involve large files and require high-performance I/O.
+- The **ext2** (Second Extended Filesystem) is among the first file systems crafted specifically for Linux, and while it is **efficient**, it lacks advanced features like journaling or encryption.
+- An improved version of ext2, **ext3** (Third Extended Filesystem), includes support for **journaling**, which helps protect against data loss by maintaining a log of changes that are yet to be committed to the file system.
+- Currently the default Linux file system, **ext4** (Fourth Extended Filesystem) supports larger file sizes and file systems, provides **improved** performance and reliability, and includes features such as delayed allocation and journal checksumming.
+- Originally developed by IBM, the **JFS** (Journaled File System) is optimized to **handle** large file systems efficiently and includes journaling capabilities.
+- The **NFS** (Network File System) is not a traditional file system but rather a protocol that allows a system to **access** files over a network as though they were on its local hard drive.
+- Serving as a software layer in the kernel, the **VFS** (Virtual File System) provides a common **interface** to various file systems, enabling the operating system to uniformly access and manage different types of file systems.
+- The **FAT** (File Allocation Table) system is simple and widely used, particularly on removable storage devices, making it a **suitable** choice for interoperability across various operating systems.
+- A standard for Windows NT and its later versions, **NTFS** (New Technology File System) can be **accessed** on Linux but is not native, which may result in a lack of full functionality.
+- Known for its strong performance and reliability, **ReiserFS** (Reiser File System) is a general-purpose, journaled file system that efficiently **handles** large numbers of small files, making it a popular choice on servers.
+- The **Btrfs** (B-tree File System) is a copy-on-write (CoW) file system for Linux, designed to provide **advanced** features focused on fault tolerance, repair, and simplified administration, with capabilities like snapshots, subvolumes, and built-in RAID.
+- Developed by Silicon Graphics, Inc., **XFS** is a high-performance, **journaling** file system that excels at parallel I/O, making it particularly effective for applications involving large files that require high-performance I/O operations.
 
 | Category                     | ext2                       | ext3                        | ext4                        | JFS                        | NFS                        | VFS                        | FAT                        | NTFS                       | ReiserFS                   | Btrfs                      | XFS                        |
 |------------------------------|----------------------------|-----------------------------|-----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|
@@ -160,7 +160,7 @@ Several types of file systems can be used on Linux systems, each designed with s
 
 Managing file systems is a fundamental skill that involves various operations such as checking existing file systems, installing necessary tools, creating new file systems on fresh partitions or drives, and modifying existing ones. This comprehensive guide provides detailed steps for each of these tasks, complete with commands, expected outputs, and practical considerations.
 
-#### I. Checking Existing File Systems
+#### Checking Existing File Systems
 
 Before performing any file system operations, it's essential to understand the current state of your system.
 
@@ -219,7 +219,7 @@ nodev   bdev
         xfs
 ```
 
-#### II. Ensuring File System Support
+#### Ensuring File System Support
 
 Before creating a new file system, ensure that your system has the necessary support for it. This involves checking for kernel module support, installing the required utilities, and verifying that your system is compatible with the file system you intend to use.
 
@@ -268,7 +268,7 @@ modinfo xfs
 
 This command provides details on the XFS module, including its dependencies, supported versions, and any required firmware. Reviewing this information confirms compatibility with your current setup.
 
-#### III. Identifying the Device
+#### Identifying the Device
 
 Accurate identification of the target device is crucial to avoid modifying the wrong disk, which could result in data loss. These commands will help you list and inspect block devices.
 
@@ -314,7 +314,7 @@ This output provides detailed information on each disk, including size, sector c
 
 If your target device is new and unpartitioned, you’ll need to partition it first. Use `fdisk`, `gdisk`, or `parted` to create new partitions.
 
-#### IV. Unmounting the Device (if applicable)
+#### Unmounting the Device (if applicable)
 
 Before modifying a device, it’s essential to ensure that it is not in use. Unmounting prevents accidental data corruption during the process.
 
@@ -365,7 +365,7 @@ bash     1234 user cwd    DIR   8,17    4096   2 /mnt/data
 
 Terminate these processes or stop the services to release the device, allowing it to be unmounted.
 
-#### V. Creating a File System
+#### Creating a File System
 
 Once the target device is unmounted, you can proceed with creating the new file system. The file system type you choose will depend on factors like performance, reliability, and feature support.
 
@@ -410,7 +410,7 @@ sudo e2label /dev/sdb1 mydata
 
 No output means the label was applied successfully. You can verify the label by running `sudo e2label /dev/sdb1`.
 
-#### VI. Changing Existing File Systems
+#### Changing Existing File Systems
 
 Modifying existing file systems requires extra caution. Backup any essential data before proceeding to avoid data loss. Here are common operations:
 
@@ -465,7 +465,7 @@ Backing up important data is always recommended before altering file systems. To
 sudo rsync -av /mnt/mydata/ /mnt/backup/
 ```
 
-#### VII. Mounting the New File System
+#### Mounting the New File System
 
 To make the new file system accessible to your system, you’ll need to mount it. Mounting allows you to interact with the file system and its contents.
 
@@ -510,7 +510,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 The output shows disk usage information for `/dev/sdb1`, confirming it is mounted on `/mnt/mydata`. You’re now ready to use the new file system for storage or data operations.
 
-#### VIII. Additional Considerations
+#### Additional Considerations
 
 When working with file systems, automating mounting, ensuring file system health, and managing permissions are essential practices. Here’s how to handle these additional considerations.
 
@@ -532,12 +532,12 @@ UUID=123e4567-e89b-12d3-a456-426614174000  /mnt/mydata  ext4  defaults  0  2
 
 Entry Components:
 
-- `UUID`: Unique identifier for the partition, obtainable with `blkid`.
-- `/mnt/mydata`: Mount point.
-- `ext4`: File system type.
-- `defaults`: Mount options (defaults include read-write access).
-- `0`: Skip dump backup.
-- `2`: Defines the order for `fsck` checks; `2` means the device is checked after root.
+- The **UUID** is a unique identifier for the partition, which can be obtained using the `blkid` command, ensuring precise identification of the partition across reboots.
+- **/mnt/mydata** is the mount point, specifying the directory where the partition will be accessible once mounted.
+- The **ext4** refers to the file system type, indicating how data is organized on the partition, with `ext4` being a common choice for Linux systems.
+- **defaults** are the mount options, which typically include settings like read-write access and automatic mounting during startup.
+- A value of **0** means the partition will skip the dump backup process, as backups are not required for this entry.
+- The **2** indicates the order in which `fsck` performs checks on the partition, with `2` meaning it will be checked after the root partition, providing structure for file system checks.
 
 Find the UUID for the device by running:
 
