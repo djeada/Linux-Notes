@@ -38,7 +38,7 @@ In modern Unix-like operating systems, `SystemD` is a prevalent tool for managin
 +--------------------------------------------------+
 ```
 
-## Daemons
+### Daemons
 
 Daemons are specialized background processes designed to perform tasks or provide services autonomously. They are typically launched during the system's startup process but can also be initiated manually. Unlike interactive user programs, daemons operate independently of user control.
 
@@ -46,21 +46,32 @@ Daemons are traditionally managed using `rc` (run commands) and `init` (initiali
 
 While `SystemD` has become the standard for service and daemon management in modern Unix-like systems, some older systems still rely on `rc` and `init` scripts. A program can function as both a service and a daemon, depending on its configuration and role.
 
-## Daemons vs services
+### Daemons vs services
 
 The distinction between daemons and services primarily lies in their roles and operational contexts. Daemons are designed for specific tasks or to provide particular services autonomously. They are generally system-started and can also be manually initiated, operating independently of direct user control, managed via `rc` and `init` scripts.
 
 In contrast, services are background processes that interface with other programs, often necessitating system-wide availability, starting with the system boot, and running continuously in the background. They are managed by starting, stopping, enabling, or disabling them as needed.
 
-The fundamental difference lies in their operational scope and interaction: daemons typically perform dedicated tasks or services autonomously, while services facilitate interactions with other system components.
+| **Aspect**        | **Daemon**                                              | **Service**                                            |
+|-------------------|---------------------------------------------------------|--------------------------------------------------------|
+| **Definition**    | A background process running continuously, often from boot time. | A software function provided to users or other programs. |
+| **Purpose**       | To handle tasks regularly, automatically, or on demand without user interaction. | To perform a specific function for the system or other applications. |
+| **Run Model**     | Always running in the background (continuous).           | Can be continuous (always running) or on-demand.       |
+| **Examples**      | `httpd` (Apache web server), `sshd` (SSH server), `crond` (cron scheduler) | Web server, database server, file-sharing service, etc. |
+| **How It's Managed** | By the system (often via tools like `systemd`, `init.d`, etc.). | By system administrators or service management tools.  |
+| **Startup**       | Generally starts at boot time and runs until shutdown.   | May start at boot, run on demand, or be manually started/stopped. |
+| **Scope**         | Background operation; typically not interacted with directly by users. | May be accessible to users or other programs as a function or API. |
+| **Naming**        | Often ends with "d" (e.g., `httpd`, `sshd`).             | Name is usually descriptive of the function (e.g., web server). |
+| **Relationship**  | Provides specific services by running in the background. | Can be implemented as a daemon but not always required to be one. |
 
-## Managing Services
+- A **daemon** describes *how* a task runs (continuously and in the background).
+- A **service** describes *what* a task provides (a specific function).
+  
+Daemons are often services, but not all services need to be daemons.
+
+### Managing Services
 
 Services, being integral background processes, offer functionalities or services to other programs or the system. Their management involves starting, stopping, enabling, or disabling them, with the specific commands and tools varying based on the service type and the operating system.
-
-### Enabling and Disabling Services
-
-Enabling and disabling services are crucial tasks in system administration, determining whether a service starts automatically during the system boot process.
 
 #### Enabling Services
 
@@ -102,10 +113,6 @@ systemctl disable httpd.service
 
 This command removes the symbolic link for the httpd.service, preventing it from starting at boot.
 
-### Starting and Stopping Services
-
-Apart from enabling or disabling services for automatic startup, you might need to manually start or stop a service for immediate effect, testing, or troubleshooting.
-
 #### Starting Services
 
 To start a service means to initiate its operation immediately. This is often done after installing a new service or making configuration changes.
@@ -146,7 +153,7 @@ systemctl stop httpd.service
 
 This command instructs systemd to terminate the httpd service.
 
-### Checking the Status of a Service
+#### Checking the Status of a Service
 
 The status of a service shows its current state and if it is active or not. Some common service statuses include:
 
@@ -175,7 +182,7 @@ II. Using `systemctl` for SystemD-based systems:
 systemctl status httpd.service
 ```
 
-### Checking Service Dependencies
+#### Checking Service Dependencies
 
 Understanding service dependencies is crucial for effective system administration, particularly when managing startup sequences and troubleshooting service issues. To check whether a particular service is dependent on a specific target or another service, the `systemctl` command can be utilized in conjunction with `grep`. Here's how to do it:
 Using this command sets Adam as the owner and assigns the "admins" group to the file.txt.
@@ -196,13 +203,14 @@ Interpretation of Results:
 
 Note that the syntax of the list-dependencies command and the target you specify may vary depending on the operating system and the version of systemctl being used.
 
-### Hands On example operating ftp server
+### Example: Operating FTP Server
 
 ### 1. **Installing FTP Server using Package Managers (RPM and YUM)**
 
 #### **1.1. Using YUM Package Manager**
 
 **Step 1: Search for FTP packages**
+
 ```bash
 yum list | grep ftp
 ```
@@ -213,17 +221,18 @@ vsftpd.x86_64      3.0.2-29.el7   @base
 lftp.x86_64        4.4.8-9.el7    @base
 ```
 
-**Interpretation**: 
 - `vsftpd` is the FTP server package we are interested in.
 - `lftp` is a command-line FTP client package.
 - The `@base` indicates that these packages are from the base repository.
 
 **Step 2: Install vsftpd (FTP server)**
+
 ```bash
 yum install vsftpd
 ```
 
 **Expected Output**:
+
 ```bash
 Dependencies Resolved
 ================================================================================
@@ -235,52 +244,55 @@ Installing:
 Is this ok [y/d/N]: y
 ```
 
-**Interpretation**: 
-- It resolves dependencies and asks for confirmation to proceed with the installation. Press `y` to install.
+It resolves dependencies and asks for confirmation to proceed with the installation. Press `y` to install.
 
 #### **1.2. Using RPM Package Manager**
 
 **Step 1: Search for FTP package using RPM**
+
 ```bash
 rpm -qa | grep ftp
 ```
 
 **Expected Output**:
+
 ```bash
 vsftpd-3.0.2-29.el7.x86_64
 lftp-4.4.8-9.el7.x86_64
 ```
 
-**Interpretation**: 
 - This lists already installed FTP-related packages.
 - `vsftpd` is the FTP server; if it's listed, you don’t need to install it again.
 
 **Step 2: Install vsftpd using RPM**
+
 ```bash
 rpm -ivh vsftpd-3.0.2-29.el7.x86_64.rpm
 ```
 
 **Expected Output**:
+
 ```bash
 Preparing...                     ################################# [100%]
 Updating / installing...
    1:vsftpd-3.0.2-29.el7         ################################# [100%]
 ```
 
-**Interpretation**:
-- The package installs successfully if no errors appear.
+The package installs successfully if no errors appear.
 
 ### 2. **Configuring and Starting the FTP Server**
 
 **Step 1: Edit the configuration file**
+
 ```bash
 vi /etc/vsftpd/vsftpd.conf
 ```
 
-- Look for these key options:
-    - `anonymous_enable=YES` or `NO` (depends on if you want anonymous access).
-    - `local_enable=YES` (to allow local users).
-    - `write_enable=YES` (if you want to allow file uploads).
+Look for these key options:
+
+- `anonymous_enable=YES` or `NO` (depends on if you want anonymous access).
+- `local_enable=YES` (to allow local users).
+- `write_enable=YES` (if you want to allow file uploads).
 
 **Step 2: Enable and start vsftpd service**
 ```bash
@@ -289,20 +301,19 @@ systemctl start vsftpd
 ```
 
 **Expected Output (Enable command)**:
+
 ```bash
 Created symlink from /etc/systemd/system/multi-user.target.wants/vsftpd.service to /usr/lib/systemd/system/vsftpd.service.
 ```
 
-**Interpretation**: 
-- The `systemctl enable` command sets the service to start on boot. The symlink confirmation indicates success.
+The `systemctl enable` command sets the service to start on boot. The symlink confirmation indicates success.
 
 **Expected Output (Start command)**:
 ```bash
 No output (command completes silently)
 ```
 
-**Interpretation**: 
-- No output means the service started successfully. Use `systemctl status` to verify.
+No output means the service started successfully. Use `systemctl status` to verify.
 
 **Step 3: Check service status**
 ```bash
@@ -310,6 +321,7 @@ systemctl status vsftpd
 ```
 
 **Expected Output**:
+
 ```bash
 ● vsftpd.service - Vsftpd ftp daemon
    Loaded: loaded (/usr/lib/systemd/system/vsftpd.service; enabled; vendor preset: disabled)
@@ -332,7 +344,6 @@ tcp   0  0 0.0.0.0:21     0.0.0.0:*       LISTEN      1234/vsftpd
 tcp6  0  0 :::21          :::*            LISTEN      1234/vsftpd
 ```
 
-**Interpretation**: 
 - This shows that the FTP server is listening on port `21` (the standard FTP port).
 - `1234` is the process ID (PID) of the vsftpd service.
 - `LISTEN` means it’s actively waiting for incoming connections.
@@ -349,15 +360,16 @@ netstat -an | grep 21
 tcp   0  0 0.0.0.0:21     0.0.0.0:*       LISTEN
 ```
 
-**Interpretation**: 
-- If you see `LISTEN` on port `21`, it means the port is in use by FTP. If there's no output, the port is free.
+If you see `LISTEN` on port `21`, it means the port is in use by FTP. If there's no output, the port is free.
 
 **Alternative:**
+
 ```bash
 ss -an | grep 21
 ```
 
 **Expected Output**:
+
 ```bash
 LISTEN     0      100    0.0.0.0:21      0.0.0.0:*
 ```
@@ -374,8 +386,7 @@ ps -ef | grep vsftpd
 root     1234     1  0 12:30 ?        00:00:00 /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
 ```
 
-**Interpretation**:
-- This output shows that vsftpd is running with PID `1234`.
+This output shows that vsftpd is running with PID `1234`.
 
 **Step 2: Test FTP connection on localhost**
 ```bash
@@ -389,7 +400,6 @@ Connected to localhost (127.0.0.1).
 Name (localhost:user):
 ```
 
-**Interpretation**: 
 - The `220 (vsFTPd 3.0.2)` message indicates the FTP server is ready.
 - You can enter a username to continue, or test anonymous access with `anonymous`.
 
@@ -410,30 +420,30 @@ Name (<server_ip>:user):
 
 **Step 4: Upload and download test files**
 1. **Upload file**:
-   ```bash
-   put testfile.txt
-   ```
-   **Expected Output**:
-   ```bash
-   200 PORT command successful.
-   150 Ok to send data.
-   226 Transfer complete.
-   ```
+```bash
+put testfile.txt
+```
+**Expected Output**:
+```bash
+200 PORT command successful.
+150 Ok to send data.
+226 Transfer complete.
+```
 
-   **Interpretation**: The file `testfile.txt` was successfully uploaded.
+**Interpretation**: The file `testfile.txt` was successfully uploaded.
 
 2. **Download file**:
-   ```bash
-   get testfile.txt
-   ```
-   **Expected Output**:
-   ```bash
-   200 PORT command successful.
-   150 Opening BINARY mode data connection.
-   226 Transfer complete.
-   ```
+```bash
+get testfile.txt
+```
+**Expected Output**:
+```bash
+200 PORT command successful.
+150 Opening BINARY mode data connection.
+226 Transfer complete.
+```
 
-   **Interpretation**: The file was successfully downloaded.
+**Interpretation**: The file was successfully downloaded.
 
 **Step 5: Exit the FTP session**
 ```bash
@@ -441,6 +451,7 @@ bye
 ```
 
 **Expected Output**:
+
 ```bash
 221 Goodbye.
 ```
@@ -452,16 +463,14 @@ tail -f /var/log/vsftpd.log
 ```
 
 **Expected Output**:
+
 ```
 Mon Oct  5 12:35:15 2024 [pid 1235] CONNECT: Client "::1"
 Mon Oct  5 12:35:16 2024 [pid 1235] [anonymous] OK LOGIN: Client "::1"
 Mon Oct  5 12:36:20 2024 [pid 1236] [user] UPLOAD: Client "::1", "/home/user/testfile.txt"
 ```
 
-**Interpretation**: 
-- This shows connection and file transfer logs, which can be helpful for debugging.
-
-
+This shows connection and file transfer logs, which can be helpful for debugging.
 
 ## Creating a Custom Service with SystemD
 
@@ -502,7 +511,7 @@ This script includes:
 
 You can read more about targets <a href="https://github.com/djeada/Linux-Notes/blob/main/notes/system_startup.md">here</a>.
 
-### Additional Notes
+#### Additional Notes
 
 After creating or modifying a service script, use `systemctl daemon-reload` to reload the SystemD configuration and `systemctl enable [service-name].service` to enable the service.
 
@@ -517,7 +526,7 @@ So, when enabling, starting, or checking the status of your service with SystemD
 - To start the service: `systemctl start my_custom_service.service`
 - To check the service status: `systemctl status my_custom_service.service`
 
-## Challenges
+### Challenges
 
 1. Use SystemD to list all timers and determine which corresponding services are enabled on your system.
 2. Install and configure a DHCP server using the `isc-dhcp-server` package. This service should be set up to automatically provide network configuration to client devices.
