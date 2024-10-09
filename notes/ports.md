@@ -548,6 +548,14 @@ Nmap done: 1 IP address (1 host up) scanned in 5.23 seconds
 
 Nmap scanned the target IP and found that ports 80, 443, and 8080 are open.
 
+**Interpreting Nmap Output**
+
+| **Category**         | **Description**                                                                                          |
+|----------------------|----------------------------------------------------------------------------------------------------------|
+| **Host Status**      | Indicates if the host is **up** or **down**.                                                              |
+| **Port State**       | - **open**: Accepting connections. <br> - **closed**: Not accepting connections but reachable. <br> - **filtered**: Status undetermined due to packet filtering. |
+| **Service Detection**| Displays the **service name** and **version** running on each open port.                                 |
+
 II. **TCP SYN Scan (Stealth Scan):**
 
 ```bash
@@ -630,14 +638,6 @@ nmap -oN output.txt <IP-address>
 **Expected Output:**
 
 The scan results are saved in `output.txt`.
-
-**Interpreting Nmap Output**
-
-| **Category**         | **Description**                                                                                          |
-|----------------------|----------------------------------------------------------------------------------------------------------|
-| **Host Status**      | Indicates if the host is **up** or **down**.                                                              |
-| **Port State**       | - **open**: Accepting connections. <br> - **closed**: Not accepting connections but reachable. <br> - **filtered**: Status undetermined due to packet filtering. |
-| **Service Detection**| Displays the **service name** and **version** running on each open port.                                 |
 
 **Legal Implications:**
 
