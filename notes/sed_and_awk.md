@@ -51,16 +51,14 @@ User
 
 The substitution command replaces text matching a pattern with new text.
 
-**Syntax:**
-
 ```bash
 sed 's/pattern/replacement/flags' inputfile
 ```
 
-- **`s`**: Substitution command.
-- **`pattern`**: The regular expression to search for.
-- **`replacement`**: The text to replace the pattern with.
-- **`flags`**: Optional flags to modify the behavior.
+- The **`s`** command initiates a substitution, signaling `sed` to replace matched patterns within the input.
+- The **`pattern`** represents the regular expression or specific text that `sed` searches for in each line.
+- The **`replacement`** is the text that replaces any matches found by the pattern, allowing for content modification.
+- **`flags`** are optional modifiers that alter the behavior of the substitution, such as making it global with `g` or applying other specific actions.
 
 **Common Flags:**
 
@@ -80,8 +78,6 @@ sed 's/apple/orange/g' fruits.txt
 
 Delete lines matching a pattern or at a specific line number.
 
-**Syntax:**
-
 ```bash
 sed '/pattern/d' inputfile
 ```
@@ -100,8 +96,6 @@ sed '/^$/d' file.txt
 ##### Insertion and Appending
 
 Insert or append text before or after a line matching a pattern.
-
-**Syntax:**
 
 **Insert (`i`)**:
 
@@ -124,8 +118,6 @@ sed '/pattern/a\text to append' inputfile
 ##### Transformation
 
 Transform characters using the `y` command, similar to `tr`.
-
-**Syntax:**
 
 ```bash
 sed 'y/source/destination/' inputfile
@@ -164,17 +156,15 @@ sed '/^Error/s/^Error/Warning/' logs.txt
 
 Specify lines to apply commands to using line numbers or patterns.
 
-**Syntax:**
-
 ```bash
 sed 'address command' inputfile
 ```
 
 **Address Types:**
 
-- **Single Line**: `sed '5d' file.txt` deletes line 5.
-- **Line Range**: `sed '2,4d' file.txt` deletes lines 2 to 4.
-- **Pattern Range**: `sed '/start/,/end/d' file.txt` deletes from 'start' to 'end'.
+- Using **single line** deletion, the command `sed '5d' file.txt` deletes only line 5 from the specified file.
+- For **line range** deletion, the command `sed '2,4d' file.txt` removes lines 2 through 4, allowing targeted multi-line deletion.
+- With a **pattern range**, the command `sed '/start/,/end/d' file.txt` deletes all lines from the first occurrence of 'start' up to and including 'end', enabling deletion based on matching patterns.
 
 ##### Holding Space
 
@@ -288,8 +278,8 @@ User
 
 ##### Field and Record Processing
 
-- **Fields**: Accessed using `$1`, `$2`, ..., `$NF` (number of fields).
-- **Records**: Each line is a record, accessed using `NR` (record number).
+- **Fields** are individual data segments within a line, accessed using positional variables like `$1`, `$2`, and so forth up to `$NF`, where `$NF` represents the total number of fields.
+- **Records** refer to each line within the input, with each record accessible using the `NR` variable, which denotes the current record number in the sequence.
 
 **Example: Print the first and third fields:**
 
