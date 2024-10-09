@@ -2,24 +2,18 @@
 
 `sed` (Stream Editor) and `awk` are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands. This guide provides a comprehensive overview of both utilities, including their history, usage, syntax, options, and practical examples.
 
-## Introduction to `sed`
-
-### Historical Background
+### Sed
 
 Developed in the 1970s by Lee E. McMahon of Bell Labs, `sed` is a non-interactive stream editor used to perform basic text transformations on an input stream (a file or input from a pipeline). It was designed to support scripting and command-line usage, automating repetitive editing tasks.
 
-### Key Features
+Main idea:
 
-- **Non-interactive Editing**: Performs editing operations automatically without user interaction.
-- **Stream Processing**: Processes input line by line, making it efficient for large files.
-- **Regular Expressions**: Supports powerful pattern matching using regular expressions.
-- **Scriptable**: Allows the use of scripts for complex editing tasks.
+- Performs editing operations automatically without user interaction.
+- Processes input line by line, making it efficient for large files.
+- Supports powerful pattern matching using regular expressions.
+- Allows the use of scripts for complex editing tasks.
 
----
-
-## Basic Usage of `sed`
-
-### Syntax
+#### Syntax
 
 The basic syntax of `sed` is:
 
@@ -27,11 +21,11 @@ The basic syntax of `sed` is:
 sed [OPTIONS] 'SCRIPT' INPUTFILE...
 ```
 
-- **OPTIONS**: Command-line options that modify the behavior of `sed`.
-- **SCRIPT**: One or more editing commands to apply to the input.
-- **INPUTFILE**: One or more files to process.
+- **OPTIONS** are used to modify the behavior of `sed`, allowing customization of how the command processes and interprets input.
+- The **SCRIPT** consists of one or more editing commands that `sed` applies to the input, defining specific transformations or modifications to be executed.
+- **INPUTFILE** refers to one or more files that `sed` processes, enabling batch or single-file editing based on the specified script commands.
 
-### How `sed` Works
+#### How `sed` Works
 
 ```
 User
@@ -51,11 +45,9 @@ User
 
 `sed` reads the input text line by line, applies the specified commands to each line, and outputs the result. If no input file is specified, `sed` reads from standard input.
 
----
+#### Common Operations with `sed`
 
-## Common Operations with `sed`
-
-### Substitution
+##### Substitution
 
 The substitution command replaces text matching a pattern with new text.
 
@@ -82,9 +74,7 @@ sed 's/pattern/replacement/flags' inputfile
 sed 's/apple/orange/g' fruits.txt
 ```
 
----
-
-### Deletion
+##### Deletion
 
 Delete lines matching a pattern or at a specific line number.
 
@@ -105,25 +95,17 @@ sed '/^$/d' file.txt
 - `^$` matches empty lines.
 - `d` deletes the matching lines.
 
----
-
-### Insertion and Appending
+##### Insertion and Appending
 
 Insert or append text before or after a line matching a pattern.
 
 **Syntax:**
 
-- **Insert (`i`)**:
+**Insert (`i`)**:
 
-  ```bash
-  sed '/pattern/i\text to insert' inputfile
-  ```
-
-- **Append (`a`)**:
-
-  ```bash
-  sed '/pattern/a\text to append' inputfile
-  ```
+```bash
+sed '/pattern/i\text to insert' inputfile
+```
 
 **Example: Insert a header before the first line:**
 
@@ -131,9 +113,13 @@ Insert or append text before or after a line matching a pattern.
 sed '1i\Header Text' file.txt
 ```
 
----
+**Append (`a`)**:
 
-### Transformation
+```bash
+sed '/pattern/a\text to append' inputfile
+```
+
+##### Transformation
 
 Transform characters using the `y` command, similar to `tr`.
 
@@ -149,11 +135,9 @@ sed 'y/source/destination/' inputfile
 sed 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' file.txt
 ```
 
----
+### Advanced `sed` Techniques
 
-## Advanced `sed` Techniques
-
-### Regular Expressions in `sed`
+##### Regular Expressions in `sed`
 
 `sed` supports regular expressions for pattern matching.
 
@@ -172,9 +156,7 @@ sed 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' file.txt
 sed '/^Error/s/^Error/Warning/' logs.txt
 ```
 
----
-
-### Addressing
+##### Addressing
 
 Specify lines to apply commands to using line numbers or patterns.
 
@@ -190,9 +172,7 @@ sed 'address command' inputfile
 - **Line Range**: `sed '2,4d' file.txt` deletes lines 2 to 4.
 - **Pattern Range**: `sed '/start/,/end/d' file.txt` deletes from 'start' to 'end'.
 
----
-
-### Holding Space
+##### Holding Space
 
 `sed` has a pattern space and a hold space for complex text manipulations.
 
@@ -207,39 +187,80 @@ sed 'N; s/\(.*\)\n\(.*\)/\2\n\1/' file.txt
 - `N` reads the next line into the pattern space.
 - The `s` command swaps the two lines.
 
----
+#### Practical Examples and Use Cases
 
-## Introduction to `awk`
+I. Replace All Occurrences of a String:
 
-### Historical Background
+```bash
+sed 's/old/new/g' file.txt
+```
+
+II. Delete Lines Containing a Pattern:
+
+```bash
+sed '/unwanted_pattern/d' file.txt
+```
+
+III. Insert Text After a Line Matching a Pattern:
+
+```bash
+sed '/pattern/a\New line of text' file.txt
+```
+
+IV. Edit Files In-Place with Backup:
+
+```bash
+sed -i.bak 's/foo/bar/g' file.txt
+```
+
+`-i.bak` edits the file in-place and creates a backup with `.bak` extension.
+
+V. Change Delimiters in CSV Files:
+
+```bash
+sed 's/,/|/g' data.csv > data.psv
+```
+
+Converts comma-separated values to pipe-separated values.
+
+#### Tips and Best Practices
+
+- Enclose scripts in single quotes to prevent shell interpretation.
+- Use backslashes to escape characters like `/`, `&`, and `\`.
+- Use without `-i` to test commands before modifying files in-place.
+- With `-E` (or `sed -r` in GNU `sed`), you can use extended regex syntax.
+
+**Example:**
+
+```bash
+sed -E 's/([0-9]{3})-([0-9]{2})-([0-9]{4})/XXX-XX-\3/' ssn.txt
+```
+
+### Awk
 
 Developed in the 1970s by Alfred Aho, Peter Weinberger, and Brian Kernighan at Bell Labs (hence the name `awk`), `awk` is a powerful text-processing language. It is designed for data extraction and reporting, offering a programming language with C-like syntax and features.
 
-### Key Features
+Main idea:
 
-- **Field-Based Processing**: Treats each line as a record and fields separated by delimiters.
-- **Pattern Matching**: Executes actions based on pattern matches.
-- **Variables and Control Structures**: Supports variables, arrays, and control flow statements.
-- **Built-in Functions**: Provides functions for string manipulation, arithmetic, and more.
-- **Extensibility**: Allows user-defined functions.
+- Treats each line as a record and fields separated by delimiters.
+- Executes actions based on pattern matches.
+- Supports variables, arrays, and control flow statements.
+- Provides functions for string manipulation, arithmetic, and more.
+- Allows user-defined functions.
 
----
-
-## Basic Usage of `awk`
-
-### Syntax
+#### Syntax
 
 The basic syntax of `awk` is:
 
 ```bash
-awk 'pattern { action }' inputfile
+awk 'PATTERN { ACTION }' INPUTFILE
 ```
 
-- **`pattern`**: A regular expression or condition to match.
-- **`action`**: Commands to execute when the pattern matches.
-- **`inputfile`**: The file to process.
+- The **PATTERN** represents a regular expression or condition that `awk` uses to identify matching lines or data segments within the input.
+- The **ACTION** includes the commands that `awk` executes whenever it finds a match for the specified pattern, determining how matching data is processed.
+- The **INPUTFILE** is the file that `awk` processes, allowing it to apply the pattern and action rules across the contents of the specified file.
 
-### How `awk` Works
+#### How `awk` Works
 
 ```
 User
@@ -259,11 +280,9 @@ User
 
 `awk` reads the input file line by line, splits each line into fields based on a delimiter (default is whitespace), and then executes the specified actions on lines matching the pattern.
 
----
+#### Common Operations with `awk`
 
-## Common Operations with `awk`
-
-### Field and Record Processing
+##### Field and Record Processing
 
 - **Fields**: Accessed using `$1`, `$2`, ..., `$NF` (number of fields).
 - **Records**: Each line is a record, accessed using `NR` (record number).
@@ -274,9 +293,7 @@ User
 awk '{ print $1, $3 }' data.txt
 ```
 
----
-
-### Patterns and Actions
+##### Patterns and Actions
 
 Execute actions only on lines matching a pattern.
 
@@ -286,9 +303,7 @@ Execute actions only on lines matching a pattern.
 awk '$2 == "Error" { print }' logs.txt
 ```
 
----
-
-### Variables and Operators
+##### Variables and Operators
 
 `awk` supports arithmetic and string operations.
 
@@ -298,11 +313,9 @@ awk '$2 == "Error" { print }' logs.txt
 awk '{ sum += $3 } END { print "Total:", sum }' data.txt
 ```
 
----
+#### Advanced `awk` Techniques
 
-## Advanced `awk` Techniques
-
-### Control Structures
+##### Control Structures
 
 `awk` supports `if`, `while`, `for`, and other control structures.
 
@@ -318,9 +331,7 @@ awk '{
 }' data.txt
 ```
 
----
-
-### Built-in Functions
+##### Built-in Functions
 
 `awk` provides numerous built-in functions for mathematical and string operations.
 
@@ -337,9 +348,7 @@ awk '{
 awk '{ $2 = toupper($2); print }' data.txt
 ```
 
----
-
-### User-Defined Functions
+##### User-Defined Functions
 
 Define custom functions for reuse.
 
@@ -350,103 +359,49 @@ awk 'function square(x) { return x * x }
      { print $1, square($2) }' data.txt
 ```
 
----
+#### Practical Examples and Use Cases
 
-## Practical Examples and Use Cases
+I. Calculate Average of a Column:
 
-### `sed` Examples
+```bash
+awk '{ total += $3; count++ } END { print "Average:", total/count }' data.txt
+```
 
-1. **Replace All Occurrences of a String:**
+II. Filter Rows Based on Field Value:
 
-   ```bash
-   sed 's/old/new/g' file.txt
-   ```
+```bash
+awk '$4 >= 50 { print }' scores.txt
+```
 
-2. **Delete Lines Containing a Pattern:**
+III. Reformat Output:
 
-   ```bash
-   sed '/unwanted_pattern/d' file.txt
-   ```
+```bash
+awk '{ printf "%-10s %-10s %5.2f\n", $1, $2, $3 }' data.txt
+```
 
-3. **Insert Text After a Line Matching a Pattern:**
+Formats output with fixed-width columns and two decimal places.
 
-   ```bash
-   sed '/pattern/a\New line of text' file.txt
-   ```
+IV. Count Occurrences of Unique Values:
 
-4. **Edit Files In-Place with Backup:**
+```bash
+awk '{ count[$1]++ } END { for (word in count) print word, count[word] }' words.txt
+```
 
-   ```bash
-   sed -i.bak 's/foo/bar/g' file.txt
-   ```
+V. Process Delimited Data with Custom Field Separator:
 
-   **Explanation:**
+```bash
+awk -F ':' '{ print $1, $3 }' /etc/passwd
+```
 
-   - `-i.bak` edits the file in-place and creates a backup with `.bak` extension.
+- `:` sets the field separator to colon.
+- Prints username and UID.
 
-5. **Change Delimiters in CSV Files:**
+#### Tips and Best Practices
 
-   ```bash
-   sed 's/,/|/g' data.csv > data.psv
-   ```
-
-   **Explanation:**
-
-   - Converts comma-separated values to pipe-separated values.
-
----
-
-### `awk` Examples
-
-1. **Calculate Average of a Column:**
-
-   ```bash
-   awk '{ total += $3; count++ } END { print "Average:", total/count }' data.txt
-   ```
-
-2. **Filter Rows Based on Field Value:**
-
-   ```bash
-   awk '$4 >= 50 { print }' scores.txt
-   ```
-
-3. **Reformat Output:**
-
-   ```bash
-   awk '{ printf "%-10s %-10s %5.2f\n", $1, $2, $3 }' data.txt
-   ```
-
-   **Explanation:**
-
-   - Formats output with fixed-width columns and two decimal places.
-
-4. **Count Occurrences of Unique Values:**
-
-   ```bash
-   awk '{ count[$1]++ } END { for (word in count) print word, count[word] }' words.txt
-   ```
-
-5. **Process Delimited Data with Custom Field Separator:**
-
-   ```bash
-   awk -F ':' '{ print $1, $3 }' /etc/passwd
-   ```
-
-   **Explanation:**
-
-   - `-F ':'` sets the field separator to colon.
-   - Prints username and UID.
-
----
-
-## Tips and Best Practices
-
-### For `sed`
-
-- **Use Single Quotes**: Enclose scripts in single quotes to prevent shell interpretation.
-- **Escape Special Characters**: Use backslashes to escape characters like `/`, `&`, and `\`.
-- **Test Before Applying**: Use without `-i` to test commands before modifying files in-place.
-- **Use Extended Regular Expressions**: With `-E` (or `sed -r` in GNU `sed`), you can use extended regex syntax.
+- Enclose scripts in single quotes to prevent shell interpretation.
+- Use backslashes to escape characters like `/`, `&`, and `\`.
+- Use without `-i` to test commands before modifying files in-place.
+- With `-E` (or `sed -r` in GNU `sed`), you can use extended regex syntax.
 
 **Example:**
 
@@ -454,13 +409,9 @@ awk 'function square(x) { return x * x }
 sed -E 's/([0-9]{3})-([0-9]{2})-([0-9]{4})/XXX-XX-\3/' ssn.txt
 ```
 
----
-
-### For `awk`
-
-- **Initialize Variables**: Ensure variables are initialized to avoid unexpected results.
-- **Field Separators**: Use `-F` to set custom field separators.
-- **Use BEGIN and END Blocks**: For actions before processing starts or after it ends.
+- Ensure variables are initialized to avoid unexpected results.
+- Use `-F` to set custom field separators.
+- For actions before processing starts or after it ends.
 
 **Example:**
 
@@ -468,10 +419,7 @@ sed -E 's/([0-9]{3})-([0-9]{2})-([0-9]{4})/XXX-XX-\3/' ssn.txt
 awk 'BEGIN { print "Start Processing" } { print $0 } END { print "End Processing" }' file.txt
 ```
 
-- **Modularize with Functions**: Use functions for complex calculations or repeated code.
-
-
-## Challenges
+### Challenges
 
 1. Examine the core differences between `sed` and `awk`. What are their primary functionalities? How do their capabilities differ when it comes to handling text streams and structured data?
 2. Describe the sequence of operations that `sed` performs on a text stream. What is the role of pattern space in `sed`?
