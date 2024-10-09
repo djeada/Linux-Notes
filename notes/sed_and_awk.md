@@ -64,9 +64,11 @@ sed 's/pattern/replacement/flags' inputfile
 
 **Common Flags:**
 
-- **`g`**: Global replacement in the line.
-- **`i`**: Case-insensitive matching.
-- **`p`**: Prints the line if a substitution occurred.
+| Flag | Description                         |
+|------|-------------------------------------|
+| `g`  | Global replacement in the line.     |
+| `i`  | Case-insensitive matching.          |
+| `p`  | Prints the line if a substitution occurred. |
 
 **Example: Replace 'apple' with 'orange' globally:**
 
@@ -143,12 +145,14 @@ sed 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' file.txt
 
 **Metacharacters:**
 
-- `.` : Matches any single character.
-- `*` : Matches zero or more occurrences of the preceding character.
-- `[]`: Character class; matches any one character inside the brackets.
-- `^` : Matches the start of a line.
-- `$` : Matches the end of a line.
-- `\` : Escapes a metacharacter.
+| Symbol | Description                                           |
+|--------|-------------------------------------------------------|
+| `.`    | Matches any single character.                         |
+| `*`    | Matches zero or more occurrences of the preceding character. |
+| `[]`   | Character class; matches any one character inside the brackets. |
+| `^`    | Matches the start of a line.                          |
+| `$`    | Matches the end of a line.                            |
+| `\`    | Escapes a metacharacter.                              |
 
 **Example: Replace lines starting with 'Error':**
 
@@ -337,10 +341,12 @@ awk '{
 
 **String Functions:**
 
-- `length(str)`: Returns the length of `str`.
-- `substr(str, start, length)`: Extracts substring.
-- `tolower(str)`: Converts to lowercase.
-- `toupper(str)`: Converts to uppercase.
+| Function                    | Description                           |
+|-----------------------------|---------------------------------------|
+| `length(str)`               | Returns the length of `str`.          |
+| `substr(str, start, length)`| Extracts substring.                   |
+| `tolower(str)`              | Converts to lowercase.                |
+| `toupper(str)`              | Converts to uppercase.                |
 
 **Example: Convert the second field to uppercase:**
 
@@ -411,7 +417,7 @@ sed -E 's/([0-9]{3})-([0-9]{2})-([0-9]{4})/XXX-XX-\3/' ssn.txt
 
 - Ensure variables are initialized to avoid unexpected results.
 - Use `-F` to set custom field separators.
-- For actions before processing starts or after it ends.
+- Use `BEGIN` and `END` Blocks for actions before processing starts or after it ends.
 
 **Example:**
 
