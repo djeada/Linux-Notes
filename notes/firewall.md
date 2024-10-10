@@ -223,34 +223,15 @@ To make the changes persistent across reboots, restart the `firewalld.service` u
 systemctl restart firewalld.service
 ```
 
-## Challenges
+### Challenges
 
-I. Configure Firewall for Specific Port Traffic
-
-- Block all incoming traffic on port 80 (HTTP).
-- Allow all incoming traffic on port 22 (SSH).
-
-II. Set Up Default Firewall Policies
-
-- Configure the firewall to deny all incoming traffic by default.
-- Allow all outgoing traffic.
-
-III. Create a firewall rule to deny incoming ICMP echo requests, effectively blocking ping requests.
-
-IV. Configure the firewall to allow incoming traffic on port 80 (HTTP) only from a specific IP address.
-
-V. Set up a rule to block all incoming HTTP traffic on port 80 from a specific IP address.
-
-VI. Modify firewall rules to allow SSH access (port 22) only from a set of predefined IP addresses.
-
-VII. Implement a rule to limit the rate of incoming connections to a specific port (e.g., 100 connections per minute) to mitigate potential DoS attacks.
-
-VIII. Set up the firewall to log details of all dropped packets for analysis and monitoring purposes.
-
-IX. Create a rule to forward traffic incoming on a specific port (e.g., 8080) to another port (e.g., 80).
-
-X. Configure the firewall to block all outgoing traffic to certain domains or IP addresses.
-
-XI. Implement firewall rules that specifically target IPv6 traffic for both incoming and outgoing connections.
-
-XII. Configure rules that are active only during certain hours of the day, for instance, allowing certain traffic only during business hours.
+1. Block all incoming traffic on port 80 (HTTP) while allowing all incoming traffic on port 22 (SSH). Test the configuration by attempting to access the system on both ports and verify that HTTP is blocked while SSH remains accessible. Discuss the importance of selectively blocking and allowing specific ports for securing a system.
+2. Configure the firewall to deny all incoming traffic by default and allow all outgoing traffic. Explain the purpose of setting default policies, and discuss how a restrictive incoming policy can improve system security by blocking unsolicited connections.
+3. Create a firewall rule to block incoming ICMP echo requests, effectively preventing ping requests. Test the configuration by pinging the system from another device, and discuss why blocking ICMP can be a useful security measure for preventing network reconnaissance.
+4. Set up a rule to allow incoming traffic on port 80 (HTTP) only from a specific IP address. Test this rule by trying to access the system from the allowed IP address and from a different IP. Discuss the use cases for restricting access to specific IP addresses and how it helps secure services exposed to the internet.
+5. Configure a rule to block all incoming HTTP traffic on port 80 from a specific IP address. Verify this rule by attempting to access the system on port 80 from the blocked IP. Explain how blocking specific IPs can help mitigate unauthorized access or prevent known malicious sources from reaching the server.
+6. Modify firewall rules to allow SSH access (port 22) only from a set of predefined IP addresses. Test access from an allowed IP and a blocked IP, and discuss the importance of limiting SSH access to trusted sources as a security best practice for remote management.
+7. Implement a rule to limit the rate of incoming connections on a specific port (e.g., 100 connections per minute) to mitigate potential DoS attacks. Simulate an excessive number of connections to this port, and monitor the firewall’s response. Explain how rate limiting can protect services from abuse and help maintain system availability.
+8. Set up the firewall to log details of all dropped packets for analysis and monitoring purposes. Review the log entries to ensure that dropped packets are being recorded, and explain how logging provides insights into unauthorized access attempts and potential threats.
+9. Create a rule to forward traffic incoming on a specific port (e.g., 8080) to another port (e.g., 80). Test this configuration by sending requests to port 8080 and verifying that they reach the service listening on port 80. Discuss port forwarding as a method for managing and redirecting traffic to internal services.
+10. Configure the firewall to block all outgoing traffic to specific domains or IP addresses. Test this by attempting to connect to the blocked addresses, and discuss scenarios where limiting outgoing connections is beneficial, such as preventing communication with known malicious domains.
