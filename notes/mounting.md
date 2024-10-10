@@ -45,10 +45,6 @@ To mount a file system, you use the `mount` command. This command attaches the f
 
 **Basic Syntax:**
 
-Absolutely, here’s a more readable explanation:
-
-**Basic Syntax:**
-
 ```bash
 mount [OPTIONS] <DEVICE> <MOUNT_POINT>
 ```
