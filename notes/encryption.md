@@ -172,8 +172,6 @@ uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 
 When communicating securely with someone, you need their public key to encrypt files for them or verify their signatures. The `gpg --import` command allows you to import a public key from a file, adding it to your keyring so that you can use it for encryption or verification purposes.
 
-**Command:**
-
 ```bash
 gpg --import recipient_public_key.asc
 ```
@@ -189,8 +187,6 @@ gpg:               imported: 1
 #### Trusting an Imported Public Key
 
 After importing a public key, you may want to specify how much you trust the key owner to verify others' identities. This process ensures that when you receive files or signatures from the key owner, you can trust their authenticity. The `gpg --edit-key` command allows you to interactively set the trust level for a specific key, providing options from "do not trust" to "ultimate trust," depending on your confidence in the key owner.
-
-**Command:**
 
 ```bash
 gpg --edit-key jane.smith@example.com
@@ -215,6 +211,14 @@ Your decision? 5
 
 To protect sensitive information, you can encrypt files using GPG. When encrypting for a specific recipient, their public key is required. The command `gpg -e -r` encrypts the specified file so that only the recipient (who possesses the corresponding private key) can decrypt it. No output indicates success, and the encrypted file is saved with a `.gpg` extension.
 
+```bash
+gpg -e -r jane.smith@example.com file.txt
+```
+
+**Example Output:**
+
+*(No output means the command was successful)*
+
 **Visualization:**
 
 ```
@@ -224,21 +228,9 @@ To protect sensitive information, you can encrypt files using GPG. When encrypti
                    (Recipient: jane.smith@example.com)
 ```
 
-**Command:**
-
-```bash
-gpg -e -r jane.smith@example.com file.txt
-```
-
-**Example Output:**
-
-*(No output means the command was successful)*
-
 #### Symmetric Encryption
 
 For cases where both parties share a secret password instead of using public-key cryptography, you can encrypt files using symmetric encryption. The command `gpg --symmetric` encrypts a file using a passphrase that you set. Both encryption and decryption of the file will require the same passphrase.
-
-**Command:**
 
 ```bash
 gpg --symmetric file.txt
@@ -254,8 +246,6 @@ Repeat passphrase: ********
 #### Decrypting a File
 
 Once a file has been encrypted (either with a public key or using symmetric encryption), you can decrypt it using the `gpg -d` command. If the file was encrypted with a public key, you’ll need the corresponding private key. If the file was symmetrically encrypted, you’ll need the correct passphrase.
-
-**Command:**
 
 ```bash
 gpg -d -o file.txt file.txt.gpg
@@ -273,8 +263,6 @@ gpg: encrypted with AES256 cipher
 
 Digital signatures ensure that the recipient of a file can verify its authenticity and that it hasn’t been altered. By using the `gpg --sign` command, you can sign a file with your private key, creating a signature that others can verify using your public key.
 
-**Command:**
-
 ```bash
 gpg --sign file.txt
 ```
@@ -286,8 +274,6 @@ gpg --sign file.txt
 #### Verifying a Signature
 
 After receiving a signed file, you can verify the authenticity of the signature using the `gpg --verify` command. This process checks the signature against the sender's public key, confirming whether the file has been tampered with and verifying the identity of the signer.
-
-**Command:**
 
 ```bash
 gpg --verify file.txt.gpg
@@ -305,16 +291,6 @@ gpg: Good signature from "John Doe (Work Key) <john.doe@example.com>"
 
 When someone wants to send you an encrypted file or verify your digital signature, they’ll need your public key. The `gpg --export` command allows you to export your public key to a file, which can then be shared with others. The `-a` option ensures the key is exported in a text-readable format (ASCII armor).
 
-**Visualization of Key Export:**
-
-```bash
-[ Private Key ]     +-------------+     [ Public Key ]
-    (Secure)   ---> | GPG Export  | ---> john_public_key.asc
-                    +-------------+
-```
-
-**Command:**
-
 ```bash
 gpg --export -a john.doe@example.com > john_public_key.asc
 ```
@@ -323,11 +299,17 @@ gpg --export -a john.doe@example.com > john_public_key.asc
 
 *(No output means the command was successful)*
 
+**Visualization of Key Export:**
+
+```bash
+[ Private Key ]     +-------------+     [ Public Key ]
+    (Secure)   ---> | GPG Export  | ---> john_public_key.asc
+                    +-------------+
+```
+
 #### Revoking a Key
 
 If your private key is ever compromised, lost, or you no longer use it, it’s essential to generate a revocation certificate. This certificate informs others that the key should no longer be trusted. The `gpg --gen-revoke` command guides you through the process of creating a revocation certificate, which you should store securely and distribute only if needed.
-
-**Command:**
 
 ```bash
 gpg --gen-revoke john.doe@example.com
@@ -345,8 +327,6 @@ Create a revocation certificate for this key? (y/N) y
 #### Creating an ASCII Armored Public Key
 
 When you need to share your public key in a human-readable format (such as for emails or posting on a website), you can use ASCII armor. The `gpg --armor --export` command converts your public key into an ASCII-encoded format, making it easier to share in text-based mediums. This command outputs the public key into a file (`public_key.asc`) which contains the key data in a format that begins and ends with `-----BEGIN PGP PUBLIC KEY BLOCK-----` and `-----END PGP PUBLIC KEY BLOCK-----`, respectively.
-
-**Command:**
 
 ```bash
 gpg --armor --export john.doe@example.com > public_key.asc
@@ -370,8 +350,6 @@ mQENBF+...
 #### Revocation Certificates
 
 If your private key is compromised or lost, it’s crucial to have a revocation certificate ready. The `gpg --gen-revoke` command creates this certificate, allowing you to inform others that the key should no longer be trusted. By adding the `--armor` option, the certificate is saved in an ASCII-encoded format, making it easy to share via email or other text-based methods. This is useful in scenarios where you need to distribute the revocation certificate if your key is no longer secure.
-
-**Command:**
 
 ```bash
 gpg --gen-revoke --armor --output=revoke.asc john.doe@example.com
@@ -456,8 +434,6 @@ GPG can be integrated with email clients or used directly to send and receive en
 
 When encrypting an email message, you can use GPG to ensure that only the intended recipient can read it. The command `gpg --armor --encrypt` takes the message file and encrypts it for the recipient, saving the output in an ASCII-armored file (`message.asc`). This file can then be safely sent over email or other communication methods.
 
-**Command:**
-
 ```bash
 gpg --armor --encrypt --recipient 'jane.smith@example.com' --output message.asc message.txt
 ```
@@ -471,8 +447,6 @@ The email content in `message.txt` is encrypted for Jane Smith and saved as `mes
 #### Decrypting an Email
 
 To read an encrypted email, the recipient must decrypt it using their private key. The `gpg --decrypt` command allows you to decrypt the encrypted file (e.g., `message.asc`), saving the content back into a readable text file.
-
-**Command:**
 
 ```bash
 gpg --decrypt message.asc > message.txt
@@ -495,8 +469,6 @@ Key servers provide a platform for users to publish and retrieve public keys, en
 
 When you want to make your public key available for others to find and use, you can upload it to a public key server. The command `gpg --send-keys` sends your key to the specified key server, allowing others to retrieve it and use it to encrypt data for you or verify your digital signatures. This is useful for establishing secure communications or making your public key widely available.
 
-**Command:**
-
 ```bash
 gpg --send-keys --keyserver hkp://pgp.mit.edu 1A2B3C4D5E6F7G8H
 ```
@@ -512,8 +484,6 @@ Your public key, identified by the key ID `1A2B3C4D5E6F7G8H`, has been successfu
 #### Searching for Keys on a Key Server
 
 To communicate securely with someone, you need their public key. The `gpg --search-keys` command allows you to look up public keys by email address or name on a specific key server. Once found, you can import the key into your keyring for encryption or verification. This process ensures that you have the correct public key before sending encrypted messages.
-
-**Command:**
 
 ```bash
 gpg --search-keys --keyserver hkp://pgp.mit.edu jane.smith@example.com
@@ -536,8 +506,6 @@ This output shows that a public key for "Jane Smith" has been found on the key s
 #### Updating Key Information
 
 Over time, the public keys stored on your keyring may be updated with new expiration dates, revocation information, or additional signatures. The `gpg --refresh-keys` command checks the key server for updated information and refreshes the keys in your local keyring. This ensures that you are always working with the latest key information, reducing the risk of using outdated or compromised keys.
-
-**Command:**
 
 ```bash
 gpg --refresh-keys --keyserver hkp://pgp.mit.edu
