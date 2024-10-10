@@ -445,11 +445,11 @@ You should see directories or files corresponding to client hostnames.
 /var/log/client3/
 ```
 
-## Utilizing `logger` for Custom Logging
+### Logger
 
 The `logger` command is a shell utility used to add messages to the system log.
 
-### Basic Usage of `logger`
+#### Basic Usage
 
 **Sending a Simple Message:**
 
@@ -467,7 +467,7 @@ logger -t backup_script "Backup failed due to insufficient disk space."
 
 Adds a tag `[backup_script]` to the log entry for easy identification.
 
-### Advanced `logger` Options
+#### Advanced Options
 
 **Specifying Facility and Priority:**
 
@@ -481,7 +481,7 @@ logger -p local0.notice "Application started."
 logger -n logserver_ip -P 514 "Remote log message from client."
 ```
 
-### Incorporating `logger` into Scripts
+#### Incorporating into Scripts
 
 **Example Backup Script with Logging:**
 
@@ -501,11 +501,11 @@ fi
 - Uses `rsync` to perform the backup.
 - Logs success or failure with appropriate severity.
 
-### Managing Log Files with `logrotate`
+### Managing Log Files with Logrotate
 
 Over time, log files can grow large, consuming significant disk space. `logrotate` automates the rotation, compression, and removal of log files.
 
-#### Understanding `logrotate` Configuration
+#### Understanding Configuration
 
 Configurations are stored in `/etc/logrotate.conf` and `/etc/logrotate.d/`.
 
