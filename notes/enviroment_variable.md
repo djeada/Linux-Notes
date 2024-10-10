@@ -110,19 +110,21 @@ Shell variables are essential components of shell scripting and command-line ope
 
 Here are a few examples of commonly used shell variables:
 
-- `PS1` variable defines the appearance of the shell prompt. By customizing `PS1`, users can modify how the prompt looks, including information such as the current directory, username, hostname, or special characters.
+`PS1` variable defines the appearance of the shell prompt. By customizing `PS1`, users can modify how the prompt looks, including information such as the current directory, username, hostname, or special characters.
 
-  ```bash
-  PS1="\u@\h:\w\$ "
-  ```
-  This example sets the prompt to display the username (`\u`), hostname (`\h`), and the current working directory (`\w`), followed by a dollar sign (`$`).
+```bash
+PS1="\u@\h:\w\$ "
+```
 
-- The `IFS` variable determines how the shell recognizes word boundaries, primarily affecting how it splits strings into words. By default, `IFS` includes a space, tab, and newline, meaning these characters are used to separate words.
+This example sets the prompt to display the username (`\u`), hostname (`\h`), and the current working directory (`\w`), followed by a dollar sign (`$`).
 
-  ```bash
-  IFS=','
-  ```
-  Setting `IFS` to a comma means that word splitting will occur at commas instead of spaces.
+The `IFS` variable determines how the shell recognizes word boundaries, primarily affecting how it splits strings into words. By default, `IFS` includes a space, tab, and newline, meaning these characters are used to separate words.
+
+```bash
+IFS=','
+```
+
+Setting `IFS` to a comma means that word splitting will occur at commas instead of spaces.
 
 #### Creating and Modifying Shell Variables
 
@@ -156,39 +158,13 @@ Hello, World!
 
 ### Challenges
 
-I. Create and Execute a Script `greetings.sh`
-
-- Write a Bash script named `greetings.sh` that prints a welcome message.
-- Ensure it has executable permissions (`chmod +x greetings.sh`).
-- Modify the `PATH` environment variable to include the script's directory (`export PATH=$PATH:/path/to/script`).
-- Test executing the script from a different directory without its absolute path.
-
-II. Write a command or script using the `USER` environment variable to print a personalized message like "Hello, $USER! Welcome back!".
-
-III. Use a command to display all currently set shell and environment variables (e.g., `set` or `env`).
-
-IV. Arithmetic Operations with a Shell Variable
-
-- Create a variable in your terminal session and assign a numeric value to it.
-- Perform and print a few arithmetic operations on this variable.
-
-V. Create and Display a New Environment Variable
-
-- Use the `export` command to create a new environment variable.
-- Print its value using `echo`.
-
-VI. Display Environment Variables and Start a Clean Shell
-
-- Use `env` to display all current environment variables.
-- Start a new shell with a clean environment using `env -i`.
-
-VII. Increment a Number in a Script with Environment Variable
-
-- Write a shell script that increments a number stored in a variable each time it is run.
-- Store this number in an environment variable for persistence across executions.
-
-VIII. Find and Execute Files Using `PATH`
-
-- Use the `PATH` variable to locate an executable file on your system.
-- Add a new directory to the `PATH` (`export PATH=$PATH:/new/directory`).
-- Test executing a command from this new directory without its full path.
+1. Write a Bash script named `greetings.sh` that prints a welcome message. Make sure the script has executable permissions by using `chmod +x greetings.sh`. Then, modify the `PATH` environment variable to include the directory where the script is stored by using `export PATH=$PATH:/path/to/script`. Test executing the script from any directory without specifying its full path, and explain the importance of the `PATH` variable.
+2. Use the `USER` environment variable in a command or script to print a personalized greeting, such as “Hello, $USER! Welcome back!”. Discuss how environment variables can add user-specific context to scripts and commands, and explain why `USER` is automatically set by the system.
+3. Display all currently set shell and environment variables by using commands like `set` or `env`. Compare the output of these commands and explain the difference between shell variables and environment variables, as well as how they are inherited by child processes.
+4. Create a variable in your terminal session and assign a numeric value to it. Perform a few arithmetic operations with this variable, such as addition or multiplication, and print the results. Explain how shell variables differ from environment variables and discuss the syntax for arithmetic operations in Bash.
+5. Use the `export` command to create a new environment variable, then print its value using `echo`. Discuss how the `export` command makes a variable available to child processes and explain when you might need to use it in scripting and system configuration.
+6. Use `env` to display all current environment variables, then start a new shell with a completely clean environment by using `env -i`. Explore the differences between the regular shell and the clean shell, and discuss how environment variables are essential for a functioning user environment.
+7. Write a shell script that stores a number in an environment variable and increments this number each time the script is run. Ensure the variable persists between script executions by using a file or another method to save the variable's state. Discuss how environment variables can be used to store persistent state information for scripts.
+8. Use the `PATH` variable to locate an executable file on your system. Then, add a new directory to `PATH` by using `export PATH=$PATH:/new/directory`. Test running a command from this new directory without its full path, and explain how the `PATH` variable affects command discovery and execution in the shell.
+9. Write a script that uses `printenv` to display specific environment variables, such as `HOME`, `SHELL`, and `PWD`. Explain how each of these environment variables is used by the system to manage the user environment, and why they are automatically set when the user logs in.
+10. Create a custom environment variable with sensitive information (e.g., an API key or password) and export it. Then, access this variable from within a child process by using `echo` or another command. Discuss best practices for handling sensitive information in environment variables and explain how to prevent accidental exposure of these variables in shared environments.
