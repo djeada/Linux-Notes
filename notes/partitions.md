@@ -161,15 +161,15 @@ Here's a comprehensive comparison of different partition types:
 | **Use Cases**        | Ideal for systems requiring multiple operating systems or separate data areas.    | Necessary when more than 4 partitions are needed on an MBR disk.                | Useful for organizing data into separate partitions beyond the primary partition limit. |
 | **Deletion Impact**  | Deleting removes the partition and all its data.                                  | Deleting removes the extended partition and all contained logical partitions.   | Deleting removes only the specific logical partition and its data.                  |
 
-#### Partition Table Formats: MBR vs. GPT
+### Partition Table Formats: MBR vs. GPT
 
 Partition table formats are  organize data on storage devices, enabling the system to locate, identify, and manage different partitions on a disk. Two of the most widely used partition table formats are the Master Boot Record (MBR) and the GUID Partition Table (GPT). Each format comes with its own structure, limitations, and features, which affect how storage devices can be utilized and managed. While MBR is an older format, widely compatible across various operating systems, GPT is a newer standard designed to address the limitations of MBR, offering greater flexibility and scalability for modern storage needs.
 
-##### Master Boot Record (MBR)
+#### Master Boot Record (MBR)
 
 The Master Boot Record is the original partition table format, introduced in the 1980s, which has been the standard for decades. Located in the first sector of a storage device, the MBR holds the boot loader and information about the disk's partitions. However, MBR has some notable limitations: it supports a maximum disk size of 2 TB and can only create up to four primary partitions. For users needing more partitions, an extended partition must be created to hold additional logical partitions. Despite these limitations, MBR's simplicity and broad compatibility with older systems make it a popular choice for users and devices that do not require large storage capacities or numerous partitions.
 
-##### GUID Partition Table (GPT)
+#### GUID Partition Table (GPT)
 
 The GUID Partition Table was developed as a modern replacement for MBR, overcoming many of its restrictions. GPT is part of the Unified Extensible Firmware Interface (UEFI) standard and supports much larger disks, theoretically up to 9.4 zettabytes, with practically unlimited partition counts. Each partition in GPT is identified by a globally unique identifier (GUID), enhancing flexibility and reducing the likelihood of partition-related conflicts. Additionally, GPT maintains multiple copies of its partition table for improved data redundancy and recovery, making it more reliable than MBR. GPT has become the preferred choice for newer systems, particularly those requiring large storage capacities or more than four partitions, and is increasingly supported by most modern operating systems.
 
