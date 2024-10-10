@@ -1,6 +1,6 @@
-## Working with Unix Data Streams
+## Working with Data Streams
 
-In Unix, input redirection, streams, pipes, and filters are fundamental concepts for efficient data processing. Input redirection (`<`) allows commands to read from files, while output redirection (`>`) sends output to files. Streams (stdin, stdout, stderr) manage the flow of data between commands and the system. Pipes (`|`) connect the output of one command to the input of another, enabling seamless command chaining. Filters, such as `grep` and `awk`, are commands that process data streams, allowing users to manipulate and extract information efficiently. Together, these tools offer powerful ways to handle and transform data in Unix.
+Input redirection (`<`) allows a command to read from a file, while output redirection (`>`) sends a command's output to a file. Streams like stdin, stdout, and stderr control the flow of data between commands and the system, where stdin is the input, stdout is the standard output, and stderr is the error output. Pipes (`|`) connect the output of one command directly into the input of another, enabling you to chain commands together seamlessly. Filters, such as `grep` and `awk`, process these data streams, allowing you to search, manipulate, and extract information efficiently.
 
 ### Standard Streams
 
@@ -188,13 +188,15 @@ Filters are specialized commands designed to process text, typically working wit
 
 #### Common Unix Filters
 
-- `sort`: Orders lines in text alphabetically or numerically.
-- `uniq`: Filters out repeated lines in adjacent positions. It's useful for simplifying text that has repeated content.
-- `cut`: Extracts specific columns or fields from each line. Handy for data extraction from structured text.
-- `tr`: Transforms certain characters into other characters or removes specific characters.
-- `wc`: Provides a count of lines, words, and characters in text.
-- `grep`: Searches input for lines that match a given pattern or regular expression. One of the most powerful text search tools.
-- `awk`: A text processing tool that is particularly good at extracting fields from lines and performing actions based on conditional matches.
+| Command | Description | Basic Usage | Common Options | Examples |
+|---------|-------------|-------------|----------------|----------|
+| `sort`  | Orders lines in text alphabetically or numerically. | `sort [options] [file]` | - `-n`: Sort numerically. <br> - `-r`: Reverse order. <br> - `-k`: Specify sort key. | `sort -n numbers.txt` sorts `numbers.txt` numerically. |
+| `uniq`  | Filters out repeated lines in adjacent positions, simplifying repeated content. | `uniq [options] [file]` | - `-c`: Count occurrences. <br> - `-d`: Only show duplicates. <br> - `-u`: Only show unique lines. | `uniq -c sorted.txt` counts occurrences of unique lines in `sorted.txt`. |
+| `cut`   | Extracts specific columns or fields from each line, useful for structured text. | `cut [options] [file]` | - `-f`: Specify delimiter. <br> - `-d`: Use a custom delimiter. <br> - `-c`: Choose column or range of characters. | `cut -f1,3 -d',' data.csv` extracts columns 1 and 3 from `data.csv`, using ',' as a delimiter. |
+| `tr`    | Transforms characters into others or removes specific characters. | `tr [options] [string1] [string2]` | - `-d`: Delete characters in `string1`. <br> - `-s`: Squeeze repeated characters. <br> - `-c`: Compliment `string1`. | `tr 'a-z' 'A-Z' < input.txt` converts lowercase to uppercase in `input.txt`. |
+| `wc`    | Counts lines, words, and characters in text. | `wc [options] [file]` | - `-l`: Line count. <br> - `-w`: Word count. <br> - `-c`: Character count. | `wc -l file.txt` returns the line count for `file.txt`. |
+| `grep`  | Searches input for lines matching a pattern or regular expression. | `grep [options] pattern [file]` | - `-i`: Ignore case. <br> - `-v`: Invert match. <br> - `-r`: Search recursively in directories. | `grep 'error' logfile.txt` searches for 'error' in `logfile.txt`. |
+| `awk`   | Processes text by extracting fields and performing actions based on conditions. | `awk 'pattern {action}' [file]` | - `-F`: Specify field separator. <br> - `-v`: Invert match. <br> - `-f`: Use file for program script. | `awk '{print $1, $3}' data.txt` prints columns 1 and 3 from `data.txt`. |
 
 #### Examples
 
