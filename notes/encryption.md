@@ -648,45 +648,13 @@ The decrypted keyfile is securely deleted to prevent unauthorized access.
 
 ### Challenges
 
-I. Explore the basic functionalities of GPG by.
-
-- Generating your own public and private GPG key pair.
-- Encrypting a plaintext file with the public key you generated.
-- Decrypting the resulting file with your private key.
-- Confirming the contents of the decrypted file matches the original.
-
-II. Experiment with symmetric encryption
-
-- Try encrypting and decrypting a file using symmetric encryption in GPG.
-- Consider the pros and cons of symmetric vs. asymmetric encryption.
-
-III. Explore GPG's use in email communication
-
-- Try to set up an encrypted email communication with another user.
-- Experiment with sending, receiving, and verifying encrypted emails.
-
-IV. Delve into key security practices
-
-- Evaluate why sharing a private key is or isn't safe.
-- Research the purpose and importance of strong passwords and passphrases for encryption. 
-- Reflect on how you would keep your private key secure.
-
-V. Explore the concept of key revocation
-
-- Generate a revocation certificate for your key.
-- Contemplate under what circumstances you might need to use this certificate.
-
-VI. Understand the use of key servers
-
-- Try uploading your public key to a key server.
-- Download and import someone else's public key from a key server.
-
-VII. Dive into disk encryption
-
-- Research how GPG can be used for disk encryption.
-- Understand the steps and tools required to set up disk encryption on a Linux system.
-
-VIII. Understand subkeys and their purpose
-
-- Generate a subkey for your primary key.
-- Reflect on the benefits and potential use-cases for using subkeys instead of a primary key.
+1. Generate your own public and private GPG key pair and use the public key to encrypt a plaintext file. Then, decrypt the file using your private key and verify that the contents match the original. Discuss the fundamentals of asymmetric encryption and why the public-private key pairing is secure.
+2. Encrypt and decrypt a file using symmetric encryption with GPG, experimenting with different passphrases. Compare and contrast the security, speed, and use cases of symmetric versus asymmetric encryption, discussing when each method is appropriate.
+3. Set up an encrypted email communication with another student using GPG. Send and receive encrypted messages, and practice verifying the signatures on received emails. Explain the role of encryption in email security and how it protects against eavesdropping.
+4. Reflect on key security practices by evaluating why sharing a private key compromises security. Research the purpose of strong passwords and passphrases for encryption and write a brief strategy for keeping your private key secure on different devices.
+5. Generate a revocation certificate for your GPG key and explain when and why you might need to use it. Discuss the process and implications of key revocation, as well as the potential impact on your digital communication.
+6. Upload your public key to a key server and download someone else’s public key from the server. Practice verifying the downloaded key's authenticity and reflect on the role of key servers in facilitating secure communication with others.
+7. Explore disk encryption by researching how it works in GPG and other tools available on Linux for full-disk encryption. Set up a basic encrypted volume on a Linux system, then mount and unmount it while discussing the security advantages and limitations of disk encryption.
+8. Generate a subkey from your primary GPG key and experiment with encrypting a file using the subkey. Reflect on the purpose of subkeys, including why they are beneficial and how they can enhance security by limiting exposure of the primary key.
+9. Use GPG to create and sign a message digitally, then verify the signature as another user might. Discuss how digital signatures provide message integrity and non-repudiation, and explain the process of verifying signatures with the sender’s public key.
+10. Research advanced encryption algorithms like AES and RSA, explaining how they differ in terms of key length, security, and typical applications. Use GPG or other encryption tools to experiment with different algorithms, noting any differences in performance or encryption speed.
