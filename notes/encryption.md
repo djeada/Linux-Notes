@@ -63,7 +63,7 @@ sudo apt update
 sudo apt install gnupg2
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 Reading package lists... Done
@@ -142,7 +142,7 @@ To manage GPG keys, you can list both public and private keys stored in your key
 gpg --list-keys
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 /home/user/.gnupg/pubring.kbx
@@ -158,7 +158,7 @@ uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 gpg --list-secret-keys
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 /home/user/.gnupg/pubring.kbx
@@ -178,7 +178,7 @@ When communicating securely with someone, you need their public key to encrypt f
 gpg --import recipient_public_key.asc
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: key 9H8G7F6E5D4C3B2A: public key "Jane Smith <jane.smith@example.com>" imported
@@ -230,7 +230,7 @@ To protect sensitive information, you can encrypt files using GPG. When encrypti
 gpg -e -r jane.smith@example.com file.txt
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -244,7 +244,7 @@ For cases where both parties share a secret password instead of using public-key
 gpg --symmetric file.txt
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 Enter passphrase: ********
@@ -261,7 +261,7 @@ Once a file has been encrypted (either with a public key or using symmetric encr
 gpg -d -o file.txt file.txt.gpg
 ```
 
-**Expected Output (If Passphrase Protected):**
+**Example Output (If Passphrase Protected):**
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 9H8G7F6E5D4C3B2A, created 2022-01-01
@@ -279,7 +279,7 @@ Digital signatures ensure that the recipient of a file can verify its authentici
 gpg --sign file.txt
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -293,7 +293,7 @@ After receiving a signed file, you can verify the authenticity of the signature 
 gpg --verify file.txt.gpg
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: Signature made Mon 03 Oct 2022 12:00:00 PM UTC
@@ -319,7 +319,7 @@ When someone wants to send you an encrypted file or verify your digital signatur
 gpg --export -a john.doe@example.com > john_public_key.asc
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -333,7 +333,7 @@ If your private key is ever compromised, lost, or you no longer use it, it’s e
 gpg --gen-revoke john.doe@example.com
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 sec  rsa4096/1A2B3C4D5E6F7G8H 2022-01-01 John Doe (Work Key) <john.doe@example.com>
@@ -352,7 +352,7 @@ When you need to share your public key in a human-readable format (such as for e
 gpg --armor --export john.doe@example.com > public_key.asc
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -377,7 +377,7 @@ If your private key is compromised or lost, it’s crucial to have a revocation 
 gpg --gen-revoke --armor --output=revoke.asc john.doe@example.com
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -417,7 +417,7 @@ Really create? (y/N) y
 gpg> save
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: key 1A2B3C4D5E6F7G8H marked as ultimately trusted
@@ -442,7 +442,7 @@ gpg --symmetric file.txt
 gpg --cipher-algo AES256 -e file.txt
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -462,7 +462,7 @@ When encrypting an email message, you can use GPG to ensure that only the intend
 gpg --armor --encrypt --recipient 'jane.smith@example.com' --output message.asc message.txt
 ```
 
-**Expected Output:**
+**Example Output:**
 
 *(No output means the command was successful)*
 
@@ -478,7 +478,7 @@ To read an encrypted email, the recipient must decrypt it using their private ke
 gpg --decrypt message.asc > message.txt
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 9H8G7F6E5D4C3B2A, created 2022-01-01
@@ -501,7 +501,7 @@ When you want to make your public key available for others to find and use, you 
 gpg --send-keys --keyserver hkp://pgp.mit.edu 1A2B3C4D5E6F7G8H
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: sending key 1A2B3C4D5E6F7G8H to hkp://pgp.mit.edu
@@ -519,7 +519,7 @@ To communicate securely with someone, you need their public key. The `gpg --sear
 gpg --search-keys --keyserver hkp://pgp.mit.edu jane.smith@example.com
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: data source: http://pgp.mit.edu:11371
@@ -543,7 +543,7 @@ Over time, the public keys stored on your keyring may be updated with new expira
 gpg --refresh-keys --keyserver hkp://pgp.mit.edu
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: refreshing 1 keys from hkp://pgp.mit.edu
@@ -592,7 +592,7 @@ dd if=/dev/urandom of=/root/luks-keyfile bs=512 count=4
 chmod 600 /root/luks-keyfile
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 4+0 records in
@@ -606,7 +606,7 @@ chmod 600 /root/luks-keyfile
 gpg --encrypt --recipient "John Doe" /root/luks-keyfile
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: /root/luks-keyfile: encryption failed: No public key
@@ -627,7 +627,7 @@ gpg --encrypt --recipient john.doe@example.com /root/luks-keyfile
 cryptsetup luksFormat /dev/sdX /root/luks-keyfile
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 WARNING!
@@ -646,7 +646,7 @@ gpg --output /root/luks-keyfile --decrypt /root/luks-keyfile.gpg
 cryptsetup luksOpen /dev/sdX my_encrypted_volume --key-file /root/luks-keyfile
 ```
 
-**Expected Output:**
+**Example Output:**
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 1A2B3C4D5E6F7G8H, created 2022-01-01
