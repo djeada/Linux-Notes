@@ -429,13 +429,13 @@ There are different versions of NFS, each with its own features:
 
 ### Challenges
 
-1. Explain the main purpose of NFS. How does it enable file sharing between different computers?
-2. Describe the key components of an NFS server. How does each component contribute to the operation of the NFS system?
-3. What is the role of the rpcbind service in NFS? Why is it important, and how does it interact with the rest of the system?
-4. Detail the steps to share a directory on an NFS server. Why is the `/etc/exports` file crucial in this process?
-5. List and explain the various options available in the `/etc/exports` file. How do these options affect the configuration of shared directories?
-6. Compare the setup processes for an NFS server and an NFS client. What are the similarities and differences?
-7. Explain how to mount an NFS-shared directory on a client. How can the client verify that the connection is successful?
-8. Discuss the potential security risks associated with NFS. What measures can be taken to mitigate these risks?
-9. Provide an example of how NFS can be useful for sharing directories across different operating systems, such as Windows, Linux, and macOS.
-10. Describe the function of the exportfs command in NFS. How is it used to view, modify, and stop sharing directories?
+1. Describe the primary purpose of NFS and how it facilitates file sharing between different computers on a network. Explain the role of NFS in distributed systems and how it allows users to access files on remote systems as if they were local.
+2. Outline the key components of an NFS server, such as the NFS daemon and `rpcbind` service. Describe how each component contributes to the operation of NFS and why they are necessary for the server to function correctly.
+3. Investigate the role of the `rpcbind` service in NFS, including how it registers and maps network services to the correct ports. Explain why `rpcbind` is essential for NFS communication and the consequences of it not being active.
+4. Configure an NFS server to share a specific directory by editing the `/etc/exports` file and setting appropriate access permissions. Explain the purpose of the `/etc/exports` file and why it is necessary for defining shared directories.
+5. Review and experiment with different options available in the `/etc/exports` file, such as `ro` (read-only), `rw` (read-write), and `sync` (synchronized writes). Discuss how these options affect client access and the security of shared directories.
+6. Compare the setup process of an NFS server and an NFS client. Document the similarities and differences, especially in terms of the services and configuration files required on each side for successful communication.
+7. Mount an NFS-shared directory on a client system using the `mount` command, and verify the connection by accessing the files in the mounted directory. Explain how the client can confirm that the connection is stable and functioning as expected.
+8. Identify potential security risks associated with NFS, such as unauthorized access and data interception. Explore measures to mitigate these risks, including using firewalls, limiting client access, and enabling NFS over VPN for added security.
+9. Demonstrate how NFS can be used to share directories across different operating systems, such as Linux, macOS, and Windows (using an NFS client for Windows). Discuss the benefits and potential challenges of cross-platform file sharing with NFS.
+10. Experiment with the `exportfs` command to view, refresh, and unexport shared directories on the NFS server. Describe how `exportfs` is used for real-time management of NFS shares and how it complements the configuration in the `/etc/exports` file.
