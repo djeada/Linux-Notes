@@ -70,10 +70,10 @@ Partitions are numbered starting from 1. For example, `/dev/sda1` is the first p
 
 Examples:
 
-- `/dev/sda`: First disk.
-- `/dev/sdb`: Second disk.
-- `/dev/sda1`: First partition on the first disk.
-- `/dev/sdb2`: Second partition on the second disk.
+- The device **/dev/sda** refers to the system’s **first disk**, typically used for the primary operating system or main storage.
+- **/dev/sdb** represents the **second disk**, which might be used for additional storage, backups, or separate partitions.
+- Located on the first disk, **/dev/sda1** is the **first partition**, often reserved for essential system files or boot-related data.
+- The **second partition** on the second disk is labeled **/dev/sdb2**, and it may be used for secondary storage, user files, or specific applications.
 
 ### Types of Partitions
 
@@ -107,12 +107,18 @@ Last sector, +sectors or +size{K,M,G,T,P}: +50G
 Created a new partition 1 of type 'Linux' and of size 50 GiB.
 ```
 
+- A new primary Linux partition was created with a size of 50 GiB.
+- It was assigned as partition number 1.
+- The partition starts at the default first sector, which is 2048.
+
 **Formatting the Partition**:
 
 ```bash
 sudo mkfs.ext4 /dev/sda1
 ```
 
+This action prepares the partition for use by creating an **ext4** filesystem structure on it.
+  
 #### Extended and Logical Partitions
 
 Extended partitions are a workaround for the MBR limitation of four primary partitions. An extended partition acts as a container for logical partitions, allowing you to create more than four partitions on a disk.
@@ -133,6 +139,11 @@ Last sector, +sectors or +size{K,M,G,T,P}: [Press Enter to use remaining space]
 Created a new extended partition 4.
 ```
 
+- A new extended partition was created and labeled as partition number 4.
+- Since there were already three primary partitions, the extended type (`e`) was selected.
+- The first sector was set to the default by pressing Enter.
+- The last sector was also set to default by pressing Enter, allowing the partition to use all remaining available space.
+
 **Creating Logical Partitions Within the Extended Partition**:
 
 ```
@@ -143,6 +154,12 @@ First sector (some value): [Press Enter]
 Last sector, +sectors or +size{K,M,G,T,P}: +20G
 Created a new logical partition 5 of type 'Linux' and of size 20 GiB.
 ```
+
+- Since all primary partitions were already in use, a new logical partition was added.
+- The partition was assigned as logical partition number 5.
+- The first sector was set to the default by pressing Enter.
+- The size of the partition was specified as 20 GiB by entering `+20G`.
+- A new 20 GiB Linux logical partition, labeled as partition 5, was successfully created.
 
 Repeat the process for additional logical partitions.
 
@@ -222,12 +239,13 @@ Both `gdisk` and `fdisk` are powerful command-line tools used for disk partition
 | `x`         | Enter expert mode for advanced options.                  | Type `x` for expert commands.                    |
 | `g`         | Create a new empty GPT partition table.                  | Type `g` to initialize GPT on a disk.            |
 
+### Managing Disk Partitions
 
-### Viewing Partition Tables
+#### Viewing Partition Tables
 
-To inspect the partition table of a disk, use tools like `fdisk`, `parted`, or `gdisk`.
+To inspect the partition table of a disk, we use previously introduced tools `fdisk`, `parted`, or `gdisk`.
 
-#### Using `fdisk`
+##### Using `fdisk`
 
 ```bash
 sudo fdisk -l /dev/sda
@@ -252,11 +270,106 @@ Device     Boot   Start        End    Sectors   Size Id Type
 - It uses the `dos` partition table format (MBR).
 - There are two primary partitions: `/dev/sda1` and `/dev/sda2`.
 
-### Managing Disk Partitions
+##### Using `parted`
+
+`parted` is another tool that can be used to inspect the partition table, particularly helpful for both MBR and GPT partition tables. 
+
+To view the partition table with `parted`, use the following command:
+
+```bash
+sudo parted /dev/sda print
+```
+
+Example output:
+
+```
+Model: ATA ST500DM002-1BD14 (scsi)
+Disk /dev/sda: 500GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  50.0GB  50.0GB  primary  ext4
+ 2      50.0GB  100GB   50.0GB  primary  ext4
+```
+
+- Here, the disk `/dev/sda` is 500GB.
+- It uses the `msdos` partition table format.
+- There are two primary partitions listed, each formatted with the `ext4` filesystem.
+
+##### Using `gdisk`
+
+`gdisk` is a tool similar to `fdisk` but designed specifically for GPT partition tables. It’s particularly useful for disks larger than 2 TB or when using UEFI-based systems.
+
+To view the partition table with `gdisk`, use the following command:
+
+```bash
+sudo gdisk -l /dev/sda
+```
+
+Example output:
+
+```
+GPT fdisk (gdisk) version 1.0.5
+
+Partition table scan:
+  MBR: not present
+  BSD: not present
+  APM: not present
+  GPT: present
+
+Disk /dev/sda: 1048576000 sectors, 500.0 GiB
+Logical sector size: 512 bytes
+Disk identifier (GUID): D2AC4D27-567A-4E2B-8A6F-3BC66E42DAF7
+Partition table holds up to 128 entries
+First usable sector is 34, last usable sector is 1048575966
+Partitions will be aligned on 2048-sector boundaries
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048        104857599   50.0 GiB    8300  Linux filesystem
+   2       104857600       209715199   50.0 GiB    8300  Linux filesystem
+```
+
+- This disk `/dev/sda` is formatted with a GPT partition table.
+- There are two partitions, each assigned the Linux filesystem type.
+- The disk can accommodate up to 128 partitions and supports large disks (over 2 TB). 
 
 #### Checking Free Space
 
-To see how much unallocated space is available on the disk:
+To check for unallocated space on a disk—space that hasn’t been assigned to any partition—you can use tools like `fdisk`, `parted`, and `lsblk`. These utilities show information about partitions and any remaining unallocated space on the disk.
+
+##### Using `fdisk` for Unallocated Space
+
+With `fdisk`, you can view both existing partitions and unallocated space. When you use `fdisk -l`, it lists the partitions on the disk, and at the end, any unallocated space will be noted.
+
+```bash
+sudo fdisk -l /dev/sda
+```
+
+Example output:
+
+```
+Disk /dev/sda: 500 GiB, 536870912000 bytes, 1048576000 sectors
+Disk model: ST500DM002-1BD14
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+Disklabel type: dos
+Disk identifier: 0x12345678
+
+Device     Boot   Start        End    Sectors   Size Id Type
+/dev/sda1          2048  104857599 104855552    50G 83 Linux
+/dev/sda2     104857600 209715199 104857600    50G 83 Linux
+
+Disk /dev/sda has 400 GiB of unallocated space.
+```
+
+- This shows that `/dev/sda` has 500 GB in total, with two partitions, and it indicates unallocated space.
+- You can see that the remainder of the disk (400 GB) is unallocated.
+
+##### Using `parted` for Unallocated Space
+
+`parted` also displays unallocated space, making it a useful tool to confirm if your disk has unused space.
 
 ```bash
 sudo parted /dev/sda print free
@@ -269,43 +382,132 @@ Model: ATA ST500DM002-1BD14 (scsi)
 Disk /dev/sda: 500GB
 Sector size (logical/physical): 512B/4096B
 Partition Table: msdos
-Disk Flags:
+Disk Flags: 
 
-Number  Start   End     Size    Type      File system  Flags
-         0.00B  1049kB  1049kB            Free Space
- 1       1049kB  50.0GB  50.0GB  primary   ext4
- 2       50.0GB 100GB   50.0GB  primary   ext4
-         100GB  500GB   400GB             Free Space
+Number  Start   End     Size    Type     File system  Flags
+        0.00B  1049kB  1049kB            Free Space
+ 1      1049kB  50.0GB  50.0GB  primary  ext4
+ 2      50.0GB  100GB   50.0GB  primary  ext4
+        100GB   500GB   400GB            Free Space
 ```
 
-There is 400 GB of free space starting at 100 GB.
+- The `print free` option in `parted` shows both allocated and unallocated space.
+- This example shows 400 GB of free space starting from 100 GB to the end of the disk.
+
+##### Using `lsblk` to Show Unallocated Space
+
+`lsblk` doesn’t directly show unallocated space, but by listing only mounted filesystems and partitions, it indirectly indicates where unallocated space might be found on a disk.
+
+```bash
+lsblk
+```
+
+Example output:
+
+```
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   500G  0 disk 
+├─sda1   8:1    0    50G  0 part /
+└─sda2   8:2    0    50G  0 part /home
+```
+
+- Here, `lsblk` shows that `/dev/sda` has a total size of 500 GB.
+- With only 100 GB used across two partitions, we can infer that the remaining space (400 GB) is unallocated. 
 
 #### Creating a New Partition
 
-To create a new primary partition using `fdisk`:
+Here’s how to create a new partition on `/dev/sda`:
+
+##### Using `fdisk` to Create a New Partition
+
+I. Open `fdisk`:
 
 ```bash
 sudo fdisk /dev/sda
 ```
 
-Inside `fdisk`:
+II. List Current Partitions:
 
-```
-Command (m for help): n
-Partition type:
-   p   primary (2 primary, 0 extended, 2 free)
-   e   extended
-Select (default p): p
-Partition number (3,4, default 3): 3
-First sector (some value): [Press Enter]
-Last sector, +sectors or +size{K,M,G,T,P}: +100G
-Created a new partition 3 of type 'Linux' and of size 100 GiB.
+Once in `fdisk`, type `p` and press Enter to view the current partition table.
+
+III. Create a New Partition:
+
+- Type `n` to create a new partition.
+- `p` for a primary partition.
+- `e` for an extended partition (if you need more than four primary partitions on an MBR disk).
+- Specify the partition number if prompted (you can usually press Enter to select the next available number).
+- Choose the starting sector (press Enter to accept the default starting position).
+- Specify the size by entering `+size`, for example, `+50G` for a 50 GB partition.
+
+IV. Write the Changes:
+
+Type `w` to write the changes to the disk and exit `fdisk`.
+
+V. Verify the New Partition:
+
+Use `lsblk` or `sudo fdisk -l` to confirm that the new partition has been created.
+
+##### Using `parted` to Create a New Partition
+
+I. Open `parted`:
+
+```bash
+sudo parted /dev/sda
 ```
 
-After creating the partition, format it:
+II. Set Disk Label (Optional):
+
+
+```bash
+mklabel gpt
+```
+
+III. Create the Partition:
+
+```bash
+mkpart primary ext4 100GB 150GB
+```
+
+This creates a primary partition formatted as `ext4` starting at 100 GB and ending at 150 GB.
+
+IV. Type `quit` to exit `parted`.
+
+V. Format the Partition (Optional):
 
 ```bash
 sudo mkfs.ext4 /dev/sda3
+```
+
+##### Using `gdisk` to Create a New Partition
+
+I. Open `gdisk`:
+
+```bash
+sudo gdisk /dev/sda
+```
+
+II. Create a New Partition:
+
+- In `gdisk`, type `n` to create a new partition.
+- Specify the partition number (or press Enter to select the next available).
+- Choose the starting sector and size, similar to `fdisk`.
+- Assign a partition type code if needed (e.g., `8300` for Linux filesystems).
+
+III. Write the Changes:
+
+Type `w` to write the changes to the disk and exit `gdisk`.
+
+After creating the partition, you may need to format it and add it to `/etc/fstab` for automatic mounting on boot. To format it, you can use a command such as:
+
+```bash
+sudo mkfs.ext4 /dev/sda3
+```
+
+To mount it immediately, create a mount point and mount the partition:
+
+```bash
+sudo mkdir /mnt/newpartition
+sudo mount /dev/sda3 /mnt/newpartition
 ```
 
 #### Resizing Partitions
@@ -355,74 +557,86 @@ sudo fsck /dev/sda1
 
 #### Deleting Partitions
 
-To delete a partition:
+Here’s how to delete a partition, for example, `/dev/sda3`:
+
+##### Using `fdisk` to Delete a Partition
+
+I. Open `fdisk`:
 
 ```bash
 sudo fdisk /dev/sda
 ```
 
-Inside `fdisk`:
+II. List Partitions:
 
-```
-Command (m for help): d
-Partition number (1-4): 3
-Partition 3 has been deleted.
-```
+Type `p` and press Enter to view the current partitions and identify the one you want to delete.
 
-Write the changes:
+III. Delete the Partition:
 
-```
-Command (m for help): w
-```
+- Type `d` to delete a partition.
+- You will be prompted to enter the partition number. Enter the number of the partition you wish to delete (e.g., `3` for `/dev/sda3`).
+- If you only have one partition, it will delete that automatically.
 
-#### Converting MBR to GPT
+IV. Write the Changes:
 
-Converting a disk from MBR to GPT requires care. It's recommended to back up all data before proceeding.
+Type `w` to write the changes and exit `fdisk`. This action removes the partition from the partition table.
 
-**Using `gdisk`**:
+V. Verify the Deletion:
 
-Install `gdisk` if necessary:
+Use `lsblk` or `sudo fdisk -l` to confirm the partition has been deleted.
+
+##### Using `parted` to Delete a Partition
+
+I. Open `parted`:
 
 ```bash
-sudo apt-get install gdisk
+sudo parted /dev/sda
 ```
 
-Run `gdisk`:
+II. List Partitions:
+
+Type `print` to view the partition table and locate the partition you want to delete.
+
+III. Delete the Partition:
+
+```bash
+rm 3
+```
+
+IV. Quit `parted`:
+
+- Type `quit` to exit `parted`.
+V. Verify the Deletion:
+- Use `lsblk` or `sudo parted /dev/sda print` to ensure the partition is removed.
+
+##### Using `gdisk` to Delete a Partition
+
+I. Open `gdisk`:
 
 ```bash
 sudo gdisk /dev/sda
 ```
 
-Inside `gdisk`:
+II. Delete the Partition:
 
-```
-GPT fdisk (gdisk) version 1.0.5
+- Type `d` and press Enter to delete a partition.
+- Enter the partition number you want to delete (e.g., `3` for `/dev/sda3`).
 
-Partition table scan:
-  MBR: MBR only
-  BSD: not present
-  APM: not present
-  GPT: not present
+III. Write the Changes:
 
-***************************************************************
-Found invalid GPT and valid MBR; converting MBR to GPT format
-in memory.
-***************************************************************
+Type `w` to write the changes to the disk and exit `gdisk`. Confirm the changes when prompted.
 
-Command (? for help): w
-```
+IV. Verify the Deletion:
 
-Write the GPT partition table:
+Use `lsblk` or `sudo gdisk -l /dev/sda` to confirm the partition has been removed.
 
-```
-Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING PARTITIONS!!
-
-Do you want to proceed? (Y/N): y
-```
+**Note:** Deleting a partition will remove all data on that partition. Make sure to back up any important data before proceeding with the deletion process.
 
 ### Practical Examples and Commands
 
 #### Listing All Disks and Partitions
+
+The `lsblk` command provides a detailed overview of all block devices, including disks and partitions, and their mount points.
 
 ```bash
 lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT
@@ -438,9 +652,11 @@ sda      8:0    0 465.8G  0 disk
 └─sda3   8:3    0   100G  0 part /data
 ```
 
+Here, each disk and partition is displayed with its size, type, and mount point. `sda` is the primary disk, with `sda1`, `sda2`, and `sda3` as its partitions.
+
 #### Formatting and Mounting a New Partition
 
-After creating `/dev/sda3`:
+After creating a new partition, such as `/dev/sda3`, you need to format it and then mount it to make it accessible.
 
 **Formatting**:
 
@@ -448,17 +664,23 @@ After creating `/dev/sda3`:
 sudo mkfs.ext4 /dev/sda3
 ```
 
+This command formats the partition `/dev/sda3` with the `ext4` filesystem. Ensure you’ve chosen the correct filesystem for your needs (e.g., `ext4`, `xfs`, etc.).
+
 **Creating a Mount Point**:
 
 ```bash
 sudo mkdir /mnt/data
 ```
 
+This creates a directory (`/mnt/data`) where the partition will be mounted, allowing access to its contents from that location.
+
 **Mounting the Partition**:
 
 ```bash
 sudo mount /dev/sda3 /mnt/data
 ```
+
+Mounting attaches the `/dev/sda3` partition to the `/mnt/data` directory, making it accessible as part of the file system.
 
 **Verifying the Mount**:
 
@@ -472,9 +694,11 @@ Example output:
 /dev/sda3       99G   60M   94G   1% /mnt/data
 ```
 
+The `df -h` command provides details about the mounted partition, showing the used and available space. The output confirms that `/dev/sda3` is mounted on `/mnt/data`.
+
 #### Adding the Partition to `/etc/fstab`
 
-To mount the partition automatically at boot, add an entry to `/etc/fstab`.
+To ensure that the partition mounts automatically at boot, add an entry to the `/etc/fstab` file. This file defines how disk partitions, block devices, and remote filesystems are mounted.
 
 **Get the UUID**:
 
@@ -488,11 +712,15 @@ Example output:
 /dev/sda3: UUID="abcd-1234" TYPE="ext4" PARTUUID="12345678-03"
 ```
 
+The `blkid` command displays the UUID for each partition. UUIDs are unique identifiers for partitions, making them more reliable than device names, as device names can change between boots.
+
 **Edit `/etc/fstab`**:
 
 ```bash
 sudo nano /etc/fstab
 ```
+
+This opens the `/etc/fstab` file in a text editor (like `nano`). You can add an entry for the new partition to ensure it mounts automatically at boot.
 
 Add the following line:
 
@@ -500,6 +728,14 @@ Add the following line:
 UUID=abcd-1234   /mnt/data   ext4   defaults   0   2
 ```
 
+- `UUID=abcd-1234` specifies the UUID for the partition.
+- `/mnt/data` is the directory where the partition will be mounted.
+- `ext4` specifies the filesystem type.
+- `defaults` are mount options (e.g., read/write permissions).
+- `0` is a flag for whether the partition should be dumped (typically set to `0`).
+- `2` sets the order for filesystem checks at boot, where `2` means it will be checked after the root filesystem.
+
+After saving and exiting, you can run `sudo mount -a` to apply changes immediately.
 ### Changing MBR to GPT Using gdisk
 
 Converting a disk's partition table from the Master Boot Record (MBR) format to the GUID Partition Table (GPT) can unlock new capabilities, such as supporting disks larger than 2 terabytes and allowing more than four primary partitions. The `gdisk` utility is a powerful tool that facilitates this conversion while aiming to preserve your existing data. In this comprehensive guide, we'll walk through the process of changing an MBR partition table to GPT using `gdisk`, providing detailed explanations and interpretations at each step.
@@ -692,10 +928,12 @@ n
 
 **Example Input:**
 
-- **Partition Number**: Press Enter to accept the default.
-- **First Sector**: Press Enter to accept the default.
-- **Last Sector**: `+1M` (creates a 1 MB partition).
-- **Hex Code**: `ef02` (BIOS boot partition).
+| Option            | Action                                            |
+|-------------------|---------------------------------------------------|
+| Partition Number  | Press Enter to accept the default.                |
+| First Sector      | Press Enter to accept the default.                |
+| Last Sector       | `+1M` (creates a 1 MB partition).                 |
+| Hex Code          | `ef02` (BIOS boot partition).                     |
 
 **Example Output:**
 
