@@ -173,13 +173,13 @@ sudo chmod +x /path/to/disk_usage_monitor.sh && sudo mv /path/to/disk_usage_moni
 
 ### Challenges
 
-1. Display the free space available on the root filesystem (`/`).
-2. For each mounted filesystem, show the percentage of space used.
-3. Provide information about all filesystems, including those that are not currently mounted.
-4. Determine the size of the directory you're currently in.
-5. Check and report the size of the `/home` directory.
-6. Identify the 10 largest directories in the system.
-7. Track and report the amount of data being written to the disk in real-time.
-8. Locate individual files that are taking up the most space on the disk.
-9. Take snapshots of disk usage at different times and compare them to identify growth trends.
-10. Break down disk usage statistics by the types of files (e.g., `.txt`, `.jpg`, `.log`).
+1. Explain the concept of filesystems and mount points, and then display the available free space on the root filesystem (`/`). Discuss why monitoring free space on the root is crucial for system stability.
+2. List all currently mounted filesystems and calculate the percentage of space used on each. Explain the importance of monitoring multiple filesystems, especially in systems with separate partitions for critical directories like `/var`, `/home`, or `/boot`.
+3. Identify all filesystems configured on the system, whether mounted or not, and display relevant information such as filesystem type, size, and last mount point. Discuss the purpose of different filesystem types and reasons they might not be mounted.
+4. Calculate the total size of the directory you’re in, including all files and subdirectories. Discuss recursive disk usage and the impact of nested directories on storage.
+5. Provide a breakdown of disk space usage within the `/home` directory for each user. Discuss the significance of managing space within `/home` and how it affects individual user accounts.
+6. List the top 10 directories consuming the most disk space across the entire system. Explain how these large directories can affect disk performance and the importance of periodically checking them.
+7. Track data being written to the disk in real-time for a set period, displaying a summary of write activity. Discuss the reasons behind tracking disk write activity, including potential implications for system performance and health.
+8. Identify individual files that occupy the most space on the disk. Discuss strategies for managing large files and how deleting or relocating these files can reclaim disk space.
+9. Take snapshots of disk usage at two different times and compare them to identify any significant changes or trends. Discuss the importance of historical data in predicting future disk space needs and planning for expansion or cleanup.
+10. Analyze disk usage by categorizing files based on their extensions (e.g., `.txt`, `.jpg`, `.log`). Explain how file type classification can help in identifying disk space hogs and in organizing cleanup strategies.
