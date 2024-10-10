@@ -115,12 +115,21 @@ Disk I/O operations involve transferring data between the system's memory and st
 
 Main idea:
 
-- **Read and write** operations are the fundamental I/O actions where data is either retrieved from or written to the disk, enabling storage and retrieval processes.
-- **I/O scheduling** is the method used by the operating system to prioritize and order incoming I/O requests, aiming to optimize disk performance and minimize latency.
-- **I/O wait times** refer to the time processes spend waiting for their I/O operations to complete, which can significantly impact overall system responsiveness and performance.
-- The **I/O queue lengths** measure the number of outstanding I/O requests waiting to be processed, with longer queues indicating potential performance bottlenecks.
-- In **synchronous I/O**, the process must wait for the completion of the I/O operation before continuing execution, leading to potential delays.
-- With **asynchronous I/O**, the process can initiate an I/O operation and continue executing other tasks without waiting for the operation to finish, improving system efficiency in some scenarios.
+- Disk **read and write** operations involve accessing or storing data on disk drives, facilitating essential data retrieval and storage functions within computer systems.
+- The operating system employs **I/O scheduling** to arrange and prioritize incoming I/O requests, which helps to enhance overall disk performance by reducing unnecessary delays.
+- **I/O wait times** measure the duration that processes remain idle while awaiting their I/O operations to complete, potentially leading to decreased system responsiveness when prolonged.
+- Monitoring **I/O queue lengths** is crucial, as longer queues often indicate performance bottlenecks with multiple I/O requests waiting to be processed by the disk.
+- **Synchronous I/O** operations require the requesting process to pause until the I/O task completes, potentially causing delays in execution when operations take longer than expected.
+- With **asynchronous I/O** methods, a process can begin an I/O operation and proceed with other tasks concurrently, promoting system efficiency by allowing work to continue while awaiting I/O completion.
+- **Caching mechanisms** can reduce I/O operation frequency by temporarily storing data in memory, thus improving access times for frequently used data and reducing overall latency.
+- **Direct I/O** bypasses caching mechanisms to read or write data directly to disk, which is beneficial for applications requiring consistent data integrity, such as databases.
+- The **buffering** process allows data to accumulate in a temporary storage area before being written to disk, helping to optimize performance by reducing the frequency of write operations.
+- In **block I/O**, data is transferred in fixed-sized blocks, which is efficient for reading or writing large amounts of data sequentially, enhancing throughput on bulk data operations.
+- **Character I/O**, in contrast, handles data one character at a time, making it more suitable for applications that require continuous data streams, such as terminals or printers.
+- **Latency** in I/O operations reflects the delay experienced when accessing or transferring data, with higher latency potentially causing slower overall performance in time-sensitive applications.
+- **Throughput** is a key metric in I/O performance, indicating the amount of data transferred over a given period, with higher throughput representing better system efficiency.
+- **I/O bandwidth** determines the maximum rate at which data can be transferred between the storage device and the system, influencing how quickly large files can be read or written.
+- **Disk fragmentation** can impact read and write speeds by causing data to be spread across multiple locations, which forces the disk to spend additional time locating fragmented pieces during access.
 
 ### Sampling Disk I/O Over Time
 
@@ -261,10 +270,10 @@ II. **Monitoring I/O Wait with `top` Command Sorted by %WA**
 
 The `top -o %WA` command is used to run the `top` utility with the output sorted by I/O wait time (represented as `%WA`). The I/O wait percentage tells you the amount of time the CPU is waiting for disk I/O operations to complete, which can indicate whether disk operations are slowing down the system.
 
-Command breakdown:
+Breaking down the command:
 
-- `top`: Displays real-time system activity, including CPU, memory, and process usage.
-- `-o %WA`: Sorts the process list by I/O wait percentage (`%WA`), which is the percentage of CPU time spent waiting for I/O operations.
+- `top` displays real-time system activity, including CPU, memory, and process usage.
+- `-o %WA` sorts the process list by I/O wait percentage (`%WA`), which is the percentage of CPU time spent waiting for I/O operations.
 
 **Example Output**:
 
@@ -316,11 +325,11 @@ To manually set the I/O priority of a process, you use the `ionice` command. For
 ionice -c2 -n0 -p 5678
 ```
 
-Explanation:
+Breaking down the command:
 
-- `-c2`: Specifies the **best-effort** class.
-- `-n0`: Sets the highest priority within the best-effort class (0 is highest, 7 is lowest).
-- `-p 5678`: Targets the process with the PID `5678`.
+- `-c2` specifies the **best-effort** class.
+- `-n0` sets the highest priority within the best-effort class (0 is highest, 7 is lowest).
+- `-p 5678` targets the process with the PID `5678`.
 
 ### Filesystem and Storage Optimization
 
