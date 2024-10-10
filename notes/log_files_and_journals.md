@@ -360,7 +360,7 @@ mail.info    /var/log/mail.info
 cron.*    /var/log/cron.log
 ```
 
-### Filtering and Routing Logs
+#### Filtering and Routing Logs
 
 You can fine-tune which messages are logged where.
 
