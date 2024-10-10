@@ -379,70 +379,15 @@ The `groupmod` command, paired with the `-g` flag, facilitates GID modification:
 groupmod -g 1001 admins
 ```
 
-## Challenges
+### Challenges
 
-I. Basic User Details
-
-- Display your current username.
-- Utilize the `id` command to retrieve your unique UID.
-
-II. Root User Exploration
-
-- Describe the purpose and power of the root user.
-- How can you temporarily gain root privileges in the terminal without fully switching to the root user?
-
-III. Dive into Shadow File
-
-- Obtain the necessary permissions to view the `/etc/shadow` file.
-- Can you locate the entry corresponding to your user in this file?
-
-IV. Audit User Activity
-
-- Review the `/var/log/auth.log` file to identify users who have recently logged in.
-- Employ `grep` to extract instances where users have invoked the `sudo` command.
-
-V. Listing Users and Their Actions
-
-- Compile a list of users currently logged in to the system.
-- Organize this list alphabetically and, for each user, detail the command they're currently executing.
-
-VI. Group Management
-
-- Construct a group named "studygroup" and enroll your user into it.
-- Generate two more users, e.g., "alice" and "bob", and assimilate them into "studygroup".
-- Confirm that these user accounts are correctly established.
-- Set up a directory that grants read and write permissions exclusively for "studygroup" members. Test permissions by creating and editing files within this directory from different user accounts.
-- Subsequently, dismantle the extra user accounts you instituted.
-
-VII. Special User Permissions
-
-Grant a user without `sudo` permissions the authority to exclusively execute the `shutdown` command. Validate that this user can perform the action.
-
-VIII. Understanding User Locks
-
-- Explain the distinction between locking a user account and nullifying its password.
-- Detail the outcomes when the commands `usermod -L` and `passwd -d` are run.
-
-IX. Inspecting User and Group IDs
-
-- Change the UID of a test user. Reflect on why and when this might be necessary.
-- Alter the GID of a test group and describe potential scenarios where this action would be essential.
-
-X. Advanced Group Management
-
-- How would you modify group memberships without using `usermod` or `gpasswd`?
-- Create a file and modify its group ownership. Discuss how this affects file access based on group membership.
-- List all groups a user is a member of without using the `id` command.
-
-XI. Managing Superuser Privileges
-
-- Designate a user the capability to execute a limited set of commands with superuser rights. Validate these permissions by running those commands as the designated user.
-- Illustrate the risks associated with providing a user with unrestricted sudo access.
-
-XII. Role-based Access
-
-Imagine a scenario where you have three categories of users: Admins, Editors, and Viewers. How would you structure groups and permissions to ensure that:
-
-- Admins have full access to all files and commands.
-- Editors can modify but not delete certain files.
-- Viewers can only read specific files and not modify them.
+1. Display your current username and use the `id` command to retrieve your unique UID, GID, and any groups you belong to. Discuss the significance of these identifiers and how they relate to user identity and access control on a Linux system.
+2. Explain the purpose and capabilities of the root user. Describe how you can temporarily gain root privileges using `sudo` without fully switching to the root user account, and discuss when and why this approach is preferred over a full root login.
+3. Obtain the necessary permissions to view the `/etc/shadow` file. Locate the entry corresponding to your user in this file, and explain the purpose of the `/etc/shadow` file, including what information it stores and why it’s restricted to privileged users.
+4. Review the `/var/log/auth.log` file to identify users who have recently logged in, and use `grep` to extract instances where users have invoked the `sudo` command. Explain how monitoring login and sudo activity contributes to system security and auditing.
+5. Compile a list of users currently logged in to the system, organizing it alphabetically, and detail the command each user is currently executing. Discuss how monitoring active users and their actions can be useful for system management and security.
+6. Create a group named "studygroup" and add your user to it. Then, create two more users, such as "alice" and "bob," and add them to the group. Set up a directory with read and write permissions exclusively for "studygroup" members, and test access by creating and modifying files within it. Finally, remove the extra user accounts and explain how group-based permissions facilitate collaboration.
+7. Grant a user without `sudo` permissions the ability to execute only the `shutdown` command. Test this setup to verify that the user can perform the action and discuss how restricted sudo access can allow users to perform specific administrative tasks without full privileges.
+8. Describe the difference between locking a user account and nullifying its password. Demonstrate both actions using `usermod -L` and `passwd -d`, and discuss the effects on user access and account security.
+9. Change the UID of a test user and the GID of a test group, reflecting on scenarios where it might be necessary to modify these IDs, such as resolving UID or GID conflicts. Explain how these changes can impact user access to files and other resources.
+10. Designate a user with permissions to execute a limited set of commands with superuser rights. Verify these permissions by running the commands as the designated user. Discuss the risks of providing unrestricted sudo access and how selective command permissions can enhance security.
