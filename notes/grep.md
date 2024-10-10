@@ -894,8 +894,13 @@ Example Output:
 
 ### Challenges
 
-1. Enumerate the visible files and directories within the current working directory. However, do not include those that are hidden or contain the word "test" in their name. 
-2. Track down all the commands involving the word "clone" that have been executed in the last week. Bear in mind that command-line histories vary depending on the shell and user configurations.
-3. Validate the existence of a user named "adam" in the system. If such a user is found, return information about their home directory and their default shell. Be aware that user information may be stored in different ways based on the system configuration.
-4. In a file named `file.txt`, locate and count the number of lines containing the word "apple". 
-5. In the same `file.txt`, identify all lines containing the pattern `[A-Z]{3}`. Then convert these lines into uppercase. This requires a combination of regular expressions and text transformation.
+1. List all visible files and directories within the current working directory, excluding any that contain the word "test" in their names. Explain the use of `grep` for pattern matching and how to use it in combination with other commands like `ls` to filter results.
+2. Search through the command history for all commands containing the word "clone" that were executed within the past week. Discuss how different shells (like Bash or Zsh) handle history files and how `grep` can be used to narrow down specific timeframes and patterns.
+3. Check if a user named "adam" exists on the system by searching the `/etc/passwd` file. If found, display their home directory and default shell information. Discuss how user information is stored in `/etc/passwd` and the role of `grep` in filtering out relevant lines.
+4. In a file named `file.txt`, count the number of lines that contain the word "apple." Explain the use of `grep -c` for counting occurrences and discuss how regular expressions can make searching more precise.
+5. Using `file.txt`, locate all lines containing a pattern of three consecutive uppercase letters (e.g., `[A-Z]{3}`). Then, convert these matched lines to uppercase using `tr` or another suitable tool. Explore how `grep` can be paired with text transformation commands for more complex tasks.
+6. Search through the system log files (e.g., `/var/log/syslog`) for lines containing the word "error" and save the results to a new file named `errors.log`. Discuss how `grep` can aid in monitoring and troubleshooting by filtering logs for relevant keywords.
+7. In a directory containing multiple text files, find and list all files that contain the exact phrase "network connection failed." Explain how `grep -l` helps locate files based on specific content without showing the matched lines themselves.
+8. Use `grep` to locate lines in a script file that contain comments (`#`), then count the number of commented lines. Discuss the usefulness of `grep` for analyzing code and configuration files, particularly for identifying specific patterns like comments or TODOs.
+9. Search a file named `data.csv` for rows where the third column contains the value "pending." Discuss how `grep` can be combined with `awk` or `cut` to target specific columns in structured files, making it easier to filter data by fields.
+10. Find all occurrences of IP addresses in a file named `access.log` using a regular expression pattern that matches IPv4 addresses. Save the matched IPs to a new file called `ip_addresses.txt`. Discuss how `grep` with regular expressions enables pattern-specific searches, useful for tasks like log analysis.
