@@ -339,7 +339,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 
 To check for unallocated space on a disk—space that hasn’t been assigned to any partition—you can use tools like `fdisk`, `parted`, and `lsblk`. These utilities show information about partitions and any remaining unallocated space on the disk.
 
-##### Using `fdisk` for Unallocated Space
+##### Using `fdisk`
 
 With `fdisk`, you can view both existing partitions and unallocated space. When you use `fdisk -l`, it lists the partitions on the disk, and at the end, any unallocated space will be noted.
 
@@ -367,7 +367,7 @@ Disk /dev/sda has 400 GiB of unallocated space.
 - This shows that `/dev/sda` has 500 GB in total, with two partitions, and it indicates unallocated space.
 - You can see that the remainder of the disk (400 GB) is unallocated.
 
-##### Using `parted` for Unallocated Space
+##### Using `parted`
 
 `parted` also displays unallocated space, making it a useful tool to confirm if your disk has unused space.
 
@@ -394,7 +394,7 @@ Number  Start   End     Size    Type     File system  Flags
 - The `print free` option in `parted` shows both allocated and unallocated space.
 - This example shows 400 GB of free space starting from 100 GB to the end of the disk.
 
-##### Using `lsblk` to Show Unallocated Space
+##### Using `lsblk`
 
 `lsblk` doesn’t directly show unallocated space, but by listing only mounted filesystems and partitions, it indirectly indicates where unallocated space might be found on a disk.
 
@@ -418,7 +418,7 @@ sda      8:0    0   500G  0 disk
 
 Here’s how to create a new partition on `/dev/sda`:
 
-##### Using `fdisk` to Create a New Partition
+##### Using `fdisk`
 
 I. Open `fdisk`:
 
@@ -447,7 +447,7 @@ V. Verify the New Partition:
 
 Use `lsblk` or `sudo fdisk -l` to confirm that the new partition has been created.
 
-##### Using `parted` to Create a New Partition
+##### Using `parted`
 
 I. Open `parted`:
 
@@ -478,7 +478,7 @@ V. Format the Partition (Optional):
 sudo mkfs.ext4 /dev/sda3
 ```
 
-##### Using `gdisk` to Create a New Partition
+##### Using `gdisk`
 
 I. Open `gdisk`:
 
@@ -514,7 +514,7 @@ sudo mount /dev/sda3 /mnt/newpartition
 
 Resizing partitions involves careful steps to avoid data loss.
 
-**Shrinking a Partition**:
+##### Shrinking a Partition
 
 - Before making any changes, it’s essential to create a **backup** of important data to prevent potential data loss.
 - To shrink the filesystem, utilize **tools** specific to the filesystem type; for example, `resize2fs` is suitable for **ext4** filesystems.
@@ -531,7 +531,7 @@ sudo fdisk /dev/sda
 
 Inside `fdisk`, you will need to **delete** the existing partition and recreate it, specifying the new, smaller size and ensuring it starts at the **same sector** as the original.
 
-**Expanding a Partition**:
+##### Expanding a Partition
 
 - To increase the partition size, adjust the **partition** to encompass additional available space using `fdisk` or `parted`.
 - After resizing the partition, use filesystem tools like **resize2fs** to expand the filesystem to fill the entire resized partition.
@@ -747,10 +747,6 @@ Converting from MBR to GPT is a significant operation that can potentially lead 
 - Before making any changes, back up all important data on the disk. While `gdisk` is designed to convert partition tables without losing data, unexpected issues can occur.
 - Ensure that your system's firmware (BIOS/UEFI) supports GPT. Most modern systems with UEFI firmware can boot from GPT disks. Older BIOS systems may require additional steps, like creating a BIOS boot partition.
 
-#### Using gdisk to Convert MBR to GPT
-
-With preparations complete, you can proceed to convert the disk using `gdisk`.
-
 #### Step 1: Examine the Current Partition Table
 
 Start by inspecting the existing partition table to understand the current disk layout.
@@ -788,7 +784,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 - There's one primary partition occupying the entire disk.
 - `gdisk` is ready to convert the MBR partition table to GPT in memory.
 
-##### Step 2: Launch gdisk Interactive Mode
+#### Step 2: Launch gdisk Interactive Mode
 
 Run `gdisk` to interactively convert the partition table.
 
@@ -809,7 +805,7 @@ Command (? for help):
 - You've entered `gdisk`'s interactive prompt.
 - You can now issue commands to modify the partition table.
 
-##### Step 3: Review the Existing Partition Table
+#### Step 3: Review the Existing Partition Table
 
 Before making changes, it's wise to review the current partitions.
 
@@ -834,7 +830,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 - Confirms the presence of a single partition spanning the entire disk.
 - The partition code `0700` indicates a Microsoft basic data partition.
 
-##### Step 4: Write the New GPT Partition Table
+#### Step 4: Write the New GPT Partition Table
 
 To apply the GPT format, write the changes to the disk.
 
@@ -865,7 +861,7 @@ The operation has completed successfully.
 - The new GPT partition table has been successfully written to the disk.
 - You can now exit `gdisk`.
 
-##### Step 5: Verify the Conversion
+#### Step 5: Verify the Conversion
 
 Confirm that the disk now uses the GPT partitioning scheme.
 
@@ -891,7 +887,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 - The existing partition is preserved and recognized as a GPT partition.
 - The partition code `8300` indicates a Linux filesystem.
 
-##### Step 6: Adjust Partition Types (If Necessary)
+#### Step 6: Adjust Partition Types (If Necessary)
 
 Depending on your system, you may need to adjust the partition type codes.
 
@@ -916,7 +912,7 @@ Hex code or GUID (L to show codes, Enter = 8300): 8300
 - Ensures that the partition type is set correctly for your operating system.
 - You can list available codes by typing `L` at the prompt.
 
-##### Step 7: Create a BIOS Boot Partition (For BIOS Systems)
+#### Step 7: Create a BIOS Boot Partition (For BIOS Systems)
 
 If your system uses BIOS (not UEFI), you'll need a BIOS boot partition to boot from a GPT disk.
 
@@ -950,7 +946,7 @@ Changed type of partition to 'BIOS boot partition'
 - A small BIOS boot partition is created at the beginning of the disk.
 - This partition is required for GRUB to boot from a GPT disk on BIOS systems.
 
-##### Step 8: Write Changes and Exit gdisk
+#### Step 8: Write Changes and Exit gdisk
 
 Save the changes to the disk.
 
@@ -973,7 +969,7 @@ OK; writing new GUID partition table (GPT) to /dev/sda.
 The operation has completed successfully.
 ```
 
-##### Step 9: Reinstall the Bootloader
+#### Step 9: Reinstall the Bootloader
 
 Since the partition table has changed, you need to reinstall the bootloader.
 
@@ -993,7 +989,7 @@ Installation finished. No error reported.
 - GRUB is reinstalled to work with the new GPT partition table.
 - No errors indicate a successful installation.
 
-##### Step 10: Update the Filesystem Table (fstab)
+#### Step 10: Update the Filesystem Table (fstab)
 
 Ensure that the `/etc/fstab` file references the correct partitions.
 
@@ -1005,7 +1001,7 @@ sudo blkid
 
 Update `/etc/fstab` accordingly.
 
-##### Step 11: Reboot and Test
+#### Step 11: Reboot and Test
 
 Reboot the system to verify that everything works correctly.
 
