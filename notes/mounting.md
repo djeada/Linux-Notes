@@ -422,28 +422,13 @@ By adding this **removal rule**, the device will be safely unmounted from the `/
 
 ### Challenges
 
-I. Recognize Devices
-
-- Plug a USB drive into your system.
-- Use the `fdisk -l` command to recognize the device name of the USB drive.
-
-II. Manual Mounting
-
-- Create a new directory under `/mnt`.
-- Mount your USB drive to this new directory.
-
-III. Accessing Mounted Files
-
-- Navigate to the mount point of your USB drive.
-- Create, read, and delete a file in this directory.
-
-IV. Unmounting
-
-- Unmount the USB drive from the directory you previously mounted it to.
-- Confirm that the device has been unmounted successfully.
-
-V. Create a Virtual Disk File
-
-- Create a new file in your home directory using the `dd` command. This file will simulate a new disk drive.
-- Format this file with an `ext4` filesystem using the `mkfs.ext4` command.
-- Mount this virtual disk file to a directory in your system.
+1. Plug a USB drive into your system and use `lsblk` and `fdisk -l` to identify the device name and partition details. Discuss how device names are assigned and explain the difference between physical devices and partitions.
+2. Create a new directory under `/mnt` or `/media`, and mount your USB drive to this directory using the `mount` command. Describe the purpose of mount points and how they provide access to external storage devices on Linux.
+3. Navigate to the mount point of the USB drive and perform basic file operations—create, read, edit, and delete a file. Discuss how mounting makes files accessible and how permissions might affect file access on mounted devices.
+4. Unmount the USB drive from the directory using the `umount` command, and verify that it’s been unmounted by checking the mount point. Explain why proper unmounting is important for data integrity, especially with external storage devices.
+5. Create a virtual disk file in your home directory using the `dd` command, specifying its size and location. Discuss how virtual disk files can simulate actual disks and their potential uses in testing and development.
+6. Format the virtual disk file with an `ext4` filesystem using `mkfs.ext4`. Explain the significance of different filesystem types and why choosing an appropriate filesystem is important for specific use cases.
+7. Mount the formatted virtual disk file to a directory under `/mnt`, just as you would a physical device. Discuss the concept of loopback devices and how they allow files to be mounted as if they were physical disks.
+8. Investigate the differences between temporary and persistent mounting by adding an entry for your USB drive or virtual disk in `/etc/fstab`. Explain how persistent mounts work and the benefits of configuring automatic mounts for commonly used devices.
+9. Explore permissions on the mounted USB drive by changing the ownership and permissions of files on it. Discuss how Linux handles permissions for different users on mounted devices and the implications for shared drives.
+10. Create a script that automatically mounts and unmounts the USB drive upon insertion and removal, utilizing `udev` rules for automation. Explain how `udev` helps manage device events in Linux and the advantages of automated mounting for frequently used external devices.
