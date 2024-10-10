@@ -886,20 +886,15 @@ On Windows (replace 'service_name' with the actual service name):
 net stop service_name && net start service_name
 ```
 
-## Challenges
+### Challenges
 
-1. Configure a static IP address, subnet mask, and default gateway for a network interface on your Linux system.
-2. Set up a DNS server by editing the `/etc/resolv.conf` file. Afterward, test DNS resolution using tools like `dig`, `nslookup`, or `host`.
-3. Enable and disable IP forwarding on your Linux system. Test this functionality by routing packets between different networks and verify that they're correctly forwarded.
-4. Create a set of firewall rules using `iptables`. These rules should block and allow specific IP addresses, ports, and protocols. Test the rules to ensure they're working as expected.
-5. Use `tcpdump` to capture network packets. Analyze the captured data to identify unusual patterns, potential network issues, or security threats.
-6. Configure a basic VPN (Virtual Private Network) connection between two Linux systems and test the encrypted communication between them.
-7. Implement network bridging between two network interfaces on your system. This should allow traffic to be forwarded seamlessly between them.
-8. Simulate common network issues and practice troubleshooting them. This includes checking the network connection status, settings, routing table, and firewall rules.
-9. Utilize `traceroute` to identify the network path taken to reach a remote IP address. Identify possible bottlenecks or long hops in the route.
-10. Install and configure a simple web server using Apache or Nginx. Once set up, access it using a web browser to ensure it's serving content correctly.
-11. Dive deep into your system's network landscape using `netstat` or `ss`. Examine the active network connections and ports that are listening for incoming connections.
-12. Set up and utilize tools like `iftop`, `iptraf`, or `nethogs`. These tools will allow you to monitor network traffic in real-time, providing insights into bandwidth usage, connection sources, and more.
-13. If you have a wireless card, use tools like `iwconfig` and `airmon-ng` to analyze Wi-Fi networks around you, their signal strength, channels, and encryption methods.
-14. Sketch out or use software to design a network topology based on your home or work network. Include devices like routers, switches, firewalls, and end-user devices.
-15. Set up an SSH server on your Linux machine, and then practice remote management tasks. Additionally, configure and use SSH key-based authentication for added security.
+1. Configure a static IP address, subnet mask, and default gateway for a network interface on your Linux system by editing network configuration files or using the `ip` command. Explain the purpose of each setting and discuss how IP addressing impacts network communication.
+2. Edit the `/etc/resolv.conf` file to set up a DNS server, then test DNS resolution using tools like `dig`, `nslookup`, or `host`. Discuss the role of DNS in network communication and how it translates domain names to IP addresses.
+3. Enable and disable IP forwarding on your Linux system and test its functionality by routing packets between two connected networks. Verify packet forwarding with `ping` or `traceroute` and explain how IP forwarding is essential in network routing.
+4. Use `tcpdump` to capture network packets on a specified interface and save the output to a file. Analyze the captured data to identify key patterns, potential network issues, or unusual traffic. Discuss how packet capture helps in network troubleshooting and security monitoring.
+5. Set up a basic VPN (Virtual Private Network) connection between two Linux systems, using software such as OpenVPN or WireGuard. Test encrypted communication between the two systems and explain the advantages of VPNs for secure remote access.
+6. Implement network bridging between two network interfaces on your system. Verify the setup by confirming that traffic can flow seamlessly between the bridged interfaces, and discuss how network bridging can be used to extend or join networks.
+7. Simulate common network issues (e.g., incorrect IP settings, DNS failure, routing issues) and practice troubleshooting by checking the connection status, inspecting the routing table, and verifying configuration files. Document the steps you took to identify and resolve each issue.
+8. Use `traceroute` to map the network path to a remote IP address and identify any potential bottlenecks or delays in the route. Discuss how traceroute reveals the path data packets take and why certain hops might exhibit higher latency.
+9. Install and configure a simple web server (Apache or Nginx), then access it from a web browser to ensure it’s serving content properly. Examine the server's access logs to track requests and discuss the basics of HTTP communication and web server functionality.
+10. Explore your system’s network connections and listening ports using `netstat` or `ss`. Identify which services are listening on which ports, and explain how these tools can help monitor network services, detect potential issues, and enhance security.
