@@ -417,9 +417,13 @@ awk 'BEGIN { print "Start Processing" } { print $0 } END { print "End Processing
 
 ### Challenges
 
-1. Examine the core differences between `sed` and `awk`. What are their primary functionalities? How do their capabilities differ when it comes to handling text streams and structured data?
-2. Describe the sequence of operations that `sed` performs on a text stream. What is the role of pattern space in `sed`?
-3. `awk` uses whitespace as a delimiter by default to separate columns in a line. Explain the steps to modify this default setting to use a different delimiter. For instance, how would you instruct `awk` to recognize a comma `,` or a colon `:` as a delimiter instead?
-4. Demonstrate with an example how you would extract data from multiple columns in `awk`. How does the syntax differ when you want to retrieve data from the first, third, and fifth columns simultaneously as opposed to extracting them one at a time?
-5. How do you filter lines in `awk` where a particular column does not match a given pattern? Explain and provide an example illustrating this use case.
-6. Explain how `awk` can be used to perform data aggregation tasks. For instance, if you have a file with several rows of data, how would you use `awk` to compute the sum of values in a specific column? Provide an example to illustrate your explanation.
+1. Research and describe the core differences between `sed` and `awk`, focusing on their primary functionalities. Compare how each tool handles text streams and structured data, and discuss when it might be more appropriate to use `sed` versus `awk`.
+2. Describe the sequence of operations `sed` performs on a text stream, including how it reads input, processes it in the pattern space, and outputs results. Explain the purpose of the pattern space and how `sed` uses it to manage the text transformations on each line.
+3. By default, `awk` uses whitespace as a delimiter to separate columns. Explain how to modify this default setting to use other delimiters, such as a comma (`,`) or a colon (`:`). Provide examples demonstrating how to set these delimiters with the `-F` option in `awk`.
+4. Demonstrate how to extract data from multiple columns in `awk` with a specific example. Show how to retrieve data from the first, third, and fifth columns simultaneously, and explain how this syntax differs from extracting each column individually.
+5. Use `awk` to filter lines where a particular column does not match a specific pattern. Provide an example that demonstrates this process, such as displaying lines from a file where the second column does not contain the word "error."
+6. Explain how `awk` can perform data aggregation tasks, such as calculating the sum of values in a specific column. Provide an example of using `awk` to read a file with multiple rows of numeric data and compute the sum of all values in a given column.
+7. Show how to use `sed` to replace all occurrences of a word in a text file with another word. Demonstrate how `sed` can be used both to perform a global replacement within each line and to limit replacements to the first occurrence of the word on each line.
+8. Explain how to use `awk` to format and print data in a specific way. For instance, given a file with names and scores, demonstrate how you could use `awk` to print the names and scores in a formatted table with aligned columns.
+9. Use `sed` to delete lines containing a specific pattern from a text file. Describe the command you used and explain how `sed` processes the file to selectively remove lines based on pattern matching.
+10. Combine `sed` and `awk` in a pipeline to perform more complex text transformations. For example, use `sed` to remove blank lines from a file, and then use `awk` to calculate the average of numeric values in a specific column. Explain how combining these tools in a pipeline can solve more advanced text processing tasks.
