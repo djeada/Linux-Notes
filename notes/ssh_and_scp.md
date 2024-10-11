@@ -232,39 +232,13 @@ Aside from SCP and SFTP, numerous other protocols and tools can be utilized for 
 
 ### Challenges
 
-I. Server Setup
-
-- Setup your own server environment using a free cloud provider option such as AWS, Google Cloud, or Azure. Alternatively, you can use a virtualization solution like VirtualBox to set up a virtual machine (VM).
-- Install a Linux distribution (like Ubuntu or CentOS) on your server or VM, ensuring that it is configured with a static IP address.
-- Secure your server by setting up a firewall, disabling root login, and installing necessary security updates.
-
-II. Connecting via SSH
-
-- Connect to your server using the SSH protocol.
-- Try to connect using both password authentication and key-based authentication, understanding the pros and cons of each method.
-- Document any errors or issues you encounter during the connection process and research how to resolve them.
-
-III. SSH Port Configuration
-
-- Modify the SSH configuration to allow connections on a non-standard port (other than 22).
-- Reconnect to the server using the newly specified port, verifying that the connection is successful.
-- Discuss the security implications of using a non-standard port for SSH.
-
-IV. Utilizing SCP for File Transfer
-
-- Copy a folder containing several files from the server to your local computer using the SCP protocol.
-- Experiment with different SCP options, such as recursive copy and specifying a different port.
-- Log the transfer times and any other notable observations during the transfer process.
-
-V. Leveraging SFTP for File Management
-
-- Connect to the server using an SFTP client.
-- Upload a folder containing multiple files and subdirectories to the server using SFTP.
-- Use the SFTP client to navigate the remote file system, creating and deleting folders as necessary.
-- Test the file permissions settings by trying to access files with different user accounts.
-
-VI. Understanding Transfer Protocols
-
-- Write a detailed explanation of the differences between SCP and SFTP, highlighting their underlying protocols and use cases.
-- Compare the transfer speed, security, and versatility of SCP and SFTP by transferring various types of files of different sizes.
-- Research and discuss other file transfer protocols like FTP and Rsync, comparing them to SCP and SFTP in terms of security and functionality.
+1. Set up a Linux server on a cloud provider or a local virtual machine and configure it for SSH access. Secure the server by disabling root login and ensuring only SSH key-based authentication is permitted. Discuss the benefits of using SSH over traditional telnet for secure server access.
+2. Connect to your server using both password-based and key-based authentication with SSH. Document the steps for setting up key-based authentication, including generating an SSH key pair and transferring the public key to the server. Explain the security advantages of key-based authentication over passwords.
+3. Modify the SSH server configuration to allow connections on a non-standard port (e.g., port 2222 instead of 22). Test the new port by reconnecting and discuss the security implications of using a non-standard port for SSH. Explain how this approach can help prevent brute-force attacks.
+4. Use the SCP protocol to transfer files between your local machine and the server. Practice transferring both individual files and entire directories, utilizing SCP’s recursive option (`-r`). Document any differences in transfer times and discuss scenarios where SCP is advantageous for quick file transfers.
+5. Explore the SFTP protocol by connecting to the server using an SFTP client (e.g., FileZilla or the command-line `sftp`). Use SFTP to upload and download files, create directories, and change permissions. Discuss the additional file management capabilities that SFTP provides over SCP.
+6. Write a comparison between SCP and SFTP, detailing the underlying protocols and use cases for each. Conduct a speed test by transferring different file types and sizes, and compare the performance of SCP vs. SFTP. Discuss how these protocols handle encryption and data integrity.
+7. Research and demonstrate the use of the Rsync protocol to transfer files between your local system and the server. Use Rsync to synchronize a local directory with a remote directory and explain how Rsync’s delta transfer algorithm improves efficiency for repeated file transfers.
+8. Install and configure an FTP server (such as vsftpd) on your server and connect to it using an FTP client. Test both secure (FTPS) and unencrypted connections, and explain why FTP alone is not recommended for secure file transfers. Discuss when FTP/FTPS might still be useful in certain network environments.
+9. Use port forwarding with SSH to create a secure tunnel between your local machine and the server. Set up an SSH tunnel to forward traffic from a local port to a remote service running on the server. Explain how SSH tunneling can be used to securely access remote services and discuss its use in bypassing firewalls or restrictive network policies.
+10. Investigate other file transfer protocols such as HTTPS, SMB, and NFS. Write a brief summary of each protocol’s advantages and limitations in comparison to SSH-based protocols (SCP, SFTP). Discuss when it might be preferable to use one of these protocols over SSH-based solutions in a networked environment.
