@@ -8,7 +8,7 @@ DWM stands out for its extreme simplicity and high customization capability. It 
 
 Here's how DWM looks in action. Each window takes a portion of the screen, allowing for easy multitasking.
 
-## Installation
+### Installation
 
 Installation of DWM is straightforward. If you're on a Debian-based system such as Ubuntu or Mint, you can install DWM and its related suckless-tools packages using the following command in your terminal:
 
@@ -22,7 +22,7 @@ After installation, you can choose DWM as your window manager from the login scr
 
 Remember that DWM is highly customizable, but changes typically require modifying the source code and recompiling. So if you're up for some tinkering, you can clone the DWM source code from the suckless website, make changes to suit your needs, and then build and install your custom version of DWM.
 
-## Usage
+### Usage
 
 - After installing DWM, interaction is mainly through keyboard shortcuts, making it quicker and more efficient than using a mouse in a tiling window manager environment.
 - Opening a new terminal can be done by pressing `Shift + Alt + Enter`, which typically launches the `st` terminal or `xterm` if `st` isn't installed.
@@ -51,13 +51,13 @@ Remember that DWM is highly customizable, but changes typically require modifyin
 - Locking your screen for security can be done by setting up a keybinding like `Alt + Shift + l` to launch a screen locker like `slock`, ensuring your system is protected when you step away.
 - Navigating between monitors in a multi-monitor setup is done by pressing `Alt + Shift + [arrow key]`, allowing you to quickly move focus or windows across different screens.
 
-## Configuration
+### Configuration
 
 Unlike other window managers that use configuration files, DWM is customized by directly modifying its source code and then recompiling it. This approach provides a lot of flexibility and control over DWM's behavior and appearance. The main configuration is located in the `config.h` file, which can be found in the DWM source code directory.
 
 Follow these steps to customize DWM to your preferences:
 
-### I. Download the DWM Source Code
+#### Download the DWM Source Code
 
 You can clone the source code from the official suckless git repository using the following command:
 
@@ -65,7 +65,7 @@ You can clone the source code from the official suckless git repository using th
 git clone https://git.suckless.org/dwm
 ```
 
-### II. Navigate to the `dwm` Directory and Create a `config.h` File
+#### Navigate to the `dwm` Directory and Create a `config.h` File
 
 The `config.def.h` file contains the default settings. To customize DWM, you should first copy `config.def.h` to `config.h`. Then, you can edit the `config.h` file with your preferred text editor (e.g., nano, vim, emacs). Here's how to do that:
 
@@ -75,13 +75,13 @@ cp config.def.h config.h
 nano config.h
 ```
 
-### III. Customize the `config.h` File
+#### Customize the `config.h` File
 
 In the `config.h` file, you can change various settings according to your preferences. For example, you can modify key bindings, set custom colors, define the status bar's appearance, and select the default font. 
 
-#### Changing the Border Configuration:
+**Changing the Border Configuration:**
 
-1. Within `config.h`, locate the section where the border settings are defined. It typically looks like this:
+I. Within `config.h`, locate the section where the border settings are defined. It typically looks like this:
 
 ```c
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -89,7 +89,7 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 
 `borderpx` controls the width of the border around each window. The default value is usually `1` pixel.
 
-2. To increase or decrease the border width, change the value of `borderpx`. For example, to set the border width to 2 pixels, change the line to:
+II. To increase or decrease the border width, change the value of `borderpx`. For example, to set the border width to 2 pixels, change the line to:
 
 ```c
 static const unsigned int borderpx  = 2;
@@ -101,7 +101,7 @@ If you want to remove the border entirely, you can set `borderpx` to `0`:
 static const unsigned int borderpx  = 0;
 ```
 
-3. The border color for both focused and unfocused windows is defined in the color scheme section of `config.h`. Look for the following lines:
+III. The border color for both focused and unfocused windows is defined in the color scheme section of `config.h`. Look for the following lines:
 
 ```c
 static const char col_gray1[]       = "#222222";
@@ -121,15 +121,19 @@ Here, `col_cyan` is used for the border of the focused window, and `col_gray2` i
 ```c
 static const char col_red[]         = "#ff0000";
 static const char *colors[][3]      = {
+
    /*               fg         bg         border   */
+
    [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+
    [SchemeSel]  = { col_gray4, col_red,   col_red   },
+
 };
 ```
 
-4. After adjusting the border settings and any other customizations, save your changes and exit the text editor.
+IV. After adjusting the border settings and any other customizations, save your changes and exit the text editor.
 
-### IV. Compile and Install the Modified DWM
+#### Compile and Install the Modified DWM
 
 After modifying the `config.h` file, you need to compile the DWM source code and install the new binary:
 
@@ -139,11 +143,11 @@ sudo make clean install
 
 This command will clean up any previous builds and compile your customized version of DWM.
 
-### V. Apply the Changes
+#### Apply the Changes
 
 To apply your changes, you need to restart DWM. You can do this by logging out and logging back in, or by restarting your X session. Once you log back in, the updated DWM with your new border settings and other customizations should be in effect.
 
-## Further Resources
+### Further Resources
 
 - If you are seeking additional information about configuring and using DWM, the official DWM Tutorial provided by the suckless community is an excellent starting point. It offers a comprehensive walkthrough of basic DWM usage and configuration, available at [https://dwm.suckless.org/tutorial/](https://dwm.suckless.org/tutorial/).
 - For a more in-depth understanding of DWM and its functionalities, the DWM man page is an invaluable resource. You can access it in your terminal by running the command `man dwm`.
