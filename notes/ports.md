@@ -646,23 +646,13 @@ The scan results are saved in `output.txt`.
 
 ### Challenges
 
-1. Some ports are reserved for specific services. Can they be used for other purposes? If so, what are the potential risks or benefits?
-2. How can you check which port numbers are available for use on your system? Is there a difference between checking on Linux vs. Windows?
-3. You suspect an unknown service is running on your machine. How can you find out which process is running on a specific port? 
-4. You've installed a new service or application. How can you find out which port(s) it is using?
-5. What is the primary reason for using ports in networking? How do they aid in multi-tasking or multi-service operations?
-6. There are 65535 ports available. Is this number split between different protocols? How are port numbers managed and allocated in a computer system?
-7. What is the difference between TCP and UDP ports? How does their underlying mechanism differ, and why might you choose one over the other?
-8. Imagine you've been given access to a server. How can you view open ports on this server, and what tools might you use?
-9. What is Nmap, and how is it used? Can you perform a basic scan of a given IP address or domain to view its open ports?
-10. How can you identify the service or application associated with a specific port on your system?
-11. What is a firewall, and why is it crucial for protecting ports? Can you configure a basic firewall rule to allow or block traffic on a specific port?
-12. What happens if two applications try to bind to the same port? How would you resolve such a conflict?
-13. What is the range for dynamic or private ports, and why are they essential? Can you provide a real-world scenario where they might be used?
-14. How you might configure rate limiting on a specific port to prevent potential DDoS attacks?
-15. What are some of the most commonly targeted ports for cyberattacks in the history of the internet? Why do you think they were targeted?
-16. If you suspect a port is vulnerable or has been exploited, how would you secure it? What tools and strategies would you deploy?
-17. How does Network Address Translation (NAT) relate to ports, and why is it significant for modern networks, especially in the context of private and public IP addresses?
-18. Select five common networking services or protocols (e.g., HTTP, FTP, SSH). What are their default port numbers, and why is it valuable to know them?
-19. How do ethical hackers utilize port scanning in their methodologies, and what are the ethics surrounding such scans?
-20. With the rise of IoT devices and the ever-growing internet, do you think the current port system will remain sustainable? How might networking evolve in the future?
+1. Research reserved ports and explain whether they can be used for purposes other than their designated services. Discuss the potential risks (such as conflicting services) and benefits (like reducing the need for custom port configurations) of using reserved ports for other applications.
+2. Check available port numbers on your system by identifying currently open ports. Use commands like `netstat` or `ss` on Linux, or `netstat` on Windows, and explain the differences in how these tools are used on each platform. Discuss the importance of knowing which ports are open on your system.
+3. Identify which process is running on a specific port using commands like `lsof -i :<port>` on Linux or `netstat -ano` on Windows. Explain how this information can help you monitor unknown services and manage resource usage on your system.
+4. After installing a new service or application, determine which port(s) it is using. Use tools like `netstat`, `ss`, or `lsof` on Linux, and explain how you can track and manage the ports used by new services.
+5. Describe the role of ports in networking, focusing on how they facilitate multi-tasking and allow multiple services to operate simultaneously on the same IP address. Discuss how ports enable different applications to communicate independently over the network.
+6. Explain the significance of having 65,535 ports available, and describe how this number is split between TCP and UDP protocols. Discuss how ports are managed and allocated on a system, and why this range of ports is sufficient for most networking needs.
+7. Compare TCP and UDP ports, describing the differences in how they function. Discuss the underlying mechanisms of each protocol and provide examples of when one might be preferred over the other, such as reliability with TCP and speed with UDP.
+8. Use a tool like `nmap` to view open ports on a server you have access to, and explain how this information can help you understand which services are running. Describe the basic usage of `nmap` and the insights it provides into a system’s network security.
+9. Research the purpose and ethical considerations of port scanning in cybersecurity. Perform a basic `nmap` scan on a local IP address or server you control to identify open ports, and explain why ethical hackers use port scanning as part of their methodology.
+10. Investigate the firewall on your system and configure a basic rule to allow or block traffic on a specific port. Test the rule by attempting to access the service associated with the port, and explain why firewalls are essential for protecting open ports from unauthorized access.
