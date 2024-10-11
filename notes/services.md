@@ -528,11 +528,13 @@ So, when enabling, starting, or checking the status of your service with SystemD
 
 ### Challenges
 
-1. Use SystemD to list all timers and determine which corresponding services are enabled on your system.
-2. Install and configure a DHCP server using the `isc-dhcp-server` package. This service should be set up to automatically provide network configuration to client devices.
-3. Use the `nfs-kernel-server` package to set up an NFS server. Ensure it allows clients to access files over the network seamlessly.
-4. Install the `openssh-server` package and configure an SSH server for secure, remote connections to your server.
-5. Utilize the `bind9` package to set up a DNS server. This server should effectively translate human-readable domain names into IP addresses.
-6. Choose between the `postfix` or `sendmail` packages to set up a mail server, capable of handling email delivery and management.
-7. Select and configure one of these packages - `nginx`, `apache`, `caddy`, or `traefik`, to establish a web server. This server should be able to serve content over HTTP or HTTPS.
-8. Install and configure a database server using either `mysql` or `postgres`. This server should provide robust data storage and management capabilities.
+1. Use `systemctl` to list all active and inactive timers on your system, and identify which services they are associated with. Explain the purpose of timers in SystemD and discuss how they can be used as a replacement for traditional cron jobs for scheduling tasks.
+2. Install and configure a DHCP server using the `isc-dhcp-server` package. Set it up to automatically assign IP addresses to client devices on your network. Document the configuration process and verify the server is working by connecting a client device to the network and checking that it receives the correct IP configuration.
+3. Install and configure the `nfs-kernel-server` package to set up an NFS server. Share a directory over the network and configure permissions to allow client devices to access files in this directory. Test the configuration by mounting the NFS share on a client system.
+4. Use the `openssh-server` package to install and configure an SSH server for secure remote access to your machine. Set up basic security measures, such as disabling root login and enabling key-based authentication, and test the setup by connecting from a remote client.
+5. Install the `bind9` package to configure a DNS server capable of resolving domain names to IP addresses. Create a basic zone file for a sample domain, then test the configuration using tools like `nslookup` or `dig` to ensure the server is correctly translating domain names to IPs.
+6. Choose between the `postfix` or `sendmail` packages and set up a basic mail server. Configure it to handle email delivery and management for a local domain, and verify that the server can successfully send and receive emails. Discuss the differences between `postfix` and `sendmail` and the scenarios in which each might be preferred.
+7. Install and configure a web server using one of the following: `nginx`, `apache`, `caddy`, or `traefik`. Set up the server to serve content over HTTP and, if possible, enable HTTPS with a self-signed certificate for secure access. Verify the server by accessing it from a web browser on a client machine.
+8. Install and configure a database server using either `mysql` or `postgresql`. Create a sample database and user, then verify connectivity to the database from a client tool such as `mysql` or `psql`. Discuss how each database system handles user authentication and data access.
+9. Set up and configure a caching service such as `memcached` or `redis`. Use it to cache data for an application or website, and explain how caching can improve performance by reducing database queries and speeding up response times.
+10. Install and configure a monitoring tool, such as `prometheus`, `nagios`, or `zabbix`, to monitor the status and health of your server. Set up alerts for specific metrics, like CPU or memory usage, and discuss the importance of monitoring in maintaining system reliability and performance.
