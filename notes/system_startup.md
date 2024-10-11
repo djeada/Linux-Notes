@@ -368,42 +368,15 @@ touch /.autorelabel
 
 9. **Exit and reboot**. Finally, type exit twice. The first exit will leave the chroot environment, and the second will continue the boot process. Your system will then reboot and you should be able to log in with the new root password.
 
-## Challenges
+### Challenges
 
-I. Reboot your system
-
-- Use the `reboot` command to restart your system. 
-- Check the output of the `uptime` command to verify that the system has been restarted. 
-- You should see that system uptime is very short, indicating a recent restart.
-
-II. Change your system's hostname
-
-- First, check the current hostname using the `hostname` command.
-- Use the `hostnamectl set-hostname your_new_name` command to rename your server, replacing `your_new_name` with the new name you want to assign.
-- Run the `hostname` command again to confirm that the operation was successful. The name displayed should match the new name you assigned.
-
-III. Recover the root password
-
-- Without logging out of your current session, simulate a situation where you've lost the root password by opening a new terminal session or SSH connection where you aren't logged in as root.
-- Follow the steps provided in the "Recovering the Root Password" section above to reset the root password.
-- After rebooting, ensure that you can successfully log in with the new root password.
-
-IV. Practice handling kernel panic
-
-- Although simulating a kernel panic scenario isn't recommended on a production machine, understanding the steps needed to resolve a kernel panic is valuable.
-- Review the "Kernel panic" section and take note of the steps you would take to diagnose and resolve a kernel panic.
-
-V. Manage system runlevels/targets
-
-- Check your current runlevel or target.
-- If you are using an init-based system, try changing the runlevel and verify the change.
-- If you are using a systemd-based system, try switching between targets and confirm that the change took effect.
-
-🔴 Remember to switch back to your default runlevel or target after you've completed the challenge.
-
-VI. Schedule system tasks
-
-- Try to schedule a system shutdown using the `shutdown` command, then cancel it before it takes effect.
-- Do the same with a system reboot.
-
-🔴 Remember to make sure to cancel these tasks if you are doing this on a production machine, to avoid unwanted system downtime.
+1. Use the `reboot` command to restart your system, then use the `uptime` command to confirm the restart by observing the system uptime. Discuss how the `uptime` command can help you monitor system stability and determine when the system was last rebooted.
+2. Check the current hostname of your system with the `hostname` command, then change it using `hostnamectl set-hostname new_hostname`. Verify the change by running `hostname` again. Discuss the significance of hostname settings, particularly for networked environments where unique identification is necessary.
+3. Simulate a scenario where you've lost the root password by opening a new terminal or SSH session where you are not logged in as root. Follow the appropriate steps to reset the root password and reboot the system. Verify that you can log in with the new password. Explain the importance of password recovery skills for system administrators.
+4. Research kernel panic scenarios and describe the steps you would take to diagnose and resolve a kernel panic. Although not recommended to simulate a kernel panic on a production system, document the commands and troubleshooting techniques used for resolving kernel panics, such as reviewing logs or booting into recovery mode.
+5. Check your current system runlevel or target using `runlevel` on init-based systems or `systemctl get-default` on systemd-based systems. Change the runlevel (for init) or switch targets (for systemd), and confirm that the change was successful. Explain the differences between runlevels and targets and their roles in controlling system state.
+6. Schedule a system shutdown with the `shutdown` command (e.g., `shutdown +10` to schedule a shutdown in 10 minutes), then cancel it before it takes effect using `shutdown -c`. Practice scheduling a reboot in a similar way, and explain how to manage scheduled tasks effectively to prevent unintended system downtime.
+7. Use the `systemctl list-timers` command to view all active timers on your system. Identify which services are associated with each timer and discuss the role of timers in automating system maintenance tasks, such as updates or backups, on a scheduled basis.
+8. Modify the timezone of your system using `timedatectl set-timezone` followed by the appropriate timezone (e.g., `America/New_York`). Verify the change with `timedatectl` and discuss how setting the correct timezone is essential for accurate logging and scheduling, especially on servers used by teams in different geographic locations.
+9. Set up a recurring system maintenance task using `cron`. For example, configure a cron job that runs a simple script every day at midnight, such as creating a backup of a directory. Verify that the cron job is functioning by checking the output or logs. Discuss the importance of cron in automating routine maintenance tasks.
+10. Use `journalctl` to view system logs from the most recent boot, filtering the logs to show only critical or error messages. Explain how analyzing boot logs can help you troubleshoot startup issues and identify potential system problems early.
