@@ -51,14 +51,12 @@ Cron uses two main types of crontab files to schedule tasks:
 - Managed by the system administrator (`root` user) for system-wide tasks.
 - Schedule routine maintenance tasks, system updates, and other automated processes.
 
-**Example Entry**:
+For example, to schedule the `apt update` command to run as the root user every hour on the hour, use the cron job entry:
 
 ```
 # m h dom mon dow user  command
 0 * * * *   root  /usr/bin/apt update
 ```
-
-Runs `apt update` every hour as the `root` user.
 
 #### User Crontabs
 
@@ -278,7 +276,7 @@ Cron allows the use of special strings instead of the five time fields:
 | **`@daily`** or **`@midnight`** | Run once a day (`0 0 * * *`).                |
 | **`@hourly`**          | Run once an hour (`0 * * * *`).                    |
 
-**Example**:
+For example, to schedule the script `weekly_task.sh` to run every week, use the cron job entry:
 
 ```crontab
 @weekly /path/to/weekly_task.sh
@@ -295,7 +293,7 @@ Cron allows the use of special strings instead of the five time fields:
 - System-wide crontab entries can be added to files in `/etc/cron.d/`.
 - These files have an additional field to specify the user.
 
-**Example** (`/etc/cron.d/system_backup`):
+For example, to run the `system_backup.sh` script as the root user every day at 2:30 AM, use the cron job entry:
 
 ```crontab
 # m h dom mon dow user  command
@@ -308,8 +306,6 @@ Cron allows the use of special strings instead of the five time fields:
 
 Backup a database every night at 11:30 PM.
 
-**Crontab Entry**:
-
 ```crontab
 30 23 * * * /usr/local/bin/backup_database.sh >> /var/log/db_backup.log 2>&1
 ```
@@ -318,8 +314,6 @@ Backup a database every night at 11:30 PM.
 
 Clear application cache every Sunday at 3:00 AM.
 
-**Crontab Entry**:
-
 ```crontab
 0 3 * * 0 /usr/bin/php /var/www/html/app/clear_cache.php
 ```
@@ -327,8 +321,6 @@ Clear application cache every Sunday at 3:00 AM.
 #### Scenario 3: System Update
 
 Run system updates on the 1st and 15th of every month at 4:00 AM.
-
-**Crontab Entry**:
 
 ```crontab
 0 4 1,15 * * /usr/bin/apt update && /usr/bin/apt upgrade -y
@@ -348,8 +340,8 @@ Always specify the full path to commands and scripts.
 
 - For **standard output** redirection, the `>` symbol is used to overwrite the contents of a file, while `>>` is used to append output to an existing file without overwriting it.
 - To redirect **standard error**, the `2>` operator is used to overwrite the error output to a file, while `2>>` appends the error output to the file instead of overwriting it.
-
-**Example**:
+- 
+For example, to execute `/path/to/command` every day at 2:00 AM and direct both standard output and error output to a log file, use the cron job entry:
 
 ```crontab
 0 2 * * * /path/to/command >> /var/log/command.log 2>&1
@@ -359,7 +351,7 @@ Always specify the full path to commands and scripts.
 
 Cron runs with a minimal environment. If your command depends on certain variables, define them in the crontab or within your script.
 
-**Example**:
+For example, to run `script.sh` every day at 5:00 AM using the Bash shell and specifying the PATH environment, set the cron job as follows:
 
 ```crontab
 SHELL=/bin/bash
@@ -381,7 +373,7 @@ Before adding them to the crontab, test your commands in the terminal to ensure 
 
 For tasks that may take longer than the scheduling interval, prevent overlapping executions.
 
-**Example Using a Lock File**:
+This script example ensures that only one instance of the script can run at a time by using a file lock. Here’s how it works:
 
 ```bash
 #!/bin/bash
@@ -391,6 +383,9 @@ For tasks that may take longer than the scheduling interval, prevent overlapping
 ) 9>/var/lock/.myscript.exclusive
 ```
 
+- `flock -n 9` attempts to acquire an exclusive, non-blocking lock on file descriptor 9. If the lock cannot be acquired because another instance is running, it immediately exits with `exit 1`.
+- `9>/var/lock/.myscript.exclusive` specifies the lock file. This file is used to track the lock status; if it’s locked, another instance will not start.
+  
 ### Common Pitfalls
 
 - Cron uses the system's time zone. Ensure it's set correctly.
