@@ -270,19 +270,15 @@ ACL specifications define who has what kind of access to a file or directory. He
 
 ACLs are applied in conjunction with standard Linux permissions, and they can either override or supplement them. For example, a file with standard permissions of rw-rw-r-- and an ACL entry of g:r-x would grant read and execute permissions to the group, even though the standard permissions do not grant execute permission. Thus, with the proper use of ACLs, you can achieve a higher level of security and flexibility in managing file and directory access.
 
-## Challenges
+### Challenges
 
-1. Create a temporary text file named `temp.txt` in your home directory. Use `ls -l` to display its permissions, which might look like this:
-
-```bash
--rw-rw-r-- 1 user_name user_group  8 Nov 21 18:02 temp.txt
-```
-The file is owned by "user_name" and belongs to the group "user_group". Both the owner and the group have write permissions, while others can only read the file. Remove write permissions for "user_group" and read permissions for others using chmod.
-
-2. Copy a file owned by root (e.g., /etc/hosts) to your home directory. Check its permissions with ls -l. Who owns the file now, and what are the implications?
-3. Pick any file and display its umask value. Use the umask command to view the umask in octal form. Can you convert it to symbolic form?
-4. Consider a file owned by a user who does not have read or write permissions on it. Can the user still remove the file? Justify your answer with appropriate commands and explain the results.
-5. Describe the process and impact of removing a group's write permissions and others' read permissions from a file using chmod. How does this change the file's accessibility?
-6. Explain the difference between standard file permissions and ACLs in Linux. What additional capabilities do ACLs provide?
-7. Can a user who is not the owner of a file or directory change its permissions? What about if the user is part of the file or directory's group? Justify your answers with appropriate commands and their outputs.
-8. Discuss when you would use standard permissions versus ACLs to control access to files and directories. Consider various scenarios such as multi-user systems, shared directories, and files with sensitive information.
+1. Create a temporary text file named `temp.txt` in your home directory and use `ls -l` to display its permissions. Note the permissions displayed (e.g., `-rw-rw-r--`), which indicate that both the owner and group have write access, while others have only read access. Use `chmod` to remove write permissions for the group and read permissions for others, and then verify the changes. Discuss how modifying permissions affects file accessibility.
+2. Copy a file owned by root, such as `/etc/hosts`, to your home directory, and then check its permissions using `ls -l`. Examine who now owns the file in your home directory, and discuss the implications of file ownership during copy operations, especially when copying files from privileged directories.
+3. Use the `umask` command to display the current umask value in octal form. Convert this value to symbolic form and explain how umask affects the default permissions of newly created files and directories. Create a new file and verify its permissions to see how they are influenced by the umask setting.
+4. Identify a file owned by a user who lacks read or write permissions on it, and then check if the user can still remove the file. Use appropriate commands to test and explain the results, discussing how file deletion is affected by directory permissions rather than file permissions.
+5. Use `chmod` to remove write permissions for the group and read permissions for others on a file. Observe how these changes impact the file’s accessibility, and explain the process of modifying permissions for specific user classes. Discuss the scenarios where adjusting these permissions would be necessary for security or collaboration.
+6. Explain the difference between standard file permissions and Access Control Lists (ACLs) in Linux. Research and discuss what additional capabilities ACLs provide, such as setting permissions for individual users or groups beyond the owner, group, and others model.
+7. Determine if a user who is not the owner of a file can change its permissions. Then, verify if a user who belongs to the file’s group can modify permissions. Use commands to test these scenarios and explain the results, discussing the limitations on who can alter file permissions.
+8. Discuss scenarios where standard permissions are sufficient versus when ACLs are more appropriate for managing access to files and directories. Consider examples such as multi-user systems, shared directories, and files with sensitive information, and explain the benefits of using ACLs in specific cases.
+9. Enable ACLs on a file by setting a custom permission for a user who is neither the file’s owner nor part of its group. Use `setfacl` to grant this user read-only access to the file, and then verify the change with `getfacl`. Explain how ACLs provide more granular control over file access and can accommodate complex permission requirements.
+10. Explore the concept of the "sticky bit" on a shared directory, such as `/tmp`, by setting it on a new directory and testing its effects. Create a shared directory, set the sticky bit on it, and explain how it restricts users from deleting files they do not own. Discuss scenarios where the sticky bit is useful for multi-user collaboration.
