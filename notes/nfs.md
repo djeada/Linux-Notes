@@ -28,6 +28,20 @@ Client                       Network                      Server
 
 In this diagram, the client interacts with the NFS server over the network. The NFS client software translates local file operations into NFS protocol requests, which are sent to the server. The server processes these requests and accesses its local file system accordingly, providing the requested data back to the client.
 
+### Reasons for Using NFS
+
+- NFS allows **centralized storage**, enabling multiple clients to access files on a single server, simplifying data management and backup processes.
+- By facilitating **file sharing across networks**, NFS enables seamless access to shared files among different systems, improving collaboration and accessibility.
+- NFS is **platform-independent**, meaning it can be used on various operating systems (such as Linux, UNIX, and Windows) without compatibility issues.
+- It provides **reduced storage duplication**, as files are stored on a central server, eliminating the need for multiple copies across different devices.
+- With **consistent access permissions**, NFS allows administrators to control file permissions centrally, ensuring consistent access rights across all clients.
+- NFS supports **automatic mounting** using configuration files, making it easier for clients to access shared directories without manual intervention.
+- The protocol is **scalable**, allowing additional clients or servers to be added to the network without significant changes to the existing infrastructure.
+- NFS can **improve performance** in certain use cases by reducing local storage requirements and centralizing storage access, optimizing resource usage.
+- NFS facilitates **remote work** and distributed computing by allowing users to access files on a central server from different physical locations.
+- With **cost efficiency**, NFS can reduce hardware costs by centralizing storage and minimizing the need for local storage on client machines.
+- NFS integrates well with **authentication and encryption** methods, such as Kerberos, to provide secure file access over networks.
+
 ### Setting Up an NFS Server on CentOS 7
 
 If you're looking to share directories from a CentOS 7 machine so that other computers on the network can access them, you'll need to set up that machine as an NFS server. Here's how you can do it step by step.
