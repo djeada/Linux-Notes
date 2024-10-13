@@ -207,37 +207,37 @@ Both `gdisk` and `fdisk` are powerful command-line tools used for disk partition
 
 #### `gdisk` Operations
 
-| **Command** | **Description**                                          | **Usage Example**                                |
-|-------------|----------------------------------------------------------|--------------------------------------------------|
-| `p`         | Display the current partition table.                     | Type `p` to list all partitions.                 |
-| `n`         | Create a new partition.                                  | Type `n` and follow prompts to define the partition. |
-| `d`         | Delete a partition.                                      | Type `d` and enter the partition number to delete. |
-| `t`         | Change a partition's type code.                          | Type `t`, select partition, and enter new type code. |
-| `l`         | List known partition types.                              | Type `l` to display a list of type codes.        |
-| `w`         | Write changes to disk and exit.                          | Type `w` to save changes and quit `gdisk`.       |
-| `q`         | Quit without saving changes.                             | Type `q` to exit without saving.                 |
-| `x`         | Enter expert mode for advanced options.                  | Type `x` to access expert commands.              |
-| `?`         | Display help information.                                | Type `?` to show help menu.                      |
-| `i`         | Show detailed information about a partition.             | Type `i` and enter the partition number.         |
-| `o`         | Create a new empty GUID partition table (GPT).           | Type `o` to start with a new GPT.                |
-| `r`         | Enter recovery and transformation mode.                  | Type `r` for recovery options.                   |
+| **Command** | **Description**                                          |
+|-------------|----------------------------------------------------------|
+| `p`         | Display the current partition table.                     |
+| `n`         | Create a new partition.                                  |
+| `d`         | Delete a partition.                                      |
+| `t`         | Change a partition's type code.                          |
+| `l`         | List known partition types.                              |
+| `w`         | Write changes to disk and exit.                          |
+| `q`         | Quit without saving changes.                             |
+| `x`         | Enter expert mode for advanced options.                  |
+| `?`         | Display help information.                                |
+| `i`         | Show detailed information about a partition.             |
+| `o`         | Create a new empty GUID partition table (GPT).           |
+| `r`         | Enter recovery and transformation mode.                  |
 
 #### `fdisk` Operations
 
-| **Command** | **Description**                                          | **Usage Example**                                |
-|-------------|----------------------------------------------------------|--------------------------------------------------|
-| `p`         | Display the partition table.                             | Type `p` to list all partitions.                 |
-| `n`         | Add a new partition.                                     | Type `n`, choose type, and define partition size. |
-| `d`         | Delete a partition.                                      | Type `d` and enter the partition number to delete. |
-| `t`         | Change a partition's system ID (type).                   | Type `t`, select partition, and enter hex code.  |
-| `l`         | List known partition types.                              | Type `l` to display a list of type codes.        |
-| `w`         | Write changes to disk and exit.                          | Type `w` to save changes and quit `fdisk`.       |
-| `q`         | Quit without saving changes.                             | Type `q` to exit without saving.                 |
-| `m`         | Display help menu.                                       | Type `m` to show help information.               |
-| `a`         | Toggle a bootable flag on a partition.                   | Type `a` and select the partition.               |
-| `v`         | Verify the partition table for errors.                   | Type `v` to check for inconsistencies.           |
-| `x`         | Enter expert mode for advanced options.                  | Type `x` for expert commands.                    |
-| `g`         | Create a new empty GPT partition table.                  | Type `g` to initialize GPT on a disk.            |
+| **Command** | **Description**                                          |
+|-------------|----------------------------------------------------------|
+| `p`         | Display the partition table.                             |
+| `n`         | Add a new partition.                                     |
+| `d`         | Delete a partition.                                      |
+| `t`         | Change a partition's system ID (type).                   |
+| `l`         | List known partition types.                              |
+| `w`         | Write changes to disk and exit.                          |
+| `q`         | Quit without saving changes.                             |
+| `m`         | Display help menu.                                       |
+| `a`         | Toggle a bootable flag on a partition.                   |
+| `v`         | Verify the partition table for errors.                   |
+| `x`         | Enter expert mode for advanced options.                  |
+| `g`         | Create a new empty GPT partition table.                  |
 
 ### Managing Disk Partitions
 
