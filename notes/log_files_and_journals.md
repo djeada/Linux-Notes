@@ -86,13 +86,13 @@ With the introduction of systemd, `journald` became the default logging system f
 +--------------------------------+
 ```
 
-Key features of `journald`:
+**Features of `journald`**:
 
 - By using **structured logging**, logs can include enriched metadata like **UID**, **GID**, and system capabilities, making detailed filtering and analysis much easier.
 - The **binary format** allows for **efficient storage** by supporting compression and indexing, which saves disk space and speeds up access to log data.
 - Access controls can be applied to ensure **security**, protecting log files from unauthorized access and preserving their **integrity**.
 
-#### Rsyslog: Advanced Log Processing
+#### Rsyslog
 
 Rsyslog is a powerful logging system that extends the capabilities of traditional syslog. It supports various input and output modules, enabling complex log processing tasks.
 
