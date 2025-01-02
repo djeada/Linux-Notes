@@ -238,6 +238,7 @@ abd acd
 ```
 
 Here's how it works:
+
 - The expression `{b,c}` is expanded into `b` and `c`.
 - The resulting strings are then combined with the prefix `a` and the suffix `d`, producing `abd` and `acd`.
 
@@ -292,6 +293,7 @@ II. Copying Files:
 ```bash
 cp image?.png /backup/
 ```
+
 This command copies files like `image1.png`, `image2.png`, etc., to the `/backup/` directory.
 
 ##### Comparison to Regular Expressions
