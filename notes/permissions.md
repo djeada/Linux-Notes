@@ -114,6 +114,7 @@ To view the current `umask` value, simply use the `umask` command:
 ```bash
 umask
 ```
+
 To change the umask value, use the umask command followed by the desired octal value:
 
 ```bash
