@@ -204,6 +204,7 @@ Each process, upon its creation, is assigned a unique Process ID (PID). To stop 
 ```bash
 kill 12345
 ```
+
 In this example, a termination signal is sent to the process with PID 12345, instructing it to stop execution.
 
 #### Terminating Processes by Name
