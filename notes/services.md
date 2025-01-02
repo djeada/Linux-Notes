@@ -295,6 +295,7 @@ Look for these key options:
 - `write_enable=YES` (if you want to allow file uploads).
 
 **Step 2: Enable and start vsftpd service**
+
 ```bash
 systemctl enable vsftpd
 systemctl start vsftpd
@@ -309,6 +310,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/vsftpd.service 
 The `systemctl enable` command sets the service to start on boot. The symlink confirmation indicates success.
 
 **Expected Output (Start command)**:
+
 ```bash
 No output (command completes silently)
 ```
