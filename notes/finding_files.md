@@ -11,6 +11,7 @@ The general syntax of the `find` command is as follows:
 ```bash
 find [path...] [expression]
 ```
+
 - `[path...]` refers to where you want to look for. It can be a single directory or multiple directories.
 - `[expression]` refers to the search criteria like name, size, file type, etc.
 
@@ -123,6 +124,7 @@ The general syntax of the `locate` command is as follows:
 ```bash
 locate [option] pattern
 ```
+
 - `[option]` refers to additional parameters that can be passed to `locate`.
 - `pattern` refers to the file or directory name you are searching for.
 
