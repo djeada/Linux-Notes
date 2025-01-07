@@ -121,6 +121,7 @@ KiB Swap:  8388604 total,  8388604 free,        0 used. 11585756 avail Mem
 The life cycle of a process in an operating system is a critical concept. The provided diagram illustrates the various stages a process goes through:
 
 ```
+# process life cycle
                         +---------+
                         |         |
                         | Created |
