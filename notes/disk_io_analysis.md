@@ -2,8 +2,6 @@
 
 Disk I/O operations directly impact performance in applications requiring frequent or large-scale data access. Understanding and monitoring disk I/O is essential for diagnosing performance bottlenecks, optimizing resource utilization, and ensuring that applications run efficiently. Disk I/O analysis involves examining how data is read from and written to storage devices, identifying patterns, and pinpointing areas where performance can be improved.
 
-We will delve into the methods and tools used for disk I/O analysis, providing detailed explanations and practical steps for monitoring and interpreting disk I/O activities.
-
 ### Disk I/O Process
 
 **Read Operation**:
