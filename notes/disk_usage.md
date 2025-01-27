@@ -2,6 +2,10 @@
 
 Managing and monitoring disk usage is necessary for server maintenance, allowing administrators to identify disk space shortages caused by large log files, such as Apache or system logs, and malfunctioning applications that generate excessive data. Tools like `df` provide quick overviews of available disk space, while `du` helps analyze directory sizes to locate space hogs. For planning future storage needs, tracking data growth with monitoring software like Nagios or Grafana enables accurate forecasting and timely upgrades of storage hardware or cloud solutions. Regularly cleaning up unused files involves deleting obsolete backups, removing temporary files from `/tmp`, archiving old user data, and eliminating redundant application caches using automated scripts or cleanup utilities like BleachBit.
 
+TODO:
+
+- grafana
+
 ### Understanding the df command
 
 The `df` (disk filesystem) command provides information about the filesystems on your machine. It shows details such as total size, used space, available space, and the percentage of space used. To display these statistics in a human-readable format, using units like KB, MB, or GB, you can use the `-h` (human-readable) option.
