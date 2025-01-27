@@ -1,6 +1,6 @@
 ## Disk Usage Management
 
-The ability to manage and monitor disk usage comes handy when maintaining servers. Disk usage is often checked when diagnosing system issues, planning for future storage requirements, or cleaning up unused files and directories.
+Managing and monitoring disk usage is necessary for server maintenance, allowing administrators to identify disk space shortages caused by large log files, such as Apache or system logs, and malfunctioning applications that generate excessive data. Tools like `df` provide quick overviews of available disk space, while `du` helps analyze directory sizes to locate space hogs. For planning future storage needs, tracking data growth with monitoring software like Nagios or Grafana enables accurate forecasting and timely upgrades of storage hardware or cloud solutions. Regularly cleaning up unused files involves deleting obsolete backups, removing temporary files from `/tmp`, archiving old user data, and eliminating redundant application caches using automated scripts or cleanup utilities like BleachBit.
 
 ### Understanding the df command
 
