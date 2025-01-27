@@ -1,8 +1,8 @@
-# Understanding How the Linux Kernel Executes Programs
+## How the Linux Kernel Executes Programs
 
 We'll explore the inner workings of the Linux kernel, focusing on how it loads and executes binaries. We'll dive into the `execve` system call, build a custom kernel, and use debugging tools to see the execution process in action. Whether you're a seasoned developer or just curious about operating systems, this walkthrough aims to shed light on the fascinating journey from a command to a running program.
 
-## The Role of the `execve` System Call
+### The Role of the `execve` System Call
 
 At the heart of program execution in Linux lies the `execve` system call. This function is responsible for replacing the current process image with a new one, effectively running a new program within the same process. When you run a command in the terminal, `execve` is the mechanism that makes it happen.
 
@@ -11,6 +11,7 @@ In C, the function signature of `execve` is:
 ```c
 int execve(const char *pathname, char *const argv[], char *const envp[]);
 ```
+
 Let's break down the parameters:
 
 - The path to the executable file you want to run.
@@ -19,7 +20,7 @@ Let's break down the parameters:
 
 When a program calls `execve`, the kernel loads the specified executable into memory, sets up the new environment, and starts executing the program from its entry point. The original process is overwritten, but it retains its process ID, which is why `execve` doesn't create a new process but transforms the existing one.
 
-## Observing `execve` in Action with `strace`
+### Observing `execve` in Action with `strace`
 
 To see how `execve` operates under the hood, we can use a tool called `strace`. This utility traces system calls made by a program, allowing us to observe interactions with the kernel.
 
@@ -31,11 +32,11 @@ strace -e execve ls
 
 The `-e execve` option tells `strace` to filter and display only `execve` system calls. When you run this command, you'll see output showing which executables are being invoked, along with the arguments and environment variables. This simple exercise reveals the essential role `execve` plays in running even the most basic commands.
 
-## Building a Custom Linux Kernel
+### Building a Custom Linux Kernel
 
 To truly understand how the kernel executes programs, we can build our own version of the Linux kernel. This allows us to customize it for debugging and explore its internals.
 
-### Cloning the Kernel Source Code
+#### Cloning the Kernel Source Code
 
 Start by cloning the official Linux kernel repository:
 
@@ -48,7 +49,7 @@ This command downloads the entire kernel source code into a directory named `lin
 cd linux
 ```
 
-### Configuring the Kernel
+#### Configuring the Kernel
 
 Before compiling, we need to configure the kernel to suit our needs. We can generate a default configuration as a starting point:
 
@@ -57,7 +58,7 @@ make defconfig
 ```
 This command creates a standard configuration file based on your system's architecture.
 
-### Customizing for Debugging
+#### Customizing for Debugging
 
 To make debugging easier and reduce compilation time, we'll adjust some settings:
 
@@ -80,7 +81,7 @@ III. **Enable Debugging Options**: These settings provide valuable information w
 - kernel debugger**.
 After making these changes, save your configuration and exit the menu.
 
-### Compiling the Kernel
+#### Compiling the Kernel
 
 Now we're ready to compile the kernel:
 
@@ -95,13 +96,14 @@ Once compilation is complete, generate the GDB scripts:
 ```bash
 make scripts_gdb
 ```
+
 These scripts help GDB (the GNU Debugger) understand kernel data structures during debugging sessions.
 
-## Creating an Initramfs with Custom Programs
+### Creating an Initramfs with Custom Programs
 
 An initramfs (initial RAM filesystem) is a simple filesystem loaded into memory during the boot process. We'll create one containing a statically linked shell and a sample program to test our custom kernel.
 
-### Building a Statically Linked Shell
+#### Building a Statically Linked Shell
 
 First, we'll build a minimal shell to use as the initial process:
 
@@ -141,7 +143,7 @@ make install
 
 This installs BusyBox into a `_install` directory.
 
-### Preparing the Initramfs
+#### Preparing the Initramfs
 
 Create a directory to hold the initramfs contents:
 
@@ -175,7 +177,7 @@ Make the script executable:
 chmod +x ../initramfs/init
 ```
 
-### Adding a Sample Program
+#### Adding a Sample Program
 
 Let's create a simple C program to test:
 
@@ -200,7 +202,7 @@ Compile the program statically:
 gcc -static -o ../initramfs/bin/hello ../initramfs/hello.c
 ```
 
-### Creating the Initramfs Archive
+#### Creating the Initramfs Archive
 
 Finally, create the initramfs cpio archive:
 
@@ -212,11 +214,11 @@ cd ..
 
 This command finds all files in the initramfs directory, creates a cpio archive in the `newc` format, and compresses it with gzip.
 
-## Booting the Custom Kernel with QEMU
+### Booting the Custom Kernel with QEMU
 
 Now that we have a custom kernel and initramfs, we can boot them using QEMU, an open-source emulator that supports virtualization.
 
-### Starting QEMU
+#### Starting QEMU
 
 Run the following command:
 
@@ -239,11 +241,11 @@ Here's what the options mean:
 
 With these options, QEMU waits for a debugger to connect before starting the kernel.
 
-## Debugging the Kernel with GDB
+### Debugging the Kernel with GDB
 
 Now we can connect GDB to QEMU to debug the kernel.
 
-### Connecting GDB
+#### Connecting GDB
 
 In a new terminal window, navigate to the kernel source directory and start GDB:
 
@@ -259,7 +261,7 @@ Within GDB, connect to QEMU:
 
 The kernel is now paused and ready for debugging.
 
-### Setting Breakpoints
+#### Setting Breakpoints
 
 Let's set a breakpoint at the `do_execve` function:
 
@@ -275,7 +277,7 @@ Then, continue execution:
 
 Switch back to the QEMU terminal. The kernel should now boot and drop into our custom shell.
 
-## Observing Program Execution
+### Observing Program Execution
 
 In the QEMU shell, run our sample program:
 
@@ -285,7 +287,7 @@ In the QEMU shell, run our sample program:
 
 Because we set a breakpoint at `do_execve`, GDB will pause execution when the kernel attempts to execute `hello`.
 
-### Stepping Through `do_execve`
+#### Stepping Through `do_execve`
 
 Back in GDB, we can step through the `do_execve` function to observe how the kernel handles the execution request:
 
@@ -295,7 +297,7 @@ Back in GDB, we can step through the `do_execve` function to observe how the ker
 
 As you step through, pay attention to how the kernel prepares the binary for execution, including loading the executable, setting up memory spaces, and initializing the process environment.
 
-### Inspecting Variables
+#### Inspecting Variables
 
 We can inspect variables and structures to understand the state of the kernel. For example, to view the binary parameters:
 
@@ -305,11 +307,11 @@ We can inspect variables and structures to understand the state of the kernel. F
 
 This displays the contents of the `linux_binprm` structure, which holds information about the binary being executed.
 
-## Understanding Binary Format Handling
+### Understanding Binary Format Handling
 
 The kernel supports multiple binary formats (like ELF, scripts, etc.). It determines how to execute a file based on its format.
 
-### Exploring `search_binary_handler`
+#### Exploring `search_binary_handler`
 
 The function `search_binary_handler` is responsible for finding the appropriate handler for the binary:
 
@@ -326,11 +328,11 @@ When the breakpoint hits, you can examine the available handlers:
 
 By continuing execution and checking the handler's name, you can see how the kernel selects the ELF handler for our compiled program.
 
-## Loading the ELF Binary
+### Loading the ELF Binary
 
 Once the ELF handler is selected, the kernel uses `load_elf_binary` to load the executable.
 
-### Stepping into `load_elf_binary`
+#### Stepping into `load_elf_binary`
 
 Continue stepping through the code:
 
@@ -340,7 +342,7 @@ Continue stepping through the code:
 
 Within `load_elf_binary`, the kernel reads the ELF header, sets up memory mappings, and prepares the process for execution.
 
-### Checking the ELF Header
+#### Checking the ELF Header
 
 You can examine the ELF header:
 
@@ -350,11 +352,11 @@ You can examine the ELF header:
 
 This should display the magic numbers identifying the file as an ELF executable.
 
-## Starting the Program
+### Starting the Program
 
 After loading the binary, the kernel sets up the initial CPU state and starts the program.
 
-### Examining `start_thread`
+#### Examining `start_thread`
 
 The `start_thread` function sets the instruction pointer and stack pointer for the new process:
 
@@ -370,7 +372,7 @@ Check the instruction pointer:
 
 This address should correspond to the entry point of our `hello` program.
 
-### Verifying the Entry Point
+#### Verifying the Entry Point
 
 To confirm, you can check the entry point in the compiled binary:
 
@@ -380,29 +382,18 @@ readelf -h hello
 
 Look for the **Entry point address** and compare it to the instruction pointer value from GDB.
 
-## Resuming Execution
+### Resuming Execution
 
 Once the setup is complete, we can allow the program to run:
 
 ```gdb
-
 (gdb) continue
 ```
-Switch back to the QEMU terminal. You should see the message from our program:
-```
 
+Switch back to the QEMU terminal. You should see the message from our program:
+
+```
 Hello from the custom kernel!
 ```
+
 This indicates that the kernel successfully executed our program.
-
-## Reflecting on the Execution Flow
-
-Through this exercise, we've observed the detailed steps the kernel takes to execute a program:
-
-- Handling the `execve` system call.
-- Determining the binary format.
-- Loading the executable into memory.
-- Setting up the execution context.
-- Starting the program.
-
-By stepping through the code, we've gained insight into the kernel's inner workings and how it manages processes.
