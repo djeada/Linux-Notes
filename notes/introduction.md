@@ -2,6 +2,72 @@
 
 Linux is a versatile and powerful open-source operating system that forms the backbone of countless technological infrastructures, from servers and desktops to mobile devices and embedded systems. Known for its stability, security, and flexibility, Linux provides a robust platform that can be customized to suit a wide range of applications. It is supported by a vibrant global community of developers and users, which contributes to its continuous evolution and ensures a rich ecosystem of software and tools. Whether for personal use, enterprise environments, or innovative tech projects, Linux offers a reliable and adaptable solution for modern computing needs.
 
+### What is Operating System?
+
+```
+                      +-------+
+                      | User  |
+                      +-------+
+                          |
+          -----------------------------------
+          |                |               |
+   +-------------+  +-------------+  +-------------+
+   | Application |  | Application |  | Application |
+   +-------------+  +-------------+  +-------------+
+          \             |              /
+           \            |             /
+            \           |            /
+             +-----------------------+
+             |   Operating System    |
+             +-----------------------+
+                |       |        |
+     +----------+-------+--------+----------+
+     |          |       |        |          |
+   +-----+   +-----+  +---------+  +------+
+   | RAM |   | CPU |  | Input/  |  |  ... |
+   |     |   |     |  | Output  |  |      |
+   +-----+   +-----+  +---------+  +------+
+```
+
+OS manages:
+
+- Memory (MMU)
+- Process
+- Devices (Drivers)
+- Storage
+- CPU (Scheduling)
+- Networking
+
+
+Operating systems are the fundamental layer that enables communication between computer hardware and user applications, evolving over time through a rich interplay of design philosophies and technological innovations. The Unix family, known for its modularity and robust design principles, has given rise to a diverse range of systems that embody both traditional and modern approaches to computing. Alongside this evolution, systems like Linux have emerged, driven by community collaboration and adaptability, offering a dynamic platform that continuously reshapes the computing landscape. In parallel, alternative paradigms, such as those seen in the Windows ecosystem, highlight different methodologies and priorities, collectively creating a broad and intricate tapestry of technologies that support everything from personal devices to complex enterprise infrastructures.
+
+```
+Operating Systems
+├── Unix & Unix-like Systems
+│   ├── Original Unix
+│   │   ├── AT&T Unix (System V)
+│   │   │   ├── Solaris (SunOS)
+│   │   │   ├── AIX (IBM)
+│   │   │   └── HP-UX (HP)
+│   │   └── BSD Unix
+│   │       ├── FreeBSD
+│   │       ├── NetBSD
+│   │       ├── OpenBSD
+│   │       └── Darwin (forms the core of macOS)
+│   └── Linux (Unix-like)
+│       ├── Debian Family
+│       │   ├── Ubuntu
+│       │   └── Others (e.g., Linux Mint)
+│       ├── Red Hat Family
+│       │   ├── Fedora
+│       │   ├── CentOS
+│       │   └── RHEL (Red Hat Enterprise Linux)
+│       └── Other Distributions (e.g., Arch, SUSE)
+└── Non-Unix Systems
+    ├── Windows Family (NT-based and earlier)
+    └── Others (e.g., DOS, AmigaOS)
+```
+
 ### Why Learn Linux?
 
 - Linux has demonstrated **consistent growth** over the past three decades, affirming its enduring relevance in the technology industry and maintaining its popularity among professionals and enthusiasts.
@@ -11,6 +77,49 @@ Linux is a versatile and powerful open-source operating system that forms the ba
 - Due to its **open-source** and modular nature, Linux can be tailored to meet a wide range of requirements, facilitating diverse applications across different sectors.
 - The **Linux community** is robust and continuously contributes to its development and improvement. This community, along with an extensive ecosystem that includes forums, educational resources, tools, and conferences, provides ample support for users seeking to learn and solve problems.
 - For businesses, especially startups, Linux is a **cost-effective** solution. It enables the efficient running of websites, databases, and applications without the hefty licensing fees associated with other operating systems. Its ease of installation, use, upgrade, deployment, and maintenance makes it an attractive choice for optimizing operational efficiency.
+
+### Before Linux
+
+```
+       Multics          Unix            GNU           Linux
+        (1960s)         (1970s)         (1983)         (1991)
+          |               |               |               |
+          |               |               |               |
+-----------------------------------------------------------------
+```
+
+I. **Multics (Multiplexed Information and Computer Services):** 
+
+An early time-sharing operating system.
+
+II. **Unix (Uniplexed Information and Computer Services, or Unics):** 
+
+- Developed to overcome many of Multics’ problems.
+- Provides a hierarchical file system  
+- Manages processes  
+- Offers a command-line interface  
+- Includes a wide range of utilities
+
+III. **POSIX (Portable Operating System Interface):**  
+
+- An IEEE 1003.1 standard from the 1980s  
+- Defines the language interface between application programs and the UNIX operating system, ensuring portability  
+- Specifies the C library, system interfaces and headers, as well as various commands and utilities
+
+IV. **GNU (GNU’s Not Unix):**
+
+- Introduced in 1983 to promote the Free Software concept  
+- Embodies the freedoms to run, study, modify, and redistribute software  
+- Uses the GNU General Public License (GPL) to protect these freedoms  
+- Aims to create a complete free-software operating system, including projects such as the shell, core utilities (e.g., ls), compilers, and libraries (e.g., the C library)
+
+V. **Linux Kernel:**  
+
+- Introduced by Linus Torvalds  
+- Licensed under GPL version 2 (GPLv2)  
+- Compiled using GNU GCC  
+- Provides a Unix-like operating system with advantages such as low cost, full control, and strong community support  
+- Serves as the kernel that the GNU project required
 
 ### The History of Linux
 
