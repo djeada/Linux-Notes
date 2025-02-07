@@ -6,8 +6,6 @@ Cron is a powerful utility in Unix-like operating systems that automates the exe
 
 Cron operates through a background process called the **cron daemon** (`crond`), which continuously runs and checks for scheduled tasks in crontab files. When the current time matches a scheduled time in the crontab, the cron daemon executes the associated command or script.
 
-Workflow Diagram:
-
 ```
 +---------------------------------------------------+
 |                                                   |
