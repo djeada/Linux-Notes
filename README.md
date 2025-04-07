@@ -52,20 +52,31 @@ To organize the notes from easiest to hardest, we'll start with fundamental conc
 
 ## References
 
-* Evi Nemeth, Garth Snyder, Trent R. Hein, Ben Whaley "<i>UNIX and Linux System Administration Handbook</i>"
-* Æleen Frisch "<i>Essential System Administration</i>"
-* James Turnbull, Peter Lieverdink, Dennis Matotek "<i>Pro Linux System Administration</i>"
-* https://www.cs.columbia.edu/~smb/classes/s06-4118/lectures.html
-* http://www.doc.ic.ac.uk/~wjk/UnixIntro
-* https://manjusri.ucsc.edu/2017/09/08/environment-modules/
-* http://www.cse.lehigh.edu/~brian/course/2012/sysadmin/notes/
-* https://github.com/imthenachoman/How-To-Secure-A-Linux-Server
-* https://www.linux.com/training-tutorials/beginners-guide-nmap/
-* https://linuxconfig.org/how-to-manage-acls-on-linux
-* https://craigmbooth.com/blog/selinux-for-mortals/
-* https://www.golinuxcloud.com/linux-commands-cheat-sheet/
-* https://www.linuxfromscratch.org/
-* https://docs.fedoraproject.org/en-US/Fedora/22/html/SELinux_Users_and_Administrators_Guide/index.html
+### Books
+- **Nemeth, Evi; Snyder, Garth; Hein, Trent R.; Whaley, Ben**  
+  *UNIX and Linux System Administration Handbook*  
+  [Amazon Link](https://amzn.to/3DZQSbU)
+
+- **Frisch, Æleen**  
+  *Essential System Administration*  
+  [Amazon Link](https://amzn.to/3Gbkqnl)
+
+- **Turnbull, James; Lieverdink, Peter; Matotek, Dennis**  
+  *Pro Linux System Administration*  
+  [Amazon Link](https://amzn.to/4chs7V2)
+
+### Online Courses and Resources
+- [Columbia University - UNIX/Linux Lectures](https://www.cs.columbia.edu/~smb/classes/s06-4118/lectures.html)
+- [Imperial College London - Unix Introduction](http://www.doc.ic.ac.uk/~wjk/UnixIntro)
+- [UCSC - Environment Modules Tutorial](https://manjusri.ucsc.edu/2017/09/08/environment-modules/)
+- [Lehigh University - System Administration Notes](http://www.cse.lehigh.edu/~brian/course/2012/sysadmin/notes/)
+- [GitHub - How To Secure A Linux Server](https://github.com/imthenachoman/How-To-Secure-A-Linux-Server)
+- [Linux.com - Beginner's Guide to Nmap](https://www.linux.com/training-tutorials/beginners-guide-nmap/)
+- [LinuxConfig.org - Managing ACLs on Linux](https://linuxconfig.org/how-to-manage-acls-on-linux)
+- [Craig M Booth - SELinux for Mortals](https://craigmbooth.com/blog/selinux-for-mortals/)
+- [GoLinuxCloud - Linux Commands Cheat Sheet](https://www.golinuxcloud.com/linux-commands-cheat-sheet/)
+- [Linux From Scratch](https://www.linuxfromscratch.org/)
+- [Fedora Project - SELinux Users and Administrators Guide](https://docs.fedoraproject.org/en-US/Fedora/22/html/SELinux_Users_and_Administrators_Guide/index.html)
 
 ## Contributing
 If you have suggestions for improving the notes or have found a mistake, please [open an issue](https://github.com/djeada/Linux-Notes/issues) or [submit a pull request](https://github.com/djeada/Linux-Notes/pulls). Contributions are welcome!
