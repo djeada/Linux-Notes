@@ -380,9 +380,17 @@ VBoxManage guestproperty get "MyVM" "/VirtualBox/GuestInfo/Net/0/V4/IP"
 Value: 10.0.2.15
 ```
 
-**Interpretation:**
-
 The VM named "MyVM" has an IP address of `10.0.2.15` on its first network interface.
+
+##### Changing Networking Mode
+
+Set to bridged networking:
+
+```bash
+VBoxManage modifyvm "MyVM" --nic1 bridged --bridgeadapter1 eth0
+```
+
+The first network adapter of "MyVM" is now bridged to the host's `eth0` interface.
 
 #### Managing VMs with VBoxManage
 
@@ -468,16 +476,6 @@ VBoxManage controlvm "MyVM" acpipowerbutton
 ```
 
 **No output is returned; the VM will begin a graceful shutdown.**
-
-##### Changing Networking Mode
-
-Set to bridged networking:
-
-```bash
-VBoxManage modifyvm "MyVM" --nic1 bridged --bridgeadapter1 eth0
-```
-
-The first network adapter of "MyVM" is now bridged to the host's `eth0` interface.
 
 ### VMware
 
