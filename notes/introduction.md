@@ -5,6 +5,7 @@ Linux is a versatile and powerful open-source operating system that forms the ba
 ### What is Operating System?
 
 ```
+# OS tree:
                       +-------+
                       | User  |
                       +-------+
