@@ -28,7 +28,7 @@ For instance, if an application requires a specific version of a runtime environ
 
 A popular example of hardware-level virtualization is the **Kernel-based Virtual Machine (KVM)**, which transforms the Linux kernel into a hypervisor, allowing multiple virtual machines to run unmodified Linux or Windows images.
 
-## Key Virtualization Technologies
+## Virtualization Technologies
 
 Two primary virtualization technologies form the backbone of virtual machine implementations: full virtualization and paravirtualization.
 
