@@ -49,6 +49,17 @@ III. **Standard Error**
 
 The pipe (`|`) character is an essential tool that allows for data to flow from one command to another. It's a form of redirection that captures the standard output (stdout) of one command and feeds it as the standard input (stdin) to another.
 
+```
++--------------+         +--------------+
+|   Process A  |         |   Process B  |
+|  (Producer)  |         |  (Consumer)  |
++--------------+         +--------------+
+      |                        ^
+      | stdout                 | stdin
+      |                        |
+      +-----------[PIPE]-------+
+```
+
 #### Example 1: Filtering User Details
    
 Suppose you want to see details about a person named "user_name" using the `w` command and subsequently modify "user_name" to "admin". This can be done with:
@@ -95,6 +106,16 @@ Here, `ls -l |&` captures both the regular output and any errors, which are then
 ### Redirection
 
 Redirection is a mechanism that controls the destination of a command's output, directing it to another command, a file, or even discarding it. It also allows commands to receive input from files instead of the keyboard.
+
+```
++------------------------+
+|       Process          |
+|------------------------|
+| stdin:  from file      |◄───────── input.txt
+| stdout: to file        |─────────► output.txt
+| stderr: to file        |─────────► error.txt
++------------------------+
+```
 
 #### I. Redirecting Standard Output
 
@@ -206,6 +227,13 @@ Here, the `-c` option specifies the command to run, while `/dev/null` discards a
 ### Filters
 
 Filters are specialized commands designed to process text, typically working with streams of text data. They are predominantly used with pipes (`|`) to modify or analyze the output of another command. A filter reads input line by line, transforms it in some way, and then outputs the result. This processing method is particularly useful in Unix-like operating systems, where filters can be combined with other commands in a pipeline to perform complex text transformations and data analysis. Common examples of filters include `grep` for searching text, `sort` for arranging lines in a particular order, and `awk` for pattern scanning and processing. Filters are a fundamental part of command-line data manipulation, allowing users to efficiently process large amounts of text with simple, concise commands.
+```
++---------------+          +-------------+          +---------------+
+|   Producer    |          |   Filter    |          |   Consumer    |
+|   (Process)   |─────────▶| (Transformer|─────────▶|   (Process)   |
+|   stdout      |─────────▶|   process)  |─────────▶|   stdin       |
++---------------+          +-------------+          +---------------+
+```
 
 #### Common Unix Filters
 
@@ -221,46 +249,220 @@ Filters are specialized commands designed to process text, typically working wit
 
 #### Examples
 
-I. Combine and sort the content of file1.txt and file2.txt, and redirect the sorted output to sorted.txt:
+Let's take a look at a few examples:
+
+I. **Combine and sort the content of file1.txt and file2.txt, and redirect the sorted output to sorted.txt:**
+
+This command uses the `sort` utility to combine the contents of both `file1.txt` and `file2.txt` while sorting all the lines alphabetically (or numerically, if options are provided). By using the redirection operator `>`, the sorted output is saved into a new file called `sorted.txt`.  
+ 
+Suppose **file1.txt** contains:  
+
+```
+banana
+apple
+```
+
+And **file2.txt** contains:  
+
+```
+cherry
+apple
+```
+
+Running the command:  
 
 ```bash
 sort file1.txt file2.txt > sorted.txt
 ```
 
-II. Eliminate any adjacent duplicate lines from sorted.txt and save the result in deduped.txt:
+The content in **sorted.txt** might be:  
+
+```
+apple
+apple
+banana
+cherry
+```  
+
+II. **Eliminate any adjacent duplicate lines from sorted.txt and save the result in deduped.txt:**
+
+After sorting, duplicate lines become adjacent. The `uniq` command then reads the sorted file and removes any consecutive duplicate lines. The output, which has duplicates eliminated, is redirected into a new file called `deduped.txt`. This is particularly useful when you need a list where each line is unique.  
+  
+Given the **sorted.txt** content from the previous step:  
+
+```
+apple
+apple
+banana
+cherry
+```  
+
+Running:  
 
 ```bash
 uniq sorted.txt > deduped.txt
-```
+```  
 
-III. Display lines containing the word "error" from deduped.txt:
+The resulting **deduped.txt** would be:  
+
+```
+apple
+banana
+cherry
+```  
+
+III. **Display lines containing the word "error" from deduped.txt:**
+
+The `grep` command is used to search within **deduped.txt** for lines that include the word "error". It is case-sensitive by default, so only lines with exactly "error" (all lowercase) will be matched. The matched lines are then printed to the terminal.  
+   
+If **deduped.txt** contains:  
+
+```
+apple
+error: file not found
+banana
+cherry
+Error: system crash
+```  
+
+Running:  
 
 ```bash
 grep 'error' deduped.txt
-```
+```  
 
-IV. Show lines from deduped.txt that contain the pattern "error", along with the line number:
+The output will be:  
+
+```
+error: file not found
+```  
+
+(Note: "Error: system crash" is not matched because `grep` is case-sensitive.)
+
+IV. **Show lines from deduped.txt that contain the pattern "error", along with the line number:**
+
+Using `awk`, this command searches for lines containing "error" in **deduped.txt** and prints the line number (`NR`, which represents the current record or line number) followed by the entire line. This gives you context on where each occurrence is located in the file.  
+  
+Consider **deduped.txt** with the following content:  
+
+```
+apple
+error: file not found
+banana
+error: network timeout
+cherry
+```  
+Executing:  
 
 ```bash
 awk '/error/ {print NR, $0}' deduped.txt
+```  
+
+Expected output:  
+
+```
+2 error: file not found
+4 error: network timeout
+```  
+
+V. **Replace all occurrences of 'old_word' with 'new_word' in file.txt:**
+
+The `sed` (Stream Editor) command in this example performs a substitution. The command will search through **file.txt** for every instance of `old_word` and replace it with `new_word`. The `g` flag at the end ensures that all occurrences on each line are replaced. Note that this command writes the changes to standard output; to update the file itself, you may need to use the `-i` (in-place) option depending on your shell or operating system.  
+  
+Assume **file.txt** contains:  
+
+```
+This is the old_word in a line.
+Another line with old_word and old_word again.
 ```
 
-V. Replace all occurrences of 'old_word' with 'new_word' in file.txt:
+Running:  
 
 ```bash
 sed 's/old_word/new_word/g' file.txt
+```  
+
+Would output:  
+
+```
+This is the new_word in a line.
+Another line with new_word and new_word again.
 ```
 
 #### Combining Filters
 
-Filters become even more powerful when combined. By chaining together multiple filters using the pipe (|), you can perform complex text transformations and analyses with a single command.
+When you chain multiple filters using the pipe operator (`|`), the output of one command becomes the input of the next. This allows you to perform complex text transformations and analyses using just one command line. Let's take a look a the following example:
 
 ```bash
 # Sort the content of a file, eliminate duplicates, and then display only lines containing "error"
-cat file.txt | sort | uniq | grep 'error'
+cat arduino_log.txt | sort | uniq | grep 'error'
 ```
 
-Filters are foundational components in the Unix philosophy of creating simple, modular tools that do one job and do it well. When used effectively, they provide powerful text processing capabilities with just a few keystrokes.
+I. **cat arduino_log.txt**  
+
+The `cat` command reads the contents of the file `arduino_log.txt` and sends it to standard output. This file might contain log messages from your Arduino or sensor readings.
+
+Suppose **arduino_log.txt** contains:
+
+```
+SensorTemp: 23.5
+error: voltage drop detected
+ArduinoInit: Success
+SensorTemp: 23.5
+error: sensor timeout
+ArduinoInit: Success
+```
+
+The output is exactly what’s contained in the file:
+
+```
+SensorTemp: 23.5
+error: voltage drop detected
+ArduinoInit: Success
+SensorTemp: 23.5
+error: sensor timeout
+ArduinoInit: Success
+```
+
+II. **sort** 
+
+The `sort` command reads the incoming text and arranges the lines in lexicographical order. Sorting helps to group identical or similar log messages together.
+
+After sorting:  
+
+```
+ArduinoInit: Success
+ArduinoInit: Success
+SensorTemp: 23.5
+SensorTemp: 23.5
+error: sensor timeout
+error: voltage drop detected
+```
+
+III. **uniq**  
+
+The `uniq` command removes any adjacent duplicate lines. Since the logs have been sorted, identical messages are now consecutive, so this command filters out the duplicates.
+
+After removing duplicates:
+
+```
+ArduinoInit: Success
+SensorTemp: 23.5
+error: sensor timeout
+error: voltage drop detected
+```
+
+IV. **grep 'error'**  
+The `grep` command then filters the output, selecting only the lines that contain the word "error". This command is case-sensitive by default.
+
+After filtering:
+
+```
+error: sensor timeout
+error: voltage drop detected
+```
+
+Filters are very important components in the Unix philosophy of creating simple, modular tools that do one job and do it well. When used effectively, they provide powerful text processing capabilities with just a few keystrokes.
 
 ## Challenges
 
