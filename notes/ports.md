@@ -119,7 +119,7 @@ Monitoring and managing open ports is crucial to prevent unauthorized access.
 sudo netstat -tuln
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Active Internet connections (only servers)
@@ -140,7 +140,7 @@ udp        0      0 0.0.0.0:68              0.0.0.0:*
 sudo ss -tuln
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Netid State      Recv-Q Send-Q Local Address:Port               Peer Address:Port
@@ -169,7 +169,7 @@ The service `service_name` has been stopped.
 sudo systemctl disable service_name
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Removed /etc/systemd/system/multi-user.target.wants/service_name.service.
@@ -187,7 +187,7 @@ Closing ports that are not in use reduces the attack surface.
 nmap -sT localhost
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Starting Nmap 7.80 ( https://nmap.org ) at 2023-10-08 12:34 UTC
@@ -210,7 +210,7 @@ Nmap found that ports 22 (SSH), 80 (HTTP), and 631 (Internet Printing Protocol) 
 sudo ufw deny 631/tcp
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Rule added
@@ -264,7 +264,7 @@ sudo ufw allow 2222/tcp
 sudo ufw delete allow 22/tcp
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Rule added
@@ -282,7 +282,7 @@ The firewall now allows traffic on port 2222 and blocks port 22.
 sudo ss -tuln | grep :2222
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 tcp   LISTEN 0      128    0.0.0.0:2222      0.0.0.0:*
@@ -309,7 +309,7 @@ Port forwarding can expose internal services to external networks if not properl
 sudo iptables -t nat -L -n -v
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
@@ -338,7 +338,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 
 sudo iptables -A FORWARD -p tcp -d 192.168.1.10 --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 ```
 
-**Expected Output:**
+Expected Output:
 
 *(No output if successful)*
 
@@ -352,7 +352,7 @@ Limit port forwarding to specific external IP addresses.
 sudo iptables -A FORWARD -j LOG --log-prefix "PORT_FORWARDING: "
 ```
 
-**Expected Output:**
+Expected Output:
 
 *(No output if successful)*
 
@@ -370,7 +370,7 @@ Proactive monitoring of network ports and associated processes is essential for 
 sudo lsof -i :80
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 COMMAND   PID   USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
@@ -394,7 +394,7 @@ apache2  1236 www-data 4u  IPv6  12345      0t0  TCP *:http (LISTEN)
 sudo lsof -i TCP -sTCP:LISTEN
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
@@ -413,7 +413,7 @@ Lists all processes that are in a `LISTEN` state for TCP connections.
 sudo netstat -tulpn | grep :22
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 tcp   0    0 0.0.0.0:22    0.0.0.0:*    LISTEN   2345/sshd
@@ -434,7 +434,7 @@ tcp6  0    0 :::22         :::*         LISTEN   2345/sshd
 sudo ss -tulwn | grep :80
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 tcp   LISTEN 0      128    0.0.0.0:80      0.0.0.0:*
@@ -456,7 +456,7 @@ tcp   LISTEN 0      128    [::]:80         [::]:*
 ss -s
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Total: 100 (kernel 110)
@@ -479,7 +479,7 @@ Provides a summary of socket usage, including the number of TCP connections in d
 ss -tan state established
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 State      Recv-Q Send-Q Local Address:Port               Peer Address:Port
@@ -495,7 +495,7 @@ Shows TCP connections that are currently established, including the local and pe
 ss -tan state established | wc -l
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 3
@@ -531,7 +531,7 @@ I. **Default TCP Scan:**
 nmap <IP-address>
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Starting Nmap 7.80 ( https://nmap.org ) at 2023-10-08 13:00 UTC
@@ -562,7 +562,7 @@ II. **TCP SYN Scan (Stealth Scan):**
 sudo nmap -sS <IP-address>
 ```
 
-**Expected Output:**
+Expected Output:
 
 Similar to the default scan but may find additional ports due to different scanning technique.
 
@@ -572,7 +572,7 @@ III. **Ping Scan (Discover Live Hosts):**
 nmap -sn 192.168.1.0/24
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Starting Nmap 7.80 ( https://nmap.org ) at 2023-10-08 13:05 UTC
@@ -593,7 +593,7 @@ IV. **Enable Version Detection:**
 nmap -sV <IP-address>
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 PORT    STATE SERVICE  VERSION
@@ -610,7 +610,7 @@ V. **Enable OS Detection:**
 sudo nmap -O <IP-address>
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 OS details: Linux 3.10 - 4.11
@@ -625,7 +625,7 @@ VI. **Combining Multiple Scans:**
 sudo nmap -A <IP-address>
 ```
 
-**Expected Output:**
+Expected Output:
 
 Provides detailed information including open ports, services, versions, OS detection, and traceroute.
 
@@ -635,7 +635,7 @@ VII. **Saving Output to a File:**
 nmap -oN output.txt <IP-address>
 ```
 
-**Expected Output:**
+Expected Output:
 
 The scan results are saved in `output.txt`.
 
