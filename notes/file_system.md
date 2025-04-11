@@ -4,6 +4,9 @@ In Unix, files and filesystems are important components of the operating system'
 
 A filesystem, on the other hand, is a method and data structure that the operating system uses to manage files on a disk or partition. It provides a way to store, retrieve, and organize files, supporting features like file permissions, links, and metadata. Common Unix filesystems include `ext4`, `XFS`, and `Btrfs`, each offering different capabilities and optimizations. Understanding these concepts is helpful for managing data and system resources effectively.
 
+TODO:
+- Add plot comparing read and write speed of various file systems also how it scales with parallel
+
 ### Types of Files in a UNIX Filesystem
 
 Unix and Unix-like systems, including Linux, organize files in a hierarchical structure called a filesystem. Files can be classified based on their purpose, storage method, and visibility.
