@@ -1,14 +1,28 @@
 ## Mounting and Unmounting
 
-Mounting and unmounting are fundamental concepts in Linux that allow you to interact with storage devices like hard drives, USB sticks, and even ISO images. Understanding these processes is crucial for managing file systems and ensuring data integrity.
+If you come from a Windows world, the idea of mounting might sound strange at first, since Linux handles storage devices and filesystems quite differently. In Linux, "mounting" is the process of making a storage device (such as a hard disk partition, USB drive, or network share) accessible within the filesystem hierarchy. Here’s a brief overview:
+
+**What Can Be Mounted:**
+
+- Hard disk partitions, SSDs, optical drives, and USB flash drives.  
+- Shares via NFS (Network File System) or SMB/CIFS (used by Windows shares).  
+- Special pseudo-filesystems like `/proc`, `/sys`, and `/dev` that provide interface access to system resources.
+
+**Mandatory vs. Optional Mounting:**  
+
+- Some filesystems must be mounted for the system to function properly. For example, root (`/`), `/proc`, `/sys`, and `/dev` are mounted at boot time by the system.
+- External drives, additional partitions, and remote shares can be mounted manually by the user when needed or configured to auto-mount based on system settings.
+
+**System vs. Manual Mounting on Distros like Ubuntu:**
+
+- Ubuntu and similar distributions use *automatic mounting* for essential filesystems during boot. The `/etc/fstab` file contains entries that help the system decide which filesystems to mount at startup and with what options. Modern desktop environments also auto-mount removable media when they are connected.
+- Users may *manually mount* devices that aren’t auto-mounted using the `mount` command. This is common for transient devices or non-standard partition layouts, and for troubleshooting or accessing specific partitions without permanent configuration changes.
 
 ### Understanding Mounting
 
 Mounting is the process of making a file system accessible at a certain point in the Linux directory tree. When you mount a device, you're telling the operating system to attach the file system on that device to a specific directory, known as a mount point. This action integrates the device's file system with the existing directory structure, allowing you to read and write data to it as if it were just another directory on your system.
 
 Imagine the Linux directory tree as a large, interconnected network of folders. By mounting a new device, you're effectively adding a new branch to this tree. This new branch can be accessed and navigated just like any other part of the tree.
-
-Here's a simple ASCII diagram to illustrate this concept:
 
 ```
 Linux Directory Tree Before Mounting:
