@@ -6,13 +6,13 @@ Input redirection (`<`) allows a command to read from a file, while output redir
 
 Unix and Unix-like operating systems use three primary standard streams for program interaction. These streams are set up at the start of a terminal session and act as the main channels for communication between a program and its environment:
 
-**I. Standard Input**
+I.** Standard Input**
 
 - **stdin** is the input stream where data is fed into a program, acting as the primary source for reading input data.
 - The default source for **stdin** is usually the keyboard.
 - Programs commonly use **stdin** to read user input from the terminal, though this input stream can also be redirected from files.
 
-**II. Standard Output**
+II.** Standard Output**
 
 - **stdout** serves as the primary output stream for a program, where it sends data that needs to be displayed.
 - The default destination for **stdout** is typically the terminal screen or console.

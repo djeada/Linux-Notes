@@ -554,7 +554,7 @@ Check the rotated and compressed log files:
 ls /var/log/syslog*
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 /var/log/syslog

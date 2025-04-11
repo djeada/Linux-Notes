@@ -306,7 +306,7 @@ sudo apt update
 sudo apt install xfsprogs
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Reading package lists... Done
@@ -328,7 +328,7 @@ Ensure that your system’s kernel and hardware support the file system by check
 modinfo xfs
 ```
 
-**Expected Output:**
+Expected Output:
 
 This command provides details on the XFS module, including its dependencies, supported versions, and any required firmware. Reviewing this information confirms compatibility with your current setup.
 
@@ -344,7 +344,7 @@ To get an overview of all attached storage devices, use:
 lsblk
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -364,7 +364,7 @@ To gather further details about each device and its partitions, use `fdisk`:
 sudo fdisk -l
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Disk /dev/sdb: 100 GiB, 107374182400 bytes, 209715200 sectors
@@ -390,7 +390,7 @@ Determine if the target device is currently mounted:
 mount | grep sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 /dev/sdb1 on /mnt/data type xfs (rw)
@@ -406,7 +406,7 @@ Unmount the device before making any changes:
 sudo umount /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 No output indicates the device was unmounted successfully.
 
@@ -418,7 +418,7 @@ If you encounter a “device is busy” error, identify processes using the devi
 sudo lsof /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 The output lists any processes using the device. For example:
 
@@ -445,7 +445,7 @@ To format the device with a specific file system type, use the appropriate `mkfs
 sudo mkfs.ext4 /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 mke2fs 1.45.5 (07-Jan-2020)
@@ -492,7 +492,7 @@ Then, adjust its size. For example, to shrink an `ext4` file system to 50 GB:
 sudo resize2fs /dev/sdb1 50G
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 resize2fs 1.45.5 (07-Jan-2020)
@@ -510,7 +510,7 @@ Some file systems support in-place conversions. For example, converting `ext2` t
 sudo tune2fs -O has_journal /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 tune2fs 1.45.5 (07-Jan-2020)
@@ -541,7 +541,7 @@ Choose a directory to serve as the mount point. If the directory does not exist,
 sudo mkdir -p /mnt/mydata
 ```
 
-**Expected Output:**
+Expected Output:
 
 No output indicates successful directory creation.
 
@@ -553,7 +553,7 @@ Once the mount point exists, mount the file system:
 sudo mount /dev/sdb1 /mnt/mydata
 ```
 
-**Expected Output:**
+Expected Output:
 
 There’s no output if the mount is successful. You can verify by listing mounted file systems or checking the mount point with `df`.
 
@@ -565,7 +565,7 @@ To confirm that the file system is mounted correctly, use:
 df -h /mnt/mydata
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Filesystem      Size  Used Avail Use% Mounted on
@@ -609,7 +609,7 @@ Find the UUID for the device by running:
 sudo blkid /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 /dev/sdb1: UUID="123e4567-e89b-12d3-a456-426614174000" TYPE="ext4"
@@ -629,7 +629,7 @@ Use `fsck` to check the file system for errors and repair any issues.
 sudo fsck /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 fsck from util-linux 2.34
@@ -647,7 +647,7 @@ Regularly monitor available space and usage with:
 df -h
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 Filesystem      Size  Used Avail Use% Mounted on
@@ -666,7 +666,7 @@ Change ownership to a specific user and group:
 sudo chown user:group /mnt/mydata
 ```
 
-**Expected Output:**
+Expected Output:
 
 No output means the command succeeded.
 
@@ -676,7 +676,7 @@ Set permissions:
 sudo chmod 755 /mnt/mydata
 ```
 
-**Expected Output:**
+Expected Output:
 
 Again, no output indicates success.
 
@@ -694,7 +694,7 @@ Use LUKS (Linux Unified Key Setup) to encrypt the partition:
 sudo cryptsetup luksFormat /dev/sdb1
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 WARNING!
@@ -716,7 +716,7 @@ To set fine-grained permissions, enable and configure Access Control Lists (ACLs
 sudo setfacl -m u:username:r /mnt/mydata
 ```
 
-**Expected Output:**
+Expected Output:
 
 No output, indicating success.
 
