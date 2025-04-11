@@ -2,6 +2,11 @@
 
 LDAP is a protocol used to access and manage directory information over an IP network. It is open, vendor-neutral, and an industry standard. LDAP is commonly used for centralized authentication, where user credentials and permissions are managed in a single directory and applied across multiple systems and applications.
 
+TODO:
+- explain clearer client and server setup, also completely local setup
+- tests
+- more on auth
+
 ## Understanding LDAP Concepts
 
 ### Directory
