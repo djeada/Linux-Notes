@@ -1,4 +1,4 @@
-## Understanding File Permissions
+## File Permissions
 
 File permissions are crucial in any Unix-like operating systems, including Linux, which employ several mechanisms for controlling access to files and directories. These mechanisms include standard permissions, special permissions, and access control lists (ACLs).
 
