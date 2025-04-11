@@ -2,6 +2,9 @@
 
 We will now delve deeply into the Linux kernel to understand its role in the operating system, where it resides on your system, and how kernel modules function. We will also explore how to download and examine the Linux kernel source code, and discuss the various configuration options available within it. The goal is to provide you with a comprehensive understanding of this critical component of the operating system—not necessarily to enable you to compile your own custom kernel, but to appreciate what the kernel does and how it operates.
 
+TODO:
+- compare various kernel versions
+
 ### What is the Linux Kernel?
 
 The **Linux kernel** is the core component of the Linux operating system. According to [Wikipedia](https://en.wikipedia.org/wiki/Linux_kernel):
