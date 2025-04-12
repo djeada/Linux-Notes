@@ -496,8 +496,6 @@ Fine-tune how your shell handles command history with environment variables.
 
 Enhance efficiency with keyboard shortcuts.
 
-Here are the details formatted into three separate markdown tables:
-
 **Movement**
 
 | **Action**                                    | **Command** |
