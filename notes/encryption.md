@@ -9,7 +9,7 @@ Main idea:
 - Ensures that data has not been altered during transit.
 - Meets legal requirements like HIPAA or GDPR for protecting personal data.
   
-**Visualization of Encryption Process:**
+Encryption Process:
 
 ```
 [ Plain Text ]     +--------------+     [ Cipher Text ]
@@ -18,7 +18,7 @@ Main idea:
                    +--------------+
 ```
 
-**Visualization of Decryption Process:**
+Decryption Process:
 
 ```
 [ Cipher Text ]    +---------------+    [ Plain Text ]
@@ -46,8 +46,6 @@ Main idea:
 - Both public and private keys are foundational components of **asymmetric** cryptography, which relies on the pairing of these keys for secure communication. 
 - Sharing a public key is necessary for **establishing trust**, but under no circumstances should the private key be shared, as it is critical for maintaining security.
 
-**Visualization of Public and Private Keys:**
-
 ```
 [ Public Key ]  <--- Shared Openly --->  [ Private Key ]
     (Encrypt)                             (Decrypt)
@@ -56,14 +54,14 @@ Main idea:
 
 #### Generating GPG Keys
 
-**Step 1: Install GPG**
+I. **Install GPG**
 
 ```bash
 sudo apt update
 sudo apt install gnupg2
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 Reading package lists... Done
@@ -75,13 +73,13 @@ The following NEW packages will be installed:
 Setting up gnupg2 (2.2.19-3ubuntu2.1) ...
 ```
 
-**Step 2: Generate a New Key Pair**
+II. **Generate a New Key Pair**
 
 ```bash
 gpg --gen-key
 ```
 
-**Interactive Prompts and Expected Responses:**
+Interactive Prompts and Expected Responses:
 
 ```
 gpg (GnuPG) 2.2.19; Copyright (C) 2019 Free Software Foundation, Inc.
@@ -136,13 +134,13 @@ public and secret key created and signed.
 
 To manage GPG keys, you can list both public and private keys stored in your keyring. Public keys represent the keys of others that you've imported, while private keys are your own, used for decrypting messages and signing data. Listing public keys helps you verify which keys are available for encrypting files or verifying signatures. Similarly, listing secret (private) keys allows you to ensure your personal encryption keys are correctly stored and accessible.
 
-**List Public Keys:**
+I. **List Public Keys:**
 
 ```bash
 gpg --list-keys
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 /home/user/.gnupg/pubring.kbx
@@ -152,13 +150,13 @@ pub   rsa4096 2022-01-01 [SC]
 uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 ```
 
-**List Private Keys:**
+II. **List Private Keys:**
 
 ```bash
 gpg --list-secret-keys
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 /home/user/.gnupg/pubring.kbx
@@ -176,7 +174,7 @@ When communicating securely with someone, you need their public key to encrypt f
 gpg --import recipient_public_key.asc
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: key 9H8G7F6E5D4C3B2A: public key "Jane Smith <jane.smith@example.com>" imported
@@ -192,7 +190,7 @@ After importing a public key, you may want to specify how much you trust the key
 gpg --edit-key jane.smith@example.com
 ```
 
-**Interactive Session:**
+Interactive Session:
 
 ```
 gpg> trust
@@ -215,11 +213,9 @@ To protect sensitive information, you can encrypt files using GPG. When encrypti
 gpg -e -r jane.smith@example.com file.txt
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
-
-**Visualization:**
 
 ```
 [ Original File ]    +-------------+    [ Encrypted File ]
@@ -236,7 +232,7 @@ For cases where both parties share a secret password instead of using public-key
 gpg --symmetric file.txt
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 Enter passphrase: ********
@@ -251,7 +247,7 @@ Once a file has been encrypted (either with a public key or using symmetric encr
 gpg -d -o file.txt file.txt.gpg
 ```
 
-**Example Output (If Passphrase Protected):**
+Example Output (If Passphrase Protected):
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 9H8G7F6E5D4C3B2A, created 2022-01-01
@@ -267,7 +263,7 @@ Digital signatures ensure that the recipient of a file can verify its authentici
 gpg --sign file.txt
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
 
@@ -279,7 +275,7 @@ After receiving a signed file, you can verify the authenticity of the signature 
 gpg --verify file.txt.gpg
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: Signature made Mon 03 Oct 2022 12:00:00 PM UTC
@@ -295,11 +291,9 @@ When someone wants to send you an encrypted file or verify your digital signatur
 gpg --export -a john.doe@example.com > john_public_key.asc
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
-
-**Visualization of Key Export:**
 
 ```bash
 [ Private Key ]     +-------------+     [ Public Key ]
@@ -315,7 +309,7 @@ If your private key is ever compromised, lost, or you no longer use it, it’s e
 gpg --gen-revoke john.doe@example.com
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 sec  rsa4096/1A2B3C4D5E6F7G8H 2022-01-01 John Doe (Work Key) <john.doe@example.com>
@@ -332,11 +326,11 @@ When you need to share your public key in a human-readable format (such as for e
 gpg --armor --export john.doe@example.com > public_key.asc
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
 
-**Sample Content of `public_key.asc`:**
+Sample Content of `public_key.asc`:
 
 ```
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -355,7 +349,7 @@ If your private key is compromised or lost, it’s crucial to have a revocation 
 gpg --gen-revoke --armor --output=revoke.asc john.doe@example.com
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
 
@@ -371,7 +365,7 @@ Subkeys are additional keys associated with your main key that can be used for s
 gpg --edit-key john.doe@example.com
 ```
 
-**Interactive Session:**
+Interactive Session:
 
 ```
 gpg> addkey
@@ -395,7 +389,7 @@ Really create? (y/N) y
 gpg> save
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: key 1A2B3C4D5E6F7G8H marked as ultimately trusted
@@ -408,19 +402,23 @@ A new subkey has been added with specific capabilities (e.g., encryption only) a
 
 GPG allows you to specify the encryption algorithm you want to use for encrypting files. By default, it uses a strong encryption algorithm, but you can customize it based on your security requirements. The `gpg --symmetric` command encrypts a file using a passphrase, while the `gpg --cipher-algo` option allows you to specify a particular cipher, like AES256, which is known for its strong security.
 
-**Symmetric Encryption:**
+I. **Symmetric Encryption:**
 
 ```bash
 gpg --symmetric file.txt
 ```
 
-**Specifying an Encryption Algorithm:**
+Example Output:
+
+*(No output means the command was successful)*
+
+II. **Specifying an Encryption Algorithm:**
 
 ```bash
 gpg --cipher-algo AES256 -e file.txt
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
 
@@ -438,7 +436,7 @@ When encrypting an email message, you can use GPG to ensure that only the intend
 gpg --armor --encrypt --recipient 'jane.smith@example.com' --output message.asc message.txt
 ```
 
-**Example Output:**
+Example Output:
 
 *(No output means the command was successful)*
 
@@ -452,7 +450,7 @@ To read an encrypted email, the recipient must decrypt it using their private ke
 gpg --decrypt message.asc > message.txt
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 9H8G7F6E5D4C3B2A, created 2022-01-01
@@ -473,7 +471,7 @@ When you want to make your public key available for others to find and use, you 
 gpg --send-keys --keyserver hkp://pgp.mit.edu 1A2B3C4D5E6F7G8H
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: sending key 1A2B3C4D5E6F7G8H to hkp://pgp.mit.edu
@@ -489,7 +487,7 @@ To communicate securely with someone, you need their public key. The `gpg --sear
 gpg --search-keys --keyserver hkp://pgp.mit.edu jane.smith@example.com
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: data source: http://pgp.mit.edu:11371
@@ -511,7 +509,7 @@ Over time, the public keys stored on your keyring may be updated with new expira
 gpg --refresh-keys --keyserver hkp://pgp.mit.edu
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: refreshing 1 keys from hkp://pgp.mit.edu
@@ -530,8 +528,6 @@ Disk encryption protects sensitive data stored on hard drives, SSDs, or other st
 
 GPG can work alongside tools like LUKS to enhance security in managing encrypted volumes. By using GPG to encrypt the keyfile required to unlock a LUKS volume, you add an additional layer of security. The workflow typically involves decrypting the keyfile using GPG, which in turn is used to unlock the encrypted disk volume.
 
-**Visualization of GPG with LUKS:**
-
 ```
 [ GPG Key ]       [ Encrypted Keyfile ]       [ LUKS Volume ]
      |                    |                          |
@@ -547,20 +543,20 @@ GPG can work alongside tools like LUKS to enhance security in managing encrypted
 
 #### Setting up GPG with LUKS
 
-**Step 1: Generate GPG Key Pair (if not already done)**
+I. **Generate GPG Key Pair (if not already done)**
 
 ```bash
 gpg --gen-key
 ```
 
-**Step 2: Create a Random Keyfile**
+II. **Create a Random Keyfile**
 
 ```bash
 dd if=/dev/urandom of=/root/luks-keyfile bs=512 count=4
 chmod 600 /root/luks-keyfile
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 4+0 records in
@@ -568,19 +564,19 @@ chmod 600 /root/luks-keyfile
 2048 bytes (2.0 kB, 2.0 KiB) copied, 0.000123 s, 16.7 MB/s
 ```
 
-**Step 3: Encrypt the Keyfile with GPG**
+III. **Encrypt the Keyfile with GPG**
 
 ```bash
 gpg --encrypt --recipient "John Doe" /root/luks-keyfile
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: /root/luks-keyfile: encryption failed: No public key
 ```
 
-**If Error Occurs:**
+If Error Occurs:
 
 - Ensure you have your own public key in your keyring.
 - Alternatively, encrypt for yourself:
@@ -589,13 +585,13 @@ gpg: /root/luks-keyfile: encryption failed: No public key
 gpg --encrypt --recipient john.doe@example.com /root/luks-keyfile
 ```
 
-**Step 4: Initialize LUKS Volume with Keyfile**
+IV. **Initialize LUKS Volume with Keyfile**
 
 ```bash
 cryptsetup luksFormat /dev/sdX /root/luks-keyfile
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 WARNING!
@@ -607,14 +603,14 @@ Are you sure? (Type uppercase yes): YES
 
 The LUKS volume is formatted using the keyfile.
 
-**Step 5: Decrypt Keyfile and Open LUKS Volume**
+V. **Decrypt Keyfile and Open LUKS Volume**
 
 ```bash
 gpg --output /root/luks-keyfile --decrypt /root/luks-keyfile.gpg
 cryptsetup luksOpen /dev/sdX my_encrypted_volume --key-file /root/luks-keyfile
 ```
 
-**Example Output:**
+Example Output:
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 1A2B3C4D5E6F7G8H, created 2022-01-01
@@ -623,13 +619,13 @@ gpg: encrypted with 4096-bit RSA key, ID 1A2B3C4D5E6F7G8H, created 2022-01-01
 
 The keyfile is decrypted and used to unlock the LUKS volume.
 
-**Step 6: Mount the Decrypted Volume**
+VI. **Mount the Decrypted Volume**
 
 ```bash
 mount /dev/mapper/my_encrypted_volume /mnt/my_mount_point
 ```
 
-**Step 7: Securely Delete the Decrypted Keyfile**
+VII. **Securely Delete the Decrypted Keyfile**
 
 ```bash
 shred -u /root/luks-keyfile
