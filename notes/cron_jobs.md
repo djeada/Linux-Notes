@@ -1,35 +1,39 @@
 ## Cron
 
-Cron is a powerful utility in Unix-like operating systems that automates the execution of scripts or commands at specified times, dates, or intervals. It's an essential tool for system administrators and users alike, facilitating tasks such as system maintenance, backups, updates, and more.
+Cron is a powerful utility in Unix-like operating systems that automates the execution of scripts or commands at specified times, dates, or intervals. It is used for tasks such as system maintenance, backups, updates, and more.
 
 ### How Cron Works
 
 Cron operates through a background process called the **cron daemon** (`crond`), which continuously runs and checks for scheduled tasks in crontab files. When the current time matches a scheduled time in the crontab, the cron daemon executes the associated command or script.
 
 ```
-+---------------------------------------------------+
-|                                                   |
-|             Cron Workflow Overview                |
-|                                                   |
-+---------------------------------------------------+
-
-User/System Schedules Tasks
-          │
-          ▼
-+----------------+      +-------------------+
-|                |      |                   |
-|  Cron Daemon   |----->|  Crontab Files    |
-|   (crond)      |      |                   |
-|                |      +-------------------+
-|  (Runs Every   |               │
-|   Minute)      |               ▼
-|                |      +-------------------+
-+----------------+      |                   |
-                        |  Executes Tasks   |
-                        |  at Scheduled     |
-                        |  Times            |
-                        |                   |
-                        +-------------------+
++------------------------------------------------------------------+
+|                       Cron Workflow Overview                     |
++------------------------------------------------------------------+
+         │
+         ▼
++--------------------------------------+       +----------------------------------+
+|       User/System Schedules          |       |         Crontab Files            |
+|       Tasks/Commands                 |       |  (Contains timing & task details)|
+| (Via command line or configuration)  |       |                                  |
++--------------------------------------+       +----------------------------------+
+         │                                                      │
+         │       (Updates/reads scheduled tasks)                │
+         --------------------------------------------------------
+                                       |
+                                       ▼
+                         +-------------------------------+
+                         |         Cron Daemon (crond)   |
+                         |       (Executes every minute) |
+                         +-------------------------------+
+                                       │
+                                       │ Monitors timing schedules and
+                                       │ triggers corresponding tasks
+                                       ▼
+                         +---------------------------------+
+                         |      Executes Scheduled Tasks   |
+                         | (Runs user/system-defined jobs) |
+                         +---------------------------------+
 ```
 
 - Task scheduling occurs when users or the system **define** specific tasks and their execution times within crontab files.
