@@ -6,11 +6,11 @@ What happens between the time you push the power button and the time you see the
 [1] Power On
        │
        ▼
-+--------------------------------+
-| [2] BIOS / UEFI                |
-|  • Load firmware from NVRAM    |
++----------------------------------+
+| [2] BIOS / UEFI                  |
+|  • Load firmware from NVRAM      |
 |  • Run POST (Power-On Self Test) |
-+--------------------------------+
++----------------------------------+
        │
        ▼
 +--------------------------------+
@@ -27,32 +27,32 @@ What happens between the time you push the power button and the time you see the
 +--------------------------------+
        │
        ▼
-+--------------------------------+
-| [5] Bootloader (GRUB2 / LILO)  |
-|  • Read /boot/grub2/grub.cfg   |
-|  • Display menu (timeout/user) |
-|  • Load:                       |
++----------------------------------+
+| [5] Bootloader (GRUB2 / LILO)    |
+|  • Read /boot/grub2/grub.cfg     |
+|  • Display menu (timeout/user)   |
+|  • Load:                         |
 |     – vmlinuz-<version> (kernel) |
-|     – initramfs-<version>.img  |
-|     – Kernel cmdline args      |
-+--------------------------------+
+|     – initramfs-<version>.img    |
+|     – Kernel cmdline args        |
++----------------------------------+
        │
        ▼
-+-------------------------------------------------+
++------------------------------------------------+
 | [6] Linux Kernel + Initramfs                   |
-|  • Decompress & relocate kernel image           |
-|  • Mount initramfs (dracut/busybox)             |
+|  • Decompress & relocate kernel image          |
+|  • Mount initramfs (dracut/busybox)            |
 |  • Load early userspace tools & modules (.ko)  |
 |  • Probe hardware & mount real root FS         |
 |  • pivot_root/switch_root → exec /sbin/init    |
-+-------------------------------------------------+
++------------------------------------------------+
        │
        ▼
 +-------------------------------------------------+
 | [7] systemd (PID 1)                             |
 |  • Execute /usr/lib/systemd/systemd             |
-|  • Read default.target → resolves into         |
-|      multi-user.target →                       |
+|  • Read default.target → resolves into          |
+|      multi-user.target →                        |
 |        ├─ sysinit.target  (fsck, sysctl, kmod)  |
 |        ├─ basic.target    (journald, udev)      |
 |        └─ multi-user.target                     |
