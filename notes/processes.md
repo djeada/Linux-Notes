@@ -1,6 +1,6 @@
 ## Processes
 
-Processes are fundamental elements in any computing system. They represent an instance of a running program and are essential for the execution of various tasks. A process is more than just the program code (often referred to as the text section in Unix); it also includes the current activity, including the program counter, the contents of the processor's registers, and the variable storage (stack and heap). Each process is assigned a unique process identifier (PID).
+In any operating system, a process is the fundamental unit of execution—a live instance of a program. Beyond its executable code (the text segment), a process encompasses its dynamic state: the program counter, CPU registers, call stack, heap, and other variable storage. To manage and schedule these tasks, the OS assigns each process a unique process identifier (PID).
 
 When a user executes a command, launches an application, or initiates a system service, a new process is instantiated. Modern computing systems, with their powerful processors, can handle a multitude of processes at the same time. This parallel execution is managed through a technique known as rapid context switching, where the operating system's scheduler assigns CPU time slices to each process and switches between them so quickly that it gives the illusion of simultaneous execution.
 
