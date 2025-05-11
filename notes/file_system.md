@@ -62,47 +62,72 @@ Blocks, pages, and the superblock are concepts in storage and memory management.
 
 #### Block — the Atomic On-Disk I/O Unit
 
-At the lowest level, a filesystem divides storage into fixed-size blocks. These blocks are the smallest units the disk and filesystem manage for both data and metadata.
-
 ```
-  Offset 0                                                  Offset 4095
-┌──────────────────────────────────────────────────────────────┐ 4 KiB
-│                       DISK BLOCK #42                         │  ← fixed at mkfs (1 KiB-64 KiB)
-└──────────────────────────────────────────────────────────────┘
-```
-
-* **Fixed size** chosen at `mkfs` (ext4 default = 4 KiB; must evenly divide the page size for DMA efficiency).
-* Every metadata/data region — bitmaps, inode tables, journal logs — is rounded to full blocks.
-* The block device layer (bio) aggregates multiple adjacent blocks into a single I/O to match device optimal I/O size.
-
-#### Superblock — Volume Header & Lifeline
-
-The superblock is the filesystem’s master record, storing global metadata and pointers to substructures. Redundancy ensures recovery if one copy becomes corrupted.
-
-```
-LBA 0                                             LBA 8191  (4 KiB blocks shown)
-┌──────────────┬──────────────┬────────────────────╥───────────────────────────┐
-│ Boot sector  │  Padding     │ PRIMARY SUPERBLOCK ║   Backup superblocks …    │
-└──────────────┴──────────────┴────────────────────╨───────────────────────────┘
+Entire Disk (logical view divided into 4 KiB blocks)
+┌────────────────────────────────────────────────────────────────────────┐
+│ Block 0 │ Block 1 │ … │ Block 41 │ Block 42 │ Block 43 │ … │ Block N-1 │
+└────────────────────────────────────────────────────────────────────────┘
+                   ↑
+                   │
+            Single 4 KiB Block
+Offset 0     ┌───────────────────────────────────┐  Offset 4095
+             │          DISK BLOCK #42           │
+             └───────────────────────────────────┘
 ```
 
-* **Primary copy** at block `0` (ext4 uses block `1024` for historical alignment).
-* **Redundant copies** at the start of each block group protect against header corruption.
-* Fields: FS UUID, block & cluster sizes, group descriptors start, compatible/incompatible feature flags, journal root, last mount time, etc.
+* **Fixed size** chosen at `mkfs` (e.g. ext4 default = 4 KiB).
+* All filesystem metadata/data (bitmaps, inodes, journals) is laid out in whole blocks.
+* The block device layer (`bio`) can aggregate multiple blocks into one I/O.
 
-#### Block Group Layout (EXT ≥ 2)
-
-Filesystems organize blocks into groups to localize related metadata, inodes, and file data, improving performance and reducing seek times.
+#### Superblock → Group Descriptor Table → Block Groups
 
 ```
-BLOCK GROUP N  (≈128 MiB @ 4 KiB blocks)
-┌──────────────────┬──────────────────┬──────────────────┬────────────────┐
-│ Inode Bitmap (1) │ Block Bitmap (1) │ Inode Table (Nx) │  Data Blocks   │
-└──────────────────┴──────────────────┴──────────────────┴────────────────┘
+Filesystem Layout (ext4, 4 KiB blocks)
+LBA 0           LBA 124      LBA 125                      LBA 126+  
+┌──────────┬─────────────┬────────────────────┬──────────────────────────┐
+│ Boot     │ Padding     │ Primary Superblock │ Group Descriptor Table   │
+│ Sector   │ (blocks)    │ (block 1024)       │ (blocks 1025…1025+GDT)   │
+└──────────┴─────────────┴────────────────────┴──────────────────────────┘
+                                  │
+                                  ▼
+              ┌───────────────────────────────────────────┐
+              │ GDT Entry #2 (for Block Group #2)         │
+              │  • start_block = 17,000                   │
+              │  • free_blocks, free_inodes, flags…       │
+              └───────────────────────────────────────────┘
 ```
 
-* Locality: The bitmaps + the inodes they describe + their data blocks live in the same neighborhood ⇒ fewer seeks on HDDs, hotter cache lines on SSD/NVMe.
-* **Group Descriptor Table** (array in the superblock region) records the starting block + free-counts for each group.
+* **Superblock** (at block 1024) holds global FS metadata plus a pointer (offset) to the start of the Group Descriptor Table (GDT).
+* **GDT** is an array of one descriptor per block group; each descriptor records where that group begins, how many free blocks/inodes remain, etc.
+* When the kernel needs to read a block group’s metadata, it indexes into the GDT to find its on-disk location.
+
+#### Block Group Layout (≈128 MiB @ 4 KiB blocks)
+
+```
+Descriptor #2
+    ↓
+Block Group #2 Start
+┌───────────────────────────────────────────────────────────────────┐
+│ Inode Bitmap    [1 block]                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ Block Bitmap    [1 block]                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ Inode Table     [ (InodesPerGroup×InodeSize)/BlockSize blocks ]   │
+├───────────────────────────────────────────────────────────────────┤
+│ Data Blocks     [remaining blocks: actual file data]              │
+└───────────────────────────────────────────────────────────────────┘
+                         ↑
+                         │
+                    Block #42  ← lives here, inside this group’s Data Blocks
+```
+
+* **Inode & Block Bitmaps**: track which inodes/blocks are free or in use.
+* **Inode Table**: fixed number of inodes allocated per group.
+* **Data Blocks**: the lion’s share of the group, holding file contents and directory structures.
+* When you ask to read or write block 42, the filesystem:
+1. Looks up block group via `42 / blocks_per_group` → group index.
+2. Indexes into the GDT to get that group’s starting block.
+3. Computes the offset within the group to reach block 42.
 
 #### Inode & Extent Trees
 
@@ -146,11 +171,11 @@ The journal provides write-ahead logging for metadata (and optionally data) to e
 
 ```
 RESERVED JOURNAL AREA
-┌─────────────────────────────────────────────────────────┐
-│  Descriptor → [block #42, block #99, …]                │
-│  Data payloads (shadow copies)                         │
-│  Commit block (checksum + tid)                         │
-└─────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────┐
+│  Descriptor → [block #42, block #99, …]            │
+│  Data payloads (shadow copies)                     │
+│  Commit block (checksum + tid)                     │
+└────────────────────────────────────────────────────┘
 ```
 
 * Write-ahead log capturing **metadata** (and optionally data) before main-area overwrite.
@@ -170,21 +195,21 @@ Here’s a high-level sequence tracing a read from the superblock through the bl
 Once blocks are read from disk, they enter the unified page cache, serving both file I/O and memory mappings seamlessly.
 
 ```
-                 +---------------------------+
-                 |  FILE -> mapping (address_space)      |
-                 +---------------------------+
-                              │
-              read(2)/mmap    │        writeback
-                              ▼
-                RAM phys addr 0x3f7e_0000
-            ┌──────────────────────────────┐ 4 KiB PAGE
-            │  page->mapping  -> inode132  │───┐  state: Clean / Dirty
-            │  index = 2 (→ block #8202)   │   │
-            └──────────────────────────────┘   │
-                                               │ DMA/PIO
-                                   ┌───────────┴───────────────────┐
-                                   │        DISK BLOCK #8202       │
-                                   └───────────────────────────────┘
++----------------------------------+
+|  FILE -> mapping (address_space) |
++----------------------------------+
+	        │
+read(2)/mmap    │        writeback
+	        ▼
+RAM phys addr 0x3f7e_0000
+┌──────────────────────────────┐ 4 KiB PAGE
+│  page->mapping  -> inode132  │───┐  state: Clean / Dirty
+│  index = 2 (→ block #8202)   │   │
+└──────────────────────────────┘   │
+		                   │ DMA/PIO
+                       ┌───────────┴───────────────────┐
+	               │        DISK BLOCK #8202       │
+	               └───────────────────────────────┘
 ```
 
 * **Fault-on-first-touch**: VFS sees a cache miss, allocates a free page, submits `bio` to read the 4 KiB block.
