@@ -4,9 +4,6 @@ In Unix, files and filesystems are important components of the operating system'
 
 A filesystem, on the other hand, is a method and data structure that the operating system uses to manage files on a disk or partition. It provides a way to store, retrieve, and organize files, supporting features like file permissions, links, and metadata. Common Unix filesystems include `ext4`, `XFS`, and `Btrfs`, each offering different capabilities and optimizations.
 
-TODO:
-- Add plot comparing read and write speed of various file systems also how it scales with parallel
-
 ### Types of Files in a UNIX Filesystem
 
 Unix and Unix-like systems, including Linux, organize files in a hierarchical structure called a filesystem. Files can be classified based on their purpose, storage method, and visibility.
@@ -70,7 +67,7 @@ At the lowest level, a filesystem divides storage into fixed-size blocks. These 
 ```
   Offset 0                                                  Offset 4095
 ┌──────────────────────────────────────────────────────────────┐ 4 KiB
-│                       DISK BLOCK #42                        │  ← fixed at mkfs (1 KiB-64 KiB)
+│                       DISK BLOCK #42                         │  ← fixed at mkfs (1 KiB-64 KiB)
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -84,9 +81,9 @@ The superblock is the filesystem’s master record, storing global metadata and 
 
 ```
 LBA 0                                             LBA 8191  (4 KiB blocks shown)
-┌──────────────┬──────────────┬───────────────────╥───────────────────────────┐
-│ Boot sector  │  Padding     │ PRIMARY SUPERBLOCK║   Backup superblocks …    │
-└──────────────┴──────────────┴───────────────────╨───────────────────────────┘
+┌──────────────┬──────────────┬────────────────────╥───────────────────────────┐
+│ Boot sector  │  Padding     │ PRIMARY SUPERBLOCK ║   Backup superblocks …    │
+└──────────────┴──────────────┴────────────────────╨───────────────────────────┘
 ```
 
 * **Primary copy** at block `0` (ext4 uses block `1024` for historical alignment).
@@ -99,9 +96,9 @@ Filesystems organize blocks into groups to localize related metadata, inodes, an
 
 ```
 BLOCK GROUP N  (≈128 MiB @ 4 KiB blocks)
-┌──────────────────┬───────────────┬──────────────────────┬─────────────────┐
+┌──────────────────┬──────────────────┬──────────────────┬────────────────┐
 │ Inode Bitmap (1) │ Block Bitmap (1) │ Inode Table (Nx) │  Data Blocks   │
-└──────────────────┴───────────────┴──────────────────────┴─────────────────┘
+└──────────────────┴──────────────────┴──────────────────┴────────────────┘
 ```
 
 * Locality: The bitmaps + the inodes they describe + their data blocks live in the same neighborhood ⇒ fewer seeks on HDDs, hotter cache lines on SSD/NVMe.
@@ -114,7 +111,7 @@ Every file is represented by an inode, which points to extents—contiguous bloc
 ```
                     INODE #132 (regular file)
 ┌──────────────────────────────────────────────────────────────┐
-│ mode, uid, size, mtime, …  |  EXTENT ROOT → depth = 1       │
+│ mode, uid, size, mtime, …  |  EXTENT ROOT → depth = 1        │
 └──────────────────────────────────────────────────────────────┘
                                │
                  ┌─────────────┴─────────────┐
@@ -201,7 +198,7 @@ Modifications to pages become "dirty" and are eventually written back to disk in
 ```
 USER SPACE write(2) / memcpy to mmap
             │                     flusher thread / sync(2)
-            ▼                                    │
+            ▼                                   │
    page->flags |= DIRTY                         │
             │                                   ▼
  ┌──────────┴────────────────┐       bio / blk-mq layer
@@ -315,6 +312,16 @@ Knowledge about the file systems is important when you need to make sure that da
 - Modern file systems allow multiple processes to access a file concurrently without interruption, and their support for *concurrent reading* enables efficient data retrieval.
 - Concurrent operations, in which one process writes while another reads a file, may lead to inconsistent data access, and this situation exemplifies a potential *read-write conflict*.
 - When multiple processes perform write operations on the same file simultaneously without proper locking, the file may become corrupted, and this risk underscores the challenge of *simultaneous writing*.
+
+Below is what the current public benchmark record shows when you compare today’s Linux files-systems on a single NVMe SSD or SATA SSD with their default mount options and no exotic tuning.
+
+![Filesystem scaling plot](https://github.com/user-attachments/assets/b2f741ab-c217-4b48-a2e1-72ca51fe4a00)
+
+* **EXT4 edges out XFS with a single thread**, but
+* **XFS scales hardest** once you pass ≈2 parallel writers/readers thanks to its per-allocation-group design — by eight workers it’s \~25 % faster than EXT4.
+* **F2FS slots in between**: flash-optimised and quick at low-to-mid thread counts, but it can’t quite keep up with XFS’s metadata parallelism at the top end.
+* **ZFS and Btrfs trail** because CoW, checksums and copy-on-write write-amplification cost throughput, especially as queue depth rises.
+* **With default settings on a single drive, EXT4 is measurably faster than both Btrfs and ZFS**, and the public data going back years backs that up.  But the moment you start using the advanced features that motivated those filesystems in the first place, their performance story changes—and sometimes surpasses EXT4 in the process.
 
 **File Limits:**
 
@@ -435,7 +442,7 @@ nodev   bdev
 
 Before creating a new file system, ensure that your system has the necessary support for it. This involves checking for kernel module support, installing the required utilities, and verifying that your system is compatible with the file system you intend to use.
 
-**1. Check Kernel Support**
+I. **Check Kernel Support**
 
 To confirm that your kernel supports the desired file system, check if the module is loaded:
 
@@ -445,7 +452,7 @@ lsmod | grep xfs
 
 If the output includes lines referencing `xfs`, it indicates that the XFS module is loaded. If no output appears, the module isn’t loaded and may need to be installed or enabled.
 
-**2. Install File System Utilities**
+II. **Install File System Utilities**
 
 Once kernel support is confirmed, install any necessary tools. For example, to manage the XFS file system, you need the `xfsprogs` package:
 
@@ -468,7 +475,7 @@ Setting up xfsprogs (5.4.0-1ubuntu2) ...
 
 This output indicates that `xfsprogs` has been successfully installed, and you can now proceed with XFS-specific file system tasks.
 
-**3. Verify Compatibility**
+**Verify Compatibility**
 
 Ensure that your system’s kernel and hardware support the file system by checking the module information:
 
@@ -484,7 +491,7 @@ This command provides details on the XFS module, including its dependencies, sup
 
 Accurate identification of the target device is crucial to avoid modifying the wrong disk, which could result in data loss. These commands will help you list and inspect block devices.
 
-**1. List All Block Devices**
+I. **List All Block Devices**
 
 To get an overview of all attached storage devices, use:
 
@@ -504,7 +511,7 @@ sdb      8:16   0  200G  0 disk
 
 The `lsblk` output lists all block devices and their partitions, along with their sizes and mount points. This lets you identify the device you intend to work with (e.g., `/dev/sdb`).
 
-**2. Detailed Device Information**
+II. **Detailed Device Information**
 
 To gather further details about each device and its partitions, use `fdisk`:
 
@@ -522,7 +529,7 @@ Units: sectors of 1 * 512 = 512 bytes
 
 This output provides detailed information on each disk, including size, sector count, and partitioning scheme. Use this to confirm the correct device before making any modifications.
 
-**3. Identify Unpartitioned Space**
+III. **Identify Unpartitioned Space**
 
 If your target device is new and unpartitioned, you’ll need to partition it first. Use `fdisk`, `gdisk`, or `parted` to create new partitions.
 
@@ -530,7 +537,7 @@ If your target device is new and unpartitioned, you’ll need to partition it fi
 
 Before modifying a device, it’s essential to ensure that it is not in use. Unmounting prevents accidental data corruption during the process.
 
-**1. Check if the Device is Mounted**
+I. **Check if the Device is Mounted**
 
 Determine if the target device is currently mounted:
 
@@ -546,7 +553,7 @@ Expected Output:
 
 If the output lists the device, it means it’s mounted. Note the mount point (e.g., `/mnt/data`) so you can unmount it in the next step.
 
-**2. Unmount the Device**
+II. **Unmount the Device**
 
 Unmount the device before making any changes:
 
@@ -558,7 +565,7 @@ Expected Output:
 
 No output indicates the device was unmounted successfully.
 
-**3. Handle Busy Devices**
+III. **Handle Busy Devices**
 
 If you encounter a “device is busy” error, identify processes using the device:
 
@@ -581,11 +588,11 @@ Terminate these processes or stop the services to release the device, allowing i
 
 Once the target device is unmounted, you can proceed with creating the new file system. The file system type you choose will depend on factors like performance, reliability, and feature support.
 
-**1. Choose the File System Type**
+I. **Choose the File System Type**
 
 Select a file system type that meets your needs. For example, `ext4` is commonly used for general-purpose storage due to its balance of performance and features. Alternatively, you may choose `xfs` for large filesystems or high-performance needs.
 
-**2. Create the File System**
+II. **Create the File System**
 
 To format the device with a specific file system type, use the appropriate `mkfs` command. For `ext4`, for instance:
 
@@ -626,7 +633,7 @@ No output means the label was applied successfully. You can verify the label by 
 
 Modifying existing file systems requires extra caution. Backup any essential data before proceeding to avoid data loss. Here are common operations:
 
-**1. Resizing a File System**
+I. **Resizing a File System**
 
 To resize a file system, unmount it first:
 
@@ -650,7 +657,7 @@ The filesystem on /dev/sdb1 is now 13107200 (4k) blocks long.
 
 This output confirms the new size of the file system. Note that shrinking can cause data loss if the specified size is smaller than the amount of data stored on the partition.
 
-**2. Converting File Systems**
+II. **Converting File Systems**
 
 Some file systems support in-place conversions. For example, converting `ext2` to `ext3` to enable journaling can be done as follows:
 
@@ -726,7 +733,7 @@ The output shows disk usage information for `/dev/sdb1`, confirming it is mounte
 
 When working with file systems, automating mounting, ensuring file system health, and managing permissions are essential practices. Here’s how to handle these additional considerations.
 
-**1. Automate Mounting at Boot**
+I. **Automate Mounting at Boot**
 
 To ensure your new file system is automatically mounted at system startup, add it to the `/etc/fstab` file.
 
@@ -765,7 +772,7 @@ Expected Output:
 
 This output provides the UUID for `/dev/sdb1`. Use this identifier in the `/etc/fstab` entry to avoid issues if device names change on reboot. After adding this to `/etc/fstab`, the system will automatically mount the file system at `/mnt/mydata` on startup.
 
-**2. File System Maintenance**
+II. **File System Maintenance**
 
 Keeping your file system healthy and monitored is crucial for data integrity and performance.
 
@@ -804,7 +811,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 This output shows disk usage for all mounted file systems, including the newly created one. Use this information to ensure the file system has enough space for your needs.
 
-**3. Permissions and Ownership**
+III. **Permissions and Ownership**
 
 To control who can access your mounted file system, set ownership and permissions.
 
@@ -814,8 +821,6 @@ Change ownership to a specific user and group:
 sudo chown user:group /mnt/mydata
 ```
 
-Expected Output:
-
 No output means the command succeeded.
 
 Set permissions:
@@ -824,13 +829,11 @@ Set permissions:
 sudo chmod 755 /mnt/mydata
 ```
 
-Expected Output:
-
 Again, no output indicates success.
 
 These commands set the ownership of `/mnt/mydata` to a specified `user` and `group`. The `chmod` command assigns permissions, where `755` means the owner has read, write, and execute permissions, while others have read and execute only.
 
-**4. Security Considerations**
+IV. **Security Considerations**
 
 When storing sensitive data, consider additional security measures, such as encryption and access control.
 
@@ -863,8 +866,6 @@ To set fine-grained permissions, enable and configure Access Control Lists (ACLs
 ```bash
 sudo setfacl -m u:username:r /mnt/mydata
 ```
-
-Expected Output:
 
 No output, indicating success.
 
