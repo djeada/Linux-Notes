@@ -333,3 +333,83 @@
 - [x] To abstract and aggregate multiple physical disks into flexible logical volumes, allowing dynamic resizing and management.
 - [ ] To perform RAID operations on a single disk.
 - [ ] To manage NFS configurations.
+
+#### Q. What is a disk sector (logical block)?
+
+* [ ] A physical platter on the disk
+* [x] The smallest addressable unit of storage on a disk
+* [ ] The partition table entry
+* [ ] The filesystem metadata area
+* [ ] A special cache area on SSDs
+
+#### Q. How is a disk partition defined?
+
+* [ ] By filesystem type only
+* [ ] By mount point only
+* [x] By a start block and an end block on the disk
+* [ ] By a unique device letter or name
+* [ ] By partition label alone
+
+#### Q. How are physical disks numbered in Windows?
+
+* [ ] Disk A, Disk B, Disk C
+* [x] Disk 0, Disk 1, Disk 2
+* [ ] Disk C, Disk D, Disk E
+* [ ] Disk 1, Disk 2, Disk 3
+* [ ] Disk A:, Disk B:, Disk C:
+
+#### Q. In Linux, which device name corresponds to the second SCSI disk?
+
+* [x] `/dev/sdb`
+* [ ] `/dev/sda2`
+* [ ] `/dev/hdb`
+* [ ] `/dev/nda`
+* [ ] `/dev/vdb`
+
+#### Q. How does Windows mount partitions?
+
+* [ ] As directory paths under `/mnt/`
+* [x] As drive letters (e.g. C:, D:)
+* [ ] Using `fstab` entries
+* [ ] By labeling volumes only
+* [ ] By UUIDs in the registry
+
+#### Q. Which Linux command lists all block devices and their partitions?
+
+* [x] `lsblk`
+* [ ] `mount`
+* [ ] `df -h`
+* [ ] `fdisk -l`
+* [ ] `du`
+
+#### Q. Can partitions on the same disk use different file systems?
+
+* [ ] No, they must all match
+* [x] Yes, each partition can be formatted independently
+* [ ] Only if the disk is GPT
+* [ ] Only on Windows
+* [ ] Only on Linux
+
+#### Q. If you see paths `/home/user1` and `/var/log` on Linux, could they be on different partitions?
+
+* [ ] No, Linux uses a single root partition
+* [x] Yes, each directory can be a separate mount point
+* [ ] Only if `/etc/fstab` is misconfigured
+* [ ] Only on enterprise distributions
+* [ ] Only when using LVM
+
+#### Q. You attach a new SCSI disk to Linux; it appears as `/dev/sdc`. What is the first partition likely named?
+
+* [ ] `/dev/sdc0`
+* [x] `/dev/sdc1`
+* [ ] `/dev/sdca`
+* [ ] `/dev/sdc01`
+* [ ] `/dev/sdc-m1`
+
+#### Q. Why is understanding partition and mount differences between Windows and Linux important?
+
+* [x] It ensures you correctly locate and manage data across systems
+* [ ] It only matters for SSDs, not HDDs
+* [ ] It lets you convert NTFS to ext4 on the fly
+* [ ] It’s only required for network shares
+* [ ] It avoids using drive letters on Linux
