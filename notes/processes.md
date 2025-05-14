@@ -259,46 +259,87 @@ kill 0 -SIGTERM
 kill -2 -SIGTERM
 ```
 
-Using these special values carefully can help manage and control process groups effectively.
+### Finding Processes
 
-### Methods for Searching Processes
+Whether you need a quick “What’s that PID?” or a detailed, real-time view, Linux gives you several handy tools
 
-In a Linux environment, various methods are available to search for processes, depending on the granularity of information you require or your personal preference. The search can be done using commands such as `ps`, `grep`, `pgrep`, and `htop`.
+#### `ps` + `grep` — the classic one-liner
 
-#### Searching Processes with `ps` and `grep`
-
-The `ps` command displays a list of currently running processes. To search for processes by name, you can combine `ps` with the `grep` command. The following command:
+ Command
 
 ```bash
-ps -ef | grep process_name
+ps -ef | grep firefox
 ```
 
-searches and displays all processes containing the specified name (process_name in this example). Here, ps -ef lists all processes, and grep process_name filters the list to show only the processes with the specified name.
+Typical output
 
-#### Searching Processes with pgrep
+```
+user      2345  1023  1 11:02 ?        00:00:03 /usr/lib/firefox/firefox
+user      2389  2345  0 11:02 ?        00:00:00 /usr/lib/firefox/firefox -contentproc -childID 1
+user      2411  2345  0 11:02 ?        00:00:00 /usr/lib/firefox/firefox -contentproc -childID 2
+```
 
-The pgrep command offers a quick and direct method to search for processes by their names and display their PIDs. For instance, to find all running processes named chromium, you would use:
+| Column          | What it means (why you care)                                          |
+| --------------- | --------------------------------------------------------------------- |
+| **user**        | Who owns the process. Useful when diagnosing multi-user boxes.        |
+| **PID**         | The Process ID you’ll feed to `kill`, `strace`, etc.                  |
+| **PPID**        | Parent PID. Child PIDs tell you which tab/plugin crashed.             |
+| **%CPU / %MEM** | If you add the `-o %cpu,%mem` flags, you’ll see quick resource usage. |
+| **CMD**         | Full command line—helps confirm you’re looking at the right thing.    |
+
+> **Tip:** End the pipeline with `grep -v grep` or use `ps -ef | grep [f]irefox` so the `grep` process doesn’t show up in the results.
+
+#### `pgrep` — faster, script-friendly
+
+Command:
 
 ```bash
-pgrep chromium
+pgrep -l nginx
 ```
 
-This command displays the PIDs for all instances of chromium currently running on the system.
+*`-l` prints the name along with each PID.*
 
-#### Searching Processes with htop
+Typical output:
 
-htop provides a real-time, interactive view of all running processes in a system. It's a robust tool for process management, offering capabilities like process searching, sorting, and termination.
+```
+1298 nginx
+1300 nginx
+```
 
-To search for processes in htop:
+* **1298** and **1300** are the PIDs for the two master/worker processes.
+* Perfect when you need to embed the result in a script:
 
-1. Launch htop by typing `htop` in the terminal.
-2. Once htop is open, press `F4` to activate the search bar.
-3. Type the name of the process or the user you're searching for, then press Enter.
-4. The list of processes will update to show only those matching your search criteria.
+```bash
+for pid in $(pgrep nginx); do sudo strace -p "$pid"; done
+```
 
-### Foreground and Background Jobs
+> **Why use `pgrep`?**
+> • No need for `ps` + `grep` gymnastics.
+> • Supports extra filters (`-u user`, `-f` to match the full command line, `-n` for the newest PID).
 
-The tasks running on your system can be in one of two states, either running in the 'foreground' or in the 'background'. These two states provide flexibility for multi-tasking and efficient system utilization.
+#### `htop` — interactive, real-time dashboard
+
+1. `htop` ↵ to open the UI.
+2. Press **F4** (or `/`) and start typing a name—e.g., `python`.
+3. Matching rows highlight instantly; everything else is temporarily hidden.
+4. Use the **arrow keys** to move, **F9** to send a signal if you need to kill/stop a misbehaving process.
+
+```
+  PID USER   PRI  NI VIRT   RES   SHR S CPU% MEM%   TIME+  Command
+ 4382 user    20   0 765M 145M  28M S  3.6  1.9  0:10.23 python my_script.py
+```
+
+* **CPU% / MEM%** columns update every couple of seconds, making it easy to spot spikes.
+* Hit **F6** to change the sort order (CPU, memory, etc.).
+* Press **F2** → *Columns* if you want to add or remove fields (I/O, Swap, etc.).
+
+> **Interpretation cheat-sheet**
+> • Green = user-space CPU, Red = kernel, Blue = low-priority, Orange = IRQ.
+> • High “Load average” in the header plus many processes in state **R** (running) → possible CPU bottleneck.
+
+### Foreground vs Background Jobs
+
+When you kick off a command in a shell, it either *grabs the terminal* (foreground) or quietly keeps working behind the scenes (background). Knowing how to juggle the two is essential for multitasking without spawning extra terminals.
 
 - When a process is running as a **Foreground Process**, it actively executes and interacts with the terminal's input and output. These are typically tasks that the user has initiated and is directly interacting with in the terminal.
 - In contrast, a **Background Process** operates without direct interaction with the terminal's input and output. This functionality enables users to run multiple processes at the same time, allowing them to initiate new tasks without waiting for the completion of others.
@@ -330,39 +371,66 @@ The tasks running on your system can be in one of two states, either running in 
 +------------------------+
 ```
 
-#### Controlling Job Execution
 
-You can direct a program to run in the background right from its initiation by appending an ampersand `&` operator after the command. Consider the following example:
+#### Starting a Job
+
+| What you type  | What happens                                                                  |
+| -------------- | ----------------------------------------------------------------------------- |
+| `sleep 1000`   | Sleeps 1 000 s *in the foreground* — your prompt is blocked.                  |
+| `sleep 1000 &` | Same command, but it *immediately* returns control, printing the job and PID. |
+
+Typical background launch:
 
 ```bash
-sleep 1000 &
-```
-
-Here, the sleep command will operate in the background, waiting for 1000 seconds before terminating. The output typically resembles this:
-
-```bash
+$ sleep 1000 &
 [1] 3241
 ```
 
-The number enclosed in square brackets (like `[1]`) represents the job number, while the subsequent number (like 3241) is the process ID (PID).
+* **`[1]`** Job number (used by `fg`/`bg`).
+* **`3241`** Process ID (PID) you’d feed to `kill`, `strace`, etc.
 
-#### Job and Process Management Commands
+#### Parking a Foreground Job mid-flight
 
-To view all active jobs in the system, use the `jobs` command.
+1. **Ctrl + Z** — sends **SIGTSTP**, pausing the job and parking it:
 
-If you wish to bring a background job to the foreground, utilize the fg command followed by the job number. For instance, to bring job number 3 to the foreground, you would use:
+   ```
+   ^Z          # you pressed Ctrl+Z
+   [1]+  Stopped                 long_running_script.sh
+   ```
+2. **`bg %1`** — resumes that job *in the background*.
+3. **`fg %1`** — yanks it back to the foreground whenever you’re ready.
+
+> **Shortcut:** If there’s only one stopped job, plain `bg` or `fg` is enough; `%1` is implied.
+
+#### Peeking at Your Jobs
 
 ```bash
-fg 3
+$ jobs -l        # -l also shows the PID
+[1]  + 3241 Running    sleep 1000 &
+[2]  - 3250 Stopped    vi notes.txt
 ```
 
-To convert a foreground process to a background process, you can use Ctrl+Z. This operation pauses the process and allows you to resume it in the background using the bg command followed by the job number. For instance:
+Column guide
 
-```bash
-bg 1
-```
+* **`+` / `-`** Current (+) and previous (–) jobs, used by `fg`/`bg` defaults.
+* **State** `Running`, `Stopped`, or `Done`.
 
-This command will resume job number 1 in the background. Understanding and managing foreground and background jobs helps to increase productivity and efficiency when working in a shell environment.
+#### Typical Workflow Cheat-Sheet
+
+| Need to…                         | Hit / Type               |
+| -------------------------------- | ------------------------ |
+| Pause current task & free prompt | **Ctrl + Z**             |
+| Let it keep running silently     | `bg`                     |
+| Check what’s in the background   | `jobs`                   |
+| Bring last job back up front     | `fg`                     |
+| Nudge a specific one             | `fg %3`, `bg %2`         |
+| Kill misbehaving job             | `kill %1` or `kill 3241` |
+
+#### What to Watch For
+
+* **Accidental Ctrl + Z** — Editors (`vim`, `nano`) freeze; a quick `fg` gets you back.
+* **Background output spam** — Redirect stdout/stderr (`cmd &>log &`) to avoid cluttering your prompt.
+* **Long-running daemons** — For anything critical, use proper service managers (`systemd`, `tmux`, `screen`) instead of backgrounding from a login shell, which dies when your session closes.
 
 ### Challenges
 
