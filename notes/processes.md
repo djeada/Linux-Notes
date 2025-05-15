@@ -120,29 +120,7 @@ KiB Swap:  8388604 total,  8388604 free,        0 used. 11585756 avail Mem
 
 The life cycle of a process in an operating system is a critical concept. The provided diagram illustrates the various stages a process goes through:
 
-```
-# process life cycle
-                        +---------+
-                        |         |
-                        | Created |
-                        |         |
-                        +----+----+
-                             |
-                             | Schedule
-                             v
-                        +----+----+
-                        |         |
-                        | Running |
-               -------- |         | ----------
-             /          +----+----+            \
-           /  Error           |        Complete  \ 
-          v                   |                   v
-  +-------+-----+     +-------+-------+     +---------+
-  |             |     |               |     |         |
-  | Terminated  |<----| Interrupted   |<----|  Exit   |
-  |             |     |               |     |         |
-  +-------------+     +---------------+     +---------+
-```
+![image](https://github.com/user-attachments/assets/ed119dd8-90c7-4f01-9c0b-e8268771876d)
 
 - When a process is **Created**, it enters the system and is allocated the necessary resources, but it has not yet started running.
 - In the **Running** state, the process is actively executing instructions on the CPU.
