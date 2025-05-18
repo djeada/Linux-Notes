@@ -369,14 +369,16 @@ $ sleep 1000 &
 
 #### Parking a Foreground Job mid-flight
 
-1. **Ctrl + Z** — sends **SIGTSTP**, pausing the job and parking it:
+I. **Ctrl + Z** — sends **SIGTSTP**, pausing the job and parking it:
 
-   ```
-   ^Z          # you pressed Ctrl+Z
-   [1]+  Stopped                 long_running_script.sh
-   ```
-2. **`bg %1`** — resumes that job *in the background*.
-3. **`fg %1`** — yanks it back to the foreground whenever you’re ready.
+```
+^Z          # you pressed Ctrl+Z
+[1]+  Stopped                 long_running_script.sh
+```
+   
+II. **`bg %1`** — resumes that job *in the background*.
+
+III. **`fg %1`** — yanks it back to the foreground whenever you’re ready.
 
 > **Shortcut:** If there’s only one stopped job, plain `bg` or `fg` is enough; `%1` is implied.
 
