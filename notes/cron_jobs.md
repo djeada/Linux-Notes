@@ -342,7 +342,7 @@ Always specify the full path to commands and scripts.
 
 - For **standard output** redirection, the `>` symbol is used to overwrite the contents of a file, while `>>` is used to append output to an existing file without overwriting it.
 - To redirect **standard error**, the `2>` operator is used to overwrite the error output to a file, while `2>>` appends the error output to the file instead of overwriting it.
-- 
+
 For example, to execute `/path/to/command` every day at 2:00 AM and direct both standard output and error output to a log file, use the cron job entry:
 
 ```crontab
