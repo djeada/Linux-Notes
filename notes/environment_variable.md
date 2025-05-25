@@ -155,8 +155,189 @@ Wrap values containing spaces or special characters in quotes (`export GREETING=
 ```bash
 : "${API_KEY:?API_KEY is required}"  # stops script if API_KEY is unset or blank
 ```
+### Shell Variables
 
+Shell variables control the behavior and state of your current shell session. These temporary name–value pairs can store counters, flags, formatting rules, or other pieces of data that your commands and scripts can reference. Because they live only in the running shell, any variables you define will vanish when you close the terminal.
 
+Shell variables control the behavior of your current shell session, holding temporary values—such as counters, flags, or formatting rules—that disappear when you close the terminal. You create one simply by assigning a name to a value:
+
+```bash
+count=10
+echo "$count"
+```
+
+Example output:
+
+```bash
+10
+```
+
+Referencing an unset variable returns an empty string, which can silently break scripts or commands.
+
+#### Enforcing Defined Variables
+
+To guard against accidentally using undefined variables in your scripts, you can enable strict mode. This ensures that any reference to a variable that has not been set will cause the script to exit immediately with an error.
+
+```bash
+set -u
+```
+
+Example script snippet:
+
+```bash
+#!/usr/bin/env bash
+set -u
+echo "Count is $count"   # Aborts here if count is unset.
+```
+
+### Customizing Your Prompt (PS1)
+
+Your shell prompt is the primary interface for issuing commands, and customizing it can give you at-a-glance information about your session. The `PS1` variable defines exactly what is displayed at each prompt, letting you include your username, hostname, working directory, and special symbols that reflect your permissions or status.
+
+The `PS1` variable defines what appears at each command prompt. You can include special backslash-escape sequences to display dynamic information:
+
+```bash
+PS1="\u@\h:\w\$ "
+```
+
+Example output:
+
+```bash
+# After setting, your prompt looks like:
+ahmad@machine:/home/ahmad$
+```
+
+Unsupported or mistyped escapes (e.g., `\x`) will appear literally in your prompt.
+
+**Common escapes:**
+
+| Escape Sequence | Description                           |
+| --------------- | ------------------------------------- |
+| `\u`            | Current username                      |
+| `\h`            | Hostname (up to the first dot)        |
+| `\w`            | Current working directory (full path) |
+| `\$`            | `#` if running as root, otherwise `$` |
+
+#### Word Splitting and IFS
+
+When you pass a string of words to a shell construct—such as a loop or a command—Bash splits that string into separate words using the **Internal Field Separator** (`IFS`). By default, `IFS` includes whitespace characters: spaces, tabs, and newlines. Changing `IFS` lets you define custom delimiters for splitting, which is essential when working with comma-separated values, semicolon lists, or other structured data in shell scripts.
+
+By default, Bash splits input on whitespace (spaces, tabs, newlines) as defined by the **Internal Field Separator** (`IFS`).
+
+```bash
+printf "%s\n" "a b" "x y" "c"
+```
+
+Example output:
+
+```bash
+# With default IFS, output:
+a
+b
+x
+y
+c
+```
+
+You can change `IFS` to split on a different character. For example, to split on commas:
+
+```bash
+IFS=','
+printf "%s\n" "a,b" "x,y" "c"
+```
+
+Example output:
+
+```bash
+# With IFS=',' :
+a
+b
+x
+y
+c
+```
+
+Setting `IFS=` (empty) disables splitting entirely. Loops like
+
+```bash
+for item in $list; do …
+done
+```
+
+will treat the entire string as a single item, potentially causing infinite loops or logic errors.
+
+#### Listing All Definitions
+
+It’s often useful to see everything that’s currently defined in your shell: variables, functions, and aliases. The built-in `set` command without any arguments dumps this entire list, allowing you to spot unwanted overrides or debug unexpected behavior—especially cases where a local variable shadows a critical environment variable like `PATH`.
+
+To inspect every variable, function, and alias in your current shell:
+
+```bash
+set
+```
+
+Example output:
+
+```bash
+BASH=/usr/bin/bash
+BASHOPTS=checkwinsize:cmdhist:complete_fullquote:expand_aliases:extglob:extquote:force_fignore:globasciiranges:globskipdots:histappend:interactive_comments:patsub_replacement:progcomp:promptvars:sourcepath
+BASH_ALIASES=()
+BASH_ARGC=([0]="0")
+BASH_ARGV=()
+BASH_CMDS=()
+BASH_COMPLETION_VERSINFO=([0]="2" [1]="11")
+...
+```
+
+#### Making Variables Read-Only
+
+Once you’ve set a variable to a value you don’t want to change—such as a maximum number of retries or a critical directory path—it’s best to mark it as read-only. Any subsequent attempts to reassign or unset the variable will fail with an error, helping prevent logic bugs caused by accidental reassignment.
+
+Prevent accidental reassignment by marking variables as immutable:
+
+```bash
+readonly max_retries=5
+max_retries=3
+```
+
+Example output:
+
+```bash
+bash: max_retries: readonly variable
+```
+
+Attempting to unset:
+
+```bash
+unset max_retries
+```
+
+yields:
+
+```bash
+bash: unset: max_retries: cannot unset: readonly variable
+```
+
+### Safe Script Defaults
+
+When writing shell scripts that you expect to run unattended or in production, it’s critical to fail early and loudly on errors, undefined variables, or pipeline failures. The recommended shebang and `set` options at the top of your script enforce these best practices, leading to safer and more maintainable code.
+
+For robust, predictable scripts, combine these options at the top:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+```
+
+Immediately stops on errors, avoids cascading failures, and catches typos or missing variables before they cause silent malfunctions.
+
+**Options:**
+
+| Option        | Meaning                                                                  |
+| ------------- | ------------------------------------------------------------------------ |
+| `-e`          | Exit immediately if any command returns a non-zero status.               |
+| `-u`          | Treat unset variables as an error when substituting.                     |
+| `-o pipefail` | Return the failure status of the first command in a pipeline that fails. |
 
 ### Challenges
 
