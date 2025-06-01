@@ -363,7 +363,7 @@ yum-config-manager --disable [repo_id]
 4. Create a script or use existing tools to automate security updates on a Linux system without breaking package dependencies.
 5. Download and compile a piece of software from a tarball, resolving all dependencies manually.
 6. Use the `alien` tool or similar to convert an RPM package to a DEB package and ensure it installs correctly on a Debian-based system.
-7. Manually resolve package dependencies for a complex software installation without using package manager automation.
+7. Is it possible for apt to remove an already installed package when you install a new one? If so, under what circumstances can this occur?
 8. Set up and configure a custom YUM repository on a CentOS system.
 9. Install a Linux software package on a system without direct internet access using offline methods.
 10. Write a script to automate the cleanup of old or unused packages and maintenance tasks like cache clearing in a Linux environment.
