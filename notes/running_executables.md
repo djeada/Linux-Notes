@@ -43,6 +43,7 @@ Start by cloning the official Linux kernel repository:
 ```bash
 git clone https://github.com/torvalds/linux.git
 ```
+
 This command downloads the entire kernel source code into a directory named `linux`. Navigate into this directory:
 
 ```bash
@@ -56,6 +57,7 @@ Before compiling, we need to configure the kernel to suit our needs. We can gene
 ```bash
 make defconfig
 ```
+
 This command creates a standard configuration file based on your system's architecture.
 
 #### Customizing for Debugging
@@ -79,6 +81,7 @@ III. **Enable Debugging Options**: These settings provide valuable information w
 - Enable **Compile the kernel with debug info**.
 - Enable **Provide GDB scripts for kernel debugging**.
 - kernel debugger**.
+
 After making these changes, save your configuration and exit the menu.
 
 #### Compiling the Kernel
