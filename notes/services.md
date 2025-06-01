@@ -539,4 +539,5 @@ So, when enabling, starting, or checking the status of your service with SystemD
 7. Install and configure a web server using one of the following: `nginx`, `apache`, `caddy`, or `traefik`. Set up the server to serve content over HTTP and, if possible, enable HTTPS with a self-signed certificate for secure access. Verify the server by accessing it from a web browser on a client machine.
 8. Install and configure a database server using either `mysql` or `postgresql`. Create a sample database and user, then verify connectivity to the database from a client tool such as `mysql` or `psql`. Discuss how each database system handles user authentication and data access.
 9. Set up and configure a caching service such as `memcached` or `redis`. Use it to cache data for an application or website, and explain how caching can improve performance by reducing database queries and speeding up response times.
-10. Install and configure a monitoring tool, such as `prometheus`, `nagios`, or `zabbix`, to monitor the status and health of your server. Set up alerts for specific metrics, like CPU or memory usage, and discuss the importance of monitoring in maintaining system reliability and performance.
+10. Some argue that a service, a daemon, and a process are all the same. Do you agree? Explain the distinctions between them.
+
