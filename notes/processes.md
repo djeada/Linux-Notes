@@ -423,4 +423,5 @@ Column guide
 7. Pause a running process using the appropriate signal and then resume it.
 8. Find the parent process ID (PPID) of a specific process.
 9. Explain the difference between a shell job and a daemon process.
-10. Use the `htop` command to filter processes by a specific string and then sort them by memory usage.
+10. If you send a SIGKILL to a zombie process’s PID but it still appears in the output of `ps`, why does the zombie remain?
+11. Use the `htop` command to filter processes by a specific string and then sort them by memory usage.
