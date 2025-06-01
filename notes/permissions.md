@@ -26,16 +26,20 @@ These permissions can be set for different classes of users, each with varying l
 The arrangement of these permissions is typically presented as follows:
 
 ```
-  Owner     Group      Others
-  r w x     r w x      r w x
-  | | |     | | |      | | |
-  | | |     | | +--- Execute
-  | | |     | +----- Write
-  | | |     +------- Read
-  | | |
-  | | +--------- Execute
-  | +----------- Write
-  +------------- Read
+Owner     Group      Others
+r w x     r w x      r w x
+| | |     | | |      | | |
+| | |     | | |      | | +--- Execute
+| | |     | | |      | +----- Write
+| | |     | | |      +------- Read
+| | |     | | |
+| | |     | | +--- Execute
+| | |     | +----- Write
+| | |     +------- Read
+| | |
+| | +--------- Execute
+| +----------- Write
++------------- Read
 ```
 
 ### Symbolic File Permissions
@@ -153,19 +157,19 @@ In addition to standard permissions, Linux offers special permissions known as s
 
 ```
 Owner   Group   Others
-  rws    rws     rwt
-  |||    |||     |||
-  |||    |||     ||+---- Sticky Bit
-  |||    |||     |+----- Execute
-  |||    |||     +------ Write
-  |||    |||
-  |||    ||+------ Set Group ID (setgid)
-  |||    |+------- Execute
-  |||    +-------- Write
-  |||
-  ||+-------- Set User ID (setuid)
-  |+--------- Execute
-  +---------- Read
+rws     rws     rwt
+|||     |||     |||
+|||     |||     ||+---- Sticky Bit
+|||     |||     |+----- Execute
+|||     |||     +------ Write
+|||     |||
+|||     ||+------ Set Group ID (setgid)
+|||     |+------- Execute
+|||     +-------- Write
+|||
+||+-------- Set User ID (setuid)
+|+--------- Execute
++---------- Read
 ```
 
 ### Setuid
