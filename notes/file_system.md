@@ -904,8 +904,9 @@ This command grants `username` read-only access to `/mnt/mydata`. Use `getfacl` 
 4. What is the purpose of the `/bin` and `/sbin` directories in a Linux system? Can you list some of the files you would typically find in these directories and briefly describe what they do?
 5. In a Linux system, what is the purpose of `/usr/bin`? What kind of files are typically stored in this directory and why?
 6. Can you explain the difference between character and block device drivers in UNIX? Can the `ls` command be used to determine whether a device file represents a character device or a block device? If so, how?
-7. By looking at the contents of `/proc/cpuinfo`, can you determine the model of your CPU? What command would you use to display this file's contents?
-8. What hidden files might you expect to find in the `/root` directory? Why might these files be hidden?
-9. What command can you use to create a new file system in Linux? What options does this command typically have, and how are they used?
-10. How can you check disk information and partitions on a device in Linux? Please write down the command you would use and briefly explain its output.
-11. What steps and commands would you use to mount a file system in Linux? Please provide an example command and explain what it does.
+7. How do the directories `/etc`, `/usr/bin`, `/var/log`, and `/opt` differ, and why is it important to understand their distinct roles?
+8. By looking at the contents of `/proc/cpuinfo`, can you determine the model of your CPU? What command would you use to display this file's contents?
+9. What hidden files might you expect to find in the `/root` directory? Why might these files be hidden?
+10. What command can you use to create a new file system in Linux? What options does this command typically have, and how are they used?
+11. How can you check disk information and partitions on a device in Linux? Please write down the command you would use and briefly explain its output.
+12. What steps and commands would you use to mount a file system in Linux? Please provide an example command and explain what it does.
