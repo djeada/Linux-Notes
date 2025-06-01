@@ -400,3 +400,27 @@ Hello from the custom kernel!
 ```
 
 This indicates that the kernel successfully executed our program.
+
+### Challenges
+
+1. Write a simple C program called `exec_test.c` that calls `execve` to run `/bin/echo` with arguments `echo HelloWorld`. Compile it and run it. Then, modify it to print a message before and after the `execve` call. Observe and explain why the “after” message never appears. Reflect on how `execve` replaces the current process image.
+2. Use `strace` to trace a command that invokes a shell script (e.g., `./myscript.sh`). In your script, have one line that executes another binary (e.g., `/bin/ls`). Run `strace -e execve ./myscript.sh` and identify each `execve` call in the output. Discuss how the kernel prepares and hands off execution at each stage.
+3. Clone the official Linux kernel repository (`git clone https://github.com/torvalds/linux.git`) into a directory of your choice. Navigate into it and run `make defconfig`. Without compiling the entire kernel, open the generated `.config` file and locate the configuration option for KASLR. Explain in your own words what KASLR does and why disabling it aids in kernel debugging.
+4. Perform a partial kernel configuration tweak: run `make menuconfig`, disable KASLR under **Processor type and features**, disable loadable module support, and disable networking support. Save the configuration and exit. Then, write a short paragraph (in a text file called `config_changes.txt`) describing each change you made and why it speeds up or simplifies debugging.
+5. In the kernel source directory, run `make -j$(nproc)` to compile the kernel (or at least start the compile until you feel comfortable pausing). While it’s building, investigate where the resulting `bzImage` and `vmlinux` files will reside once compilation completes. After compilation, locate and list the paths to those two files, then explain the difference between them (`bzImage` versus `vmlinux`).
+6. Download BusyBox (e.g., `wget https://busybox.net/downloads/busybox-1.35.0.tar.bz2`), extract it, and configure it for static linking (`make defconfig` + enable static in `menuconfig`). Build BusyBox statically and install it into a directory named `busybox_root`. Then, inspect the resulting BusyBox binary with `ldd busybox_root/bin/busybox` to verify it is truly statically linked, and write a brief note about why static linking matters for an initramfs.
+7. Create an `initramfs` directory structure (`mkdir -p initramfs/{bin,sbin,etc,proc,sys,usr/{bin,sbin}}`). Copy your static BusyBox files into `initramfs`. Write a minimal `init` script in `initramfs/init` that mounts `/proc` and `/sys`, prints “Custom Initramfs Loaded!”, and then invokes `/bin/sh`. Make the `init` script executable. Finally, create the cpio archive (`cd initramfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ../initramfs.cpio.gz`). Verify the archive exists and note its size.
+8. Write a simple “Hello” C program (`hello.c`) in your `initramfs/bin` folder that prints “Hello from initramfs!”. Compile it statically (`gcc -static -o initramfs/bin/hello hello.c`). Verify via `file initramfs/bin/hello` that it is an ELF binary. Explain why the kernel will be able to run this program without any userspace libraries.
+9. In your GDB session, set a breakpoint at the kernel’s `do_execve` function (`break do_execve`) and continue. In the QEMU serial console, run `/bin/hello`. When GDB breaks at `do_execve`, step through (`step`) a few instructions and use `print *bprm` to inspect the `linux_binprm` structure. Write a short explanation (in a file called `gdb_inspection.txt`) of what `bprm` contains and how the kernel uses it to prepare the `hello` binary for execution.
+10. Install QEMU on your system (or verify it’s installed). Boot your newly compiled `bzImage` with your `initramfs.cpio.gz` using:
+
+```bash
+qemu-system-x86_64 \
+ -kernel path/to/arch/x86/boot/bzImage \
+ -initrd initramfs.cpio.gz \
+ -append "console=ttyS0" \
+ -nographic \
+ -s -S
+```
+
+Once QEMU is waiting for a debugger connection, open another terminal, navigate to your kernel source, and run `gdb vmlinux`. In GDB, do `target remote :1234` and then `continue`. Describe what you see on the QEMU console and why you’re dropped into your initramfs shell.
