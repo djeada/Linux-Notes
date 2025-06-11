@@ -97,17 +97,17 @@ chmod 771 path/to/file.txt
 
 This command sets the permissions of the file path/to/file.txt to 771, as explained above.
 
-## Understanding Default Permissions
+### Default Permissions
 
 In Linux, when you create a new file or directory, it is assigned a set of default permissions. These permissions define what types of access are allowed for the owner of the file, members of the group that owns the file, and all other users.
 
-### Default File and Directory Permissions
+#### Default File and Directory Permissions
 
 By default, new files are created with the permissions `rw-rw-rw-`, equivalent to the numeric value `666`. This allows any user to read and write to the file, but not execute it.
 
 New directories, on the other hand, are created with the permissions `rwxrwxrwx` or `777`. This allows any user to read, write, and execute within the directory.
 
-### Using Umask to Change Default Permissions
+#### Using Umask to Change Default Permissions
 
 The `umask` command is used to determine the default permissions for newly created files and directories. It's a three-digit number that specifies which permissions should be removed or "masked" when new files and directories are created. 
 
@@ -127,7 +127,7 @@ umask 0022
 
 This will set the umask value to 0022, and new files and directories will be created with the corresponding default permissions. It's important to note that the umask value only affects new files and directories, not existing ones.
 
-### Examples of Umask Values and Their Effects
+#### Examples of Umask Values and Their Effects
 
 Here are some common umask values and the resulting default permissions for files and directories:
 
@@ -151,7 +151,7 @@ umask u-x,g=r,o+w
 
 This command configures the umask such that new files and directories will have the permissions specified.
 
-## Understanding Special Permissions: setuid, setgid, and the Sticky Bit
+### Special Permissions: setuid, setgid, and the Sticky Bit
 
 In addition to standard permissions, Linux offers special permissions known as setuid, setgid, and the sticky bit. These permissions provide additional control over access to files and directories and can be used to enhance both functionality and security.
 
@@ -172,57 +172,148 @@ rws     rws     rwt
 +---------- Read
 ```
 
-### Setuid
+#### Setuid
 
-The setuid or 'Set User ID' permission allows a user to execute an executable file with the permissions of the file's owner. This is especially useful for allowing users to run specific programs with elevated privileges, even if they don't have direct access permissions to the file.
+The setuid (“set user ID”) bit causes a program to run with the file owner’s user permissions, rather than with the permissions of the user who launched it. In practice, this allows ordinary users to execute specific tasks with elevated privileges—most commonly, root-level privileges—without giving them full root access.
 
-To set the setuid bit on a file, use the `chmod` command with the `u+s` flag:
+**Why it matters:**
+
+* The `passwd` command needs to modify `/etc/shadow`, which is owned by root. By marking `/usr/bin/passwd` as setuid root, any user can change their own password despite not having write access to the shadow file.
+* If a setuid binary is vulnerable (e.g., buffer overflow), an attacker might exploit it to gain root. Always audit and minimize setuid programs.
+
+**How to set the setuid bit:**
 
 ```bash
-chmod u+s /path/to/file
+chmod u+s /path/to/program
 ```
 
-To remove the setuid bit from a file, use the chmod command with the u-s flag:
+* This adds the “s” in the owner’s execute field.
+* Octal equivalent: `chmod 4755 /path/to/program`.
+
+**How to remove the setuid bit:**
 
 ```bash
-chmod u-s /path/to/file
+chmod u-s /path/to/program
 ```
 
-### Setgid
+* Removes the “s”, reverting to a normal execute bit.
+* Octal equivalent: `chmod 0755 /path/to/program`.
 
-The setgid or 'Set Group ID' permission enables an executable file to be run with the permissions of the file's group. This can be useful when you want to share access to a program or a set of files with a group of users without granting them individual access permissions to those files.
+**How to verify if setuid is in place:**
 
-To set the setgid bit on a file or directory, use the chmod command with the g+s flag:
+```bash
+ls -l /path/to/program
+```
+
+* *Set:* `-rwsr-xr-x` → the owner’s `x` is replaced by `s`.
+* *Not set (counter-example):* `-rwxr-xr-x`.
+
+**Find all setuid files:**
+
+```bash
+find / -perm /4000 -type f 2>/dev/null
+```
+
+Lists every file on the system with the setuid bit.
+
+#### Setgid
+
+The setgid (“set group ID”) bit causes an executable to run with the group permissions of the file’s group owner, or on a directory, causes newly created files within to inherit the directory’s group. This facilitates controlled collaboration among group members.
+
+**Why it matters:**
+
+* A backup script owned by group `backup` can be run by any user in that group, with file-creation operations done under the `backup` group, ensuring correct group ownership of backup archives.
+* On `/srv/shared`, setgid makes new files inherit the `shared` group, so every team member automatically has group write permission on new files.
+* A setgid program with flaws could let a non-group member escalate privileges to that group, potentially accessing sensitive group-owned resources.
+
+**How to set the setgid bit:**
 
 ```bash
 chmod g+s /path/to/file_or_directory
 ```
 
-To remove the setgid bit from a file or directory, use the chmod command with the g-s flag:
+* *Octal equivalent (file):* `chmod 2755 /path/to/file`
+* *Octal equivalent (directory):* `chmod 2775 /path/to/directory`
+
+**How to remove the setgid bit:**
 
 ```bash
 chmod g-s /path/to/file_or_directory
 ```
 
-### Sticky Bit
+Octal equivalent: `chmod 0755 /path/to/file` or `chmod 0775 /path/to/directory`
 
-The sticky bit is a permission that can be set on directories. When the sticky bit is set on a directory, only the owner of a file within that directory (or the root user) can delete or rename the file. This is particularly useful for shared directories where you want to prevent users from deleting or altering files they do not own.
-
-To set the sticky bit on a directory, use the chmod command with the +t flag:
+**How to verify if setgid is in place:**
 
 ```bash
-chmod +t /path/to/dir
+ls -ld /path/to/file_or_directory
 ```
 
-To remove the sticky bit from a directory, use the chmod command with the -t flag:
+* *Executable with setgid:* `-rwxr-sr-x` (the group’s `x` is replaced by `s`).
+* *Directory with setgid:* `drwxrwsr-x`.
+* *Not set (counter-example):* `-rwxr-xr-x` or `drwxr-xr-x`.
+
+**Find all setgid files/directories:**
 
 ```bash
-chmod -t /path/to/dir
+find / -perm /2000 -type f -or -type d 2>/dev/null
 ```
 
-It's important to handle these special permissions with care. When misused, they can potentially create security risks. For instance, a program with the setuid bit set, if it has a vulnerability, might be exploited to gain unauthorized privileges on the system.
+Searches for the setgid bit in both files and directories.
 
-## Understanding Access Control Lists (ACLs)
+#### Sticky Bit
+
+When set on a directory, the sticky bit ensures that within that directory, only the file’s owner (or root) may delete or rename their files. It prevents users from removing or renaming other users’ files in a shared directory.
+
+**Why it matters:**
+
+* On `/tmp`, the sticky bit prevents user A from deleting user B’s temporary files, even though `/tmp` is world-writable.
+* Without the sticky bit on a shared directory like `/shared`, any user with write permission could delete or rename another user’s files, leading to accidental or malicious data loss.
+
+**How to set the sticky bit:**
+
+```bash
+chmod +t /path/to/directory
+```
+
+Octal equivalent: `chmod 1777 /path/to/directory` (common for `/tmp`).
+
+**How to remove the sticky bit:**
+
+```bash
+chmod -t /path/to/directory
+```
+
+Octal equivalent, restoring typical permissions: `chmod 0777 /path/to/directory`.
+
+**How to verify if the sticky bit is in place:**
+
+```bash
+ls -ld /path/to/directory
+```
+
+* *Set:* `drwxrwxrwt` – the others’ execute bit is replaced by `t`.
+* *Not set (counter-example):* `drwxrwxrwx`.
+
+**Find all sticky directories:**
+
+```bash
+find / -type d -perm /1000 2>/dev/null
+```
+
+Lists all directories that have the sticky bit set.
+
+#### Quick Reference Table
+
+| Permission | Symbol in `ls -l`            | Octal Mask | Common Use Case                            |
+| ---------- | ---------------------------- | ---------- | ------------------------------------------ |
+| setuid     | `-rws------`                 | 4xxx       | `passwd` (user password changes)           |
+| setgid     | `-rwxr-s---` or `drwxrws---` | 2xxx       | Shared project dirs, group-run executables |
+| sticky     | `drwxrwxrwt`                 | 1xxx       | `/tmp`, other world-writable shared dirs   |
+
+Use these checks and examples to ensure each special permission is applied correctly and safely. Keywords for `find` (4000 for setuid, 2000 for setgid, 1000 for sticky) will help audit your system comprehensively.
+
+### Access Control Lists (ACLs)
 
 Access Control Lists (ACLs) are an additional layer of discretionary access control provided by many Linux systems. They allow for more fine-grained control over file and directory access, extending beyond the standard user, group, and other permissions.
 
@@ -238,7 +329,7 @@ ACLs are not supported by all tools, but modern 'mke2fs' typically enables ACLs 
     +--------------------- User (u), Group (g), Others (o), Mask (m)
 ```
 
-### Setting ACLs with `setfacl`
+#### Setting ACLs with `setfacl`
 
 The `setfacl` command is used to manage ACLs on a file or directory. It can set, modify, or remove ACL entries. If no path is provided, it takes file and directory names from the standard input (stdin). Each line of input should contain one path name.
 
@@ -254,7 +345,7 @@ To remove an ACL, use the -x flag followed by the ACL specification to be remove
 setfacl -x g:group_name /opt/test
 ```
 
-### Viewing ACLs with getfacl
+#### Viewing ACLs with getfacl
 
 The getfacl command is used to display the ACLs of a file or directory. Use the -l flag to list the ACLs:
 
@@ -262,7 +353,7 @@ The getfacl command is used to display the ACLs of a file or directory. Use the 
 getfacl /opt/test
 ```
 
-### ACL Specifications
+#### ACL Specifications
 
 ACL specifications define who has what kind of access to a file or directory. Here are some common examples:
 
