@@ -6,6 +6,22 @@
 * [ ] `sed --delete /error/ log.txt`
 * [ ] `sed -r '/error/d' -i log.txt`
 
+#### Q. Which `grep` option makes the search case-insensitive?
+
+* [ ] `-r`
+* [x] `-i`
+* [ ] `-v`
+* [ ] `-n`
+* [ ] `-c`
+
+#### Q. How do you count the number of matching lines for “error” in `log.txt`?
+
+* [ ] `grep "error" log.txt`
+* [ ] `grep -n "error" log.txt`
+* [x] `grep -c "error" log.txt`
+* [ ] `grep -v "error" log.txt`
+* [ ] `grep -l "error" log.txt`
+
 #### Q. How do you replace the first occurrence of “foo” with “bar” on each line of standard input using `sed`?
 
 * [ ] `sed 's/foo/bar/g'`
@@ -38,21 +54,165 @@
 * [ ] `awk '{print column 2}' data.txt`
 * [ ] `awk 'print $2' data.txt`
 
-#### Q. Which `grep` option makes the search case-insensitive?
+#### Q. Which `find` command searches for files larger than 100MB in the current directory?
 
+* [ ] `find . -size +100M`
+* [x] `find . -size +100M`
+* [ ] `find . -size 100M+`
+* [ ] `find . --size >100M`
+* [ ] `find . -bigger 100M`
+
+#### Q. How do you display the last 20 lines of a file using `tail`?
+
+* [ ] `tail -20 filename`
+* [x] `tail -n 20 filename`
+* [ ] `tail --lines=20 filename`
+* [ ] `tail -l 20 filename`
+* [ ] Both B and C are correct
+
+#### Q. Which `chmod` command gives read, write, and execute permissions to the owner only?
+
+* [ ] `chmod 777 file`
+* [ ] `chmod 755 file`
+* [x] `chmod 700 file`
+* [ ] `chmod 644 file`
+* [ ] `chmod 600 file`
+
+#### Q. What does the `ps aux` command display?
+
+* [ ] Only running processes
+* [ ] Only system processes
+* [x] All running processes with detailed information
+* [ ] Only user processes
+* [ ] Process tree structure
+
+#### Q. Which `tar` command extracts a compressed archive `backup.tar.gz`?
+
+* [ ] `tar -cf backup.tar.gz`
+* [ ] `tar -tf backup.tar.gz`
+* [x] `tar -xzf backup.tar.gz`
+* [ ] `tar -czf backup.tar.gz`
+* [ ] `tar -uzf backup.tar.gz`
+
+#### Q. How do you check disk usage of the current directory with `du`?
+
+* [ ] `du -a`
+* [x] `du -sh`
+* [ ] `du -l`
+* [ ] `du --total`
+* [ ] `du -c`
+
+#### Q. Which `sort` option sorts lines numerically instead of alphabetically?
+
+* [ ] `-a`
+* [x] `-n`
 * [ ] `-r`
-* [x] `-i`
+* [ ] `-u`
+* [ ] `-f`
+
+#### Q. What does the `wc -l` command count?
+
+* [ ] Number of words
+* [ ] Number of characters
+* [x] Number of lines
+* [ ] Number of bytes
+* [ ] Number of files
+
+#### Q. Which `cut` command extracts characters 1-5 from each line of `file.txt`?
+
+* [x] `cut -c 1-5 file.txt`
+* [ ] `cut -f 1-5 file.txt`
+* [ ] `cut -d: -f1-5 file.txt`
+* [ ] `cut --chars=1-5 file.txt`
+* [ ] `cut -b 1-5 file.txt`
+
+#### Q. How do you display only unique lines from a sorted file using `uniq`?
+
+* [x] `uniq filename`
+* [ ] `uniq -d filename`
+* [ ] `uniq -c filename`
+* [ ] `uniq -u filename`
+* [ ] `uniq --unique filename`
+
+#### Q. Which `ln` command creates a symbolic link?
+
+* [ ] `ln file link`
+* [x] `ln -s file link`
+* [ ] `ln -h file link`
+* [ ] `ln --symbolic file link`
+* [ ] Both B and D are correct
+
+#### Q. What does the `head -n 5` command do?
+
+* [ ] Shows the first 5 characters of a file
+* [x] Shows the first 5 lines of a file
+* [ ] Shows the first 5 words of a file
+* [ ] Shows files starting with "5"
+* [ ] Shows the 5th line of a file
+
+#### Q. Which `rsync` option preserves permissions and timestamps during synchronization?
+
 * [ ] `-v`
+* [ ] `-r`
+* [x] `-a`
+* [ ] `-z`
 * [ ] `-n`
-* [ ] `-c`
 
-#### Q. How do you count the number of matching lines for “error” in `log.txt`?
+#### Q. How do you search for processes containing "nginx" using `pgrep`?
 
-* [ ] `grep "error" log.txt`
-* [ ] `grep -n "error" log.txt`
-* [x] `grep -c "error" log.txt`
-* [ ] `grep -v "error" log.txt`
-* [ ] `grep -l "error" log.txt`
+* [ ] `pgrep -f nginx`
+* [x] `pgrep nginx`
+* [ ] `pgrep --full nginx`
+* [ ] `pgrep -n nginx`
+* [ ] Both A and C are correct
+
+#### Q. Which `df` option shows disk usage in human-readable format?
+
+* [ ] `-a`
+* [x] `-h`
+* [ ] `-i`
+* [ ] `-T`
+* [ ] `-l`
+
+#### Q. What does the `watch` command do by default?
+
+* [ ] Monitors file changes
+* [x] Runs a command repeatedly every 2 seconds
+* [ ] Watches network traffic
+* [ ] Monitors system performance
+* [ ] Tracks user activity
+
+#### Q. Which `less` command allows you to search forward for a pattern?
+
+* [ ] `?pattern`
+* [x] `/pattern`
+* [ ] `grep pattern`
+* [ ] `find pattern`
+* [ ] `s/pattern`
+
+#### Q. How do you kill a process with PID 1234 using `kill`?
+
+* [x] `kill 1234`
+* [ ] `kill -9 1234`
+* [ ] `kill --pid 1234`
+* [ ] `kill -TERM 1234`
+* [ ] All except C are correct
+
+#### Q. Which `crontab` entry runs a script every day at 3:30 AM?
+
+* [ ] `30 3 * * * /path/to/script`
+* [x] `30 3 * * * /path/to/script`
+* [ ] `3 30 * * * /path/to/script`
+* [ ] `30 03 * * * /path/to/script`
+* [ ] `* 3:30 * * * /path/to/script`
+
+#### Q. What does the `tee` command do?
+
+* [ ] Splits files into multiple parts
+* [x] Writes output to both stdout and a file
+* [ ] Merges multiple files
+* [ ] Creates symbolic links
+* [ ] Displays file contents in reverse
 
 #### Q. Which flag in `grep` inverts the match, showing only non-matching lines?
 
@@ -164,6 +324,174 @@
 * [x] `gzip -k log.txt`
 * [ ] `gzip -dk log.txt`
 * [ ] `gzip --remove log.txt`
+
+#### Q. Which `tr` command converts all lowercase letters to uppercase?
+
+* [ ] `tr 'a-z' 'A-Z'`
+* [x] `tr 'a-z' 'A-Z'`
+* [ ] `tr [:lower:] [:upper:]`
+* [ ] `tr '[:lower:]' '[:upper:]'`
+* [ ] Both A and D are correct
+
+#### Q. How do you display the first 10 lines of multiple files using `head`?
+
+* [ ] `head -10 file1 file2`
+* [x] `head file1 file2`
+* [ ] `head -n 10 file1 file2`
+* [ ] `head --lines=10 file1 file2`
+* [ ] All except A are correct
+
+#### Q. Which `xargs` command removes all `.tmp` files found by `find`?
+
+* [ ] `find . -name "*.tmp" | xargs rm`
+* [x] `find . -name "*.tmp" | xargs rm`
+* [ ] `find . -name "*.tmp" | xargs -I {} rm {}`
+* [ ] `find . -name "*.tmp" | xargs -0 rm`
+* [ ] All are correct depending on filenames
+
+#### Q. What does the `nohup` command do?
+
+* [ ] Prevents process termination by SIGHUP
+* [ ] Runs commands in background
+* [x] Runs commands immune to hangups
+* [ ] Creates daemon processes
+* [ ] Prevents process interruption
+
+#### Q. Which `stat` option shows only the file type and permissions?
+
+* [ ] `stat -c %A filename`
+* [x] `stat -c '%F %A' filename`
+* [ ] `stat --format=%A filename`
+* [ ] `stat -f filename`
+* [ ] `stat --type filename`
+
+#### Q. How do you compress a directory `mydir` into `archive.tar.bz2`?
+
+* [ ] `tar -cjf archive.tar.bz2 mydir`
+* [x] `tar -cjf archive.tar.bz2 mydir`
+* [ ] `tar -czf archive.tar.bz2 mydir`
+* [ ] `tar --bzip2 -cf archive.tar.bz2 mydir`
+* [ ] Both A and D are correct
+
+#### Q. Which `locate` command finds all files containing "config" in their name?
+
+* [ ] `locate config`
+* [x] `locate "*config*"`
+* [ ] `locate -i config`
+* [ ] `locate --regexp config`
+* [ ] `locate -b config`
+
+#### Q. What does the `jobs` command display?
+
+* [ ] All running processes
+* [ ] System jobs
+* [x] Active jobs in current shell
+* [ ] Scheduled cron jobs
+* [ ] Background processes
+
+#### Q. Which `mount` command mounts a USB device at `/dev/sdb1` to `/mnt/usb`?
+
+* [ ] `mount /dev/sdb1 /mnt/usb`
+* [x] `mount /dev/sdb1 /mnt/usb`
+* [ ] `mount -t auto /dev/sdb1 /mnt/usb`
+* [ ] `mount --type=auto /dev/sdb1 /mnt/usb`
+* [ ] All are correct
+
+#### Q. How do you display network connections using `netstat`?
+
+* [ ] `netstat -a`
+* [ ] `netstat -tuln`
+* [x] `netstat -an`
+* [ ] `netstat --all`
+* [ ] `netstat -tcp -udp`
+
+#### Q. Which `file` command determines the type of a file?
+
+* [x] `file filename`
+* [ ] `file -t filename`
+* [ ] `file --type filename`
+* [ ] `file -i filename`
+* [ ] `file --mime filename`
+
+#### Q. What does the `uptime` command show?
+
+* [ ] System boot time only
+* [ ] Current time only
+* [ ] Load average only
+* [x] Current time, uptime, users, and load average
+* [ ] Process runtime
+
+#### Q. Which `alias` command creates a shortcut `ll` for `ls -la`?
+
+* [x] `alias ll='ls -la'`
+* [ ] `alias ll "ls -la"`
+* [ ] `alias ll=ls -la`
+* [ ] `alias 'll'='ls -la'`
+* [ ] `alias set ll='ls -la'`
+
+#### Q. How do you view the last 50 lines of `/var/log/messages` and follow new entries?
+
+* [ ] `tail -50 -f /var/log/messages`
+* [x] `tail -n 50 -f /var/log/messages`
+* [ ] `tail --lines=50 --follow /var/log/messages`
+* [ ] `tail -50f /var/log/messages`
+* [ ] All are correct
+
+#### Q. Which `whoami` command shows the current user?
+
+* [x] `whoami`
+* [ ] `who am i`
+* [ ] `id -u`
+* [ ] `echo $USER`
+* [ ] All show user information
+
+#### Q. What does the `diff` command with `-u` option produce?
+
+* [ ] Context diff format
+* [x] Unified diff format
+* [ ] Side-by-side comparison
+* [ ] Brief summary only
+* [ ] Ignores whitespace
+
+#### Q. Which `history` command shows the last 20 commands?
+
+* [ ] `history 20`
+* [x] `history | tail -20`
+* [ ] `history -20`
+* [ ] `history --last=20`
+* [ ] Both A and B are correct
+
+#### Q. How do you create a hard link named `link.txt` to `original.txt`?
+
+* [x] `ln original.txt link.txt`
+* [ ] `ln -s original.txt link.txt`
+* [ ] `ln --hard original.txt link.txt`
+* [ ] `link original.txt link.txt`
+* [ ] `hardlink original.txt link.txt`
+
+#### Q. Which `env` command displays all environment variables?
+
+* [x] `env`
+* [ ] `env -a`
+* [ ] `env --all`
+* [ ] `printenv`
+* [ ] Both A and D are correct
+
+#### Q. What does the `touch` command do when the file already exists?
+
+* [ ] Creates a new file
+* [ ] Deletes the file
+* [x] Updates the timestamp
+* [ ] Copies the file
+* [ ] Does nothing
+
+#### Q. Which `ping` option sends only 5 packets?
+
+* [ ] `ping -5 hostname`
+* [x] `ping -c 5 hostname`
+* [ ] `ping --count=5 hostname`
+* [ ] `ping -n 5 hostname`
+* [ ] Both B and C are correct
 
 #### Q. After running `gzip file1 file2`, which files remain in the directory?
 
