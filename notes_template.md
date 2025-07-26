@@ -1,6 +1,7 @@
 TODO:
 
 - real life story
+- concrete full steps to reproduce
 
 
 # [Topic Name]
