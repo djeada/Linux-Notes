@@ -414,14 +414,14 @@ Column guide
 
 ### Challenges
 
-1. Find the process ID (PID) of a specific process by its name.
-2. List all processes that belong to a specific user.
-3. Start a process in the background, bring it to the foreground, and then move it back to the background.
-4. Terminate a process using both its PID and its name.
-5. Write a simple C program that spawns a child process to execute a command.
-6. Use the `top` command to identify the process with the highest CPU usage and terminate it.
-7. Pause a running process using the appropriate signal and then resume it.
-8. Find the parent process ID (PPID) of a specific process.
+1. How can you find the process ID (PID) of a process when only its name is known?
+2. How do you list all processes owned by a specific user?
+3. Demonstrate how to start a process in the background, bring it to the foreground, and then return it to the background.
+4. How can you terminate a process using either its PID or its name?
+5. Write a simple C program that creates a child process to execute a given command.
+6. Using the `top` command, identify the process consuming the most CPU resources and terminate it.
+7. How can you pause a running process with a signal and then resume it?
+8. How can you determine the parent process ID (PPID) of a given process?
 9. Explain the difference between a shell job and a daemon process.
-10. If you send a SIGKILL to a zombie process’s PID but it still appears in the output of `ps`, why does the zombie remain?
-11. Use the `htop` command to filter processes by a specific string and then sort them by memory usage.
+10. Why does a zombie process remain visible in `ps` output even after sending it a `SIGKILL`?
+11. Using the `htop` command, filter processes by a specific string and sort them by memory usage.
