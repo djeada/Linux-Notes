@@ -238,21 +238,21 @@
 * [ ] `sshtunnel`
 * [ ] `ssh-proxy`
 
-#### Q. What encryption algorithm is recommended for new SSH keys?
+#### Q. What is the minimum recommended key size for RSA SSH keys?
 
-* [ ] RSA-1024
-* [ ] DSA
-* [x] Ed25519
-* [ ] ECDSA-256
-* [ ] MD5
+* [ ] 512 bits
+* [ ] 1024 bits
+* [x] 2048 bits
+* [ ] 4096 bits
+* [ ] 8192 bits
 
-#### Q. Which file on the server contains fingerprints of known client hosts?
+#### Q. Which SSH option disables strict host key checking?
 
-* [ ] `~/.ssh/authorized_keys`
-* [ ] `~/.ssh/config`
-* [x] `~/.ssh/known_hosts`
-* [ ] `/etc/ssh/ssh_host_key`
-* [ ] `~/.ssh/id_rsa.pub`
+* [ ] `-o NoHostKey=yes`
+* [ ] `-o IgnoreHostKey=yes`
+* [x] `-o StrictHostKeyChecking=no`
+* [ ] `-o DisableHostCheck=yes`
+* [ ] `-o SkipHostKey=yes`
 
 #### Q. What does the `-X` option enable when connecting via SSH?
 
@@ -262,13 +262,13 @@
 * [ ] Extended authentication
 * [ ] Xterm mode
 
-#### Q. Which command creates an SSH tunnel for local port forwarding?
+#### Q. What does the `-D` option do in SSH?
 
-* [ ] `ssh -R`
-* [x] `ssh -L`
-* [ ] `ssh -D`
-* [ ] `ssh -T`
-* [ ] `ssh -N`
+* [ ] Disables password authentication
+* [x] Creates a dynamic SOCKS proxy
+* [ ] Enables debug mode
+* [ ] Downloads files
+* [ ] Deletes remote files
 
 #### Q. What is the purpose of the `ssh-agent`?
 

@@ -294,13 +294,13 @@
 * [ ] Enables bash mode
 * [ ] Prints bash version
 
-#### Q. Which file is sourced for non-login interactive shells?
+#### Q. What is the order of configuration file execution for a bash login shell?
 
-* [ ] `~/.bash_profile`
-* [x] `~/.bashrc`
-* [ ] `~/.profile`
-* [ ] `/etc/profile`
-* [ ] `~/.bash_login`
+* [ ] ~/.bashrc → ~/.bash_profile → /etc/profile
+* [x] /etc/profile → ~/.bash_profile (or ~/.bash_login or ~/.profile)
+* [ ] ~/.profile → /etc/profile → ~/.bashrc
+* [ ] ~/.bash_login → /etc/profile → ~/.bashrc
+* [ ] All files are executed simultaneously
 
 #### Q. What is the purpose of `~/.bash_history`?
 
