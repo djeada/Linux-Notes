@@ -254,6 +254,22 @@
 * [ ] `echo $@`
 * [ ] `echo $#`
 
+#### Q. What does `$#` represent in a bash script?
+
+* [ ] The script name
+* [ ] The last argument
+* [x] The number of arguments passed to the script
+* [ ] All arguments as a string
+* [ ] The process ID
+
+#### Q. Which operator is used for command substitution in bash?
+
+* [ ] `{command}`
+* [x] `$(command)` or backticks
+* [ ] `[command]`
+* [ ] `<command>`
+* [ ] `#command#`
+
 #### Q. Which shell option causes the script to exit when expanding an unset variable?
 
 * [ ] `set +u`
@@ -277,6 +293,22 @@
 * [ ] `$*` treats each argument as separate; `$@` treats all as one string
 * [ ] `$@` is for arrays; `$*` is for strings
 * [ ] `$*` includes the script name
+
+#### Q. Which command makes a script executable?
+
+* [ ] `run script.sh`
+* [x] `chmod +x script.sh`
+* [ ] `exec script.sh`
+* [ ] `enable script.sh`
+* [ ] `./script.sh`
+
+#### Q. What does the shebang `#!/bin/bash` do?
+
+* [ ] Comments out the line
+* [x] Specifies the interpreter for the script
+* [ ] Imports bash functions
+* [ ] Enables bash mode
+* [ ] Prints bash version
 
 #### Q. Which command is commonly used to enable “strict mode” (exit on error, unset vars, pipeline failures) in bash scripts?
 

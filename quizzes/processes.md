@@ -254,6 +254,14 @@
 * [ ] `htop`
 * [ ] `jobs`
 
+#### Q. What is a zombie process?
+
+* [ ] A process using too much CPU
+* [ ] A process that cannot be killed
+* [x] A terminated process whose parent hasn't read its exit status
+* [ ] A process running in the background
+* [ ] A process waiting for I/O
+
 #### Q. Which command shows the current status and recent logs for the `nginx` systemd service?
 
 * [ ] `service nginx info`
