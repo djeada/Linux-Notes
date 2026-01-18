@@ -9,10 +9,10 @@
 #### Q. In `/etc/fstab`, what does the third field specify?
 
 * [ ] The filesystem UUID
-* [x] The mount point
+* [ ] The mount point
 * [ ] Mount options
 * [ ] Dump/pass order
-* [ ] Filesystem type
+* [x] Filesystem type
 
 #### Q. What is an inode in a Linux filesystem?
 
@@ -38,10 +38,10 @@
 * [ ] `tune2fs -r /dev/sda2`
 * [ ] `mkfs.ext4 -r /dev/sda2`
 
-#### Q. Which of these is a journaling filesystem?
+#### Q. Which of these is a journaling filesystem native to Linux?
 
 * [ ] FAT32
-* [ ] NTFS
+* [ ] FAT16
 * [x] XFS
 * [ ] ISO9660
 * [ ] UDF
@@ -128,7 +128,7 @@
 
 #### Q. Which service handles dynamic on-demand automounting via `/etc/auto.*` maps?
 
-* [ ] `autofs`
+* [ ] `nfsd`
 * [ ] `systemd-automount`
 * [ ] `autohome`
 * [x] `autofs`

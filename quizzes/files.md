@@ -87,7 +87,7 @@
 * [ ] `stat -f /`
 
 
-#### Q. Which option tells `more` to display line numbers before each line?
+#### Q. Which option tells `more` to display a more informative prompt at screen bottom?
 
 * [ ] `more -n`
 * [ ] `more -l`
@@ -266,10 +266,10 @@
 #### Q. Which `rsync` option preserves symbolic links, devices, attributes, permissions, ownerships, and timestamps?
 
 * [ ] `-r`
-* [ ] `-a`
-* [x] `-rlptgoD`
-* [ ] `-z`
+* [x] `-a`
 * [ ] `-v`
+* [ ] `-z`
+* [ ] `-n`
 
 #### Q. How do you copy a file `file.txt` to `/backup/` using `cp`, prompting before overwrite?
 
@@ -354,8 +354,8 @@
 
 #### Q. How can you search forward for the next occurrence of “ERROR” while inside `more`?
 
-* [ ] `/ERROR` then Enter
-* [x] `?ERROR` then Enter
+* [x] `/ERROR` then Enter
+* [ ] `?ERROR` then Enter
 * [ ] `ERROR` then Space
 * [ ] `nERROR` then Enter
 * [ ] `fERROR` then Enter

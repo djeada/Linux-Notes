@@ -56,7 +56,7 @@
 
 #### Q. Which `find` command searches for files larger than 100MB in the current directory?
 
-* [ ] `find . -size +100M`
+* [ ] `find . -size 100M`
 * [x] `find . -size +100M`
 * [ ] `find . -size 100M+`
 * [ ] `find . --size >100M`
@@ -200,10 +200,10 @@
 
 #### Q. Which `crontab` entry runs a script every day at 3:30 AM?
 
-* [ ] `30 3 * * * /path/to/script`
+* [ ] `0 3 * * * /path/to/script`
 * [x] `30 3 * * * /path/to/script`
 * [ ] `3 30 * * * /path/to/script`
-* [ ] `30 03 * * * /path/to/script`
+* [ ] `* 3 * * * /path/to/script`
 * [ ] `* 3:30 * * * /path/to/script`
 
 #### Q. What does the `tee` command do?
@@ -327,11 +327,11 @@
 
 #### Q. Which `tr` command converts all lowercase letters to uppercase?
 
-* [ ] `tr 'a-z' 'A-Z'`
+* [ ] `tr 'A-Z' 'a-z'`
 * [x] `tr 'a-z' 'A-Z'`
 * [ ] `tr [:lower:] [:upper:]`
 * [ ] `tr '[:lower:]' '[:upper:]'`
-* [ ] Both A and D are correct
+* [ ] Both B and D are correct
 
 #### Q. How do you display the first 10 lines of multiple files using `head`?
 
@@ -343,7 +343,7 @@
 
 #### Q. Which `xargs` command removes all `.tmp` files found by `find`?
 
-* [ ] `find . -name "*.tmp" | xargs rm`
+* [ ] `find . -name "*.tmp" -delete`
 * [x] `find . -name "*.tmp" | xargs rm`
 * [ ] `find . -name "*.tmp" | xargs -I {} rm {}`
 * [ ] `find . -name "*.tmp" | xargs -0 rm`
@@ -367,11 +367,11 @@
 
 #### Q. How do you compress a directory `mydir` into `archive.tar.bz2`?
 
-* [ ] `tar -cjf archive.tar.bz2 mydir`
+* [ ] `tar -cvf archive.tar.bz2 mydir`
 * [x] `tar -cjf archive.tar.bz2 mydir`
 * [ ] `tar -czf archive.tar.bz2 mydir`
-* [ ] `tar --bzip2 -cf archive.tar.bz2 mydir`
-* [ ] Both A and D are correct
+* [ ] `tar --gzip -cf archive.tar.bz2 mydir`
+* [ ] `tar -xjf archive.tar.bz2 mydir`
 
 #### Q. Which `locate` command finds all files containing "config" in their name?
 
@@ -559,7 +559,7 @@
 
 #### Q. Which command prints only lines 5 through 10 from `file.log` using `sed`?
 
-* [ ] `sed -n '5,10p' file.log`
+* [ ] `sed '5,10p' file.log`
 * [x] `sed -n '5,10p' file.log`
 * [ ] `sed '5;10!p' file.log`
 * [ ] `sed '5,10d' file.log`

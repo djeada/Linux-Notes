@@ -136,10 +136,10 @@
 
 #### Q. What is the default DHCP client configuration file on Ubuntu systems?
 
-* [ ] `/etc/dhcp/dhclient.conf`
 * [ ] `/etc/dhcpcd.conf`
-* [x] `/etc/dhcp/dhclient.conf`
 * [ ] `/etc/network/dhcp.conf`
+* [x] `/etc/dhcp/dhclient.conf`
+* [ ] `/etc/netplan/dhcp.conf`
 * [ ] `/etc/systemd/network/dhcp.conf`
 
 #### Q. Which command displays the current ARP table entries?
@@ -152,11 +152,11 @@
 
 #### Q. How do you enable IP forwarding temporarily on a Linux system?
 
-* [ ] `echo 1 > /proc/sys/net/ipv4/ip_forward`
+* [ ] `ip forward enable`
 * [x] `echo 1 > /proc/sys/net/ipv4/ip_forward`
 * [ ] `sysctl net.ipv4.ip_forward=1`
 * [ ] `iptables -A FORWARD -j ACCEPT`
-* [ ] Both A and C are correct
+* [ ] `netfilter --enable-forward`
 
 #### Q. Which port does SSH typically use for connections?
 

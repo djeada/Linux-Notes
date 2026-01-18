@@ -160,9 +160,9 @@
 
 #### Q. What must be true about the total size of logical volumes in relation to the size of the physical volumes in LVM?
 
-* [x] The total size of logical volumes can exceed the size of physical volumes.
+* [ ] The total size of logical volumes can exceed the size of physical volumes.
 * [ ] The total size of logical volumes must exactly match the size of physical volumes.
-* [ ] The total size of logical volumes must be less than the size of physical volumes, leaving some unallocated space.
+* [x] The total size of logical volumes must be less than or equal to the combined size of physical volumes in the volume group.
 * [ ] The total size of logical volumes must be double the size of physical volumes.
 * [ ] The size of logical volumes is independent of the size of physical volumes.
 
@@ -222,19 +222,19 @@
 * [ ] File Allocation Table (FAT)
 * [ ] Extended Partition
 
-#### Q. In LVM, what term describes the process of combining multiple physical volumes into a single logical volume?
+#### Q. In LVM, what term describes the process of combining multiple physical volumes into a volume group?
 
 * [ ] Striping
 * [x] Aggregation
 * [ ] Mirroring
-* [ ] Spanning
+* [ ] Partitioning
 * [ ] Fragmentation
 
-#### Q. Which storage configuration allows a single logical volume to utilize the combined storage capacity of multiple physical disks?
+#### Q. Which storage configuration provides data striping across multiple disks for improved read/write performance?
 
-* [ ] RAID 0
+* [x] RAID 0
 * [ ] RAID 1
-* [x] RAID 5
+* [ ] RAID 5
 * [ ] RAID 10
 * [ ] RAID 6
 
