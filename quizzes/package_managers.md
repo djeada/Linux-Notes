@@ -237,3 +237,123 @@
 * [ ] Smaller file sizes
 * [ ] Better security
 * [ ] No root access required
+
+#### Q. Which command searches for a package in APT repositories?
+
+* [ ] `apt find nginx`
+* [x] `apt search nginx`
+* [ ] `apt locate nginx`
+* [ ] `apt query nginx`
+* [ ] `apt lookup nginx`
+
+#### Q. What is the difference between `apt` and `apt-get`?
+
+* [ ] They are completely different tools
+* [x] `apt` is a newer, more user-friendly interface to the same functionality
+* [ ] `apt-get` is faster
+* [ ] `apt` only works on Ubuntu
+* [ ] `apt-get` is deprecated
+
+#### Q. Which command lists all installed packages on a Debian-based system?
+
+* [ ] `apt list`
+* [x] `dpkg -l` or `apt list --installed`
+* [ ] `apt show all`
+* [ ] `apt packages`
+* [ ] `apt installed`
+
+#### Q. What does `apt-cache show package` display?
+
+* [ ] Package installation status
+* [x] Detailed package information from the cache
+* [ ] Package file list
+* [ ] Package dependencies only
+* [ ] Package changelog
+
+#### Q. Which command cleans the local APT cache?
+
+* [ ] `apt remove cache`
+* [x] `apt clean` or `apt autoclean`
+* [ ] `apt clear`
+* [ ] `apt flush`
+* [ ] `apt cache clean`
+
+#### Q. What is the purpose of `apt autoremove`?
+
+* [ ] Removes broken packages
+* [x] Removes packages that were installed as dependencies but are no longer needed
+* [ ] Removes all packages
+* [ ] Removes duplicate packages
+* [ ] Removes old configuration files
+
+#### Q. Which YUM command displays the history of package transactions?
+
+* [ ] `yum log`
+* [x] `yum history`
+* [ ] `yum transactions`
+* [ ] `yum changelog`
+* [ ] `yum past`
+
+#### Q. How do you undo the last YUM transaction?
+
+* [ ] `yum revert`
+* [x] `yum history undo last`
+* [ ] `yum rollback`
+* [ ] `yum undo`
+* [ ] `yum cancel`
+
+#### Q. What is the purpose of the `dnf module` command?
+
+* [ ] To load kernel modules
+* [x] To manage modular content (application streams)
+* [ ] To configure DNF
+* [ ] To install Python modules
+* [ ] To update repositories
+
+#### Q. Which command lists all available repositories in YUM/DNF?
+
+* [ ] `yum repos`
+* [x] `yum repolist` or `dnf repolist`
+* [ ] `yum list repos`
+* [ ] `yum show repos`
+* [ ] `yum repo list`
+
+#### Q. What does the `--enablerepo` option do?
+
+* [ ] Permanently enables a repository
+* [x] Temporarily enables a disabled repository for the current command
+* [ ] Creates a new repository
+* [ ] Updates repository configuration
+* [ ] Enables all repositories
+
+#### Q. Which command downloads a package without installing it using APT?
+
+* [ ] `apt get package`
+* [x] `apt download package`
+* [ ] `apt fetch package`
+* [ ] `apt save package`
+* [ ] `apt cache package`
+
+#### Q. What is a PPA in Ubuntu?
+
+* [ ] Primary Package Archive
+* [x] Personal Package Archive
+* [ ] Private Package Archive
+* [ ] Public Package Archive
+* [ ] Preferred Package Archive
+
+#### Q. Which command adds a PPA repository in Ubuntu?
+
+* [ ] `apt add repository`
+* [x] `add-apt-repository ppa:user/repo`
+* [ ] `apt ppa add`
+* [ ] `apt-add-ppa`
+* [ ] `ppa-add`
+
+#### Q. What is the purpose of GPG keys in package management?
+
+* [ ] To compress packages
+* [x] To verify the authenticity and integrity of packages
+* [ ] To encrypt package contents
+* [ ] To speed up downloads
+* [ ] To track package versions

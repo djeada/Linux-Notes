@@ -237,3 +237,123 @@
 * [ ] `--`
 * [ ] `last`
 * [ ] `^`
+
+#### Q. What is the purpose of the `set -e` option in a bash script?
+
+* [ ] Enables echo mode
+* [x] Exits the script immediately if any command fails
+* [ ] Exports all variables
+* [ ] Enables extended globbing
+* [ ] Sets environment variables
+
+#### Q. Which command displays the exit status of the last executed command?
+
+* [ ] `echo $!`
+* [x] `echo $?`
+* [ ] `echo $$`
+* [ ] `echo $@`
+* [ ] `echo $#`
+
+#### Q. What does `$#` represent in a bash script?
+
+* [ ] The script name
+* [ ] The last argument
+* [x] The number of arguments passed to the script
+* [ ] All arguments as a string
+* [ ] The process ID
+
+#### Q. Which operator is used for command substitution in bash?
+
+* [ ] `{command}`
+* [x] `$(command)` or backticks
+* [ ] `[command]`
+* [ ] `<command>`
+* [ ] `#command#`
+
+#### Q. What is the difference between `$@` and `$*`?
+
+* [ ] There is no difference
+* [x] `$@` treats each argument as separate; `$*` treats all as one string
+* [ ] `$*` treats each argument as separate; `$@` treats all as one string
+* [ ] `$@` is for arrays; `$*` is for strings
+* [ ] `$*` includes the script name
+
+#### Q. Which command makes a script executable?
+
+* [ ] `run script.sh`
+* [x] `chmod +x script.sh`
+* [ ] `exec script.sh`
+* [ ] `enable script.sh`
+* [ ] `./script.sh`
+
+#### Q. What does the shebang `#!/bin/bash` do?
+
+* [ ] Comments out the line
+* [x] Specifies the interpreter for the script
+* [ ] Imports bash functions
+* [ ] Enables bash mode
+* [ ] Prints bash version
+
+#### Q. Which file is sourced for non-login interactive shells?
+
+* [ ] `~/.bash_profile`
+* [x] `~/.bashrc`
+* [ ] `~/.profile`
+* [ ] `/etc/profile`
+* [ ] `~/.bash_login`
+
+#### Q. What is the purpose of `~/.bash_history`?
+
+* [ ] Stores bash aliases
+* [ ] Stores bash functions
+* [x] Stores command history
+* [ ] Stores environment variables
+* [ ] Stores shell options
+
+#### Q. Which variable controls the number of commands stored in history?
+
+* [ ] `$HISTORY`
+* [x] `$HISTSIZE`
+* [ ] `$CMDHISTORY`
+* [ ] `$HISTLEN`
+* [ ] `$HISTMAX`
+
+#### Q. What does `set -x` do in a bash script?
+
+* [ ] Exits on error
+* [x] Prints each command before executing (debug mode)
+* [ ] Exports variables
+* [ ] Sets execute permission
+* [ ] Enables extended options
+
+#### Q. How do you define a function in bash?
+
+* [ ] `def function_name { }`
+* [x] `function_name() { }` or `function function_name { }`
+* [ ] `func function_name { }`
+* [ ] `define function_name { }`
+* [ ] `sub function_name { }`
+
+#### Q. What is the purpose of the `trap` command?
+
+* [ ] Captures keyboard input
+* [x] Catches signals and executes commands when received
+* [ ] Traps errors in scripts
+* [ ] Creates a debug breakpoint
+* [ ] Logs command output
+
+#### Q. Which command runs a script in the current shell environment?
+
+* [ ] `./script.sh`
+* [x] `source script.sh` or `. script.sh`
+* [ ] `bash script.sh`
+* [ ] `exec script.sh`
+* [ ] `run script.sh`
+
+#### Q. What is a here document in bash?
+
+* [ ] Documentation for scripts
+* [x] A way to redirect multiple lines of input to a command
+* [ ] A help command
+* [ ] A man page
+* [ ] A comment block

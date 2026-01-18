@@ -245,3 +245,123 @@
 * [ ] `ip addr show ipv6`
 * [ ] `ip6 addr show`
 * [ ] `ip addr -6`
+
+#### Q. What is the purpose of a subnet mask?
+
+* [ ] To encrypt network traffic
+* [x] To divide an IP address into network and host portions
+* [ ] To speed up network connections
+* [ ] To assign MAC addresses
+* [ ] To route packets between networks
+
+#### Q. Which command displays the routing table on Linux?
+
+* [ ] `route show`
+* [x] `ip route` or `route -n`
+* [ ] `netstat -i`
+* [ ] `ifconfig -r`
+* [ ] `traceroute`
+
+#### Q. What is the loopback IP address?
+
+* [ ] 0.0.0.0
+* [x] 127.0.0.1
+* [ ] 192.168.1.1
+* [ ] 255.255.255.255
+* [ ] 10.0.0.1
+
+#### Q. Which port does HTTP use by default?
+
+* [ ] 21
+* [ ] 22
+* [ ] 443
+* [x] 80
+* [ ] 25
+
+#### Q. Which port does HTTPS use by default?
+
+* [ ] 80
+* [ ] 8080
+* [x] 443
+* [ ] 8443
+* [ ] 22
+
+#### Q. What does DNS stand for?
+
+* [ ] Direct Network Service
+* [x] Domain Name System
+* [ ] Dynamic Network Server
+* [ ] Distributed Name Service
+* [ ] Data Network System
+
+#### Q. Which command tests DNS resolution?
+
+* [ ] `ping`
+* [x] `nslookup` or `dig`
+* [ ] `traceroute`
+* [ ] `netstat`
+* [ ] `ifconfig`
+
+#### Q. What is the purpose of the `/etc/hosts` file?
+
+* [ ] To store passwords
+* [x] To provide static hostname to IP address mappings
+* [ ] To configure network interfaces
+* [ ] To store routing information
+* [ ] To configure DNS servers
+
+#### Q. Which file configures DNS resolver settings?
+
+* [ ] `/etc/hosts`
+* [x] `/etc/resolv.conf`
+* [ ] `/etc/dns.conf`
+* [ ] `/etc/network/dns`
+* [ ] `/etc/nsswitch.conf`
+
+#### Q. What is the purpose of ARP?
+
+* [ ] To assign IP addresses
+* [x] To resolve IP addresses to MAC addresses
+* [ ] To route packets between networks
+* [ ] To encrypt network traffic
+* [ ] To establish TCP connections
+
+#### Q. Which command shows the ARP cache?
+
+* [ ] `ifconfig -a`
+* [x] `arp -a` or `ip neigh`
+* [ ] `netstat -arp`
+* [ ] `route arp`
+* [ ] `show arp`
+
+#### Q. What is a VLAN?
+
+* [ ] Virtual Local Access Node
+* [x] Virtual Local Area Network
+* [ ] Very Large Area Network
+* [ ] Virtual Link Access Network
+* [ ] Variable Length Address Network
+
+#### Q. Which protocol is used to automatically assign IP addresses?
+
+* [ ] DNS
+* [ ] ARP
+* [x] DHCP
+* [ ] NAT
+* [ ] ICMP
+
+#### Q. What command displays active network connections and listening ports?
+
+* [ ] `ifconfig`
+* [x] `netstat -tuln` or `ss -tuln`
+* [ ] `ip addr`
+* [ ] `route -n`
+* [ ] `ping localhost`
+
+#### Q. What is the purpose of NAT?
+
+* [ ] To encrypt traffic
+* [x] To translate private IP addresses to public IP addresses
+* [ ] To resolve hostnames
+* [ ] To balance network load
+* [ ] To monitor network traffic

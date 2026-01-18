@@ -237,3 +237,123 @@
 * [ ] `ssh-forward`
 * [ ] `sshtunnel`
 * [ ] `ssh-proxy`
+
+#### Q. What encryption algorithm is recommended for new SSH keys?
+
+* [ ] RSA-1024
+* [ ] DSA
+* [x] Ed25519
+* [ ] ECDSA-256
+* [ ] MD5
+
+#### Q. Which file on the server contains fingerprints of known client hosts?
+
+* [ ] `~/.ssh/authorized_keys`
+* [ ] `~/.ssh/config`
+* [x] `~/.ssh/known_hosts`
+* [ ] `/etc/ssh/ssh_host_key`
+* [ ] `~/.ssh/id_rsa.pub`
+
+#### Q. What does the `-X` option enable when connecting via SSH?
+
+* [ ] Extra verbose output
+* [x] X11 forwarding for graphical applications
+* [ ] XML output format
+* [ ] Extended authentication
+* [ ] Xterm mode
+
+#### Q. Which command creates an SSH tunnel for local port forwarding?
+
+* [ ] `ssh -R`
+* [x] `ssh -L`
+* [ ] `ssh -D`
+* [ ] `ssh -T`
+* [ ] `ssh -N`
+
+#### Q. What is the purpose of the `ssh-agent`?
+
+* [ ] To generate SSH keys
+* [x] To cache SSH private keys in memory for passwordless authentication
+* [ ] To manage SSH connections
+* [ ] To configure SSH settings
+* [ ] To monitor SSH traffic
+
+#### Q. Which command adds a private key to the ssh-agent?
+
+* [ ] `ssh-keygen -a`
+* [x] `ssh-add`
+* [ ] `ssh-agent add`
+* [ ] `ssh-load`
+* [ ] `ssh-import`
+
+#### Q. What does the `-N` option do in an SSH command?
+
+* [ ] Enables null authentication
+* [x] Does not execute a remote command (useful for port forwarding)
+* [ ] Uses numeric IP addresses
+* [ ] Disables host key checking
+* [ ] Enables NAT traversal
+
+#### Q. How do you specify a different SSH configuration file?
+
+* [ ] `ssh --config file`
+* [x] `ssh -F file`
+* [ ] `ssh -c file`
+* [ ] `ssh -C file`
+* [ ] `ssh --file file`
+
+#### Q. What is the purpose of the `~/.ssh/config` file?
+
+* [ ] To store SSH keys
+* [x] To define connection settings for specific hosts
+* [ ] To log SSH connections
+* [ ] To store known hosts
+* [ ] To configure the SSH daemon
+
+#### Q. Which SCP option preserves file modification times and permissions?
+
+* [ ] `-r`
+* [x] `-p`
+* [ ] `-v`
+* [ ] `-C`
+* [ ] `-q`
+
+#### Q. What does the `-C` option do in SSH and SCP?
+
+* [ ] Clears the screen
+* [x] Enables compression
+* [ ] Checks connection
+* [ ] Creates directories
+* [ ] Copies recursively
+
+#### Q. Which command displays the fingerprint of an SSH key?
+
+* [ ] `ssh-keygen -p`
+* [x] `ssh-keygen -lf`
+* [ ] `ssh-add -l`
+* [ ] `ssh-fingerprint`
+* [ ] `ssh-show`
+
+#### Q. What is the default location for the SSH server configuration file?
+
+* [ ] `~/.ssh/sshd_config`
+* [x] `/etc/ssh/sshd_config`
+* [ ] `/etc/sshd.conf`
+* [ ] `/var/ssh/config`
+* [ ] `/usr/ssh/sshd_config`
+
+#### Q. Which directive in sshd_config disables password authentication?
+
+* [ ] `NoPassword yes`
+* [x] `PasswordAuthentication no`
+* [ ] `DisablePassword yes`
+* [ ] `AuthPassword no`
+* [ ] `PasswordLogin no`
+
+#### Q. What is SOCKS proxy mode in SSH?
+
+* [ ] A secure file transfer mode
+* [x] Dynamic port forwarding that creates a local SOCKS proxy
+* [ ] A compression algorithm
+* [ ] A key exchange method
+* [ ] A connection pooling feature

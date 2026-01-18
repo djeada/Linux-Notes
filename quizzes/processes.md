@@ -237,3 +237,123 @@
 * [ ] `ps --filter user`
 * [ ] `ps -user username`
 * [ ] `ps -a username`
+
+#### Q. What is the difference between a process and a thread?
+
+* [ ] Threads are faster than processes
+* [x] A process has its own memory space; threads share memory within a process
+* [ ] Processes can only run one at a time
+* [ ] Threads cannot communicate with each other
+* [ ] There is no difference
+
+#### Q. Which command shows the process tree with parent-child relationships?
+
+* [ ] `ps aux`
+* [x] `pstree`
+* [ ] `top`
+* [ ] `htop`
+* [ ] `jobs`
+
+#### Q. What is a zombie process?
+
+* [ ] A process using too much CPU
+* [ ] A process that cannot be killed
+* [x] A terminated process whose parent hasn't read its exit status
+* [ ] A process running in the background
+* [ ] A process waiting for I/O
+
+#### Q. Which command displays the parent process ID (PPID) of a process?
+
+* [ ] `ps -p`
+* [x] `ps -o ppid`
+* [ ] `ps aux`
+* [ ] `top -p`
+* [ ] `pgrep -P`
+
+#### Q. What does the `nice` command do?
+
+* [ ] Terminates a process politely
+* [x] Starts a process with a specified priority
+* [ ] Pauses a process
+* [ ] Resumes a suspended process
+* [ ] Lists nice processes
+
+#### Q. Which command changes the priority of a running process?
+
+* [ ] `nice`
+* [x] `renice`
+* [ ] `priority`
+* [ ] `setpri`
+* [ ] `chprio`
+
+#### Q. What is the range of nice values in Linux?
+
+* [ ] 0 to 100
+* [ ] 1 to 20
+* [x] -20 to 19
+* [ ] -100 to 100
+* [ ] 0 to 39
+
+#### Q. Which nice value gives a process the highest priority?
+
+* [ ] 19
+* [ ] 0
+* [x] -20
+* [ ] 1
+* [ ] 100
+
+#### Q. What does the `&` symbol do when placed at the end of a command?
+
+* [ ] Redirects output to a file
+* [x] Runs the command in the background
+* [ ] Chains multiple commands
+* [ ] Makes the command run faster
+* [ ] Suppresses error output
+
+#### Q. Which command displays only your own processes?
+
+* [ ] `ps aux`
+* [x] `ps -u $USER`
+* [ ] `top`
+* [ ] `pgrep`
+* [ ] `jobs`
+
+#### Q. What does the `wait` command do in shell scripting?
+
+* [ ] Pauses for a specified time
+* [x] Waits for background processes to complete
+* [ ] Waits for user input
+* [ ] Suspends the current process
+* [ ] Waits for network connection
+
+#### Q. Which signal is sent by the `kill -9` command?
+
+* [ ] SIGTERM
+* [ ] SIGINT
+* [x] SIGKILL
+* [ ] SIGHUP
+* [ ] SIGSTOP
+
+#### Q. What is the default signal sent by the `kill` command?
+
+* [ ] SIGKILL (9)
+* [x] SIGTERM (15)
+* [ ] SIGINT (2)
+* [ ] SIGHUP (1)
+* [ ] SIGSTOP (19)
+
+#### Q. Which command shows system load average?
+
+* [ ] `ps aux`
+* [x] `uptime`
+* [ ] `free`
+* [ ] `vmstat`
+* [ ] `df`
+
+#### Q. What do the three numbers in load average represent?
+
+* [ ] CPU, memory, and disk usage
+* [x] Average load over 1, 5, and 15 minutes
+* [ ] User, system, and idle time
+* [ ] Read, write, and wait operations
+* [ ] Process count at different times
