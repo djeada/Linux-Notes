@@ -122,11 +122,11 @@
 
 * [ ] `ps aux`
 * [ ] `ps -ef`
-* [x] `ps fax`
+* [x] `ps --forest`
 * [ ] `top`
 * [ ] `pgrep -l`
 
-#### Q. What is the first process called that is started during system boot on modern Linux systems?
+#### Q. What is the first process (PID 1) called on systemd-based Linux distributions?
 
 * [ ] `init`
 * [x] `systemd`

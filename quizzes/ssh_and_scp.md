@@ -122,7 +122,7 @@
 
 * [ ] Simple File Transfer Protocol
 * [x] Secure File Transfer Protocol
-* [ ] SSH File Transfer Protocol
+* [ ] System File Transfer Protocol
 * [ ] Server File Transfer Protocol
 * [ ] Standard FTP
 
