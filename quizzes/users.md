@@ -144,9 +144,9 @@
 #### Q. How do you allow user `alice` to run only `/usr/bin/systemctl` via sudo?
 
 * [ ] `alice ALL=(ALL) ALL: /usr/bin/systemctl`
-* [ ] `alice ALL=(ALL) /usr/bin/systemctl`
+* [x] `alice ALL=(ALL) /usr/bin/systemctl`
 * [ ] `alice ALL=(ALL) NOPASSWD: /usr/bin/systemctl`
-* [x] `alice ALL=(root) /usr/bin/systemctl`
+* [ ] `alice ALL=(root) !/usr/bin/systemctl`
 * [ ] `alice ALL=(ALL) !/usr/bin/systemctl`
 
 #### Q. Which command displays both standard permissions and ACLs for the file `example.txt`?

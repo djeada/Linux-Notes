@@ -371,7 +371,7 @@
 * [x] `tar -cjf archive.tar.bz2 mydir`
 * [ ] `tar -czf archive.tar.bz2 mydir`
 * [ ] `tar --gzip -cf archive.tar.bz2 mydir`
-* [ ] `tar -xjf archive.tar.bz2 mydir`
+* [ ] `tar -tvf archive.tar.bz2 mydir`
 
 #### Q. Which `locate` command finds all files containing "config" in their name?
 
