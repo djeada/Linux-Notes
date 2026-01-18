@@ -270,6 +270,22 @@
 * [ ] `<command>`
 * [ ] `#command#`
 
+#### Q. Which shell option causes the script to exit when expanding an unset variable?
+
+* [ ] `set +u`
+* [ ] `set -x`
+* [ ] `set -e`
+* [x] `set -u`
+* [ ] `set -n`
+
+#### Q. What does enabling `set -o pipefail` do in a bash script?
+
+* [ ] Forces pipelines to run in the background
+* [x] Causes a pipeline to fail if any command in it fails
+* [ ] Disables error checking in pipelines
+* [ ] Redirects pipeline output to `/dev/null`
+* [ ] Enables command tracing for pipelines
+
 #### Q. What is the difference between `$@` and `$*`?
 
 * [ ] There is no difference
@@ -293,6 +309,22 @@
 * [ ] Imports bash functions
 * [ ] Enables bash mode
 * [ ] Prints bash version
+
+#### Q. Which command is commonly used to enable “strict mode” (exit on error, unset vars, pipeline failures) in bash scripts?
+
+* [ ] `set -ex`
+* [ ] `set -Ee`
+* [ ] `set -eu`
+* [ ] `set -eox pipefail`
+* [x] `set -euo pipefail`
+
+#### Q. Why do many scripts use the shebang `#!/usr/bin/env bash` instead of `#!/bin/bash`?
+
+* [x] It locates `bash` via the `PATH`, improving portability across systems
+* [ ] It forces a login shell
+* [ ] It runs the script with elevated privileges
+* [ ] It disables environment variable inheritance
+* [ ] It makes the script POSIX compliant
 
 #### Q. What is the order of configuration file execution for a bash login shell?
 

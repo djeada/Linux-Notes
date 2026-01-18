@@ -262,6 +262,14 @@
 * [ ] A process running in the background
 * [ ] A process waiting for I/O
 
+#### Q. Which command shows the current status and recent logs for the `nginx` systemd service?
+
+* [ ] `service nginx info`
+* [ ] `journalctl nginx`
+* [ ] `systemctl logs nginx`
+* [x] `systemctl status nginx`
+* [ ] `ps -ef | grep nginx`
+
 #### Q. Which command displays the parent process ID (PPID) of a process?
 
 * [ ] `ps -p`
