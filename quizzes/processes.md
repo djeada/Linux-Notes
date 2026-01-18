@@ -254,13 +254,13 @@
 * [ ] `htop`
 * [ ] `jobs`
 
-#### Q. What is a zombie process?
+#### Q. Which command shows the current status and recent logs for the `nginx` systemd service?
 
-* [ ] A process using too much CPU
-* [ ] A process that cannot be killed
-* [x] A terminated process whose parent hasn't read its exit status
-* [ ] A process running in the background
-* [ ] A process waiting for I/O
+* [ ] `service nginx info`
+* [ ] `journalctl nginx`
+* [ ] `systemctl logs nginx`
+* [x] `systemctl status nginx`
+* [ ] `ps -ef | grep nginx`
 
 #### Q. Which command displays the parent process ID (PPID) of a process?
 

@@ -254,21 +254,21 @@
 * [ ] `echo $@`
 * [ ] `echo $#`
 
-#### Q. What does `$#` represent in a bash script?
+#### Q. Which shell option causes the script to exit when expanding an unset variable?
 
-* [ ] The script name
-* [ ] The last argument
-* [x] The number of arguments passed to the script
-* [ ] All arguments as a string
-* [ ] The process ID
+* [ ] `set +u`
+* [ ] `set -x`
+* [ ] `set -e`
+* [x] `set -u`
+* [ ] `set -n`
 
-#### Q. Which operator is used for command substitution in bash?
+#### Q. What does enabling `set -o pipefail` do in a bash script?
 
-* [ ] `{command}`
-* [x] `$(command)` or backticks
-* [ ] `[command]`
-* [ ] `<command>`
-* [ ] `#command#`
+* [ ] Forces pipelines to run in the background
+* [x] Causes a pipeline to fail if any command in it fails
+* [ ] Disables error checking in pipelines
+* [ ] Redirects pipeline output to `/dev/null`
+* [ ] Enables command tracing for pipelines
 
 #### Q. What is the difference between `$@` and `$*`?
 
@@ -278,21 +278,21 @@
 * [ ] `$@` is for arrays; `$*` is for strings
 * [ ] `$*` includes the script name
 
-#### Q. Which command makes a script executable?
+#### Q. Which command is commonly used to enable “strict mode” (exit on error, unset vars, pipeline failures) in bash scripts?
 
-* [ ] `run script.sh`
-* [x] `chmod +x script.sh`
-* [ ] `exec script.sh`
-* [ ] `enable script.sh`
-* [ ] `./script.sh`
+* [ ] `set -ex`
+* [ ] `set -Ee`
+* [ ] `set -eu`
+* [ ] `set -eox pipefail`
+* [x] `set -euo pipefail`
 
-#### Q. What does the shebang `#!/bin/bash` do?
+#### Q. Why do many scripts use the shebang `#!/usr/bin/env bash` instead of `#!/bin/bash`?
 
-* [ ] Comments out the line
-* [x] Specifies the interpreter for the script
-* [ ] Imports bash functions
-* [ ] Enables bash mode
-* [ ] Prints bash version
+* [x] It locates `bash` via the `PATH`, improving portability across systems
+* [ ] It forces a login shell
+* [ ] It runs the script with elevated privileges
+* [ ] It disables environment variable inheritance
+* [ ] It makes the script POSIX compliant
 
 #### Q. What is the order of configuration file execution for a bash login shell?
 
