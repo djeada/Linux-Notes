@@ -9,10 +9,10 @@
 #### Q. In `/etc/fstab`, what does the third field specify?
 
 * [ ] The filesystem UUID
-* [x] The mount point
+* [ ] The mount point
 * [ ] Mount options
 * [ ] Dump/pass order
-* [ ] Filesystem type
+* [x] Filesystem type
 
 #### Q. What is an inode in a Linux filesystem?
 
@@ -38,10 +38,10 @@
 * [ ] `tune2fs -r /dev/sda2`
 * [ ] `mkfs.ext4 -r /dev/sda2`
 
-#### Q. Which of these is a journaling filesystem?
+#### Q. Which of these is a journaling filesystem native to Linux?
 
 * [ ] FAT32
-* [ ] NTFS
+* [ ] FAT16
 * [x] XFS
 * [ ] ISO9660
 * [ ] UDF
@@ -128,7 +128,7 @@
 
 #### Q. Which service handles dynamic on-demand automounting via `/etc/auto.*` maps?
 
-* [ ] `autofs`
+* [ ] `nfsd`
 * [ ] `systemd-automount`
 * [ ] `autohome`
 * [x] `autofs`
@@ -237,3 +237,123 @@
 * [ ] Mount the filesystem read-only
 * [x] Limit disk usage per user or group
 * [ ] Convert the filesystem to read-write compression
+
+#### Q. What is the default block size for most ext4 filesystems?
+
+* [ ] 512 bytes
+* [ ] 1 KiB
+* [ ] 2 KiB
+* [x] 4 KiB
+* [ ] 8 KiB
+
+#### Q. Which command displays the UUID of all block devices?
+
+* [ ] `lsblk --uuid`
+* [x] `blkid`
+* [ ] `fdisk -l`
+* [ ] `mount -l`
+* [ ] `df -h`
+
+#### Q. What is the purpose of the superblock in a filesystem?
+
+* [ ] To store user data
+* [ ] To track file permissions
+* [x] To store filesystem metadata like size, block count, and status
+* [ ] To manage swap space
+* [ ] To compress files
+
+#### Q. Which filesystem supports Copy-on-Write (CoW) and snapshots natively?
+
+* [ ] ext4
+* [ ] XFS
+* [x] Btrfs
+* [ ] FAT32
+* [ ] NTFS
+
+#### Q. Which command resizes an ext4 filesystem online (while mounted)?
+
+* [ ] `fsck.ext4 -r`
+* [x] `resize2fs /dev/sda1`
+* [ ] `tune2fs --resize`
+* [ ] `mkfs.ext4 --resize`
+* [ ] `mount --resize`
+
+#### Q. What does the fifth field in `/etc/fstab` specify?
+
+* [ ] Mount options
+* [ ] Filesystem type
+* [x] Dump frequency for backup
+* [ ] Filesystem UUID
+* [ ] Mount point
+
+#### Q. Which command shows disk space usage in human-readable format?
+
+* [ ] `du -h`
+* [x] `df -h`
+* [ ] `ls -lh`
+* [ ] `stat -h`
+* [ ] `mount -h`
+
+#### Q. What type of file represents a hardware device in Linux?
+
+* [ ] Regular file
+* [ ] Directory file
+* [x] Device file
+* [ ] Symbolic link
+* [ ] Socket file
+
+#### Q. Which directory contains device files in Linux?
+
+* [ ] `/etc`
+* [ ] `/var`
+* [x] `/dev`
+* [ ] `/sys`
+* [ ] `/proc`
+
+#### Q. What is a symbolic link?
+
+* [ ] A copy of the original file
+* [x] A pointer to another file or directory
+* [ ] A compressed version of a file
+* [ ] An encrypted file reference
+* [ ] A backup of a file
+
+#### Q. Which command creates a symbolic link?
+
+* [ ] `link -s source target`
+* [x] `ln -s source target`
+* [ ] `cp -l source target`
+* [ ] `symlink source target`
+* [ ] `mklink source target`
+
+#### Q. What happens when you delete the original file of a symbolic link?
+
+* [ ] The symbolic link is also deleted
+* [ ] The symbolic link becomes a regular file
+* [x] The symbolic link becomes a broken (dangling) link
+* [ ] The data is preserved in the symbolic link
+* [ ] The system prevents deletion
+
+#### Q. Which filesystem type is commonly used for USB flash drives for cross-platform compatibility?
+
+* [ ] ext4
+* [ ] XFS
+* [ ] NTFS
+* [x] FAT32 or exFAT
+* [ ] Btrfs
+
+#### Q. What does the `mount -o remount,rw /` command do?
+
+* [ ] Creates a new mount point
+* [x] Remounts the root filesystem as read-write
+* [ ] Unmounts the root filesystem
+* [ ] Checks the root filesystem for errors
+* [ ] Creates a backup of mount settings
+
+#### Q. Which command shows the inode usage of a filesystem?
+
+* [ ] `df -h`
+* [x] `df -i`
+* [ ] `ls -i`
+* [ ] `stat -i`
+* [ ] `du -i`

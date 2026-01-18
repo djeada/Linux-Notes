@@ -128,7 +128,7 @@
 #### Q. By default, where does sudo log its authentication events on many Linux systems?
 
 * [ ] `/var/log/syslog`
-* [ ] `/var/log/auth.log`
+* [ ] `/var/log/messages`
 * [x] `/var/log/auth.log`
 * [ ] `/var/log/sudo.log`
 * [ ] `/var/log/secure`
@@ -144,9 +144,9 @@
 #### Q. How do you allow user `alice` to run only `/usr/bin/systemctl` via sudo?
 
 * [ ] `alice ALL=(ALL) ALL: /usr/bin/systemctl`
-* [ ] `alice ALL=(ALL) /usr/bin/systemctl`
-* [x] `alice ALL=(ALL) NOPASSWD: /usr/bin/systemctl`
-* [ ] `alice ALL=(root) /usr/bin/systemctl`
+* [x] `alice ALL=(ALL) /usr/bin/systemctl`
+* [ ] `alice ALL=(ALL) NOPASSWD: /usr/bin/systemctl`
+* [ ] `alice ALL=(root) !/usr/bin/systemctl`
 * [ ] `alice ALL=(ALL) !/usr/bin/systemctl`
 
 #### Q. Which command displays both standard permissions and ACLs for the file `example.txt`?
@@ -256,7 +256,7 @@
 #### Q. What does the octal permission `754` represent for user/group/others?
 
 * [ ] `rwx rwx rwx`
-* [ ] `rwx r-x r--`
+* [ ] `rw- r-x r--`
 * [x] `rwx r-x r--`
 * [ ] `rwx r-- r-x`
 * [ ] `rwx rw- r-x`
