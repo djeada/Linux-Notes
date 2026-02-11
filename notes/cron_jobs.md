@@ -205,6 +205,137 @@ Example entry from `/etc/crontab`:
 
 `run-parts` is a utility that executes all scripts in the specified directory.
 
+## Anacron
+
+While `cron` schedules jobs at precise times, it assumes the system is always running. This is not suitable for laptops or systems that may be powered off during scheduled execution times. `anacron` ensures that missed scheduled tasks are executed when the system becomes available again.
+
+Anacron is commonly used together with cron. Cron provides precise scheduling, while Anacron guarantees reliability for systems with irregular uptime.
+
+### How Anacron Works
+
+Anacron checks timestamps of previously executed jobs. If a scheduled job was missed because the system was powered off, Anacron executes it after a specified delay once the system starts.
+
+Unlike cron, Anacron does not support minute-level scheduling. Instead, it focuses on daily or longer intervals such as daily, weekly, or monthly tasks.
+
+
+
+```text
++--------------------------------------------------------------+
+|                      Anacron Workflow                        |
++--------------------------------------------------------------+
+        │
+        ▼
++------------------------------+
+|   System Starts / Boots      |
++------------------------------+
+        │
+        ▼
++-------------------------------------------+
+| Anacron Checks Last Execution Timestamps  |
++-------------------------------------------+
+        │
+        │ If job was missed
+        ▼
++-------------------------------------------+
+| Wait for Configured Delay (in minutes)    |
++-------------------------------------------+
+        │
+        ▼
++-------------------------------------------+
+| Execute Scheduled Daily/Weekly/Monthly    |
+| Jobs using run-parts                      |
++-------------------------------------------+
+```
+
+### Anacron Configuration File
+The main configuration file is: /etc/anacrontab 
+
+Example structure: period delay job-identifier command
+
+Example configuration:
+
+```text
+
+1  5   cron.daily    run-parts /etc/cron.daily
+7  10  cron.weekly   run-parts /etc/cron.weekly
+30 15  cron.monthly  run-parts /etc/cron.monthly
+```
+### Field descriptions:
+
+| Field | Description |
+| :--- | :--- |
+| **period** | Frequency in days (e.g., `1` for daily, `7` for weekly, `30` for monthly). |
+| **delay** | Minutes to wait after system startup before running the job. |
+| **job-identifier** | Unique name for the task (used to track timestamps). |
+| **command** | The specific command or script path to execute. |
+
+
+#### Execution timestamps are typically stored in: /var/spool/anacron/
+
+### Cron vs. Anacron: Key Differences
+
+| Feature | Cron | Anacron |
+| :--- | :--- | :--- |
+| **Timing Precision** | Minute-level scheduling | Daily or longer intervals |
+| **System Uptime** | Requires 24/7 uptime | Handles intermittent uptime |
+| **Best Suited For** | Servers / Always-on systems | Laptops / Desktops |
+| **Missed Job Handling** | Job is skipped if system is off | Executed on next startup |
+
+
+### Relationship with Cron Directories
+
+Many Linux distributions use Anacron to execute scripts placed in:
+```text
+/etc/cron.daily/
+
+/etc/cron.weekly/
+
+/etc/cron.monthly/
+```
+### Running Anacron Manually
+
+You can manually trigger Anacron using: ``` sudo anacron -n ```
+
+These directories are often triggered through Anacron to ensure tasks run even if the system was offline at the scheduled time.
+
+### Useful Anacron Options
+
+| Option | Description |
+| :--- | :--- |
+| `-n` | **Run immediately:** Ignores the `delay` field and starts jobs now. |
+| `-f` | **Force execution:** Runs the job even if the timestamp says it isn't due yet. |
+| `-s` | **Serial execution:** Runs jobs one after another to prevent CPU/Resource spikes. |
+| `-u` | **Update timestamps:** Updates the last-run date without actually running the jobs. |
+
+### Best Practices
+
+Use for Maintenance: Ideal for backups, log rotations, and system updates.
+
+Check Permissions: Ensure scripts have execute permissions:``` chmod +x script.sh. ```
+
+Sequential Execution: Use the ``` -s ``` flag if running multiple heavy scripts to avoid overloading the system on boot.
+
+### Practical Examples of Anacron
+
+Below are common scenarios where Anacron is used to ensure vital tasks are not skipped on systems with irregular uptime.
+
+#### 1. Daily Database Backup
+Ensure a local database backup is performed every day. If the laptop is closed at midnight, the backup will trigger 15 minutes after the user logs in the next morning.
+
+```
+period    delay    job-id       command
+1          15     db_backup   /usr/local/bin/backup_script.sh
+```
+
+#### 2. Weekly System Cleanup
+
+Clear out temporary files or old logs once a week. The 30-minute delay ensures the system has finished its boot-up processes before starting the cleanup.
+
+```
+ period  delay  job-id          command
+7         30     weekly_clean   rm -rf /tmp/old_project_files/*
+```
+
 ### Creating Custom Schedules with Crontab
 
 To schedule tasks at specific times, you can create custom crontab entries.
