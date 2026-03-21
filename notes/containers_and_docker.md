@@ -514,8 +514,6 @@ Real-world applications rarely consist of a single container. A web application 
 Create a `docker-compose.yml`:
 
 ```yaml
-version: "3.8"
-
 services:
   web:
     image: nginx:alpine
