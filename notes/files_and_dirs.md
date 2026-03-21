@@ -39,7 +39,9 @@ Key Differences:
 
 Linux provides several commands to navigate through the file system and manipulate files and directories. Here are a few fundamental commands:
 
-### Print Working Directory (`pwd`)
+Before modifying files, it helps to confirm where you are, move into the correct directory, and inspect its contents. A common workflow is `pwd` to verify your location, `cd` to move elsewhere, and `ls` to confirm that the expected files are present before you start copying, editing, or deleting anything.
+
+#### Print Working Directory (`pwd`)
 
 The `pwd` command displays the absolute path of the current directory.
 
