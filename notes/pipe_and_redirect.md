@@ -224,6 +224,63 @@ Here, the `-c` option specifies the command to run, while `/dev/null` discards a
 | `\|& tee`   | Yes            | Yes            | Yes            | Yes            | Overwrite               |
 | `\|& tee -a`| Yes            | Yes            | Yes            | Yes            | Append                  |
 
+### Process Substitution
+
+Process substitution allows you to use the output of a command as if it were a file. This is especially useful when a command expects a filename argument but you want to supply the output of another command instead. Process substitution uses the syntax `<(command)` for input and `>(command)` for output.
+
+```
++--------------+         +--------------------+
+|   Command    | ------> | Temporary file-like|
+|  (Producer)  |         | descriptor created |
++--------------+         | by the shell       |
+                         +--------------------+
+                                  |
+                                  v
+                         +--------------+
+                         |   Consumer   |
+                         |  (reads it   |
+                         |   as a file) |
+                         +--------------+
+```
+
+#### Comparing Output of Two Commands
+
+A common use case is comparing the output of two commands with `diff`:
+
+```bash
+diff <(ls /etc) <(ls /usr/local/etc)
+```
+
+Here, `<(ls /etc)` and `<(ls /usr/local/etc)` each produce a temporary file descriptor containing the directory listing. The `diff` command then compares them as if they were regular files, without needing to create actual temporary files on disk.
+
+#### Feeding Command Output to Commands That Expect Files
+
+Some commands accept only file arguments and cannot read from standard input. Process substitution bridges that gap:
+
+```bash
+paste <(cut -f1 data.csv) <(cut -f3 data.csv)
+```
+
+This extracts the first and third columns from `data.csv` and pastes them side by side.
+
+#### Output Process Substitution
+
+The `>(command)` form redirects output into another command's standard input via a file descriptor:
+
+```bash
+tee >(grep "error" > errors.txt) >(grep "warning" > warnings.txt) > /dev/null
+```
+
+In this example, the input is simultaneously fed to two `grep` processes: one filtering for errors and another for warnings, each writing to its own file.
+
+#### Differences from Pipes
+
+While pipes connect one command's stdout to another's stdin in a linear chain, process substitution is more flexible:
+
+- A **pipe** connects exactly one producer to one consumer in sequence, flowing data in a single direction through the pipeline.
+- **Process substitution** allows multiple command outputs to be used as separate file arguments within a single command, enabling parallel input from several sources simultaneously.
+- Process substitution creates entries under `/dev/fd/` (or uses named pipes internally), making the output accessible as a file path that any command can open and read.
+
 ### Filters
 
 Filters are specialized commands designed to process text, typically working with streams of text data. They are predominantly used with pipes (`|`) to modify or analyze the output of another command. A filter reads input line by line, transforms it in some way, and then outputs the result. This processing method is particularly useful in Unix-like operating systems, where filters can be combined with other commands in a pipeline to perform complex text transformations and data analysis. Common examples of filters include `grep` for searching text, `sort` for arranging lines in a particular order, and `awk` for pattern scanning and processing. Filters are a fundamental part of command-line data manipulation, allowing users to efficiently process large amounts of text with simple, concise commands.

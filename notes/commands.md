@@ -111,6 +111,115 @@ cd /home/user/Docments
 # Now you're in the right place!
 ```
 
+#### History Expansion: Do More With Less Typing
+
+History expansion lets you reuse parts of previous commands without retyping them. These shortcuts can save a lot of keystrokes, especially when working with long file paths or complex arguments.
+
+**Repeat the entire last command:**
+
+```bash
+!!
+```
+
+This runs whatever you just executed. A common use case is when you forget `sudo`:
+
+```bash
+apt update
+# Permission denied!
+sudo !!
+# Runs: sudo apt update
+```
+
+**Grab the last argument from the previous command:**
+
+```bash
+!$
+```
+
+*Real scenario:*
+```bash
+mkdir -p /var/www/mysite/assets
+cd !$
+# Runs: cd /var/www/mysite/assets
+```
+
+**Grab the first argument:**
+
+```bash
+!^
+```
+
+**Grab all arguments from the previous command:**
+
+```bash
+!*
+```
+
+*Example:*
+```bash
+echo one two three
+cat !*
+# Runs: cat one two three
+```
+
+**Pick a specific argument by position:**
+
+```bash
+!:2
+```
+
+The numbering starts at 0 (the command itself), so `!:1` is the first argument, `!:2` is the second, and so on.
+
+*Example:*
+```bash
+cp /etc/hosts /tmp/hosts.bak
+cat !:1
+# Runs: cat /etc/hosts
+```
+
+**Use arguments from a specific history entry:**
+
+```bash
+!42:2
+```
+
+This grabs the second argument from command #42 in your history.
+
+#### Editing and Re-running Commands with `fc`
+
+The `fc` (fix command) built-in opens previous commands in your default text editor, letting you make changes before re-executing. This is especially helpful for long or complex commands.
+
+**Edit and re-run the last command:**
+
+```bash
+fc
+```
+
+Your `$EDITOR` (or `vi` by default) opens with the last command. Save and quit to execute the edited version.
+
+**Edit a specific command from history:**
+
+```bash
+fc 42
+```
+
+Opens command #42 for editing.
+
+**Edit a range of commands:**
+
+```bash
+fc 10 20
+```
+
+Opens commands 10 through 20 in the editor. When you save and exit, all the commands run in sequence. This is useful for replaying a series of steps with modifications.
+
+**List recent history without editing (similar to `history`):**
+
+```bash
+fc -l
+fc -l -20
+```
+
 #### Keeping Secrets Out of History
 
 Sometimes you need to run sensitive commands (like those with passwords). Here's how to keep them private:
