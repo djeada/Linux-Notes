@@ -160,7 +160,9 @@ Set up a virtual environment where you can break things without consequences:
 # Create a minimal CentOS/RHEL or Ubuntu VM
 # Give it at least 2 CPUs, 2GB RAM, and two virtual disks
 
-# For RHCSA practice, CentOS Stream or Rocky Linux works well
+# For RHCSA practice, use Rocky Linux or AlmaLinux (free RHEL clones
+# that closely match the exam environment; avoid CentOS Stream as
+# its rolling release model may differ from stable RHEL)
 # For LFCS, pick whatever distribution you plan to test on
 ```
 

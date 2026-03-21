@@ -93,8 +93,7 @@ RHCSA Exam Domains
 └── Manage Containers
     ├── Find and retrieve container images
     ├── Inspect container images
-    ├── Perform container management (run, stop, list, inspect)
-    ├── Perform basic container management (start, stop, remove)
+    ├── Perform container management (run, start, stop, list, inspect, remove)
     ├── Run a service inside a container
     ├── Configure a container to start automatically as a systemd service
     └── Attach persistent storage to a container
@@ -483,7 +482,7 @@ The `:Z` flag at the end of the volume mount tells podman to apply the correct S
 #### Start Here (Beginner)
 
 1. **Set up your lab:**
-   - Install Rocky Linux or CentOS Stream in a virtual machine
+   - Install Rocky Linux or AlmaLinux in a virtual machine (these are free RHEL-compatible distributions that closely match the exam environment; avoid CentOS Stream as it's a rolling release that may differ from stable RHEL)
    - Give it two virtual disks (one for the OS, one for practice partitioning)
    - Allocate at least 2GB RAM
 

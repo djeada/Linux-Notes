@@ -606,7 +606,7 @@ Since you choose your distribution at registration, know the differences that ma
 #### Start Here (Beginner)
 
 1. **Set up your lab:**
-   - Install your chosen distribution (Ubuntu or CentOS) in a virtual machine
+   - Install your chosen distribution in a virtual machine (for CentOS/RHEL, use Rocky Linux or AlmaLinux since traditional CentOS has reached end-of-life; for Ubuntu, use the latest LTS release)
    - Add a second virtual disk for storage practice
    - Allocate at least 2GB RAM and 2 CPUs
 
