@@ -173,8 +173,8 @@ The numbering starts at 0 (the command itself), so `!:1` is the first argument, 
 *Example:*
 ```bash
 cp /etc/hosts /tmp/hosts.bak
-cat !:1
-# Runs: cat /etc/hosts
+cat !:2
+# Runs: cat /tmp/hosts.bak
 ```
 
 **Use arguments from a specific history entry:**

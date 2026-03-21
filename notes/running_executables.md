@@ -407,7 +407,7 @@ Most programs on a Linux system are dynamically linked, meaning they rely on sha
 
 #### How Dynamic Linking Works
 
-When you run a dynamically linked executable, the kernel hands off control to the dynamic linker (`ld-linux.so`), which resolves shared library dependencies before the program's `main` function executes.
+When you run a dynamically linked executable, the kernel hands off control to the dynamic linker (`ld-linux-x86-64.so.2`), which resolves shared library dependencies before the program's `main` function executes.
 
 ```
 +-------------------+       +-------------------+       +-------------------+
