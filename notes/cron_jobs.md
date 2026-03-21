@@ -272,6 +272,8 @@ Example configuration:
 
 #### Execution timestamps are typically stored in: /var/spool/anacron/
 
+Anacron creates timestamp files in `/var/spool/anacron/` so it can remember when each job last ran. On the next boot, it compares the current date with those stored timestamps to decide whether a daily, weekly, or monthly task is due. This is what allows Anacron to catch up on missed jobs instead of silently skipping them.
+
 ### Cron vs. Anacron: Key Differences
 
 | Feature | Cron | Anacron |
@@ -292,11 +294,20 @@ Many Linux distributions use Anacron to execute scripts placed in:
 
 /etc/cron.monthly/
 ```
+
+If the machine was powered off when one of these jobs was supposed to run, Anacron will usually launch it after the next startup, respecting the delay configured in `/etc/anacrontab`.
+
 ### Running Anacron Manually
 
-You can manually trigger Anacron using: `sudo anacron -n`
+You can manually trigger Anacron using `sudo anacron -n`. The `-n` flag tells it to ignore the configured startup delays and run any due jobs immediately, which is useful when you want to test a configuration change without rebooting.
 
-These directories are often triggered through Anacron to ensure tasks run even if the system was offline at the scheduled time.
+For example:
+
+```bash
+sudo anacron -n -f
+```
+
+In this case, `-f` forces execution even if the timestamp suggests the job has already run today. This combination is handy for validating backup scripts, log rotation hooks, or other maintenance tasks managed through Anacron.
 
 ### Useful Anacron Options
 
