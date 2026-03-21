@@ -196,6 +196,8 @@ Example output:
 node_filesystem_avail_bytes{device="/dev/sda1",fstype="ext4",mountpoint="/"} 1.073741824e+10
 ```
 
+The value is in bytes; `1.073741824e+10` equals roughly 10 GB of available space.
+
 #### Configuring Prometheus to Scrape Metrics
 
 Add the Node Exporter target to the Prometheus configuration file (`/etc/prometheus/prometheus.yml`):
