@@ -246,7 +246,7 @@ II. **VSZ:** Total memory allocation at start.
 To list the 10 processes consuming the most RAM, you can use the command:
 
 ```bash
-ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head 10
+ps -e -o pid,vsz,comm= | sort -n -k 2 -r | head -n 10
 ```
 
 Example Output of Command:

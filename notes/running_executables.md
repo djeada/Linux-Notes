@@ -80,7 +80,7 @@ III. **Enable Debugging Options**: These settings provide valuable information w
 
 - Enable **Compile the kernel with debug info**.
 - Enable **Provide GDB scripts for kernel debugging**.
-- kernel debugger**.
+- Enable **KDB (kernel debugger)**.
 
 After making these changes, save your configuration and exit the menu.
 

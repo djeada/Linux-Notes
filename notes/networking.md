@@ -2,12 +2,6 @@
 
 Networking is the practice of connecting computers and devices so that they can communicate and exchange data. It forms the backbone of the internet, local area networks, and even small home networks. To grasp the intricacies of networking, it's imperative to familiarize oneself with key terminologies and concepts.
 
-TODO:
-
-- change ip address
-- change routes
-- restart network interfaces
-
 ## Basic Networking Terms
 
 Understanding the fundamentals can pave the way for more advanced networking tasks. Here's a breakdown of basic networking terms:
@@ -385,7 +379,7 @@ Setting a static IP can be essential for devices that should have a consistent I
 
 ```
 nmcli con add con-name [interface] type ethernet ifname [interface] ipv4.method manual ipv4.address [IP address]/[network prefix] ipv4.gateway [default gateway]
-````
+```
 
 For example, to assign the IP `192.168.1.10` with a subnet mask of `255.255.255.0` (prefix `24`) and gateway `192.168.1.1` to `eth0`, execute:
 

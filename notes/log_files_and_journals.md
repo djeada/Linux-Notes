@@ -416,7 +416,7 @@ I. Edit `/etc/rsyslog.conf`:
 Add the following line at the end:
 
 ```bash
-* 514
+*.* @logserver_ip:514
 ```
 
 For TCP, use `@@` instead of `@`.

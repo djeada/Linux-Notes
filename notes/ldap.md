@@ -2,11 +2,6 @@
 
 LDAP is a protocol used to access and manage directory information over an IP network. It is open, vendor-neutral, and an industry standard. LDAP is commonly used for centralized authentication, where user credentials and permissions are managed in a single directory and applied across multiple systems and applications.
 
-TODO:
-- explain clearer client and server setup, also completely local setup
-- tests
-- more on auth
-
 ## Understanding LDAP Concepts
 
 ### Directory
@@ -485,6 +480,193 @@ ssh jdoe@localhost
 - **Expected Behavior**:
 - Prompt for password.
 - Upon successful authentication, home directory is created.
+
+#### Testing LDAP Server Connectivity
+
+Verify that the LDAP service is listening and reachable:
+
+```bash
+ldapwhoami -x -H ldap://localhost
+```
+
+Expected output for an anonymous bind:
+
+```
+anonymous
+```
+
+For an authenticated bind, supply credentials:
+
+```bash
+ldapwhoami -x -D "cn=admin,dc=example,dc=com" -W -H ldap://localhost
+```
+
+Expected output:
+
+```
+dn:cn=admin,dc=example,dc=com
+```
+
+#### Testing Search Operations
+
+Search for all user entries to confirm the directory is populated:
+
+```bash
+ldapsearch -x -b "ou=users,dc=example,dc=com" -H ldap://localhost "(objectClass=inetOrgPerson)" uid cn
+```
+
+Verify a specific group:
+
+```bash
+ldapsearch -x -b "ou=groups,dc=example,dc=com" -H ldap://localhost "(cn=developers)"
+```
+
+#### Testing Add, Modify, and Delete Operations
+
+Create a temporary test user (`testuser.ldif`):
+
+```ldif
+dn: uid=testuser,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: testuser
+cn: Test User
+sn: User
+userPassword: testpass
+```
+
+Add, verify, and then remove the test entry:
+
+```bash
+sudo ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f testuser.ldif
+ldapsearch -x -b "dc=example,dc=com" "(uid=testuser)" uid cn
+sudo ldapdelete -x -D "cn=admin,dc=example,dc=com" -W "uid=testuser,ou=users,dc=example,dc=com"
+```
+
+#### Testing NSS Integration
+
+After configuring NSS, verify that the system can resolve LDAP users and groups:
+
+```bash
+getent passwd          # should list LDAP users alongside local users
+getent group           # should list LDAP groups
+id jdoe                # should show uid, gid, and groups from LDAP
+```
+
+### Authentication Mechanisms
+
+LDAP supports several methods for authenticating clients to the directory server.
+
+#### Simple Authentication
+
+Simple authentication sends a DN and password to the server. It should always be used over an encrypted connection to prevent credentials from being transmitted in clear text.
+
+```bash
+ldapwhoami -x -D "uid=jdoe,ou=users,dc=example,dc=com" -W -H ldap://localhost
+```
+
+#### Securing Connections with TLS
+
+Transport Layer Security (TLS) encrypts the communication channel between the client and the server.
+
+I. Generate or obtain a TLS certificate and key for the LDAP server.
+
+II. Configure slapd to use TLS by creating an LDIF file (`tls.ldif`):
+
+```ldif
+dn: cn=config
+changetype: modify
+add: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/ssl/certs/ca-certificates.crt
+-
+add: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/ldap/ssl/ldap-server.crt
+-
+add: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/ldap/ssl/ldap-server.key
+```
+
+Apply the configuration:
+
+```bash
+sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f tls.ldif
+```
+
+III. Configure clients to require TLS by adding to `/etc/ldap/ldap.conf`:
+
+```conf
+TLS_CACERT /etc/ssl/certs/ca-certificates.crt
+TLS_REQCERT demand
+```
+
+IV. Test a TLS connection:
+
+```bash
+ldapwhoami -x -ZZ -D "uid=jdoe,ou=users,dc=example,dc=com" -W -H ldap://localhost
+```
+
+The `-ZZ` flag enforces StartTLS and fails if encryption cannot be established.
+
+#### Password Policies
+
+OpenLDAP supports password policies through the `ppolicy` overlay, which allows administrators to enforce rules like minimum length, expiration, and lockout after failed attempts.
+
+Load the password policy module and schema:
+
+```bash
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/ppolicy.ldif
+```
+
+Create a default password policy entry (`ppolicy_default.ldif`):
+
+```ldif
+dn: cn=default,ou=policies,dc=example,dc=com
+objectClass: pwdPolicy
+objectClass: person
+cn: default
+sn: default
+pwdAttribute: userPassword
+pwdMaxAge: 7776000
+pwdMinLength: 8
+pwdMaxFailure: 5
+pwdLockout: TRUE
+pwdLockoutDuration: 900
+pwdMustChange: TRUE
+```
+
+Add the policy:
+
+```bash
+sudo ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f ppolicy_default.ldif
+```
+
+#### Local (Single-Machine) Setup
+
+For development or testing purposes, you can run both the LDAP server and client on the same host. Follow the server installation steps above, then configure the client to connect to `localhost`:
+
+I. Install client libraries:
+
+```bash
+sudo apt-get install libnss-ldap libpam-ldap ldap-utils nscd
+```
+
+When prompted for the LDAP server URI, enter `ldap://127.0.0.1`.
+
+II. Edit `/etc/nsswitch.conf` to add `ldap`:
+
+```conf
+passwd:         compat systemd ldap
+group:          compat systemd ldap
+shadow:         compat ldap
+```
+
+III. Restart services and test:
+
+```bash
+sudo service nscd restart
+getent passwd jdoe
+```
+
+Because both the server and client processes share the same machine, no network configuration is required beyond verifying that slapd listens on `127.0.0.1:389`.
 
 ### Maintenance and Management
 

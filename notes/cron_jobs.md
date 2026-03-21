@@ -294,7 +294,7 @@ Many Linux distributions use Anacron to execute scripts placed in:
 ```
 ### Running Anacron Manually
 
-You can manually trigger Anacron using: ``` sudo anacron -n ```
+You can manually trigger Anacron using: `sudo anacron -n`
 
 These directories are often triggered through Anacron to ensure tasks run even if the system was offline at the scheduled time.
 
@@ -311,9 +311,9 @@ These directories are often triggered through Anacron to ensure tasks run even i
 
 Use for Maintenance: Ideal for backups, log rotations, and system updates.
 
-Check Permissions: Ensure scripts have execute permissions:``` chmod +x script.sh. ```
+Check Permissions: Ensure scripts have execute permissions: `chmod +x script.sh`.
 
-Sequential Execution: Use the ``` -s ``` flag if running multiple heavy scripts to avoid overloading the system on boot.
+Sequential Execution: Use the `-s` flag if running multiple heavy scripts to avoid overloading the system on boot.
 
 ### Practical Examples of Anacron
 
