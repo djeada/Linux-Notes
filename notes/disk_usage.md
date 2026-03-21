@@ -132,6 +132,97 @@ Once you've identified what's using your disk space, the next step is often to f
 - Using a disk cleanup utility can automate the process of deleting various unnecessary files. Tools like `bleachbit` can efficiently remove temporary files, cache, cookies, internet history, and log files, helping to free up space.
 - Archiving and compressing less frequently used data can also save space. Files and directories that are rarely accessed can be compressed using tools like `tar`, `gzip`, or `bzip2`, reducing their size and freeing up more disk space.
 
+### Managing Disk Quotas
+
+Disk quotas allow administrators to limit the amount of disk space or the number of files (inodes) that individual users or groups can consume on a filesystem. This prevents any single user from exhausting shared storage and helps maintain fair resource allocation on multi-user systems.
+
+#### Enabling Quotas on a Filesystem
+
+To use quotas, the filesystem must be mounted with quota options. Edit `/etc/fstab` to add `usrquota` and `grpquota` to the desired filesystem:
+
+```
+/dev/sda1  /home  ext4  defaults,usrquota,grpquota  0  2
+```
+
+After modifying `/etc/fstab`, remount the filesystem and initialize the quota database:
+
+```bash
+mount -o remount /home
+quotacheck -cug /home
+quotaon /home
+```
+
+- `quotacheck -cug` creates the `aquota.user` and `aquota.group` files that store quota information.
+- `quotaon` activates quota enforcement on the specified filesystem.
+
+#### Setting Quotas for a User
+
+Use the `edquota` command to set soft and hard limits for a specific user:
+
+```bash
+edquota -u username
+```
+
+This opens an editor displaying the current quota settings:
+
+```
+Disk quotas for user username (uid 1001):
+  Filesystem   blocks   soft     hard   inodes   soft   hard
+  /dev/sda1    51200    204800   256000   100      0      0
+```
+
+- **Soft limit** is a threshold that the user can temporarily exceed for a grace period before the system enforces restrictions.
+- **Hard limit** is the absolute maximum that cannot be exceeded under any circumstances.
+- **blocks** represent the amount of disk space in kilobytes, while **inodes** represent the number of files.
+
+#### Checking Quota Usage
+
+To display the current quota status for a specific user, run:
+
+```bash
+quota -u username
+```
+
+For a summary of all users' quota usage on a filesystem, use:
+
+```bash
+repquota /home
+```
+
+Example output:
+
+```
+*** Report for user quotas on device /dev/sda1
+Block grace time: 7days; Inode grace time: 7days
+                        Block limits                File limits
+User            used    soft    hard  grace    used  soft  hard  grace
+----------------------------------------------------------------------
+root      --   10240       0       0              5     0     0
+alice     --   51200  204800  256000            100     0     0
+bob       +-  230400  204800  256000  5days     320     0     0
+```
+
+The `+-` indicator next to `bob` shows that the user has exceeded the soft limit and is within the grace period.
+
+#### Setting Group Quotas
+
+Group quotas work similarly to user quotas. Use the `-g` flag to manage them:
+
+```bash
+edquota -g groupname
+repquota -g /home
+```
+
+#### Configuring the Grace Period
+
+The grace period determines how long a user can remain above the soft limit before it is enforced as a hard limit. To adjust it:
+
+```bash
+edquota -t
+```
+
+This opens an editor where you can set the grace period for both block and inode limits across the filesystem.
+
 ### Automating Disk Usage Checks
 
 For ongoing disk usage monitoring, consider setting up automated tasks. For instance, you can schedule a cron job that runs `df` and `du` at regular intervals and sends reports via email or logs them for later review.

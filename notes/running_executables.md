@@ -401,6 +401,105 @@ Hello from the custom kernel!
 
 This indicates that the kernel successfully executed our program.
 
+### Shared Libraries and Dynamic Linking
+
+Most programs on a Linux system are dynamically linked, meaning they rely on shared libraries (`.so` files) at runtime rather than containing all the code they need. Understanding how the system locates and loads these libraries is essential for troubleshooting and deploying applications.
+
+#### How Dynamic Linking Works
+
+When you run a dynamically linked executable, the kernel hands off control to the dynamic linker (`ld-linux-x86-64.so.2`), which resolves shared library dependencies before the program's `main` function executes.
+
+```
++-------------------+       +-------------------+       +-------------------+
+|    Executable     | ----> |  Dynamic Linker   | ----> |  Shared Libraries |
+|   (e.g., hello)   |       | (ld-linux-x86-64  |       | (libc.so.6, etc.) |
+|                   |       |   .so.2)          |       |                   |
++-------------------+       +-------------------+       +-------------------+
+```
+
+The dynamic linker searches for libraries in several locations:
+
+- Paths embedded in the executable (the `RPATH` or `RUNPATH` fields).
+- Directories listed in the `LD_LIBRARY_PATH` environment variable.
+- Entries in the `/etc/ld.so.cache` file, which is a compiled index of known library paths.
+- Default system directories such as `/lib`, `/usr/lib`, `/lib64`, and `/usr/lib64`.
+
+#### Inspecting Library Dependencies with `ldd`
+
+The `ldd` command displays the shared library dependencies of a binary:
+
+```bash
+ldd /usr/bin/ls
+```
+
+Example output:
+
+```
+linux-vdso.so.1 (0x00007ffc12345000)
+libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x00007f1234560000)
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1234100000)
+/lib64/ld-linux-x86-64.so.2 (0x00007f1234800000)
+```
+
+Each line shows a required library and where it was found on the system. If a library is missing, `ldd` will show `not found`, indicating that the program will fail to start.
+
+#### Managing Library Paths with `ldconfig`
+
+The `ldconfig` command updates the shared library cache (`/etc/ld.so.cache`), which the dynamic linker uses for fast library lookups. After installing new libraries, run:
+
+```bash
+sudo ldconfig
+```
+
+To add a custom library directory, create a configuration file in `/etc/ld.so.conf.d/`:
+
+```bash
+echo "/opt/myapp/lib" | sudo tee /etc/ld.so.conf.d/myapp.conf
+sudo ldconfig
+```
+
+Verify that the library is now indexed:
+
+```bash
+ldconfig -p | grep mylib
+```
+
+#### Using `LD_LIBRARY_PATH`
+
+The `LD_LIBRARY_PATH` environment variable allows you to specify additional directories for the dynamic linker to search at runtime, without modifying system-wide configuration:
+
+```bash
+export LD_LIBRARY_PATH=/opt/myapp/lib:$LD_LIBRARY_PATH
+./myapp
+```
+
+This is useful during development and testing but is generally not recommended for production systems because it affects all dynamically linked programs in the session and can lead to unexpected library version conflicts.
+
+#### Static vs. Dynamic Linking
+
+| Feature                    | Static Linking                                    | Dynamic Linking                                |
+|----------------------------|--------------------------------------------------|------------------------------------------------|
+| **Library inclusion**       | All library code is copied into the executable.   | The executable references shared `.so` files.  |
+| **File size**               | Larger, since libraries are embedded.             | Smaller, since libraries are shared on disk.   |
+| **Portability**             | Runs without needing external libraries.          | Requires the correct library versions at runtime. |
+| **Memory usage**            | Each process loads its own copy of library code.  | Multiple processes share one copy in memory.   |
+| **Updates**                 | Requires recompilation to pick up library fixes.  | Programs automatically benefit from library updates. |
+
+To compile a program statically:
+
+```bash
+gcc -static -o myapp myapp.c
+```
+
+To verify that a binary is statically linked:
+
+```bash
+file myapp
+# Expected output includes "statically linked"
+ldd myapp
+# Expected output: "not a dynamic executable"
+```
+
 ### Challenges
 
 1. Write a simple C program called `exec_test.c` that calls `execve` to run `/bin/echo` with arguments `echo HelloWorld`. Compile it and run it. Then, modify it to print a message before and after the `execve` call. Observe and explain why the “after” message never appears. Reflect on how `execve` replaces the current process image.
