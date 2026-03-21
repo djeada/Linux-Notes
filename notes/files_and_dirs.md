@@ -152,6 +152,64 @@ rm -r directory_name
 
 Warning: The rm command is powerful and potentially destructive, especially when used with the -r (recursive) and -f (force) options. Use it with caution.
 
+#### Synchronizing Files and Directories with `rsync`
+
+The `rsync` utility efficiently copies and synchronizes files between local paths or between a local and remote host. Unlike `cp`, it only transfers the differences between the source and destination, making it ideal for backups and large-scale file transfers.
+
+Basic syntax:
+
+```bash
+rsync [options] source destination
+```
+
+To synchronize a local directory to another local path:
+
+```bash
+rsync -av /home/user/documents/ /mnt/backup/documents/
+```
+
+- The `-a` (archive) flag preserves permissions, timestamps, symbolic links, and recursion.
+- The `-v` (verbose) flag prints each file as it is transferred.
+- A trailing `/` on the source copies the directory contents without creating an extra nested folder.
+
+To synchronize files to a remote host over SSH:
+
+```bash
+rsync -avz /home/user/documents/ user@remote:/backup/documents/
+```
+
+- The `-z` flag compresses data during transfer, reducing bandwidth usage.
+
+To perform a dry run and preview what would be transferred without making changes:
+
+```bash
+rsync -avz --dry-run /home/user/documents/ /mnt/backup/documents/
+```
+
+To delete files in the destination that no longer exist in the source (mirroring):
+
+```bash
+rsync -av --delete /home/user/documents/ /mnt/backup/documents/
+```
+
+To exclude certain files or directories from the transfer:
+
+```bash
+rsync -av --exclude='*.log' --exclude='.cache' /home/user/ /mnt/backup/user/
+```
+
+Common `rsync` options:
+
+| Option | Description |
+|---|---|
+| `-a` | Archive mode; preserves permissions, timestamps, symlinks, and recurses into directories. |
+| `-v` | Verbose output; lists each file transferred. |
+| `-z` | Compress data during transfer. |
+| `-P` | Show progress per file and keep partially transferred files. |
+| `--delete` | Remove files from the destination that no longer exist in the source. |
+| `--dry-run` | Simulate the transfer without making changes. |
+| `--exclude` | Skip files matching the given pattern. |
+
 ### Viewing and Inspecting File Contents
 
 There are various ways to view and inspect the contents of files in Unix-like operating systems. We can use the `cat`, `more`, `less`, `head`, and `tail` commands to achieve this. 

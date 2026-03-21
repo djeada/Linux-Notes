@@ -171,6 +171,74 @@ du -x / | sort -nr | head -10 >> "$LOG_FILE"
 sudo chmod +x /path/to/disk_usage_monitor.sh && sudo mv /path/to/disk_usage_monitor.sh /etc/cron.daily/
 ```
 
+### Monitoring Disk Usage with Grafana
+
+For long-term disk usage monitoring and visualization, Grafana provides powerful dashboarding capabilities when paired with a data collection agent like Prometheus and its Node Exporter.
+
+#### Installing Node Exporter
+
+Node Exporter collects hardware and OS metrics, including disk usage, and exposes them for Prometheus to scrape.
+
+```bash
+sudo apt install prometheus-node-exporter
+sudo systemctl enable --now prometheus-node-exporter
+```
+
+By default, Node Exporter listens on port `9100`. Verify it is running:
+
+```bash
+curl -s http://localhost:9100/metrics | grep node_filesystem_avail_bytes
+```
+
+Example output:
+
+```
+node_filesystem_avail_bytes{device="/dev/sda1",fstype="ext4",mountpoint="/"} 1.073741824e+10
+```
+
+#### Configuring Prometheus to Scrape Metrics
+
+Add the Node Exporter target to the Prometheus configuration file (`/etc/prometheus/prometheus.yml`):
+
+```yaml
+scrape_configs:
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+```
+
+Restart Prometheus to apply the change:
+
+```bash
+sudo systemctl restart prometheus
+```
+
+#### Setting Up Grafana Dashboards
+
+After installing Grafana and logging in (default at `http://localhost:3000`), add Prometheus as a data source, then import a community dashboard for disk metrics.
+
+I. Add Prometheus as a data source under **Configuration → Data Sources → Add data source**, and set the URL to `http://localhost:9090`.
+
+II. Import the **Node Exporter Full** dashboard (ID `1860`) via **Dashboards → Import**, which includes pre-built panels for disk space, inode usage, and I/O rates.
+
+III. Create custom alerts under **Alerting → Alert Rules** to trigger notifications when available disk space drops below a threshold:
+
+```
+node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} < 0.1
+```
+
+This PromQL expression fires when the root filesystem has less than 10% free space.
+
+#### Overview of the Monitoring Stack
+
+```
++------------------+         +--------------+         +-----------+
+|  Node Exporter   |-------->|  Prometheus  |-------->|  Grafana  |
+|  (collects disk  |  scrape |  (stores     |  query  |  (visual  |
+|   metrics)       |         |   time-series|         |   dashbrd)|
++------------------+         +--------------+         +-----------+
+```
+
 ### Challenges
 
 1. Explain the concept of filesystems and mount points, and then display the available free space on the root filesystem (`/`). Discuss why monitoring free space on the root is crucial for system stability.
