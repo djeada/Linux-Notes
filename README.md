@@ -197,6 +197,12 @@ The notes are organized from beginner to advanced concepts. **Follow this recomm
 - [SELinux Security](https://github.com/djeada/Linux-Notes/blob/main/notes/selinux.md) — Advanced security with SELinux
 - [Dynamic Window Manager](https://github.com/djeada/Linux-Notes/blob/main/notes/dwm.md) — Efficient window management
 
+### 🎓 Certification Preparation
+*Prepare for industry-recognized Linux certifications*
+
+- [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) — Compare certifications, choose the right path, and study strategies
+- [RHCSA (Red Hat Certified System Administrator)](https://github.com/djeada/Linux-Notes/blob/main/notes/rhcsa.md) — Exam objectives, key skills, and hands-on practice for EX200
+- [LFCS (Linux Foundation Certified System Administrator)](https://github.com/djeada/Linux-Notes/blob/main/notes/lfcs.md) — Exam domains, distribution-specific tips, and practice exercises
 ### 🔄 From Linux Admin to DevOps
 *Bridge your sysadmin skills into modern DevOps practices*
 
@@ -530,6 +536,11 @@ Absolutely! Many users have successfully used these notes to prepare for:
 - RHCSA (Red Hat Certified System Administrator)
 - LFCS (Linux Foundation Certified System Administrator)
 - LFCE (Linux Foundation Certified Engineer)
+
+We also have dedicated certification guides to help you prepare:
+- [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) — Compare certifications and choose the right one
+- [RHCSA Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/rhcsa.md) — Detailed RHCSA exam preparation
+- [LFCS Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/lfcs.md) — Detailed LFCS exam preparation
 
 Combine with official cert materials for best results.
 
