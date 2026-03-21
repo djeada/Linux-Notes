@@ -220,7 +220,7 @@ The notes in this repository cover many certification exam objectives. Here's ho
 | Automation | [Cron Jobs](./cron_jobs.md), [Shells and Bash](./shells_and_bash_configuration.md) |
 | Text processing | [Grep](./grep.md), [Sed and Awk](./sed_and_awk.md) |
 | Package management | [Package Managers](./package_managers.md) |
-| Monitoring | [Performance Monitoring](./performance_monitoring.md), [Log Files and Journals](./log_files_and_journals.md) |
+| Monitoring | [Performance Monitoring](./performance_monitoring.md), [Log Files and Journals](./log_files_and_journals.md), [Inotify](./inotify.md) |
 
 ### Practice Makes Perfect
 

@@ -164,6 +164,7 @@ The notes are organized from beginner to advanced concepts. **Follow this recomm
 - [System Startup & Boot Process](https://github.com/djeada/Linux-Notes/blob/main/notes/system_startup.md) — Understand system initialization
 - [Scheduled Tasks (Cron)](https://github.com/djeada/Linux-Notes/blob/main/notes/cron_jobs.md) — Automate recurring tasks
 - [System Services](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md) — Manage systemd and system services
+- [Inotify](https://github.com/djeada/Linux-Notes/blob/main/notes/inotify.md) — Monitor file system events in real time
 
 ### 🌐 Networking & Security
 *Connect systems and secure your infrastructure*
