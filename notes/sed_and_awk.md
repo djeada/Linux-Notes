@@ -394,19 +394,9 @@ awk -F ':' '{ print $1, $3 }' /etc/passwd
 
 #### Tips and Best Practices
 
-- Enclose scripts in single quotes to prevent shell interpretation.
-- Use backslashes to escape characters like `/`, `&`, and `\`.
-- Use without `-i` to test commands before modifying files in-place.
-- With `-E` (or `sed -r` in GNU `sed`), you can use extended regex syntax.
-
-**Example:**
-
-```bash
-sed -E 's/([0-9]{3})-([0-9]{2})-([0-9]{4})/XXX-XX-\3/' ssn.txt
-```
-
-- Ensure variables are initialized to avoid unexpected results.
+- Enclose `awk` scripts in single quotes to prevent shell interpretation.
 - Use `-F` to set custom field separators.
+- Ensure variables are initialized to avoid unexpected results.
 - Use `BEGIN` and `END` Blocks for actions before processing starts or after it ends.
 
 **Example:**

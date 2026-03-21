@@ -185,7 +185,6 @@ systemctl status httpd.service
 #### Checking Service Dependencies
 
 Understanding service dependencies is crucial for effective system administration, particularly when managing startup sequences and troubleshooting service issues. To check whether a particular service is dependent on a specific target or another service, the `systemctl` command can be utilized in conjunction with `grep`. Here's how to do it:
-Using this command sets Adam as the owner and assigns the "admins" group to the file.txt.
 ```bash
 systemctl list-dependencies [target/service] | grep [service-name]
 ```
