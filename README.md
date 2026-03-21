@@ -13,7 +13,7 @@
 
 <div align="center">
 
-### 🎯 **42+ In-Depth Guides** • 📊 **19,000+ Lines of Documentation** • 💡 **100+ Practical Exercises** • 🎓 **Beginner to Expert**
+### 🎯 **45+ In-Depth Guides** • 📊 **21,000+ Lines of Documentation** • 💡 **100+ Practical Exercises** • 🎓 **Beginner to Expert**
 
 </div>
 
@@ -25,7 +25,7 @@ In the vast landscape of Linux documentation, this repository stands out by offe
 
 - **🎯 Structured Learning Path**: Progress logically from basic commands to advanced system administration
 - **🛠️ Hands-On Focus**: Every concept includes practical challenges and real-world examples
-- **📊 Comprehensive Coverage**: 42+ detailed guides covering everything from file permissions to SELinux
+- **📊 Comprehensive Coverage**: 45+ detailed guides covering everything from file permissions to CI/CD pipelines
 - **🔄 Continuously Updated**: Regular updates reflecting the latest Linux practices and tools
 - **👥 Community-Driven**: Built with contributions from Linux enthusiasts worldwide
 - **📖 Clear Explanations**: Complex topics broken down into digestible, understandable sections
@@ -111,6 +111,15 @@ This repository provides **structured learning materials** covering the complete
 </details>
 
 <details open>
+<summary><b>🔄 From Linux Admin to DevOps</b></summary>
+
+- **Containers & Docker**: Build, ship, and run applications in containers with Docker and Podman
+- **CI/CD Pipelines**: Automate integration, testing, and deployment with Jenkins, GitLab CI, and GitHub Actions
+- **Infrastructure as Code**: Manage infrastructure programmatically with Ansible and Terraform
+
+</details>
+
+<details open>
 <summary><b>🔍 Power User Tools</b></summary>
 
 - **Text Processing**: grep, sed, awk, and regular expressions
@@ -187,6 +196,13 @@ The notes are organized from beginner to advanced concepts. **Follow this recomm
 - [LDAP Integration](https://github.com/djeada/Linux-Notes/blob/main/notes/ldap.md) — Directory services and authentication
 - [SELinux Security](https://github.com/djeada/Linux-Notes/blob/main/notes/selinux.md) — Advanced security with SELinux
 - [Dynamic Window Manager](https://github.com/djeada/Linux-Notes/blob/main/notes/dwm.md) — Efficient window management
+
+### 🔄 From Linux Admin to DevOps
+*Bridge your sysadmin skills into modern DevOps practices*
+
+- [Containers and Docker](https://github.com/djeada/Linux-Notes/blob/main/notes/containers_and_docker.md) — Containerize applications with Docker and Podman
+- [CI/CD Pipelines](https://github.com/djeada/Linux-Notes/blob/main/notes/ci_cd.md) — Automate builds, tests, and deployments
+- [Infrastructure as Code](https://github.com/djeada/Linux-Notes/blob/main/notes/infrastructure_as_code.md) — Manage infrastructure with Ansible and Terraform
 
 ### 📊 Additional Resources
 
@@ -312,7 +328,7 @@ wsl --install
 
 ### What Makes This Repository Special?
 
-- **📊 Comprehensive**: 42+ detailed guides covering 19,000+ lines of content
+- **📊 Comprehensive**: 45+ detailed guides covering 21,000+ lines of content
 - **🎯 Structured**: Clear progression from basics to advanced topics
 - **💪 Practical**: 100+ hands-on exercises and real-world examples
 - **🔄 Updated**: Regular updates with latest Linux practices
@@ -333,6 +349,9 @@ After working through this repository, you'll be able to:
 ✅ Manage users, processes, and services  
 ✅ Implement security best practices  
 ✅ Deploy and manage servers  
+✅ Containerize applications with Docker  
+✅ Set up CI/CD pipelines for automated deployments  
+✅ Manage infrastructure as code with Ansible and Terraform  
 
 ## 🤝 Community & Support
 
@@ -393,7 +412,7 @@ This project exists thanks to all the people who contribute!
 
 | 📝 Guides | 📄 Lines | 💪 Exercises | ⭐ Stars |
 |:---------:|:--------:|:------------:|:--------:|
-| 42+ | 19,000+ | 100+ | ![Stars](https://img.shields.io/github/stars/djeada/Linux-Notes) |
+| 45+ | 21,000+ | 100+ | ![Stars](https://img.shields.io/github/stars/djeada/Linux-Notes) |
 
 </div>
 
@@ -402,10 +421,11 @@ This project exists thanks to all the people who contribute!
 We're constantly improving! Here's what's coming:
 
 ### 🚀 Upcoming Content
-- [ ] **Container Technologies**: Docker and Podman guides
-- [ ] **Configuration Management**: Ansible, Puppet tutorials
+- [x] **Container Technologies**: Docker and Podman guides
+- [x] **CI/CD Pipelines**: Jenkins, GitLab CI, GitHub Actions
+- [x] **Infrastructure as Code**: Ansible and Terraform tutorials
+- [ ] **Configuration Management**: Puppet tutorials
 - [ ] **Cloud Integration**: AWS, Azure, GCP specific guides
-- [ ] **CI/CD Pipelines**: Jenkins, GitLab CI, GitHub Actions
 - [ ] **Monitoring Solutions**: Prometheus, Grafana setup
 - [ ] **Video Tutorials**: Visual learning supplements
 - [ ] **Interactive Labs**: Browser-based practice environments
