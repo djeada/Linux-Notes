@@ -174,3 +174,4 @@ Examples of popular Linux distributions include:
 7. Linux operates under the GNU General Public License (GPL). What is the significance of this license? How does it affect how Linux can be used, modified, and redistributed?
 8. Linux is often lauded for its security features. What are these features and how do they work to maintain system security?
 9. Linux often involves using a command line interface. What are some of the basic commands that every Linux user should know?
+10. Compare and contrast at least three different Linux distributions (e.g., Ubuntu, Fedora, Arch Linux). Evaluate each based on factors such as ease of installation, package management, community support, and target audience. Which distribution would you recommend for a beginner, and why?

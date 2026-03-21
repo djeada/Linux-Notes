@@ -147,6 +147,19 @@ This command will clean up any previous builds and compile your customized versi
 
 To apply your changes, you need to restart DWM. You can do this by logging out and logging back in, or by restarting your X session. Once you log back in, the updated DWM with your new border settings and other customizations should be in effect.
 
+### Challenges
+
+1. Install DWM on a virtual machine or spare system. Launch several terminal windows and practice switching between them using the keyboard shortcuts (`Alt + j`, `Alt + k`). Document how DWM arranges the windows in its default tiling layout and compare the experience to a traditional floating window manager.
+2. Clone the DWM source code from the suckless repository and modify the `config.h` file to change the border width and border color of focused windows. Recompile, install, and verify that your changes take effect. Explain the process and why DWM requires recompilation for configuration changes.
+3. Customize your DWM key bindings by editing `config.h` to launch a specific application (such as a web browser or file manager) with a new keyboard shortcut. Rebuild DWM and test the binding. Discuss the advantages and disadvantages of source-level configuration compared to configuration files.
+4. Use DWM's tag system to organize windows across multiple workspaces. Open different applications on separate tags, practice moving windows between tags using `Shift + Alt + [tag number]`, and explain how tags differ from traditional virtual desktops.
+5. Apply a patch from the suckless community (such as the gaps patch, systray patch, or autostart patch) to your DWM build. Document the patching process, rebuild DWM, and verify that the patch works as expected. Discuss how the suckless patching workflow compares to plugin systems in other window managers.
+6. Set up a custom status bar for DWM by writing a shell script that displays system information (CPU usage, memory, date/time, battery status) and pipes the output to `xsetroot -name`. Configure the script to run on startup and explain how DWM uses the root window name as the status bar text.
+7. Configure `dmenu` as your application launcher within DWM. Practice launching applications by typing their names, and customize the `dmenu` appearance (font, colors) through command-line flags or source code modifications. Compare `dmenu` with other application launchers you have used.
+8. Experiment with DWM's different layouts (tiled, floating, monocle) by cycling through them with `Alt + Space`. Resize the master area using `Alt + h` and `Alt + l`, and explain when each layout mode might be most useful for your workflow.
+9. Set up DWM for a multi-monitor configuration. Practice moving windows between monitors and assigning specific tags to each screen. Document any challenges you encounter and how you resolved them.
+10. Compare DWM with at least two other tiling window managers (such as i3, bspwm, or Awesome WM). Evaluate each based on configuration approach, resource usage, ease of customization, and community support. Summarize your findings and explain which one you would recommend for different types of users.
+
 ### Further Resources
 
 - If you are seeking additional information about configuring and using DWM, the official DWM Tutorial provided by the suckless community is an excellent starting point. It offers a comprehensive walkthrough of basic DWM usage and configuration, available at [https://dwm.suckless.org/tutorial/](https://dwm.suckless.org/tutorial/).

@@ -355,7 +355,7 @@ To disable a repository temporarily (for example, to prevent updates from that r
 yum-config-manager --disable [repo_id]
 ```
 
-## Challenges
+### Challenges
 
 1. Configure a Linux system to use both official and third-party repositories while preventing package conflicts.
 2. Safely upgrade a major software package (like Python or MySQL) ensuring all system dependencies are maintained.
