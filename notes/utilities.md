@@ -57,7 +57,7 @@ To start the recording, click on the "Start" button and select the area of the s
 
 ## Preparing a Bootable USB Stick with USBImager
 
-USBImager is a graphical utility for creating bootable USB sticks in Linux. It allows you to write an image file to a USB drive, making it possible to boot a computer from the USB drive. USBImager is lightweight, cross-platform, and supports raw disk images, compressed images, and ISO files, making it a versatile choice for creating installation media for Linux distributions and other operating systems.
+USBImager is a graphical utility for creating bootable USB sticks in Linux. It allows you to write an image file to a USB drive, making it possible to boot a computer from the USB drive. USBImager is lightweight and cross-platform, supporting raw disk images, compressed images, and ISO files. This makes it a versatile choice for creating installation media for Linux distributions and other operating systems.
 
 To install USBImager, download the appropriate package from the official USBImager GitHub releases page and install it using your system's package manager or by extracting the archive.
 
