@@ -475,5 +475,4 @@ Filters are very important components in the Unix philosophy of creating simple,
 7. From any text file of your choice, identify the ten most frequently occurring words and display their counts.
 8. Examine the `/etc/systemd/system` directory and list the service files that are currently active on the system.
 9. Search for words in a text file that are longer than 7 characters, contain the letter 'z', and display them sorted in reverse alphabetical order.
-10. Find the top five directories that consume the most disk space in your home directory. Hint: Use the `du` and `sort` commands.
-11. Starting from your home directory, list all files (recursively, including subdirectories) that were modified in the last 24 hours, sorted by their modification time. 
+10. Find the top five directories that consume the most disk space in your home directory using the `du` and `sort` commands. Then, starting from your home directory, list all files recursively (including subdirectories) that were modified in the last 24 hours, sorted by their modification time. 
