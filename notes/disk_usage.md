@@ -2,10 +2,6 @@
 
 Managing and monitoring disk usage is necessary for server maintenance, allowing administrators to identify disk space shortages caused by large log files, such as Apache or system logs, and malfunctioning applications that generate excessive data. Tools like `df` provide quick overviews of available disk space, while `du` helps analyze directory sizes to locate space hogs. For planning future storage needs, tracking data growth with monitoring software like Nagios or Grafana enables accurate forecasting and timely upgrades of storage hardware or cloud solutions. Regularly cleaning up unused files involves deleting obsolete backups, removing temporary files from `/tmp`, archiving old user data, and eliminating redundant application caches using automated scripts or cleanup utilities like BleachBit.
 
-TODO:
-
-- grafana
-
 ### Understanding the df command
 
 The `df` (disk filesystem) command provides information about the filesystems on your machine. It shows details such as total size, used space, available space, and the percentage of space used. To display these statistics in a human-readable format, using units like KB, MB, or GB, you can use the `-h` (human-readable) option.
@@ -173,6 +169,76 @@ du -x / | sort -nr | head -10 >> "$LOG_FILE"
 
 ```bash
 sudo chmod +x /path/to/disk_usage_monitor.sh && sudo mv /path/to/disk_usage_monitor.sh /etc/cron.daily/
+```
+
+### Monitoring Disk Usage with Grafana
+
+For long-term disk usage monitoring and visualization, Grafana provides powerful dashboarding capabilities when paired with a data collection agent like Prometheus and its Node Exporter.
+
+#### Installing Node Exporter
+
+Node Exporter collects hardware and OS metrics, including disk usage, and exposes them for Prometheus to scrape.
+
+```bash
+sudo apt install prometheus-node-exporter
+sudo systemctl enable --now prometheus-node-exporter
+```
+
+By default, Node Exporter listens on port `9100`. Verify it is running:
+
+```bash
+curl -s http://localhost:9100/metrics | grep node_filesystem_avail_bytes
+```
+
+Example output:
+
+```
+node_filesystem_avail_bytes{device="/dev/sda1",fstype="ext4",mountpoint="/"} 1.073741824e+10
+```
+
+The value is in bytes; `1.073741824e+10` equals roughly 10 GB of available space.
+
+#### Configuring Prometheus to Scrape Metrics
+
+Add the Node Exporter target to the Prometheus configuration file (`/etc/prometheus/prometheus.yml`):
+
+```yaml
+scrape_configs:
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+```
+
+Restart Prometheus to apply the change:
+
+```bash
+sudo systemctl restart prometheus
+```
+
+#### Setting Up Grafana Dashboards
+
+After installing Grafana and logging in (default at `http://localhost:3000`), add Prometheus as a data source, then import a community dashboard for disk metrics.
+
+I. Add Prometheus as a data source under **Configuration → Data Sources → Add data source**, and set the URL to `http://localhost:9090`.
+
+II. Import the **Node Exporter Full** dashboard (ID `1860`) via **Dashboards → Import**, which includes pre-built panels for disk space, inode usage, and I/O rates.
+
+III. Create custom alerts under **Alerting → Alert Rules** to trigger notifications when available disk space drops below a threshold:
+
+```
+node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} < 0.1
+```
+
+This PromQL expression fires when the root filesystem has less than 10% free space.
+
+#### Overview of the Monitoring Stack
+
+```
++------------------+         +--------------+         +-----------+
+|  Node Exporter   |-------->|  Prometheus  |-------->|  Grafana  |
+|  (collects disk  |  scrape |  (stores     |  query  |  (visual  |
+|   metrics)       |         |   time-series|         |   dashbrd)|
++------------------+         +--------------+         +-----------+
 ```
 
 ### Challenges

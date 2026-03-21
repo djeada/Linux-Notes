@@ -12,10 +12,10 @@ To take a screenshot of the entire screen, use the following command:
 scrot screenshot.png
 ```
 
-This will save the screenshot as a PNG image in the current working directory. If you want to specify a different directory or file name, use the -f option followed by the path and file name of your choice:
+This will save the screenshot as a PNG image in the current working directory. If you want to specify a different directory or file name, provide the desired path and file name as an argument:
 
 ```
-scrot -f /path/to/screenshot.png
+scrot /path/to/screenshot.png
 ```
 
 To take a screenshot of a specific window, use the -u option followed by the window title or ID:
@@ -71,7 +71,7 @@ To install Maldet on a Debian-based system, use the following commands:
 
 ```
 wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
-tar xvfvz maldetect-current.tar.gz
+tar xvfz maldetect-current.tar.gz
 cd maldetect-2.1.1 && sudo ./install.sh
 ```
 

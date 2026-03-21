@@ -2,9 +2,6 @@
 
 We will now delve deeply into the Linux kernel to understand its role in the operating system, where it resides on your system, and how kernel modules function. We will also explore how to download and examine the Linux kernel source code, and discuss the various configuration options available within it. The goal is to provide you with a comprehensive understanding of this critical component of the operating system—not necessarily to enable you to compile your own custom kernel, but to appreciate what the kernel does and how it operates.
 
-TODO:
-- compare various kernel versions
-
 ### What is the Linux Kernel?
 
 The **Linux kernel** is the core component of the Linux operating system. According to [Wikipedia](https://en.wikipedia.org/wiki/Linux_kernel):
@@ -185,6 +182,37 @@ Example output:
 /boot/vmlinuz-5.4.0-40-generic
 /boot/vmlinuz-5.4.0-42-generic
 ```
+
+#### Comparing Kernel Versions
+
+The Linux kernel follows a `major.minor.patch` versioning scheme. Each major release series introduces significant changes in hardware support, performance, and features.
+
+| Version Series | Release Year | Notable Changes |
+|---|---|---|
+| 2.6.x | 2003 | Long-lived series; introduced udev, sysfs, NPTL threading, and improved SMP support. |
+| 3.x | 2011 | Numbering change (no functional leap from 2.6.39); added Btrfs improvements, transparent huge pages, and cgroup-based resource control. |
+| 4.x | 2015 | Live kernel patching, eBPF for tracing and networking, improved GPU support, and overlayfs. |
+| 5.x | 2019 | io_uring for async I/O, WireGuard VPN, exFAT support, and energy-aware scheduling. |
+| 6.x | 2022 | Rust language support in kernel modules, improved Btrfs RAID, MGLRU memory management, and user-space access to hardware performance counters. |
+
+To check your current kernel version:
+
+```bash
+uname -r
+```
+
+To compare available kernels on your system:
+
+```bash
+dpkg --list | grep linux-image   # Debian/Ubuntu
+rpm -qa | grep kernel             # RHEL/Fedora
+```
+
+When choosing a kernel version, consider the following:
+
+- Newer kernels provide better hardware support for recent CPUs, GPUs, and peripherals.
+- Long-term support (LTS) kernels receive security patches for several years, making them suitable for production servers.
+- Some enterprise distributions (RHEL, SUSE) backport fixes to older kernel versions, so the version number alone does not indicate the full feature set.
 
 #### Selecting a Kernel at Boot Time
 
