@@ -155,9 +155,9 @@ ufw enable
 
 ## Firewalld
 
-Firewalld is a more advanced firewall used by Fedora and other Linux distributions. It lets you configure firewalls using zones, which are collections of rules that apply to specific types of network interfaces.
+Firewalld is a more advanced firewall used by Fedora and other Linux distributions. It lets you configure firewalls using zones, which are collections of rules that apply to specific types of network interfaces. One helpful detail to remember is that `firewalld` keeps separate runtime and permanent configurations. Commands without `--permanent` affect the current session only, while permanent rules are written to disk and take effect after a reload or reboot.
 
-To view the currently configured rules, use the `--list-all flag`:
+To view the currently configured rules, use the `--list-all` flag:
 
 ```bash
 firewall-cmd --list-all
@@ -193,12 +193,28 @@ Explanation:
 - **Protocols, Masquerade, Forward-ports, Source-ports, Icmp-blocks**: Other network settings and rules.
 - **Rich Rules**: More complex rules defined, like allowing specific IP ranges on certain ports. For example, the rule allowing all traffic from the `192.168.0.0/24` subnet, and allowing TCP traffic on port `443` from the `10.0.0.0/8` subnet.
 
+You can also inspect which zones exist and which one is currently the default:
+
+```bash
+firewall-cmd --get-zones
+firewall-cmd --get-default-zone
+firewall-cmd --get-active-zones
+```
+
+This is useful on multi-homed hosts. For example, you might place a public-facing interface in the `public` zone and an internal interface in the `internal` zone.
+
 I. Adding Rules
 
 To add a new rule, use the `--add-service` flag followed by the service name. For example, to allow incoming `SSH` connections, use:
 
 ```bash
 firewall-cmd --permanent --add-service=ssh
+```
+
+To allow a custom port instead of a predefined service, use `--add-port`:
+
+```bash
+firewall-cmd --permanent --add-port=8443/tcp
 ```
 
 II. Removing Rules
@@ -209,7 +225,36 @@ To remove a rule, use the `--remove-service` flag followed by the service name. 
 firewall-cmd --permanent --remove-service=http
 ```
 
-III. Applying Changes
+III. Assigning Interfaces and Using Zones
+
+Zones become especially useful when the same machine serves different networks. The commands below move an interface into the `internal` zone and then confirm the result:
+
+```bash
+firewall-cmd --permanent --zone=internal --change-interface=eth1
+firewall-cmd --reload
+firewall-cmd --zone=internal --list-all
+```
+
+If the built-in zones do not match your environment, you can create a new one:
+
+```bash
+firewall-cmd --permanent --new-zone=web-admin
+firewall-cmd --permanent --zone=web-admin --add-service=https
+firewall-cmd --permanent --zone=web-admin --add-source=192.168.50.0/24
+firewall-cmd --reload
+```
+
+This configuration creates a dedicated zone for administrative HTTPS access from a trusted subnet.
+
+IV. Rich Rules
+
+For more precise filtering, `firewalld` supports rich rules. For example, the following rule allows HTTPS only from the `10.0.0.0/8` network:
+
+```bash
+firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.0.0.0/8" service name="https" accept'
+```
+
+V. Applying Changes
 
 To apply the changes and reload the firewall, use the `--reload` flag:
 
@@ -222,6 +267,18 @@ To make the changes persistent across reboots, restart the `firewalld.service` u
 ```
 systemctl restart firewalld.service
 ```
+
+### Choosing Between `iptables`, `ufw`, and `firewalld`
+
+Each firewall tool can solve the same basic problem, but they target different workflows:
+
+| Tool | Best For | Strengths | Trade-Offs |
+|------|----------|-----------|------------|
+| `iptables` | Low-level packet filtering and legacy environments | Very flexible, widely documented, exposes the full rule chain model | Verbose syntax, easier to misconfigure, harder for beginners |
+| `ufw` | Small servers and desktop systems | Simple commands such as `allow`, `deny`, and `status`, quick to learn | Less expressive for advanced routing and zone-based designs |
+| `firewalld` | Systems with changing interfaces, multiple trust zones, and enterprise distros | Supports runtime vs permanent rules, zones, rich rules, and D-Bus integration | More concepts to learn than `ufw`, less direct than raw `iptables` |
+
+As a rule of thumb, choose `ufw` when you want a simple host firewall, choose `firewalld` when you need zone-aware administration, and fall back to `iptables` when you need direct low-level control or you are maintaining an older system.
 
 ### Challenges
 
