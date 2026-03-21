@@ -380,3 +380,5 @@ The output constists of following columns:
 6. When system load average exceeds 1.0, use a combination of `uptime`, `vmstat`, and `dmesg` to diagnose the root cause. Document the methodology and findings.
 7. Create a cron job script to gather CPU, memory, and disk usage statistics every hour. Store this data in a log file for a week and analyze it to identify any patterns or anomalies.
 8. Set up Nagios to monitor a server. Configure it to send an email alert for critical conditions like CPU usage > 90%, disk space < 10%, and RAM usage > 90%.
+9. Use `sar` (from the `sysstat` package) to collect and report system activity over a 24-hour period. Analyze the report to identify peak usage times for CPU, memory, and I/O, and recommend scheduling strategies for resource-intensive tasks based on your findings.
+10. Compare the resource usage of two different applications that serve a similar purpose (for example, two web servers or two text editors). Use tools like `top`, `vmstat`, and `iostat` to benchmark CPU, memory, and disk usage under similar workloads. Present your findings in a summary table and recommend which application is more resource-efficient.
