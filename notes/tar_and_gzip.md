@@ -291,3 +291,4 @@ tar -xJvf archive.tar.xz
 7. Compress a folder using tar and `gzip`, then decompress it using the same tools. Time how long each operation takes and compare the results.
 8. Create a compressed archive of a folder containing various file types (e.g., text files, images, audio files). Use the `file` command to determine the types of files in the compressed archive without extracting it.
 9. Write a script that finds the largest file in a directory and compresses it using `gzip`. The script should display the file name and its size before and after compression.
+10. Create an incremental backup strategy using `tar` with the `--newer` or `--listed-incremental` option. Perform a full backup of a test directory, add and modify some files, then create an incremental backup containing only the changes. Restore both backups in sequence to a new location and verify that the final state matches the original directory.

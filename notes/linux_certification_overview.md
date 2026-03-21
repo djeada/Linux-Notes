@@ -303,3 +303,16 @@ Once you've chosen your certification path, dive into the specific preparation g
 ---
 
 **Ready to start preparing?** Pick your target certification, then head to the [RHCSA Guide](./rhcsa.md) or [LFCS Guide](./lfcs.md) for a focused study plan.
+
+### Challenges
+
+1. Research the prerequisites and exam format for each of the certifications covered in this overview (RHCSA, LFCS, CompTIA Linux+, LPIC). Create a comparison table that includes cost, exam duration, number of questions, passing score, and validity period. Use this table to determine which certification best fits your current skill level and career goals.
+2. Set up a study plan for your chosen certification by breaking down the exam objectives into weekly study topics. Identify the resources you will use for each topic (official documentation, online courses, practice labs) and estimate the total preparation time needed.
+3. Install a Linux distribution that aligns with your target certification (for example, a Red Hat-based distribution for RHCSA or an Ubuntu-based distribution for LFCS) in a virtual machine. Complete the installation and initial configuration, and explain why hands-on practice with the appropriate distribution is important for exam preparation.
+4. Identify and list the core Linux skills that are common across all major Linux certifications, such as file management, user administration, networking, and service management. Practice each of these skills in your lab environment and document the commands and procedures you used.
+5. Take a practice exam or self-assessment for your target certification. Review your results to identify strengths and weaknesses, and adjust your study plan to focus more time on areas where you scored lowest.
+6. Research the renewal and recertification requirements for at least two certifications covered in this overview. Explain the differences in how each certification body handles expiration and renewal, and discuss strategies for keeping your certifications current.
+7. Join an online community or forum related to your target certification (such as a subreddit, Discord server, or Linux Foundation forum). Participate in discussions, ask questions about exam preparation, and share resources. Document what you learned from the community that you did not find in official study materials.
+8. Compare the career opportunities and salary expectations associated with each certification covered in this guide. Research job postings that list these certifications as requirements or preferences, and summarize the types of roles and industries where each certification is most valued.
+9. Set up a multi-machine lab environment (using virtual machines or containers) to practice advanced scenarios such as configuring network services between systems, setting up shared storage, and managing user authentication across hosts. Document the lab topology and the exercises you performed.
+10. After completing your study plan, review the exam registration process for your chosen certification. Identify the available testing options (in-person vs. remote proctoring), schedule a practice run to familiarize yourself with the testing environment, and create a checklist of items to prepare on exam day.

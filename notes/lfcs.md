@@ -706,3 +706,16 @@ After earning the LFCS, consider advancing your career with:
 ---
 
 **Ready to start studying?** Set up your practice lab with your chosen distribution, then work through each exam domain systematically. The [Linux Certification Overview](./linux_certification_overview.md) can help you confirm that LFCS is the right choice for your goals.
+
+### Challenges
+
+1. Set up a practice lab environment by installing a Linux distribution (such as Ubuntu or CentOS) in a virtual machine. Configure the system with a non-root user account, set up sudo access, and verify that you can perform administrative tasks. Document the steps you followed and explain why using a dedicated lab is important for exam preparation.
+2. Practice essential command-line operations by creating a directory structure, copying and moving files between directories, and using tools like `find`, `grep`, and `tar` to search for and archive files. Time yourself to simulate exam conditions and identify areas where you need more practice.
+3. Configure a local filesystem by creating a new partition, formatting it with a filesystem (such as ext4 or xfs), and mounting it at a specific mount point. Make the mount persistent across reboots by editing `/etc/fstab` and verify the configuration after a reboot.
+4. Set up and manage Logical Volume Manager (LVM) by creating physical volumes, a volume group, and logical volumes. Practice extending and reducing logical volumes, and explain how LVM provides flexibility compared to traditional partitioning.
+5. Configure network settings on your practice system by assigning a static IP address, setting up DNS resolution, and verifying connectivity using `ping`, `ip`, and `ss`. Troubleshoot a simulated network issue (such as an incorrect gateway) and document the resolution steps.
+6. Create and manage user accounts and groups. Set up password policies, configure account expiration, and assign users to specific groups with appropriate file permissions. Verify that file access behaves as expected for users in different groups.
+7. Schedule automated tasks using cron and systemd timers. Create a cron job that backs up a directory at regular intervals and a systemd timer that runs a cleanup script. Compare the two approaches and explain when each is most appropriate.
+8. Configure a basic firewall using either `iptables` or `firewalld`. Set up rules to allow SSH and HTTP traffic while blocking all other incoming connections. Test the configuration by attempting to connect on allowed and blocked ports, and make the rules persistent across reboots.
+9. Practice managing system services with `systemctl`. Enable, start, stop, and check the status of services. Create a custom systemd service unit that runs a simple script, and configure it to start automatically at boot.
+10. Simulate an exam scenario by completing a multi-step task under a time limit, such as setting up a web server, configuring firewall rules, creating user accounts with specific permissions, and scheduling a backup job. Review your work against the LFCS exam objectives and identify areas for improvement.

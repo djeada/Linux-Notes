@@ -464,7 +464,7 @@ error: voltage drop detected
 
 Filters are very important components in the Unix philosophy of creating simple, modular tools that do one job and do it well. When used effectively, they provide powerful text processing capabilities with just a few keystrokes.
 
-## Challenges
+### Challenges
 
 1. Find the number of users currently logged in. Hint: Use the `who` or `w` command followed by a line count.
 2. Generate a sorted list of all system users. Hint: The `/etc/passwd` file contains user information.

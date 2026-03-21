@@ -90,7 +90,7 @@ Inode Number: 1234
 
 A hardlink creates an additional reference to the existing inode of a file. It's essentially another name for an existing file on the same filesystem.
 
-I. Use the `ln` command to crea a hardlink:
+I. Use the `ln` command to create a hardlink:
 
 ```
 ln existing_file hardlink_name
