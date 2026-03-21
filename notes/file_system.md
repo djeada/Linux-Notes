@@ -125,9 +125,9 @@ Block Group #2 Start
 * **Inode Table**: fixed number of inodes allocated per group.
 * **Data Blocks**: the lion’s share of the group, holding file contents and directory structures.
 * When you ask to read or write block 42, the filesystem:
-1. Looks up block group via `42 / blocks_per_group` → group index.
-2. Indexes into the GDT to get that group’s starting block.
-3. Computes the offset within the group to reach block 42.
+    1. Looks up block group via `42 / blocks_per_group` → group index.
+    2. Indexes into the GDT to get that group’s starting block.
+    3. Computes the offset within the group to reach block 42.
 
 #### Inode & Extent Trees
 
@@ -907,6 +907,4 @@ This command grants `username` read-only access to `/mnt/mydata`. Use `getfacl` 
 7. How do the directories `/etc`, `/usr/bin`, `/var/log`, and `/opt` differ, and why is it important to understand their distinct roles?
 8. By looking at the contents of `/proc/cpuinfo`, can you determine the model of your CPU? What command would you use to display this file's contents?
 9. What hidden files might you expect to find in the `/root` directory? Why might these files be hidden?
-10. What command can you use to create a new file system in Linux? What options does this command typically have, and how are they used?
-11. How can you check disk information and partitions on a device in Linux? Please write down the command you would use and briefly explain its output.
-12. What steps and commands would you use to mount a file system in Linux? Please provide an example command and explain what it does.
+10. What command can you use to create a new file system in Linux? What options does this command typically have, and how are they used? Additionally, explain how you would check disk information and partitions on a device, and describe the steps and commands needed to mount the newly created file system.
