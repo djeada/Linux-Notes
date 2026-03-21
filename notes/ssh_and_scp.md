@@ -226,9 +226,51 @@ sftp> exit
 
 Aside from SCP and SFTP, numerous other protocols and tools can be utilized for transferring files, each with their own characteristics:
 
-- **FTP** is a traditional protocol used for file transfers, but it lacks modern security features, making it generally unsuitable for sensitive data transfers.
+- **FTP** is a traditional protocol used for file transfers, but it lacks modern security features, making it generally unsuitable for sensitive data transfers. If you must use it, prefer **FTPS**, which adds TLS encryption on top of FTP for better confidentiality.
 - **Rsync** is a fast and efficient tool designed for synchronizing large sets of files across systems, providing options for incremental transfers to optimize the process.
 - **SMB** is a protocol commonly utilized by Windows systems for sharing files over local networks. It supports various authentication mechanisms to secure data access and protect shared resources.
+
+#### Rsync for Repeated Transfers
+
+`rsync` is often a better fit than `scp` when you need to copy the same directory more than once. Instead of retransmitting every file, it compares the source and destination and sends only the differences.
+
+```bash
+rsync -avz ./project/ username@serverhost:/srv/project/
+```
+
+- `-a` preserves permissions, timestamps, symbolic links, and directory structure.
+- `-v` shows what is being copied.
+- `-z` compresses the data stream, which can help over slower links.
+
+If SSH is listening on a non-standard port, you can still use `rsync` securely:
+
+```bash
+rsync -avz -e "ssh -p 2222" ./project/ username@serverhost:/srv/project/
+```
+
+This makes `rsync` a common choice for backups, website deployments, and synchronizing configuration files between hosts.
+
+#### SMB for Shared Network Folders
+
+SMB is widely used for file sharing in mixed Windows/Linux environments. On Linux, an SMB share can be mounted into the local file system so it behaves like a regular directory:
+
+```bash
+sudo mount -t cifs //fileserver/shared /mnt/shared -o username=alice,vers=3.0
+```
+
+This approach is useful when several users need ongoing access to the same files over a local network. Compared with `scp`, SMB is less about one-time secure copies and more about keeping a shared workspace available to many clients.
+
+#### FTP and FTPS in Legacy Environments
+
+Plain FTP is still encountered on older appliances, hosting providers, and internal networks, but it sends credentials and data without encryption. That is why it should be avoided on untrusted networks.
+
+When compatibility requirements force you to use the FTP ecosystem, FTPS is the safer option because it adds TLS:
+
+```bash
+lftp -u username ftps://ftp.example.com
+```
+
+In short, prefer `scp` or `sftp` for secure one-off transfers, use `rsync` for efficient synchronization, and reserve SMB or FTPS for environments where file sharing or legacy compatibility matters more than a pure SSH workflow.
 
 ### Challenges
 
