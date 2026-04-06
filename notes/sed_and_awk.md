@@ -349,11 +349,11 @@ This makes `awk` very good for:
 
 #### Basic syntax
 
-```bash
+`awk` programs are built from simple **pattern → action** rules: for each line of input, it checks the pattern and runs the action if it matches.
+
+```bash id="6n3q8v"
 awk 'PATTERN { ACTION }' file
 ```
-
-### Parts
 
 * **`PATTERN`** decides which lines to match
 * **`ACTION`** says what to do for matching lines
