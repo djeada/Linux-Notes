@@ -1,6 +1,6 @@
 ## Command-Line Stream Editors
 
-`sed` (Stream Editor) and `awk` are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands. 
+`sed` (Stream Editor) and `awk` are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands.
 
 ### `sed`
 
@@ -188,49 +188,49 @@ These are typical `sed` one-liners for replacing text, filtering lines, and maki
 
 **Replace first match on each line**
 
-```bash id="x4j2k8"
+```bash
 sed 's/old/new/' file.txt
 ```
 
 **Replace all matches**
 
-```bash id="r7m1qp"
+```bash
 sed 's/old/new/g' file.txt
 ```
 
 **Delete lines containing a word**
 
-```bash id="h9t3zn"
+```bash
 sed '/unwanted/d' file.txt
 ```
 
 **Delete empty lines**
 
-```bash id="k2v8sx"
+```bash
 sed '/^$/d' file.txt
 ```
 
 **Print only matching lines**
 
-```bash id="p5c1df"
+```bash
 sed -n '/error/p' log.txt
 ```
 
 **Insert a line before line 1**
 
-```bash id="z8q4lm"
+```bash
 sed '1i\Header Text' file.txt
 ```
 
 **Append text after matching lines**
 
-```bash id="w6n2ba"
+```bash
 sed '/pattern/a\New line of text' file.txt
 ```
 
 **Edit file in place with backup**
 
-```bash id="t3y7ke"
+```bash
 sed -i.bak 's/foo/bar/g' file.txt
 ```
 
@@ -238,14 +238,14 @@ This modifies `file.txt` and keeps a backup as `file.txt.bak`.
 
 **Convert commas to pipes**
 
-```bash id="m1x9rv"
+```bash
 sed 's/,/|/g' data.csv > data.psv
 ```
 
 #### Multi-line and hold space
 
 `sed` normally works on one line at a time, but it also has:
- Editor) and awk are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands. This guide provides a comprehensive overview of both utilities, including their history, usage, syntax, options, and practical examples.
+Editor) and awk are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands. This guide provides a comprehensive overview of both utilities, including their history, usage, syntax, options, and practical examples.
 
 * **pattern space** = current working text
 * **hold space** = temporary storage
@@ -351,7 +351,7 @@ This makes `awk` very good for:
 
 `awk` programs are built from simple **pattern → action** rules: for each line of input, it checks the pattern and runs the action if it matches.
 
-```bash id="6n3q8v"
+```bash
 awk 'PATTERN { ACTION }' file
 ```
 
@@ -540,55 +540,55 @@ These are typical one-liners that cover the most common `awk` use cases: selecti
 
 **Print specific columns**
 
-```bash id="v3f4xl"
+```bash
 awk '{ print $1, $3 }' data.txt
 ```
 
 **Print lines matching a condition**
 
-```bash id="c6t9z2"
+```bash
 awk '$2 == "Error" { print }' logs.txt
 ```
 
 **Sum a column**
 
-```bash id="0g8m8c"
+```bash
 awk '{ sum += $3 } END { print "Total:", sum }' data.txt
 ```
 
 **Compute an average**
 
-```bash id="v1y3d7"
+```bash
 awk '{ total += $3; count++ } END { print "Average:", total/count }' data.txt
 ```
 
 **Filter rows by numeric value**
 
-```bash id="9q1l5r"
+```bash
 awk '$4 >= 50 { print }' scores.txt
 ```
 
 **Convert a field to uppercase**
 
-```bash id="2g6p1n"
+```bash
 awk '{ $2 = toupper($2); print }' data.txt
 ```
 
 **Count repeated values**
 
-```bash id="5d7w9k"
+```bash
 awk '{ count[$1]++ } END { for (word in count) print word, count[word] }' words.txt
 ```
 
 **Print line number with content**
 
-```bash id="p3k8u2"
+```bash
 awk '{ print NR, $0 }' file.txt
 ```
 
 **Use a custom field separator**
 
-```bash id="x8n2c4"
+```bash
 awk -F ':' '{ print $1, $3 }' /etc/passwd
 ```
 
@@ -600,7 +600,7 @@ awk -F ':' '{ print $1, $3 }' /etc/passwd
 
 Use `if` to conditionally execute code based on field values or expressions:
 
-```bash id="v0pf5l"
+```bash
 awk '{
   if ($3 > 100) {
     print $1, $2, "High"
@@ -614,7 +614,7 @@ awk '{
 
 Often used with arrays to iterate over collected values:
 
-```bash id="m6hj4y"
+```bash
 awk '{ count[$1]++ } END { for (x in count) print x, count[x] }' file.txt
 ```
 
