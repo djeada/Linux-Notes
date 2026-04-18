@@ -605,54 +605,62 @@ Since you choose your distribution at registration, know the differences that ma
 
 #### Start Here (Beginner)
 
-1. **Set up your lab:**
-   - Install your chosen distribution in a virtual machine (for CentOS/RHEL, use Rocky Linux or AlmaLinux since traditional CentOS has reached end-of-life; for Ubuntu, use the latest LTS release)
-   - Add a second virtual disk for storage practice
-   - Allocate at least 2GB RAM and 2 CPUs
+I. **Set up your lab:**
 
-2. **Master essential commands:**
-   - Practice `find`, `grep`, `sort`, `cut`, `wc`, and `diff` until they're second nature
-   - Work through file archiving with `tar` (create, extract, list) using all compression types
-   - Practice input/output redirection in realistic scenarios
+- Install your chosen distribution in a virtual machine (for CentOS/RHEL, use Rocky Linux or AlmaLinux since traditional CentOS has reached end-of-life; for Ubuntu, use the latest LTS release)
+- Add a second virtual disk for storage practice
+- Allocate at least 2GB RAM and 2 CPUs
+
+II. **Master essential commands:**
+
+- Practice `find`, `grep`, `sort`, `cut`, `wc`, and `diff` until they're second nature
+- Work through file archiving with `tar` (create, extract, list) using all compression types
+- Practice input/output redirection in realistic scenarios
 
 #### Next Level (Intermediate)
 
-3. **System administration tasks:**
-   - Create users with specific properties (UID, shell, groups, home directory)
-   - Configure password aging policies
-   - Set up cron jobs and verify they execute correctly
-   - Practice log analysis using `journalctl` with various filters
+III. **System administration tasks:**
 
-4. **Networking and services:**
-   - Configure static IP addresses using the tools for your chosen distribution
-   - Set up SSH key-based authentication
-   - Install and configure Apache with custom virtual hosts
-   - Configure firewall rules to allow and deny specific traffic
+- Create users with specific properties (UID, shell, groups, home directory)
+- Configure password aging policies
+- Set up cron jobs and verify they execute correctly
+- Practice log analysis using `journalctl` with various filters
+
+IV. **Networking and services:**
+
+- Configure static IP addresses using the tools for your chosen distribution
+- Set up SSH key-based authentication
+- Install and configure Apache with custom virtual hosts
+- Configure firewall rules to allow and deny specific traffic
 
 #### Advanced Challenges
 
-5. **Storage challenges:**
-   - Create a complete LVM setup from scratch (PV → VG → LV → filesystem → mount → fstab)
-   - Set up LUKS-encrypted storage
-   - Configure disk quotas for users
-   - Build a RAID 1 array and verify it works correctly
+V. **Storage challenges:**
 
-6. **Timed practice exam:**
-   - Set a 2-hour timer
-   - Work through a mix of tasks from all exam domains
-   - Use only man pages and built-in help (no internet)
-   - Reboot your VM to verify all changes are persistent
+- Create a complete LVM setup from scratch (PV → VG → LV → filesystem → mount → fstab)
+- Set up LUKS-encrypted storage
+- Configure disk quotas for users
+- Build a RAID 1 array and verify it works correctly
+
+VI. **Timed practice exam:**
+
+- Set a 2-hour timer
+- Work through a mix of tasks from all exam domains
+- Use only man pages and built-in help (no internet)
+- Reboot your VM to verify all changes are persistent
 
 <details>
 <summary>Click for hints and tips</summary>
 
 **Choosing Ubuntu vs CentOS for the exam:**
+
 - Pick whichever you use most often in your daily work
 - Ubuntu is more common in cloud environments and development
 - CentOS/RHEL is more common in enterprise data centers
 - If you have no preference, CentOS aligns well with RHCSA prep if you plan to pursue that later
 
 **Exam strategy:**
+
 - The LFCS gives you 2 hours for 15–20 tasks, so pace yourself
 - Read each task fully before starting to work on it
 - Handle quick tasks first, then tackle complex ones
@@ -660,6 +668,7 @@ Since you choose your distribution at registration, know the differences that ma
 - Verify persistence by checking `/etc/fstab`, enabled services, and reboot behavior
 
 **Common mistakes:**
+
 - Forgetting to make changes persistent (fstab, firewall, service enable)
 - Mixing up Ubuntu and CentOS commands under pressure
 - Not reading task requirements carefully (e.g., specific mount options or user properties)
@@ -667,6 +676,7 @@ Since you choose your distribution at registration, know the differences that ma
 - Forgetting to restart services after configuration changes
 
 **Useful exam shortcuts:**
+
 - `man -k keyword` to find relevant commands
 - `systemctl list-unit-files | grep enabled` to check enabled services
 - `lsblk` for a quick overview of disk layout
@@ -702,8 +712,6 @@ After earning the LFCS, consider advancing your career with:
 - [Cron Jobs](./cron_jobs.md) — Task scheduling
 - [Grep](./grep.md) — Text searching with regular expressions
 - [SSH and SCP](./ssh_and_scp.md) — Secure remote access
-
----
 
 **Ready to start studying?** Set up your practice lab with your chosen distribution, then work through each exam domain systematically. The [Linux Certification Overview](./linux_certification_overview.md) can help you confirm that LFCS is the right choice for your goals.
 
