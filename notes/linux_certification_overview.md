@@ -210,17 +210,17 @@ The notes in this repository cover many certification exam objectives. Here's ho
 
 | Exam Objective | Relevant Notes |
 |---------------|----------------|
-| File management | [Files and Directories](./files_and_dirs.md), [Permissions](./permissions.md), [Finding Files](./finding_files.md) |
-| User administration | [Managing Users](./managing_users.md) |
-| Storage management | [Partitions](./partitions.md), [LVM](./logical_volume_management.md), [Mounting](./mounting.md), [Disk Usage](./disk_usage.md) |
-| Networking | [Networking](./networking.md), [Ports](./ports.md), [SSH and SCP](./ssh_and_scp.md) |
-| Security | [SELinux](./selinux.md), [Encryption](./encryption.md), [Firewall](./firewall.md) |
-| Services and boot | [Services](./services.md), [System Startup](./system_startup.md) |
-| Process management | [Processes](./processes.md), [Task State Analysis](./task_state_analysis.md) |
-| Automation | [Cron Jobs](./cron_jobs.md), [Shells and Bash](./shells_and_bash_configuration.md) |
-| Text processing | [Grep](./grep.md), [Sed and Awk](./sed_and_awk.md) |
-| Package management | [Package Managers](./package_managers.md) |
-| Monitoring | [Performance Monitoring](./performance_monitoring.md), [Log Files and Journals](./log_files_and_journals.md), [Inotify](./inotify.md) |
+| File management | [Files and Directories](https://github.com/djeada/Linux-Notes/blob/main/notes/files_and_dirs.md), [Permissions](https://github.com/djeada/Linux-Notes/blob/main/notes/permissions.md), [Finding Files](https://github.com/djeada/Linux-Notes/blob/main/notes/finding_files.md) |
+| User administration | [Managing Users](https://github.com/djeada/Linux-Notes/blob/main/notes/managing_users.md) |
+| Storage management | [Partitions](https://github.com/djeada/Linux-Notes/blob/main/notes/partitions.md), [LVM](https://github.com/djeada/Linux-Notes/blob/main/notes/logical_volume_management.md), [Mounting](https://github.com/djeada/Linux-Notes/blob/main/notes/mounting.md), [Disk Usage](https://github.com/djeada/Linux-Notes/blob/main/notes/disk_usage.md) |
+| Networking | [Networking](https://github.com/djeada/Linux-Notes/blob/main/notes/networking.md), [Ports](https://github.com/djeada/Linux-Notes/blob/main/notes/ports.md), [SSH and SCP](https://github.com/djeada/Linux-Notes/blob/main/notes/ssh_and_scp.md) |
+| Security | [SELinux](https://github.com/djeada/Linux-Notes/blob/main/notes/selinux.md), [Encryption](https://github.com/djeada/Linux-Notes/blob/main/notes/encryption.md), [Firewall](https://github.com/djeada/Linux-Notes/blob/main/notes/firewall.md) |
+| Services and boot | [Services](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md), [System Startup](https://github.com/djeada/Linux-Notes/blob/main/notes/system_startup.md) |
+| Process management | [Processes](https://github.com/djeada/Linux-Notes/blob/main/notes/processes.md), [Task State Analysis](https://github.com/djeada/Linux-Notes/blob/main/notes/task_state_analysis.md) |
+| Automation | [Cron Jobs](https://github.com/djeada/Linux-Notes/blob/main/notes/cron_jobs.md), [Shells and Bash](https://github.com/djeada/Linux-Notes/blob/main/notes/shells_and_bash_configuration.md) |
+| Text processing | [Grep](https://github.com/djeada/Linux-Notes/blob/main/notes/grep.md), [Sed and Awk](https://github.com/djeada/Linux-Notes/blob/main/notes/sed_and_awk.md) |
+| Package management | [Package Managers](https://github.com/djeada/Linux-Notes/blob/main/notes/package_managers.md) |
+| Monitoring | [Performance Monitoring](https://github.com/djeada/Linux-Notes/blob/main/notes/performance_monitoring.md), [Log Files and Journals](https://github.com/djeada/Linux-Notes/blob/main/notes/log_files_and_journals.md), [Inotify](https://github.com/djeada/Linux-Notes/blob/main/notes/inotify.md) |
 
 ### Practice Makes Perfect
 
@@ -283,8 +283,8 @@ The notes in this repository cover many certification exam objectives. Here's ho
 
 Once you've chosen your certification path, dive into the specific preparation guides:
 
-- [RHCSA Certification Guide](./rhcsa.md) — Detailed preparation for the Red Hat Certified System Administrator exam
-- [LFCS Certification Guide](./lfcs.md) — Detailed preparation for the Linux Foundation Certified System Administrator exam
+- [RHCSA Certification Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/rhcsa.md) — Detailed preparation for the Red Hat Certified System Administrator exam
+- [LFCS Certification Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/lfcs.md) — Detailed preparation for the Linux Foundation Certified System Administrator exam
 
 ### Helpful Resources
 
@@ -302,7 +302,7 @@ Once you've chosen your certification path, dive into the specific preparation g
 
 ---
 
-**Ready to start preparing?** Pick your target certification, then head to the [RHCSA Guide](./rhcsa.md) or [LFCS Guide](./lfcs.md) for a focused study plan.
+**Ready to start preparing?** Pick your target certification, then head to the [RHCSA Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/rhcsa.md) or [LFCS Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/lfcs.md) for a focused study plan.
 
 ### Challenges
 

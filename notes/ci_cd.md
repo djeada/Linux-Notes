@@ -116,7 +116,7 @@ Most teams start with Continuous Delivery and graduate to Continuous Deployment 
 
 ### Jenkins
 
-Jenkins is one of the oldest and most widely used CI/CD tools. It runs as a Java application on Linux and is managed as a system service—something you already know how to handle from working with `systemd` (see [services.md](./services.md)).
+Jenkins is one of the oldest and most widely used CI/CD tools. It runs as a Java application on Linux and is managed as a system service—something you already know how to handle from working with `systemd` (see [services.md](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md)).
 
 #### Installing Jenkins on Linux
 
@@ -449,7 +449,7 @@ Never hardcode secrets in pipeline configuration files. Every major CI/CD platfo
 
 #### Environment Variables in Pipelines
 
-CI/CD pipelines rely heavily on environment variables (see [environment_variable.md](./environment_variable.md)) for configuration. Best practices include:
+CI/CD pipelines rely heavily on environment variables (see [environment_variable.md](https://github.com/djeada/Linux-Notes/blob/main/notes/environment_variable.md)) for configuration. Best practices include:
 
 - Use the platform's secret store for sensitive values like API keys, SSH keys, and database passwords.
 - Define non-sensitive configuration as plain environment variables in the pipeline file.
@@ -484,7 +484,7 @@ As a Linux administrator, the final stages of a CI/CD pipeline often land square
 
 #### SSH Deployment
 
-Deploying over SSH (see [ssh_and_scp.md](./ssh_and_scp.md)) is one of the most common patterns for pushing artifacts to Linux servers:
+Deploying over SSH (see [ssh_and_scp.md](https://github.com/djeada/Linux-Notes/blob/main/notes/ssh_and_scp.md)) is one of the most common patterns for pushing artifacts to Linux servers:
 
 ```bash
 #!/bin/bash
@@ -510,7 +510,7 @@ EOF
 
 #### Systemd Service Restarts
 
-When your pipeline deploys a new version, it typically needs to restart the application service. A well-designed service unit file (see [services.md](./services.md)) makes this reliable:
+When your pipeline deploys a new version, it typically needs to restart the application service. A well-designed service unit file (see [services.md](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md)) makes this reliable:
 
 ```ini
 # /etc/systemd/system/myapp.service

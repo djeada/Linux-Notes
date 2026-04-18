@@ -550,8 +550,8 @@ The `:Z` flag at the end of the volume mount tells podman to apply the correct S
 After passing the RHCSA, consider these paths:
 
 - [RHCE Preparation](https://www.redhat.com/en/services/certification/rhce) — Focuses on Ansible automation and advanced system administration
-- [Linux Certification Overview](./linux_certification_overview.md) — Compare other certification options
-- [LFCS Certification Guide](./lfcs.md) — See how the Linux Foundation certification compares
+- [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) — Compare other certification options
+- [LFCS Certification Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/lfcs.md) — See how the Linux Foundation certification compares
 
 ### Helpful Resources
 
@@ -563,16 +563,16 @@ After passing the RHCSA, consider these paths:
 
 #### Related Notes in This Repository
 
-- [SELinux](./selinux.md) — Deep dive into SELinux configuration and troubleshooting
-- [Logical Volume Management](./logical_volume_management.md) — Comprehensive LVM guide
-- [Managing Users](./managing_users.md) — User and group administration
-- [Firewall](./firewall.md) — Firewall configuration with firewalld
-- [Services](./services.md) — Systemd service management
-- [Networking](./networking.md) — Network configuration fundamentals
+- [SELinux](https://github.com/djeada/Linux-Notes/blob/main/notes/selinux.md) — Deep dive into SELinux configuration and troubleshooting
+- [Logical Volume Management](https://github.com/djeada/Linux-Notes/blob/main/notes/logical_volume_management.md) — Comprehensive LVM guide
+- [Managing Users](https://github.com/djeada/Linux-Notes/blob/main/notes/managing_users.md) — User and group administration
+- [Firewall](https://github.com/djeada/Linux-Notes/blob/main/notes/firewall.md) — Firewall configuration with firewalld
+- [Services](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md) — Systemd service management
+- [Networking](https://github.com/djeada/Linux-Notes/blob/main/notes/networking.md) — Network configuration fundamentals
 
 ---
 
-**Ready to start studying?** Set up your practice lab first, then work through each exam objective systematically. The [Linux Certification Overview](./linux_certification_overview.md) can help you confirm that RHCSA is the right choice for your career goals.
+**Ready to start studying?** Set up your practice lab first, then work through each exam objective systematically. The [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) can help you confirm that RHCSA is the right choice for your career goals.
 
 ### Challenges
 
