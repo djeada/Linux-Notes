@@ -689,8 +689,8 @@ VI. **Timed practice exam:**
 After earning the LFCS, consider advancing your career with:
 
 - [LFCE (Linux Foundation Certified Engineer)](https://training.linuxfoundation.org/certification/linux-foundation-certified-engineer-lfce/) — Advanced Linux engineering topics
-- [Linux Certification Overview](./linux_certification_overview.md) — Compare all certification options
-- [RHCSA Certification Guide](./rhcsa.md) — Add a Red Hat certification to your credentials
+- [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) — Compare all certification options
+- [RHCSA Certification Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/rhcsa.md) — Add a Red Hat certification to your credentials
 
 ### Helpful Resources
 
@@ -702,18 +702,18 @@ After earning the LFCS, consider advancing your career with:
 
 #### Related Notes in This Repository
 
-- [Commands](./commands.md) — Essential Linux commands reference
-- [Permissions](./permissions.md) — File permissions and ownership
-- [Logical Volume Management](./logical_volume_management.md) — Complete LVM guide
-- [Networking](./networking.md) — Network configuration fundamentals
-- [Firewall](./firewall.md) — Firewall configuration
-- [Managing Users](./managing_users.md) — User and group administration
-- [Processes](./processes.md) — Process management
-- [Cron Jobs](./cron_jobs.md) — Task scheduling
-- [Grep](./grep.md) — Text searching with regular expressions
-- [SSH and SCP](./ssh_and_scp.md) — Secure remote access
+- [Commands](https://github.com/djeada/Linux-Notes/blob/main/notes/commands.md) — Essential Linux commands reference
+- [Permissions](https://github.com/djeada/Linux-Notes/blob/main/notes/permissions.md) — File permissions and ownership
+- [Logical Volume Management](https://github.com/djeada/Linux-Notes/blob/main/notes/logical_volume_management.md) — Complete LVM guide
+- [Networking](https://github.com/djeada/Linux-Notes/blob/main/notes/networking.md) — Network configuration fundamentals
+- [Firewall](https://github.com/djeada/Linux-Notes/blob/main/notes/firewall.md) — Firewall configuration
+- [Managing Users](https://github.com/djeada/Linux-Notes/blob/main/notes/managing_users.md) — User and group administration
+- [Processes](https://github.com/djeada/Linux-Notes/blob/main/notes/processes.md) — Process management
+- [Cron Jobs](https://github.com/djeada/Linux-Notes/blob/main/notes/cron_jobs.md) — Task scheduling
+- [Grep](https://github.com/djeada/Linux-Notes/blob/main/notes/grep.md) — Text searching with regular expressions
+- [SSH and SCP](https://github.com/djeada/Linux-Notes/blob/main/notes/ssh_and_scp.md) — Secure remote access
 
-**Ready to start studying?** Set up your practice lab with your chosen distribution, then work through each exam domain systematically. The [Linux Certification Overview](./linux_certification_overview.md) can help you confirm that LFCS is the right choice for your goals.
+**Ready to start studying?** Set up your practice lab with your chosen distribution, then work through each exam domain systematically. The [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) can help you confirm that LFCS is the right choice for your goals.
 
 ### Challenges
 

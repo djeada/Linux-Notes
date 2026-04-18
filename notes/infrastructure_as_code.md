@@ -191,7 +191,7 @@ The real power of Ansible becomes clear when you see how it handles tasks you wo
 
 #### Managing Packages and Services
 
-This playbook installs a LAMP stack on your web servers, tying together concepts from [package management](./package_managers.md) and [services](./services.md):
+This playbook installs a LAMP stack on your web servers, tying together concepts from [package management](https://github.com/djeada/Linux-Notes/blob/main/notes/package_managers.md) and [services](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md):
 
 ```yaml
 ---
@@ -226,7 +226,7 @@ This playbook installs a LAMP stack on your web servers, tying together concepts
 
 #### Configuring Firewalls
 
-If you have worked through the [firewall notes](./firewalls.md), you know the importance of controlling network traffic. Ansible can manage firewall rules consistently across all your servers:
+If you have worked through the [firewall notes](https://github.com/djeada/Linux-Notes/blob/main/notes/firewall.md), you know the importance of controlling network traffic. Ansible can manage firewall rules consistently across all your servers:
 
 ```yaml
 ---
@@ -277,7 +277,7 @@ If you have worked through the [firewall notes](./firewalls.md), you know the im
 
 #### Managing Users and Groups
 
-User management, a topic covered in [managing users](./managing_users.md), becomes much simpler when done through code. This playbook creates developer accounts with proper group memberships and SSH keys:
+User management, a topic covered in [managing users](https://github.com/djeada/Linux-Notes/blob/main/notes/managing_users.md), becomes much simpler when done through code. This playbook creates developer accounts with proper group memberships and SSH keys:
 
 ```yaml
 ---
