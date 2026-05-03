@@ -1,7 +1,3 @@
-Below is a revised and expanded version of your notes, with the **environment lifetime / fork / exec / child process** explanations placed in the appropriate sections.
-
----
-
 ## Variable Types
 
 In Unix-style shells, variables let you store and reuse pieces of information, such as your preferred editor:
