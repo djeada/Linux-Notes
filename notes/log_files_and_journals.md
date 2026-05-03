@@ -64,6 +64,7 @@ With logs, debugging becomes investigation.
 Linux systems usually have more than one logging system working together.
 
 ```text
+#
                          +----------------------+
                          |      Applications    |
                          | Python, nginx, SSHD  |
