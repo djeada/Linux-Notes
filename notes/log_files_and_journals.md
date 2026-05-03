@@ -8,13 +8,11 @@ A **log** is a record of events produced by an operating system, application, se
 
 Logs answer questions like:
 
-```text
-What happened?
-When did it happen?
-Who or what caused it?
-Was it normal, suspicious, or broken?
-Where should I look next?
-```
+* What happened?
+* When did it happen?
+* Who or what caused it?
+* Was it normal, suspicious, or broken?
+* Where should I look next?
 
 A typical log entry contains:
 
@@ -92,19 +90,15 @@ Linux systems usually have more than one logging system working together.
 
 Modern Linux systems commonly use:
 
-```text
-+-------------------+-------------------------------------------------------+
-| System            | Purpose                                               |
-|-------------------|-------------------------------------------------------|
-| journald          | Collects structured logs from systemd, kernel, apps   |
-| journalctl        | Reads and filters journald logs                       |
-| rsyslog           | Routes logs into text files or remote log servers     |
-| /var/log          | Directory where many plain-text logs live             |
-| logrotate         | Rotates, compresses, and deletes old text logs        |
-| logger            | Sends custom log messages from shell scripts          |
-| dmesg             | Reads kernel ring buffer messages                     |
-+-------------------+-------------------------------------------------------+
-```
+| System     | Purpose                                             |
+| ---------- | --------------------------------------------------- |
+| journald   | Collects structured logs from systemd, kernel, apps |
+| journalctl | Reads and filters journald logs                     |
+| rsyslog    | Routes logs into text files or remote log servers   |
+| /var/log   | Directory where many plain-text logs live           |
+| logrotate  | Rotates, compresses, and deletes old text logs      |
+| logger     | Sends custom log messages from shell scripts        |
+| dmesg      | Reads kernel ring buffer messages                   |
 
 ### Common Linux Log Locations
 
@@ -160,14 +154,12 @@ RHEL / CentOS / Fedora:
 
 Plain text logs are ordinary files you can read with tools like:
 
-```bash
-cat
-less
-tail
-grep
-awk
-sed
-```
+- `cat`
+- `less`
+- `tail`
+- `grep`
+- `awk`
+- `sed`
 
 Example:
 
@@ -207,11 +199,11 @@ Many modern Linux distributions use **systemd-journald**.
 +-----------+-------------+
             ^
             |
-+-----------+------------+----------------+----------------+
-|                        |                |                |
-| systemd services       | kernel         | applications   | stdout/stderr |
-| nginx.service          | hardware       | custom apps    | service logs  |
-+------------------------+----------------+----------------+
++-----------+------------+----------------+----------------+----------------+
+|                        |                |                |                |
+| systemd services       | kernel         | applications   | stdout/stderr  |
+| nginx.service          | hardware       | custom apps    | service logs   |
++------------------------+----------------+----------------+----------------+
 ```
 
 Unlike plain text logs, the systemd journal is structured and usually stored in binary format.
@@ -232,11 +224,44 @@ View all logs:
 journalctl
 ```
 
+This command displays all logs stored in the systemd journal. It shows logs from system services, kernel messages, user sessions, boot activity, and other system events. By default, the output is shown in a pager, so you can scroll through it using keyboard controls.
+
+Example output:
+
+```text
+May 03 09:15:01 server systemd[1]: Started Session 12 of User root.
+May 03 09:15:05 server sshd[1245]: Accepted publickey for admin from 192.168.1.20
+May 03 09:15:10 server sudo[1302]: admin : TTY=pts/0 ; COMMAND=/usr/bin/systemctl status nginx
+```
+
+Explanation:
+
+* Shows all available journal entries.
+* Useful for general troubleshooting.
+* Can produce a large amount of output on active systems.
+* Press `q` to exit the log viewer.
+
 View newest logs:
 
 ```bash
 journalctl -n 50
 ```
+
+This command displays the newest 50 log entries. It is useful when you only want to inspect the most recent system activity instead of scrolling through the entire journal.
+
+Example output:
+
+```text
+May 03 10:01:22 server nginx[2210]: Configuration file /etc/nginx/nginx.conf test is successful
+May 03 10:01:23 server systemd[1]: Reloaded nginx.service - A high performance web server
+May 03 10:02:01 server CRON[2250]: pam_unix(cron:session): session opened for user root
+```
+
+Explanation:
+
+* `-n 50` limits the output to the last 50 log lines.
+* Useful for checking recent errors or recent service activity.
+* You can change `50` to any number, such as `100` or `200`.
 
 Follow logs live:
 
@@ -244,11 +269,45 @@ Follow logs live:
 journalctl -f
 ```
 
+This command follows logs in real time. New log entries appear automatically as they are written to the journal. It works similarly to `tail -f`.
+
+Example output:
+
+```text
+May 03 10:05:12 server sshd[2401]: Failed password for invalid user test from 203.0.113.10
+May 03 10:05:15 server sshd[2401]: Connection closed by invalid user test 203.0.113.10
+May 03 10:05:20 server nginx[2410]: 192.168.1.25 - - "GET / HTTP/1.1" 200
+```
+
+Explanation:
+
+* Shows new log entries as they happen.
+* Useful for live debugging.
+* Commonly used while restarting a service or reproducing an issue.
+* Press `Ctrl + C` to stop following logs.
+
 View logs since boot:
 
 ```bash
 journalctl -b
 ```
+
+This command displays logs from the current system boot only. It filters out logs from previous boots and shows what has happened since the machine last started.
+
+Example output:
+
+```text
+May 03 08:00:01 server kernel: Linux version 6.8.0
+May 03 08:00:04 server systemd[1]: Starting system initialization...
+May 03 08:00:15 server systemd[1]: Started ssh.service - OpenSSH server daemon
+```
+
+Explanation:
+
+* `-b` means current boot.
+* Useful for investigating startup problems.
+* Helps separate current issues from older historical logs.
+* Often used after a reboot or crash.
 
 View previous boot:
 
@@ -256,17 +315,68 @@ View previous boot:
 journalctl -b -1
 ```
 
+This command shows logs from the previous boot. It is useful when the system crashed, rebooted unexpectedly, or had an issue before the current startup.
+
+Example output:
+
+```text
+May 02 22:41:03 server kernel: Out of memory: Killed process 1884
+May 02 22:41:10 server systemd[1]: nginx.service: Failed with result 'exit-code'
+May 02 22:42:01 server systemd[1]: Reached target Reboot
+```
+
+Explanation:
+
+* `-b -1` means one boot before the current boot.
+* Useful for checking why a system restarted.
+* Helps troubleshoot crashes, failed shutdowns, and boot loops.
+* `journalctl --list-boots` can be used to see available boot records.
+
 View logs from the last hour:
 
 ```bash
 journalctl --since "1 hour ago"
 ```
 
+This command displays logs generated during the last hour. It is helpful when an issue happened recently and you do not want to search through older logs.
+
+Example output:
+
+```text
+May 03 09:12:44 server docker[1805]: Container web_app started
+May 03 09:25:10 server nginx[1921]: connect() failed while connecting to upstream
+May 03 09:58:31 server sshd[2150]: Accepted password for deploy from 192.168.1.30
+```
+
+Explanation:
+
+* `--since` filters logs by start time.
+* `"1 hour ago"` is a relative time expression.
+* Useful for recent troubleshooting.
+* Other examples include `"10 minutes ago"` or `"yesterday"`.
+
 View logs from a time range:
 
 ```bash
 journalctl --since "2026-05-03 09:00" --until "2026-05-03 10:00"
 ```
+
+This command displays logs between a specific start time and end time. It is useful when you know exactly when a problem occurred and want to inspect only that period.
+
+Example output:
+
+```text
+May 03 09:05:14 server nginx[1602]: 502 Bad Gateway while reading response header from upstream
+May 03 09:20:44 server postgresql[1710]: checkpoint complete
+May 03 09:45:02 server systemd[1]: Started cleanup temporary files
+```
+
+Explanation:
+
+* `--since` defines the beginning of the time range.
+* `--until` defines the end of the time range.
+* Useful for incident investigation.
+* Time format should be clear and consistent, such as `YYYY-MM-DD HH:MM`.
 
 #### Filter by Service
 
@@ -277,17 +387,68 @@ journalctl -u docker.service
 journalctl -u postgresql.service
 ```
 
+These commands display logs for specific systemd services. Filtering by service is one of the most common ways to use `journalctl` because it removes unrelated system messages and focuses only on the service you are troubleshooting.
+
+Example output:
+
+```text
+May 03 10:12:01 server sshd[2501]: Server listening on 0.0.0.0 port 22
+May 03 10:12:08 server sshd[2510]: Accepted publickey for admin from 192.168.1.20
+May 03 10:12:10 server sshd[2510]: pam_unix(sshd:session): session opened for user admin
+```
+
+Explanation:
+
+* `-u` filters logs by systemd unit name.
+* Service names usually end in `.service`.
+* Useful for debugging one service at a time.
+* Common examples include `ssh.service`, `nginx.service`, `docker.service`, and `postgresql.service`.
+
 Follow one service live:
 
 ```bash
 journalctl -u nginx.service -f
 ```
 
+This command follows only the logs from `nginx.service` in real time. It is useful when testing configuration changes, watching requests, or troubleshooting live service behavior.
+
+Example output:
+
+```text
+May 03 10:20:01 server nginx[2701]: 192.168.1.50 - - "GET /api/status HTTP/1.1" 200
+May 03 10:20:08 server nginx[2701]: 192.168.1.51 - - "POST /login HTTP/1.1" 302
+May 03 10:20:12 server nginx[2701]: connect() failed while connecting to upstream
+```
+
+Explanation:
+
+* `-u nginx.service` filters logs to Nginx only.
+* `-f` follows new log entries live.
+* Useful during reloads, restarts, and active testing.
+* Press `Ctrl + C` to stop.
+
 Show only recent logs for a service:
 
 ```bash
 journalctl -u nginx.service -n 100
 ```
+
+This command displays the most recent 100 log entries for `nginx.service`. It is useful when you want recent service logs without following them live.
+
+Example output:
+
+```text
+May 03 10:30:05 server nginx[2801]: signal process started
+May 03 10:30:06 server systemd[1]: Reloaded nginx.service - A high performance web server
+May 03 10:31:10 server nginx[2801]: 192.168.1.70 - - "GET /health HTTP/1.1" 200
+```
+
+Explanation:
+
+* `-u nginx.service` limits logs to the Nginx service.
+* `-n 100` shows the last 100 entries.
+* Useful for quick service checks.
+* You can increase or decrease the number depending on how much history you need.
 
 #### Filter by Severity
 
@@ -297,30 +458,100 @@ journalctl -p err
 
 Shows errors and anything more severe.
 
-Priority levels:
+This command filters logs by priority level. The `err` level shows error messages and more severe messages such as critical, alert, and emergency logs. It is useful when you want to quickly find serious problems without reading informational logs.
+
+Example output:
 
 ```text
-+----------+------+------------------------------+
-| Name     | Code | Meaning                      |
-|----------|------|------------------------------|
-| emerg    | 0    | System unusable              |
-| alert    | 1    | Immediate action required    |
-| crit     | 2    | Critical condition           |
-| err      | 3    | Error                        |
-| warning  | 4    | Warning                      |
-| notice   | 5    | Normal but important         |
-| info     | 6    | Informational                |
-| debug    | 7    | Debug messages               |
-+----------+------+------------------------------+
+May 03 10:40:11 server nginx[3001]: connect() failed while connecting to upstream
+May 03 10:41:03 server kernel: EXT4-fs error on device sda1
+May 03 10:42:18 server systemd[1]: docker.service: Failed with result 'exit-code'
 ```
+
+Explanation:
+
+* `-p err` shows priority level `err` and anything more severe.
+* Useful for finding failures quickly.
+* Less noisy than viewing all logs.
+* Can be combined with `-u` to filter errors for a specific service.
+
+Priority levels:
+
+| Name    | Code | Meaning                   |
+| ------- | ---- | ------------------------- |
+| emerg   | 0    | System unusable           |
+| alert   | 1    | Immediate action required |
+| crit    | 2    | Critical condition        |
+| err     | 3    | Error                     |
+| warning | 4    | Warning                   |
+| notice  | 5    | Normal but important      |
+| info    | 6    | Informational             |
+| debug   | 7    | Debug messages            |
 
 Examples:
 
 ```bash
 journalctl -p warning
+```
+
+This command shows warning messages and anything more severe. It is useful when you want to see potential problems before they become errors.
+
+Example output:
+
+```text
+May 03 10:50:01 server nginx[3100]: conflicting server name ignored
+May 03 10:51:22 server kernel: CPU temperature above threshold
+May 03 10:52:05 server systemd[1]: service restart operation timed out
+```
+
+Explanation:
+
+* Shows `warning`, `err`, `crit`, `alert`, and `emerg` messages.
+* Good for proactive troubleshooting.
+* More detailed than `-p err`.
+* May include warnings that are not service-breaking.
+
+```bash
 journalctl -p err -u ssh.service
+```
+
+This command shows only error-level and more severe logs for the SSH service. It is useful when troubleshooting failed SSH logins, SSH service failures, or authentication problems.
+
+Example output:
+
+```text
+May 03 11:00:12 server sshd[3301]: error: kex_exchange_identification: client sent invalid protocol identifier
+May 03 11:01:44 server sshd[3310]: fatal: Timeout before authentication
+May 03 11:03:01 server sshd[3322]: error: PAM: Authentication failure for illegal user test
+```
+
+Explanation:
+
+* `-p err` filters by error severity.
+* `-u ssh.service` limits logs to SSH.
+* Useful for authentication and connection troubleshooting.
+* Reduces noise from normal SSH login messages.
+
+```bash
 journalctl -p debug -u myapp.service
 ```
+
+This command shows debug-level logs for `myapp.service`. Since `debug` is the lowest priority level, this may include very detailed messages depending on how the service logs its output.
+
+Example output:
+
+```text
+May 03 11:10:01 server myapp[3500]: DEBUG Loading configuration from /etc/myapp/config.yml
+May 03 11:10:02 server myapp[3500]: DEBUG Database connection pool initialized
+May 03 11:10:03 server myapp[3500]: INFO Application started successfully
+```
+
+Explanation:
+
+* `-p debug` includes debug logs and all higher-priority messages.
+* Useful during development or deep troubleshooting.
+* Can produce very verbose output.
+* Best combined with `-u` to avoid too much unrelated output.
 
 #### Journal Output Formats
 
@@ -330,11 +561,45 @@ Normal output:
 journalctl -u nginx
 ```
 
+This command shows logs for the Nginx service using the default journal output format. The default format is readable and suitable for most manual troubleshooting tasks.
+
+Example output:
+
+```text
+May 03 11:20:01 server nginx[3700]: 192.168.1.80 - - "GET / HTTP/1.1" 200
+May 03 11:20:05 server nginx[3700]: 192.168.1.81 - - "GET /favicon.ico HTTP/1.1" 404
+May 03 11:20:10 server systemd[1]: Reloaded nginx.service - A high performance web server
+```
+
+Explanation:
+
+* Displays service logs in the standard human-readable format.
+* Good for day-to-day troubleshooting.
+* Shows timestamp, hostname, process name, process ID, and message.
+* Easy to read directly in the terminal.
+
 Short ISO timestamps:
 
 ```bash
 journalctl -u nginx -o short-iso
 ```
+
+This command shows Nginx logs with ISO-style timestamps. This format is useful when you need clearer timestamps, especially for comparing logs across systems or matching logs with external monitoring tools.
+
+Example output:
+
+```text
+2026-05-03T11:25:01+0200 server nginx[3800]: 192.168.1.90 - - "GET / HTTP/1.1" 200
+2026-05-03T11:25:03+0200 server nginx[3800]: 192.168.1.91 - - "POST /api/login HTTP/1.1" 401
+2026-05-03T11:25:08+0200 server nginx[3800]: upstream timed out while reading response header
+```
+
+Explanation:
+
+* `-o short-iso` changes the output format.
+* Shows timestamps in ISO-style format.
+* Useful for log correlation.
+* Easier to sort, compare, and copy into reports.
 
 Verbose metadata:
 
@@ -342,11 +607,49 @@ Verbose metadata:
 journalctl -u nginx -o verbose
 ```
 
+This command shows detailed metadata for each journal entry. It includes fields such as systemd unit name, process ID, executable path, hostname, priority, and other internal journal fields.
+
+Example output:
+
+```text
+MESSAGE=192.168.1.90 - - "GET / HTTP/1.1" 200
+_PID=3800
+_UID=33
+_GID=33
+_SYSTEMD_UNIT=nginx.service
+_COMM=nginx
+_HOSTNAME=server
+PRIORITY=6
+```
+
+Explanation:
+
+* `-o verbose` shows detailed journal fields.
+* Useful for advanced debugging.
+* Helps identify exact processes, units, users, and priorities.
+* More detailed than normal output and less convenient for quick reading.
+
 JSON output:
 
 ```bash
 journalctl -u nginx -o json
 ```
+
+This command outputs each journal entry as a single JSON object. It is useful when logs need to be processed by scripts, command-line tools, or log aggregation systems.
+
+Example output:
+
+```json
+{"MESSAGE":"192.168.1.90 - - \"GET / HTTP/1.1\" 200","_PID":"3800","_SYSTEMD_UNIT":"nginx.service","PRIORITY":"6","_HOSTNAME":"server"}
+{"MESSAGE":"upstream timed out while reading response header","_PID":"3800","_SYSTEMD_UNIT":"nginx.service","PRIORITY":"3","_HOSTNAME":"server"}
+```
+
+Explanation:
+
+* `-o json` prints logs as JSON.
+* Each log entry appears on one line.
+* Useful for parsing with tools such as `jq`.
+* Good for automation, scripts, and log pipelines.
 
 Pretty JSON:
 
@@ -354,63 +657,231 @@ Pretty JSON:
 journalctl -u nginx -o json-pretty
 ```
 
-This is useful when feeding logs into scripts or log aggregation systems.
+This command outputs journal entries as formatted JSON. It is easier for humans to read than normal JSON output because fields are split across multiple lines with indentation.
+
+Example output:
+
+```json
+{
+  "MESSAGE" : "192.168.1.90 - - \"GET / HTTP/1.1\" 200",
+  "_PID" : "3800",
+  "_SYSTEMD_UNIT" : "nginx.service",
+  "PRIORITY" : "6",
+  "_HOSTNAME" : "server"
+}
+```
+
+Explanation:
+
+* `-o json-pretty` formats JSON across multiple lines.
+* Easier to inspect manually than compact JSON.
+* Useful when reviewing metadata-rich log entries.
+* Less convenient for line-based log processing than `-o json`.
+
+This is useful when feeding logs into scripts or log aggregation systems. JSON formats allow tools to read fields such as service name, priority, process ID, hostname, and message without relying on text parsing. For quick manual troubleshooting, normal or short output is usually easier to read. For automation and structured logging workflows, JSON output is usually better.
 
 ### Linux Logs by System Layer
 
 A useful way to understand logs is by layers.
 
-```text
-+------------------------------------------------------+
-| Application Layer                                    |
-| Python apps, nginx, Apache, PostgreSQL, Docker apps  |
-+------------------------------------------------------+
-| Service Layer                                        |
-| systemd services, cron, SSH, NetworkManager          |
-+------------------------------------------------------+
-| OS Layer                                             |
-| package manager, sudo, auth, syslog                  |
-+------------------------------------------------------+
-| Kernel Layer                                         |
-| drivers, hardware, memory, disk, CPU, networking     |
-+------------------------------------------------------+
-| Boot Layer                                           |
-| bootloader, initramfs, systemd startup               |
-+------------------------------------------------------+
-```
+| Layer              | Components                                              |
+|--------------------|----------------------------------------------------------|
+| Application Layer  | Python apps, nginx, Apache, PostgreSQL, Docker apps     |
+| Service Layer      | systemd services, cron, SSH, NetworkManager             |
+| OS Layer           | package manager, sudo, auth, syslog                     |
+| Kernel Layer       | drivers, hardware, memory, disk, CPU, networking        |
+| Boot Layer         | bootloader, initramfs, systemd startup                  |
 
 #### Kernel Logs
 
 Kernel logs are useful for debugging:
 
-```text
-hardware
-drivers
-network interfaces
-USB devices
-disks
-memory errors
-CPU warnings
-filesystem problems
-```
+* hardware
+* drivers
+* network interfaces
+* USB devices
+* disks
+* memory errors
+* CPU warnings
+* filesystem problems
+
+Kernel logs come from the Linux kernel rather than from normal user-space applications. They are especially useful when troubleshooting low-level system problems, such as a disk failing, a network card disconnecting, a USB device not being detected, a driver crashing, or the system reporting CPU or memory warnings.
 
 Commands:
 
 ```bash
 dmesg
+```
+
+This command displays messages from the kernel ring buffer. These messages usually include boot messages, device detection, driver messages, hardware warnings, and kernel-level errors.
+
+Example output:
+
+```text
+[    0.000000] Linux version 6.8.0-31-generic
+[    1.245011] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[    2.884310] eth0: renamed from enp0s3
+[   15.902144] EXT4-fs (sda1): mounted filesystem
+```
+
+Explanation:
+
+* Shows kernel messages stored in the kernel ring buffer.
+* Useful for checking hardware and driver events.
+* Timestamps are shown as seconds since boot.
+* Output may be cleared after reboot or overwritten on busy systems.
+
+```bash
 dmesg -T
+```
+
+This command displays kernel messages with human-readable timestamps. Instead of showing only seconds since boot, it converts timestamps into normal date and time format.
+
+Example output:
+
+```text
+[Sun May  3 09:01:10 2026] Linux version 6.8.0-31-generic
+[Sun May  3 09:01:12 2026] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[Sun May  3 09:01:15 2026] eth0: renamed from enp0s3
+[Sun May  3 09:02:01 2026] EXT4-fs (sda1): mounted filesystem
+```
+
+Explanation:
+
+* `-T` shows readable timestamps.
+* Easier to match kernel events with incidents.
+* Useful when checking when a device disconnected or an error happened.
+* Timestamp conversion may be less accurate if the system clock changed after boot.
+
+```bash
 journalctl -k
+```
+
+This command displays kernel messages from the systemd journal. It is similar to `dmesg`, but it reads kernel logs from the journal instead of only the kernel ring buffer.
+
+Example output:
+
+```text
+May 03 09:01:10 server kernel: Linux version 6.8.0-31-generic
+May 03 09:01:12 server kernel: usb 1-1: new high-speed USB device number 2 using xhci_hcd
+May 03 09:01:15 server kernel: eth0: renamed from enp0s3
+May 03 09:02:01 server kernel: EXT4-fs (sda1): mounted filesystem
+```
+
+Explanation:
+
+* `-k` shows kernel messages from the journal.
+* Uses normal journal timestamps.
+* Can include persisted kernel logs from previous boots if journal persistence is enabled.
+* Useful when you want kernel logs with `journalctl` filtering options.
+
+```bash
 journalctl -k -b
 ```
+
+This command displays kernel messages from the current boot only. It is useful when troubleshooting hardware, driver, or boot-related issues from the current running session.
+
+Example output:
+
+```text
+May 03 09:01:10 server kernel: Linux version 6.8.0-31-generic
+May 03 09:01:13 server kernel: ACPI: bus type USB registered
+May 03 09:01:18 server kernel: e1000e 0000:00:19.0 eth0: NIC Link is Up
+May 03 09:04:44 server kernel: EXT4-fs (sda1): re-mounted filesystem
+```
+
+Explanation:
+
+* `-k` filters journal entries to kernel messages.
+* `-b` limits output to the current boot.
+* Useful for checking startup and hardware initialization messages.
+* Helps avoid mixing current kernel messages with older boot logs.
 
 Examples:
 
 ```bash
 dmesg | grep -i error
+```
+
+This command searches kernel messages for the word `error`, ignoring letter case. It is useful for quickly finding kernel-level failures.
+
+Example output:
+
+```text
+[ 1234.442100] EXT4-fs error (device sda1): ext4_find_entry: inode read error
+[ 1240.112901] blk_update_request: I/O error, dev sda, sector 884120
+[ 1244.650331] usb 2-1: device descriptor read/64, error -71
+```
+
+Explanation:
+
+* `grep -i error` searches for `error`, `Error`, or `ERROR`.
+* Useful for finding disk, USB, filesystem, and driver errors.
+* May miss problems that use words like `failed`, `timeout`, or `reset`.
+* For broader searches, also check `fail`, `warn`, and `timeout`.
+
+```bash
 dmesg | grep -i usb
+```
+
+This command filters kernel messages related to USB devices. It is useful when checking whether a USB drive, keyboard, network adapter, or other USB device was detected correctly.
+
+Example output:
+
+```text
+[    1.245011] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[    1.601233] usb 1-1: New USB device found, idVendor=0781, idProduct=5567
+[    1.604811] usb-storage 1-1:1.0: USB Mass Storage device detected
+```
+
+Explanation:
+
+* Shows USB detection and driver messages.
+* Useful when a USB device is not appearing.
+* Can show device resets, disconnects, and descriptor errors.
+* Helpful for troubleshooting external drives and USB adapters.
+
+```bash
 dmesg | grep -i eth
+```
+
+This command searches kernel messages for Ethernet-related entries. It is useful when checking network interface detection, link state changes, and network driver messages.
+
+Example output:
+
+```text
+[    2.884310] eth0: renamed from enp0s3
+[   45.812001] e1000e 0000:00:19.0 eth0: NIC Link is Up 1000 Mbps Full Duplex
+[  300.441221] eth0: Link is Down
+```
+
+Explanation:
+
+* Searches for messages containing `eth`.
+* Useful for Ethernet interface troubleshooting.
+* Can show whether the network link is up or down.
+* Some systems use names like `enp0s3`, `ens160`, or `eno1` instead of `eth0`.
+
+```bash
 journalctl -k -p warning
 ```
+
+This command shows kernel warning messages and anything more severe. It is useful when you want to focus on kernel problems without reading normal informational messages.
+
+Example output:
+
+```text
+May 03 10:12:44 server kernel: CPU0: Core temperature above threshold
+May 03 10:13:02 server kernel: blk_update_request: I/O error, dev sda, sector 884120
+May 03 10:13:10 server kernel: EXT4-fs warning (device sda1): mounting fs with errors
+```
+
+Explanation:
+
+* `-k` filters logs to kernel messages.
+* `-p warning` shows warnings, errors, critical, alert, and emergency messages.
+* Useful for finding serious hardware or kernel issues quickly.
+* Can be combined with `-b` to show warnings from the current boot only.
 
 Sample kernel log:
 
@@ -420,6 +891,8 @@ Sample kernel log:
 [12347.222222] CPU0: Core temperature above threshold
 ```
 
+This sample shows three different kernel-level problems. The first line indicates a network interface link problem, the second line indicates a filesystem or disk write problem, and the third line indicates a CPU temperature warning.
+
 Interpretation:
 
 ```text
@@ -428,17 +901,23 @@ EXT4-fs error            → filesystem or disk issue
 temperature threshold    → cooling or hardware problem
 ```
 
+Explanation:
+
+* `eth0 Link is Down` usually means the network cable was unplugged, the virtual interface disconnected, or the switch port went down.
+* `EXT4-fs error` usually points to filesystem corruption, disk I/O errors, storage problems, or an unsafe shutdown.
+* `I/O error while writing superblock` is serious because the superblock contains important filesystem metadata.
+* `CPU temperature above threshold` means the CPU is getting too hot and may throttle performance or shut down to protect hardware.
+* Repeated disk, filesystem, or temperature messages should be investigated immediately.
+
 #### Authentication Logs
 
 Authentication logs record:
 
-```text
-SSH login attempts
-sudo usage
-failed passwords
-user sessions
-PAM authentication
-```
+- SSH login attempts
+- sudo usage
+- failed passwords
+- user sessions
+- PAM authentication
 
 Ubuntu/Debian:
 
@@ -634,7 +1113,7 @@ or:
 /var/log/httpd/error_log
 ```
 
-#### 6.7 Database Logs
+#### Database Logs
 
 PostgreSQL logs may be in:
 
@@ -1029,7 +1508,7 @@ grep myapp /var/log/syslog
 
 ### Creating Logs from Shell Scripts
 
-## Using `logger`
+#### Using `logger`
 
 The `logger` command sends messages to syslog/journald.
 
@@ -1081,13 +1560,11 @@ grep backup_script /var/log/syslog
 
 `rsyslog` is a powerful syslog daemon used to:
 
-```text
-receive logs
-filter logs
-write logs to files
-forward logs to remote servers
-split logs by facility/severity/program
-```
+- receive logs
+- filter logs
+- write logs to files
+- forward logs to remote servers
+- split logs by facility/severity/program
 
 Basic flow:
 
@@ -1125,21 +1602,17 @@ mail.info            /var/log/mail.info
 
 Facilities:
 
-```text
-+----------+---------------------------+
-| Facility | Meaning                   |
-|----------|---------------------------|
-| auth     | Authentication            |
-| authpriv | Private auth messages     |
-| cron     | Cron jobs                 |
-| daemon   | System daemons            |
-| kern     | Kernel messages           |
-| mail     | Mail system               |
-| syslog   | Syslog internal messages  |
-| user     | User-level messages       |
-| local0-7 | Custom use                |
-+----------+---------------------------+
-```
+| Facility | Meaning                  |
+| -------- | ------------------------ |
+| auth     | Authentication           |
+| authpriv | Private auth messages    |
+| cron     | Cron jobs                |
+| daemon   | System daemons           |
+| kern     | Kernel messages          |
+| mail     | Mail system              |
+| syslog   | Syslog internal messages |
+| user     | User-level messages      |
+| local0-7 | Custom use               |
 
 Priorities:
 
@@ -1233,25 +1706,19 @@ Logs grow forever unless managed.
 
 Housekeeping means:
 
-```text
-rotate old logs
-compress old logs
-delete expired logs
-limit disk usage
-vacuum journal files
-archive important logs
-```
+- rotate old logs
+- compress old logs
+- delete expired logs
+- limit disk usage
+- vacuum journal files
+- archive important logs
 
 There are two major housekeeping systems:
 
-```text
-+------------------+----------------------------------------+
-| System           | Manages                                |
+| System           | Manages                               |
 |------------------|----------------------------------------|
-| logrotate        | Plain text logs in /var/log             |
-| journald config  | systemd journal size and retention      |
-+------------------+----------------------------------------+
-```
+| logrotate        | Plain text logs in /var/log            |
+| journald config  | systemd journal size and retention     |
 
 #### Logrotate
 
@@ -1456,25 +1923,21 @@ This is where practical debugging happens.
 
 #### Basic Tools
 
-```text
-+---------+------------------------------------------------+
-| Tool    | Use                                            |
-|---------|------------------------------------------------|
-| less    | Read large files interactively                 |
-| tail    | Show last lines / follow live logs             |
-| grep    | Search text                                    |
-| awk     | Extract columns / summarize                    |
-| sed     | Transform/filter text                          |
-| cut     | Extract fields                                 |
-| sort    | Sort results                                   |
-| uniq    | Count repeated lines                           |
-| wc      | Count lines                                    |
-| jq      | Parse JSON logs                                |
-| journalctl | Query systemd journal                       |
-| zgrep   | Search compressed .gz logs                     |
-| lnav    | Interactive log viewer                         |
-+---------+------------------------------------------------+
-```
+| Tool       | Use                                |
+| ---------- | ---------------------------------- |
+| less       | Read large files interactively     |
+| tail       | Show last lines / follow live logs |
+| grep       | Search text                        |
+| awk        | Extract columns / summarize        |
+| sed        | Transform/filter text              |
+| cut        | Extract fields                     |
+| sort       | Sort results                       |
+| uniq       | Count repeated lines               |
+| wc         | Count lines                        |
+| jq         | Parse JSON logs                    |
+| journalctl | Query systemd journal              |
+| zgrep      | Search compressed .gz logs         |
+| lnav       | Interactive log viewer             |
 
 #### Fast Examples
 
@@ -1627,14 +2090,12 @@ sudo lnav /var/log/nginx/*.log
 
 Benefits:
 
-```text
-colored logs
-automatic timestamp detection
-search
-filtering
-SQL-like queries
-multiple files together
-```
+- colored logs
+- automatic timestamp detection
+- search
+- filtering
+- SQL-like queries
+- multiple files together
 
 #### Gathering Logs Together
 
@@ -1695,26 +2156,22 @@ For many servers, centralized logging is better.
 
 Common tools:
 
-```text
-+----------------+--------------------------------------------------+
-| Tool           | Purpose                                          |
-|----------------|--------------------------------------------------|
-| rsyslog        | Classic syslog forwarding and routing            |
-| syslog-ng      | Alternative syslog daemon                        |
-| Fluent Bit     | Lightweight log collector/forwarder              |
-| Fluentd        | Heavier log collector/processor                  |
-| Vector         | Fast log/event pipeline                          |
-| Logstash       | Processing pipeline for Elastic/OpenSearch       |
-| Filebeat       | Ships log files to Elastic/OpenSearch            |
-| Promtail       | Ships logs to Loki                               |
-| Loki           | Log storage/query system by Grafana ecosystem    |
-| Elasticsearch  | Search/index log storage                         |
-| OpenSearch     | Open-source Elasticsearch alternative            |
-| Splunk         | Commercial log analytics platform                |
-| Grafana        | Dashboards for logs and metrics                  |
-| Kibana         | Elasticsearch visualization UI                   |
-+----------------+--------------------------------------------------+
-```
+| Tool          | Purpose                                       |
+| ------------- | --------------------------------------------- |
+| rsyslog       | Classic syslog forwarding and routing         |
+| syslog-ng     | Alternative syslog daemon                     |
+| Fluent Bit    | Lightweight log collector/forwarder           |
+| Fluentd       | Heavier log collector/processor               |
+| Vector        | Fast log/event pipeline                       |
+| Logstash      | Processing pipeline for Elastic/OpenSearch    |
+| Filebeat      | Ships log files to Elastic/OpenSearch         |
+| Promtail      | Ships logs to Loki                            |
+| Loki          | Log storage/query system by Grafana ecosystem |
+| Elasticsearch | Search/index log storage                      |
+| OpenSearch    | Open-source Elasticsearch alternative         |
+| Splunk        | Commercial log analytics platform             |
+| Grafana       | Dashboards for logs and metrics               |
+| Kibana        | Elasticsearch visualization UI                |
 
 ### Debugging with Logs: Practical Playbooks
 
@@ -1793,15 +2250,13 @@ sudo grep "Accepted" /var/log/auth.log
 
 Common causes:
 
-```text
-wrong password
-wrong username
-SSH key permission problem
-firewall blocking port
-PermitRootLogin disabled
-PasswordAuthentication disabled
-fail2ban blocking IP
-```
+- wrong password
+- wrong username
+- SSH key permission problem
+- firewall blocking port
+- PermitRootLogin disabled
+- PasswordAuthentication disabled
+- fail2ban blocking IP
 
 #### Disk Full Because of Logs
 
@@ -1975,46 +2430,40 @@ sudo fail2ban-client status sshd
 
 #### For Linux Admins
 
-```text
-Use journalctl for systemd services.
-Use /var/log for traditional text logs.
-Check service-specific logs.
-Know your distro differences.
-Use logrotate.
-Check journal disk usage.
-Centralize logs for multiple servers.
-Do not delete logs blindly.
-Secure log permissions.
-```
+- Use journalctl for systemd services.
+- Use /var/log for traditional text logs.
+- Check service-specific logs.
+- Know your distro differences.
+- Use logrotate.
+- Check journal disk usage.
+- Centralize logs for multiple servers.
+- Do not delete logs blindly.
+- Secure log permissions.
 
 #### For Application Developers
 
-```text
-Use structured logging.
-Include timestamps.
-Include severity levels.
-Include service name.
-Include request IDs where possible.
-Log exceptions with tracebacks.
-Avoid logging secrets.
-Send logs to stdout when running under systemd or containers.
-Use JSON logs for production systems.
-```
+- Use structured logging.
+- Include timestamps.
+- Include severity levels.
+- Include service name.
+- Include request IDs where possible.
+- Log exceptions with tracebacks.
+- Avoid logging secrets.
+- Send logs to stdout when running under systemd or containers.
+- Use JSON logs for production systems.
 
 #### What Not to Log
 
 Avoid logging:
 
-```text
-passwords
-API keys
-private tokens
-session cookies
-credit card numbers
-personal data unless required
-SSH private keys
-database credentials
-```
+- passwords
+- API keys
+- private tokens
+- session cookies
+- credit card numbers
+- personal data unless required
+- SSH private keys
+- database credentials
 
 Bad:
 
