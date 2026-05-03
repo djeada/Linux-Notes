@@ -42,22 +42,17 @@ May 03 09:02:44 web01 myapp[1234]: ERROR Database connection failed
 
 Logs are used for:
 
-```text
-+--------------------+--------------------------------------------------+
-| Purpose            | Example                                          |
-|--------------------|--------------------------------------------------|
-| Troubleshooting    | Why did nginx fail to start?                     |
-| Security           | Who tried to SSH into the server?                |
-| Auditing           | Who used sudo?                                   |
-| Monitoring         | Is disk space filling up?                        |
-| Performance        | Why is the app slow?                             |
-| Compliance         | Can we prove access attempts were recorded?      |
-+--------------------+--------------------------------------------------+
-```
+| Purpose         | Example                                     |
+| --------------- | ------------------------------------------- |
+| Troubleshooting | Why did nginx fail to start?                |
+| Security        | Who tried to SSH into the server?           |
+| Auditing        | Who used sudo?                              |
+| Monitoring      | Is disk space filling up?                   |
+| Performance     | Why is the app slow?                        |
+| Compliance      | Can we prove access attempts were recorded? |
 
-Without logs, debugging becomes guessing.
-
-With logs, debugging becomes investigation.
+- Without logs, you can't really debug, you can only guess.
+- With logs, debugging becomes investigation.
 
 ### The Linux Logging Landscape
 
