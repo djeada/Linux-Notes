@@ -28,8 +28,6 @@ The most important distinction is this:
 > A shell variable belongs only to the current shell.
 > An environment variable is exported so that child processes can inherit it.
 
----
-
 ### Shell Variables
 
 A **shell variable** exists only inside the current shell process.
@@ -93,8 +91,6 @@ export VAR=value
 
 creates or updates a shell variable **and marks it for inheritance by child processes**.
 
----
-
 ## Environment Variables
 
 Environment variables are key-value pairs that a process passes to its child processes. They are commonly used for configuration, such as executable search paths, language settings, home directories, credentials, and feature flags.
@@ -115,8 +111,6 @@ That copy is extremely important:
 
 > Environment variables flow downward from parent to child.
 > They do not flow upward from child to parent.
-
----
 
 ### Listing Environment Variables
 
@@ -163,8 +157,6 @@ Example output:
 ```bash
 /home/ahmad
 ```
-
----
 
 ## Shell Variable vs Environment Variable
 
@@ -242,13 +234,9 @@ Example output:
 
 It is empty because `DATABASE_URL=value command` only applies to that one command invocation.
 
----
-
 ## How Long Do Environment Variables Persist?
 
 Environment variables do **not** automatically persist forever. Their lifetime depends on where they were defined.
-
----
 
 ### 1. Current Terminal Session
 
@@ -274,8 +262,6 @@ abc123
 ```
 
 But when you close the terminal, that shell process exits, and the variable disappears.
-
----
 
 ### 2. Between Different Terminals
 
@@ -329,8 +315,6 @@ source ~/.bashrc
 
 Now future interactive Bash sessions that read `~/.bashrc` will set `EDITOR`.
 
----
-
 ### 3. Permanent Variables via Startup Files
 
 To persist a variable across new shell sessions, add it to a shell startup file.
@@ -371,8 +355,6 @@ For login shells, especially on macOS or server logins, variables may belong in:
 
 The exact file depends on shell and login mode.
 
----
-
 ## Parent and Child Processes
 
 Every running program is a process.
@@ -396,8 +378,6 @@ The shell is the parent. `python3` is the child.
 
 The child receives a **copy** of the parent’s environment.
 
----
-
 ### Concrete Example: Parent Gives Environment to Child
 
 Run this in the shell:
@@ -414,8 +394,6 @@ Child sees COLOR = blue
 ```
 
 The Python process inherited `COLOR` from the shell.
-
----
 
 ### Concrete Example: Child Changes Its Own Environment
 
@@ -444,8 +422,6 @@ This is one of the most important rules:
 
 The environment is copied downward, not shared upward.
 
----
-
 ## Fork and Exec
 
 When a Unix-style shell runs an external command, it usually uses two important operations:
@@ -454,8 +430,6 @@ When a Unix-style shell runs an external command, it usually uses two important 
 2. `exec()`
 
 They do different things.
-
----
 
 ### `fork()`
 
@@ -483,8 +457,6 @@ parent shell
 
 The child has its own copy. If the child changes `COLOR`, the parent is not affected.
 
----
-
 ### `exec()`
 
 `exec()` does **not** create a new process.
@@ -510,8 +482,6 @@ COLOR=blue
 ```
 
 But that does not mean the parent shell is affected.
-
----
 
 ### Normal Shell Command: `fork()` + `exec()`
 
@@ -546,8 +516,6 @@ The important point:
 > A child process became `ls`.
 
 That is why changes made by `ls`, Python, Node, Ruby, or any other child process do not affect the parent shell environment.
-
----
 
 ### Why “exec Keeps the Same Environment” Can Be Confusing
 
@@ -588,8 +556,6 @@ dev
 ```
 
 Python changed its own environment, not the shell’s environment.
-
----
 
 ### Running `exec` Directly in the Shell
 
@@ -648,8 +614,6 @@ shell is replaced
 no original shell remains
 ```
 
----
-
 ### Fork vs Exec Summary
 
 | Operation      | Creates new process? | Keeps same process ID? | Environment behavior                                          |
@@ -658,8 +622,6 @@ no original shell remains
 | `exec()`       |                   No |                    Yes | New program keeps current process environment unless replaced |
 | normal command |         Yes, usually |     Child gets new PID | Shell forks; child execs command with copied environment      |
 | `exec command` |                   No |                    Yes | Current shell is replaced by command                          |
-
----
 
 ## Can a Child Process Change the Parent’s Environment?
 
@@ -715,8 +677,6 @@ Why?
 Because running `./change_token.sh` starts a child process.
 
 The child process can change its own environment, but not the parent shell’s environment.
-
----
 
 ## When Can a Script Change the Current Shell?
 
@@ -778,8 +738,6 @@ If you ran it as a normal script:
 ```
 
 it would modify only a child process and then exit, leaving your shell unchanged.
-
----
 
 ## Subshells
 
@@ -846,8 +804,6 @@ not:
 {commands}
 ```
 
----
-
 ## Builtins vs External Commands
 
 Some commands are shell builtins. They run inside the shell process itself.
@@ -890,8 +846,6 @@ ruby
 usually run in child processes.
 
 They inherit environment variables, but cannot modify the parent shell.
-
----
 
 ## Common Environment Variables
 
@@ -969,8 +923,6 @@ cd ~
 
 If `HOME` points to a nonexistent path, you may see errors in containers, minimal environments, or incorrectly configured users.
 
----
-
 ### `PWD`
 
 `PWD` stores the current working directory.
@@ -1026,8 +978,6 @@ may show the physical path:
 /mnt/data/projects/real_project
 ```
 
----
-
 ### `OLDPWD`
 
 `OLDPWD` stores the previous working directory.
@@ -1058,8 +1008,6 @@ Example output:
 /home/ahmad/projects/env_test
 ```
 
----
-
 ### `HOSTNAME`
 
 `HOSTNAME` identifies the current machine.
@@ -1087,8 +1035,6 @@ Example filename:
 ```
 
 In containers or cloud machines, the hostname may be a generated ID.
-
----
 
 ### `PATH`
 
@@ -1164,8 +1110,6 @@ Example output:
 ls is /usr/bin/ls
 ```
 
----
-
 ### `LANG`
 
 `LANG` controls locale settings such as language, character encoding, sorting behavior, and formatting.
@@ -1188,8 +1132,6 @@ export LANG=en_US.UTF-8
 
 If locale variables are misconfigured, programs may warn about unsupported locales or handle Unicode incorrectly.
 
----
-
 ### `EDITOR`
 
 `EDITOR` tells command-line tools which editor to open.
@@ -1205,8 +1147,6 @@ Example:
 ```bash
 git config --global core.editor "$EDITOR"
 ```
-
----
 
 ## Changing Variables
 
@@ -1256,8 +1196,6 @@ You can also set and export in one line:
 export DATABASE_URL='postgres://user:pass@localhost/db'
 ```
 
----
-
 ### One Command Only
 
 You can set an environment variable for only one command:
@@ -1295,8 +1233,6 @@ or:
 AWS_PROFILE=dev terraform plan
 ```
 
----
-
 ### Permanent Updates
 
 For permanent updates, add the export statement to a startup file.
@@ -1327,8 +1263,6 @@ Example output:
 vim
 ```
 
----
-
 ## Removing Variables
 
 Use `unset` to remove a shell or environment variable from the current shell.
@@ -1357,8 +1291,6 @@ Example output:
 ```
 
 If the variable was exported, `unset` also removes it from the environment of future child processes.
-
----
 
 ## Making Variables Read-Only
 
@@ -1398,8 +1330,6 @@ This is useful for constants in scripts:
 readonly CONFIG_DIR="$HOME/.config/myapp"
 readonly MAX_RETRIES=5
 ```
-
----
 
 ## Enforcing Defined Variables
 
@@ -1467,8 +1397,6 @@ set -euo pipefail
 echo "Using API key..."
 ```
 
----
-
 ## Customizing Your Prompt with `PS1`
 
 Your shell prompt is controlled by the `PS1` variable.
@@ -1512,8 +1440,6 @@ $
 ```
 
 `PS1` is usually a shell variable used by the interactive shell itself. It does not usually need to be exported.
-
----
 
 ## Word Splitting and `IFS`
 
@@ -1564,8 +1490,6 @@ alpha beta gamma
 ```
 
 Quoted expansions are not split.
-
----
 
 ### Splitting on Commas
 
@@ -1619,8 +1543,6 @@ Prefer local or one-command usage where possible:
 IFS=',' read -r a b c <<< "$data"
 ```
 
----
-
 ### Empty `IFS`
 
 Setting `IFS` to an empty value disables word splitting for unquoted expansions.
@@ -1641,8 +1563,6 @@ a b c
 ```
 
 This can be useful in rare cases, but it can also break loops that expect normal splitting.
-
----
 
 ## Listing Shell Definitions
 
@@ -1688,8 +1608,6 @@ declare -x HOME="/home/ahmad"
 
 The `-x` means exported.
 
----
-
 ## `env`: Running Commands with Modified Environments
 
 The `env` command can run a program with a modified environment.
@@ -1727,8 +1645,6 @@ env -i PATH=/usr/bin:/bin HOME="$HOME" python3 -c 'import os; print(os.environ)'
 This runs Python with only the variables you explicitly provide.
 
 This is useful for debugging scripts that accidentally depend on your personal shell environment.
-
----
 
 ## Safe Script Defaults
 
@@ -1768,8 +1684,6 @@ might appear successful because `sort` succeeded, even though `grep` failed.
 
 With `pipefail`, the whole pipeline fails.
 
----
-
 ## Practical Debugging Examples
 
 ### Check Whether a Variable Is Exported
@@ -1806,8 +1720,6 @@ MY_VAR = None
 EXPORTED_VAR = world
 ```
 
----
-
 ### Prove That a Child Cannot Change the Parent
 
 ```bash
@@ -1830,8 +1742,6 @@ Before change in child: parent
 After change in child: child
 Back in parent: LEVEL=parent
 ```
-
----
 
 ### Prove That Sourcing Changes the Current Shell
 
@@ -1869,8 +1779,6 @@ Example output:
 sourced
 ```
 
----
-
 ### Prove That Different Terminals Do Not Share Environment Changes
 
 Terminal 1:
@@ -1898,8 +1806,6 @@ Example output:
 ```
 
 They are separate shell processes.
-
----
 
 ## Mental Model
 
