@@ -481,48 +481,55 @@ The `:Z` flag at the end of the volume mount tells podman to apply the correct S
 
 #### Start Here (Beginner)
 
-1. **Set up your lab:**
-   - Install Rocky Linux or AlmaLinux in a virtual machine (these are free RHEL-compatible distributions that closely match the exam environment; avoid CentOS Stream as it's a rolling release that may differ from stable RHEL)
-   - Give it two virtual disks (one for the OS, one for practice partitioning)
-   - Allocate at least 2GB RAM
+**Set up your lab:**
 
-2. **Master the basics:**
-   - Create users, groups, and set passwords without looking at notes
-   - Practice file operations (copy, move, link, find) until they're automatic
-   - Set up SSH key-based authentication between two VMs
+- Install Rocky Linux or AlmaLinux in a virtual machine (these are free RHEL-compatible distributions that closely match the exam environment; avoid CentOS Stream as it's a rolling release that may differ from stable RHEL)
+- Give it two virtual disks (one for the OS, one for practice partitioning)
+- Allocate at least 2GB RAM
+
+**Master the basics:**
+
+- Create users, groups, and set passwords without looking at notes
+- Practice file operations (copy, move, link, find) until they're automatic
+- Set up SSH key-based authentication between two VMs
 
 #### Next Level (Intermediate)
 
-3. **Storage tasks:**
-   - Create partitions, physical volumes, volume groups, and logical volumes
-   - Extend logical volumes and resize filesystems
-   - Configure `/etc/fstab` entries and verify with `mount -a`
-   - Set up swap space using both partitions and files
+**Storage tasks:**
 
-4. **Service management:**
-   - Install and configure Apache (`httpd`)
-   - Configure it to start at boot with `systemctl enable`
-   - Open the correct firewall ports
-   - Fix SELinux contexts for custom document roots
+- Create partitions, physical volumes, volume groups, and logical volumes
+- Extend logical volumes and resize filesystems
+- Configure `/etc/fstab` entries and verify with `mount -a`
+- Set up swap space using both partitions and files
+
+**Service management:**
+
+- Install and configure Apache (`httpd`)
+- Configure it to start at boot with `systemctl enable`
+- Open the correct firewall ports
+- Fix SELinux contexts for custom document roots
 
 #### Advanced Challenges
 
-5. **Full scenario practice:**
-   - Reset the root password using the `rd.break` method
-   - Configure a container to run as a systemd service
-   - Set up autofs for NFS mounts
-   - Configure network interfaces using `nmcli`
+**Full scenario practice:**
 
-6. **Timed practice exam:**
-   - Set a 2.5-hour timer
-   - Work through all the tasks you can create from the exam objectives
-   - Use only `man` pages and `--help` for reference
-   - Reboot your VM at the end to verify persistence
+- Reset the root password using the `rd.break` method
+- Configure a container to run as a systemd service
+- Set up autofs for NFS mounts
+- Configure network interfaces using `nmcli`
+
+**Timed practice exam:**
+
+- Set a 2.5-hour timer
+- Work through all the tasks you can create from the exam objectives
+- Use only `man` pages and `--help` for reference
+- Reboot your VM at the end to verify persistence
 
 <details>
 <summary>Click for hints and tips</summary>
 
 **Critical things that must survive a reboot:**
+
 - `/etc/fstab` entries (use `mount -a` to test before rebooting)
 - Firewall rules (always use `--permanent` flag then `--reload`)
 - SELinux settings (use `-P` flag with `setsebool`)
@@ -530,6 +537,7 @@ The `:Z` flag at the end of the volume mount tells podman to apply the correct S
 - Network configuration changes made persistent via `nmcli`
 
 **Time management during the exam:**
+
 - Quickly read through all tasks first
 - Do easy tasks first to bank points
 - Don't spend more than 15 minutes on any single task
@@ -537,6 +545,7 @@ The `:Z` flag at the end of the volume mount tells podman to apply the correct S
 - Save 10 minutes at the end to verify persistence
 
 **Common pitfalls:**
+
 - Forgetting `restorecon` after changing SELinux file contexts
 - Using `firewall-cmd` without `--permanent`
 - Not testing `/etc/fstab` with `mount -a` before rebooting
@@ -569,8 +578,6 @@ After passing the RHCSA, consider these paths:
 - [Firewall](https://github.com/djeada/Linux-Notes/blob/main/notes/firewall.md) — Firewall configuration with firewalld
 - [Services](https://github.com/djeada/Linux-Notes/blob/main/notes/services.md) — Systemd service management
 - [Networking](https://github.com/djeada/Linux-Notes/blob/main/notes/networking.md) — Network configuration fundamentals
-
----
 
 **Ready to start studying?** Set up your practice lab first, then work through each exam objective systematically. The [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) can help you confirm that RHCSA is the right choice for your career goals.
 
