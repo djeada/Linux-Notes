@@ -831,19 +831,19 @@ nobody 65534
 
 These operators are used in `awk` patterns and conditions to compare values, combine logic, and match text using regular expressions.
 
-| Form | Meaning               |   |            |
-| ---- | --------------------- | - | ---------- |
-| `==` | equal to              |   |            |
-| `!=` | not equal to          |   |            |
-| `>`  | greater than          |   |            |
-| `<`  | less than             |   |            |
-| `>=` | greater than or equal |   |            |
-| `<=` | less than or equal    |   |            |
-| `&&` | logical AND           |   |            |
-| `    |                       | ` | logical OR |
-| `!`  | logical NOT           |   |            |
-| `~`  | matches regex         |   |            |
-| `!~` | does not match regex  |   |            |
+| Form | Meaning               |
+|------|-----------------------|
+| `==` | equal to              |
+| `!=` | not equal to          |
+| `>`  | greater than          |
+| `<`  | less than             |
+| `>=` | greater than or equal |
+| `<=` | less than or equal    |
+| `&&` | logical AND           |
+| `||` | logical OR            |
+| `!`  | logical NOT           |
+| `~`  | matches regex         |
+| `!~` | does not match regex  |
 
 Example:
 
