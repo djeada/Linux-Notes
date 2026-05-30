@@ -1,47 +1,153 @@
 ## Mounting and Unmounting
 
-If you come from a Windows world, the idea of mounting might sound strange at first, since Linux handles storage devices and filesystems quite differently. In Linux, "mounting" is the process of making a storage device (such as a hard disk partition, USB drive, or network share) accessible within the filesystem hierarchy. Here’s a brief overview:
+In Linux, mounting is the process of making a filesystem available somewhere inside the main directory tree.
 
-**What Can Be Mounted:**
+This can feel unusual if you come from Windows. In Windows, storage devices usually appear as separate drive letters, such as:
 
-- Hard disk partitions, SSDs, optical drives, and USB flash drives.  
-- Shares via NFS (Network File System) or SMB/CIFS (used by Windows shares).  
-- Special pseudo-filesystems like `/proc`, `/sys`, and `/dev` that provide interface access to system resources.
+```text
+C:\
+D:\
+E:\
+```
 
-**Mandatory vs. Optional Mounting:**  
+Linux works differently. Linux has one main directory tree that starts at:
 
-- Some filesystems must be mounted for the system to function properly. For example, root (`/`), `/proc`, `/sys`, and `/dev` are mounted at boot time by the system.
-- External drives, additional partitions, and remote shares can be mounted manually by the user when needed or configured to auto-mount based on system settings.
+```text
+/
+```
 
-**System vs. Manual Mounting on Distros like Ubuntu:**
+Storage devices, partitions, USB drives, ISO files, and network shares are attached somewhere inside that tree.
 
-- Ubuntu and similar distributions use *automatic mounting* for essential filesystems during boot. The `/etc/fstab` file contains entries that help the system decide which filesystems to mount at startup and with what options. Modern desktop environments also auto-mount removable media when they are connected.
-- Users may *manually mount* devices that aren’t auto-mounted using the `mount` command. This is common for transient devices or non-standard partition layouts, and for troubleshooting or accessing specific partitions without permanent configuration changes.
+For example, a USB drive might be mounted at:
+
+```text
+/mnt/external
+```
+
+or:
+
+```text
+/media/user/USB_DRIVE
+```
+
+Once mounted, the device looks like an ordinary directory. You can use commands such as `cd`, `ls`, `cp`, `mv`, and `rm` to work with its files.
+
+### What Can Be Mounted
+
+Many different things can be mounted in Linux.
+
+Common examples include:
+
+- hard disk partitions
+- SSD partitions
+- USB flash drives
+- external hard drives
+- CD/DVD/ISO images
+- network shares
+- special system filesystems
+
+Network filesystems can also be mounted, such as:
+
+```text
+NFS        common on Unix/Linux networks
+SMB/CIFS   common for Windows file shares
+```
+
+Linux also mounts special pseudo-filesystems that do not represent normal storage devices. These include:
+
+```text
+/proc
+/sys
+/dev
+/run
+```
+
+These provide information about processes, hardware, devices, and runtime system state.
+
+### Required and Optional Mounts
+
+Some filesystems are required for the system to work.
+
+For example:
+
+```text
+/       root filesystem
+/proc   process and kernel information
+/sys    hardware and kernel information
+/dev    device files
+```
+
+These are usually mounted automatically during boot.
+
+Other filesystems are optional. These include USB drives, extra partitions, external disks, ISO images, and network shares.
+
+Optional filesystems may be mounted manually by the user or automatically by the desktop environment.
+
+### Mounting on Desktop Linux
+
+On desktop distributions such as Ubuntu, Fedora, or Linux Mint, removable devices are often mounted automatically.
+
+For example, when you plug in a USB drive, the file manager may automatically mount it under something like:
+
+```text
+/media/username/USB_NAME
+```
+
+This is convenient for normal desktop use.
+
+Manual mounting is still useful when:
+
+- a device is not auto-mounted
+- you are working on a server
+- you are troubleshooting
+- you want a custom mount point
+- you are mounting an ISO file
+- you are mounting a network share
+- you need specific mount options
 
 ### Understanding Mounting
 
-Mounting is the process of making a file system accessible at a certain point in the Linux directory tree. When you mount a device, you're telling the operating system to attach the file system on that device to a specific directory, known as a mount point. This action integrates the device's file system with the existing directory structure, allowing you to read and write data to it as if it were just another directory on your system.
+Mounting attaches a filesystem to a directory.
 
-Imagine the Linux directory tree as a large, interconnected network of folders. By mounting a new device, you're effectively adding a new branch to this tree. This new branch can be accessed and navigated just like any other part of the tree.
+That directory is called a mount point.
 
-```
+Before mounting, the directory is just an ordinary directory. After mounting, the contents of the mounted filesystem appear there.
+
+```text
 Linux Directory Tree Before Mounting:
 
 /
 ├── bin
 ├── etc
 ├── home
-│   ├── user
+│   └── user
+├── mnt
 ├── usr
 └── var
+```
 
+Now suppose a USB drive partition is available as:
+
+```text
+/dev/sdb1
+```
+
+and we mount it at:
+
+```text
+/mnt/external
+```
+
+After mounting, the tree may look like this:
+
+```text
 Linux Directory Tree After Mounting /dev/sdb1 at /mnt/external:
 
 /
 ├── bin
 ├── etc
 ├── home
-│   ├── user
+│   └── user
 ├── mnt
 │   └── external  <-- Mounted device /dev/sdb1
 │       ├── documents
@@ -51,280 +157,865 @@ Linux Directory Tree After Mounting /dev/sdb1 at /mnt/external:
 └── var
 ```
 
-In this diagram, `/dev/sdb1` is a storage device (like a USB drive), and `/mnt/external` is the directory where it's mounted. After mounting, the contents of the device appear under `/mnt/external`.
+The files are physically stored on `/dev/sdb1`, but they are accessed through `/mnt/external`.
 
-### The Mount Command
+A simple way to remember this is:
 
-To mount a file system, you use the `mount` command. This command attaches the file system found on a device to the directory tree at the specified mount point.
-
-**Basic Syntax:**
-
-```bash
-mount [OPTIONS] <DEVICE> <MOUNT_POINT>
+```text
+Device or filesystem + mount point = accessible files
 ```
 
-- `<DEVICE>` is the device file representing the storage device, such as `/dev/sdb1` for a specific partition.
-- `<MOUNT_POINT>` is the directory where you want to access the contents of the device, like `/mnt/external`.
+### Important Mounting Idea
 
-**Common Options (`[OPTIONS]`):** 
+Mounting does not copy files into the mount point.
 
-- `-t <filesystem_type>` lets you specify the filesystem type, like `ext4` for Linux filesystems or `ntfs` for Windows filesystems. If you don’t specify this, `mount` will try to detect the filesystem type automatically.
-- `-o <options>` allows you to pass specific options. For example, `ro` mounts the device as read-only, while `rw` makes it read-write. You can also use `noexec` to prevent files on the device from being executed or `uid=<user_id>` to set the ownership. 
+It simply makes the filesystem visible at that location.
 
-**Example:**
-
-Suppose you have a USB drive at `/dev/sdb1` that you want to mount at `/mnt/external`. Here's how you can do it:
-
-I. **Create a Mount Point:**
-
-First, create the directory if it doesn't exist:
-
-```bash
-sudo mkdir -p /mnt/external
-```
-
-II. **Mount the Device:**
+For example:
 
 ```bash
 sudo mount /dev/sdb1 /mnt/external
 ```
 
-This command mounts the device `/dev/sdb1` to the directory `/mnt/external`.
+does not copy the USB drive into `/mnt/external`.
 
-**Understanding the Output:**
+It attaches the filesystem on `/dev/sdb1` so that its contents can be accessed through `/mnt/external`.
 
-After mounting, you can verify that the device is mounted by using the `mount` command without any arguments:
+### Mount Points
+
+A mount point is a directory where a filesystem is attached.
+
+Common mount point locations include:
+
+```text
+/mnt        traditional temporary mount location
+/media      common location for removable media
+/backup     custom mount point for backup drives
+/data       custom mount point for data disks
+```
+
+For example:
+
+```text
+/mnt/external
+/mnt/iso
+/media/usb
+/data
+/backup
+```
+
+A mount point should usually be empty before mounting.
+
+If the directory already contains files, those files are not deleted, but they become hidden while another filesystem is mounted on top of that directory.
+
+Example:
+
+```text
+Before mounting:
+/mnt/external contains oldfile.txt
+
+After mounting /dev/sdb1 at /mnt/external:
+/mnt/external shows the USB drive contents
+
+After unmounting:
+/mnt/external shows oldfile.txt again
+```
+
+This can confuse beginners, so it is best to use an empty directory as the mount point.
+
+### Device Names
+
+Linux represents storage devices using files under:
+
+```text
+/dev
+```
+
+Examples:
+
+```text
+/dev/sda      first disk
+/dev/sda1     first partition on first disk
+/dev/sdb      second disk
+/dev/sdb1     first partition on second disk
+/dev/nvme0n1  NVMe disk
+/dev/nvme0n1p1 first partition on NVMe disk
+```
+
+A USB drive might appear as:
+
+```text
+/dev/sdb
+```
+
+and its first partition might appear as:
+
+```text
+/dev/sdb1
+```
+
+However, device names can change after rebooting or reconnecting hardware. For persistent configuration, it is usually better to use a UUID instead of a device name.
+
+### Checking Which Devices Exist
+
+Before mounting a device, first check whether Linux can see it.
+
+Useful commands include:
 
 ```bash
-mount
+lsblk
 ```
-
-This will display a list of all mounted file systems. Look for an entry like:
-
-```
-/dev/sdb1 on /mnt/external type ext4 (rw,relatime)
-```
-
-Breaking down the command:
-
-- `/dev/sdb1` is the device that's mounted.
-- `on /mnt/external` is the mount point.
-- `type ext4` is the file system type.
-- `(rw,relatime)` are mount options indicating it's read-write with relatime updates.
-
-### Understanding Unmounting
-
-Unmounting is the process of detaching a mounted file system from the directory tree. Before physically disconnecting a device, you should always unmount it to ensure that all data has been written to the device and to prevent data corruption.
-
-Think of unmounting as safely removing a book from a library shelf. You ensure that no one is reading or writing notes in it before you take it away.
-
-### The Umount Command
-
-To unmount a file system, you use the `umount` command (note there's no 'n' in 'umount').
-
-**Basic Syntax:**
-Of course! Here’s a clear explanation for unmounting a device:
-
-**Basic Syntax:**
-
-```bash
-umount [OPTIONS] <MOUNT_POINT or DEVICE>
-```
-
-- `<MOUNT_POINT>` or `<DEVICE>` specifies what you want to unmount. You can provide the directory where the device is mounted (e.g., `/mnt/external`) or the device itself (e.g., `/dev/sdb1`).
-
-**Common Options (`[OPTIONS]`):**
-
-- `-l` (Lazy unmount) allows the unmounting process to complete after the device is no longer in use. This is helpful if a process is currently accessing the device, as it will unmount once that process finishes.
-- `-f` (Force unmount) forces the device to unmount, even if it’s currently in use. Use this with caution, as it can lead to data corruption if the device is actively writing or reading data.
-
-**Example:**
-
-To unmount the device we mounted earlier:
-
-```bash
-sudo umount /mnt/external
-```
-
-**Handling Common Issues:**
-
-Sometimes, you might encounter an error like:
-
-```
-umount: /mnt/external: target is busy.
-```
-
-This means that a process is still using the file system. To find out which processes are causing this, you can use:
-
-```bash
-sudo lsof +f -- /mnt/external
-```
-
-This command lists open files on the file system. The output will look something like:
-
-```
-COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-bash     1234 user  cwd    DIR   8,17     4096    2 /mnt/external
-```
-
-Below is a table explaining meaning of each field:
-
-| **Field**   | **Description**                                                                                                     |
-|-------------|---------------------------------------------------------------------------------------------------------------------|
-| `COMMAND`   | The name of the command or process that opened the file.                                                            |
-| `PID`       | The Process ID of the command or process.                                                                           |
-| `USER`      | The user who owns the process that opened the file.                                                                 |
-| `FD`        | The file descriptor (e.g., `cwd` for current directory, `rtd` for root, `txt` for code, `mem` for memory).          |
-| `TYPE`      | The type of file, such as `REG` (regular file), `DIR` (directory), `CHR` (character device), `FIFO` (pipe), etc.    |
-| `DEVICE`    | The device number (major and minor) for the file.                                                                   |
-| `SIZE/OFF`  | The size of the file or the file offset.                                                                            |
-| `NODE`      | The file's inode number.                                                                                            |
-| `NAME`      | The name or path of the file being accessed.                                                                        |
-
-To resolve the issue, you can close the application or navigate out of the directory in any terminal sessions. If necessary, you can terminate the process using:
-
-```bash
-sudo kill 1234
-```
-
-### Verifying Drive Visibility
-
-Before mounting a device, it's important to verify that the operating system recognizes it. This ensures that the device is properly connected and ready for use.
-
-**Using fdisk to List Devices:**
-
-The `fdisk -l` command lists all the disk partitions on the system.
 
 ```bash
 sudo fdisk -l
 ```
 
-**Sample Output:**
-
+```bash
+blkid
 ```
-Disk /dev/sda: 256 GB
-...
+
+The `lsblk` command is often the easiest for beginners.
+
+Example:
+
+```bash
+lsblk
+```
+
+Example output:
+
+```text
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0 256.0G  0 disk
+├─sda1   8:1    0   512M  0 part /boot
+└─sda2   8:2    0 255.5G  0 part /
+sdb      8:16   1  32.0G  0 disk
+└─sdb1   8:17   1  32.0G  0 part
+```
+
+This shows that `/dev/sdb1` exists but is not currently mounted.
+
+The `fdisk -l` command gives more detailed partition information:
+
+```bash
+sudo fdisk -l
+```
+
+Example output:
+
+```text
 Disk /dev/sdb: 32 GB
 Device     Boot Start       End   Sectors  Size Id Type
 /dev/sdb1        2048  62521343  62519296 29.8G 83 Linux
 ```
 
-- The disk named `/dev/sdb` is configured with a **total capacity** of 32 GB, which can be used for various storage purposes.
-- Within this disk, there exists a **partition** labeled `/dev/sdb1`, allowing for segmented storage allocation.
-- This **partition** possesses a specific size, which may occupy the entire disk space or just a portion, depending on how it was set up.
-- The **type** of the `/dev/sdb1` partition typically indicates its intended usage, such as **Linux** or **swap** partition, which defines how the system interacts with it. 
+This means:
 
-### Mounting File Systems with Specific Types
+```text
+/dev/sdb   is the disk
+/dev/sdb1  is a partition on that disk
+29.8G      is the partition size
+Linux      is the partition type
+```
 
-Sometimes, you may need to specify the file system type when mounting, especially if it's not a standard type or if the system doesn't auto-detect it.
+The partition is usually what you mount, not the whole disk.
 
-**Example: Mounting a NTFS File System**
+So you usually mount:
 
-Suppose you have an external hard drive formatted with the NTFS file system (common with Windows). You can mount it using:
+```text
+/dev/sdb1
+```
+
+not:
+
+```text
+/dev/sdb
+```
+
+### The `mount` Command
+
+The `mount` command attaches a filesystem to a mount point.
+
+Basic syntax:
 
 ```bash
-sudo mount -t ntfs /dev/sdb1 /mnt/external
+mount [OPTIONS] DEVICE MOUNT_POINT
 ```
 
-Breaking down the command:
-
-- `-t ntfs` specifies the file system type as NTFS.
-
-### Using the /etc/fstab File for Persistent Mounts
-
-The `/etc/fstab` file contains information about file systems and mount points. By adding an entry here, you can configure the system to automatically mount a device at boot.
-
-**Example Entry:**
-
-```
-/dev/sdb1   /mnt/external   ext4    defaults    0   2
-```
-
-Below is a table explaining each field in the entry:
-
-| **Field**            | **Description**                                                                                   |
-|----------------------|---------------------------------------------------------------------------------------------------|
-| **Device**           | `/dev/sdb1` – the device file or partition being mounted.                                         |
-| **Mount Point**      | `/mnt/external` – the directory where the device is mounted.                                      |
-| **File System Type** | `ext4` – the type of file system on the device.                                                   |
-| **Options**          | `defaults` – standard mount options (e.g., read-write, async).                                    |
-| **Dump**             | `0` – indicates if the partition should be backed up by the `dump` utility (`0` = no).            |
-| **Pass**             | `2` – the fsck order during boot (`1` for root filesystem, `2` for other filesystems, `0` for no check). |
-
-**Mounting All File Systems in fstab:**
-
-After editing `/etc/fstab`, you can mount all file systems listed there using:
+Example:
 
 ```bash
-sudo mount -a
+sudo mount /dev/sdb1 /mnt/external
+```
+
+This means:
+
+```text
+Mount the filesystem on /dev/sdb1 at /mnt/external.
+```
+
+The general workflow is:
+
+```text
+Find the device
+      |
+      v
+Create a mount point
+      |
+      v
+Mount the device
+      |
+      v
+Access files through the mount point
+```
+
+### Basic Manual Mount Example
+
+Suppose a USB drive partition is available as:
+
+```text
+/dev/sdb1
+```
+
+and you want to access it at:
+
+```text
+/mnt/external
+```
+
+First, create the mount point:
+
+```bash
+sudo mkdir -p /mnt/external
+```
+
+Then mount the device:
+
+```bash
+sudo mount /dev/sdb1 /mnt/external
+```
+
+Now list the files:
+
+```bash
+ls /mnt/external
+```
+
+You can also move into the mounted filesystem:
+
+```bash
+cd /mnt/external
+```
+
+### Verifying Mounted Filesystems
+
+To see mounted filesystems, you can run:
+
+```bash
+mount
+```
+
+However, the output can be long.
+
+A cleaner command is:
+
+```bash
+findmnt
+```
+
+To check one mount point:
+
+```bash
+findmnt /mnt/external
+```
+
+Example output:
+
+```text
+TARGET        SOURCE    FSTYPE OPTIONS
+/mnt/external /dev/sdb1 ext4   rw,relatime
+```
+
+This means:
+
+|             | Description          |
+| ----------- | -------------------- |
+| **TARGET**  | Where it is mounted  |
+| **SOURCE**  | Device being mounted |
+| **FSTYPE**  | Filesystem type      |
+| **OPTIONS** | Mount options        |
+
+
+You can also use:
+
+```bash
+df -h
+```
+
+This shows mounted filesystems and available space in a human-readable format.
+
+### Understanding Mount Output
+
+A mount entry might look like this:
+
+```text
+/dev/sdb1 on /mnt/external type ext4 (rw,relatime)
+```
+
+Breaking it down:
+
+```text
+/dev/sdb1        device
+/mnt/external    mount point
+ext4             filesystem type
+rw               read-write
+relatime         access-time update behavior
+```
+
+The `rw` option means the filesystem is mounted read-write.
+
+A read-only mount would show:
+
+```text
+ro
+```
+
+### Filesystem Types
+
+A filesystem type describes how data is organized on the device.
+
+Common filesystem types include:
+
+| Filesystem  | Description                                    |
+| ----------- | ---------------------------------------------- |
+| **ext4**    | Common Linux filesystem                        |
+| **xfs**     | Common on servers                              |
+| **btrfs**   | Modern Linux filesystem with advanced features |
+| **vfat**    | FAT32, common for USB drives                   |
+| **exfat**   | Common for large USB drives and SD cards       |
+| **ntfs**    | Common Windows filesystem                      |
+| **iso9660** | CD/DVD ISO filesystem                          |
+| **nfs**     | Network File System                            |
+| **cifs**    | Windows/Samba network share                    |
+
+Usually Linux can detect the filesystem automatically.
+
+If needed, you can specify it manually with `-t`.
+
+Example:
+
+```bash
+sudo mount -t ext4 /dev/sdb1 /mnt/external
+```
+
+For an NTFS drive:
+
+```bash
+sudo mount -t ntfs3 /dev/sdb1 /mnt/external
+```
+
+On some systems, especially older ones, NTFS support may use `ntfs-3g`:
+
+```bash
+sudo mount -t ntfs-3g /dev/sdb1 /mnt/external
+```
+
+If you get an error about an unknown filesystem type, you may need to install support for that filesystem.
+
+### Mount Options
+
+Mount options control how the filesystem is mounted.
+
+Options are passed with `-o`.
+
+Example:
+
+```bash
+sudo mount -o ro /dev/sdb1 /mnt/external
+```
+
+This mounts the filesystem as read-only.
+
+Common options include:
+
+| Option       | Description                                            |
+| ------------ | ------------------------------------------------------ |
+| **ro**       | Read-only                                              |
+| **rw**       | Read-write                                             |
+| **noexec**   | Do not allow execution of programs from the filesystem |
+| **nosuid**   | Ignore set-user-ID and set-group-ID bits               |
+| **nodev**    | Do not interpret device files                          |
+| **uid=1000** | Set file owner for filesystems without Unix ownership  |
+| **gid=1000** | Set group owner                                        |
+| **defaults** | Use default options                                    |
+
+Examples:
+
+```bash
+sudo mount -o ro /dev/sdb1 /mnt/external
+```
+
+```bash
+sudo mount -o noexec,nosuid,nodev /dev/sdb1 /mnt/external
+```
+
+Read-only mounting is useful when you want to inspect a disk without accidentally changing it.
+
+### Unmounting
+
+Unmounting detaches a mounted filesystem from the directory tree.
+
+The command is:
+
+```bash
+umount
+```
+
+Notice the spelling:
+
+```text
+umount
+```
+
+not:
+
+```text
+unmount
+```
+
+To unmount a filesystem, use either the mount point or the device.
+
+Example using the mount point:
+
+```bash
+sudo umount /mnt/external
+```
+
+Example using the device:
+
+```bash
+sudo umount /dev/sdb1
+```
+
+After unmounting, the files from the device are no longer visible at the mount point.
+
+### Why Unmounting Matters
+
+You should unmount removable storage before physically removing it.
+
+Linux often caches writes. This means that when you copy a file to a USB drive, the command may finish before all data has actually been written to the physical device.
+
+Unmounting makes sure pending writes are completed.
+
+The safe workflow is:
+
+```text
+Copy files
+    |
+    v
+Unmount the device
+    |
+    v
+Wait for command to finish
+    |
+    v
+Physically remove the device
+```
+
+If you unplug a device without unmounting it, you may cause:
+
+- corrupted files
+- incomplete writes
+- damaged filesystem metadata
+- lost data
+
+### The `sync` Command
+
+The `sync` command asks Linux to flush cached writes to storage.
+
+```bash
+sync
+```
+
+This can be useful before unmounting removable media.
+
+However, `sync` is not a replacement for `umount`.
+
+A safer sequence is:
+
+```bash
+sync
+sudo umount /mnt/external
+```
+
+### Handling “Target Is Busy”
+
+Sometimes unmounting fails with an error like:
+
+```text
+umount: /mnt/external: target is busy
+```
+
+This means something is still using the mounted filesystem.
+
+Common causes include:
+
+- a terminal is currently inside the mount point
+- a file is open in an editor
+- a program is reading or writing files there
+- a shell process has that directory as its current working directory
+
+For example, if your terminal is currently in:
+
+```text
+/mnt/external
+```
+
+then unmounting may fail.
+
+Move out of the directory:
+
+```bash
+cd ~
+```
+
+Then try again:
+
+```bash
+sudo umount /mnt/external
+```
+
+### Finding Processes Using a Mount
+
+To see which processes are using a mount point, use `lsof`:
+
+```bash
+sudo lsof +f -- /mnt/external
+```
+
+Example output:
+
+```text
+COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+bash     1234 user  cwd    DIR   8,17     4096    2 /mnt/external
+```
+
+This means a Bash process with PID `1234` has its current working directory inside `/mnt/external`.
+
+The most important fields are:
+
+| Field       | Description                  |
+| ----------- | ---------------------------- |
+| **COMMAND** | Process name                 |
+| **PID**     | Process ID                   |
+| **USER**    | User running the process     |
+| **FD**      | File descriptor              |
+| **NAME**    | File or directory being used |
+
+Another useful command is:
+
+```bash
+sudo fuser -vm /mnt/external
+```
+
+To close the issue, first try to close the application or move the terminal out of the directory.
+
+If needed, terminate the process:
+
+```bash
+sudo kill 1234
+```
+
+Use `kill` carefully. Terminating a process that is writing data may cause data loss.
+
+### Lazy and Forced Unmounts
+
+The `umount` command has advanced options.
+
+Lazy unmount:
+
+```bash
+sudo umount -l /mnt/external
+```
+
+The `-l` option detaches the filesystem now and cleans it up after it is no longer busy.
+
+Forced unmount:
+
+```bash
+sudo umount -f /mnt/external
+```
+
+The `-f` option forces the unmount.
+
+Forced unmounts should be used carefully, especially for local disks, because they can risk data corruption.
+
+A good rule is:
+
+- Normal unmount first.
+- Find and close processes if busy.
+- Use lazy or forced unmount only when you understand the risk.
+
+#### Mounting with a Specific Filesystem Type
+
+Sometimes Linux does not automatically detect the filesystem type, or you want to be explicit.
+
+Example for ext4:
+
+```bash
+sudo mount -t ext4 /dev/sdb1 /mnt/external
+```
+
+Example for NTFS:
+
+```bash
+sudo mount -t ntfs3 /dev/sdb1 /mnt/external
+```
+
+Example for FAT32:
+
+```bash
+sudo mount -t vfat /dev/sdb1 /mnt/external
+```
+
+Example for exFAT:
+
+```bash
+sudo mount -t exfat /dev/sdb1 /mnt/external
+```
+
+If mounting fails, check the filesystem type with:
+
+```bash
+lsblk -f
+```
+
+or:
+
+```bash
+sudo blkid /dev/sdb1
+```
+
+Example:
+
+```text
+/dev/sdb1: UUID="ABCD-1234" TYPE="exfat" LABEL="MYUSB"
 ```
 
 ### Mounting ISO Images
 
-An ISO image is a single file that contains the complete content and structure of a CD/DVD. You can mount an ISO file to access its contents without burning it to a physical disc.
+An ISO image is a file that contains the contents of a CD, DVD, or installation image.
 
-**Mounting an ISO File:**
+For example:
 
-Suppose you have an ISO file named `ubuntu.iso` and you want to mount it at `/mnt/iso`.
+```text
+ubuntu.iso
+```
 
-I. Create a Mount Point:
+You can mount an ISO file without burning it to a disc.
+
+First create a mount point:
 
 ```bash
 sudo mkdir -p /mnt/iso
 ```
 
-II. Mount the ISO:
+Then mount the ISO:
 
 ```bash
 sudo mount -o loop ubuntu.iso /mnt/iso
 ```
 
-Breaking down the command:
+The `loop` option lets Linux treat a regular file as if it were a block device.
 
-- `-o` uses a loop device, allowing you to mount a file as a block device.
-
-**Accessing the ISO Contents:**
-
-Navigate to the mount point:
+After mounting, view the files:
 
 ```bash
-cd /mnt/iso
-ls
+ls /mnt/iso
 ```
 
-You'll see the files and directories contained within the ISO image.
-
-### Unmounting the ISO Image
-
-When you're done, unmount the ISO to free up the loop device:
+When finished, unmount it:
 
 ```bash
 sudo umount /mnt/iso
 ```
 
-### Visualizing the Mounting Process
+The workflow looks like this:
 
-Here's an ASCII diagram to help visualize how mounting integrates a device into the directory tree:
-
+```text
+ubuntu.iso file
+      |
+      v
+loop device
+      |
+      v
+mounted at /mnt/iso
+      |
+      v
+contents become accessible
 ```
-Before Mounting:
 
+### Mounting Network Shares
+
+Network shares can also be mounted.
+
+Two common types are:
+
+```text
+NFS      common between Linux/Unix systems
+CIFS     used for Windows/Samba shares
+```
+
+Example NFS mount:
+
+```bash
+sudo mount -t nfs server:/export/data /mnt/data
+```
+
+Example CIFS mount:
+
+```bash
+sudo mount -t cifs //server/share /mnt/share -o username=myuser
+```
+
+Network mounts are common for shared storage, home directories, backups, and file servers.
+
+For persistent network mounts, `/etc/fstab` or systemd mount units are often used.
+
+### Persistent Mounts with `/etc/fstab`
+
+Manual mounts disappear after reboot.
+
+To mount a filesystem automatically at boot, configure it in:
+
+```text
+/etc/fstab
+```
+
+The file contains one filesystem per line.
+
+Example:
+
+```text
+/dev/sdb1   /mnt/external   ext4    defaults    0   2
+```
+
+The fields are:
+
+| Field           | Value           |
+| --------------- | --------------- |
+| **Device**      | `/dev/sdb1`     |
+| **Mount point** | `/mnt/external` |
+| **Filesystem**  | `ext4`          |
+| **Options**     | `defaults`      |
+| **Dump**        | `0`             |
+| **fsck pass**   | `2`             |
+
+The last two fields are older but still important:
+
+```text
+0   do not use dump backup
+2   check this filesystem after the root filesystem
+```
+
+The root filesystem usually has pass value `1`.
+
+Other local Linux filesystems often use `2`.
+
+Filesystems that should not be checked at boot often use `0`.
+
+### Prefer UUIDs in `/etc/fstab`
+
+Device names such as `/dev/sdb1` can change.
+
+For example, today a USB drive may be:
+
+```text
+/dev/sdb1
+```
+
+but after reboot it may become:
+
+```text
+/dev/sdc1
+```
+
+To avoid this problem, use a UUID.
+
+Find the UUID:
+
+```bash
+sudo blkid /dev/sdb1
+```
+
+Example:
+
+```text
+/dev/sdb1: UUID="1234-ABCD" TYPE="ext4"
+```
+
+Then use the UUID in `/etc/fstab`:
+
+```text
+UUID=1234-ABCD   /mnt/external   ext4   defaults   0   2
+```
+
+This is more reliable than using `/dev/sdb1`.
+
+### Testing `/etc/fstab`
+
+After editing `/etc/fstab`, do not reboot immediately.
+
+First test it with:
+
+```bash
+sudo mount -a
+```
+
+This attempts to mount everything listed in `/etc/fstab`.
+
+If there is an error, fix it before rebooting.
+
+A bad `/etc/fstab` entry can cause boot problems, especially if it refers to an unavailable device without safe options.
+
+For removable or optional drives, consider options such as:
+
+```text
+nofail
+x-systemd.automount
+```
+
+Example:
+
+```text
+UUID=1234-ABCD   /mnt/external   ext4   defaults,nofail   0   2
+```
+
+The `nofail` option allows the system to continue booting even if the device is not present.
+
+## Visualizing the Mounting Process
+
+Before mounting:
+
+```text
 /
 ├── bin
 ├── etc
 ├── home
-│   ├── user
+│   └── user
 ├── mnt
 ├── usr
 └── var
+```
 
-After Mounting /dev/sdb1 at /mnt/external:
+After mounting `/dev/sdb1` at `/mnt/external`:
 
+```text
 /
 ├── bin
 ├── etc
 ├── home
-│   ├── user
+│   └── user
 ├── mnt
 │   └── external
 │       ├── data
@@ -333,106 +1024,297 @@ After Mounting /dev/sdb1 at /mnt/external:
 └── var
 ```
 
-### The Mounting Workflow
+The mounted filesystem becomes part of the normal directory tree.
 
-I. Verify Device Visibility:
+You do not access it through a separate drive letter. You access it through the mount point.
 
-Use `sudo fdisk -l` to list all devices and ensure your device is recognized.
+### Typical Mounting Workflow
 
-II. Create a Mount Point:
+A safe manual mounting workflow looks like this:
 
-If necessary, create a directory to serve as the mount point.
+1. Connect the device
+2. Identify the device name
+3. Check the filesystem type
+4. Create a mount point
+5. Mount the filesystem
+6. Access the files
+7. Unmount when finished
+8. Remove the device
+
+Commands:
 
 ```bash
-sudo mkdir /mnt/external
+lsblk -f
 ```
 
-III. Mount the Device:
+```bash
+sudo mkdir -p /mnt/external
+```
 
 ```bash
 sudo mount /dev/sdb1 /mnt/external
 ```
 
-IV. Access Files:
-
-Navigate to `/mnt/external` to access the device's files.
-
-V. Unmount When Done:
+```bash
+ls /mnt/external
+```
 
 ```bash
 sudo umount /mnt/external
 ```
 
-### Ensuring Data Integrity
+### Data Integrity
 
-- To avoid **data loss**, always unmount devices before physically removing them, as this allows the operating system to finalize any pending write operations.
-- Since the operating system often **caches** write operations, data may not be written to the device immediately, so unmounting ensures all data has been properly saved.
-- When you **unmount** a device, it confirms that all read and write processes have concluded, making it safe to remove the device without risking corruption.
-- Failing to **unmount** a device before removing it can lead to incomplete data transfers and, consequently, corrupted files.
+Always unmount removable filesystems before unplugging them.
 
-### Automating Mounting with udev Rules
+This matters because Linux may delay writes for performance.
 
-- Advanced users can set up **udev rules** to automate the mounting process whenever a device is connected, enhancing ease of access.
-- Creating **custom rules** in the `/etc/udev/rules.d/` directory enables automatic actions based on device characteristics, like USB device type or specific serial numbers.
-- With **udev** rules, frequently used devices can be automatically mounted at a predefined location, reducing repetitive manual mounting steps.
-- This automation can improve **workflow efficiency** and minimize errors, especially if you regularly work with multiple external devices.
+For example, copying a file may appear to finish quickly, but some data may still be waiting in memory.
 
-#### Example: Auto-Mount USB Drive with udev
+Unmounting ensures that:
 
-I. **Identify the Device**:
+```text
+pending writes are completed
+open files are closed
+filesystem metadata is updated
+the device is safe to remove
+```
 
-- First, connect the USB drive to your system and identify it using the `lsblk` or `dmesg` command.
-- Find the device's **UUID** (Universally Unique Identifier) with the `blkid` command. This is necessary for ensuring that the rule applies to this specific device.
+This reduces the chance of corruption or data loss.
+
+### Automounting
+
+Many desktop systems already automount removable drives.
+
+For servers or custom setups, there are several ways to automate mounting:
+
+```text
+/etc/fstab
+systemd mount units
+systemd automount units
+udev rules
+desktop environment automounting
+autofs
+```
+
+For most users, `/etc/fstab` is the best starting point.
+
+For advanced users, `udev` can run actions when hardware appears or disappears.
+
+### Automating Mounting with `udev`
+
+`udev` manages device events in Linux.
+
+It can detect when a USB drive is connected and run a command or script.
+
+However, using `udev` directly for mounting can be tricky. Long commands with shell features such as `&&` may not work as expected unless run through a script or shell.
+
+A cleaner approach is to have a `udev` rule call a script.
+
+First, identify the device UUID:
 
 ```bash
 sudo blkid /dev/sdX1
 ```
 
-II. **Create the udev Rule**:
+Example:
 
-- Open or create a new file in `/etc/udev/rules.d/`, for example, `99-usb-mount.rules`.
-- Add the following rule, which will automatically mount the USB drive to a specified directory whenever it’s connected:
-
-```bash
-ACTION=="add", KERNEL=="sdX1", SUBSYSTEM=="block", ENV{ID_FS_UUID}=="your-uuid-here", RUN+="/bin/mkdir -p /media/my_usb && /bin/mount /dev/sdX1 /media/my_usb"
+```text
+/dev/sdX1: UUID="1234-ABCD" TYPE="ext4"
 ```
 
-Replace **sdX1** with your specific device identifier, and **your-uuid-here** with the UUID of the device you found in the previous step.
+Create a script:
 
-In this rule:
+```bash
+sudo nano /usr/local/sbin/mount-my-usb.sh
+```
 
-- `ACTION=="add"` specifies that the rule should apply when the device is **added**.
-- `KERNEL=="sdX1"` matches the specific device you want to auto-mount.
-- `SUBSYSTEM=="block"` indicates that this rule applies to **block devices**, like hard drives or USB drives.
-- `ENV{ID_FS_UUID}=="your-uuid-here"` ensures the rule matches the **exact device** based on its UUID.
-- `RUN+="/bin/mkdir -p /media/my_usb && /bin/mount /dev/sdX1 /media/my_usb"` defines the action, which is to create the mount directory if it doesn’t exist and mount the device to that directory.
+Example script:
 
-III. **Reload udev Rules**:
+```bash
+#!/bin/sh
+mkdir -p /media/my_usb
+mount UUID=1234-ABCD /media/my_usb
+```
 
-After saving the file, reload the **udev** rules with the following command:
+Make it executable:
+
+```bash
+sudo chmod +x /usr/local/sbin/mount-my-usb.sh
+```
+
+Then create a `udev` rule:
+
+```bash
+sudo nano /etc/udev/rules.d/99-usb-mount.rules
+```
+
+Example rule:
+
+```text
+ACTION=="add", SUBSYSTEM=="block", ENV{ID_FS_UUID}=="1234-ABCD", RUN+="/usr/local/sbin/mount-my-usb.sh"
+```
+
+Reload rules:
 
 ```bash
 sudo udevadm control --reload-rules
+sudo udevadm trigger
 ```
-   
-Then, to test the new rule, **disconnect** and **reconnect** your USB drive.
 
-IV. **Remove Rules**:
+Then unplug and reconnect the device to test.
 
-If the drive is **removed**, you may want to create a separate rule to **unmount** it automatically:
+For many real systems, `systemd` automounts or desktop automounting are easier and more reliable than custom `udev` mounting rules.
+
+### Troubleshooting Mounting Problems
+
+#### Problem: Permission Denied
+
+Example:
+
+```text
+mount: permission denied
+```
+
+Possible causes:
+
+- you forgot sudo
+- the mount point permissions are restricted
+- the filesystem permissions do not allow access
+- security policy is blocking the mount
+
+Try:
 
 ```bash
-ACTION=="remove", KERNEL=="sdX1", SUBSYSTEM=="block", ENV{ID_FS_UUID}=="your-uuid-here", RUN+="/bin/umount /media/my_usb"
+sudo mount /dev/sdb1 /mnt/external
 ```
 
-By adding this **removal rule**, the device will be safely unmounted from the `/media/my_usb` directory whenever it is disconnected, helping to prevent **data corruption**.
+If the mount succeeds but your user cannot write to the mounted filesystem, check ownership and permissions.
 
-### Troubleshooting Mounting Issues
+For Linux filesystems such as ext4, use:
 
-- If you encounter a **"Permission Denied"** error, confirm that you have the necessary user permissions, or try using the `sudo` command for elevated access.
-- When the system reports an **"Unknown File System Type"** error, you may need to install additional software packages, such as `ntfs-3g`, which provides support for NTFS file systems on Linux.
-- A **"Device is Busy"** message indicates that files or processes are currently using the device; use commands like `lsof` or `fuser` to identify and close them before attempting to unmount.
-- For devices that won’t unmount due to **active processes**, ending those processes can clear the device for proper unmounting, ensuring data integrity.
+```bash
+ls -ld /mnt/external
+```
+
+For FAT, exFAT, or NTFS filesystems, ownership may need to be controlled with mount options such as `uid` and `gid`.
+
+Example:
+
+```bash
+sudo mount -o uid=1000,gid=1000 /dev/sdb1 /mnt/external
+```
+
+#### Problem: Unknown Filesystem Type
+
+Example:
+
+```text
+mount: unknown filesystem type 'exfat'
+```
+
+Possible causes:
+
+- missing filesystem driver
+- wrong filesystem type specified
+- damaged filesystem
+
+Check the type:
+
+```bash
+lsblk -f
+```
+
+or:
+
+```bash
+sudo blkid /dev/sdb1
+```
+
+Then install the needed support package if necessary.
+
+For example, NTFS or exFAT support may require additional packages on some systems.
+
+#### Problem: Target Is Busy
+
+Example:
+
+```text
+umount: /mnt/external: target is busy
+```
+
+Find processes using it:
+
+```bash
+sudo lsof +f -- /mnt/external
+```
+
+or:
+
+```bash
+sudo fuser -vm /mnt/external
+```
+
+Then close the program, move out of the directory, or stop the process.
+
+Common fix:
+
+```bash
+cd ~
+sudo umount /mnt/external
+```
+
+#### Problem: Device Not Found
+
+Example:
+
+```text
+mount: /dev/sdb1 does not exist
+```
+
+Check devices:
+
+```bash
+lsblk
+```
+
+Possible causes:
+
+- device not plugged in
+- wrong device name
+- kernel has not detected it yet
+- bad cable or port
+- device name changed
+
+Check recent kernel messages:
+
+```bash
+dmesg | tail
+```
+
+#### Problem: Bad `/etc/fstab` Entry
+
+If `mount -a` fails, inspect `/etc/fstab`.
+
+Common mistakes include:
+
+- wrong UUID
+- wrong filesystem type
+- missing mount point directory
+- bad mount options
+- incorrect spacing
+
+Create the mount point if missing:
+
+```bash
+sudo mkdir -p /mnt/external
+```
+
+Then test again:
+
+```bash
+sudo mount -a
+```
 
 ### Challenges
 
