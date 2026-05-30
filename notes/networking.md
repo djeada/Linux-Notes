@@ -1,16 +1,30 @@
-# Networking
+## Networking
 
-Networking is the practice of connecting computers and devices so that they can communicate and exchange data. It forms the backbone of the internet, local area networks, and even small home networks. To grasp the intricacies of networking, it's imperative to familiarize oneself with key terminologies and concepts.
+Networking is the practice of connecting computers, servers, phones, routers, printers, and other devices so they can communicate and exchange data.
 
-## Basic Networking Terms
+A network can be very small, such as two computers connected together, or very large, such as the internet. Most modern systems depend on networking in some way, whether for browsing websites, logging into remote servers, downloading software, sharing files, using cloud services, or communicating between applications.
 
-Understanding the fundamentals can pave the way for more advanced networking tasks. Here's a breakdown of basic networking terms:
+At a basic level, networking answers questions like:
+
+```text id="g4qlff"
+How does one device find another device?
+How does data move between devices?
+How does a computer know where to send traffic?
+How do names like google.com become IP addresses?
+How do we troubleshoot when the network fails?
+```
+
+To understand networking, it is important to know the basic terms: network interfaces, MAC addresses, IP addresses, DHCP, DNS, routes, gateways, and common diagnostic commands.
 
 ### Network Interfaces
 
-A network interface serves as the point of interconnection between a device and a network. 
+A network interface is the point where a computer connects to a network.
 
-```
+It may be a physical device, such as an Ethernet card or wireless card, or a virtual interface created by software.
+
+A computer can have more than one network interface. For example, a laptop may have Wi-Fi, Ethernet, loopback, VPN, and virtual machine interfaces.
+
+```text id="2n854w"
 +--------------------------------------------------------+
 |                      COMPUTER SYSTEM                   |
 |                                                        |
@@ -33,862 +47,1696 @@ A network interface serves as the point of interconnection between a device and 
 +--------------------------------------------------------+
 ```
 
-Different types of network interfaces include:
+The operating system uses network interfaces to send and receive data.
 
-* `Loopback interface (lo)`: It's primarily for internal communication within the device. It usually has an IP address of `127.0.0.1`. You can use it to access a locally hosted website on your device. It's important to note that this interface is not accessible from other devices.
+Each interface usually has:
 
-* `Ethernet interface (eth0)`: This interface connects devices to a local area network (LAN). If you're running Linux, even within a virtual machine (VM), you'll often find an eth0 interface. For network and internet access, ensure this interface is active and assigned an IP address.
-
-### MAC Addresses
-
-A MAC (Media Access Control) address is a hardware-based unique identifier for every network interface. It's used for device identification and tracking on a network. The MAC address is either hardcoded into a physical network card at the time of manufacturing or assigned to a virtual adapter during its creation. A typical MAC address format is: `aa:bb:cc:dd:ee:ff`.
-
+```text id="66wq1t"
+a name
+a MAC address
+one or more IP addresses
+a status, such as UP or DOWN
+configuration settings
 ```
+
+Common interface names include:
+
+```text id="z1id2k"
+lo        loopback interface
+eth0      traditional Ethernet interface name
+ens33     modern predictable Ethernet interface name
+wlan0     wireless interface name
+docker0   Docker bridge interface
+tun0      VPN tunnel interface
+```
+
+#### Loopback Interface
+
+The loopback interface is used for internal communication inside the same machine.
+
+It is usually named:
+
+```text id="md43cz"
+lo
+```
+
+Its IPv4 address is usually:
+
+```text id="6aexcn"
+127.0.0.1
+```
+
+This address is also called localhost.
+
+For example, if a web server is running on your own computer, you may be able to access it with:
+
+```text id="bijjae"
+http://127.0.0.1
+```
+
+or:
+
+```text id="439ga7"
+http://localhost
+```
+
+The loopback interface is not used to communicate with other devices. It is only for communication within the same system.
+
+A simple way to think about it is:
+
+```text id="c1vlh0"
+127.0.0.1 = this computer talking to itself
+```
+
+#### Ethernet and Wireless Interfaces
+
+An Ethernet interface connects a device to a wired network.
+
+A wireless interface connects a device to a Wi-Fi network.
+
+Examples:
+
+```text id="b5b4r3"
+eth0     older Ethernet naming style
+ens33    common Ethernet name on virtual machines
+wlan0    common wireless interface name
+```
+
+To see network interfaces on Linux, use:
+
+```bash id="ui7vx9"
+ip link show
+```
+
+Example output:
+
+```text id="65maqh"
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
+```
+
+The important parts are:
+
+```text id="gj6g1g"
+eth0                  interface name
+UP                    interface is enabled
+LOWER_UP              physical link is detected
+mtu 1500              maximum transmission unit
+link/ether            MAC address follows
+00:11:22:33:44:55     MAC address
+```
+
+If an interface is `DOWN`, it may be disabled or disconnected.
+
+#### MAC Addresses
+
+A MAC address is a hardware identifier assigned to a network interface.
+
+MAC stands for Media Access Control.
+
+It is used mainly for communication inside a local network. Devices on the same local network use MAC addresses to deliver frames to the correct network card.
+
+A typical MAC address looks like this:
+
+```text id="gkbj5e"
+aa:bb:cc:dd:ee:ff
+```
+
+It is made of six pairs of hexadecimal digits.
+
+```text id="s0lrhh"
 +-----------------------------------------+
 |   Manufacturer ID   | Device Identifier |
 +-----------------------------------------+
          xx:xx:xx     :     xx:xx:xx
 ```
 
-To retrieve the MAC address of a network interface on a Linux-based system, the `ip link` command is useful:
+The first part often identifies the manufacturer or vendor. The second part identifies the individual device or adapter.
 
-```
+To view MAC addresses on Linux:
+
+```bash id="iz6idd"
 ip link show
 ```
 
-This command's output will enumerate details about all the network interfaces present on your system. The MAC address is highlighted adjacent to the link/ether field.
+Example:
 
-For example:
-
-```
+```text id="6va1im"
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
-link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
+    link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
 ```
 
-In the provided example, the MAC address associated with the eth0 interface is `00:11:22:33:44:55`.
+Here, the MAC address is:
+
+```text id="x2g57q"
+00:11:22:33:44:55
+```
+
+MAC addresses are used on the local network. IP addresses are used for routing traffic between networks.
+
+A useful comparison is:
+
+```text id="ahgykh"
+MAC address = local delivery identity
+IP address  = network location identity
+```
 
 ### IP Addresses
 
-An IP (Internet Protocol) address is a unique numerical label assigned to every device participating in a computer network that uses the Internet Protocol for communication. IP addresses help in identifying and locating devices on a network, ensuring proper routing of data packets. Contrary to a common misconception, IP addresses range from `0.0.0.0` to `255.255.255.255`. While a device can possess multiple IP addresses, each must be unique within its network.
+An IP address identifies a device on an IP network.
 
+IP stands for Internet Protocol.
+
+IP addresses allow devices to find and communicate with each other across local networks and the internet.
+
+There are two main versions:
+
+```text id="4gaedi"
+IPv4    example: 192.168.1.10
+IPv6    example: 2001:db8::10
 ```
+
+These notes focus mostly on IPv4.
+
+An IPv4 address is made of four numbers separated by dots. Each number ranges from 0 to 255.
+
+Example:
+
+```text id="9i2fwy"
+192.168.1.10
+```
+
+```text id="msqre4"
 IPv4 Address: 192.168.1.10
 
 +-----+-----+-----+-----+
 | 192 | 168 |  1  |  10 |
 +-----+-----+-----+-----+
   |     |     |      |
-  |     |     |      +--- Host ID (Identifies device in local network)
-  |     |     +-------- Subnet (Often represents different segments of a network)
-  |     +----------- Private Address Space (Commonly used in local networks)
-  +-------------- Network ID (Identifies the specific network)
+  |     |     |      +--- Host part, often identifying a device
+  |     |     +---------- Subnet portion
+  |     +---------------- Private address space
+  +---------------------- Network portion
 ```
+
+The exact network and host portions depend on the subnet mask or prefix length.
+
+For example:
+
+```text id="0p8aov"
+192.168.1.10/24
+```
+
+means the first 24 bits identify the network.
+
+In everyday terms:
+
+```text id="ydtjsz"
+192.168.1.0/24 is the network
+192.168.1.10 is one device on that network
+```
+
+#### Viewing IP Addresses
+
+To show IPv4 addresses on Linux:
+
+```bash id="ke5j46"
+ip -4 address show
+```
+
+Example output:
+
+```text id="zlal4v"
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 192.168.1.10/24 brd 192.168.1.255 scope global dynamic eth0
+```
+
+The important part is:
+
+```text id="6esfjx"
+inet 192.168.1.10/24
+```
+
+This means the interface has the IPv4 address:
+
+```text id="4vnkkp"
+192.168.1.10
+```
+
+with prefix length:
+
+```text id="bo43c8"
+24
+```
+
+The word `dynamic` often means the address was assigned using DHCP.
 
 #### Private IP Addresses
 
-Private IP addresses are reserved for internal use within a local network and are not routable on the public internet. Devices within the same local network communicate using these private IPs. Routers or other Network Address Translation (NAT) devices translate these addresses to a public IP when accessing the internet. Here are the typical reserved ranges for private IP addresses:
+Private IP addresses are used inside local networks.
 
-* `10.0.0.0` to `10.255.255.255`
-* `172.16.0.0` to `172.31.255.255`
-* `192.168.0.0` to `192.168.255.255`
+They are not routed directly on the public internet.
 
+Common private IPv4 ranges are:
+
+```text id="cerd4v"
+10.0.0.0       to 10.255.255.255
+172.16.0.0     to 172.31.255.255
+192.168.0.0    to 192.168.255.255
 ```
+
+```text id="sksvnc"
        +---------------------------------+
        |       Private IP Address        |
        +---------------------------------+
        |                                 |
 +------|---------++-----------------++---|-------------+
-| 10.x.x.x       ||  172.16.x.x     || 192.168.x.x     |
-| to             ||  to             || to              |
-| 10.255.255.255 ||  172.31.255.255 || 192.168.255.255 |
+| 10.x.x.x       || 172.16.x.x      || 192.168.x.x     |
+| to             || to              || to              |
+| 10.255.255.255 || 172.31.255.255  || 192.168.255.255 |
 +----------------++-----------------++-----------------+
    |                      |                 |
-   |                      |                 +-----> Commonly used in home networks, 
-   |                      |                         small offices, etc.
+   |                      |                 +---- Common in home networks
    |                      |
-   |                      +--------> Used by medium-sized enterprises due to 
-   |                                 the larger subnetting options it offers.
+   |                      +---------------------- Common in medium/large networks
    |
-   +---------> Rarely used in home networks but can be found in 
-               larger enterprises due to its vast address space.
+   +--------------------------------------------- Large private address space
 ```
 
-To retrieve your device's private IP address, utilize the terminal with this command:
+Examples of private IP addresses:
 
-```
-ip -4 address show
-```
-
-The output showcases details about your network interfaces and their corresponding IPv4 addresses. Specifically, search for the `inet` label which is immediately followed by the IP address.
-
-Sample output:
-
-```
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
-inet 192.168.1.10/24 brd 192.168.1.255 scope global dynamic noprefixroute eth0
+```text id="y14jt5"
+192.168.1.20
+10.0.0.15
+172.16.5.100
 ```
 
-In the depicted sample, the private IP address for the `eth0` interface is `192.168.1.10`.
+Private addresses are commonly used by homes, schools, companies, virtual machines, containers, and cloud private networks.
+
+Because private IP addresses are not directly reachable from the internet, routers usually use NAT to allow private devices to access public websites.
 
 #### Public IP Addresses
 
-A public IP address uniquely identifies your network on the worldwide internet. Internet Service Providers (ISPs) assign this address to your router or modem, making it the external face of your network. Whenever you interact with a website or an online service, this public IP address is the identifiable source of your connection.
+A public IP address identifies a network or device on the public internet.
 
+Your home router usually has a public IP address assigned by your Internet Service Provider.
+
+Devices inside your home usually have private IP addresses, such as:
+
+```text id="lk97dk"
+192.168.1.2
+192.168.1.3
+192.168.1.4
 ```
+
+When those devices access the internet, the router translates their private addresses to the public address.
+
+```text id="asq6wk"
                            Internet
                       +----------------+
                       |                |
-                      |   WWW  Cloud   |
+                      |   WWW / Cloud  |
                       |                |
                       +--------+-------+
                                |
-                               | Public IP (e.g., 203.0.113.10)
+                               | Public IP
+                               | e.g. 203.0.113.10
                                |
                       +--------+-------+
                       |    Router      |
-                      +--------+-------+
+             - - - -  +--------+-------+ - - - - -
            /                   |                   \
           /                    |                    \
       Private IP           Private IP            Private IP
-(e.g., 192.168.1.2)  (e.g., 192.168.1.3)  (e.g., 192.168.1.4)
- Device A     Device B     Device C
+   192.168.1.2          192.168.1.3          192.168.1.4
+    Device A             Device B             Device C
 ```
 
-For identifying your public IP address, third-party services can be handy. Using tools like `curl` in combination with online utilities such as `ifconfig.me`, `ipify.org`, or `icanhazip.com` can fetch your public IP. Here's how you can do it:
+To check your public IP from the command line, you can use an external service:
 
-```
+```bash id="t7e15c"
 curl ifconfig.me
 ```
 
-Your public IP address will be displayed as an output. For instance:
+or:
 
+```bash id="mve3vd"
+curl icanhazip.com
 ```
+
+Example output:
+
+```text id="5bum9u"
 203.0.113.10
 ```
 
-Note: Since public IP addresses are exposed to the internet, they're susceptible to malicious actors and potential cyber threats. It's crucial to ensure proper security measures like firewalls and VPNs to protect your network.
+Public IP addresses are visible on the internet, so systems using them should be protected with firewalls, secure configurations, and regular updates.
 
-### DHCP (Dynamic Host Configuration Protocol)
+### DHCP
 
-As networks grow and accommodate more devices, manually assigning IP addresses to each one becomes cumbersome and inefficient. DHCP, or Dynamic Host Configuration Protocol, automates this process, enabling seamless IP address allocation.
+DHCP stands for Dynamic Host Configuration Protocol.
 
+It automatically assigns network settings to devices.
+
+Without DHCP, every device would need to be configured manually with:
+
+```text id="be6hzt"
+IP address
+subnet mask or prefix
+default gateway
+DNS servers
 ```
+
+That would be slow and error-prone, especially on large networks.
+
+With DHCP, a device can join the network and automatically receive the settings it needs.
+
+```text id="8tjaof"
+Device joins network
+        |
+        v
+Asks for network settings
+        |
+        v
+DHCP server replies with IP configuration
+        |
+        v
+Device can communicate on the network
+```
+
+#### DHCP Lease Process
+
+The DHCP process usually has four main steps.
+
+```text id="4t8qum"
 Device (DHCP Client)                 DHCP Server
-      |                                  |
       |                                  |
       |    1. DHCPDISCOVER               |
       |--------------------------------->|
       |                                  |
-      |                                  |
       |    2. DHCPOFFER                  |
       |<---------------------------------|
-      |                                  |
       |                                  |
       |    3. DHCPREQUEST                |
       |--------------------------------->|
       |                                  |
-      |                                  |
       |    4. DHCPACK                    |
       |<---------------------------------|
       |                                  |
-      |                                  |
 ```
 
-When a device, often referred to as a DHCP client, joins a network, it sends out a broadcast message requesting an IP address. If a DHCP server is present within the network, it responds by assigning an available IP address to that device. To ensure no IP address conflicts arise, the DHCP server maintains a record of all allocated IP addresses, thus preventing the same address from being assigned to multiple devices.
+The steps are:
+
+1. The client broadcasts a DHCPDISCOVER message, asking if any DHCP server is available.
+2. The DHCP server replies with a DHCPOFFER, offering an IP address and settings.
+3. The client sends a DHCPREQUEST, asking to use the offered address.
+4. The server sends a DHCPACK, confirming the lease.
+
+The assigned IP address is called a lease because it is usually temporary. The device can renew the lease before it expires.
 
 #### Benefits of DHCP
 
-* Automates the IP address assignment process, reducing manual intervention.
-* Ideal for devices that don't require consistent IP addresses, like mobile phones, tablets, or laptops that frequently connect and disconnect from various networks.
-* Minimizes the risk of IP conflicts and errors stemming from manual IP assignments.
+DHCP is useful because it:
 
-#### DHCP Lease Process
-
-1. The device broadcasts a message, seeking a DHCP server.
-2. The DHCP server responds with an IP address offer.
-3. The device requests the offered IP address.
-4. The DHCP server acknowledges and finalizes the IP address allocation.
-
-To determine if a device is utilizing DHCP, inspect its network configuration or interface information. The presence of the term "dynamic" often indicates an IP address assigned via DHCP.
-
-#### Limitations of DHCP
-
-While DHCP is incredibly valuable, it might not be suitable for every scenario. Devices that necessitate consistent, unchanging IP addresses—such as servers or printers—might be better off with a static IP assignment. This can be achieved in two ways:
-
-* **Manual Configuration**: Setting a fixed IP address directly on the device.
-* **DHCP Reservations**: Configuring the DHCP server to always assign a specific IP address to a particular device based on its MAC address.
-
-#### Setting Up DHCP
-
-On Linux systems, DHCP client configurations can often be found and modified within the `/etc/dhcp/dhclient.conf` file. Editing this file allows users to define custom configurations for obtaining IP addresses from a DHCP server.
-
-In conclusion, DHCP streamlines the IP address management process, especially for larger networks or environments with frequently changing devices. However, for infrastructure components that require a stable IP address, static assignments or reservations are recommended.
-
-## Networking Commands
-
-Networking commands are essential for configuring, managing, and troubleshooting network connections on a system. Below are some commonly used commands and their typical use-cases:
-
-### ifconfig
-
-Historically one of the primary tools for network configuration on Linux systems, `ifconfig` displays information about all active network interfaces, including their IP addresses, MAC addresses, and more.
-
-Usage:
-
-- To view details of all network interfaces: `ifconfig`
-- To view details of a specific interface (e.g., eth0): `ifconfig eth0`
-
-_Note: While `ifconfig` is still widely used, it's considered deprecated in many modern Linux distributions in favor of the `ip` command._
-
-### ip
-
-The `ip` command is a versatile and powerful tool for network administration, replacing functionalities previously offered by `ifconfig`, `route`, and others.
-
-Usage:
-
-- Display IP addresses and interfaces: `ip addr show`
-- List all network interfaces along with their status and MAC addresses: `ip link show`
-- Show statistics for interfaces including sent and received packet details: `ip -s link`
-- Display routing information for IPv6: `ip -6 route show`
-
-### ping
-
-The `ping` command is a network diagnostic tool used to test the connectivity between your computer and another host, usually specified by an IP address or a domain name. It works by sending ICMP echo request packets to the target host and waits for a reply.
-
-Usage:
-
-- To verify if a specific domain or IP address is reachable, use `ping` followed by the domain or IP. For example, `ping google.com`. It displays round-trip times for each packet.
-- Limit the number of ICMP packets sent using `-c`. For example, `ping -c 5 google.com` sends only 5 packets.
-- To specify a timeout period (in seconds), use `-t`. For instance, `ping -t 5 google.com` will stop after 5 seconds.
-- To ping a host until manually stopped (using Ctrl+C), just type `ping` with the address.
-- The round-trip time (RTT) information helps assess the quality of the connection. Consistent and low RTT indicates a stable and fast connection.
-- If some of the ICMP packets fail to return, `ping` can indicate packet loss, a sign of network issues.
-
-### netstat
-
-This tool provides network statistics. It's useful for displaying active network connections, listening ports, and network protocol statistics.
-
-Usage:
-
-- Show all active connections: `netstat -a`
-- Display listening ports: `netstat -l`
-
-### traceroute
-
-`traceroute` helps in identifying the route taken by packets across a network. It's particularly useful for troubleshooting network slowdowns and failures.
-
-Usage:
-
-- To find the path packets take to a specific domain, use `traceroute` followed by the domain name. For example, `traceroute google.com`.
-- Use `-m` to set the maximum number of hops (routers) `traceroute` will probe. For instance, `traceroute -m 30 google.com`.
-- By default, `traceroute` uses ICMP. To use TCP or UDP, use `-T` or `-U` respectively. For example, `traceroute -T google.com`.
-- With `-s`, you can specify the size of the probing packets. This can be useful to understand how packet size affects routing. For example, `traceroute -s 60 google.com`.
-- The `-w` option sets how long `traceroute` waits for a response from each hop. For example, `traceroute -w 5 google.com`.
-- By default, `traceroute` resolves IP addresses to hostnames. Use `-n` to show numeric IP addresses only.
-
-### route
-
-The `route` command is a crucial tool for managing the IP routing table in Unix-based systems. This table controls how packets are forwarded and routed between different networks and hosts.
-
-Usage:
-
-- `route -n`: Displays the routing table in a numeric format. This provides an overview of routes with their destination, gateway, netmask, flags, and other associated metrics. Numeric format ensures IP addresses are displayed rather than hostnames.
-- `route add default gw IP_ADDRESS`: Sets the default gateway for the system. Replace `IP_ADDRESS` with the IP address of the desired gateway. This effectively directs packets destined for networks not explicitly listed in the routing table to be sent to this gateway.
-- `route add -host IP_ADDRESS gw GATEWAY_IP`: Directs traffic intended for a specific host (given by `IP_ADDRESS`) to be routed through the specified gateway (`GATEWAY_IP`).
-- `route add -net NETWORK_IP netmask NETMASK gw GATEWAY_IP`: Routes traffic for an entire network range (`NETWORK_IP` with the given `NETMASK`) through the specified gateway.
-- `route add -host IP_ADDRESS reject`: This command prevents any traffic from being routed to the specified host IP address. Useful for intentionally blocking access to or from a particular host.
-- `route del default`: Removes the default gateway, which can halt all outbound traffic unless there are specific routes available or another default route is set.
-- `route del -host IP_ADDRESS`: Removes the route for a specific host.
-- `route del -net NETWORK_IP netmask NETMASK`: Removes the route for a specific network range.
-
-The changes made using the `route` command are temporary and will be lost after a system reboot. To make routes **persistent** across reboots:
-
-- For Debian-based systems, routes can be added to `/etc/network/interfaces`.
-- On Red Hat-based systems, routes are typically added in a file inside the `/etc/sysconfig/network-scripts/` directory named `route-INTERFACE_NAME` (e.g., `route-eth0`).
-- Alternatively, consider using more modern tools like the `ip` command or network management systems like NetworkManager or systemd-networkd, which offer mechanisms for persistent route configurations.
-
-## Network Manager daemon
-
-Network Manager is a versatile service on Linux systems responsible for managing network configurations, making it easier to handle network resources on both desktops and servers.
-
+```text id="e445v8"
+automates IP address assignment
+reduces manual configuration errors
+prevents duplicate IP addresses
+works well for laptops, phones, tablets, and guest devices
+makes large networks easier to manage
 ```
-+------------+      +-------------+     +------------+
-|            |      |             |     |            |
-|  User GUI  <------>  Network    <----->  Network   |
-|   Tools    |      |  Manager    |     | Interfaces |
-|  (nmtui,   |      |  Daemon     |     | (eth0, wlan0,..)
-| nm-applet) |      |             |     |            |
-|            |      |             |     |            |
-+------------+      +------^------+     +------------+
+
+DHCP is especially helpful in networks where devices frequently join and leave.
+
+#### Static IP Addresses and DHCP Reservations
+
+Some devices need a stable IP address.
+
+Examples include:
+
+```text id="k1aia8"
+servers
+printers
+routers
+DNS servers
+network storage devices
+monitoring systems
+```
+
+There are two common ways to give a device a consistent IP address.
+
+A static IP address is manually configured on the device.
+
+A DHCP reservation is configured on the DHCP server. The server always gives the same IP address to a device based on its MAC address.
+
+A good rule is:
+
+```text id="asgx32"
+Use DHCP for normal client devices.
+Use static IPs or DHCP reservations for infrastructure devices.
+```
+
+### Networking Commands
+
+Linux provides many commands for checking, configuring, and troubleshooting networks.
+
+Some older commands are still common, but modern Linux systems usually prefer the `ip` command.
+
+#### `ifconfig`
+
+The `ifconfig` command was historically used to show and configure network interfaces.
+
+Example:
+
+```bash id="w7z6t7"
+ifconfig
+```
+
+To show a specific interface:
+
+```bash id="gmsmw4"
+ifconfig eth0
+```
+
+However, `ifconfig` is considered deprecated on many modern Linux distributions. The modern replacement is usually `ip`.
+
+#### `ip`
+
+The `ip` command is the modern Linux tool for viewing and managing network configuration.
+
+Show IP addresses:
+
+```bash id="vwmfop"
+ip addr show
+```
+
+Show only IPv4 addresses:
+
+```bash id="g19t59"
+ip -4 addr show
+```
+
+Show interfaces and MAC addresses:
+
+```bash id="eocejx"
+ip link show
+```
+
+Show interface statistics:
+
+```bash id="vdr866"
+ip -s link
+```
+
+Show routes:
+
+```bash id="uzmcn1"
+ip route show
+```
+
+Show IPv6 routes:
+
+```bash id="1tfsk0"
+ip -6 route show
+```
+
+The `ip` command replaces many older tools, including parts of `ifconfig`, `route`, and `netstat`.
+
+#### `ping`
+
+The `ping` command tests whether another host is reachable.
+
+It sends ICMP echo request packets and waits for replies.
+
+Example:
+
+```bash id="6fom83"
+ping google.com
+```
+
+To send only five packets:
+
+```bash id="9h6yab"
+ping -c 5 google.com
+```
+
+Example output includes round-trip time:
+
+```text id="92yef9"
+64 bytes from 142.250.185.206: icmp_seq=1 ttl=116 time=12.4 ms
+64 bytes from 142.250.185.206: icmp_seq=2 ttl=116 time=11.9 ms
+```
+
+Important values:
+
+```text id="ytt7ro"
+time       round-trip latency
+ttl        time to live
+packet loss   percentage of packets that did not return
+```
+
+Low and consistent response times usually indicate a healthy connection.
+
+High latency, packet loss, or no replies may indicate a network issue.
+
+On Linux, to stop after a specific time limit, use `-w`:
+
+```bash id="36n0d6"
+ping -w 5 google.com
+```
+
+This runs for about five seconds.
+
+To stop a continuous ping manually, press:
+
+```text id="rp4xr4"
+Ctrl + C
+```
+
+#### `netstat` and `ss`
+
+The `netstat` command shows network connections, listening ports, and network statistics.
+
+Examples:
+
+```bash id="m4709t"
+netstat -a
+```
+
+```bash id="7n1rqk"
+netstat -l
+```
+
+However, `netstat` is also considered older on many Linux systems.
+
+The modern replacement is usually `ss`.
+
+Show listening TCP and UDP ports:
+
+```bash id="c2x76d"
+ss -tuln
+```
+
+Show established connections:
+
+```bash id="7b2f35"
+ss -tun
+```
+
+A useful comparison:
+
+```text id="6ctu2f"
+netstat = older tool
+ss      = newer, faster replacement
+```
+
+#### `traceroute`
+
+The `traceroute` command shows the path packets take to reach a remote host.
+
+Example:
+
+```bash id="wny1sq"
+traceroute google.com
+```
+
+It displays each router, or hop, along the path.
+
+Example:
+
+```text id="hc6yhu"
+1  192.168.1.1       1.1 ms
+2  10.10.0.1         8.4 ms
+3  203.0.113.1      14.2 ms
+4  ...
+```
+
+This is useful when troubleshooting slow or broken connections.
+
+To avoid DNS lookups and show only IP addresses:
+
+```bash id="46e6qw"
+traceroute -n google.com
+```
+
+To set the maximum number of hops:
+
+```bash id="3xm9ov"
+traceroute -m 30 google.com
+```
+
+Some systems may use `tracepath` instead:
+
+```bash id="g7d4pr"
+tracepath google.com
+```
+
+#### `route`
+
+The `route` command displays or modifies the routing table.
+
+Example:
+
+```bash id="4yen0b"
+route -n
+```
+
+The `-n` option shows numeric IP addresses instead of trying to resolve names.
+
+However, `route` is older. The modern command is:
+
+```bash id="bavqqc"
+ip route
+```
+
+A route tells the system where to send packets.
+
+Example route:
+
+```text id="yr2w12"
+default via 192.168.1.1 dev eth0
+```
+
+This means:
+
+```text id="o8v5fj"
+If there is no more specific route, send traffic to 192.168.1.1 through eth0.
+```
+
+### Default Gateway
+
+The default gateway is the router your device uses to reach other networks.
+
+If your computer wants to contact another device on the same local network, it can usually send traffic directly.
+
+If your computer wants to contact a device outside the local network, such as a website on the internet, it sends the traffic to the default gateway.
+
+```text id="kobtpn"
++----------------+     +---------------+     +---------------------+
+| Local Device A |     | Local Network |     | External Network /  |
+| 192.168.1.2    |-----| 192.168.1.0/24|-----| Internet            |
++----------------+     |               |     +---------------------+
+                       | Gateway:      |
++----------------+     | 192.168.1.1   |
+| Local Device B |-----|               |
+| 192.168.1.3    |     +---------------+
++----------------+
+```
+
+The default gateway is usually your router.
+
+To show the default gateway on Linux:
+
+```bash id="8au52x"
+ip route show default
+```
+
+Example output:
+
+```text id="36re7e"
+default via 192.168.1.1 dev eth0
+```
+
+The default gateway is:
+
+```text id="o3fys3"
+192.168.1.1
+```
+
+To extract only the gateway IP:
+
+```bash id="7aapxf"
+ip route show default | awk '{print $3}'
+```
+
+### Setting and Removing a Default Gateway
+
+The modern way to add a default gateway is:
+
+```bash id="9hyg9p"
+sudo ip route add default via 192.168.1.254
+```
+
+To remove the default route:
+
+```bash id="vnn6vr"
+sudo ip route del default
+```
+
+The older `route` command can also do this:
+
+```bash id="2t016z"
+sudo route add default gw 192.168.1.254
+```
+
+and:
+
+```bash id="askmte"
+sudo route del default
+```
+
+Manual route changes made this way are usually temporary. They may disappear after a reboot or network restart unless configured persistently through NetworkManager, systemd-networkd, netplan, or distribution-specific network files.
+
+### NetworkManager
+
+NetworkManager is a Linux service that manages network connections.
+
+It is common on desktop Linux systems and many servers.
+
+It can manage:
+
+```text id="f8pzug"
+Ethernet
+Wi-Fi
+VPNs
+mobile broadband
+Bluetooth networking
+DNS settings
+DHCP
+static IP profiles
+```
+
+NetworkManager has command-line, text-based, and graphical tools.
+
+```text id="ju30zg"
++------------+      +-------------+      +------------+
+|            |      |             |      |            |
+| User Tools |<---->| Network     |<---->| Network    |
+| nmcli,     |      | Manager     |      | Interfaces |
+| nmtui, GUI |      | Daemon      |      | eth0,wlan0 |
+|            |      |             |      |            |
++------------+      +------^------+      +------------+
                            |
-                           |
-                      +----v----+
-                      |         |
-                      |  D-Bus  |
-                      |         |
+                           v
+                      +---------+
+                      | D-Bus   |
                       +----^----+
                            |
-                           |
-                     +-----v------+
-                     |            |
-                     |  System    |
-                     |  Services  |
-                     |(DNS, DHCP, |
-                     |  VPN,...)  |
-                     |            |
+                           v
+                     +------------+
+                     | System     |
+                     | Services   |
+                     | DNS, DHCP, |
+                     | VPN, etc.  |
                      +------------+
 ```
 
-### Features
+### Useful `nmcli` Commands
 
-I. Interfaces
+Check whether NetworkManager is running:
 
-- **CLI**: A command-line tool, `nmcli`, lets you handle all networking tasks from the terminal.
-- **GUI**: For those who prefer graphical interfaces, Network Manager provides a comprehensive GUI to manage network settings.
-
-II. Versatile Connectivity Support
-
-Network Manager is adept at handling a variety of connection types, not just wired networks. Its capabilities extend to:
-
-- Wi-Fi networks, facilitating easy connections to wireless networks.
-- VPN (Virtual Private Network) support, ensuring secure connections to private networks over the internet.
-- DSL (Digital Subscriber Line), allowing broadband connection management.
-- Mobile broadband, including 4G networks, making it easy to connect via cellular data.
-- Bluetooth connections, enabling network access over short-range Bluetooth devices.
-
-III. Network Profiles and Configurations
-
-One of the key strengths of Network Manager is its ability to manage multiple network profiles:
-
-- Users can create, save, and easily switch between various network profiles. This feature is particularly beneficial for those who frequently change networks, like travelers or professionals working in different locations.
-- Network Manager automatically adjusts network settings based on the saved profiles, making transitions between different networks seamless and efficient.
-- Each profile can be customized extensively, allowing users to tailor network settings to their specific needs for different environments.
-
-### Examples
-
-- `nmcli -t -f RUNNING general`: Determines Network Manager's state. Outputs either "running" or "stopped" based on its current state.
-
-- `nmcli con reload`: Useful after manually editing the network configuration files. This command reloads the settings.
-
-- `nmcli con show`: Lists all saved network connection profiles.
-
-- `nmcli dev status`: Showcases the status of all network devices recognized by Network Manager.
-
-### Configuring a Static IP Address
-
-Setting a static IP can be essential for devices that should have a consistent IP, like servers or specific workstations. Here's the command structure:
-
-```
-nmcli con add con-name [interface] type ethernet ifname [interface] ipv4.method manual ipv4.address [IP address]/[network prefix] ipv4.gateway [default gateway]
+```bash id="8qgppw"
+nmcli -t -f RUNNING general
 ```
 
-For example, to assign the IP `192.168.1.10` with a subnet mask of `255.255.255.0` (prefix `24`) and gateway `192.168.1.1` to `eth0`, execute:
+Show saved connection profiles:
 
-```
-nmcli con add con-name eth0 type ethernet ifname eth0 ipv4.method manual ipv4.address 192.168.1.10/24 ipv4.gateway 192.168.1.1
-```
-
-### Configuring a Dynamic IP Address with DHCP
-
-For devices that don't need a fixed IP, obtaining one dynamically via DHCP is the way to go:
-
-```
-nmcli con add con-name [interface] type ethernet ifname [interface] ipv4.method auto
+```bash id="1z5pv2"
+nmcli con show
 ```
 
-For `eth0`:
+Show device status:
 
+```bash id="dggu7u"
+nmcli dev status
 ```
-nmcli con add con-name eth0 type ethernet ifname eth0 ipv4.method auto
+
+Reload connection profiles after changes:
+
+```bash id="eujnp4"
+nmcli con reload
 ```
 
-### Text-based UI with `nmtui`
+Bring a connection up:
 
-`nmtui`, or Network Manager Text User Interface, is an excellent alternative for those operating on a system without a GUI or who find the `nmcli` command line interface a bit intimidating. It strikes a balance by providing a user-friendly, text-based interface for managing network settings. 
-
-To launch `nmtui`, simply enter the following in your terminal:
-
+```bash id="qwaeaf"
+nmcli con up eth0
 ```
+
+Bring a connection down:
+
+```bash id="gh9f2y"
+nmcli con down eth0
+```
+
+### Configuring a Static IP with `nmcli`
+
+A static IP is useful for devices that should keep the same address, such as servers.
+
+Example:
+
+```bash id="mglkvx"
+sudo nmcli con add \
+  con-name eth0 \
+  type ethernet \
+  ifname eth0 \
+  ipv4.method manual \
+  ipv4.addresses 192.168.1.10/24 \
+  ipv4.gateway 192.168.1.1 \
+  ipv4.dns "8.8.8.8 8.8.4.4"
+```
+
+This creates a connection profile named `eth0`.
+
+The settings mean:
+
+```text id="5lfa7j"
+192.168.1.10/24   static IP address and network prefix
+192.168.1.1       default gateway
+8.8.8.8 8.8.4.4   DNS servers
+```
+
+Then activate it:
+
+```bash id="3p61ew"
+sudo nmcli con up eth0
+```
+
+### Configuring DHCP with `nmcli`
+
+For automatic IP assignment with DHCP:
+
+```bash id="01p1p2"
+sudo nmcli con add \
+  con-name eth0 \
+  type ethernet \
+  ifname eth0 \
+  ipv4.method auto
+```
+
+Then activate it:
+
+```bash id="fy156z"
+sudo nmcli con up eth0
+```
+
+DHCP is usually best for laptops, desktops, and devices that do not need a fixed address.
+
+### `nmtui`
+
+`nmtui` is the NetworkManager text user interface.
+
+It provides a menu-based interface in the terminal.
+
+Start it with:
+
+```bash id="gdj610"
 nmtui
 ```
 
-This command opens up a straightforward, menu-driven interface where you can navigate using your keyboard to configure network settings. It's particularly useful for:
+It can be used to:
 
-- Setting up new connections.
-- Modifying existing connections.
-- Enabling or disabling wired, wireless, and other network interfaces.
-
-Once you've made your adjustments and saved them within `nmtui`, you can apply these changes by restarting the Network Manager service. This ensures that your network configurations are updated and active. To restart Network Manager, use:
-
-```
-systemctl restart NetworkManager
-```
-
-## DNS
-
-The Domain Name System (DNS) serves as the internet's phonebook. It allows users to input human-friendly domain names, like www.example.com, and translates them into IP addresses that computers use for communication.
-
-
-```
-  User's Device               Local DNS Resolver       Root & Top-Level
-      |                               |                Domain (TLD) Servers
-      |                               |                          |
-      |    1. Request                 |                          |
-      |    "www.example.com"          |                          |
-      |------------------------------>|                          |
-      |                               |                          |
-      |    2. Ask Root Server         |                          |
-      |------------------------------>|                          |
-      |                               | 3. Reply with .com Server|
-      |                               |<-------------------------|
-      |                               |                          |
-      |                               |                          |
-      |    4. Ask .com Server         |                          |
-      |------------------------------>|                          |
-      |                               |  5. Reply with IP for    |
-      |                               |   "www.example.com"     |
-      |                               |<-------------------------|
-      |                               |                          |
-      |                               |                          |
-      |  6. Return IP to User's Device|                          |
-      |<------------------------------|                          |
-      |                               |                          |
-      |                               |                          |
+```text id="p2n45g"
+edit a connection
+activate a connection
+set a hostname
+configure static IP settings
+configure DNS settings
+enable or disable interfaces
 ```
 
-### Understanding DNS
+`nmtui` is helpful when you do not have a graphical desktop but want something easier than long `nmcli` commands.
 
-1. Before resorting to DNS servers, a computer will first check its local `/etc/hosts` file to see if there's a stored mapping for the requested domain to an IP address.
-2. If the `/etc/hosts` doesn't have the needed mapping, the system consults the `/etc/resolv.conf` file to determine which DNS server it should query.
-3. The computer sends a request to the identified DNS server to fetch the corresponding IP address for the domain.
+After changing network settings, you may need to restart NetworkManager:
 
-### Modifying DNS Settings
-
-Changing DNS servers can provide various benefits, including faster browsing, improved security, and the ability to bypass regional restrictions on websites. Adjusting your DNS settings can help you take advantage of these features.
-
-I. Using `nmtui` 
-
-The Network Manager Text User Interface (`nmtui`) is a user-friendly, text-based tool for modifying network configurations, including DNS settings. To adjust DNS configurations:
-   
-- Launch `nmtui`.
-- Select "Edit a connection".
-- Choose the connection you wish to modify.
-- Under the "IPv4 CONFIGURATION" or "IPv6 CONFIGURATION" sections, enter your preferred DNS server addresses.
-
-II. Direct Configuration File Edits
-
-Editing configuration files manually is another method to set DNS servers. Follow these steps:
-   
-- Go to `/etc/sysconfig/network-scripts`.
-- Each network interface has an associated configuration file, like `ifcfg-eth0` for the primary Ethernet connection.
-- Open the relevant file for your connection.
-- Add or change `DNS1`, `DNS2`, etc., to the desired DNS server IP addresses.
-
-Example configuration:
-
-```
-DEVICE=eth0
-...
-DNS1=8.8.8.8
-DNS2=8.8.4.4
+```bash id="vm6ad6"
+sudo systemctl restart NetworkManager
 ```
 
-After making these changes, restart the network service to apply them.
+Be careful when restarting networking on a remote server, because a mistake can disconnect your SSH session.
 
-III. Verifying DNS Configuration
+### DNS
 
-To check the active DNS settings, inspect the `/etc/resolv.conf` file. This file lists the DNS servers your system is using, identified with `nameserver` tags.
+DNS stands for Domain Name System.
 
-For example, `/etc/resolv.conf` might contain:
+DNS translates human-readable names into IP addresses.
 
+For example:
+
+```text id="bbhyu6"
+www.example.com  --->  93.184.216.34
 ```
+
+DNS is often described as the phonebook of the internet.
+
+Humans prefer names. Computers communicate using IP addresses.
+
+```text id="oqc0ju"
+You type:
+    www.example.com
+
+DNS finds:
+    93.184.216.34
+
+Your computer connects to:
+    93.184.216.34
+```
+
+#### How DNS Resolution Works
+
+A simplified DNS lookup looks like this:
+
+```text id="u4oxcb"
+  User's Device               DNS Resolver          Root / TLD / Authoritative DNS
+      |                            |                              |
+      | 1. Request                 |                              |
+      | "www.example.com"          |                              |
+      |--------------------------->|                              |
+      |                            | 2. Ask DNS hierarchy         |
+      |                            |----------------------------> |
+      |                            |                              |
+      |                            | 3. Receive answer            |
+      |                            |<---------------------------- |
+      |                            |                              |
+      | 4. Return IP address       |                              |
+      |<---------------------------|                              |
+      |                            |                              |
+```
+
+Before asking DNS servers, a Linux system may check local files first.
+
+A common order is:
+
+```text id="jkqqux"
+1. Check /etc/hosts
+2. Check DNS settings, often from /etc/resolv.conf or systemd-resolved
+3. Ask the configured DNS resolver
+```
+
+#### `/etc/hosts`
+
+The `/etc/hosts` file can manually map names to IP addresses.
+
+Example:
+
+```text id="xsmz13"
+127.0.0.1       localhost
+192.168.1.50    myserver.local
+```
+
+If this file contains a matching entry, the system may use it before asking DNS.
+
+This is useful for small local mappings or testing.
+
+#### `/etc/resolv.conf`
+
+The `/etc/resolv.conf` file often shows which DNS servers are configured.
+
+Example:
+
+```text id="ys5lpx"
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 ```
 
-### DNS Troubleshooting
+However, on many modern Linux systems, this file may be automatically managed by NetworkManager or systemd-resolved. Manual edits may be overwritten.
 
-DNS issues can arise due to misconfigurations, unreachable DNS servers, or delays in DNS record updates. When encountering difficulties accessing websites, it's crucial to determine if DNS is the underlying problem.
+To check DNS settings on systems using systemd-resolved:
 
-Potential Indicators of DNS Issues:
-
-1. If you can't reach websites using their domain names but can access them using direct IP addresses, it could indicate DNS issues.
-2. Errors like "Server not found" or "DNS resolution error" in web browsers often point to DNS problems.
-3. Issues may occur after modifying DNS settings or switching to a new DNS server.
-
-Tools for DNS Diagnostics:
-
-I. dig
-
-- `dig` is a powerful tool for conducting detailed DNS queries, providing comprehensive information including the answer, authority, and additional sections.
-- To query information about a domain, you would use: `dig www.example.com`.
-
-II. nslookup
-
-- This interactive command-line tool queries DNS servers to find domain name or IP address mappings and can provide information about the DNS server being queried.
-- To find the IP address of a domain, use: `nslookup www.example.com`.
-
-III. host
-
-- Focusing on simplicity, `host` is used for DNS lookups to quickly find the IP address of a domain or the domain of an IP address.
-- To get the IP address for a domain, you would use: `host www.example.com`.
-
-## Default Gateway
-
-The default gateway is a critical networking concept, functioning as the intermediary device, typically a router, which forwards network traffic from the local network to other distant networks or the internet. It's the "gate" between two networks, and it acts as the default route when no specific path is defined for a data packet.
-
-```
-+----------------+     +---------------+     +---------------------+
-| Local Device A |     |   Local       |     | External Device/    |
-| 192.168.1.2    |-----|   Network     |-----| Internet            |
-+----------------+     | 192.168.1.0/24|     +---------------------+
-                       | Gateway:      |
-+----------------+     | 192.168.1.1   |
-| Local Device B |     +---------------+
-| 192.168.1.3    |
-+----------------+
+```bash id="u12roj"
+resolvectl status
 ```
 
-### Importance of a Default Gateway
+#### Changing DNS Settings
 
-1. Enables devices within a local network to communicate with devices on external networks, including the wider internet.
-2. When a device needs to communicate with another that isn't within its local network, it sends the data packet to the default gateway. The gateway then determines where to forward that packet to reach its final destination.
-3. If the network doesn't have a predetermined route for a packet, it will send it to the default gateway.
+DNS settings can be changed using NetworkManager tools.
 
-### How to Display the Default Gateway
+With `nmtui`:
 
-You can quickly determine the currently configured default gateway on a Linux system with the following command:
-
-```bash
-ip route show | grep 'default' | awk '{print $3}'
+```text id="0rv1gs"
+1. Run nmtui
+2. Select Edit a connection
+3. Choose the connection
+4. Edit IPv4 or IPv6 settings
+5. Add DNS servers
+6. Save and activate the connection
 ```
 
-This command fetches the routing table, filters out the default route, and then extracts the IP address of the default gateway.
+With `nmcli`, you can set DNS servers like this:
 
-### How to Set or Remove a Default Gateway
-
-While the ip command has largely replaced route for many network configurations, you can still use route to manage the default gateway:
-
-I. Set a Default Gateway
-
-The following command establishes a default gateway, routing all external traffic through the specified IP address:
-
-```bash
-route add default gw 192.168.1.254
+```bash id="by4fmf"
+sudo nmcli con mod eth0 ipv4.dns "8.8.8.8 8.8.4.4"
+sudo nmcli con mod eth0 ipv4.ignore-auto-dns yes
+sudo nmcli con up eth0
 ```
 
-II. Remove the Default Gateway
+This sets custom DNS servers and tells NetworkManager not to use DNS servers received from DHCP.
 
-If you need to remove the currently configured default gateway, perhaps for troubleshooting or to set a new one, use:
+#### DNS Troubleshooting
 
-```bash
-route del default
+DNS problems often look like this:
+
+```text id="q74dwh"
+You can ping an IP address,
+but you cannot reach a domain name.
 ```
 
-### Using ip to Manage the Default Gateway
+For example:
 
-The ip command provides more advanced features and is now the preferred tool for many network configuration tasks:
-
-I. Set a Default Gateway
-
-```bash
-ip route add default via 192.168.1.254
+```bash id="9ixg2t"
+ping 8.8.8.8
 ```
 
-II. Remove the Default Gateway
+works, but:
 
-```bash
-ip route del default
+```bash id="lwrqk4"
+ping google.com
 ```
 
-## Packet Analysis
+fails.
 
-Packet analysis, often termed packet sniffing, delves into the observation and detailed examination of network traffic. By capturing the individual packets—data's essential building blocks—circulating between network devices, administrators and security experts can:
+That suggests the network may be working, but name resolution is broken.
 
-- Identify and troubleshoot network anomalies or bottlenecks.
-- Understand regular network utilization and bandwidth consumption.
-- Detect potential security intrusions or breaches.
-  
+Useful DNS tools include:
+
+```bash id="4q97a2"
+dig example.com
 ```
+
+```bash id="sj9ity"
+nslookup example.com
+```
+
+```bash id="j9irm3"
+host example.com
+```
+
+`dig` gives detailed DNS information.
+
+`nslookup` is widely available and simple.
+
+`host` is quick and easy for basic lookups.
+
+Example:
+
+```bash id="efebzn"
+dig www.example.com
+```
+
+A successful answer will include an IP address in the answer section.
+
+### Packet Analysis
+
+Packet analysis means capturing and inspecting network traffic.
+
+It is useful for:
+
+```text id="ghm6ng"
+troubleshooting connectivity problems
+checking whether traffic is leaving or reaching a system
+understanding protocols
+detecting unusual or suspicious traffic
+measuring network behavior
+```
+
+```text id="p2rrce"
                     +-----------------------+
                     |       Internet        |
                     +-----------------------+
                                |
-                               |
                                v
 +--------------+        +-------+-------+        +---------------+
-| Source       |  ====> | Packet River  |  ====> | Destination  |
-| Device       |  <==== |               |  <==== | Device       |
+| Source       |  ====> | Packet River  |  ====> | Destination   |
+| Device       |  <==== |               |  <==== | Device        |
 +--------------+        +-------+-------+        +---------------+
                                 ^
                                 |
                     [Packet Analysis Tool]
-                         /      |     \
-                        /       |      \
-                    Source    Data    Destination
-                   Address            Address
+                         /      |      \
+                        /       |       \
+                    Source     Data    Destination
+                   Address             Address
 ```
 
-### A Command-Line Packet Analyzer tcpdump
+Packet analysis should be done responsibly. Only capture traffic on networks and systems where you have permission.
 
+#### `tcpdump`
 
-`tcpdump` is an essential packet analysis tool for Linux, providing powerful capabilities for packet capture and analysis from the command line.
+`tcpdump` is a command-line packet capture tool.
 
-**Example of Packet Capture with `tcpdump`**:
+To capture packets on interface `eth0` and save them to a file:
 
-To capture packets on the eth0 network interface and save them to a file:
-
-```bash
-tcpdump -i eth0 -w traffic.pcap
+```bash id="15xj5m"
+sudo tcpdump -i eth0 -w traffic.pcap
 ```
 
 Explanation:
 
-- `-i eth0`: Selects the eth0 network interface for capturing packets.
-- `-w traffic.pcap`: Directs tcpdump to write the captured packets to traffic.pcap file.
-
-Advanced Options in tcpdump:
-
-I. Limiting Packet Capture (`-c`)
-
-Set a specific number of packets to capture. For example, `-c 10` will limit the capture to 10 packets:
-
-```bash
-tcpdump -i eth0 -w traffic.pcap -c 10
+```text id="eplivy"
+-i eth0          capture on interface eth0
+-w traffic.pcap  write captured packets to a file
 ```
 
-II. Setting Snapshot Length (`-s`)
+To capture only 10 packets:
 
-Defines the maximum amount of each packet to capture, measured in bytes. `-s 100` captures the first 100 bytes of each packet:
-
-```bash
-tcpdump -i eth0 -w traffic.pcap -s 100
+```bash id="3y726a"
+sudo tcpdump -i eth0 -c 10
 ```
 
-III. Using Packet Filters (`-f`)
+To save 10 packets to a file:
 
-Filters capture to specific packet types or criteria. For example, capturing only HTTP traffic (typically port 80):
-
-```bash
-tcpdump -i eth0 -w traffic.pcap -f "port 80"
+```bash id="5cahtu"
+sudo tcpdump -i eth0 -c 10 -w traffic.pcap
 ```
 
-## IP Forwarding
+To capture traffic for port 80:
 
-IP forwarding, sometimes referred to as packet forwarding or routing, facilitates the relay of data packets across different networks. 
-
+```bash id="xvy3tv"
+sudo tcpdump -i eth0 port 80
 ```
+
+To capture DNS traffic:
+
+```bash id="yl7l1a"
+sudo tcpdump -i eth0 port 53
+```
+
+To capture ICMP traffic, such as ping:
+
+```bash id="g09klv"
+sudo tcpdump -i eth0 icmp
+```
+
+To read a saved capture:
+
+```bash id="ga8ouz"
+tcpdump -r traffic.pcap
+```
+
+A `.pcap` file can also be opened in Wireshark for graphical analysis.
+
+### IP Forwarding
+
+IP forwarding allows a Linux system to forward packets between networks.
+
+When IP forwarding is enabled, the system can act like a router.
+
+```text id="cc348t"
 +-------------+       +------------+       +-------------+
 | Network A   |       |            |       | Network B   |
 | 192.168.1.0 |-------|  IP        |-------| 10.0.1.0    |
-|   /24       |       | Forwarding |       |   /24       |
-+-------------+       |  Device    |       +-------------+
-                      | (Router)   |
+| /24         |       | Forwarding |       | /24         |
++-------------+       | Device     |       +-------------+
+                      | Router     |
 +-------------+       |            |       +-------------+
-| Network C   |       |            |       | Network D   |
-| 10.0.2.0    |-------|            |-------| 172.16.1.0  |
-|   /24       |       +------------+       |   /24       |
+| Network C   |-------|            |-------| Network D   |
+| 10.0.2.0    |       +------------+       | 172.16.1.0  |
+| /24         |                            | /24         |
 +-------------+                            +-------------+
 ```
 
-This mechanism is important for:
+This is useful for:
 
-- Establishing communication between devices sprawled across various networks.
-- Enabling devices to access external networks, including the internet.
+```text id="wi2cl6"
+routers
+VPN gateways
+firewalls
+network labs
+containers and virtual machines
+connecting separate networks
+```
 
-Activating and Verifying IP Forwarding:
+#### Checking IP Forwarding
 
-I. Check the current IP forwarding status
+To check IPv4 forwarding:
 
-```bash
+```bash id="15shhu"
 cat /proc/sys/net/ipv4/ip_forward
 ```
 
-II. Temporarily enable IP forwarding
+Output:
 
-```bash
-sysctl -w net.ipv4.ip_forward=1 # For IPv4 forwarding
-sysctl -w net.ipv6.conf.all.forwarding=1 # For IPv6 forwarding
+```text id="d26a7u"
+0
 ```
 
-III. Permanently enable IP forwarding
+means forwarding is disabled.
 
-Modify the `/etc/sysctl.conf` file, appending these configurations:
+Output:
 
-```bash
-net.ipv4.ip_forward=1 # Activates IPv4 forwarding
-net.ipv6.conf.all.forwarding=1 # Activates IPv6 forwarding
+```text id="6yfxag"
+1
 ```
 
-Apply the changes and restart the network services:
+means forwarding is enabled.
 
-```bash
-sysctl -p /etc/sysctl.conf
-service network restart # For RedHat and related distributions
-/etc/init.d/networking restart # For Debian and its derivatives
+#### Temporarily Enabling IP Forwarding
+
+To enable IPv4 forwarding temporarily:
+
+```bash id="7xef5j"
+sudo sysctl -w net.ipv4.ip_forward=1
 ```
 
-Note: IP forwarding should be enabled judiciously, keeping security considerations in mind. When active, it allows the device to forward packets from one network to another, which, if not secured correctly, can be a potential vulnerability.
+To enable IPv6 forwarding temporarily:
 
-## Network Troubleshooting
+```bash id="bkwxes"
+sudo sysctl -w net.ipv6.conf.all.forwarding=1
+```
 
-Network troubleshooting is a crucial skill for IT professionals. Adopting a systematic and structured approach to troubleshooting can hasten the resolution of network issues.
+Temporary changes may be lost after reboot.
 
-Steps for Network Troubleshooting:
+#### Permanently Enabling IP Forwarding
 
-I. Verify Network Connection and Settings
+Edit:
 
-Ensure the network interface is active and its configuration is correct.
+```bash id="l6xpj9"
+/etc/sysctl.conf
+```
 
-```bash
+Add:
+
+```text id="hfme35"
+net.ipv4.ip_forward=1
+net.ipv6.conf.all.forwarding=1
+```
+
+Apply the changes:
+
+```bash id="s0r899"
+sudo sysctl -p /etc/sysctl.conf
+```
+
+Enable IP forwarding carefully. A forwarding system may expose traffic between networks, so firewall rules and routing rules should be configured properly.
+
+### Network Troubleshooting
+
+Network troubleshooting works best when done step by step.
+
+A useful order is:
+
+```text id="n8gc43"
+1. Check physical or virtual link
+2. Check interface status
+3. Check IP address
+4. Check default gateway and routes
+5. Check DNS
+6. Check firewall rules
+7. Test remote connectivity
+8. Capture traffic if needed
+```
+
+#### Step 1: Check Interfaces
+
+Use:
+
+```bash id="jkojhq"
 ip link
-ip -4 address
 ```
 
-Example of Incorrect Output for `ip link`:
+Look for the interface state.
 
-```
+Example problem:
+
+```text id="9yemzg"
 2: eth0: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast state DOWN mode DEFAULT group default qlen 1000
 ```
 
-The state DOWN shows that the interface is not active, which is a sign of a problem.
+The key part is:
 
-Example of Incorrect Output for `ip -4 address`:
-
-```
-inet 169.254.x.x/16 brd 169.254.x.x scope global dynamic eth0
+```text id="qdzadb"
+state DOWN
 ```
 
-An IP in the 169.254.x.x range suggests a failure in DHCP configuration or a lack of connectivity with the DHCP server, often seen in Windows as "Limited Connectivity".
+This means the interface is not active.
 
-II. Inspect Routing Table
+To bring it up:
 
-The routing table guides packet direction. Confirm routes, particularly the default gateway, are correctly configured.
+```bash id="xpxk16"
+sudo ip link set eth0 up
+```
 
-```bash
+If it still does not work, check cables, Wi-Fi connection, virtual machine settings, or NetworkManager.
+
+#### Step 2: Check IP Address
+
+Use:
+
+```bash id="m2j9pp"
+ip -4 address
+```
+
+A normal private address might look like:
+
+```text id="mhgfro"
+inet 192.168.1.10/24
+```
+
+A suspicious address may look like:
+
+```text id="2cb5lx"
+inet 169.254.x.x/16
+```
+
+An address in the `169.254.x.x` range often means the device did not receive an address from DHCP and assigned itself a link-local address.
+
+This usually indicates:
+
+```text id="jmo0w0"
+DHCP server not reachable
+network cable disconnected
+Wi-Fi not connected
+wrong VLAN or network
+DHCP service problem
+```
+
+#### Step 3: Check Routes
+
+Use:
+
+```bash id="qb8u9r"
 ip route
-route -n
 ```
 
-Incorrect Output for `ip route`:
+A normal route may look like:
 
-```
-default via 192.168.1.1 dev eth0 metric 202 
-192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.3 
-```
-
-If the default gateway IP doesn’t match your network's actual gateway, or if the network route points to the wrong interface (like eth1 instead of eth0), there's a configuration issue.
-
-Incorrect Output for `route -n`:
-
-```
-Kernel IP routing table
-Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-0.0.0.0         0.0.0.0         0.0.0.0         UG    0      0        0 eth0
-192.168.2.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+```text id="bl91e6"
+default via 192.168.1.1 dev eth0
+192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.10
 ```
 
-A gateway of 0.0.0.0 or a mismatched subnet suggests routing issues that could hinder network communication.
+The default route is important because it tells the system how to reach external networks.
 
-III. Examine Firewall Rules
+If there is no default route, the system may reach local devices but not the internet.
 
-Firewalls can block or allow specific traffic. Verify that firewall settings are correctly configured to permit essential traffic and block potential threats.
+#### Step 4: Test Connectivity
 
-On Linux:
+Start local, then move outward.
 
-```bash
-iptables -L
+Test loopback:
+
+```bash id="7t0iwm"
+ping -c 3 127.0.0.1
 ```
 
-On Windows:
+Test your own IP:
 
-```bash
-netsh advfirewall firewall show rule name=all
+```bash id="x1c95u"
+ping -c 3 192.168.1.10
 ```
 
-IV. Monitor Network Traffic
+Test the default gateway:
 
-Utilize tools like tcpdump and Wireshark for packet inspection, aiding in spotting unusual patterns or malicious activities.
-
-Capturing packets with `tcpdump`:
-
-```bash
-tcpdump -i eth0
+```bash id="kvh8gh"
+ping -c 3 192.168.1.1
 ```
 
-What to Look For:
+Test a public IP:
 
-- Sudden spikes in traffic, especially to unfamiliar IPs or ports.
-- Repeated Attempts to Access Specific Ports could indicate a scanning attempt by an unauthorized user.
-- Unexpected protocols might suggest malicious activity.
-
-Example of Potential Issue:
-
-```bash
-tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
-23:45:10.123456 IP [suspicious IP] > [your IP].http: Flags [S], seq 123456789:123456890, win 65535, length 0
+```bash id="gqur53"
+ping -c 3 8.8.8.8
 ```
 
-Repeated lines like this could suggest a potential network scan or attack attempt.
+Test DNS:
 
-Using `netstat` to Review Network Statistics and Active Connections:
-
-```bash
-netstat -s
+```bash id="2z2wd7"
+ping -c 3 google.com
 ```
 
-What to Look For:
+The results help narrow down the problem.
 
-- High Number of TCP Retransmissions indicates potential network congestion or poor connectivity.
-- Persistent connections from unknown sources could be suspicious.
-- High numbers of packet errors suggest network hardware issues or configuration errors.
+```text id="xqffcs"
+If 127.0.0.1 fails:
+    local network stack problem
 
-Example of Potential Issue:
+If gateway fails:
+    local network or router problem
 
-```bash
-Tcp:
-    5 active connections openings
-    20 passive connection openings
-    2 failed connection attempts
-    25 retransmitted segments
-    3 resets sent
+If 8.8.8.8 works but google.com fails:
+    DNS problem
+
+If gateway works but internet IP fails:
+    routing, firewall, or ISP problem
 ```
 
-Here, a high number of retransmitted segments could point to network congestion or reliability issues.
+#### Step 5: Check DNS
 
-V. Assess Physical Hardware
+Check configured DNS:
 
-Hardware problems are common culprits. Look for:
-
-- Disconnected or faulty cables.
-- Dysfunctional switches or routers.
-- Wireless network interference.
-- Network device indicator lights for status checks.
-
-VI. Reset Network Settings or Services
-
-Sometimes restarting network services can resolve issues due to temporary glitches.
-
-On Linux:
-
-```bash
-systemctl restart networking
+```bash id="ih24c0"
+cat /etc/resolv.conf
 ```
 
-On Windows (replace 'service_name' with the actual service name):
+or:
 
-```bash
-net stop service_name && net start service_name
+```bash id="3igoot"
+resolvectl status
+```
+
+Test DNS lookup:
+
+```bash id="4qxfg0"
+dig google.com
+```
+
+or:
+
+```bash id="ufonwm"
+host google.com
+```
+
+If DNS fails, try a known DNS server:
+
+```bash id="1pdv0h"
+dig @8.8.8.8 google.com
+```
+
+If that works, your configured DNS resolver may be wrong or unreachable.
+
+#### Step 6: Check Firewall Rules
+
+Firewalls may block traffic.
+
+On Linux systems using iptables:
+
+```bash id="n2t9x0"
+sudo iptables -L -n -v
+```
+
+On systems using nftables:
+
+```bash id="6wmou0"
+sudo nft list ruleset
+```
+
+On systems using firewalld:
+
+```bash id="iv6hhu"
+sudo firewall-cmd --list-all
+```
+
+Look for rules that block required ports or protocols.
+
+For example, if SSH is not reachable, check whether port 22 is allowed.
+
+#### Step 7: Check Listening Ports
+
+To see which services are listening:
+
+```bash id="nq8a8m"
+ss -tuln
+```
+
+Example output:
+
+```text id="c6txs0"
+Netid  State   Local Address:Port
+tcp    LISTEN  0.0.0.0:22
+tcp    LISTEN  127.0.0.1:5432
+tcp    LISTEN  0.0.0.0:80
+```
+
+This means:
+
+```text id="t7sd9k"
+port 22 is listening on all IPv4 interfaces
+port 5432 is listening only on localhost
+port 80 is listening on all IPv4 interfaces
+```
+
+If a service is only listening on `127.0.0.1`, remote devices cannot connect to it.
+
+#### Step 8: Capture Traffic
+
+If the issue is still unclear, use `tcpdump`.
+
+Example:
+
+```bash id="koic01"
+sudo tcpdump -i eth0
+```
+
+Capture only traffic to or from a host:
+
+```bash id="laq20j"
+sudo tcpdump -i eth0 host 192.168.1.20
+```
+
+Capture traffic on a port:
+
+```bash id="b6lvfd"
+sudo tcpdump -i eth0 port 443
+```
+
+Packet capture can answer questions like:
+
+```text id="b4i5l7"
+Is the request leaving my machine?
+Is the reply coming back?
+Is traffic reaching the server?
+Is DNS being queried?
+Is the firewall dropping packets?
+```
+
+### Hardware and Physical Checks
+
+Not every network problem is caused by software.
+
+Common physical issues include:
+
+```text id="af0eq4"
+unplugged Ethernet cable
+bad cable
+bad switch port
+disabled Wi-Fi
+weak wireless signal
+wrong VLAN
+failed router or switch
+virtual machine adapter disconnected
+```
+
+Always check the simple things early.
+
+#### Restarting Network Services
+
+Sometimes a service restart can fix temporary network problems.
+
+For NetworkManager:
+
+```bash id="590dbx"
+sudo systemctl restart NetworkManager
+```
+
+For older Debian-style networking:
+
+```bash id="ozqxd9"
+sudo systemctl restart networking
+```
+
+Be careful when doing this over SSH. Restarting networking can disconnect you from the remote machine.
+
+#### Scenario 1: No IP Address
+
+Symptoms:
+
+```text id="0g3c7z"
+ip address is missing
+or address is 169.254.x.x
+```
+
+Check:
+
+```bash id="r20d3y"
+ip link
+ip -4 address
+nmcli dev status
+```
+
+Possible causes:
+
+```text id="3z459r"
+interface is down
+DHCP failed
+cable disconnected
+wrong Wi-Fi network
+NetworkManager profile misconfigured
+```
+
+#### Scenario 2: Can Reach Router but Not Internet
+
+Symptoms:
+
+```text id="clcata"
+ping 192.168.1.1 works
+ping 8.8.8.8 fails
+```
+
+Check:
+
+```bash id="yydnr5"
+ip route
+traceroute 8.8.8.8
+```
+
+Possible causes:
+
+```text id="gyt0f5"
+router has no internet
+wrong default gateway
+firewall blocking traffic
+ISP issue
+```
+
+#### Scenario 3: Can Reach IPs but Not Domain Names
+
+Symptoms:
+
+```text id="mhi1kp"
+ping 8.8.8.8 works
+ping google.com fails
+```
+
+Check:
+
+```bash id="fldlqe"
+cat /etc/resolv.conf
+resolvectl status
+dig google.com
+dig @8.8.8.8 google.com
+```
+
+Likely cause:
+
+```text id="tvzdo6"
+DNS problem
+```
+
+#### Scenario 4: Service Not Reachable Remotely
+
+Symptoms:
+
+```text id="qbnzdl"
+service works locally
+remote clients cannot connect
+```
+
+Check:
+
+```bash id="lgzj0g"
+ss -tuln
+sudo firewall-cmd --list-all
+sudo iptables -L -n -v
+```
+
+Possible causes:
+
+```text id="kn50jo"
+service is only listening on 127.0.0.1
+firewall is blocking the port
+wrong IP address
+routing issue
+service is not running
 ```
 
 ### Challenges
 
-1. Configure a static IP address, subnet mask, and default gateway for a network interface on your Linux system by editing network configuration files or using the `ip` command. Explain the purpose of each setting and discuss how IP addressing impacts network communication.
-2. Edit the `/etc/resolv.conf` file to set up a DNS server, then test DNS resolution using tools like `dig`, `nslookup`, or `host`. Discuss the role of DNS in network communication and how it translates domain names to IP addresses.
-3. Enable and disable IP forwarding on your Linux system and test its functionality by routing packets between two connected networks. Verify packet forwarding with `ping` or `traceroute` and explain how IP forwarding is essential in network routing.
-4. Use `tcpdump` to capture network packets on a specified interface and save the output to a file. Analyze the captured data to identify key patterns, potential network issues, or unusual traffic. Discuss how packet capture helps in network troubleshooting and security monitoring.
-5. Set up a basic VPN (Virtual Private Network) connection between two Linux systems, using software such as OpenVPN or WireGuard. Test encrypted communication between the two systems and explain the advantages of VPNs for secure remote access.
-6. Implement network bridging between two network interfaces on your system. Verify the setup by confirming that traffic can flow seamlessly between the bridged interfaces, and discuss how network bridging can be used to extend or join networks.
-7. Simulate common network issues (e.g., incorrect IP settings, DNS failure, routing issues) and practice troubleshooting by checking the connection status, inspecting the routing table, and verifying configuration files. Document the steps you took to identify and resolve each issue.
-8. Use `traceroute` to map the network path to a remote IP address and identify any potential bottlenecks or delays in the route. Discuss how traceroute reveals the path data packets take and why certain hops might exhibit higher latency.
-9. Install and configure a simple web server (Apache or Nginx), then access it from a web browser to ensure it’s serving content properly. Examine the server's access logs to track requests and discuss the basics of HTTP communication and web server functionality.
-10. Explore your system’s network connections and listening ports using `netstat` or `ss`. Identify which services are listening on which ports, and explain how these tools can help monitor network services, detect potential issues, and enhance security.
+1. Configure a static IP address, subnet prefix, default gateway, and DNS server for a Linux interface. Explain what each setting does.
+2. Configure a system to use DHCP. Verify that it receives an IP address automatically.
+3. Use `ip addr`, `ip link`, and `ip route` to inspect a system’s network configuration. Identify the interface name, IP address, MAC address, and default gateway.
+4. Edit DNS settings using `nmtui` or `nmcli`. Test DNS resolution with `dig`, `host`, or `nslookup`.
+5. Enable and disable IP forwarding. Explain why forwarding is required when a Linux system acts as a router.
+6. Use `tcpdump` to capture packets on a network interface. Save the capture to a `.pcap` file and inspect it with `tcpdump` or Wireshark.
+7. Use `traceroute` or `tracepath` to map the route to a remote host. Identify where latency increases.
+8. Install a simple web server such as Apache or Nginx. Confirm that it listens on port 80 or 443 using `ss -tuln`.
+9. Simulate common network problems, such as wrong DNS, missing gateway, or disabled interface. Practice identifying and fixing each issue.
+10. Use `ss`, `netstat`, or firewall tools to identify listening services and open ports. Explain how this helps with security and troubleshooting.
