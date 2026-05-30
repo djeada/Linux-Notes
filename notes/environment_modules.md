@@ -1,109 +1,282 @@
 ## Environment Modules
 
-Environment Modules is a powerful and flexible tool that enables dynamic modification of a user's environment via modulefiles. Each modulefile contains the information necessary to configure the shell for a specific application or version, allowing users to seamlessly switch between different software environments. This utility is essential in complex computing environments, such as high-performance computing (HPC) clusters, where managing multiple software packages and versions can be challenging.
+Environment Modules is a tool used to manage software environments from the command line.
 
-Environment Modules simplifies this process by handling environment variables like `PATH`, `LD_LIBRARY_PATH`, and others, ensuring that users can load and unload applications as needed without conflicts or compatibility issues. It promotes efficient use of system resources and enhances productivity by providing a consistent and user-friendly interface for environment management.
+It allows users to load, unload, and switch between different software packages and software versions without manually editing shell configuration files every time.
 
-Main idea:
+This is especially useful on shared systems, such as high-performance computing clusters, university servers, research machines, and multi-user Linux systems.
 
-- Load and unload software environments on-the-fly.
-- Easily switch between different versions of software packages.
-- Automatically detect and prevent conflicts between incompatible modules.
-- Define complex environment setups using Tcl scripting within modulefiles.
+For example, one project may need Python 3.8, another may need Python 2.7, and another may need a specific version of GCC or CUDA. Environment Modules makes it possible to switch between these setups safely and quickly.
+
+```text id="8d8f6a"
+Without Environment Modules:
+
+User manually edits PATH, LD_LIBRARY_PATH, and other variables
+        |
+        v
+Easy to make mistakes or create conflicts
+
+
+With Environment Modules:
+
+User runs module load python/3.8
+        |
+        v
+Environment variables are adjusted automatically
+```
+
+The main idea is simple:
+
+```bash id="tszv8i"
+module load software/version
+```
+
+and later:
+
+```bash id="3zwf00"
+module unload software/version
+```
+
+### Why Environment Modules Are Useful
+
+Many programs depend on environment variables.
+
+For example, the shell uses `PATH` to decide where to search for executable programs. The dynamic linker may use `LD_LIBRARY_PATH` to find shared libraries. The `man` command may use `MANPATH` to find manual pages.
+
+If these variables are not set correctly, software may not run, or the wrong version may run.
+
+Environment Modules solves this by changing the environment only when needed.
+
+```text id="mno09v"
+User command
+    |
+    v
+module load gcc/9.3.0
+    |
+    v
+PATH is updated
+LD_LIBRARY_PATH is updated
+Other variables are updated
+    |
+    v
+gcc now points to the selected version
+```
+
+This makes it easier to:
+
+* load software only when needed
+* switch between different versions of the same software
+* avoid conflicts between incompatible packages
+* keep shared systems organized
+* make scripts and jobs more reproducible
+* provide users with a consistent command-line interface
+
+Environment Modules are very common on HPC systems because these systems often have many compilers, MPI libraries, Python versions, CUDA versions, scientific tools, and application stacks installed at the same time.
+
+### The Basic Model
+
+Environment Modules works by using small configuration files called modulefiles.
+
+A modulefile describes how the environment should change when a software package is loaded.
+
+```text id="y0xeg5"
++-------------+        +------------------+        +----------------------+
+| User        |        | module command   |        | Modulefile           |
+|             |        |                  |        |                      |
+| module load | -----> | Reads modulefile | -----> | Defines environment  |
+| my_app/1.0  |        |                  |        | changes              |
++-------------+        +------------------+        +----------------------+
+                                      |
+                                      v
+                         PATH, LD_LIBRARY_PATH,
+                         MANPATH, and other variables
+                         are updated
+```
+
+For example, loading a module may add a directory to `PATH` so that a program becomes available:
+
+```text id="8edc9b"
+Before loading module:
+
+PATH=/usr/bin:/bin
+
+
+After loading my_app/1.0:
+
+PATH=/opt/my_app/1.0/bin:/usr/bin:/bin
+```
+
+The software itself is usually already installed somewhere on the system. The module does not normally install the software. Instead, it tells your shell how to find and use it.
 
 ### Installing Environment Modules
 
-The installation process for Environment Modules varies depending on your Linux distribution. Below are the instructions for different systems:
+The installation method depends on the Linux distribution.
 
-#### Debian-based Systems (e.g., Ubuntu)
+On many systems, Environment Modules can be installed with the normal package manager.
 
-Update the package list and install Environment Modules:
+#### Debian or Ubuntu
 
-```bash
+```bash id="dhf7cv"
 sudo apt update
 sudo apt install environment-modules
 ```
 
-#### Red Hat-based Systems (e.g., CentOS, RHEL, Fedora)
+The first command updates the package list. The second command installs the Environment Modules package.
 
-Use `yum` or `dnf` to install Environment Modules:
+#### Red Hat, CentOS, RHEL, or Fedora
 
-```bash
-# For CentOS/RHEL
+On older Red Hat-based systems, you may use `yum`:
+
+```bash id="m3z68y"
 sudo yum install environment-modules
+```
 
-# For Fedora
+On newer Fedora or Red Hat-based systems, you may use `dnf`:
+
+```bash id="8dhgso"
 sudo dnf install environment-modules
 ```
 
-#### SUSE-based Systems (e.g., openSUSE)
+#### SUSE or openSUSE
 
-Install using `zypper`:
-
-```bash
+```bash id="5o2bxr"
 sudo zypper install environment-modules
 ```
 
-#### Installing Environment Modules from Source
+#### Installing from Source
 
-If the Environment Modules package is not available through your operating system’s package manager, or if you require a specific version, you can install it directly from the source. This approach provides greater flexibility, particularly if you want to install a newer or custom version.
+Sometimes the package manager version is not available or is not the version you need. In that case, Environment Modules can be installed from source.
 
-I. **Download the Latest Version:**
+A source installation usually follows this pattern:
 
-First, download the source code from the official Environment Modules repository on SourceForge. The following example uses `wget` to fetch version 4.7.1, but be sure to replace the URL with the latest version if needed:
-
-```bash
+```bash id="oj6xhp"
 wget https://sourceforge.net/projects/modules/files/Modules/modules-4.7.1/modules-4.7.1.tar.gz
 tar -xzf modules-4.7.1.tar.gz
 cd modules-4.7.1
 ```
 
-- `wget` is a command-line tool used to download files from the internet.
-- The `tar -xzf` command extracts the downloaded `.tar.gz` archive, unzipping it into a directory named `modules-4.7.1`.
-- `cd modules-4.7.1` changes to this directory, where the source code is located, preparing for the installation steps.
+- The `wget` command downloads the source archive.
+- The `tar -xzf` command extracts the `.tar.gz` file.
+- The `cd` command moves into the extracted source directory.
 
-II. **Configure and Install:**
+Then the software can be configured, compiled, and installed:
 
-After extracting the source, you’ll need to configure the build settings and then compile and install the software:
-
-```bash
+```bash id="ach1o5"
 ./configure --prefix=/usr/local/modules
 make
 sudo make install
 ```
 
-- `./configure --prefix=/usr/local/modules` initiates the configuration process and specifies the installation prefix. By setting the `--prefix` option, you control where the software will be installed; in this case, `/usr/local/modules`. You can customize this path as needed.
-- `make` compiles the source code, creating the binaries that will be installed. This step may take a few minutes depending on your system.
-- `sudo make install` installs the compiled software to the specified prefix directory. This command requires `sudo` because it installs files in system directories that need root privileges.
+- The `./configure` command prepares the build and sets the installation location.
+- The `--prefix=/usr/local/modules` option means the software will be installed under:
 
-III. **Configure Shell Initialization:**
+```text id="0i70rd"
+/usr/local/modules
+```
 
-To make the `module` command available in your shell, you need to add a line to your shell initialization file. This line loads the Environment Modules system each time you open a new shell session:
+- The `make` command compiles the program.
+- The `sudo make install` command installs it.
 
-```bash
+### Making the `module` Command Available
+
+After installing Environment Modules, the shell must be initialized so that the `module` command becomes available.
+
+For Bash, this is usually done by sourcing an initialization script.
+
+Example:
+
+```bash id="u380xf"
+source /usr/local/modules/init/bash
+```
+
+To make this happen automatically whenever a new Bash shell starts, add the line to `~/.bashrc`:
+
+```bash id="srlghj"
 echo "source /usr/local/modules/init/bash" >> ~/.bashrc
 ```
 
-- This command appends the `source` line to your `~/.bashrc` file, ensuring the modules system is initialized whenever you start a new shell.
-- Adjust `bash` in the path if you use a different shell, such as `zsh` or `tcsh`. For example, if you use `zsh`, the line would be: `source /usr/local/modules/init/zsh`.
+Then reload the file:
 
-To apply these changes immediately, either log out and back in or reload your shell configuration:
-
-```bash
+```bash id="q8dlec"
 source ~/.bashrc
 ```
 
-This command applies the new configuration without requiring a logout, so you can start using Environment Modules right away. Now you should be able to run the `module` command and manage software modules as needed.
+The flow looks like this:
 
-### Working with Environment Module Files
-
-Modulefiles are scripts written in the Tcl language that define how to modify the environment for a specific application. They are typically stored in directories specified by the `MODULEPATH` environment variable, such as `/usr/share/modules/modulefiles` or `/etc/modulefiles`.
-
-#### Example Modulefile Directory
-
-Here's an example of what a directory tree structure might look like for a collection of modulefiles organized for various applications and versions. Each application has its own subdirectory, and within that, modulefiles for specific versions are stored. Additionally, a `.version` file or symbolic link might be present to specify the default version.
-
+```text id="5zw4kp"
+Open new shell
+      |
+      v
+~/.bashrc is read
+      |
+      v
+Environment Modules init script is sourced
+      |
+      v
+module command becomes available
 ```
+
+If you use another shell, such as Zsh or Tcsh, the initialization file and init script may be different.
+
+For example, with Zsh the line may look like:
+
+```bash id="ktpav6"
+source /usr/local/modules/init/zsh
+```
+
+The exact path depends on how Environment Modules was installed.
+
+### What Modulefiles Are
+
+A modulefile is a small script that describes how to configure the environment for a particular application or version.
+
+Modulefiles are usually written in Tcl.
+
+They commonly modify variables such as:
+
+```text id="8jxzuk"
+PATH
+LD_LIBRARY_PATH
+MANPATH
+MODULEPATH
+CPATH
+LIBRARY_PATH
+PKG_CONFIG_PATH
+```
+
+A modulefile can also define custom environment variables, load dependencies, provide help messages, and prevent incompatible modules from being loaded together.
+
+The important idea is:
+
+```text id="duhbe7"
+Software is installed somewhere on the system.
+
+The modulefile tells the shell how to find and use it.
+```
+
+### Where Modulefiles Are Stored
+
+Modulefiles are stored in directories searched by Environment Modules.
+
+The list of directories is controlled by the `MODULEPATH` environment variable.
+
+Common locations include:
+
+```bash id="b5jz1s"
+/usr/share/modules/modulefiles
+/etc/modulefiles
+/usr/local/modulefiles
+```
+
+You can view the current module search path with:
+
+```bash id="rp5pr6"
+echo "$MODULEPATH"
+```
+
+A typical modulefile layout might look like this:
+
+```text id="wzuo8j"
 /etc/modulefiles
 ├── python
 │   ├── 2.7
@@ -133,53 +306,69 @@ Here's an example of what a directory tree structure might look like for a colle
     └── .version
 ```
 
-This structure provides organization and makes it easy to manage multiple versions of different software using Environment Modules. Each application has its own directory under `/etc/modulefiles`, and within those directories, version-specific modulefiles are stored.
+This layout keeps each application in its own directory.
 
-#### Creating Modulefile Directories
+Inside each application directory, each version has its own modulefile.
 
-To organize your modulefiles, it’s a good practice to create a directory structure that reflects the software you’re managing. This makes it easier to maintain and locate modulefiles as your collection grows.
+For example:
 
-I. **Create a Directory for Your Application:**
+```text id="k3g4q8"
+/etc/modulefiles/python/3.8
+```
 
-Use the following command to create a new directory for your application within the standard modulefile path:
+would be the modulefile for Python 3.8.
 
-```bash
+This makes it easy to run:
+
+```bash id="qbo01d"
+module load python/3.8
+```
+
+### Creating a Modulefile Directory
+
+Suppose you want to create modulefiles for an application called `my_app`.
+
+First, create a directory for it:
+
+```bash id="0t8kvd"
 sudo mkdir -p /usr/share/modules/modulefiles/my_app
 ```
 
-- The `-p` flag tells `mkdir` to create the parent directories if they do not already exist, which helps avoid errors if any intermediate directories are missing.
-- Replace `my_app` with the name of your application, making the modulefile directory structure more organized.
+The `-p` option tells `mkdir` to create parent directories if needed.
 
-II. **Set Appropriate Permissions:**
+Then set permissions so users can access the directory:
 
-To ensure that users can access the modulefiles, set the correct permissions on the new directory:
-
-```bash
+```bash id="ccnxkx"
 sudo chmod 755 /usr/share/modules/modulefiles/my_app
 ```
 
-- The `755` permission setting allows the owner to read, write, and execute files in the directory, while others can read and execute files. This is usually suitable for shared module directories, as it allows others to access the files but not modify them.
+The permission value `755` means:
 
-#### Writing a Modulefile for a Specific Version
+```text id="r069d0"
+Owner: read, write, execute
+Group: read, execute
+Others: read, execute
+```
 
-A modulefile is a simple script that configures the environment for a particular software version. By setting paths and environment variables, a modulefile helps users load the necessary settings for your application without modifying their shell configuration files.
+This is common for shared modulefile directories because normal users should be able to read the modulefiles but not modify them.
 
-I. **Create the Modulefile:**
+### Writing a Simple Modulefile
 
-To create a modulefile, use a text editor to open a new file with the version number you want to manage:
+A modulefile for `my_app` version `1.0` might be stored here:
 
-```bash
+```bash id="l0fnek"
+/usr/share/modules/modulefiles/my_app/1.0
+```
+
+To create it:
+
+```bash id="o0vhby"
 sudo nano /usr/share/modules/modulefiles/my_app/1.0
 ```
 
-- This command creates a file named `1.0` inside the `my_app` directory, representing version 1.0 of your application.
-- You can replace `1.0` with any version number, following this naming convention for each version of the software you want to manage with modules.
+Example modulefile:
 
-II. **Edit the Modulefile:**
-
-Here’s an example modulefile for `my_app` version 1.0. The file contains commands that configure the environment whenever the module is loaded.
-
-```tcl
+```tcl id="4br6ox"
 #%Module1.0#####################################################################
 ##
 ## my_app modulefile
@@ -202,331 +391,557 @@ prepend-path MANPATH $root/share/man
 # Set custom environment variables
 setenv MY_APP_HOME $root
 
-# Handle conflicts with other versions
+# Prevent multiple my_app versions from being loaded together
 conflict my_app
 ```
 
-- **proc ModulesHelp { }**: Defines a function that outputs a help message when the `module help my_app/1.0` command is run. This is useful for providing users with a brief description of what the module does.
-- **module-whatis**: This command specifies a one-line summary of the module, displayed when users run `module whatis my_app/1.0`. It helps users quickly identify what this modulefile does.
-- **set root**: The `set` command defines a variable (`root`) that points to the installation directory of your application. This makes the modulefile easier to update, as you can adjust the path in one place if needed.
-- The **prepend-path** command adds directories to various environment variables by placing a new directory at the beginning of each specified path. For example, it adds `$root/bin` to `PATH`, so the shell can locate the application's executables; `$root/lib` to `LD_LIBRARY_PATH`, enabling the linker to find the application’s libraries; and `$root/share/man` to `MANPATH`, allowing the `man` command to access the application’s manual pages.
-- **setenv**: This command defines a custom environment variable `MY_APP_HOME`, which points to the root directory of the application. Users can reference this variable directly, which can be helpful for scripts or commands related to the application.
-- **conflict**: This command prevents users from loading multiple versions of `my_app` at the same time. If a user tries to load a second version without first unloading the current one, the module system will display an error message. This ensures that only one version of the application is loaded, avoiding potential conflicts.
+This modulefile says:
 
-III. **Save and Exit:**
+```text id="p5gn4h"
+my_app is installed in /opt/my_app/1.0
 
-After editing the modulefile, save and close the editor:
+When loaded:
+- add /opt/my_app/1.0/bin to PATH
+- add /opt/my_app/1.0/lib to LD_LIBRARY_PATH
+- add /opt/my_app/1.0/share/man to MANPATH
+- define MY_APP_HOME
+- prevent conflicting my_app versions
+```
 
-- Press `Ctrl + O` to save your changes.
-- Press `Ctrl + X` to exit `nano`.
+### Understanding the Modulefile Line by Line
 
-### Managing the MODULEPATH Variable
+The first line identifies the file as a modulefile:
 
-The `MODULEPATH` environment variable tells the `module` command where to look for available modulefiles. By adjusting `MODULEPATH`, you can customize where the module system searches for additional modules, allowing you to access modulefiles that may not be in the default path.
+```tcl id="k2zn4f"
+#%Module1.0
+```
 
-I. **Add to MODULEPATH Temporarily:**
+The help procedure defines text shown by `module help`:
 
-To add a directory to `MODULEPATH` for your current session only, use the `module use` command:
+```tcl id="j29sf6"
+proc ModulesHelp { } {
+   puts stderr "This module loads my_app version 1.0"
+}
+```
 
-```bash
+The `module-whatis` command provides a short description:
+
+```tcl id="e7h8rm"
+module-whatis "Loads my_app version 1.0"
+```
+
+Users can see this description with:
+
+```bash id="6x8c67"
+module whatis my_app/1.0
+```
+
+The `set` command defines a Tcl variable:
+
+```tcl id="8i9lfk"
+set root /opt/my_app/1.0
+```
+
+This makes the modulefile easier to maintain. Instead of repeating `/opt/my_app/1.0` many times, the file can use `$root`.
+
+The `prepend-path` command adds a directory to the front of an environment variable:
+
+```tcl id="q3bpg0"
+prepend-path PATH $root/bin
+```
+
+This means the shell will find programs in `$root/bin` before checking later directories in `PATH`.
+
+The `setenv` command creates or changes an environment variable:
+
+```tcl id="30z2vu"
+setenv MY_APP_HOME $root
+```
+
+The `conflict` command prevents incompatible modules from being loaded together:
+
+```tcl id="dtn6ud"
+conflict my_app
+```
+
+This is useful when users should not load multiple versions of the same application at the same time.
+
+### Managing `MODULEPATH`
+
+The `MODULEPATH` variable tells Environment Modules where to search for modulefiles.
+
+You can think of it like `PATH`, but for modules instead of executable programs.
+
+```text id="id5wx5"
+PATH       tells the shell where to find commands
+MODULEPATH tells module where to find modulefiles
+```
+
+To view the current `MODULEPATH`:
+
+```bash id="xq3dry"
+echo "$MODULEPATH"
+```
+
+To temporarily add a modulefile directory:
+
+```bash id="8lcgg7"
 module use /usr/share/modules/modulefiles
 ```
 
-This command tells the module system to include `/usr/share/modules/modulefiles` when searching for available modulefiles. However, it only applies to the current terminal session. Once you log out or close the terminal, the addition to `MODULEPATH` is reset.
+This only affects the current shell session.
 
-II. **Add to MODULEPATH Permanently:**
+To make it permanent, add it to `~/.bashrc`:
 
-To make the change permanent, add the `module use` line to your shell initialization file, such as `~/.bashrc` (for Bash users). This ensures the path is always added when you open a new terminal:
-
-```bash
+```bash id="tvlbw7"
 echo "module use /usr/share/modules/modulefiles" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### Usage of the `module` Command
+The flow is:
 
-The `module` command provides several subcommands to interact with environment modules. These subcommands allow you to load, unload, list, display, switch, and manage module configurations.
-
-#### Loading Modules
-
-I. **Load a Module:**
-
-To load a module and make its associated software available for use:
-
-```bash
-module load my_app
+```text id="vyx7qc"
+module use /some/module/path
+        |
+        v
+Directory is added to MODULEPATH
+        |
+        v
+module avail can now find modules stored there
 ```
 
-This command loads the specified module and updates environment variables such as `PATH`, `LD_LIBRARY_PATH`, or other variables defined by the modulefile. If multiple versions of a module exist and no default is set, you may need to specify the desired version:
+### Basic `module` Commands
 
-```bash
-module load my_app/1.0
+The `module` command has several useful subcommands.
+
+The most common ones are:
+
+```text id="u1qvdf"
+module avail      show available modules
+module load       load a module
+module unload     unload a module
+module list       show currently loaded modules
+module show       show what a module changes
+module help       show help for a module
+module switch     switch from one module to another
+module purge      unload all modules
 ```
 
-II. **Load Multiple Modules:**
+### Listing Available Modules
 
-To load multiple modules at once, separate each module name with a space:
+To see which modules are available:
 
-```bash
-module load gcc/9.3.0 openmpi/4.0.5 my_app/1.0
-```
-
-This example loads the GCC compiler, the Open MPI library, and `my_app`. Modules are loaded in the order specified, which can be important if later modules depend on those loaded earlier.
-
-#### Unloading Modules
-
-I. **Unload a Module:**
-
-To remove a module from your environment and reset any associated environment variables:
-
-```bash
-module unload my_app
-```
-
-This command removes the specified module's changes from the environment, effectively "unloading" it.
-
-II. **Unload Multiple Modules:**
-
-You can also unload multiple modules at once by listing them with spaces:
-
-```bash
-module unload gcc openmpi my_app
-```
-
-This is useful for clearing several modules without removing all loaded modules.
-
-#### Listing Modules
-
-I. **List Loaded Modules:**
-
-To view a list of all currently loaded modules:
-
-```bash
-module list
-```
-
-This command displays the names and versions of each module currently loaded into your environment.
-
-II. **List Available Modules:**
-
-To see a list of all modules available for loading, use:
-
-```bash
+```bash id="0jgcke"
 module avail
 ```
 
-If you want to filter the results, you can specify part of a module name or a pattern:
+To search for a specific module name:
 
-```bash
-module avail my_app
+```bash id="djdev7"
+module avail python
 ```
 
-This command will show only those modules that match `my_app`.
+Example output may look like:
 
-#### Displaying Module Information
+```text id="yu7rdg"
+---------------- /etc/modulefiles ----------------
+python/2.7
+python/3.8
+python/3.11
+```
 
-I. **Show Module Details:**
+This tells you which Python versions can be loaded.
 
-To view detailed information about a specific module, including the environment variables it modifies:
+### Loading Modules
 
-```bash
+To load a module:
+
+```bash id="kasd9x"
+module load my_app
+```
+
+If several versions exist, it is better to specify the version:
+
+```bash id="10ttdq"
+module load my_app/1.0
+```
+
+Loading a module updates your environment.
+
+For example:
+
+```text id="ub96u2"
+Before:
+
+my_app command not found
+
+
+After:
+
+module load my_app/1.0
+my_app is available
+```
+
+To load several modules at once:
+
+```bash id="itj7pv"
+module load gcc/9.3.0 openmpi/4.0.5 my_app/1.0
+```
+
+The order can matter. For example, an MPI module may depend on a particular compiler module.
+
+### Listing Loaded Modules
+
+To see which modules are currently loaded:
+
+```bash id="cz0g3y"
+module list
+```
+
+Example output:
+
+```text id="95qbld"
+Currently Loaded Modulefiles:
+ 1) gcc/9.3.0
+ 2) openmpi/4.0.5
+ 3) my_app/1.0
+```
+
+This is useful when debugging because it shows what environment customizations are active.
+
+### Unloading Modules
+
+To unload a module:
+
+```bash id="k7fz1j"
+module unload my_app
+```
+
+or:
+
+```bash id="ln9sh8"
+module unload my_app/1.0
+```
+
+This removes the changes made by the modulefile.
+
+To unload several modules:
+
+```bash id="fwqj9p"
+module unload gcc openmpi my_app
+```
+
+### Showing Module Details
+
+To see what a module does:
+
+```bash id="dq9nhw"
 module show my_app/1.0
 ```
 
-This command displays the modulefile’s contents and how it affects your environment, helping you understand what it changes when loaded.
+This displays the environment changes that will happen when the module is loaded.
 
-II. **Get Help for a Module:**
+For example, it may show that the module prepends directories to `PATH` and `LD_LIBRARY_PATH`.
 
-Some modules include a help message to provide additional usage information. To access this help:
+This is one of the most useful troubleshooting commands because it helps answer the question:
 
-```bash
+```text id="1yycf9"
+What exactly does this module change?
+```
+
+### Getting Module Help
+
+Some modulefiles include help messages.
+
+To view help for a module:
+
+```bash id="wcxdsq"
 module help my_app/1.0
 ```
 
-#### Switching Between Modules
+This displays the text defined in the `ModulesHelp` procedure inside the modulefile.
 
-If you want to replace one version of a module with another, you can use `module switch`:
+### Switching Between Module Versions
 
-```bash
+To replace one version with another, use:
+
+```bash id="m4y9oj"
 module switch my_app/1.0 my_app/2.0
 ```
 
-This command unloads the first module and immediately loads the second, effectively switching between versions.
+This unloads `my_app/1.0` and loads `my_app/2.0`.
 
-#### Purging Modules
+The result is cleaner than manually unloading one version and loading another.
 
-The `module purge` command removes all loaded modules from your environment:
+You can also do it manually:
 
-```bash
+```bash id="9qjv63"
+module unload my_app/1.0
+module load my_app/2.0
+```
+
+### Purging All Modules
+
+To unload all currently loaded modules:
+
+```bash id="j6yt7i"
 module purge
 ```
 
-This is useful when you need a clean environment but should be used with caution, as it will unload every loaded module, including those you may still need.
+This gives you a clean environment.
 
-#### Saving and Restoring Module Sets
+However, use it carefully. On some systems, important default modules may be loaded automatically, and `module purge` may remove them.
 
-I. **Save Current Module Set:**
+A safer workflow is:
 
-To save your current set of loaded modules, use:
+```bash id="gh5edl"
+module list
+module purge
+module load gcc/9.3.0 openmpi/4.0.5 my_app/1.0
+```
 
-```bash
+This lets you see what was loaded before clearing the environment.
+
+### Saving and Restoring Module Sets
+
+If you often use the same group of modules, you can save them as a named collection.
+
+First, load the modules you want:
+
+```bash id="y53vg4"
+module load gcc/9.3.0 openmpi/4.0.5 my_app/1.0
+```
+
+Then save the set:
+
+```bash id="jv5c41"
 module save my_default_modules
 ```
 
-This creates a named set of modules that you can reload later, making it easy to return to a specific configuration.
+Later, you can restore the same set:
 
-II. **Restore Module Set:**
-
-To reload a saved module set, use:
-
-```bash
+```bash id="rjsuxo"
 module restore my_default_modules
 ```
 
-This command reloads all the modules saved under the specified name, allowing you to quickly set up your environment.
+To list saved module sets:
 
-III. **List Saved Module Sets:**
-
-To view a list of all saved module sets:
-
-```bash
+```bash id="bn0278"
 module savelist
 ```
 
-This displays the names of all saved sets, helping you remember what configurations you’ve saved for later use.
+This is useful for returning to a known working environment.
 
 ### Example: Switching Between Python Versions
 
-Environment Modules is especially useful when you need to switch between different versions of the same software. For example, you may need to switch between Python 2.7 and Python 3.8 for different projects. The steps below illustrate how you can use Environment Modules to handle this task.
+Environment Modules is especially useful for switching between software versions.
 
-#### I. Create a directory for Python modulefiles
+Suppose a system has Python 2.7 and Python 3.8 installed in separate locations:
 
-First, you need a directory where your Python module files will reside. This is typically located in `/etc/modulefiles/`, but you can adjust the path based on your system’s configuration. Create a directory for Python modulefiles:
-
-```bash
-sudo mkdir /etc/modulefiles/python
+```text id="ix46fi"
+/usr/local/python2.7
+/usr/local/python3.8
 ```
 
-This command creates a directory `/etc/modulefiles/python`, where you'll store the configuration files for different Python versions.
+You can create separate modulefiles for each version.
 
-#### II. Create and configure a modulefile for Python 2.7
+#### Step 1: Create a Python Module Directory
 
-Next, create a modulefile for Python 2.7. A modulefile is essentially a script that modifies environment variables like `PATH` and `LD_LIBRARY_PATH` to make the specific Python version available in your environment.
+```bash id="8a3bka"
+sudo mkdir -p /etc/modulefiles/python
+```
 
-```bash
-sudo touch /etc/modulefiles/python/2.7
+This directory will hold the Python version modulefiles.
+
+The layout will look like this:
+
+```text id="6usfed"
+/etc/modulefiles
+└── python
+    ├── 2.7
+    └── 3.8
+```
+
+#### Step 2: Create the Python 2.7 Modulefile
+
+Create and open the file:
+
+```bash id="p9mi12"
 sudo nano /etc/modulefiles/python/2.7
 ```
 
-The `touch` command creates an empty file named `2.7`, and `nano` opens it for editing.
+Add:
 
-#### III. Edit the modulefile for Python 2.7
-
-In the opened `nano` editor, add the necessary lines that define how the environment should be configured when the Python 2.7 module is loaded. Be sure to modify the `prepend-path` lines based on the actual location of Python 2.7 on your system.
-
-```bash
-#%Module 1.0
+```tcl id="68m7a0"
+#%Module1.0
 ##
-##  Module for the Python 2.7 programming language.
+## Module for Python 2.7
 ##
 
 module-whatis "Module for Python 2.7"
 
 prepend-path PATH /usr/local/python2.7/bin
 prepend-path LD_LIBRARY_PATH /usr/local/python2.7/lib
+
 conflict python
 ```
 
-- `module-whatis` provides a short description of the module.
-- `prepend-path PATH` ensures that the directory containing the Python 2.7 binary is placed at the front of your `PATH` environment variable.
-- `prepend-path LD_LIBRARY_PATH` adds the directory containing Python 2.7 libraries to `LD_LIBRARY_PATH`.
-- `conflict python` ensures that only one Python version is loaded at a time, preventing conflicts.
+This modulefile adds Python 2.7 to the front of the shell’s search path.
 
-Save the file and exit `nano` by pressing `CTRL + X`, then `Y`, and `Enter`.
+The `conflict python` line prevents another Python module from being loaded at the same time.
 
-#### IV. Create and configure a modulefile for Python 3.8
+#### Step 3: Create the Python 3.8 Modulefile
 
-Similarly, you need to create a modulefile for Python 3.8:
+Create and open the file:
 
-```bash
-sudo touch /etc/modulefiles/python/3.8
+```bash id="po5i5c"
 sudo nano /etc/modulefiles/python/3.8
 ```
 
-Then, add the following lines to configure Python 3.8. Again, adjust the `prepend-path` lines based on your system’s Python 3.8 location.
+Add:
 
-```bash
-#%Module 1.0
+```tcl id="ehyhxa"
+#%Module1.0
 ##
-##  Module for the Python 3.8 programming language.
+## Module for Python 3.8
 ##
 
 module-whatis "Module for Python 3.8"
 
 prepend-path PATH /usr/local/python3.8/bin
 prepend-path LD_LIBRARY_PATH /usr/local/python3.8/lib
+
 conflict python
 ```
 
-This modulefile works similarly to the one for Python 2.7, but it's configured for Python 3.8. The `conflict python` directive ensures that Python 2.7 and Python 3.8 cannot be loaded at the same time.
+This modulefile works the same way but points to the Python 3.8 installation.
 
-#### V. Switch between Python versions
+#### Step 4: Load Python 2.7
 
-Once the modulefiles are created and configured, you can easily switch between the two Python versions using the `module` command.
-
-To load Python 2.7, run:
-
-```bash
+```bash id="p3ro3b"
 module load python/2.7
 ```
 
-This will modify your shell environment, updating `PATH` and `LD_LIBRARY_PATH` so that Python 2.7 becomes the default.
+Check the active version:
 
-If you later need to switch to Python 3.8, first unload Python 2.7, then load Python 3.8:
-
-```bash
-module unload python/2.7
-module load python/3.8
-```
-
-Unloading Python 2.7 ensures that no conflicting versions are loaded simultaneously.
-
-#### VI. Verify the active Python version
-
-After switching between Python versions, you can verify which version is active by using the following command:
-
-```bash
+```bash id="aas8gg"
 python --version
 ```
 
-This will display the version of Python currently set as default in your environment.
+Expected result:
 
-### Best Practices
+```text id="t4n8y7"
+Python 2.7.x
+```
 
-I. To ensure reproducibility and avoid unexpected behavior, always specify the version when loading modules.
+#### Step 5: Switch to Python 3.8
 
-```bash
+First unload Python 2.7:
+
+```bash id="m1hihc"
+module unload python/2.7
+```
+
+Then load Python 3.8:
+
+```bash id="3hz06b"
+module load python/3.8
+```
+
+Check again:
+
+```bash id="3obds8"
+python --version
+```
+
+Expected result:
+
+```text id="f3r1om"
+Python 3.8.x
+```
+
+The full workflow looks like this:
+
+```text id="vh7uyb"
+module load python/2.7
+        |
+        v
+python command points to Python 2.7
+        |
+        v
+module unload python/2.7
+        |
+        v
+module load python/3.8
+        |
+        v
+python command points to Python 3.8
+```
+
+### Setting Default Module Versions
+
+Administrators can set a default version for a module.
+
+This allows users to run:
+
+```bash id="2f06e4"
+module load my_app
+```
+
+instead of:
+
+```bash id="og7u2s"
 module load my_app/1.0
 ```
 
-II. While `module purge` can help reset your environment, it may also unload critical modules. Check which modules are loaded before purging.
+There are two common ways to define a default version.
 
-III. Include module load commands in scripts or job submission files to ensure the correct environment is set up for your tasks.
+#### Using a `.version` File
 
-IV. Be aware of module conflicts, especially when working with compilers and MPI libraries. The `conflict` command in modulefiles helps prevent incompatible modules from being loaded together.
+Inside the module directory, create a `.version` file.
+
+Example:
+
+```tcl id="0rqevz"
+#%Module1.0
+set ModulesVersion "1.0"
+```
+
+This tells Environment Modules that version `1.0` is the default.
+
+#### Using a Symbolic Link
+
+Another method is to create a symbolic link named `default`.
+
+Example:
+
+```bash id="bj1j67"
+ln -s 1.0 /usr/share/modules/modulefiles/my_app/default
+```
+
+This creates a link called `default` that points to version `1.0`.
+
+The directory may then look like this:
+
+```text id="8q9ucg"
+my_app
+├── 1.0
+├── 2.0
+└── default -> 1.0
+```
+
+If the default needs to change later, the link can be updated.
 
 ### Advanced Modulefile Techniques
 
-Environment Modules support Tcl scripting, which allows for advanced features like conditional logic and dynamic behavior. This makes it possible to create more flexible and powerful modulefiles that adapt to the environment in which they are loaded.
+Modulefiles can include conditional logic because they are written in Tcl.
 
-#### Conditional Loading Based on Environment
+This allows modulefiles to check the current environment before making changes.
 
-You can use Tcl's scripting features to implement conditional logic within a modulefile. For example, you might want to load specific dependencies only if another module is already loaded.
+For example, a modulefile may require a specific compiler to be loaded first:
 
-```tcl
-# Check if a specific module is loaded
+```tcl id="hzzbir"
 if { [ is-loaded gcc/9.3.0 ] } {
-    # Load dependencies
     module load dependency_module
 } else {
     puts stderr "Error: gcc/9.3.0 must be loaded before my_app."
@@ -534,91 +949,274 @@ if { [ is-loaded gcc/9.3.0 ] } {
 }
 ```
 
-- `is-loaded gcc/9.3.0`: This checks if the `gcc/9.3.0` module is already loaded in the environment.
-- `module load dependency_module`: Loads a required dependency if the condition is true.
-- `puts stderr`: Prints an error message to the standard error if the condition is false.
-- `exit 1`: Exits with an error code, signaling a failure due to the unmet condition.
+This means:
 
-This ensures that the required dependencies are in place before loading your application module.
+```text id="y5f3uo"
+If gcc/9.3.0 is loaded:
+    load dependency_module
 
-#### Setting Default Modules
-
-Administrators can set a default module version so that users automatically load the default version of a module if they don’t specify a specific one. This can be done using either a `.version` file or a symbolic link.
-
-I. **Using a `.version` File:**
-
-You can create a `.version` file in the application's modulefile directory to define the default version of the module.
-
-```tcl
-#%Module1.0
-set ModulesVersion "1.0"
+Otherwise:
+    show an error and stop
 ```
 
-The `.version` file ensures consistency by defaulting to a stable version of the software.
+This is useful when software was compiled with a specific compiler or depends on a specific library stack.
 
-II. **Using a Symbolic Link:**
+### Best Practices
 
-Another method to set the default module version is by using symbolic links. This method involves creating a symbolic link named `default` pointing to the desired version.
+Use explicit versions when loading modules.
 
-```bash
-ln -s 1.0 /usr/share/modules/modulefiles/my_app/default
+Instead of:
+
+```bash id="q1y5w8"
+module load my_app
 ```
 
-- `ln -s 1.0`: Creates a symbolic link named `default` that points to version `1.0`.
-- `/usr/share/modules/modulefiles/my_app/default`: Specifies the path where the symbolic link will reside, which is the modulefile directory for `my_app`.
+prefer:
 
-This approach allows for easy switching of default versions by updating the symbolic link to point to a new version.
+```bash id="r9kq31"
+module load my_app/1.0
+```
+
+This makes your environment more predictable.
+
+Include module commands in scripts and job submission files. For example, an HPC job script might contain:
+
+```bash id="gi1dq9"
+module purge
+module load gcc/9.3.0
+module load openmpi/4.0.5
+module load my_app/1.0
+```
+
+This makes the job easier to reproduce.
+
+Check loaded modules before running important work:
+
+```bash id="v3e8g4"
+module list
+```
+
+Inspect unfamiliar modules before loading them:
+
+```bash id="ht1nlj"
+module show my_app/1.0
+```
+
+Be careful with compiler and MPI combinations. For example, an MPI library built with one compiler may not work correctly with another compiler.
+
+Avoid randomly loading many modules. Too many loaded modules can make the environment confusing and harder to debug.
+
+Use `module purge` when you need a clean start, but remember that it removes all loaded modules.
 
 ### Troubleshooting
 
-Even with well-written modulefiles, users may encounter issues when loading or using modules. Here are common issues and their solutions.
+#### Problem: `module: command not found`
 
-I. **Module Not Found:**
+This means the `module` command is not available in the current shell.
 
-If the module you are trying to load is not found, it could be due to the modulefile directory not being included in the `MODULEPATH`. To verify the directories in `MODULEPATH`, run:
+Possible causes:
 
-```bash
-echo $MODULEPATH
+```text id="juyj3i"
+Environment Modules is not installed
+The init script was not sourced
+The shell startup file is not configured correctly
 ```
 
-If the desired directory is not listed, you can add it using the following command:
+For Bash, try:
 
-```bash
-module use /path/to/modulefiles
-```
-
-Ensure that the correct directory is permanently added if you need it frequently by adding the command to your shell's initialization script (e.g., `.bashrc` or `.bash_profile`).
-
-II. **Environment Variables Not Set:**
-
-If certain environment variables aren’t being set as expected when you load a module, check the modulefile for errors in syntax or incorrect paths. To inspect what a module does when loaded, use the following command:
-
-```bash
-module show <module_name>
-```
-
-III. **Conflicts with Other Modules:**
-
-Sometimes, multiple loaded modules can conflict with each other, causing unexpected behavior. If this happens, the easiest solution is to unload all currently loaded modules and start fresh:
-
-```bash
-module purge
-```
-
-After purging, you can selectively load the required modules for your task.
-
-IV. **Module Command Not Found:**
-
-If you receive an error like `module: command not found`, it indicates that the Environment Modules package is either not installed or not set up properly in your shell environment. To resolve this:
-
-1. Ensure that Environment Modules is installed by checking your package manager or manually inspecting the system.
-2. Ensure that your shell initialization file (e.g., `.bashrc`, `.bash_profile`) sources the appropriate environment setup script. For example, for bash, you would typically add:
-
-```bash
+```bash id="nvuecu"
 source /usr/share/modules/init/bash
 ```
 
-This ensures that the `module` command is available in your shell sessions.
+or, depending on the installation path:
+
+```bash id="emhpa4"
+source /usr/local/modules/init/bash
+```
+
+Then test:
+
+```bash id="iivsh6"
+module avail
+```
+
+If that works, add the source line to `~/.bashrc`.
+
+#### Problem: Module Not Found
+
+If you try to load a module and get an error saying it cannot be found, check `MODULEPATH`.
+
+```bash id="jx2p5y"
+echo "$MODULEPATH"
+```
+
+Then check available modules:
+
+```bash id="lzs6uu"
+module avail
+```
+
+If the directory containing your modulefiles is missing, add it:
+
+```bash id="9xawuw"
+module use /path/to/modulefiles
+```
+
+Example:
+
+```bash id="41vytk"
+module use /etc/modulefiles
+```
+
+Then try again:
+
+```bash id="kb62p2"
+module avail
+```
+
+#### Problem: Environment Variables Are Not Set Correctly
+
+If a module loads but the program still does not work, inspect the modulefile:
+
+```bash id="n4bx21"
+module show my_app/1.0
+```
+
+Check whether paths are correct.
+
+Common mistakes include:
+
+```text id="d1txw2"
+wrong installation path
+missing bin directory
+missing lib directory
+incorrect version number
+typo in the modulefile
+```
+
+You can also inspect variables directly:
+
+```bash id="0vblbi"
+echo "$PATH"
+echo "$LD_LIBRARY_PATH"
+echo "$MY_APP_HOME"
+```
+
+#### Problem: Wrong Software Version Runs
+
+If the wrong version of a program runs, check which executable is being used.
+
+Example:
+
+```bash id="y9ddtl"
+which python
+python --version
+```
+
+or:
+
+```bash id="g5oj7d"
+which gcc
+gcc --version
+```
+
+Then check loaded modules:
+
+```bash id="vmaeej"
+module list
+```
+
+A wrong version often means another module or manually configured path is taking priority.
+
+#### Problem: Conflicting Modules
+
+If two modules conflict, unload one of them:
+
+```bash id="7q7h22"
+module unload my_app/1.0
+module load my_app/2.0
+```
+
+Or start clean:
+
+```bash id="o8pun3"
+module purge
+module load my_app/2.0
+```
+
+If the modulefile includes a `conflict` rule, Environment Modules may prevent the conflict automatically.
+
+### Useful Command Summary
+
+```bash id="e4de0v"
+module avail                  # show available modules
+module avail python           # search available modules
+module load python/3.8        # load a module
+module unload python/3.8      # unload a module
+module list                   # show loaded modules
+module show python/3.8        # show what a module changes
+module help python/3.8        # show module help
+module switch old new         # switch from one module to another
+module purge                  # unload all modules
+module save my_set            # save current module set
+module restore my_set         # restore saved module set
+module savelist               # list saved module sets
+module use /path/to/modules   # add a modulefile directory
+```
+
+### Practical Example Session
+
+This example shows a typical user workflow.
+
+```bash id="c37fwu"
+module avail python
+```
+
+Example output:
+
+```text id="216f56"
+python/2.7
+python/3.8
+python/3.11
+```
+
+Load Python 3.8:
+
+```bash id="rpddx8"
+module load python/3.8
+```
+
+Check the loaded modules:
+
+```bash id="kmj09u"
+module list
+```
+
+Check the Python version:
+
+```bash id="2b6j9z"
+python --version
+```
+
+Switch to another version:
+
+```bash id="ig1gsq"
+module switch python/3.8 python/3.11
+```
+
+Check again:
+
+```bash id="7hmx5x"
+python --version
+```
+
+Unload all modules when finished:
+
+```bash id="o8jf29"
+module purge
+```
+
+This kind of workflow is common on HPC clusters and shared research systems.
 
 ### Challenges
 
