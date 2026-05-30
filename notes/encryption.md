@@ -1,148 +1,253 @@
-## Encryption
+## Encryption and GPG
 
-Encryption is the cornerstone of modern data security, ensuring that information remains confidential and unaltered during storage and transmission. By converting plaintext into ciphertext using cryptographic algorithms, encryption protects data from unauthorized access and tampering.
+Encryption is one of the main tools used to protect digital information. It keeps data private by changing readable information into an unreadable form. The readable version is called plaintext, and the unreadable version is called ciphertext.
 
-Main idea:
+For example, the message:
 
-- Prevents unauthorized users from accessing sensitive information.
-- Allows safe exchange of data over insecure networks.
-- Ensures that data has not been altered during transit.
-- Meets legal requirements like HIPAA or GDPR for protecting personal data.
-  
-Encryption Process:
-
-```
-[ Plain Text ]     +--------------+     [ Cipher Text ]
-    "Hello"   ---> | Encryption   | ---> "6hj7!#f&"
-                   | Algorithm    |
-                   +--------------+
+```text
+Hello
 ```
 
-Decryption Process:
+might be transformed into something unreadable, such as:
 
-```
-[ Cipher Text ]    +---------------+    [ Plain Text ]
-   "6hj7!#f&" ---> | Decryption    | ---> "Hello"
-                   | Algorithm     |
-                   +---------------+
+```text
+6hj7!#f&
 ```
 
-### GPG (GNU Privacy Guard)
+The unreadable version is only useful to someone who has the correct key or password needed to turn it back into the original message.
 
-GPG is an open-source implementation of the OpenPGP standard, providing cryptographic privacy and authentication through the use of public and private keys. It enables users to:
+### Why Encryption Matters
 
-- Encrypt and decrypt data.
-- Digitally sign and verify documents and messages.
-- Manage cryptographic keys.
+Encryption protects information when it is stored and when it is sent across a network.
 
-Main idea:
+It is used when logging into websites, sending private messages, storing passwords, protecting backups, securing disks, and sending sensitive files. Without encryption, anyone who intercepts or steals the data may be able to read it.
 
-- A public key is primarily used to **encrypt** data, allowing only the corresponding private key holder to decrypt it.
-- Public keys also play a critical role in verifying **signatures**, ensuring the authenticity of the sender’s message or document.
-- Public keys are designed to be shared **openly**, enabling others to encrypt messages or verify signatures without compromising security.
-- The private key, on the other hand, is used to **decrypt** data that was encrypted with the associated public key.
-- Private keys are also responsible for creating digital **signatures**, which authenticate the identity of the sender.
-- A private key must always be kept **secure**, as its exposure can lead to unauthorized decryption of data or fraudulent signature creation. 
-- Both public and private keys are foundational components of **asymmetric** cryptography, which relies on the pairing of these keys for secure communication. 
-- Sharing a public key is necessary for **establishing trust**, but under no circumstances should the private key be shared, as it is critical for maintaining security.
+The main goals of encryption are:
 
-```
-[ Public Key ]  <--- Shared Openly --->  [ Private Key ]
-    (Encrypt)                             (Decrypt)
-     +-------> [ Encrypted Data ] <-------+
+```text
+Confidentiality  -> Only authorized people can read the data.
+Integrity        -> The data has not been changed unexpectedly.
+Authentication   -> The sender or owner can be verified.
+Compliance       -> Legal or policy requirements can be met.
 ```
 
-#### Generating GPG Keys
+Encryption is especially important when information travels over insecure networks, such as the internet or public Wi-Fi.
 
-I. **Install GPG**
+### Basic Encryption Process
+
+The basic encryption process looks like this:
+
+```text
+[ Plaintext ]       +------------------+       [ Ciphertext ]
+  "Hello"    -----> | Encryption       | -----> "6hj7!#f&"
+                    | Algorithm + Key  |
+                    +------------------+
+```
+
+The plaintext is the original readable data. The encryption algorithm is the mathematical process used to transform the data. The key controls how that transformation happens.
+
+Without the correct key, the ciphertext should be extremely difficult to turn back into plaintext.
+
+### Basic Decryption Process
+
+Decryption reverses the process.
+
+```text
+[ Ciphertext ]      +------------------+       [ Plaintext ]
+  "6hj7!#f&" -----> | Decryption       | -----> "Hello"
+                    | Algorithm + Key  |
+                    +------------------+
+```
+
+The encrypted data is given to the decryption algorithm along with the correct key. If the key is valid, the original plaintext is recovered.
+
+### Symmetric and Asymmetric Encryption
+
+There are two major types of encryption that are important to understand.
+
+Symmetric encryption uses the same secret key for encryption and decryption.
+
+```text
+             Same Secret Key
+                  |
+                  v
+[ Plaintext ] -> Encrypt -> [ Ciphertext ] -> Decrypt -> [ Plaintext ]
+```
+
+This is simple and fast, but both sides must already know the same secret key. If the key is shared insecurely, the encryption can be broken.
+
+Asymmetric encryption uses a pair of related keys: a public key and a private key.
+
+```text
+[ Public Key ]  ---> encrypts data
+[ Private Key ] ---> decrypts data
+```
+
+The public key can be shared with other people. The private key must be kept secret.
+
+This makes asymmetric encryption useful for secure communication between people who have not already shared a secret password.
+
+### GPG
+
+GPG stands for GNU Privacy Guard. It is a free and open-source tool that implements the OpenPGP standard.
+
+GPG can be used to encrypt files, decrypt files, create digital signatures, verify signatures, manage cryptographic keys, and exchange public keys with other people.
+
+GPG is commonly used for protecting files, sending secure messages, verifying software releases, and managing trusted identities.
+
+### Public and Private Keys
+
+GPG uses key pairs.
+
+A key pair contains:
+
+```text
+Public key   -> shared with others
+Private key  -> kept secret
+```
+
+The public key can safely be shared. Other people use your public key to encrypt files or messages for you. Once something is encrypted with your public key, only your matching private key can decrypt it.
+
+The private key must never be shared. It is used to decrypt data sent to you and to create digital signatures that prove something came from you.
+
+The relationship looks like this:
+
+```text
+                 Shared openly
+              <---------------->
+[ Public Key ]                    [ Private Key ]
+  encrypts data                    decrypts data
+  verifies signatures              creates signatures
+```
+
+Another way to visualize it:
+
+```text
+Someone wants to send you a secret file
+
+Their computer:
+[ Plain File ] + [ Your Public Key ]
+        |
+        v
+[ Encrypted File ]
+
+Your computer:
+[ Encrypted File ] + [ Your Private Key ]
+        |
+        v
+[ Plain File ]
+```
+
+The important rule is:
+
+```text
+Share your public key.
+Protect your private key.
+```
+
+### Public Key vs Private Key Responsibilities
+
+- The public key is used for two main things.
+- First, it encrypts data. If Jane wants to send John an encrypted file, Jane uses John’s public key.
+- Second, it verifies signatures. If John signs a file with his private key, Jane can use John’s public key to verify that the signature is valid.
+- The private key is also used for two main things.
+- First, it decrypts data that was encrypted with the matching public key.
+- Second, it creates digital signatures.
+- This means the private key is highly sensitive. If someone steals your private key and knows its passphrase, they may be able to decrypt private data or impersonate you by creating signatures.
+
+### Installing GPG
+
+On Debian or Ubuntu-based systems, GPG can be installed with:
 
 ```bash
 sudo apt update
 sudo apt install gnupg2
 ```
 
-Example Output:
+On many Linux systems, GPG may already be installed.
 
-```
-Reading package lists... Done
-Building dependency tree       
-Reading state information... Done
-The following NEW packages will be installed:
-  gnupg2
-...
-Setting up gnupg2 (2.2.19-3ubuntu2.1) ...
+To check whether it is available, run:
+
+```bash
+gpg --version
 ```
 
-II. **Generate a New Key Pair**
+This prints the installed GPG version and supported algorithms.
+
+### Generating a GPG Key Pair
+
+To create a new GPG key pair, run:
 
 ```bash
 gpg --gen-key
 ```
 
-Interactive Prompts and Expected Responses:
+GPG will ask a series of questions.
 
-```
-gpg (GnuPG) 2.2.19; Copyright (C) 2019 Free Software Foundation, Inc.
-...
+A typical key generation process includes choosing the key type, key size, expiration date, name, email address, optional comment, and passphrase.
 
-Please select what kind of key you want:
-   (1) RSA and RSA (default)
-   ...
+Example choices might be:
 
-Your selection? 1
-
-RSA keys may be between 1024 and 4096 bits long.
-What keysize do you want? (3072) 4096
-
-Please specify how long the key should be valid.
-         0 = key does not expire
-      <n>  = key expires in n days
-      ...
-
-Key is valid for? (0) 0
-
-Key does not expire at all
-Is this correct? (y/N) y
-
-GnuPG needs to construct a user ID to identify your key.
-
-Real name: John Doe
-Email address: john.doe@example.com
+```text
+Key type: RSA and RSA
+Key size: 4096 bits
+Expiration: 1 year or no expiration
+Name: John Doe
+Email: john.doe@example.com
 Comment: Work Key
-You selected this USER-ID:
-    "John Doe (Work Key) <john.doe@example.com>"
-
-Change (N)ame, (E)mail, (C)omment, or (O)kay/(Q)uit? O
-
-You need a Passphrase to protect your secret key.
-...
-
-We need to generate a lot of random bytes. It is a good idea to perform
-some other action (type on the keyboard, move the mouse, ...)
-
-gpg: key 1A2B3C4D5E6F7G8H marked as ultimately trusted
-gpg: revocation certificate stored as '/home/user/.gnupg/openpgp-revocs.d/1A2B3C4D5E6F7G8H.rev'
-public and secret key created and signed.
 ```
 
-- A new key pair is generated with a 4096-bit RSA algorithm.
-- The key does not expire.
-- User ID is set to "John Doe (Work Key) <john.doe@example.com>".
-- A passphrase is set to protect the private key.
+The user ID might look like this:
 
-#### Listing GPG Keys
+```text
+John Doe (Work Key) <john.doe@example.com>
+```
 
-To manage GPG keys, you can list both public and private keys stored in your keyring. Public keys represent the keys of others that you've imported, while private keys are your own, used for decrypting messages and signing data. Listing public keys helps you verify which keys are available for encrypting files or verifying signatures. Similarly, listing secret (private) keys allows you to ensure your personal encryption keys are correctly stored and accessible.
+GPG will also ask for a passphrase. This passphrase protects the private key. Even if someone copies the private key file, they still need the passphrase to use it.
 
-I. **List Public Keys:**
+The process looks like this:
+
+```text
+gpg --gen-key
+      |
+      v
+Choose key type and size
+      |
+      v
+Set expiration date
+      |
+      v
+Enter name and email
+      |
+      v
+Set passphrase
+      |
+      v
+Public key + private key are created
+```
+
+A strong passphrase is important. It should be long, unique, and difficult to guess.
+
+### Key Expiration
+
+- GPG keys can be created with or without an expiration date.
+- A key that does not expire may be convenient, but it can be risky if it is forgotten, lost, or compromised.
+- A key with an expiration date is often safer because it forces regular review. If the key is still valid and secure, the expiration date can usually be extended.
+- For personal learning, a non-expiring key may be simple. For serious use, an expiration date is often better.
+
+### Listing GPG Keys
+
+GPG stores keys in a keyring.
+
+To list public keys in your keyring, run:
 
 ```bash
 gpg --list-keys
 ```
 
-Example Output:
+Example output:
 
-```
+```text
 /home/user/.gnupg/pubring.kbx
 -----------------------------
 pub   rsa4096 2022-01-01 [SC]
@@ -150,15 +255,15 @@ pub   rsa4096 2022-01-01 [SC]
 uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 ```
 
-II. **List Private Keys:**
+To list private keys, run:
 
 ```bash
 gpg --list-secret-keys
 ```
 
-Example Output:
+Example output:
 
-```
+```text
 /home/user/.gnupg/pubring.kbx
 -----------------------------
 sec   rsa4096 2022-01-01 [SC]
@@ -166,434 +271,772 @@ sec   rsa4096 2022-01-01 [SC]
 uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 ```
 
-#### Importing a Public Key
+The public key list shows keys you can use to encrypt data or verify signatures.
 
-When communicating securely with someone, you need their public key to encrypt files for them or verify their signatures. The `gpg --import` command allows you to import a public key from a file, adding it to your keyring so that you can use it for encryption or verification purposes.
+The secret key list shows private keys that belong to you and can be used for decryption or signing.
+
+### Understanding Key Usage Flags
+
+GPG output often includes letters such as:
+
+```text
+[S]  signing
+[C]  certification
+[E]  encryption
+[A]  authentication
+```
+
+For example:
+
+```text
+pub rsa4096 2022-01-01 [SC]
+```
+
+means the primary public key can be used for signing and certification.
+
+A subkey might show:
+
+```text
+sub rsa4096 2022-01-01 [E]
+```
+
+which means that subkey is used for encryption.
+
+These flags help explain what each key is allowed to do.
+
+### Importing a Public Key
+
+To send encrypted data to someone, you need their public key.
+
+If someone gives you a public key file, such as:
+
+```text
+recipient_public_key.asc
+```
+
+you can import it with:
 
 ```bash
 gpg --import recipient_public_key.asc
 ```
 
-Example Output:
+Example output:
 
-```
+```text
 gpg: key 9H8G7F6E5D4C3B2A: public key "Jane Smith <jane.smith@example.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
 ```
 
-#### Trusting an Imported Public Key
+After importing the key, it becomes available in your keyring.
 
-After importing a public key, you may want to specify how much you trust the key owner to verify others' identities. This process ensures that when you receive files or signatures from the key owner, you can trust their authenticity. The `gpg --edit-key` command allows you to interactively set the trust level for a specific key, providing options from "do not trust" to "ultimate trust," depending on your confidence in the key owner.
+You can then use it to encrypt files for that person or verify signatures from that person.
+
+### Checking a Key Fingerprint
+
+Before trusting a public key, you should verify its fingerprint.
+
+A fingerprint is a longer identifier for a key. It is more reliable than a short key ID.
+
+To show a key fingerprint, run:
+
+```bash
+gpg --fingerprint jane.smith@example.com
+```
+
+You should compare the fingerprint with the owner through a trusted channel, such as in person, a verified website, a secure call, or another reliable method.
+
+This matters because anyone can create a key with someone else’s name and email address. The fingerprint helps confirm that the key really belongs to the person you think it belongs to.
+
+### Trusting an Imported Public Key
+
+After importing someone’s public key, GPG may not automatically trust it.
+
+To edit trust settings, run:
 
 ```bash
 gpg --edit-key jane.smith@example.com
 ```
 
-Interactive Session:
+Inside the interactive GPG prompt, type:
 
+```text
+trust
 ```
-gpg> trust
-pub  rsa4096/9H8G7F6E5D4C3B2A
-      created: 2022-01-01  expires: never       usage: SC  
-      trust: unknown       validity: unknown
-[ unknown] (1). Jane Smith <jane.smith@example.com>
 
-Please decide how far you trust this user to correctly verify others' keys
-(1=I don't know or won't say, 2=I do NOT trust, 3=I trust marginally,
- 4=I trust fully, 5=I trust ultimately)
+GPG will ask how much you trust the key owner to verify other keys.
+
+Example options include:
+
+```text
+1 = I do not know
+2 = I do not trust
+3 = I trust marginally
+4 = I trust fully
+5 = I trust ultimately
+```
+
+For example:
+
+```text
 Your decision? 5
 ```
 
-#### Encrypting a File
+Ultimate trust should usually be used only for your own keys. For other people’s keys, choose a level that matches how carefully you verified the key.
 
-To protect sensitive information, you can encrypt files using GPG. When encrypting for a specific recipient, their public key is required. The command `gpg -e -r` encrypts the specified file so that only the recipient (who possesses the corresponding private key) can decrypt it. No output indicates success, and the encrypted file is saved with a `.gpg` extension.
+After making changes, type:
+
+```text
+save
+```
+
+or:
+
+```text
+quit
+```
+
+depending on what you are doing.
+
+### Encrypting a File for Someone
+
+To encrypt a file for a recipient, you need that recipient’s public key.
+
+Use:
 
 ```bash
 gpg -e -r jane.smith@example.com file.txt
 ```
 
-Example Output:
+Here:
 
-*(No output means the command was successful)*
-
-```
-[ Original File ]    +-------------+    [ Encrypted File ]
-    file.txt   --->  | GPG Encrypt | ---> file.txt.gpg
-                     +-------------+
-                   (Recipient: jane.smith@example.com)
+```text
+-e  means encrypt
+-r  means recipient
 ```
 
-#### Symmetric Encryption
+This creates an encrypted file, usually named:
 
-For cases where both parties share a secret password instead of using public-key cryptography, you can encrypt files using symmetric encryption. The command `gpg --symmetric` encrypts a file using a passphrase that you set. Both encryption and decryption of the file will require the same passphrase.
-
-```bash
-gpg --symmetric file.txt
+```text
+file.txt.gpg
 ```
 
-Example Output:
+The process looks like this:
 
+```text
+[ Original File ]       +-------------+       [ Encrypted File ]
+    file.txt     -----> | GPG Encrypt | -----> file.txt.gpg
+                        +-------------+
+                         Recipient: Jane
 ```
-Enter passphrase: ********
-Repeat passphrase: ********
-```
 
-#### Decrypting a File
+Only Jane’s private key can decrypt the file.
 
-Once a file has been encrypted (either with a public key or using symmetric encryption), you can decrypt it using the `gpg -d` command. If the file was encrypted with a public key, you’ll need the corresponding private key. If the file was symmetrically encrypted, you’ll need the correct passphrase.
+If the command succeeds, GPG may produce no output. In many Unix tools, no output often means success.
+
+### Decrypting a File
+
+To decrypt an encrypted file, use:
 
 ```bash
 gpg -d -o file.txt file.txt.gpg
 ```
 
-Example Output (If Passphrase Protected):
+Here:
 
-```
-gpg: encrypted with 4096-bit RSA key, ID 9H8G7F6E5D4C3B2A, created 2022-01-01
-      "Jane Smith <jane.smith@example.com>"
-gpg: encrypted with AES256 cipher
-```
-
-#### Creating Digital Signatures
-
-Digital signatures ensure that the recipient of a file can verify its authenticity and that it hasn’t been altered. By using the `gpg --sign` command, you can sign a file with your private key, creating a signature that others can verify using your public key.
-
-```bash
-gpg --sign file.txt
+```text
+-d          decrypt
+-o file.txt write output to file.txt
 ```
 
-Example Output:
+The process looks like this:
 
-*(No output means the command was successful)*
-
-#### Verifying a Signature
-
-After receiving a signed file, you can verify the authenticity of the signature using the `gpg --verify` command. This process checks the signature against the sender's public key, confirming whether the file has been tampered with and verifying the identity of the signer.
-
-```bash
-gpg --verify file.txt.gpg
+```text
+[ Encrypted File ]      +-------------+       [ Original File ]
+   file.txt.gpg  -----> | GPG Decrypt | -----> file.txt
+                        +-------------+
 ```
 
-Example Output:
+If the file was encrypted with your public key, GPG uses your private key to decrypt it.
 
-```
-gpg: Signature made Mon 03 Oct 2022 12:00:00 PM UTC
-gpg:                using RSA key 1A2B3C4D5E6F7G8H
-gpg: Good signature from "John Doe (Work Key) <john.doe@example.com>"
-```
+If your private key is protected by a passphrase, GPG will ask for that passphrase.
 
-#### Exporting Your Public Key
+### Symmetric Encryption with GPG
 
-When someone wants to send you an encrypted file or verify your digital signature, they’ll need your public key. The `gpg --export` command allows you to export your public key to a file, which can then be shared with others. The `-a` option ensures the key is exported in a text-readable format (ASCII armor).
+GPG can also use symmetric encryption.
 
-```bash
-gpg --export -a john.doe@example.com > john_public_key.asc
-```
+Symmetric encryption uses one shared passphrase instead of a public/private key pair.
 
-Example Output:
-
-*(No output means the command was successful)*
-
-```bash
-[ Private Key ]     +-------------+     [ Public Key ]
-    (Secure)   ---> | GPG Export  | ---> john_public_key.asc
-                    +-------------+
-```
-
-#### Revoking a Key
-
-If your private key is ever compromised, lost, or you no longer use it, it’s essential to generate a revocation certificate. This certificate informs others that the key should no longer be trusted. The `gpg --gen-revoke` command guides you through the process of creating a revocation certificate, which you should store securely and distribute only if needed.
-
-```bash
-gpg --gen-revoke john.doe@example.com
-```
-
-Example Output:
-
-```
-sec  rsa4096/1A2B3C4D5E6F7G8H 2022-01-01 John Doe (Work Key) <john.doe@example.com>
-
-Create a revocation certificate for this key? (y/N) y
-...
-```
-
-#### Creating an ASCII Armored Public Key
-
-When you need to share your public key in a human-readable format (such as for emails or posting on a website), you can use ASCII armor. The `gpg --armor --export` command converts your public key into an ASCII-encoded format, making it easier to share in text-based mediums. This command outputs the public key into a file (`public_key.asc`) which contains the key data in a format that begins and ends with `-----BEGIN PGP PUBLIC KEY BLOCK-----` and `-----END PGP PUBLIC KEY BLOCK-----`, respectively.
-
-```bash
-gpg --armor --export john.doe@example.com > public_key.asc
-```
-
-Example Output:
-
-*(No output means the command was successful)*
-
-Sample Content of `public_key.asc`:
-
-```
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-mQENBF+...
-... (Key Data)
-... 
------END PGP PUBLIC KEY BLOCK-----
-```
-
-#### Revocation Certificates
-
-If your private key is compromised or lost, it’s crucial to have a revocation certificate ready. The `gpg --gen-revoke` command creates this certificate, allowing you to inform others that the key should no longer be trusted. By adding the `--armor` option, the certificate is saved in an ASCII-encoded format, making it easy to share via email or other text-based methods. This is useful in scenarios where you need to distribute the revocation certificate if your key is no longer secure.
-
-```bash
-gpg --gen-revoke --armor --output=revoke.asc john.doe@example.com
-```
-
-Example Output:
-
-*(No output means the command was successful)*
-
-The revocation certificate is saved in `revoke.asc` and is ready to be shared or used if needed.
-
-#### Subkeys
-
-Subkeys are additional keys associated with your main key that can be used for specific tasks like encryption or signing, providing flexibility in key management. The `gpg --edit-key` command opens an interactive session where you can manage keys, including creating subkeys. In this process, you can choose the purpose of the subkey (e.g., for encryption only), set its size, and define its expiration date. This makes it easier to manage different aspects of key usage while ensuring that your main key remains secure.
-
-**Creating a Subkey:**
-
-```bash
-gpg --edit-key john.doe@example.com
-```
-
-Interactive Session:
-
-```
-gpg> addkey
-Please select what kind of key you want:
-   (4) RSA (sign only)
-   (6) RSA (encrypt only)
-   (8) RSA (set your own capabilities)
-Your selection? 6
-
-RSA keys may be between 1024 and 4096 bits long.
-What keysize do you want? (3072) 2048
-
-Please specify how long the key should be valid.
-         0 = key does not expire
-Key is valid for? (0) 1y
-
-Is this correct? (y/N) y
-
-Really create? (y/N) y
-
-gpg> save
-```
-
-Example Output:
-
-```
-gpg: key 1A2B3C4D5E6F7G8H marked as ultimately trusted
-gpg: revocation certificate stored as '/home/user/.gnupg/openpgp-revocs.d/1A2B3C4D5E6F7G8H.rev'
-```
-
-A new subkey has been added with specific capabilities (e.g., encryption only) and a custom expiration date.
-
-#### Advanced Encryption Options
-
-GPG allows you to specify the encryption algorithm you want to use for encrypting files. By default, it uses a strong encryption algorithm, but you can customize it based on your security requirements. The `gpg --symmetric` command encrypts a file using a passphrase, while the `gpg --cipher-algo` option allows you to specify a particular cipher, like AES256, which is known for its strong security.
-
-I. **Symmetric Encryption:**
+To encrypt a file symmetrically, run:
 
 ```bash
 gpg --symmetric file.txt
 ```
 
-Example Output:
+GPG will ask for a passphrase:
 
-*(No output means the command was successful)*
-
-II. **Specifying an Encryption Algorithm:**
-
-```bash
-gpg --cipher-algo AES256 -e file.txt
+```text
+Enter passphrase:
+Repeat passphrase:
 ```
 
-Example Output:
+The output file is usually:
 
-*(No output means the command was successful)*
+```text
+file.txt.gpg
+```
 
-The file `file.txt` is encrypted using AES256, a secure encryption algorithm. You can adjust the algorithm based on your needs.
+The process looks like this:
 
-#### Working with Encrypted Emails
+```text
+[ file.txt ] + [ passphrase ]
+      |
+      v
+[ file.txt.gpg ]
+```
 
-GPG can be integrated with email clients or used directly to send and receive encrypted messages. Encrypting an email involves converting the email content into an encrypted format that can only be read by the intended recipient. By using the `--armor` option, you ensure the encrypted email content is saved in ASCII format, suitable for sending via email. The recipient can then decrypt the email using their private key.
+To decrypt it, the recipient must know the same passphrase.
 
-#### Encrypting an Email
+Symmetric encryption is useful when you do not want to manage public keys, but it has one major challenge: the passphrase must be shared safely.
 
-When encrypting an email message, you can use GPG to ensure that only the intended recipient can read it. The command `gpg --armor --encrypt` takes the message file and encrypts it for the recipient, saving the output in an ASCII-armored file (`message.asc`). This file can then be safely sent over email or other communication methods.
+### Asymmetric vs Symmetric Encryption
+
+Asymmetric encryption is better when you want people to send encrypted data to each other without first sharing a password.
+
+Symmetric encryption is simpler and often faster, but both sides must know the same secret.
+
+A simple comparison:
+
+|                  | **Asymmetric encryption**                              | **Symmetric encryption**                    |
+| ---------------- | ------------------------------------------------------ | ------------------------------------------- |
+| **How it works** | Uses public and private keys                           | Uses one shared password or key             |
+| **Key sharing**  | Public key can be shared; private key must stay secret | Same secret encrypts and decrypts           |
+| **Common uses**  | Secure communication between different people          | Personal file encryption or shared secrets  |
+| **Notes**        | Useful without needing a pre-shared secret             | Requires a safe way to share the passphrase |
+
+### Creating Digital Signatures
+
+Encryption protects confidentiality. Digital signatures protect authenticity and integrity.
+
+A digital signature proves two things:
+
+```text
+1. The file was signed by someone who has the private key.
+2. The file has not changed since it was signed.
+```
+
+To sign a file, run:
+
+```bash
+gpg --sign file.txt
+```
+
+This creates a signed file, usually:
+
+```text
+file.txt.gpg
+```
+
+The signing process looks like this:
+
+```text
+[ File ] + [ Your Private Key ]
+     |
+     v
+[ Signed File ]
+```
+
+Anyone with your public key can verify the signature.
+
+### Verifying a Signature
+
+To verify a signed file, run:
+
+```bash
+gpg --verify file.txt.gpg
+```
+
+Example output:
+
+```text
+gpg: Signature made Mon 03 Oct 2022 12:00:00 PM UTC
+gpg:                using RSA key 1A2B3C4D5E6F7G8H
+gpg: Good signature from "John Doe (Work Key) <john.doe@example.com>"
+```
+
+A good signature means the file matches the signature and the signature was created by the private key matching the public key in your keyring.
+
+However, a good signature does not automatically mean you trust the person. It only means the signature is mathematically valid for that key.
+
+You still need to decide whether the key itself is trustworthy.
+
+### Detached Signatures
+
+Sometimes you may want to keep the original file unchanged and create a separate signature file.
+
+Use:
+
+```bash
+gpg --detach-sign file.txt
+```
+
+This creates a separate signature file, usually:
+
+```text
+file.txt.sig
+```
+
+To verify it, use:
+
+```bash
+gpg --verify file.txt.sig file.txt
+```
+
+Detached signatures are common for software downloads. A project may provide a file and a separate signature so users can verify that the file was not modified.
+
+### Exporting Your Public Key
+
+Other people need your public key if they want to send you encrypted files or verify your signatures.
+
+To export your public key in ASCII-armored format, run:
+
+```bash
+gpg --export -a john.doe@example.com > john_public_key.asc
+```
+
+The `-a` option means ASCII armor. This creates a text-based version of the key that is easier to share in email, websites, or messages.
+
+The process looks like this:
+
+```text
+[ Your Public Key in GPG Keyring ]
+              |
+              v
+       GPG export command
+              |
+              v
+[ john_public_key.asc ]
+```
+
+The file may contain text like:
+
+```text
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQENBF+...
+...
+-----END PGP PUBLIC KEY BLOCK-----
+```
+
+This file can be shared publicly.
+
+### Exporting Your Private Key
+
+Normally, you should not export your private key unless you are making a secure backup or moving it to another trusted device.
+
+To export a private key, the command is:
+
+```bash
+gpg --export-secret-keys -a john.doe@example.com > john_private_key.asc
+```
+
+This file must be protected carefully.
+
+A private key backup should be stored securely, preferably offline and encrypted.
+
+Never email your private key to yourself or upload it to an insecure cloud location.
+
+### Revoking a Key
+
+If your private key is lost, stolen, compromised, or no longer used, you need a way to tell others not to trust it anymore.
+
+That is what a revocation certificate is for.
+
+To create a revocation certificate, run:
+
+```bash
+gpg --gen-revoke john.doe@example.com
+```
+
+You can also save an ASCII-armored revocation certificate to a file:
+
+```bash
+gpg --gen-revoke --armor --output revoke.asc john.doe@example.com
+```
+
+The revocation process looks like this:
+
+```text
+Private key compromised or retired
+          |
+          v
+Create or publish revocation certificate
+          |
+          v
+Other users learn the key should no longer be trusted
+```
+
+It is a good idea to create a revocation certificate soon after creating a key and store it somewhere safe.
+
+Do not publish the revocation certificate unless you actually want to revoke the key.
+
+### Subkeys
+
+A GPG key can have subkeys.
+
+A primary key is often used for identity and certification. Subkeys can be used for specific tasks such as encryption, signing, or authentication.
+
+This is useful because you can keep the primary key more secure and use subkeys for daily work.
+
+The structure looks like this:
+
+```text
+[ Primary Key ]
+      |
+      +--> [ Signing Subkey ]
+      |
+      +--> [ Encryption Subkey ]
+      |
+      +--> [ Authentication Subkey ]
+```
+
+If a subkey is compromised, you may be able to revoke or replace only that subkey instead of replacing the entire identity.
+
+To manage subkeys, run:
+
+```bash
+gpg --edit-key john.doe@example.com
+```
+
+Then inside the GPG prompt:
+
+```text
+addkey
+```
+
+GPG will ask what kind of subkey you want.
+
+Example:
+
+```text
+(4) RSA sign only
+(6) RSA encrypt only
+(8) RSA set your own capabilities
+```
+
+After choosing the type, you can set the size and expiration date.
+
+When finished, type:
+
+```text
+save
+```
+
+### Advanced Encryption Options
+
+GPG chooses reasonable defaults, but you can also specify options manually.
+
+For symmetric encryption, you can choose a cipher algorithm:
+
+```bash
+gpg --cipher-algo AES256 --symmetric file.txt
+```
+
+AES256 is a widely used symmetric encryption algorithm.
+
+For public-key encryption, a basic command is:
+
+```bash
+gpg --encrypt --recipient jane.smith@example.com file.txt
+```
+
+You may also see the shorter form:
+
+```bash
+gpg -e -r jane.smith@example.com file.txt
+```
+
+In most normal situations, it is better to rely on GPG’s safe defaults unless you have a specific reason to change algorithms.
+
+### Working with Encrypted Email
+
+GPG can be used with email. Some email clients integrate GPG directly, while others require manual encryption and decryption.
+
+The basic idea is:
+
+```text
+Write message
+      |
+      v
+Encrypt message with recipient's public key
+      |
+      v
+Send encrypted message
+      |
+      v
+Recipient decrypts with private key
+```
+
+## Encrypting an Email Message Manually
+
+Suppose the message is stored in:
+
+```text
+message.txt
+```
+
+To encrypt it for Jane and save it as an ASCII-armored file, run:
 
 ```bash
 gpg --armor --encrypt --recipient 'jane.smith@example.com' --output message.asc message.txt
 ```
 
-Example Output:
+Here:
 
-*(No output means the command was successful)*
+```text
+--armor       creates text-based encrypted output
+--encrypt     encrypts the file
+--recipient   chooses who can decrypt it
+--output      chooses the output filename
+```
 
-The email content in `message.txt` is encrypted for Jane Smith and saved as `message.asc`, making it safe to send electronically.
+The result is:
 
-#### Decrypting an Email
+```text
+message.asc
+```
 
-To read an encrypted email, the recipient must decrypt it using their private key. The `gpg --decrypt` command allows you to decrypt the encrypted file (e.g., `message.asc`), saving the content back into a readable text file.
+This file can be sent through email or another text-based communication method.
+
+### Decrypting an Encrypted Email Message
+
+To decrypt the message, run:
 
 ```bash
 gpg --decrypt message.asc > message.txt
 ```
 
-Example Output:
+This decrypts the encrypted content and writes the readable message to:
 
-```
-gpg: encrypted with 4096-bit RSA key, ID 9H8G7F6E5D4C3B2A, created 2022-01-01
-      "Jane Smith <jane.smith@example.com>"
+```text
+message.txt
 ```
 
-The encrypted message from `message.asc` is decrypted and saved as `message.txt`, allowing the recipient to read the original content.
+If the message was encrypted for your public key, your private key is required to decrypt it.
 
 ### Key Servers
 
-Key servers provide a platform for users to publish and retrieve public keys, enabling secure communication and file sharing across different systems and users. By sending your public key to a key server, you make it easily accessible to others, while searching for and importing keys allows you to securely exchange encrypted data with new contacts. Key servers are a critical part of the public-key infrastructure (PKI), helping users find and trust public keys for encryption and digital signatures.
+Key servers are systems that allow people to publish and find public keys.
 
-#### Sending Keys to a Key Server
+If you upload your public key to a key server, other people can search for it and import it.
 
-When you want to make your public key available for others to find and use, you can upload it to a public key server. The command `gpg --send-keys` sends your key to the specified key server, allowing others to retrieve it and use it to encrypt data for you or verify your digital signatures. This is useful for establishing secure communications or making your public key widely available.
+The general workflow is:
+
+```text
+Create public key
+      |
+      v
+Upload public key to key server
+      |
+      v
+Other people search for your key
+      |
+      v
+They import it and use it
+```
+
+### Sending a Key to a Key Server
+
+To upload a public key to a key server, use:
 
 ```bash
 gpg --send-keys --keyserver hkp://pgp.mit.edu 1A2B3C4D5E6F7G8H
 ```
 
-Example Output:
+Example output:
 
-```
+```text
 gpg: sending key 1A2B3C4D5E6F7G8H to hkp://pgp.mit.edu
 ```
 
-Your public key, identified by the key ID `1A2B3C4D5E6F7G8H`, has been successfully uploaded to the key server at `pgp.mit.edu`. Now, anyone can search for and download your public key from that server.
+This makes your public key available to people who search that key server.
 
-#### Searching for Keys on a Key Server
+Before uploading a key publicly, remember that public key servers may preserve information for a long time. Do not upload keys with email addresses or identities you do not want publicly associated.
 
-To communicate securely with someone, you need their public key. The `gpg --search-keys` command allows you to look up public keys by email address or name on a specific key server. Once found, you can import the key into your keyring for encryption or verification. This process ensures that you have the correct public key before sending encrypted messages.
+### Searching for Keys on a Key Server
+
+To search for someone’s public key, use:
 
 ```bash
 gpg --search-keys --keyserver hkp://pgp.mit.edu jane.smith@example.com
 ```
 
-Example Output:
+Example output:
 
-```
+```text
 gpg: data source: http://pgp.mit.edu:11371
 (1)     Jane Smith <jane.smith@example.com>
           4096 bit RSA key 9H8G7F6E5D4C3B2A, created: 2022-01-01
-Keys 1-1 of 1 for "jane.smith@example.com".  Enter number(s), N)ext, or Q)uit > 1
+Keys 1-1 of 1 for "jane.smith@example.com". Enter number(s), N)ext, or Q)uit > 1
 gpg: key 9H8G7F6E5D4C3B2A: public key "Jane Smith <jane.smith@example.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
 ```
 
-This output shows that a public key for "Jane Smith" has been found on the key server and successfully imported into your keyring. You can now use this key to encrypt files for her or verify her signatures.
+After importing the key, you should still verify the fingerprint before trusting it.
 
-#### Updating Key Information
+A key server can help you find a key, but it does not automatically prove the key is genuine.
 
-Over time, the public keys stored on your keyring may be updated with new expiration dates, revocation information, or additional signatures. The `gpg --refresh-keys` command checks the key server for updated information and refreshes the keys in your local keyring. This ensures that you are always working with the latest key information, reducing the risk of using outdated or compromised keys.
+### Refreshing Keys
+
+Keys may change over time. They can expire, be extended, gain new signatures, or be revoked.
+
+To refresh keys from a key server, run:
 
 ```bash
 gpg --refresh-keys --keyserver hkp://pgp.mit.edu
 ```
 
-Example Output:
+Example output:
 
-```
+```text
 gpg: refreshing 1 keys from hkp://pgp.mit.edu
 gpg: key 9H8G7F6E5D4C3B2A: "Jane Smith <jane.smith@example.com>" not changed
 gpg: Total number processed: 1
 gpg:              unchanged: 1
 ```
 
-This output indicates that the keyring was successfully refreshed, but Jane Smith's key did not require any updates. If any keys had been updated, GPG would show the changes, ensuring that you are using the most current versions of your contacts' keys.
+Refreshing keys helps make sure you are not using outdated or revoked key information.
 
 ### Disk Encryption
 
-Disk encryption protects sensitive data stored on hard drives, SSDs, or other storage devices by converting it into unreadable ciphertext. Even if the physical drive is stolen, encrypted data cannot be accessed without the correct decryption key. GPG can be used to manage encryption keys for disk encryption tools such as LUKS (Linux Unified Key Setup), ensuring that keys are securely stored and protected.
+Disk encryption protects data stored on a hard drive, SSD, USB drive, or other storage device.
 
-#### Integration with Disk Encryption Tools
+If someone steals the physical device, disk encryption helps prevent them from reading the files.
 
-GPG can work alongside tools like LUKS to enhance security in managing encrypted volumes. By using GPG to encrypt the keyfile required to unlock a LUKS volume, you add an additional layer of security. The workflow typically involves decrypting the keyfile using GPG, which in turn is used to unlock the encrypted disk volume.
+Disk encryption is different from encrypting a single file. Instead of protecting only one file, it can protect an entire partition, disk, or volume.
 
+The basic idea is:
+
+```text
+[ Disk Data ] + [ Encryption Key ]
+       |
+       v
+[ Encrypted Disk ]
+
+Without the key, the disk contents are unreadable.
 ```
+
+On Linux, a common disk encryption system is LUKS, which stands for Linux Unified Key Setup.
+
+### GPG and LUKS Together
+
+- GPG can be used with LUKS to protect a keyfile.
+- A keyfile is a file used to unlock an encrypted disk volume.
+- Instead of storing the keyfile in plain form, you can encrypt the keyfile with GPG.
+
+The workflow looks like this:
+
+```text
+[ GPG Private Key ]
+        |
+        v
+Decrypts
+        |
+        v
+[ Encrypted Keyfile ] -----> [ Plain Keyfile ]
+                                      |
+                                      v
+                              Unlocks LUKS Volume
+                                      |
+                                      v
+                              [ Decrypted Disk Access ]
+```
+
+A simpler diagram:
+
+```text
 [ GPG Key ]       [ Encrypted Keyfile ]       [ LUKS Volume ]
      |                    |                          |
-     +--> Decrypt Keyfile +--> Unlocks LUKS Volume --+
+     +--> Decrypt Keyfile +--> Unlocks Volume ------+
 ```
 
-- The GPG key involves using your **private** key to decrypt the keyfile, which is necessary for unlocking the LUKS volume.
-- An **encrypted** keyfile is used to unlock the LUKS volume, and it is securely encrypted with your GPG key to prevent unauthorized access.
-- A LUKS volume is a disk that is **encrypted** using LUKS, with access only granted when the decrypted keyfile, provided by the GPG key, is available.
-- The **private** GPG key plays a critical role in maintaining security, as it is required to decrypt the keyfile before unlocking the LUKS volume.
-- Once the keyfile is **decrypted**, it acts as the input to unlock the LUKS volume, providing secure access to the disk’s contents.
-- LUKS encryption ensures that the disk remains **inaccessible** without the decrypted keyfile, enhancing the overall security of the storage medium.
+This creates multiple layers of protection.
 
-#### Setting up GPG with LUKS
+The disk needs the keyfile, and the keyfile is protected by GPG.
 
-I. **Generate GPG Key Pair (if not already done)**
+### Creating a Random LUKS Keyfile
 
-```bash
-gpg --gen-key
-```
-
-II. **Create a Random Keyfile**
+To create a random keyfile, run:
 
 ```bash
 dd if=/dev/urandom of=/root/luks-keyfile bs=512 count=4
 chmod 600 /root/luks-keyfile
 ```
 
-Example Output:
+The `dd` command creates random data from `/dev/urandom`.
 
-```
+The `chmod 600` command makes the file readable and writable only by its owner.
+
+Example output:
+
+```text
 4+0 records in
 4+0 records out
-2048 bytes (2.0 kB, 2.0 KiB) copied, 0.000123 s, 16.7 MB/s
+2048 bytes copied
 ```
 
-III. **Encrypt the Keyfile with GPG**
+This keyfile should be protected carefully because it can unlock the encrypted volume.
 
-```bash
-gpg --encrypt --recipient "John Doe" /root/luks-keyfile
-```
+### Encrypting the Keyfile with GPG
 
-Example Output:
-
-```
-gpg: /root/luks-keyfile: encryption failed: No public key
-```
-
-If Error Occurs:
-
-- Ensure you have your own public key in your keyring.
-- Alternatively, encrypt for yourself:
+To encrypt the keyfile for yourself, run:
 
 ```bash
 gpg --encrypt --recipient john.doe@example.com /root/luks-keyfile
 ```
 
-IV. **Initialize LUKS Volume with Keyfile**
+This creates an encrypted version, usually:
+
+```text
+/root/luks-keyfile.gpg
+```
+
+If you see an error such as:
+
+```text
+gpg: /root/luks-keyfile: encryption failed: No public key
+```
+
+it means GPG could not find the public key for the recipient.
+
+Check that the key exists:
+
+```bash
+gpg --list-keys
+```
+
+Then use the correct email address or key ID.
+
+### Initializing a LUKS Volume with a Keyfile
+
+To format a device as a LUKS encrypted volume using the keyfile, run:
 
 ```bash
 cryptsetup luksFormat /dev/sdX /root/luks-keyfile
 ```
 
-Example Output:
+Be extremely careful with `/dev/sdX`.
 
-```
+This is only a placeholder. You must replace it with the correct device name.
+
+Formatting the wrong device can destroy data.
+
+GPG/LUKS setup should be tested in a safe lab environment before being used on important systems.
+
+A warning may appear:
+
+```text
 WARNING!
 ========
 This will overwrite data on /dev/sdX irrevocably.
@@ -601,46 +1044,200 @@ This will overwrite data on /dev/sdX irrevocably.
 Are you sure? (Type uppercase yes): YES
 ```
 
-The LUKS volume is formatted using the keyfile.
+This warning means the data on that device will be overwritten.
 
-V. **Decrypt Keyfile and Open LUKS Volume**
+### Decrypting the Keyfile and Opening the LUKS Volume
+
+To decrypt the keyfile:
 
 ```bash
 gpg --output /root/luks-keyfile --decrypt /root/luks-keyfile.gpg
+```
+
+Then use it to open the LUKS volume:
+
+```bash
 cryptsetup luksOpen /dev/sdX my_encrypted_volume --key-file /root/luks-keyfile
 ```
 
-Example Output:
+This creates a mapped decrypted device, usually under:
 
+```text
+/dev/mapper/my_encrypted_volume
 ```
-gpg: encrypted with 4096-bit RSA key, ID 1A2B3C4D5E6F7G8H, created 2022-01-01
-      "John Doe (Work Key) <john.doe@example.com>"
+
+The flow is:
+
+```text
+Decrypt keyfile
+      |
+      v
+Use keyfile with cryptsetup
+      |
+      v
+Open encrypted LUKS volume
+      |
+      v
+Access mapped device
 ```
 
-The keyfile is decrypted and used to unlock the LUKS volume.
+### Mounting the Decrypted Volume
 
-VI. **Mount the Decrypted Volume**
+After opening the LUKS volume, mount it:
 
 ```bash
 mount /dev/mapper/my_encrypted_volume /mnt/my_mount_point
 ```
 
-VII. **Securely Delete the Decrypted Keyfile**
+This makes the decrypted filesystem accessible at:
+
+```text
+/mnt/my_mount_point
+```
+
+The mount point must exist first. If it does not exist, create it with:
+
+```bash
+mkdir -p /mnt/my_mount_point
+```
+
+### Securely Deleting the Decrypted Keyfile
+
+After unlocking the volume, the decrypted keyfile should not be left sitting on disk.
+
+To securely delete it, run:
 
 ```bash
 shred -u /root/luks-keyfile
 ```
 
-The decrypted keyfile is securely deleted to prevent unauthorized access.
+The `shred` command overwrites the file before deleting it.
 
-#### Advantages
+The `-u` option removes the file after overwriting.
 
-- Combining GPG with LUKS offers **enhanced** security by providing multiple layers of encryption, ensuring data is protected from unauthorized access.
-- The integration of GPG simplifies **key** management, making it easier to revoke or rotate keys without the need to re-encrypt the entire disk.
-- Using GPG and LUKS together adds **flexibility**, allowing for the implementation of more complex security policies tailored to different organizational needs.
-- This combination supports **multi-user** environments, where different users can have separate encryption keys, maintaining individual security and access controls.
-- One of the key benefits of this setup is the ability to **seamlessly** manage multiple encryption keys for various purposes, streamlining administration.
-- GPG's ability to **revoke** keys without re-encrypting data adds a level of operational efficiency, reducing the risk and downtime in case of compromised keys.
+This helps reduce the risk of someone recovering the keyfile later.
+
+### Advantages of Combining GPG with LUKS
+
+- Using GPG with LUKS can provide stronger key management.
+- The LUKS volume protects the disk data. GPG protects the keyfile used to unlock the volume.
+- This approach can be useful when managing encrypted storage, especially in situations where keyfiles need to be backed up, transferred, or protected separately.
+
+Some advantages include:
+
+```text
+Extra protection for disk unlock keys
+Better key management
+Support for multiple users or recipients
+Ability to revoke or rotate GPG keys
+Separation between disk encryption and key protection
+```
+
+However, this setup is more complex than using a normal LUKS passphrase. More complexity can also create more chances for mistakes.
+
+### Security Best Practices
+
+- Keep your private key private. Never share it with anyone.
+- Use a strong passphrase for your private key. A short or reused passphrase weakens the protection.
+- Create a revocation certificate and store it somewhere safe.
+- Back up your keys securely. If you lose your private key, you may lose access to encrypted data.
+- Verify public key fingerprints before trusting keys.
+- Do not assume a key is genuine just because it came from a key server.
+- Use expiration dates for important keys.
+- Be careful when running disk encryption commands. A wrong device name can erase data.
+- Test complex encryption workflows in a virtual machine or lab environment before using them on real data.
+
+### Common GPG Commands
+
+Generate a new key:
+
+```bash
+gpg --gen-key
+```
+
+List public keys:
+
+```bash
+gpg --list-keys
+```
+
+List private keys:
+
+```bash
+gpg --list-secret-keys
+```
+
+Import a public key:
+
+```bash
+gpg --import recipient_public_key.asc
+```
+
+Export your public key:
+
+```bash
+gpg --export -a john.doe@example.com > john_public_key.asc
+```
+
+Encrypt a file for someone:
+
+```bash
+gpg -e -r jane.smith@example.com file.txt
+```
+
+Decrypt a file:
+
+```bash
+gpg -d -o file.txt file.txt.gpg
+```
+
+Encrypt a file symmetrically:
+
+```bash
+gpg --symmetric file.txt
+```
+
+Sign a file:
+
+```bash
+gpg --sign file.txt
+```
+
+Create a detached signature:
+
+```bash
+gpg --detach-sign file.txt
+```
+
+Verify a signature:
+
+```bash
+gpg --verify file.txt.gpg
+```
+
+Generate a revocation certificate:
+
+```bash
+gpg --gen-revoke john.doe@example.com
+```
+
+Edit a key:
+
+```bash
+gpg --edit-key john.doe@example.com
+```
+
+Search for keys on a key server:
+
+```bash
+gpg --search-keys --keyserver hkp://pgp.mit.edu jane.smith@example.com
+```
+
+Refresh keys:
+
+```bash
+gpg --refresh-keys --keyserver hkp://pgp.mit.edu
+```
 
 ### Challenges
 
