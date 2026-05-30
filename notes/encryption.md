@@ -777,7 +777,7 @@ Send encrypted message
 Recipient decrypts with private key
 ```
 
-## Encrypting an Email Message Manually
+### Encrypting an Email Message Manually
 
 Suppose the message is stored in:
 
