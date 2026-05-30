@@ -1073,12 +1073,10 @@ For example, copying a file may appear to finish quickly, but some data may stil
 
 Unmounting ensures that:
 
-```text
-pending writes are completed
-open files are closed
-filesystem metadata is updated
-the device is safe to remove
-```
+- pending writes are completed
+- open files are closed
+- filesystem metadata is updated
+- the device is safe to remove
 
 This reduces the chance of corruption or data loss.
 
@@ -1088,14 +1086,12 @@ Many desktop systems already automount removable drives.
 
 For servers or custom setups, there are several ways to automate mounting:
 
-```text
-/etc/fstab
-systemd mount units
-systemd automount units
-udev rules
-desktop environment automounting
-autofs
-```
+- /etc/fstab
+- systemd mount units
+- systemd automount units
+- udev rules
+- desktop environment automounting
+- autofs
 
 For most users, `/etc/fstab` is the best starting point.
 
