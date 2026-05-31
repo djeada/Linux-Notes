@@ -6,13 +6,11 @@ A network can be very small, such as two computers connected together, or very l
 
 At a basic level, networking answers questions like:
 
-```text id="g4qlff"
-How does one device find another device?
-How does data move between devices?
-How does a computer know where to send traffic?
-How do names like google.com become IP addresses?
-How do we troubleshoot when the network fails?
-```
+* How does one device find another device?
+* How does data move between devices?
+* How does a computer know where to send traffic?
+* How do names like `google.com` become IP addresses?
+* How do we troubleshoot when the network fails?
 
 To understand networking, it is important to know the basic terms: network interfaces, MAC addresses, IP addresses, DHCP, DNS, routes, gateways, and common diagnostic commands.
 
@@ -51,24 +49,22 @@ The operating system uses network interfaces to send and receive data.
 
 Each interface usually has:
 
-```text id="66wq1t"
-a name
-a MAC address
-one or more IP addresses
-a status, such as UP or DOWN
-configuration settings
-```
+* A name
+* A MAC address
+* One or more IP addresses
+* A status, such as `UP` or `DOWN`
+* Configuration settings
 
 Common interface names include:
 
-```text id="z1id2k"
-lo        loopback interface
-eth0      traditional Ethernet interface name
-ens33     modern predictable Ethernet interface name
-wlan0     wireless interface name
-docker0   Docker bridge interface
-tun0      VPN tunnel interface
-```
+| Interface | Description                                |
+| --------- | ------------------------------------------ |
+| `lo`      | Loopback interface                         |
+| `eth0`    | Traditional Ethernet interface name        |
+| `ens33`   | Modern predictable Ethernet interface name |
+| `wlan0`   | Wireless interface name                    |
+| `docker0` | Docker bridge interface                    |
+| `tun0`    | VPN tunnel interface                       |
 
 #### Loopback Interface
 
@@ -116,11 +112,11 @@ A wireless interface connects a device to a Wi-Fi network.
 
 Examples:
 
-```text id="b5b4r3"
-eth0     older Ethernet naming style
-ens33    common Ethernet name on virtual machines
-wlan0    common wireless interface name
-```
+| Interface | Description                              |
+| --------- | ---------------------------------------- |
+| `eth0`    | Older Ethernet naming style              |
+| `ens33`   | Common Ethernet name on virtual machines |
+| `wlan0`   | Common wireless interface name           |
 
 To see network interfaces on Linux, use:
 
@@ -137,14 +133,14 @@ Example output:
 
 The important parts are:
 
-```text id="gj6g1g"
-eth0                  interface name
-UP                    interface is enabled
-LOWER_UP              physical link is detected
-mtu 1500              maximum transmission unit
-link/ether            MAC address follows
-00:11:22:33:44:55     MAC address
-```
+| Field                 | Description               |
+| --------------------- | ------------------------- |
+| **eth0**              | Interface name            |
+| **UP**                | Interface is enabled      |
+| **LOWER_UP**          | Physical link is detected |
+| **mtu 1500**          | Maximum transmission unit |
+| **link/ether**        | MAC address follows       |
+| **00:11:22:33:44:55** | MAC address               |
 
 If an interface is `DOWN`, it may be disabled or disconnected.
 
@@ -400,12 +396,10 @@ It automatically assigns network settings to devices.
 
 Without DHCP, every device would need to be configured manually with:
 
-```text id="be6hzt"
-IP address
-subnet mask or prefix
-default gateway
-DNS servers
-```
+* IP address
+* Subnet mask or prefix
+* Default gateway
+* DNS servers
 
 That would be slow and error-prone, especially on large networks.
 
@@ -458,13 +452,11 @@ The assigned IP address is called a lease because it is usually temporary. The d
 
 DHCP is useful because it:
 
-```text id="e445v8"
-automates IP address assignment
-reduces manual configuration errors
-prevents duplicate IP addresses
-works well for laptops, phones, tablets, and guest devices
-makes large networks easier to manage
-```
+* Automates IP address assignment
+* Reduces manual configuration errors
+* Prevents duplicate IP addresses
+* Works well for laptops, phones, tablets, and guest devices
+* Makes large networks easier to manage
 
 DHCP is especially helpful in networks where devices frequently join and leave.
 
@@ -474,14 +466,12 @@ Some devices need a stable IP address.
 
 Examples include:
 
-```text id="k1aia8"
-servers
-printers
-routers
-DNS servers
-network storage devices
-monitoring systems
-```
+* Servers
+* Printers
+* Routers
+* DNS servers
+* Network storage devices
+* Monitoring systems
 
 There are two common ways to give a device a consistent IP address.
 
@@ -589,11 +579,11 @@ Example output includes round-trip time:
 
 Important values:
 
-```text id="ytt7ro"
-time       round-trip latency
-ttl        time to live
-packet loss   percentage of packets that did not return
-```
+| Field           | Description                               |
+| --------------- | ----------------------------------------- |
+| **time**        | Round-trip latency                        |
+| **ttl**         | Time to live                              |
+| **packet loss** | Percentage of packets that did not return |
 
 Low and consistent response times usually indicate a healthy connection.
 
@@ -805,16 +795,14 @@ It is common on desktop Linux systems and many servers.
 
 It can manage:
 
-```text id="f8pzug"
-Ethernet
-Wi-Fi
-VPNs
-mobile broadband
-Bluetooth networking
-DNS settings
-DHCP
-static IP profiles
-```
+* Ethernet
+* Wi-Fi
+* VPNs
+* Mobile broadband
+* Bluetooth networking
+* DNS settings
+* DHCP
+* Static IP profiles
 
 NetworkManager has command-line, text-based, and graphical tools.
 
@@ -946,14 +934,12 @@ nmtui
 
 It can be used to:
 
-```text id="p2n45g"
-edit a connection
-activate a connection
-set a hostname
-configure static IP settings
-configure DNS settings
-enable or disable interfaces
-```
+* Edit a connection
+* Activate a connection
+* Set a hostname
+* Configure static IP settings
+* Configure DNS settings
+* Enable or disable interfaces
 
 `nmtui` is helpful when you do not have a graphical desktop but want something easier than long `nmcli` commands.
 
@@ -1017,11 +1003,9 @@ Before asking DNS servers, a Linux system may check local files first.
 
 A common order is:
 
-```text id="jkqqux"
 1. Check /etc/hosts
 2. Check DNS settings, often from /etc/resolv.conf or systemd-resolved
 3. Ask the configured DNS resolver
-```
 
 #### `/etc/hosts`
 
@@ -1063,14 +1047,12 @@ DNS settings can be changed using NetworkManager tools.
 
 With `nmtui`:
 
-```text id="0rv1gs"
 1. Run nmtui
 2. Select Edit a connection
 3. Choose the connection
 4. Edit IPv4 or IPv6 settings
 5. Add DNS servers
 6. Save and activate the connection
-```
 
 With `nmcli`, you can set DNS servers like this:
 
@@ -1141,13 +1123,11 @@ Packet analysis means capturing and inspecting network traffic.
 
 It is useful for:
 
-```text id="ghm6ng"
-troubleshooting connectivity problems
-checking whether traffic is leaving or reaching a system
-understanding protocols
-detecting unusual or suspicious traffic
-measuring network behavior
-```
+* Troubleshooting connectivity problems
+* Checking whether traffic is leaving or reaching a system
+* Understanding protocols
+* Detecting unusual or suspicious traffic
+* Measuring network behavior
 
 ```text id="p2rrce"
                     +-----------------------+
@@ -1247,14 +1227,12 @@ When IP forwarding is enabled, the system can act like a router.
 
 This is useful for:
 
-```text id="wi2cl6"
-routers
-VPN gateways
-firewalls
-network labs
-containers and virtual machines
-connecting separate networks
-```
+* Routers
+* VPN gateways
+* Firewalls
+* Network labs
+* Containers and virtual machines
+* Connecting separate networks
 
 #### Checking IP Forwarding
 
@@ -1325,7 +1303,6 @@ Network troubleshooting works best when done step by step.
 
 A useful order is:
 
-```text id="n8gc43"
 1. Check physical or virtual link
 2. Check interface status
 3. Check IP address
@@ -1334,7 +1311,6 @@ A useful order is:
 6. Check firewall rules
 7. Test remote connectivity
 8. Capture traffic if needed
-```
 
 #### Step 1: Check Interfaces
 
@@ -1392,13 +1368,11 @@ An address in the `169.254.x.x` range often means the device did not receive an 
 
 This usually indicates:
 
-```text id="jmo0w0"
-DHCP server not reachable
-network cable disconnected
-Wi-Fi not connected
-wrong VLAN or network
-DHCP service problem
-```
+* DHCP server not reachable
+* Network cable disconnected
+* Wi-Fi not connected
+* Wrong VLAN or network
+* DHCP service problem
 
 #### Step 3: Check Routes
 
@@ -1580,13 +1554,11 @@ sudo tcpdump -i eth0 port 443
 
 Packet capture can answer questions like:
 
-```text id="b4i5l7"
-Is the request leaving my machine?
-Is the reply coming back?
-Is traffic reaching the server?
-Is DNS being queried?
-Is the firewall dropping packets?
-```
+* Is the request leaving my machine?
+* Is the reply coming back?
+* Is traffic reaching the server?
+* Is DNS being queried?
+* Is the firewall dropping packets?
 
 ### Hardware and Physical Checks
 
@@ -1594,16 +1566,14 @@ Not every network problem is caused by software.
 
 Common physical issues include:
 
-```text id="af0eq4"
-unplugged Ethernet cable
-bad cable
-bad switch port
-disabled Wi-Fi
-weak wireless signal
-wrong VLAN
-failed router or switch
-virtual machine adapter disconnected
-```
+* Unplugged Ethernet cable
+* Bad cable
+* Bad switch port
+* Disabled Wi-Fi
+* Weak wireless signal
+* Wrong VLAN
+* Failed router or switch
+* Virtual machine adapter disconnected
 
 Always check the simple things early.
 
@@ -1644,13 +1614,11 @@ nmcli dev status
 
 Possible causes:
 
-```text id="3z459r"
-interface is down
-DHCP failed
-cable disconnected
-wrong Wi-Fi network
-NetworkManager profile misconfigured
-```
+* Interface is down
+* DHCP failed
+* Cable disconnected
+* Wrong Wi-Fi network
+* NetworkManager profile misconfigured
 
 #### Scenario 2: Can Reach Router but Not Internet
 
@@ -1720,13 +1688,11 @@ sudo iptables -L -n -v
 
 Possible causes:
 
-```text id="kn50jo"
-service is only listening on 127.0.0.1
-firewall is blocking the port
-wrong IP address
-routing issue
-service is not running
-```
+* Service is only listening on `127.0.0.1`
+* Firewall is blocking the port
+* Wrong IP address
+* Routing issue
+* Service is not running
 
 ### Challenges
 
