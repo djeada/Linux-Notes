@@ -66,7 +66,6 @@ sed 'address command' file
 
 Example:
 
-
 ```bash
 sed '5d' file.txt
 ```

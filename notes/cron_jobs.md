@@ -217,8 +217,6 @@ Anacron checks timestamps of previously executed jobs. If a scheduled job was mi
 
 Unlike cron, Anacron does not support minute-level scheduling. Instead, it focuses on daily or longer intervals such as daily, weekly, or monthly tasks.
 
-
-
 ```text
 +--------------------------------------------------------------+
 |                      Anacron Workflow                        |
@@ -248,6 +246,7 @@ Unlike cron, Anacron does not support minute-level scheduling. Instead, it focus
 ```
 
 ### Anacron Configuration File
+
 The main configuration file is: /etc/anacrontab 
 
 Example structure: period delay job-identifier command
@@ -269,7 +268,6 @@ Example configuration:
 | **job-identifier** | Unique name for the task (used to track timestamps). |
 | **command** | The specific command or script path to execute. |
 
-
 #### Execution timestamps are typically stored in: /var/spool/anacron/
 
 Anacron creates timestamp files in `/var/spool/anacron/` so it can remember when each job last ran. On the next boot, it compares the current date with those stored timestamps to decide whether a daily, weekly, or monthly task is due. This is what allows Anacron to catch up on missed jobs instead of silently skipping them.
@@ -282,7 +280,6 @@ Anacron creates timestamp files in `/var/spool/anacron/` so it can remember when
 | **System Uptime** | Requires 24/7 uptime | Handles intermittent uptime |
 | **Best Suited For** | Servers / Always-on systems | Laptops / Desktops |
 | **Missed Job Handling** | Job is skipped if system is off | Executed on next startup |
-
 
 ### Relationship with Cron Directories
 
@@ -331,6 +328,7 @@ Sequential Execution: Use the `-s` flag if running multiple heavy scripts to avo
 Below are common scenarios where Anacron is used to ensure vital tasks are not skipped on systems with irregular uptime.
 
 #### 1. Daily Database Backup
+
 Ensure a local database backup is performed every day. If the laptop is closed at midnight, the backup will trigger 15 minutes after the user logs in the next morning.
 
 ```
@@ -529,7 +527,7 @@ This script example ensures that only one instance of the script can run at a ti
 
 - `flock -n 9` attempts to acquire an exclusive, non-blocking lock on file descriptor 9. If the lock cannot be acquired because another instance is running, it immediately exits with `exit 1`.
 - `9>/var/lock/.myscript.exclusive` specifies the lock file. This file is used to track the lock status; if it’s locked, another instance will not start.
-  
+
 ### Common Pitfalls
 
 - Cron uses the system's time zone. Ensure it's set correctly.

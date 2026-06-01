@@ -1,4 +1,5 @@
 ## Performance Monitoring
+
 Performance monitoring is the process of observing how a system uses its resources.
 
 The goal is to understand whether the system is healthy, overloaded, or waiting on a specific bottleneck.
@@ -20,7 +21,7 @@ A system may feel slow for many reasons. Performance monitoring helps avoid gues
 
 Instead of saying:
 
-```text id="y28f8k"
+```text
 The server is slow.
 ```
 
@@ -35,9 +36,10 @@ we want to answer:
 - When did the problem start?
 
 ### Basic Performance Model
+
 A Linux system runs many processes. Those processes compete for CPU, memory, disk, and network resources.
 
-```text id="x2l633"
+```text
 +-------------------+
 | Applications      |
 | nginx, database,  |
@@ -62,6 +64,7 @@ A Linux system runs many processes. Those processes compete for CPU, memory, dis
 Monitoring tools observe these layers and show how busy they are.
 
 ### Important Usage Statistics
+
 The most common system usage statistics are:
 
 - CPU usage
@@ -75,6 +78,7 @@ The most common system usage statistics are:
 Each statistic tells a different part of the story.
 
 ### CPU Usage
+
 CPU usage shows how much processing work the system is doing.
 
 High CPU usage can mean:
@@ -89,12 +93,13 @@ CPU usage is not automatically bad. A busy CPU may be normal if the system is do
 
 The important question is:
 
-```text id="xfnkwv"
+```text
 Is the CPU busy because of expected work,
 or is one process consuming CPU unexpectedly?
 ```
 
 ### RAM Usage
+
 RAM is fast working memory.
 
 Linux uses RAM for:
@@ -112,24 +117,25 @@ A system can show little “free” memory and still be healthy because cached m
 
 The better field to watch is usually:
 
-```text id="n2ccw5"
+```text
 available memory
 ```
 
 not just:
 
-```text id="uqzqoj"
+```text
 free memory
 ```
 
 ### Swap Usage
+
 Swap is disk space used as overflow memory.
 
 Swap helps prevent immediate crashes when RAM is full, but it is much slower than RAM.
 
 Heavy swap usage can make a system feel extremely slow.
 
-```text id="zrg5dg"
+```text
 RAM is fast.
 Swap is much slower because it uses disk.
 ```
@@ -137,13 +143,14 @@ Swap is much slower because it uses disk.
 Some swap usage is not always a problem. Continuous swap-in and swap-out activity is a problem.
 
 ### Disk Usage vs Disk I/O
+
 Disk usage and disk I/O are different.
 
 Disk usage means how much storage space is filled.
 
 Example:
 
-```text id="cyir2z"
+```text
 The filesystem is 95% full.
 ```
 
@@ -151,7 +158,7 @@ Disk I/O means how actively the disk is reading and writing.
 
 Example:
 
-```text id="h4z7rw"
+```text
 The disk is writing 300 MB/s and is 100% busy.
 ```
 
@@ -160,6 +167,7 @@ A disk can be almost full but not busy.
 A disk can have plenty of free space but still be overloaded with reads and writes.
 
 ### Load Average
+
 Load average shows how many processes are running or waiting to run.
 
 It is shown over three time periods:
@@ -170,7 +178,7 @@ It is shown over three time periods:
 
 Example:
 
-```text id="dyu1ek"
+```text
 load average: 0.42, 0.35, 0.30
 ```
 
@@ -182,17 +190,18 @@ However, load average can also increase when processes are waiting on disk I/O, 
 
 So high load means:
 
-```text id="nr0p02"
+```text
 There is work waiting.
 ```
 
 It does not always mean:
 
-```text id="jbf7md"
+```text
 The CPU is the bottleneck.
 ```
 
 ### Monitoring Workflow
+
 A good performance investigation follows a structured path.
 
 1. Check load average
@@ -206,7 +215,7 @@ A good performance investigation follows a structured path.
 
 Useful starting commands:
 
-```bash id="pre5ay"
+```bash
 uptime
 top
 free -h
@@ -218,11 +227,12 @@ ps aux --sort=-%mem | head
 ```
 
 ### `top`
+
 The `top` command provides a live view of system activity.
 
 Run:
 
-```bash id="vtptz2"
+```bash
 top
 ```
 
@@ -236,7 +246,8 @@ The system summary shows CPU, memory, swap, load average, task count, and uptime
 The process list shows running processes, usually sorted by CPU usage.
 
 ### Example `top` Output
-```text id="j4zueo"
+
+```text
 top - 15:00:02 up 1 day,  4:03,  2 users,  load average: 0.42, 0.35, 0.30
 Tasks: 180 total,   2 running, 178 sleeping,   0 stopped,   0 zombie
 %Cpu(s):  5.1 us,  2.2 sy,  0.0 ni, 92.1 id,  0.4 wa,  0.0 hi,  0.2 si,  0.0 st
@@ -249,6 +260,7 @@ KiB Swap:  2048000 total,  1755000 free,   293000 used,  1234567 avail Mem
 ```
 
 ### Understanding the Top Summary
+
 - 15:00:02                 current time
 - up 1 day, 4:03           system uptime
 - 2 users                  logged-in users
@@ -259,6 +271,7 @@ KiB Swap:  2048000 total,  1755000 free,   293000 used,  1234567 avail Mem
 - KiB Swap                 swap summary
 
 ### Understanding CPU Fields in `top`
+
 - us   user CPU time
 - sy   system/kernel CPU time
 - ni   nice-priority process CPU time
@@ -270,7 +283,7 @@ KiB Swap:  2048000 total,  1755000 free,   293000 used,  1234567 avail Mem
 
 Example:
 
-```text id="ny021c"
+```text
 %Cpu(s): 5.1 us, 2.2 sy, 92.1 id, 0.4 wa
 ```
 
@@ -281,6 +294,7 @@ Interpretation:
 - The system is not CPU-bound in this sample.
 
 ### Understanding Process Columns in `top`
+
 - PID       process ID
 - USER      user running the process
 - PR        kernel scheduling priority
@@ -303,6 +317,7 @@ Important process states:
 - Z   zombie
 
 ### Useful `top` Keys
+
 - Shift + M   sort by memory usage
 - Shift + P   sort by CPU usage
 - k           kill a process
@@ -312,41 +327,43 @@ Important process states:
 
 To monitor one process:
 
-```bash id="fp8n5b"
+```bash
 top -p 1234
 ```
 
 ### `htop`
+
 `htop` is an interactive and more user-friendly alternative to `top`.
 
 It shows CPU bars, memory bars, process lists, searching, filtering, tree view, and easier process management.
 
 Install it on Debian or Ubuntu:
 
-```bash id="evj3o8"
+```bash
 sudo apt install htop
 ```
 
 On Red Hat or CentOS:
 
-```bash id="evxcje"
+```bash
 sudo yum install htop
 ```
 
 On Fedora:
 
-```bash id="ovq6f4"
+```bash
 sudo dnf install htop
 ```
 
 Run:
 
-```bash id="tfiy8g"
+```bash
 htop
 ```
 
 ### Example `htop` View
-```text id="rthhrz"
+
+```text
 1  [||||||||||| 34.5%]   Tasks: 65, 132 thr; 2 running
 2  [||||||||||  28.7%]   Load average: 1.23 0.97 0.88
 Mem[|||||||||||||||1.45G/3.84G]
@@ -368,11 +385,12 @@ Interpretation:
 `htop` is useful when you want to interactively inspect and manage processes.
 
 ### `free`
+
 The `free` command shows memory and swap usage.
 
 Run:
 
-```bash id="nz0vbn"
+```bash
 free -h
 ```
 
@@ -380,13 +398,14 @@ The `-h` option shows human-readable units.
 
 Example output:
 
-```text id="opk3x7"
+```text
               total        used        free      shared  buff/cache   available
 Mem:            8G         3.2G        2.1G       101M      2.7G        4.4G
 Swap:           2G         1.2G        800M
 ```
 
 ### Understanding `free -h`
+
 Important memory fields:
 
 - total        total physical RAM
@@ -412,13 +431,14 @@ Interpretation of the example:
 
 The most important field for practical memory pressure is usually:
 
-```text id="c7ge1u"
+```text
 available
 ```
 
 If `available` is low and swap activity is high, the system may be under memory pressure.
 
 ### RSS and VSZ
+
 Linux process memory can be confusing because there are multiple memory measurements.
 
 Two important fields are:
@@ -427,19 +447,21 @@ Two important fields are:
 - VSZ
 
 ### RSS
+
 RSS means Resident Set Size.
 
 It is the amount of physical RAM currently used by the process.
 
 RSS is usually more useful than VSZ when asking:
 
-```text id="up9h75"
+```text
 How much real RAM is this process using right now?
 ```
 
 However, RSS includes shared memory pages, so adding RSS values for many processes can overcount total RAM.
 
 ### VSZ
+
 VSZ means Virtual Set Size, or virtual memory size.
 
 It includes memory that may be:
@@ -456,6 +478,7 @@ VSZ can look large even when actual RAM use is modest.
 A common mistake is to treat VSZ as real RAM usage. For physical RAM pressure, check RSS and `%MEM`.
 
 ### Example RSS and VSZ Calculation
+
 Suppose a process currently uses:
 
 - 450K binary code in RAM
@@ -464,7 +487,7 @@ Suppose a process currently uses:
 
 RSS is:
 
-```text id="zo29xb"
+```text
 450K + 800K + 120K = 1370K
 ```
 
@@ -476,22 +499,23 @@ Suppose the process has virtually allocated:
 
 VSZ is:
 
-```text id="ec5ssf"
+```text
 600K + 2200K + 150K = 2950K
 ```
 
 The process has a larger virtual memory footprint than physical resident memory.
 
 ### Finding Top Memory Processes
+
 To show processes sorted by real physical memory percentage:
 
-```bash id="d7rb32"
+```bash
 ps aux --sort=-%mem | head -n 10
 ```
 
 Example output:
 
-```text id="vrrsl0"
+```text
 USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
 mysql     5678 12.0 18.5 2540000 1500000 ?     Sl   10:00   3:20 mysqld
 java      1234 25.0 15.0 4096000 1210000 ?     Sl   09:50   8:10 java
@@ -506,7 +530,7 @@ Interpretation:
 
 To sort by VSZ instead:
 
-```bash id="p0y0ms"
+```bash
 ps -e -o pid,vsz,rss,comm --sort=-vsz | head -n 10
 ```
 
@@ -516,15 +540,16 @@ Important note:
 - Sorting by RSS or %MEM is usually better for real RAM pressure.
 
 ### Checking Memory for a Specific Process
+
 Example for `nginx`:
 
-```bash id="kd6hty"
+```bash
 ps -o %mem,rss,vsz,cmd -C nginx
 ```
 
 Example output:
 
-```text id="zp5r0j"
+```text
 %MEM   RSS     VSZ     CMD
  2.3   12000   250000  nginx: master process /usr/sbin/nginx
  1.2    6000   150000  nginx: worker process
@@ -538,28 +563,30 @@ Interpretation:
 - VSZ is larger than RSS because it includes virtual mappings.
 
 ### `vmstat`
+
 `vmstat` shows process, memory, swap, disk I/O, system, and CPU statistics.
 
 Run a single snapshot:
 
-```bash id="fo9iiw"
+```bash
 vmstat
 ```
 
 Run updates every second:
 
-```bash id="dws8gx"
+```bash
 vmstat 1
 ```
 
 Run three samples five seconds apart:
 
-```bash id="h2jnu1"
+```bash
 vmstat 5 3
 ```
 
 ### Example `vmstat` Output
-```text id="u6x7iz"
+
+```text
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  0      0 2723288 844288 5670316    0    0    14    42   49   39  7  5 88  0  0
@@ -596,17 +623,18 @@ Interpretation of this example:
 - I/O wait is 0.
 
 ### `uptime`
+
 `uptime` is a quick way to check how long the system has been running and what the load average is.
 
 Run:
 
-```bash id="gw2p8j"
+```bash
 uptime
 ```
 
 Example output:
 
-```text id="bcuqho"
+```text
 15:00:02 up 1 day, 4:03, 2 users, load average: 0.42, 0.35, 0.30
 ```
 
@@ -617,17 +645,18 @@ Interpretation:
 - Load average is low.
 
 ### `iostat`
+
 `iostat` reports CPU and disk I/O statistics.
 
 Install it through `sysstat` if needed:
 
-```bash id="jqm6z2"
+```bash
 sudo apt install sysstat
 ```
 
 Run:
 
-```bash id="l3fr5y"
+```bash
 iostat -xz 1
 ```
 
@@ -643,7 +672,7 @@ Important disk fields:
 
 Example output:
 
-```text id="b3eqq1"
+```text
 Device            r/s     w/s     rkB/s     wkB/s   await  aqu-sz  %util
 sda              1.00    2.00     50.00    100.00    2.20    0.01   0.15
 ```
@@ -656,17 +685,18 @@ Interpretation:
 - There is no disk I/O bottleneck in this sample.
 
 ### `iotop`
+
 `iotop` shows disk I/O by process.
 
 Install:
 
-```bash id="q3gryu"
+```bash
 sudo apt install iotop
 ```
 
 Run:
 
-```bash id="ee7q0e"
+```bash
 sudo iotop -o
 ```
 
@@ -674,7 +704,7 @@ The `-o` option shows only processes currently doing I/O.
 
 Example output:
 
-```text id="vj3j0e"
+```text
 Total DISK READ: 100.00 K/s | Total DISK WRITE: 50.00 K/s
 PID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
 7890 be/4  user      50.00 K/s   25.00 K/s  0.00 %  10.00 %  process_a
@@ -689,17 +719,18 @@ Interpretation:
 `iotop` is useful when you know the disk is busy and want to know which process is responsible.
 
 ### `df` and `du`
+
 `df` shows filesystem space usage.
 
 Run:
 
-```bash id="nlm8iq"
+```bash
 df -h
 ```
 
 Example:
 
-```text id="xmzam2"
+```text
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/sda3       100G   92G  8.0G  92% /
 ```
@@ -713,13 +744,13 @@ Interpretation:
 
 Example:
 
-```bash id="wn5jry"
+```bash
 sudo du -h --max-depth=1 /var | sort -h
 ```
 
 Example output:
 
-```text id="mx40v9"
+```text
 100M    /var/tmp
 2.0G    /var/log
 12G     /var/lib
@@ -732,52 +763,55 @@ Interpretation:
 - Investigate that directory next.
 
 ### Scenario 1: Simulate a CPU Bottleneck
-#### Goal
+
 Create high CPU usage and verify it with `top`, `htop`, and `vmstat`.
 
 #### Simulate the Bottleneck
+
 Install `stress-ng` if needed:
 
-```bash id="bufw6s"
+```bash
 sudo apt install stress-ng
 ```
 
 Run a CPU stress test:
 
-```bash id="tjyv6d"
+```bash
 stress-ng --cpu 4 --timeout 60s
 ```
 
 This starts four CPU workers for 60 seconds.
 
 #### Check with `top`
-```bash id="puzgyi"
+
+```bash
 top
 ```
 
 Example output:
 
-```text id="y8crl6"
+```text
 %Cpu(s): 96.0 us,  3.0 sy,  0.0 ni,  1.0 id,  0.0 wa
 
 PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM COMMAND
 4321 user      20   0   50000   8000   2000 R 399.0  0.1 stress-ng-cpu
 ```
 
-#### Interpretation
+Interpretation:
 - CPU user time is very high.
 - Idle time is almost zero.
 - stress-ng is using about four CPU cores.
 - I/O wait is zero, so this is not a disk bottleneck.
 
 #### Check with `vmstat`
-```bash id="w8tu18"
+
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="rgltn5"
+```text
 r  b   swpd   free   buff  cache   si   so    bi    bo   in    cs us sy id wa st
 5  0      0 800000  20000 500000    0    0     0     1 3000  6000 95  4  1  0  0
 ```
@@ -790,6 +824,7 @@ Interpretation:
 - This confirms CPU saturation.
 
 #### Possible Fixes
+
 - stop or optimize the CPU-heavy process
 - reduce worker count
 - schedule the job for off-peak hours
@@ -798,50 +833,53 @@ Interpretation:
 
 Example:
 
-```bash id="won0xc"
+```bash
 nice -n 10 command
 ```
 
 ### Scenario 2: Simulate Memory Pressure
-#### Goal
+
 Create memory pressure and observe it with `free`, `top`, and `vmstat`.
 
 #### Simulate the Bottleneck
+
 Run:
 
-```bash id="cdtv02"
+```bash
 stress-ng --vm 2 --vm-bytes 70% --timeout 60s
 ```
 
 This starts memory workers that allocate memory.
 
 #### Check with `free`
-```bash id="jdt0z3"
+
+```bash
 free -h
 ```
 
 Example output:
 
-```text id="e3ei5y"
+```text
               total        used        free      shared  buff/cache   available
 Mem:            8.0G        6.9G        250M       120M        850M        600M
 Swap:           2.0G        100M        1.9G
 ```
 
-#### Interpretation
+Interpretation:
 - Used memory is high.
 - Available memory is low.
 - Swap has started to be used.
 - The system is under memory pressure.
 
 #### Check with `vmstat`
-```bash id="u9hlv7"
+
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="du9zog"
+```text
 r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
 2  1 200000 100000  12000 200000  100  300  800  1500 2500 7000 30 15 45 10  0
 ```
@@ -853,6 +891,7 @@ Interpretation:
 - The root issue is memory pressure.
 
 #### Possible Fixes
+
 - stop memory-heavy processes
 - reduce application memory limits
 - add RAM
@@ -861,29 +900,31 @@ Interpretation:
 - avoid running too many memory-heavy jobs together
 
 ### Scenario 3: Simulate Swap Thrashing
-#### Goal
+
 Show how heavy swap activity can slow a system.
 
 #### Simulate Carefully
+
 Use a stronger memory test only on a lab system:
 
-```bash id="qam9s0"
+```bash
 stress-ng --vm 4 --vm-bytes 90% --timeout 60s
 ```
 
 #### Check with `vmstat`
-```bash id="ghzvd6"
+
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="hhopcd"
+```text
 r  b   swpd    free   buff  cache    si    so     bi     bo   in    cs us sy id wa st
 3  6 1500000  50000  8000  90000  5000  7000  12000  18000 5000 15000 15 20 20 45  0
 ```
 
-#### Interpretation
+Interpretation:
 - swpd is high.
 - si and so are very high.
 - b is high, meaning blocked processes.
@@ -893,6 +934,7 @@ r  b   swpd    free   buff  cache    si    so     bi     bo   in    cs us sy id 
 The system may feel frozen because it is constantly moving memory pages between RAM and disk.
 
 #### Possible Fixes
+
 - reduce memory load immediately
 - stop the offending process
 - add RAM
@@ -901,19 +943,20 @@ The system may feel frozen because it is constantly moving memory pages between 
 - review swap configuration
 
 ### Scenario 4: Simulate Disk I/O Bottleneck
-#### Goal
+
 Create heavy disk writes and verify them with `iostat`, `iotop`, and `vmstat`.
 
 #### Simulate the Bottleneck
+
 Install tools:
 
-```bash id="snv1c0"
+```bash
 sudo apt install fio sysstat iotop
 ```
 
 Run a safe file-based write test:
 
-```bash id="f16j50"
+```bash
 mkdir -p ~/perf-lab
 
 fio --name=write-test \
@@ -927,18 +970,19 @@ fio --name=write-test \
 ```
 
 #### Check with `iostat`
-```bash id="r4i4vw"
+
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="n7dfgz"
+```text
 Device            r/s     w/s     rkB/s     wkB/s   await  aqu-sz  %util
 sda              0.00  350.00      0.00  350000.0   32.50   10.20  99.60
 ```
 
-#### Interpretation
+Interpretation:
 - w/s and wkB/s are high.
 - await is elevated.
 - aqu-sz shows queueing.
@@ -946,13 +990,14 @@ sda              0.00  350.00      0.00  350000.0   32.50   10.20  99.60
 - The disk is saturated by writes.
 
 #### Check with `iotop`
-```bash id="od5fuy"
+
+```bash
 sudo iotop -o
 ```
 
 Example output:
 
-```text id="t6zi6q"
+```text
 Total DISK WRITE: 340.00 M/s
 TID  PRIO USER DISK READ DISK WRITE IO> COMMAND
 5221 be/4 user 0.00 B/s  338.00 M/s 92% fio --name=write-test
@@ -964,6 +1009,7 @@ Interpretation:
 - The bottleneck is disk write I/O.
 
 #### Possible Fixes
+
 - move heavy writes to off-peak hours
 - use ionice for background jobs
 - move workload to faster storage
@@ -972,60 +1018,62 @@ Interpretation:
 
 Example:
 
-```bash id="bgj4eo"
+```bash
 ionice -c3 backup-command
 ```
 
 ### Scenario 5: Simulate High Disk Space Usage
-#### Goal
+
 Create a nearly full filesystem in a safe test directory and diagnose it.
 
 #### Simulate the Problem
+
 Create a large test file:
 
-```bash id="zlrt2k"
+```bash
 mkdir -p ~/perf-lab
 fallocate -l 1G ~/perf-lab/bigfile.img
 ```
 
 Check disk usage:
 
-```bash id="ck8v5c"
+```bash
 du -sh ~/perf-lab
 ```
 
 Example output:
 
-```text id="tblj7o"
+```text
 1.1G    /home/user/perf-lab
 ```
 
 Check filesystem space:
 
-```bash id="zug4ln"
+```bash
 df -h ~
 ```
 
 Example output:
 
-```text id="lx8skx"
+```text
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/sda3       20G   18G  2.0G  90% /
 ```
 
-#### Interpretation
+Interpretation:
 - The filesystem is 90% full.
 - The test directory contributes about 1.1 GB.
 - If this were production, the system could soon fail writes or logs.
 
 #### Find Large Directories
-```bash id="mzm16y"
+
+```bash
 du -h --max-depth=1 ~ | sort -h
 ```
 
 Example output:
 
-```text id="pz3npy"
+```text
 100M    /home/user/Documents
 500M    /home/user/Downloads
 1.1G    /home/user/perf-lab
@@ -1034,66 +1082,70 @@ Example output:
 
 Interpretation:
 
-```text id="vwlmbf"
+```text
 perf-lab is one of the largest directories under the home directory.
 ```
 
 #### Clean Up
-```bash id="x7kzlr"
+
+```bash
 rm -rf ~/perf-lab
 ```
 
 ### Scenario 6: Simulate High Load Average from CPU
-#### Goal
+
 Understand load average when CPU is the bottleneck.
 
 #### Simulate
-```bash id="e2xquy"
+
+```bash
 stress-ng --cpu 4 --timeout 120s
 ```
 
 #### Check Load
-```bash id="ky644j"
+
+```bash
 uptime
 ```
 
 Example output:
 
-```text id="nep039"
+```text
 15:30:00 up 2 days,  1 user,  load average: 4.20, 2.10, 1.00
 ```
 
 Check CPU count:
 
-```bash id="w4jf1n"
+```bash
 nproc
 ```
 
 Example output:
 
-```text id="rvro8p"
+```text
 4
 ```
 
-#### Interpretation
+Interpretation:
 - The 1-minute load is about 4.20.
 - The system has 4 CPUs.
 - This indicates the CPU is near full utilization.
 
 Confirm with `top`:
 
-```text id="yxjzm8"
+```text
 High us, low id, low wa = CPU-bound load.
 ```
 
 ### Scenario 7: Simulate High Load Average from Disk Wait
-#### Goal
+
 Show that high load can come from I/O wait, not just CPU work.
 
 #### Simulate
+
 Run a disk-heavy workload:
 
-```bash id="cr6p4v"
+```bash
 fio --name=randwrite-test \
     --directory=~/perf-lab \
     --size=1G \
@@ -1107,7 +1159,8 @@ fio --name=randwrite-test \
 ```
 
 #### Check
-```bash id="sfs1ve"
+
+```bash
 uptime
 vmstat 1
 iostat -xz 1
@@ -1115,75 +1168,79 @@ iostat -xz 1
 
 Example `vmstat` output:
 
-```text id="orsot8"
+```text
 r  b   swpd   free   buff  cache   si   so    bi    bo   in    cs us sy id wa st
 1  8      0 500000  20000 700000    0    0     0 75000 3000 9000  5  8 15 72  0
 ```
 
 Example `iostat` output:
 
-```text id="j8we8y"
+```text
 Device            r/s     w/s    rkB/s    wkB/s   await  aqu-sz  %util
 sda              0.00  5200.00   0.00  20800.0   48.30   25.60  99.90
 ```
 
-#### Interpretation
+Interpretation:
 - b is high, meaning blocked processes.
 - wa is high, meaning CPU is waiting for I/O.
 - Disk %util is near 100%.
 - This high load is caused by disk I/O wait, not CPU computation.
 
 ### Scenario 8: Identify a Memory-Heavy Process
-#### Goal
+
 Find which process is consuming RAM.
 
 #### Simulate
+
 Start a memory workload:
 
-```bash id="ejzptl"
+```bash
 stress-ng --vm 1 --vm-bytes 1G --timeout 120s
 ```
 
 #### Check with `ps`
-```bash id="xw9p4i"
+
+```bash
 ps aux --sort=-%mem | head -n 10
 ```
 
 Example output:
 
-```text id="vcs44s"
+```text
 USER       PID %CPU %MEM    VSZ     RSS COMMAND
 user      7001 80.0 12.5 1200000 1024000 stress-ng-vm
 mysql     5678 10.0  8.0 2500000  650000 mysqld
 ```
 
-#### Interpretation
+Interpretation:
 - stress-ng-vm is using the most physical RAM.
 - RSS is about 1 GB.
 - This process is responsible for memory pressure.
 
 #### Check Specific Process
-```bash id="c82hjp"
+
+```bash
 ps -o pid,%mem,rss,vsz,cmd -p 7001
 ```
 
 Example:
 
-```text id="fi2ok8"
+```text
 PID  %MEM     RSS     VSZ CMD
 7001 12.5 1024000 1200000 stress-ng-vm
 ```
 
 ### Scenario 9: Simulate a Zombie Process
-#### Goal
+
 Understand zombie processes and how to identify them.
 
 A zombie process has finished running but still has an entry in the process table because its parent has not collected its exit status.
 
 #### Simulate with a Small Script
+
 Create a file:
 
-```bash id="ekw3fn"
+```bash
 cat > /tmp/make-zombie.py <<'EOF'
 import os
 import time
@@ -1198,23 +1255,23 @@ EOF
 
 Run it:
 
-```bash id="g835mj"
+```bash
 python3 /tmp/make-zombie.py
 ```
 
 In another terminal:
 
-```bash id="p1ypq5"
+```bash
 ps -eo pid,ppid,state,cmd | grep ' Z '
 ```
 
 Example output:
 
-```text id="i9hwtf"
+```text
 8123  8122 Z [python3] <defunct>
 ```
 
-#### Interpretation
+Interpretation:
 - State Z means zombie.
 - The child process exited.
 - The parent process has not collected it yet.
@@ -1222,16 +1279,18 @@ Example output:
 - Many zombies may indicate a broken parent process.
 
 #### Fix
+
 Usually fix or restart the parent process.
 
 In this simulation, wait 60 seconds or stop the parent script.
 
 ### Scenario 10: Script an Alert for Disk Usage Above 80%
-#### Goal
+
 Create a simple script that warns when a filesystem is too full and lists the largest directories.
 
 #### Script
-```bash id="rekcr8"
+
+```bash
 cat > ~/check-disk-usage.sh <<'EOF'
 #!/bin/bash
 
@@ -1255,13 +1314,13 @@ chmod +x ~/check-disk-usage.sh
 
 Run:
 
-```bash id="c6tobp"
+```bash
 ~/check-disk-usage.sh
 ```
 
 Example output:
 
-```text id="lrh43d"
+```text
 WARNING: / is 87% full
 
 Top directories under /:
@@ -1272,17 +1331,18 @@ Top directories under /:
 18G     /
 ```
 
-#### Interpretation
+Interpretation:
 - The root filesystem is above the threshold.
 - The largest top-level directories are listed.
 - Investigate /var, /usr, or /home depending on what is unexpectedly large.
 
 ### Scenario 11: Gather Hourly Performance Logs
-#### Goal
+
 Collect simple performance statistics over time.
 
 #### Create a Script
-```bash id="e2dowm"
+
+```bash
 cat > ~/perf-snapshot.sh <<'EOF'
 #!/bin/bash
 
@@ -1309,52 +1369,55 @@ chmod +x ~/perf-snapshot.sh
 
 Run manually:
 
-```bash id="i4t2ga"
+```bash
 ~/perf-snapshot.sh
 ```
 
 Add to cron:
 
-```bash id="w711cj"
+```bash
 crontab -e
 ```
 
 Add:
 
-```text id="fi18nn"
+```text
 0 * * * * /home/user/perf-snapshot.sh
 ```
 
-#### Interpretation
+Interpretation:
 - The script records a basic hourly snapshot.
 - After several days, compare timestamps to identify peak usage times.
 
 ### Performance Troubleshooting Decision Guide
+
 Use this guide to interpret common patterns.
 
 #### Pattern: High CPU, Low I/O Wait
+
 Example:
 
-```text id="e66xbe"
+```text
 top: us = 95%, id = 1%, wa = 0%
 ```
 
 Likely cause:
 
-```text id="qs2314"
+```text
 CPU-bound workload
 ```
 
 Check:
 
-```bash id="z57old"
+```bash
 ps aux --sort=-%cpu | head
 ```
 
 #### Pattern: High I/O Wait
+
 Example:
 
-```text id="fwz0i9"
+```text
 top: wa = 70%
 vmstat: b is high
 iostat: %util is 99%
@@ -1362,41 +1425,43 @@ iostat: %util is 99%
 
 Likely cause:
 
-```text id="u5y9va"
+```text
 disk I/O bottleneck
 ```
 
 Check:
 
-```bash id="kkptoc"
+```bash
 iostat -xz 1
 sudo iotop -o
 ```
 
 #### Pattern: Low Available Memory and Swap Activity
+
 Example:
 
-```text id="cd1mb0"
+```text
 free: available memory is low
 vmstat: si and so are high
 ```
 
 Likely cause:
 
-```text id="xalrj3"
+```text
 memory pressure or memory leak
 ```
 
 Check:
 
-```bash id="m8oh5x"
+```bash
 ps aux --sort=-%mem | head
 ```
 
 #### Pattern: High Load but CPU Idle
+
 Example:
 
-```text id="eav2eu"
+```text
 uptime: load average high
 top: CPU mostly idle
 vmstat: b high, wa high
@@ -1404,41 +1469,43 @@ vmstat: b high, wa high
 
 Likely cause:
 
-```text id="z75ltu"
+```text
 processes blocked on I/O
 ```
 
 Check:
 
-```bash id="qz46d9"
+```bash
 vmstat 1
 iostat -xz 1
 ps -eo pid,stat,cmd | awk '$2 ~ /D/ {print}'
 ```
 
 #### Pattern: Disk Almost Full
+
 Example:
 
-```text id="wq906p"
+```text
 df -h: Use% above 90%
 ```
 
 Likely cause:
 
-```text id="v9757k"
+```text
 logs, cache, backups, database files, or user data consuming space
 ```
 
 Check:
 
-```bash id="rzg5gp"
+```bash
 sudo du -xhd1 / | sort -h
 ```
 
 ### Useful Command Summary
+
 General:
 
-```bash id="j6fpir"
+```bash
 uptime
 top
 htop
@@ -1448,14 +1515,14 @@ free -h
 
 CPU:
 
-```bash id="uxljn9"
+```bash
 ps aux --sort=-%cpu | head
 top -p PID
 ```
 
 Memory:
 
-```bash id="r0lozr"
+```bash
 free -h
 ps aux --sort=-%mem | head
 ps -o pid,%mem,rss,vsz,cmd -p PID
@@ -1463,14 +1530,14 @@ ps -o pid,%mem,rss,vsz,cmd -p PID
 
 Disk space:
 
-```bash id="z8v8s9"
+```bash
 df -h
 du -h --max-depth=1 DIRECTORY | sort -h
 ```
 
 Disk I/O:
 
-```bash id="kpyueq"
+```bash
 iostat -xz 1
 sudo iotop -o
 vmstat 1
@@ -1478,20 +1545,21 @@ vmstat 1
 
 Process states:
 
-```bash id="kmmhxt"
+```bash
 ps -eo pid,ppid,state,cmd
 ps -eo pid,stat,cmd | awk '$2 ~ /D/ {print}'
 ```
 
 Stress testing in labs:
 
-```bash id="k6ulof"
+```bash
 stress-ng --cpu 4 --timeout 60s
 stress-ng --vm 2 --vm-bytes 70% --timeout 60s
 fio --name=write-test --directory=~/perf-lab --size=1G --rw=write --bs=1M --direct=1 --runtime=60 --time_based
 ```
 
 ### Safe Lab Rules
+
 Before simulating bottlenecks:
 
 - Do not run heavy tests on production systems.
@@ -1504,7 +1572,7 @@ Before simulating bottlenecks:
 
 Clean up test data:
 
-```bash id="t8l1bv"
+```bash
 rm -rf ~/perf-lab
 ```
 

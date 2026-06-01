@@ -793,7 +793,6 @@ INFO: Retrying connection
 - The `-C 1` option displays the matching line containing 'timeout' and one line before and after it.
 - This option provides a broader view of the situation surrounding the match, showing the context on both sides.
 
-
 ### Excluding and Including Files in Searches
 
 When performing recursive searches, you might want to include or exclude certain files or file types.
@@ -843,7 +842,6 @@ Breaking down the command:
 | `grep -C 2`                  | Shows two lines of context before and after each match.                                              |
 | `{}`                          | Placeholder for each file found by `find`, passed to `grep`.                                         |
 | `+`                          | Appends all found files to a single `grep` command, optimizing performance.                          |
-
 
 Suppose you have the following `.log` files within `/var/log/`:
 

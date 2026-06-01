@@ -122,7 +122,7 @@ sudo mkfs.ext4 /dev/sda1
 ```
 
 This action prepares the partition for use by creating an **ext4** filesystem structure on it.
-  
+
 #### Extended and Logical Partitions
 
 Extended partitions are a workaround for the MBR limitation of four primary partitions. An extended partition acts as a container for logical partitions, allowing you to create more than four partitions on a disk.
@@ -460,7 +460,6 @@ sudo parted /dev/sda
 ```
 
 II. Set Disk Label (Optional):
-
 
 ```bash
 mklabel gpt

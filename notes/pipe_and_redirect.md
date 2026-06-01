@@ -61,7 +61,7 @@ The pipe (`|`) character is an essential tool that allows for data to flow from 
 ```
 
 #### Example 1: Filtering User Details
-   
+
 Suppose you want to see details about a person named "user_name" using the `w` command and subsequently modify "user_name" to "admin". This can be done with:
 
 ```bash
@@ -311,7 +311,7 @@ Let's take a look at a few examples:
 I. **Combine and sort the content of file1.txt and file2.txt, and redirect the sorted output to sorted.txt:**
 
 This command uses the `sort` utility to combine the contents of both `file1.txt` and `file2.txt` while sorting all the lines alphabetically (or numerically, if options are provided). By using the redirection operator `>`, the sorted output is saved into a new file called `sorted.txt`.  
- 
+
 Suppose **file1.txt** contains:  
 
 ```
@@ -344,7 +344,7 @@ cherry
 II. **Eliminate any adjacent duplicate lines from sorted.txt and save the result in deduped.txt:**
 
 After sorting, duplicate lines become adjacent. The `uniq` command then reads the sorted file and removes any consecutive duplicate lines. The output, which has duplicates eliminated, is redirected into a new file called `deduped.txt`. This is particularly useful when you need a list where each line is unique.  
-  
+
 Given the **sorted.txt** content from the previous step:  
 
 ```
@@ -371,7 +371,7 @@ cherry
 III. **Display lines containing the word "error" from deduped.txt:**
 
 The `grep` command is used to search within **deduped.txt** for lines that include the word "error". It is case-sensitive by default, so only lines with exactly "error" (all lowercase) will be matched. The matched lines are then printed to the terminal.  
-   
+
 If **deduped.txt** contains:  
 
 ```
@@ -399,7 +399,7 @@ error: file not found
 IV. **Show lines from deduped.txt that contain the pattern "error", along with the line number:**
 
 Using `awk`, this command searches for lines containing "error" in **deduped.txt** and prints the line number (`NR`, which represents the current record or line number) followed by the entire line. This gives you context on where each occurrence is located in the file.  
-  
+
 Consider **deduped.txt** with the following content:  
 
 ```
@@ -425,7 +425,7 @@ Expected output:
 V. **Replace all occurrences of 'old_word' with 'new_word' in file.txt:**
 
 The `sed` (Stream Editor) command in this example performs a substitution. The command will search through **file.txt** for every instance of `old_word` and replace it with `new_word`. The `g` flag at the end ensures that all occurrences on each line are replaced. Note that this command writes the changes to standard output; to update the file itself, you may need to use the `-i` (in-place) option depending on your shell or operating system.  
-  
+
 Assume **file.txt** contains:  
 
 ```

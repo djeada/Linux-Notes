@@ -39,7 +39,6 @@ OS manages:
 - CPU (Scheduling)
 - Networking
 
-
 Operating systems are the fundamental layer that enables communication between computer hardware and user applications, evolving over time through a rich interplay of design philosophies and technological innovations. The Unix family, known for its modularity and robust design principles, has given rise to a diverse range of systems that embody both traditional and modern approaches to computing. Alongside this evolution, systems like Linux have emerged, driven by community collaboration and adaptability, offering a dynamic platform that continuously reshapes the computing landscape. In parallel, alternative paradigms, such as those seen in the Windows ecosystem, highlight different methodologies and priorities, collectively creating a broad and intricate tapestry of technologies that support everything from personal devices to complex enterprise infrastructures.
 
 ```

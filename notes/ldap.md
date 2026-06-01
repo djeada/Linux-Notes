@@ -58,7 +58,7 @@ All of these systems may need to know:
 
 LDAP allows this information to live in one central directory.
 
-```text id="d59bwr"
+```text
                  +--------------------+
                  |    LDAP Server     |
                  | ldap.example.com   |
@@ -120,7 +120,7 @@ Each entry contains attributes.
 
 For example, a user entry might contain:
 
-```text id="skb5ob"
+```text
 uid: jdoe
 cn: John Doe
 sn: Doe
@@ -131,7 +131,7 @@ homeDirectory: /home/jdoe
 
 The entry is the object. The attributes describe the object.
 
-```text id="b7dqaf"
+```text
 Entry:
 uid=jdoe,ou=users,dc=example,dc=com
 
@@ -150,7 +150,7 @@ It works like a full path to the entry.
 
 Example:
 
-```text id="qvhki6"
+```text
 uid=jdoe,ou=users,dc=example,dc=com
 ```
 
@@ -165,7 +165,7 @@ The DN is read from left to right as specific to general.
 
 A helpful comparison:
 
-```text id="m36wk3"
+```text
 Filesystem path:
 /home/users/jdoe
 
@@ -200,7 +200,7 @@ Meaning:
 
 LDAP stores entries in a hierarchy called the Directory Information Tree, or DIT.
 
-```text id="v9zqqa"
+```text
                     (Root)
                       |
            +----------+----------+
@@ -236,7 +236,7 @@ The base DN is the starting point for LDAP searches.
 
 For the domain `example.com`, the base DN is often:
 
-```text id="azy1ti"
+```text
 dc=example,dc=com
 ```
 
@@ -244,7 +244,7 @@ A search using this base can search everything under the example.com directory t
 
 A narrower search base might be:
 
-```text id="sgwptj"
+```text
 ou=users,dc=example,dc=com
 ```
 
@@ -283,7 +283,7 @@ That is important because a simple address-book-style LDAP user is not always en
 
 A basic informational user might look like this:
 
-```ldif id="snfevy"
+```ldif
 dn: uid=jdoe,ou=users,dc=example,dc=com
 objectClass: inetOrgPerson
 uid: jdoe
@@ -296,7 +296,7 @@ userPassword: {SSHA}encrypted_password_here
 
 For Linux authentication through NSS/PAM, a more complete user entry usually needs POSIX attributes:
 
-```ldif id="vcqj88"
+```ldif
 dn: uid=jdoe,ou=users,dc=example,dc=com
 objectClass: inetOrgPerson
 objectClass: posixAccount
@@ -327,7 +327,7 @@ Without POSIX attributes, `getent passwd jdoe` may not return a valid Linux acco
 
 A Linux-compatible group can use `posixGroup`.
 
-```ldif id="pl8n83"
+```ldif
 dn: cn=developers,ou=groups,dc=example,dc=com
 objectClass: posixGroup
 cn: developers
@@ -347,7 +347,7 @@ It is a plain text format used to add, modify, delete, export, and import LDAP e
 
 Example LDIF entry:
 
-```ldif id="fip7c7"
+```ldif
 dn: ou=users,dc=example,dc=com
 objectClass: organizationalUnit
 ou: users
@@ -382,7 +382,7 @@ An authenticated bind provides a DN and password.
 
 Example:
 
-```bash id="n1jw60"
+```bash
 ldapwhoami -x -D "uid=jdoe,ou=users,dc=example,dc=com" -W
 ```
 
@@ -394,7 +394,7 @@ Options:
 
 Example output:
 
-```text id="t2te53"
+```text
 Enter LDAP Password:
 dn:uid=jdoe,ou=users,dc=example,dc=com
 ```
@@ -410,7 +410,7 @@ Search retrieves entries matching a filter.
 
 Example:
 
-```bash id="o1k3qe"
+```bash
 ldapsearch -x -b "dc=example,dc=com" "(uid=jdoe)"
 ```
 
@@ -422,7 +422,7 @@ Options:
 
 Example output:
 
-```text id="piuic3"
+```text
 dn: uid=jdoe,ou=users,dc=example,dc=com
 uid: jdoe
 cn: John Doe
@@ -447,13 +447,13 @@ The add operation creates a new entry.
 
 Example:
 
-```bash id="r3q2gh"
+```bash
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f user.ldif
 ```
 
 Example output:
 
-```text id="tvz3fj"
+```text
 adding new entry "uid=jdoe,ou=users,dc=example,dc=com"
 ```
 
@@ -467,7 +467,7 @@ The modify operation changes an existing entry.
 
 Example modify file:
 
-```ldif id="hinbel"
+```ldif
 dn: uid=jdoe,ou=users,dc=example,dc=com
 changetype: modify
 replace: mail
@@ -476,13 +476,13 @@ mail: john.doe@example.com
 
 Apply it:
 
-```bash id="paqdk5"
+```bash
 ldapmodify -x -D "cn=admin,dc=example,dc=com" -W -f modify_jdoe.ldif
 ```
 
 Example output:
 
-```text id="w4fzti"
+```text
 modifying entry "uid=jdoe,ou=users,dc=example,dc=com"
 ```
 
@@ -496,7 +496,7 @@ The delete operation removes an entry.
 
 Example:
 
-```bash id="mhb2j3"
+```bash
 ldapdelete -x -D "cn=admin,dc=example,dc=com" -W \
 "uid=jdoe,ou=users,dc=example,dc=com"
 ```
@@ -514,37 +514,37 @@ Search filters control which entries are returned.
 
 Basic equality filter:
 
-```text id="bbl4l9"
+```text
 (uid=jdoe)
 ```
 
 Find entries with an email address:
 
-```text id="acm1hk"
+```text
 (mail=*)
 ```
 
 AND filter:
 
-```text id="ahqax6"
+```text
 (&(objectClass=person)(mail=*))
 ```
 
 OR filter:
 
-```text id="creytb"
+```text
 (|(uid=alice)(uid=bob))
 ```
 
 NOT filter:
 
-```text id="bprtim"
+```text
 (!(uid=jdoe))
 ```
 
 Find users with usernames beginning with `a`:
 
-```text id="sjwnif"
+```text
 (uid=a*)
 ```
 
@@ -554,7 +554,7 @@ A search filter is one of the most important LDAP skills because almost every LD
 
 When LDAP is used for authentication, the client application usually asks LDAP whether a user’s credentials are valid.
 
-```text id="ul4smn"
+```text
 User                Client Host             LDAP Server
  |                       |                       |
  |---Login Request------>|                       |
@@ -576,14 +576,14 @@ Typical steps:
 
 On Debian or Ubuntu, install OpenLDAP and LDAP utilities:
 
-```bash id="f6owsp"
+```bash
 sudo apt-get update
 sudo apt-get install slapd ldap-utils
 ```
 
 If configuration prompts do not appear, run:
 
-```bash id="lg3v69"
+```bash
 sudo dpkg-reconfigure slapd
 ```
 
@@ -598,13 +598,13 @@ Typical configuration values:
 
 For the domain:
 
-```text id="mkkidq"
+```text
 example.com
 ```
 
 the base DN is:
 
-```text id="w1x84c"
+```text
 dc=example,dc=com
 ```
 
@@ -612,7 +612,7 @@ dc=example,dc=com
 
 Create `base.ldif`:
 
-```ldif id="xaoof0"
+```ldif
 dn: dc=example,dc=com
 objectClass: top
 objectClass: dcObject
@@ -633,13 +633,13 @@ ou: groups
 
 Load it:
 
-```bash id="aa8uxt"
+```bash
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f base.ldif
 ```
 
 Expected output:
 
-```text id="vlyngj"
+```text
 adding new entry "dc=example,dc=com"
 
 adding new entry "ou=users,dc=example,dc=com"
@@ -656,13 +656,13 @@ Interpretation:
 
 Use `slappasswd`:
 
-```bash id="ea3fe1"
+```bash
 slappasswd
 ```
 
 Example output:
 
-```text id="xd7nr5"
+```text
 {SSHA}r3wP3fH0QpK8vF5yBEXAMPLEHASH
 ```
 
@@ -674,7 +674,7 @@ Avoid storing plain text passwords in LDIF files.
 
 Create `jdoe.ldif`:
 
-```ldif id="c37fzx"
+```ldif
 dn: uid=jdoe,ou=users,dc=example,dc=com
 objectClass: inetOrgPerson
 objectClass: posixAccount
@@ -693,13 +693,13 @@ userPassword: {SSHA}encrypted_password_here
 
 Add it:
 
-```bash id="xczfda"
+```bash
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f jdoe.ldif
 ```
 
 Expected output:
 
-```text id="okaiu8"
+```text
 adding new entry "uid=jdoe,ou=users,dc=example,dc=com"
 ```
 
@@ -707,7 +707,7 @@ adding new entry "uid=jdoe,ou=users,dc=example,dc=com"
 
 Create `developers.ldif`:
 
-```ldif id="r8s1kq"
+```ldif
 dn: cn=developers,ou=groups,dc=example,dc=com
 objectClass: posixGroup
 cn: developers
@@ -717,13 +717,13 @@ memberUid: jdoe
 
 Add it:
 
-```bash id="pnif02"
+```bash
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f developers.ldif
 ```
 
 Expected output:
 
-```text id="otkgal"
+```text
 adding new entry "cn=developers,ou=groups,dc=example,dc=com"
 ```
 
@@ -731,13 +731,13 @@ adding new entry "cn=developers,ou=groups,dc=example,dc=com"
 
 Search for a user:
 
-```bash id="zueg3k"
+```bash
 ldapsearch -x -b "ou=users,dc=example,dc=com" "(uid=jdoe)" uid cn mail
 ```
 
 Example output:
 
-```text id="j4gwe5"
+```text
 dn: uid=jdoe,ou=users,dc=example,dc=com
 uid: jdoe
 cn: John Doe
@@ -748,13 +748,13 @@ mail: jdoe@example.com
 
 Search for a group:
 
-```bash id="donz8t"
+```bash
 ldapsearch -x -b "ou=groups,dc=example,dc=com" "(cn=developers)"
 ```
 
 Example output:
 
-```text id="uv301v"
+```text
 dn: cn=developers,ou=groups,dc=example,dc=com
 objectClass: posixGroup
 cn: developers
@@ -784,7 +784,7 @@ The system components are:
 
 Flow:
 
-```text id="yiu1gq"
+```text
 getent passwd jdoe
         |
         v
@@ -801,13 +801,13 @@ Linux sees jdoe as a valid user
 
 After configuring the client, test user lookup:
 
-```bash id="erl589"
+```bash
 getent passwd jdoe
 ```
 
 Expected output:
 
-```text id="xn2xit"
+```text
 jdoe:x:10000:10000:John Doe:/home/jdoe:/bin/bash
 ```
 
@@ -818,25 +818,25 @@ Interpretation:
 
 Check group information:
 
-```bash id="dxote4"
+```bash
 getent group developers
 ```
 
 Expected output:
 
-```text id="y0hnp8"
+```text
 developers:*:10000:jdoe
 ```
 
 Check user identity:
 
-```bash id="slen42"
+```bash
 id jdoe
 ```
 
 Expected output:
 
-```text id="qlb1y7"
+```text
 uid=10000(jdoe) gid=10000(developers) groups=10000(developers)
 ```
 
@@ -846,19 +846,19 @@ If LDAP users can authenticate but have no home directory, configure PAM to crea
 
 Install the needed module:
 
-```bash id="s079op"
+```bash
 sudo apt-get install libpam-mkhomedir
 ```
 
 Add to the PAM session configuration:
 
-```conf id="k01hd3"
+```conf
 session required pam_mkhomedir.so skel=/etc/skel umask=077
 ```
 
 Expected behavior:
 
-```text id="nfieyy"
+```text
 When jdoe logs in for the first time,
 Linux creates /home/jdoe automatically.
 ```
@@ -867,25 +867,25 @@ Linux creates /home/jdoe automatically.
 
 Test anonymous access:
 
-```bash id="ikzdeq"
+```bash
 ldapwhoami -x -H ldap://localhost
 ```
 
 Expected output:
 
-```text id="szp884"
+```text
 anonymous
 ```
 
 Test authenticated bind:
 
-```bash id="w4cfo2"
+```bash
 ldapwhoami -x -D "cn=admin,dc=example,dc=com" -W -H ldap://localhost
 ```
 
 Expected output:
 
-```text id="m3p4mi"
+```text
 dn:cn=admin,dc=example,dc=com
 ```
 
@@ -909,7 +909,7 @@ StartTLS begins as a normal LDAP connection and upgrades to TLS.
 
 Example StartTLS test:
 
-```bash id="xmfw04"
+```bash
 ldapwhoami -x -ZZ -D "uid=jdoe,ou=users,dc=example,dc=com" -W -H ldap://ldap.example.com
 ```
 
@@ -929,7 +929,7 @@ The client needs to trust the CA certificate.
 
 A conceptual TLS flow:
 
-```text id="e2mr9o"
+```text
 LDAP client
     |
     | StartTLS request
@@ -973,7 +973,7 @@ LDAP should be backed up regularly.
 
 A common backup command is:
 
-```bash id="ty8e50"
+```bash
 slapcat > ldap-backup.ldif
 ```
 
@@ -981,7 +981,7 @@ This exports the directory database to LDIF.
 
 A restore may use:
 
-```bash id="ig9svi"
+```bash
 slapadd -l ldap-backup.ldif
 ```
 
@@ -998,7 +998,7 @@ LDAP replication means keeping multiple LDAP servers synchronized.
 
 A typical layout:
 
-```text id="xos8qd"
+```text
               +-------------------+
               | Primary LDAP      |
               | ldap1.example.com |
@@ -1045,31 +1045,31 @@ Practice identifying a server availability problem.
 
 On a test LDAP server:
 
-```bash id="fhzbi6"
+```bash
 sudo systemctl stop slapd
 ```
 
 #### Check with `ldapwhoami`
 
-```bash id="vrcruh"
+```bash
 ldapwhoami -x -H ldap://localhost
 ```
 
 Example output:
 
-```text id="a8zucp"
+```text
 ldap_sasl_bind(SIMPLE): Can't contact LDAP server (-1)
 ```
 
 #### Check Service Status
 
-```bash id="te19ma"
+```bash
 systemctl status slapd
 ```
 
 Example output:
 
-```text id="picnwp"
+```text
 ● slapd.service - LSB: OpenLDAP standalone server
    Active: inactive (dead)
 ```
@@ -1082,19 +1082,19 @@ Interpretation:
 
 #### Fix
 
-```bash id="hc26vq"
+```bash
 sudo systemctl start slapd
 ```
 
 Verify:
 
-```bash id="cbdfie"
+```bash
 ldapwhoami -x -H ldap://localhost
 ```
 
 Expected output:
 
-```text id="ykgkv1"
+```text
 anonymous
 ```
 
@@ -1106,25 +1106,25 @@ Practice diagnosing connection target mistakes.
 
 Use the wrong port:
 
-```bash id="d84ff6"
+```bash
 ldapsearch -x -H ldap://localhost:1389 -b "dc=example,dc=com" "(objectClass=*)"
 ```
 
 Example output:
 
-```text id="zailxs"
+```text
 ldap_sasl_bind(SIMPLE): Can't contact LDAP server (-1)
 ```
 
 #### Check Listening Ports
 
-```bash id="x63sce"
+```bash
 ss -tulnp | grep slapd
 ```
 
 Example output:
 
-```text id="fnlc8i"
+```text
 tcp LISTEN 0 128 0.0.0.0:389 0.0.0.0:* users:(("slapd",pid=1200,fd=8))
 ```
 
@@ -1138,7 +1138,7 @@ Interpretation:
 
 Use the correct URI:
 
-```bash id="w1hx8w"
+```bash
 ldapsearch -x -H ldap://localhost:389 -b "dc=example,dc=com" "(objectClass=*)"
 ```
 
@@ -1150,7 +1150,7 @@ Practice identifying authentication failure.
 
 Run a bind with the wrong password:
 
-```bash id="si8k4d"
+```bash
 ldapwhoami -x -D "cn=admin,dc=example,dc=com" -W -H ldap://localhost
 ```
 
@@ -1158,7 +1158,7 @@ Enter the wrong password.
 
 Example output:
 
-```text id="sb6wux"
+```text
 ldap_bind: Invalid credentials (49)
 ```
 
@@ -1172,13 +1172,13 @@ Interpretation:
 
 Try a known working bind:
 
-```bash id="vv7wun"
+```bash
 ldapwhoami -x -D "cn=admin,dc=example,dc=com" -W -H ldap://localhost
 ```
 
 Expected output:
 
-```text id="p38xhh"
+```text
 dn:cn=admin,dc=example,dc=com
 ```
 
@@ -1190,13 +1190,13 @@ Practice recognizing search base mistakes.
 
 Use the wrong base DN:
 
-```bash id="h2tu79"
+```bash
 ldapsearch -x -H ldap://localhost -b "dc=wrong,dc=com" "(uid=jdoe)"
 ```
 
 Example output:
 
-```text id="rrp4sl"
+```text
 ## search result
 search: 2
 result: 32 No such object
@@ -1213,13 +1213,13 @@ Interpretation:
 
 Search from the correct base:
 
-```bash id="i74yao"
+```bash
 ldapsearch -x -H ldap://localhost -b "dc=example,dc=com" "(uid=jdoe)"
 ```
 
 Expected result:
 
-```text id="xvfh68"
+```text
 result: 0 Success
 ## numEntries: 1
 ```
@@ -1232,13 +1232,13 @@ Distinguish between “search succeeded but no entries matched” and “LDAP er
 
 Search for a nonexistent user:
 
-```bash id="afhop8"
+```bash
 ldapsearch -x -H ldap://localhost -b "dc=example,dc=com" "(uid=nosuchuser)"
 ```
 
 Example output:
 
-```text id="cf366v"
+```text
 ## search result
 search: 2
 result: 0 Success
@@ -1258,7 +1258,7 @@ Interpretation:
 
 Check known users:
 
-```bash id="acdzvb"
+```bash
 ldapsearch -x -H ldap://localhost -b "ou=users,dc=example,dc=com" "(objectClass=inetOrgPerson)" uid
 ```
 
@@ -1272,13 +1272,13 @@ Create a user with only `inetOrgPerson` attributes and no `uidNumber`, `gidNumbe
 
 Search finds the user:
 
-```bash id="maxjp3"
+```bash
 ldapsearch -x -b "ou=users,dc=example,dc=com" "(uid=jdoe)"
 ```
 
 Example output:
 
-```text id="gidcnb"
+```text
 dn: uid=jdoe,ou=users,dc=example,dc=com
 objectClass: inetOrgPerson
 uid: jdoe
@@ -1289,13 +1289,13 @@ mail: jdoe@example.com
 
 But Linux lookup fails:
 
-```bash id="x50ugz"
+```bash
 getent passwd jdoe
 ```
 
 Example output:
 
-```text id="z1jo22"
+```text
 ```
 
 No output.
@@ -1319,13 +1319,13 @@ Add the required object classes and attributes:
 
 Then test again:
 
-```bash id="pd8sdr"
+```bash
 getent passwd jdoe
 ```
 
 Expected output:
 
-```text id="gjmcf0"
+```text
 jdoe:x:10000:10000:John Doe:/home/jdoe:/bin/bash
 ```
 
@@ -1337,13 +1337,13 @@ Practice diagnosing TLS certificate or StartTLS problems.
 
 Require StartTLS against a server that is not correctly configured for TLS:
 
-```bash id="n87xti"
+```bash
 ldapwhoami -x -ZZ -H ldap://localhost
 ```
 
 Example output:
 
-```text id="bhdn7x"
+```text
 ldap_start_tls: Connect error (-11)
 additional info: TLS error -8172:Peer's certificate issuer has been marked as not trusted
 ```
@@ -1356,13 +1356,13 @@ Interpretation:
 
 #### Check Client TLS Config
 
-```bash id="nss2y8"
+```bash
 grep -v '^#' /etc/ldap/ldap.conf
 ```
 
 Example:
 
-```text id="l22c45"
+```text
 TLS_CACERT /etc/ssl/certs/ca-certificates.crt
 TLS_REQCERT demand
 ```
@@ -1379,13 +1379,13 @@ Possible fixes:
 
 Then test again:
 
-```bash id="g7f5w7"
+```bash
 ldapwhoami -x -ZZ -H ldap://localhost
 ```
 
 Expected output:
 
-```text id="knz3sa"
+```text
 anonymous
 ```
 
@@ -1397,32 +1397,32 @@ Practice diagnosing NSS integration problems.
 
 Assume LDAP search works:
 
-```bash id="t5b0n7"
+```bash
 ldapsearch -x -b "dc=example,dc=com" "(uid=jdoe)"
 ```
 
 but Linux lookup fails:
 
-```bash id="vsrttg"
+```bash
 getent passwd jdoe
 ```
 
 Example output:
 
-```text id="fr95uw"
+```text
 ```
 
 No output.
 
 #### Check NSS Configuration
 
-```bash id="h2zvon"
+```bash
 grep '^passwd\|^group\|^shadow' /etc/nsswitch.conf
 ```
 
 Example broken output:
 
-```text id="h5if8f"
+```text
 passwd: files systemd
 group:  files systemd
 shadow: files
@@ -1440,7 +1440,7 @@ Depending on the client stack, configure NSS to include LDAP or SSSD.
 
 Example concept:
 
-```text id="atolix"
+```text
 passwd: files systemd ldap
 group:  files systemd ldap
 shadow: files ldap
@@ -1448,19 +1448,19 @@ shadow: files ldap
 
 Then restart the relevant cache/client service:
 
-```bash id="cwgngy"
+```bash
 sudo systemctl restart nscd
 ```
 
 or, if using SSSD:
 
-```bash id="rxt9zw"
+```bash
 sudo systemctl restart sssd
 ```
 
 Test again:
 
-```bash id="gnv7p2"
+```bash
 getent passwd jdoe
 ```
 
@@ -1474,31 +1474,31 @@ A user may authenticate successfully but still not be allowed to access a servic
 
 Assume `jdoe` can bind successfully:
 
-```bash id="kph66f"
+```bash
 ldapwhoami -x -D "uid=jdoe,ou=users,dc=example,dc=com" -W
 ```
 
 Expected output:
 
-```text id="tssif7"
+```text
 dn:uid=jdoe,ou=users,dc=example,dc=com
 ```
 
 But the application requires membership in:
 
-```text id="revnrr"
+```text
 cn=admins,ou=groups,dc=example,dc=com
 ```
 
 Search group membership:
 
-```bash id="mugw4y"
+```bash
 ldapsearch -x -b "ou=groups,dc=example,dc=com" "(cn=admins)"
 ```
 
 Example output:
 
-```text id="r511vs"
+```text
 dn: cn=admins,ou=groups,dc=example,dc=com
 objectClass: posixGroup
 cn: admins
@@ -1518,7 +1518,7 @@ Add `jdoe` to the required group.
 
 Example modify LDIF:
 
-```ldif id="ooek8g"
+```ldif
 dn: cn=admins,ou=groups,dc=example,dc=com
 changetype: modify
 add: memberUid
@@ -1527,7 +1527,7 @@ memberUid: jdoe
 
 Apply:
 
-```bash id="gv1ryy"
+```bash
 ldapmodify -x -D "cn=admin,dc=example,dc=com" -W -f add_jdoe_to_admins.ldif
 ```
 
@@ -1539,13 +1539,13 @@ Understand how broad LDAP searches can become slow and how to inspect them.
 
 Run a broad search from the top of the directory:
 
-```bash id="hcvpqu"
+```bash
 time ldapsearch -x -H ldap://localhost -b "dc=example,dc=com" "(objectClass=*)" > /tmp/all_ldap_entries.txt
 ```
 
 Example output:
 
-```text id="hgunhm"
+```text
 real    0m4.820s
 user    0m0.120s
 sys     0m0.040s
@@ -1553,13 +1553,13 @@ sys     0m0.040s
 
 #### Compare with a Narrow Search
 
-```bash id="fghkka"
+```bash
 time ldapsearch -x -H ldap://localhost -b "ou=users,dc=example,dc=com" "(uid=jdoe)" uid cn
 ```
 
 Example output:
 
-```text id="bnyir8"
+```text
 real    0m0.080s
 user    0m0.020s
 sys     0m0.010s
@@ -1582,7 +1582,7 @@ Interpretation:
 
 Example better search:
 
-```bash id="i81l4o"
+```bash
 ldapsearch -x -b "ou=users,dc=example,dc=com" "(uid=jdoe)" uid cn mail
 ```
 
@@ -1605,43 +1605,43 @@ When LDAP fails, troubleshoot in layers.
 
 ### Step 1: Check Server Status
 
-```bash id="b746c4"
+```bash
 systemctl status slapd
 ```
 
 Expected healthy state:
 
-```text id="w19xmr"
+```text
 Active: active (running)
 ```
 
 ### Step 2: Check Listening Port
 
-```bash id="psijwd"
+```bash
 ss -tulnp | grep slapd
 ```
 
 Expected output:
 
-```text id="mn203f"
+```text
 tcp LISTEN 0 128 0.0.0.0:389 0.0.0.0:* users:(("slapd",pid=1200,fd=8))
 ```
 
 If using LDAPS:
 
-```text id="fxgt31"
+```text
 port 636
 ```
 
 ### Step 3: Test Basic Connectivity
 
-```bash id="gsixv6"
+```bash
 ldapwhoami -x -H ldap://localhost
 ```
 
 Expected:
 
-```text id="qetoo7"
+```text
 anonymous
 ```
 
@@ -1649,13 +1649,13 @@ If this fails, check service status, firewall, port, URI, and network connectivi
 
 ### Step 4: Test Authenticated Bind
 
-```bash id="o3byxw"
+```bash
 ldapwhoami -x -D "cn=admin,dc=example,dc=com" -W -H ldap://localhost
 ```
 
 Expected:
 
-```text id="f90g1l"
+```text
 dn:cn=admin,dc=example,dc=com
 ```
 
@@ -1663,13 +1663,13 @@ If this fails with invalid credentials, check the DN and password.
 
 ### Step 5: Test Search Base
 
-```bash id="xu76e0"
+```bash
 ldapsearch -x -H ldap://localhost -b "dc=example,dc=com" "(objectClass=*)"
 ```
 
 If the result is:
 
-```text id="ae2mr7"
+```text
 No such object
 ```
 
@@ -1677,7 +1677,7 @@ then the base DN may be wrong or missing.
 
 ### Step 6: Test Specific User Search
 
-```bash id="tgw3ew"
+```bash
 ldapsearch -x -H ldap://localhost -b "ou=users,dc=example,dc=com" "(uid=jdoe)"
 ```
 
@@ -1685,7 +1685,7 @@ If `numEntries` is 0, the user may not exist or the filter is wrong.
 
 ### Step 7: Test Linux Account Resolution
 
-```bash id="v7pkj9"
+```bash
 getent passwd jdoe
 id jdoe
 ```
@@ -1696,13 +1696,13 @@ If LDAP search works but `getent` fails, check NSS, SSSD, nslcd, or PAM configur
 
 Server logs may be available through systemd:
 
-```bash id="dd7vf4"
+```bash
 journalctl -u slapd -b
 ```
 
 Kernel-level or authentication logs may also help:
 
-```bash id="jwz9ug"
+```bash
 journalctl -xe
 sudo less /var/log/auth.log
 ```
@@ -1743,7 +1743,7 @@ Examples:
 
 Connectivity:
 
-```bash id="rbsld6"
+```bash
 ldapwhoami -x -H ldap://localhost
 ldapwhoami -x -D "cn=admin,dc=example,dc=com" -W -H ldap://localhost
 ldapwhoami -x -ZZ -H ldap://localhost
@@ -1751,7 +1751,7 @@ ldapwhoami -x -ZZ -H ldap://localhost
 
 Search:
 
-```bash id="yln5rd"
+```bash
 ldapsearch -x -b "dc=example,dc=com" "(objectClass=*)"
 ldapsearch -x -b "ou=users,dc=example,dc=com" "(uid=jdoe)"
 ldapsearch -x -b "ou=groups,dc=example,dc=com" "(cn=developers)"
@@ -1759,7 +1759,7 @@ ldapsearch -x -b "ou=groups,dc=example,dc=com" "(cn=developers)"
 
 Add, modify, delete:
 
-```bash id="epn7fy"
+```bash
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f entry.ldif
 ldapmodify -x -D "cn=admin,dc=example,dc=com" -W -f modify.ldif
 ldapdelete -x -D "cn=admin,dc=example,dc=com" -W "uid=jdoe,ou=users,dc=example,dc=com"
@@ -1767,7 +1767,7 @@ ldapdelete -x -D "cn=admin,dc=example,dc=com" -W "uid=jdoe,ou=users,dc=example,d
 
 Linux identity lookup:
 
-```bash id="mska1c"
+```bash
 getent passwd jdoe
 getent group developers
 id jdoe
@@ -1775,7 +1775,7 @@ id jdoe
 
 Server checks:
 
-```bash id="id9uyw"
+```bash
 systemctl status slapd
 ss -tulnp | grep slapd
 journalctl -u slapd -b
@@ -1783,7 +1783,7 @@ journalctl -u slapd -b
 
 Backup:
 
-```bash id="bg2l3w"
+```bash
 slapcat > ldap-backup.ldif
 ```
 

@@ -22,7 +22,7 @@ It may be a physical device, such as an Ethernet card or wireless card, or a vir
 
 A computer can have more than one network interface. For example, a laptop may have Wi-Fi, Ethernet, loopback, VPN, and virtual machine interfaces.
 
-```text id="2n854w"
+```text
 +--------------------------------------------------------+
 |                      COMPUTER SYSTEM                   |
 |                                                        |
@@ -72,13 +72,13 @@ The loopback interface is used for internal communication inside the same machin
 
 It is usually named:
 
-```text id="md43cz"
+```text
 lo
 ```
 
 Its IPv4 address is usually:
 
-```text id="6aexcn"
+```text
 127.0.0.1
 ```
 
@@ -86,13 +86,13 @@ This address is also called localhost.
 
 For example, if a web server is running on your own computer, you may be able to access it with:
 
-```text id="bijjae"
+```text
 http://127.0.0.1
 ```
 
 or:
 
-```text id="439ga7"
+```text
 http://localhost
 ```
 
@@ -100,7 +100,7 @@ The loopback interface is not used to communicate with other devices. It is only
 
 A simple way to think about it is:
 
-```text id="c1vlh0"
+```text
 127.0.0.1 = this computer talking to itself
 ```
 
@@ -120,13 +120,13 @@ Examples:
 
 To see network interfaces on Linux, use:
 
-```bash id="ui7vx9"
+```bash
 ip link show
 ```
 
 Example output:
 
-```text id="65maqh"
+```text
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
     link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
 ```
@@ -154,13 +154,13 @@ It is used mainly for communication inside a local network. Devices on the same 
 
 A typical MAC address looks like this:
 
-```text id="gkbj5e"
+```text
 aa:bb:cc:dd:ee:ff
 ```
 
 It is made of six pairs of hexadecimal digits.
 
-```text id="s0lrhh"
+```text
 +-----------------------------------------+
 |   Manufacturer ID   | Device Identifier |
 +-----------------------------------------+
@@ -171,20 +171,20 @@ The first part often identifies the manufacturer or vendor. The second part iden
 
 To view MAC addresses on Linux:
 
-```bash id="iz6idd"
+```bash
 ip link show
 ```
 
 Example:
 
-```text id="6va1im"
+```text
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
     link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
 ```
 
 Here, the MAC address is:
 
-```text id="x2g57q"
+```text
 00:11:22:33:44:55
 ```
 
@@ -192,7 +192,7 @@ MAC addresses are used on the local network. IP addresses are used for routing t
 
 A useful comparison is:
 
-```text id="ahgykh"
+```text
 MAC address = local delivery identity
 IP address  = network location identity
 ```
@@ -207,7 +207,7 @@ IP addresses allow devices to find and communicate with each other across local 
 
 There are two main versions:
 
-```text id="4gaedi"
+```text
 IPv4    example: 192.168.1.10
 IPv6    example: 2001:db8::10
 ```
@@ -218,11 +218,11 @@ An IPv4 address is made of four numbers separated by dots. Each number ranges fr
 
 Example:
 
-```text id="9i2fwy"
+```text
 192.168.1.10
 ```
 
-```text id="msqre4"
+```text
 IPv4 Address: 192.168.1.10
 
 +-----+-----+-----+-----+
@@ -239,7 +239,7 @@ The exact network and host portions depend on the subnet mask or prefix length.
 
 For example:
 
-```text id="0p8aov"
+```text
 192.168.1.10/24
 ```
 
@@ -247,7 +247,7 @@ means the first 24 bits identify the network.
 
 In everyday terms:
 
-```text id="ydtjsz"
+```text
 192.168.1.0/24 is the network
 192.168.1.10 is one device on that network
 ```
@@ -256,32 +256,32 @@ In everyday terms:
 
 To show IPv4 addresses on Linux:
 
-```bash id="ke5j46"
+```bash
 ip -4 address show
 ```
 
 Example output:
 
-```text id="zlal4v"
+```text
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
     inet 192.168.1.10/24 brd 192.168.1.255 scope global dynamic eth0
 ```
 
 The important part is:
 
-```text id="6esfjx"
+```text
 inet 192.168.1.10/24
 ```
 
 This means the interface has the IPv4 address:
 
-```text id="4vnkkp"
+```text
 192.168.1.10
 ```
 
 with prefix length:
 
-```text id="bo43c8"
+```text
 24
 ```
 
@@ -295,13 +295,13 @@ They are not routed directly on the public internet.
 
 Common private IPv4 ranges are:
 
-```text id="cerd4v"
+```text
 10.0.0.0       to 10.255.255.255
 172.16.0.0     to 172.31.255.255
 192.168.0.0    to 192.168.255.255
 ```
 
-```text id="sksvnc"
+```text
        +---------------------------------+
        |       Private IP Address        |
        +---------------------------------+
@@ -321,7 +321,7 @@ Common private IPv4 ranges are:
 
 Examples of private IP addresses:
 
-```text id="y14jt5"
+```text
 192.168.1.20
 10.0.0.15
 172.16.5.100
@@ -339,7 +339,7 @@ Your home router usually has a public IP address assigned by your Internet Servi
 
 Devices inside your home usually have private IP addresses, such as:
 
-```text id="lk97dk"
+```text
 192.168.1.2
 192.168.1.3
 192.168.1.4
@@ -347,7 +347,7 @@ Devices inside your home usually have private IP addresses, such as:
 
 When those devices access the internet, the router translates their private addresses to the public address.
 
-```text id="asq6wk"
+```text
                            Internet
                       +----------------+
                       |                |
@@ -370,19 +370,19 @@ When those devices access the internet, the router translates their private addr
 
 To check your public IP from the command line, you can use an external service:
 
-```bash id="t7e15c"
+```bash
 curl ifconfig.me
 ```
 
 or:
 
-```bash id="mve3vd"
+```bash
 curl icanhazip.com
 ```
 
 Example output:
 
-```text id="5bum9u"
+```text
 203.0.113.10
 ```
 
@@ -405,7 +405,7 @@ That would be slow and error-prone, especially on large networks.
 
 With DHCP, a device can join the network and automatically receive the settings it needs.
 
-```text id="8tjaof"
+```text
 Device joins network
         |
         v
@@ -422,7 +422,7 @@ Device can communicate on the network
 
 The DHCP process usually has four main steps.
 
-```text id="4t8qum"
+```text
 Device (DHCP Client)                 DHCP Server
       |                                  |
       |    1. DHCPDISCOVER               |
@@ -481,7 +481,7 @@ A DHCP reservation is configured on the DHCP server. The server always gives the
 
 A good rule is:
 
-```text id="asgx32"
+```text
 Use DHCP for normal client devices.
 Use static IPs or DHCP reservations for infrastructure devices.
 ```
@@ -498,13 +498,13 @@ The `ifconfig` command was historically used to show and configure network inter
 
 Example:
 
-```bash id="w7z6t7"
+```bash
 ifconfig
 ```
 
 To show a specific interface:
 
-```bash id="gmsmw4"
+```bash
 ifconfig eth0
 ```
 
@@ -516,37 +516,37 @@ The `ip` command is the modern Linux tool for viewing and managing network confi
 
 Show IP addresses:
 
-```bash id="vwmfop"
+```bash
 ip addr show
 ```
 
 Show only IPv4 addresses:
 
-```bash id="g19t59"
+```bash
 ip -4 addr show
 ```
 
 Show interfaces and MAC addresses:
 
-```bash id="eocejx"
+```bash
 ip link show
 ```
 
 Show interface statistics:
 
-```bash id="vdr866"
+```bash
 ip -s link
 ```
 
 Show routes:
 
-```bash id="uzmcn1"
+```bash
 ip route show
 ```
 
 Show IPv6 routes:
 
-```bash id="1tfsk0"
+```bash
 ip -6 route show
 ```
 
@@ -560,19 +560,19 @@ It sends ICMP echo request packets and waits for replies.
 
 Example:
 
-```bash id="6fom83"
+```bash
 ping google.com
 ```
 
 To send only five packets:
 
-```bash id="9h6yab"
+```bash
 ping -c 5 google.com
 ```
 
 Example output includes round-trip time:
 
-```text id="92yef9"
+```text
 64 bytes from 142.250.185.206: icmp_seq=1 ttl=116 time=12.4 ms
 64 bytes from 142.250.185.206: icmp_seq=2 ttl=116 time=11.9 ms
 ```
@@ -591,7 +591,7 @@ High latency, packet loss, or no replies may indicate a network issue.
 
 On Linux, to stop after a specific time limit, use `-w`:
 
-```bash id="36n0d6"
+```bash
 ping -w 5 google.com
 ```
 
@@ -599,7 +599,7 @@ This runs for about five seconds.
 
 To stop a continuous ping manually, press:
 
-```text id="rp4xr4"
+```text
 Ctrl + C
 ```
 
@@ -609,11 +609,11 @@ The `netstat` command shows network connections, listening ports, and network st
 
 Examples:
 
-```bash id="m4709t"
+```bash
 netstat -a
 ```
 
-```bash id="7n1rqk"
+```bash
 netstat -l
 ```
 
@@ -623,19 +623,19 @@ The modern replacement is usually `ss`.
 
 Show listening TCP and UDP ports:
 
-```bash id="c2x76d"
+```bash
 ss -tuln
 ```
 
 Show established connections:
 
-```bash id="7b2f35"
+```bash
 ss -tun
 ```
 
 A useful comparison:
 
-```text id="6ctu2f"
+```text
 netstat = older tool
 ss      = newer, faster replacement
 ```
@@ -646,7 +646,7 @@ The `traceroute` command shows the path packets take to reach a remote host.
 
 Example:
 
-```bash id="wny1sq"
+```bash
 traceroute google.com
 ```
 
@@ -654,7 +654,7 @@ It displays each router, or hop, along the path.
 
 Example:
 
-```text id="hc6yhu"
+```text
 1  192.168.1.1       1.1 ms
 2  10.10.0.1         8.4 ms
 3  203.0.113.1      14.2 ms
@@ -665,19 +665,19 @@ This is useful when troubleshooting slow or broken connections.
 
 To avoid DNS lookups and show only IP addresses:
 
-```bash id="46e6qw"
+```bash
 traceroute -n google.com
 ```
 
 To set the maximum number of hops:
 
-```bash id="3xm9ov"
+```bash
 traceroute -m 30 google.com
 ```
 
 Some systems may use `tracepath` instead:
 
-```bash id="g7d4pr"
+```bash
 tracepath google.com
 ```
 
@@ -687,7 +687,7 @@ The `route` command displays or modifies the routing table.
 
 Example:
 
-```bash id="4yen0b"
+```bash
 route -n
 ```
 
@@ -695,7 +695,7 @@ The `-n` option shows numeric IP addresses instead of trying to resolve names.
 
 However, `route` is older. The modern command is:
 
-```bash id="bavqqc"
+```bash
 ip route
 ```
 
@@ -703,13 +703,13 @@ A route tells the system where to send packets.
 
 Example route:
 
-```text id="yr2w12"
+```text
 default via 192.168.1.1 dev eth0
 ```
 
 This means:
 
-```text id="o8v5fj"
+```text
 If there is no more specific route, send traffic to 192.168.1.1 through eth0.
 ```
 
@@ -721,7 +721,7 @@ If your computer wants to contact another device on the same local network, it c
 
 If your computer wants to contact a device outside the local network, such as a website on the internet, it sends the traffic to the default gateway.
 
-```text id="kobtpn"
+```text
 +----------------+     +---------------+     +---------------------+
 | Local Device A |     | Local Network |     | External Network /  |
 | 192.168.1.2    |-----| 192.168.1.0/24|-----| Internet            |
@@ -737,25 +737,25 @@ The default gateway is usually your router.
 
 To show the default gateway on Linux:
 
-```bash id="8au52x"
+```bash
 ip route show default
 ```
 
 Example output:
 
-```text id="36re7e"
+```text
 default via 192.168.1.1 dev eth0
 ```
 
 The default gateway is:
 
-```text id="o3fys3"
+```text
 192.168.1.1
 ```
 
 To extract only the gateway IP:
 
-```bash id="7aapxf"
+```bash
 ip route show default | awk '{print $3}'
 ```
 
@@ -763,25 +763,25 @@ ip route show default | awk '{print $3}'
 
 The modern way to add a default gateway is:
 
-```bash id="9hyg9p"
+```bash
 sudo ip route add default via 192.168.1.254
 ```
 
 To remove the default route:
 
-```bash id="vnn6vr"
+```bash
 sudo ip route del default
 ```
 
 The older `route` command can also do this:
 
-```bash id="2t016z"
+```bash
 sudo route add default gw 192.168.1.254
 ```
 
 and:
 
-```bash id="askmte"
+```bash
 sudo route del default
 ```
 
@@ -806,7 +806,7 @@ It can manage:
 
 NetworkManager has command-line, text-based, and graphical tools.
 
-```text id="ju30zg"
+```text
 +------------+      +-------------+      +------------+
 |            |      |             |      |            |
 | User Tools |<---->| Network     |<---->| Network    |
@@ -833,37 +833,37 @@ NetworkManager has command-line, text-based, and graphical tools.
 
 Check whether NetworkManager is running:
 
-```bash id="8qgppw"
+```bash
 nmcli -t -f RUNNING general
 ```
 
 Show saved connection profiles:
 
-```bash id="1z5pv2"
+```bash
 nmcli con show
 ```
 
 Show device status:
 
-```bash id="dggu7u"
+```bash
 nmcli dev status
 ```
 
 Reload connection profiles after changes:
 
-```bash id="eujnp4"
+```bash
 nmcli con reload
 ```
 
 Bring a connection up:
 
-```bash id="qwaeaf"
+```bash
 nmcli con up eth0
 ```
 
 Bring a connection down:
 
-```bash id="gh9f2y"
+```bash
 nmcli con down eth0
 ```
 
@@ -873,7 +873,7 @@ A static IP is useful for devices that should keep the same address, such as ser
 
 Example:
 
-```bash id="mglkvx"
+```bash
 sudo nmcli con add \
   con-name eth0 \
   type ethernet \
@@ -888,7 +888,7 @@ This creates a connection profile named `eth0`.
 
 The settings mean:
 
-```text id="5lfa7j"
+```text
 192.168.1.10/24   static IP address and network prefix
 192.168.1.1       default gateway
 8.8.8.8 8.8.4.4   DNS servers
@@ -896,7 +896,7 @@ The settings mean:
 
 Then activate it:
 
-```bash id="3p61ew"
+```bash
 sudo nmcli con up eth0
 ```
 
@@ -904,7 +904,7 @@ sudo nmcli con up eth0
 
 For automatic IP assignment with DHCP:
 
-```bash id="01p1p2"
+```bash
 sudo nmcli con add \
   con-name eth0 \
   type ethernet \
@@ -914,7 +914,7 @@ sudo nmcli con add \
 
 Then activate it:
 
-```bash id="fy156z"
+```bash
 sudo nmcli con up eth0
 ```
 
@@ -928,7 +928,7 @@ It provides a menu-based interface in the terminal.
 
 Start it with:
 
-```bash id="gdj610"
+```bash
 nmtui
 ```
 
@@ -945,7 +945,7 @@ It can be used to:
 
 After changing network settings, you may need to restart NetworkManager:
 
-```bash id="vm6ad6"
+```bash
 sudo systemctl restart NetworkManager
 ```
 
@@ -959,7 +959,7 @@ DNS translates human-readable names into IP addresses.
 
 For example:
 
-```text id="bbhyu6"
+```text
 www.example.com  --->  93.184.216.34
 ```
 
@@ -967,7 +967,7 @@ DNS is often described as the phonebook of the internet.
 
 Humans prefer names. Computers communicate using IP addresses.
 
-```text id="oqc0ju"
+```text
 You type:
     www.example.com
 
@@ -982,7 +982,7 @@ Your computer connects to:
 
 A simplified DNS lookup looks like this:
 
-```text id="u4oxcb"
+```text
   User's Device               DNS Resolver          Root / TLD / Authoritative DNS
       |                            |                              |
       | 1. Request                 |                              |
@@ -1013,7 +1013,7 @@ The `/etc/hosts` file can manually map names to IP addresses.
 
 Example:
 
-```text id="xsmz13"
+```text
 127.0.0.1       localhost
 192.168.1.50    myserver.local
 ```
@@ -1028,7 +1028,7 @@ The `/etc/resolv.conf` file often shows which DNS servers are configured.
 
 Example:
 
-```text id="ys5lpx"
+```text
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 ```
@@ -1037,7 +1037,7 @@ However, on many modern Linux systems, this file may be automatically managed by
 
 To check DNS settings on systems using systemd-resolved:
 
-```bash id="u12roj"
+```bash
 resolvectl status
 ```
 
@@ -1056,7 +1056,7 @@ With `nmtui`:
 
 With `nmcli`, you can set DNS servers like this:
 
-```bash id="by4fmf"
+```bash
 sudo nmcli con mod eth0 ipv4.dns "8.8.8.8 8.8.4.4"
 sudo nmcli con mod eth0 ipv4.ignore-auto-dns yes
 sudo nmcli con up eth0
@@ -1068,20 +1068,20 @@ This sets custom DNS servers and tells NetworkManager not to use DNS servers rec
 
 DNS problems often look like this:
 
-```text id="q74dwh"
+```text
 You can ping an IP address,
 but you cannot reach a domain name.
 ```
 
 For example:
 
-```bash id="9ixg2t"
+```bash
 ping 8.8.8.8
 ```
 
 works, but:
 
-```bash id="lwrqk4"
+```bash
 ping google.com
 ```
 
@@ -1091,15 +1091,15 @@ That suggests the network may be working, but name resolution is broken.
 
 Useful DNS tools include:
 
-```bash id="4q97a2"
+```bash
 dig example.com
 ```
 
-```bash id="sj9ity"
+```bash
 nslookup example.com
 ```
 
-```bash id="j9irm3"
+```bash
 host example.com
 ```
 
@@ -1111,7 +1111,7 @@ host example.com
 
 Example:
 
-```bash id="efebzn"
+```bash
 dig www.example.com
 ```
 
@@ -1129,7 +1129,7 @@ It is useful for:
 * Detecting unusual or suspicious traffic
 * Measuring network behavior
 
-```text id="p2rrce"
+```text
                     +-----------------------+
                     |       Internet        |
                     +-----------------------+
@@ -1156,50 +1156,50 @@ Packet analysis should be done responsibly. Only capture traffic on networks and
 
 To capture packets on interface `eth0` and save them to a file:
 
-```bash id="15xj5m"
+```bash
 sudo tcpdump -i eth0 -w traffic.pcap
 ```
 
 Explanation:
 
-```text id="eplivy"
+```text
 -i eth0          capture on interface eth0
 -w traffic.pcap  write captured packets to a file
 ```
 
 To capture only 10 packets:
 
-```bash id="3y726a"
+```bash
 sudo tcpdump -i eth0 -c 10
 ```
 
 To save 10 packets to a file:
 
-```bash id="5cahtu"
+```bash
 sudo tcpdump -i eth0 -c 10 -w traffic.pcap
 ```
 
 To capture traffic for port 80:
 
-```bash id="xvy3tv"
+```bash
 sudo tcpdump -i eth0 port 80
 ```
 
 To capture DNS traffic:
 
-```bash id="yl7l1a"
+```bash
 sudo tcpdump -i eth0 port 53
 ```
 
 To capture ICMP traffic, such as ping:
 
-```bash id="g09klv"
+```bash
 sudo tcpdump -i eth0 icmp
 ```
 
 To read a saved capture:
 
-```bash id="ga8ouz"
+```bash
 tcpdump -r traffic.pcap
 ```
 
@@ -1211,7 +1211,7 @@ IP forwarding allows a Linux system to forward packets between networks.
 
 When IP forwarding is enabled, the system can act like a router.
 
-```text id="cc348t"
+```text
 +-------------+       +------------+       +-------------+
 | Network A   |       |            |       | Network B   |
 | 192.168.1.0 |-------|  IP        |-------| 10.0.1.0    |
@@ -1238,13 +1238,13 @@ This is useful for:
 
 To check IPv4 forwarding:
 
-```bash id="15shhu"
+```bash
 cat /proc/sys/net/ipv4/ip_forward
 ```
 
 Output:
 
-```text id="d26a7u"
+```text
 0
 ```
 
@@ -1252,7 +1252,7 @@ means forwarding is disabled.
 
 Output:
 
-```text id="6yfxag"
+```text
 1
 ```
 
@@ -1262,13 +1262,13 @@ means forwarding is enabled.
 
 To enable IPv4 forwarding temporarily:
 
-```bash id="7xef5j"
+```bash
 sudo sysctl -w net.ipv4.ip_forward=1
 ```
 
 To enable IPv6 forwarding temporarily:
 
-```bash id="bkwxes"
+```bash
 sudo sysctl -w net.ipv6.conf.all.forwarding=1
 ```
 
@@ -1278,20 +1278,20 @@ Temporary changes may be lost after reboot.
 
 Edit:
 
-```bash id="l6xpj9"
+```bash
 /etc/sysctl.conf
 ```
 
 Add:
 
-```text id="hfme35"
+```text
 net.ipv4.ip_forward=1
 net.ipv6.conf.all.forwarding=1
 ```
 
 Apply the changes:
 
-```bash id="s0r899"
+```bash
 sudo sysctl -p /etc/sysctl.conf
 ```
 
@@ -1316,7 +1316,7 @@ A useful order is:
 
 Use:
 
-```bash id="jkojhq"
+```bash
 ip link
 ```
 
@@ -1324,13 +1324,13 @@ Look for the interface state.
 
 Example problem:
 
-```text id="9yemzg"
+```text
 2: eth0: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast state DOWN mode DEFAULT group default qlen 1000
 ```
 
 The key part is:
 
-```text id="qdzadb"
+```text
 state DOWN
 ```
 
@@ -1338,7 +1338,7 @@ This means the interface is not active.
 
 To bring it up:
 
-```bash id="xpxk16"
+```bash
 sudo ip link set eth0 up
 ```
 
@@ -1348,19 +1348,19 @@ If it still does not work, check cables, Wi-Fi connection, virtual machine setti
 
 Use:
 
-```bash id="m2j9pp"
+```bash
 ip -4 address
 ```
 
 A normal private address might look like:
 
-```text id="mhgfro"
+```text
 inet 192.168.1.10/24
 ```
 
 A suspicious address may look like:
 
-```text id="2cb5lx"
+```text
 inet 169.254.x.x/16
 ```
 
@@ -1378,13 +1378,13 @@ This usually indicates:
 
 Use:
 
-```bash id="qb8u9r"
+```bash
 ip route
 ```
 
 A normal route may look like:
 
-```text id="bl91e6"
+```text
 default via 192.168.1.1 dev eth0
 192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.10
 ```
@@ -1399,37 +1399,37 @@ Start local, then move outward.
 
 Test loopback:
 
-```bash id="7t0iwm"
+```bash
 ping -c 3 127.0.0.1
 ```
 
 Test your own IP:
 
-```bash id="x1c95u"
+```bash
 ping -c 3 192.168.1.10
 ```
 
 Test the default gateway:
 
-```bash id="kvh8gh"
+```bash
 ping -c 3 192.168.1.1
 ```
 
 Test a public IP:
 
-```bash id="gqur53"
+```bash
 ping -c 3 8.8.8.8
 ```
 
 Test DNS:
 
-```bash id="2z2wd7"
+```bash
 ping -c 3 google.com
 ```
 
 The results help narrow down the problem.
 
-```text id="xqffcs"
+```text
 If 127.0.0.1 fails:
     local network stack problem
 
@@ -1447,31 +1447,31 @@ If gateway works but internet IP fails:
 
 Check configured DNS:
 
-```bash id="ih24c0"
+```bash
 cat /etc/resolv.conf
 ```
 
 or:
 
-```bash id="3igoot"
+```bash
 resolvectl status
 ```
 
 Test DNS lookup:
 
-```bash id="4qxfg0"
+```bash
 dig google.com
 ```
 
 or:
 
-```bash id="ufonwm"
+```bash
 host google.com
 ```
 
 If DNS fails, try a known DNS server:
 
-```bash id="1pdv0h"
+```bash
 dig @8.8.8.8 google.com
 ```
 
@@ -1483,19 +1483,19 @@ Firewalls may block traffic.
 
 On Linux systems using iptables:
 
-```bash id="n2t9x0"
+```bash
 sudo iptables -L -n -v
 ```
 
 On systems using nftables:
 
-```bash id="6wmou0"
+```bash
 sudo nft list ruleset
 ```
 
 On systems using firewalld:
 
-```bash id="iv6hhu"
+```bash
 sudo firewall-cmd --list-all
 ```
 
@@ -1507,13 +1507,13 @@ For example, if SSH is not reachable, check whether port 22 is allowed.
 
 To see which services are listening:
 
-```bash id="nq8a8m"
+```bash
 ss -tuln
 ```
 
 Example output:
 
-```text id="c6txs0"
+```text
 Netid  State   Local Address:Port
 tcp    LISTEN  0.0.0.0:22
 tcp    LISTEN  127.0.0.1:5432
@@ -1522,7 +1522,7 @@ tcp    LISTEN  0.0.0.0:80
 
 This means:
 
-```text id="t7sd9k"
+```text
 port 22 is listening on all IPv4 interfaces
 port 5432 is listening only on localhost
 port 80 is listening on all IPv4 interfaces
@@ -1536,19 +1536,19 @@ If the issue is still unclear, use `tcpdump`.
 
 Example:
 
-```bash id="koic01"
+```bash
 sudo tcpdump -i eth0
 ```
 
 Capture only traffic to or from a host:
 
-```bash id="laq20j"
+```bash
 sudo tcpdump -i eth0 host 192.168.1.20
 ```
 
 Capture traffic on a port:
 
-```bash id="b6lvfd"
+```bash
 sudo tcpdump -i eth0 port 443
 ```
 
@@ -1583,13 +1583,13 @@ Sometimes a service restart can fix temporary network problems.
 
 For NetworkManager:
 
-```bash id="590dbx"
+```bash
 sudo systemctl restart NetworkManager
 ```
 
 For older Debian-style networking:
 
-```bash id="ozqxd9"
+```bash
 sudo systemctl restart networking
 ```
 
@@ -1599,14 +1599,14 @@ Be careful when doing this over SSH. Restarting networking can disconnect you fr
 
 Symptoms:
 
-```text id="0g3c7z"
+```text
 ip address is missing
 or address is 169.254.x.x
 ```
 
 Check:
 
-```bash id="r20d3y"
+```bash
 ip link
 ip -4 address
 nmcli dev status
@@ -1624,21 +1624,21 @@ Possible causes:
 
 Symptoms:
 
-```text id="clcata"
+```text
 ping 192.168.1.1 works
 ping 8.8.8.8 fails
 ```
 
 Check:
 
-```bash id="yydnr5"
+```bash
 ip route
 traceroute 8.8.8.8
 ```
 
 Possible causes:
 
-```text id="gyt0f5"
+```text
 router has no internet
 wrong default gateway
 firewall blocking traffic
@@ -1649,14 +1649,14 @@ ISP issue
 
 Symptoms:
 
-```text id="mhi1kp"
+```text
 ping 8.8.8.8 works
 ping google.com fails
 ```
 
 Check:
 
-```bash id="fldlqe"
+```bash
 cat /etc/resolv.conf
 resolvectl status
 dig google.com
@@ -1665,7 +1665,7 @@ dig @8.8.8.8 google.com
 
 Likely cause:
 
-```text id="tvzdo6"
+```text
 DNS problem
 ```
 
@@ -1673,14 +1673,14 @@ DNS problem
 
 Symptoms:
 
-```text id="qbnzdl"
+```text
 service works locally
 remote clients cannot connect
 ```
 
 Check:
 
-```bash id="lgzj0g"
+```bash
 ss -tuln
 sudo firewall-cmd --list-all
 sudo iptables -L -n -v

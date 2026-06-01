@@ -3,6 +3,7 @@
 File permissions are crucial in any Unix-like operating systems, including Linux, which employ several mechanisms for controlling access to files and directories. These mechanisms include standard permissions, special permissions, and access control lists (ACLs).
 
 ### Standard Permissions
+
 The primary set of file permissions, commonly known as standard permissions, governs the fundamental access levels for files and directories. These permissions fall into three categories:
 
 - Read (`r`)

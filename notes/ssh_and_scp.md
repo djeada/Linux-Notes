@@ -221,7 +221,7 @@ sftp> rmdir old_directory
 sftp> rm unwanted_file
 sftp> exit
 ```
-   
+
 ### Other Protocols for File Transfers
 
 Aside from SCP and SFTP, numerous other protocols and tools can be utilized for transferring files, each with their own characteristics:

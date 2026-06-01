@@ -49,11 +49,10 @@ apt install vokoscreen
 ```
 
 To start the program, simply run the `vokoscreenNG` command. This will open the Vokoscreen window, which provides a number of options for configuring the screen recording.
-    
+
 ![Screenshot from 2022-09-21 11-15-03](https://user-images.githubusercontent.com/37275728/191465681-8b4915ad-b8a5-4a69-b05b-d3b25b5e2d95.png)
 
 To start the recording, click on the "Start" button and select the area of the screen you want to capture. You can also choose to record audio and webcam video, as well as specify a file name and location for the recording. When you are finished, click on the "Stop" button to end the recording.
-
 
 ## Preparing a Bootable USB Stick with USBImager
 

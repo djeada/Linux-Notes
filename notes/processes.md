@@ -349,7 +349,6 @@ When you kick off a command in a shell, it either *grabs the terminal* (foregrou
 +------------------------+
 ```
 
-
 #### Starting a Job
 
 | What you type  | What happens                                                                  |
@@ -375,7 +374,7 @@ I. **Ctrl + Z** — sends **SIGTSTP**, pausing the job and parking it:
 ^Z          # you pressed Ctrl+Z
 [1]+  Stopped                 long_running_script.sh
 ```
-   
+
 II. **`bg %1`** — resumes that job *in the background*.
 
 III. **`fg %1`** — yanks it back to the foreground whenever you’re ready.

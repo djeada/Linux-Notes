@@ -6,7 +6,7 @@ Linux supports this variety because the kernel is modular. Hardware support can 
 
 At a high level, Linux hardware management looks like this:
 
-```text id="jc73u6"
+```text
 Hardware device
       |
       v
@@ -83,19 +83,19 @@ RISC-V is an emerging open hardware architecture.
 
 To check the current system architecture:
 
-```bash id="dfh7la"
+```bash
 uname -m
 ```
 
 Example output:
 
-```text id="z0lqxk"
+```text
 x86_64
 ```
 
 To see more CPU architecture information:
 
-```bash id="m5zpfw"
+```bash
 lscpu
 ```
 
@@ -105,7 +105,7 @@ Linux follows the Unix idea that many system resources can be represented as fil
 
 Hardware devices are often represented under:
 
-```text id="env1ma"
+```text
 /dev
 ```
 
@@ -113,7 +113,7 @@ The `/dev` directory contains device files.
 
 These files are special interfaces to hardware or kernel features.
 
-```text id="o7zt5z"
+```text
 +-------------------+
 | User command      |
 | cat, dd, program  |
@@ -161,13 +161,13 @@ These usually represent disks, partitions, SSDs, NVMe drives, USB storage, and l
 
 To list block devices:
 
-```bash id="jeom3r"
+```bash
 lsblk
 ```
 
 Example output:
 
-```text id="n83phz"
+```text
 NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 238.5G  0 disk
 ├─sda1   8:1    0   512M  0 part /boot/efi
@@ -199,13 +199,13 @@ Character devices are common for terminals, serial ports, input devices, and ran
 
 To inspect a device file:
 
-```bash id="v8zpqc"
+```bash
 ls -l /dev/null /dev/sda
 ```
 
 Example output:
 
-```text id="pu5306"
+```text
 crw-rw-rw- 1 root root 1, 3 Jun  1 10:00 /dev/null
 brw-rw---- 1 root disk 8, 0 Jun  1 10:00 /dev/sda
 ```
@@ -230,7 +230,7 @@ Examples:
 
 Example:
 
-```bash id="d9z0vs"
+```bash
 echo "discard this" > /dev/null
 ```
 
@@ -238,7 +238,7 @@ echo "discard this" > /dev/null
 
 Example:
 
-```bash id="aj50dr"
+```bash
 head -c 16 /dev/zero | xxd
 ```
 
@@ -250,13 +250,13 @@ Device files have normal Linux permissions.
 
 Example:
 
-```bash id="t68tjm"
+```bash
 ls -l /dev/sda
 ```
 
 Example output:
 
-```text id="etzpbf"
+```text
 brw-rw---- 1 root disk 8, 0 Jun  1 10:00 /dev/sda
 ```
 
@@ -281,7 +281,7 @@ For example, when you plug in a USB drive, the kernel detects it, then `udev` cr
 
 The basic flow is:
 
-```text id="m6yfh5"
+```text
 Hardware event
       |
       v
@@ -319,25 +319,25 @@ PCI devices include graphics cards, network cards, storage controllers, sound ca
 
 Run:
 
-```bash id="yof2e7"
+```bash
 lspci
 ```
 
 For more detail:
 
-```bash id="k6ir1q"
+```bash
 lspci -vvv
 ```
 
 To show which driver is handling each device:
 
-```bash id="xqdy0p"
+```bash
 lspci -k
 ```
 
 Example output:
 
-```text id="w2zu3u"
+```text
 00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller
         Kernel driver in use: ahci
         Kernel modules: ahci
@@ -361,19 +361,19 @@ USB devices include webcams, keyboards, mice, flash drives, Bluetooth adapters, 
 
 Run:
 
-```bash id="i7q9go"
+```bash
 lsusb
 ```
 
 Verbose output:
 
-```bash id="jglyvs"
+```bash
 lsusb -v
 ```
 
 Example output:
 
-```text id="h7l2p2"
+```text
 Bus 002 Device 003: ID 0bda:5689 Realtek Semiconductor Corp. Integrated Webcam
 ```
 
@@ -389,13 +389,13 @@ Vendor and product IDs are useful when searching for driver information.
 
 Run:
 
-```bash id="y4rs4q"
+```bash
 lscpu
 ```
 
 Example output:
 
-```text id="k103am"
+```text
 Architecture:            x86_64
 CPU(s):                  8
 Thread(s) per core:      2
@@ -417,19 +417,19 @@ This helps understand CPU capacity and architecture.
 
 Run:
 
-```bash id="cecxci"
+```bash
 lsblk
 ```
 
 More useful filesystem view:
 
-```bash id="jrxert"
+```bash
 lsblk -f
 ```
 
 Example output:
 
-```text id="dhkbf0"
+```text
 NAME   FSTYPE LABEL UUID                                 MOUNTPOINTS
 sda
 ├─sda1 vfat         1111-2222                            /boot/efi
@@ -448,13 +448,13 @@ Interpretation:
 
 Run:
 
-```bash id="mdipd3"
+```bash
 sudo lshw -short
 ```
 
 Example output:
 
-```text id="dfzvuq"
+```text
 H/W path        Device      Class          Description
 ======================================================
 /0                          system         Latitude 5480
@@ -478,19 +478,19 @@ Interpretation:
 
 Show recent messages:
 
-```bash id="eksuzr"
+```bash
 dmesg | tail -50
 ```
 
 With readable timestamps:
 
-```bash id="dyjxth"
+```bash
 dmesg -T | tail -50
 ```
 
 Example after plugging in a USB drive:
 
-```text id="cg61kw"
+```text
 [Mon Jun  1 10:15:01 2026] usb 1-1: new high-speed USB device number 3 using xhci_hcd
 [Mon Jun  1 10:15:01 2026] usb 1-1: Product: Ultra USB 3.0
 [Mon Jun  1 10:15:02 2026] sd 6:0:0:0: [sdb] 60062500 512-byte logical blocks
@@ -511,13 +511,13 @@ Interpretation:
 
 To watch hardware events live:
 
-```bash id="l6hk6f"
+```bash
 sudo udevadm monitor --environment --udev
 ```
 
 Example output:
 
-```text id="y3l0pc"
+```text
 UDEV  [456.789123] add /devices/pci0000:00/.../usb1/1-1 (usb)
 ACTION=add
 DEVNAME=/dev/bus/usb/001/003
@@ -553,19 +553,19 @@ Useful tools include:
 
 Run:
 
-```bash id="rnyk97"
+```bash
 top
 ```
 
 or:
 
-```bash id="x7e6te"
+```bash
 htop
 ```
 
 Example `top` output:
 
-```text id="rfa7mg"
+```text
 %Cpu(s): 25.0 us,  5.0 sy, 65.0 id,  5.0 wa
 MiB Mem :  16384.0 total, 8192.0 used, 2048.0 free, 6144.0 buff/cache
 
@@ -591,7 +591,7 @@ Important fields:
 
 Run:
 
-```bash id="vpknsm"
+```bash
 vmstat 5
 ```
 
@@ -599,7 +599,7 @@ This prints system statistics every 5 seconds.
 
 Example output:
 
-```text id="uhvw5p"
+```text
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  0      0 823456  23456 345678    0    0     1     2  300  500  5  1 93  1  0
@@ -629,13 +629,13 @@ Important fields:
 
 Run:
 
-```bash id="ogb1kc"
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="met1f2"
+```text
 avg-cpu:  %user %nice %system %iowait %steal %idle
            2.00  0.00    1.00    0.50   0.00 96.50
 
@@ -666,13 +666,13 @@ The older tool is `netstat`, but modern Linux systems usually prefer `ss`.
 
 Show listening TCP and UDP ports:
 
-```bash id="w8cjra"
+```bash
 ss -tulnp
 ```
 
 Example output:
 
-```text id="hq92qa"
+```text
 Netid State  Local Address:Port  Peer Address:Port Process
 tcp   LISTEN 0.0.0.0:22          0.0.0.0:*         users:(("sshd",pid=1234,fd=3))
 tcp   LISTEN 0.0.0.0:80          0.0.0.0:*         users:(("nginx",pid=5678,fd=6))
@@ -690,25 +690,25 @@ This is useful for checking which services are reachable over the network.
 
 Install sensors tools if needed:
 
-```bash id="e7qi96"
+```bash
 sudo apt install lm-sensors
 ```
 
 Detect available sensors:
 
-```bash id="ex73ia"
+```bash
 sudo sensors-detect
 ```
 
 Then run:
 
-```bash id="k0d4x2"
+```bash
 sensors
 ```
 
 Example output:
 
-```text id="yn35ur"
+```text
 coretemp-isa-0000
 Package id 0:  +55.0°C  (high = +80.0°C, crit = +100.0°C)
 Core 0:        +54.0°C  (high = +80.0°C, crit = +100.0°C)
@@ -728,7 +728,7 @@ High temperatures can cause throttling, instability, shutdowns, or long-term har
 
 Run:
 
-```bash id="uelawz"
+```bash
 glances
 ```
 
@@ -740,7 +740,7 @@ It is useful when you want a quick overall view of system health.
 
 Run:
 
-```bash id="gf17c6"
+```bash
 nmon
 ```
 
@@ -773,13 +773,13 @@ Examples include:
 
 Run:
 
-```bash id="jzrlag"
+```bash
 sudo hdparm -I /dev/sda
 ```
 
 Example output:
 
-```text id="uf9o5h"
+```text
 /dev/sda:
 
 Model Number:       Samsung SSD 860 EVO 500GB
@@ -804,13 +804,13 @@ Be careful with `hdparm` write-related options. Some options can affect data saf
 
 Run:
 
-```bash id="amri08"
+```bash
 sudo sdparm --all /dev/sdb
 ```
 
 Example output:
 
-```text id="o5yk6f"
+```text
 Caching (SBC) mode page:
   WCE   Write Cache Enable: 1
   RCD   Read Cache Disable: 0
@@ -827,19 +827,19 @@ Storage cache settings can affect performance and data safety.
 
 On X11 systems, use:
 
-```bash id="xdc0ym"
+```bash
 xrandr
 ```
 
 Set a display mode:
 
-```bash id="r1d5du"
+```bash
 xrandr --output HDMI-1 --mode 1920x1080 --rate 60 --primary
 ```
 
 Example output:
 
-```text id="zrsj8g"
+```text
 HDMI-1 connected primary 1920x1080+0+0
 1920x1080     60.00*+  59.94
 1680x1050     59.88
@@ -857,7 +857,7 @@ Note that Wayland-based desktop environments may use different tools or graphica
 
 Interactive mixer:
 
-```bash id="w5s8sf"
+```bash
 alsamixer
 ```
 
@@ -870,14 +870,14 @@ Useful keys:
 
 Scriptable commands:
 
-```bash id="k8anzc"
+```bash
 amixer set Master unmute
 amixer set Master 75%
 ```
 
 Example output:
 
-```text id="q9gjvs"
+```text
 Simple mixer control 'Master',0
 Front Left: Playback 49152 [75%] [on]
 Front Right: Playback 49152 [75%] [on]
@@ -892,19 +892,19 @@ Interpretation:
 
 Show network interfaces:
 
-```bash id="odexff"
+```bash
 ip addr show
 ```
 
 Bring an interface up:
 
-```bash id="snxv89"
+```bash
 sudo ip link set eth0 up
 ```
 
 Example output:
 
-```text id="fv4zzh"
+```text
 2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 state DOWN
     link/ether 00:0a:95:9d:68:16
 ```
@@ -919,13 +919,13 @@ Interpretation:
 
 Check wireless block status:
 
-```bash id="lto0hf"
+```bash
 rfkill list
 ```
 
 Example output:
 
-```text id="myir1e"
+```text
 0: phy0: Wireless LAN
     Soft blocked: no
     Hard blocked: no
@@ -942,7 +942,7 @@ Interpretation:
 
 Unblock Bluetooth:
 
-```bash id="sagysd"
+```bash
 rfkill unblock bluetooth
 ```
 
@@ -967,19 +967,19 @@ Useful commands include:
 
 Run:
 
-```bash id="axqwfg"
+```bash
 lsmod
 ```
 
 Search for a module:
 
-```bash id="xvnp7e"
+```bash
 lsmod | grep e1000e
 ```
 
 Example output:
 
-```text id="n6nrk9"
+```text
 e1000e                245760  0
 intel_cstate           20480  0
 ```
@@ -994,7 +994,7 @@ Interpretation:
 
 Load a module:
 
-```bash id="b2vs3e"
+```bash
 sudo modprobe e1000e
 ```
 
@@ -1004,7 +1004,7 @@ sudo modprobe e1000e
 
 Unload a module:
 
-```bash id="oohcjd"
+```bash
 sudo modprobe -r e1000e
 ```
 
@@ -1012,7 +1012,7 @@ This may fail if the module is currently in use.
 
 Example:
 
-```text id="qcx99q"
+```text
 modprobe: FATAL: Module e1000e is in use.
 ```
 
@@ -1025,13 +1025,13 @@ Interpretation:
 
 Run:
 
-```bash id="jd6dxw"
+```bash
 modinfo e1000e
 ```
 
 Example output:
 
-```text id="gqrj4j"
+```text
 filename:    /lib/modules/6.x/kernel/drivers/net/ethernet/intel/e1000e/e1000e.ko
 version:     3.2.6-k
 license:     GPL
@@ -1049,13 +1049,13 @@ Interpretation:
 
 Module options can be configured under:
 
-```text id="sdr0ts"
+```text
 /etc/modprobe.d/
 ```
 
 Example:
 
-```bash id="hq7l7v"
+```bash
 echo "options e1000e InterruptThrottleRate=3000" | sudo tee /etc/modprobe.d/e1000e.conf
 ```
 
@@ -1069,7 +1069,7 @@ If a module causes problems or conflicts with another driver, it can be blacklis
 
 Example:
 
-```bash id="a928kv"
+```bash
 echo "blacklist nouveau" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
 ```
 
@@ -1077,7 +1077,7 @@ This prevents the open-source NVIDIA `nouveau` driver from loading.
 
 After changing early boot driver behavior, you may need:
 
-```bash id="fgtuik"
+```bash
 sudo update-initramfs -u
 sudo reboot
 ```
@@ -1102,25 +1102,25 @@ NVIDIA may use either the open-source `nouveau` driver or the proprietary NVIDIA
 
 On Ubuntu systems, you can inspect recommended drivers with:
 
-```bash id="q2y29s"
+```bash
 ubuntu-drivers devices
 ```
 
 Install a driver:
 
-```bash id="yvduge"
+```bash
 sudo apt install nvidia-driver-470
 ```
 
 Check status:
 
-```bash id="t4wzgv"
+```bash
 nvidia-smi
 ```
 
 Example output:
 
-```text id="f9bgki"
+```text
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 470.57.02    Driver Version: 470.57.02    CUDA Version: 11.4     |
 | GPU  Name            Temp    Memory-Usage        GPU-Util                   |
@@ -1140,25 +1140,25 @@ AMD GPUs often use the open-source `amdgpu` driver.
 
 Check GPU:
 
-```bash id="subbdw"
+```bash
 lspci | grep -E 'VGA|3D|Display'
 ```
 
 Example output:
 
-```text id="vqvnd5"
+```text
 01:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10
 ```
 
 Check driver:
 
-```bash id="kmnpch"
+```bash
 lspci -k | grep -A3 -E 'VGA|3D|Display'
 ```
 
 Example:
 
-```text id="lekx5w"
+```text
 Kernel driver in use: amdgpu
 Kernel modules: amdgpu
 ```
@@ -1188,7 +1188,7 @@ A good order is:
 
 Use:
 
-```bash id="w34lcf"
+```bash
 lspci
 lsusb
 lsblk
@@ -1207,19 +1207,19 @@ This answers:
 
 Use:
 
-```bash id="co2nar"
+```bash
 dmesg -T | tail -100
 ```
 
 Search for errors:
 
-```bash id="d4zk39"
+```bash
 dmesg -T | grep -iE 'error|fail|warn|timeout|reset'
 ```
 
 Example output:
 
-```text id="vx9jwr"
+```text
 [Mon Jun  1 10:20:01 2026] ata1.00: failed command: READ FPDMA QUEUED
 [Mon Jun  1 10:20:01 2026] ata1.00: error: { UNC }
 ```
@@ -1234,7 +1234,7 @@ Interpretation:
 
 Use:
 
-```bash id="vkguc3"
+```bash
 lspci -k
 ```
 
@@ -1249,7 +1249,7 @@ If no driver is in use, the device may not function properly.
 
 Depending on the distribution, check:
 
-```bash id="a76tgd"
+```bash
 sudo less /var/log/syslog
 sudo less /var/log/kern.log
 sudo journalctl -k
@@ -1257,13 +1257,13 @@ sudo journalctl -k
 
 With systemd, kernel logs can be viewed using:
 
-```bash id="avw9x6"
+```bash
 journalctl -k -b
 ```
 
 Search for errors:
 
-```bash id="jk5xnr"
+```bash
 journalctl -k -b | grep -iE 'error|fail|warn|timeout|reset'
 ```
 
@@ -1271,19 +1271,19 @@ journalctl -k -b | grep -iE 'error|fail|warn|timeout|reset'
 
 Install SMART tools:
 
-```bash id="a3msuw"
+```bash
 sudo apt install smartmontools
 ```
 
 Check health:
 
-```bash id="dxs2w0"
+```bash
 sudo smartctl -H /dev/sda
 ```
 
 Example output:
 
-```text id="taqdrj"
+```text
 SMART overall-health self-assessment test result: PASSED
 ```
 
@@ -1294,7 +1294,7 @@ Interpretation:
 
 Detailed check:
 
-```bash id="a54gh7"
+```bash
 sudo smartctl -a /dev/sda
 ```
 
@@ -1322,19 +1322,19 @@ General interpretation:
 
 Install:
 
-```bash id="gwfwe3"
+```bash
 sudo apt install stress-ng
 ```
 
 Run a CPU stress test:
 
-```bash id="xh8kdc"
+```bash
 stress-ng --cpu 4 --timeout 60s
 ```
 
 Example output:
 
-```text id="ihn74e"
+```text
 stress-ng: info: setting to a timeout of 60 seconds
 stress-ng: info: dispatching hogs: 4 cpu
 stress-ng: info: successful run completed in 60.00s
@@ -1379,7 +1379,7 @@ Plug in a USB flash drive.
 
 In another terminal, watch udev events:
 
-```bash id="p6e11i"
+```bash
 sudo udevadm monitor --environment --udev
 ```
 
@@ -1387,13 +1387,13 @@ Then plug in the USB device.
 
 #### Check with `dmesg`
 
-```bash id="oed2sm"
+```bash
 dmesg -T | tail -30
 ```
 
 Example output:
 
-```text id="ok5hk2"
+```text
 [Mon Jun  1 10:15:01 2026] usb 1-1: new high-speed USB device number 3 using xhci_hcd
 [Mon Jun  1 10:15:01 2026] usb 1-1: Product: Ultra USB 3.0
 [Mon Jun  1 10:15:02 2026] sd 6:0:0:0: [sdb] 60062500 512-byte logical blocks
@@ -1402,25 +1402,25 @@ Example output:
 
 #### Check with `lsusb`
 
-```bash id="brtgp8"
+```bash
 lsusb
 ```
 
 Example output:
 
-```text id="l3ks65"
+```text
 Bus 001 Device 003: ID 0781:5591 SanDisk Corp. Ultra USB 3.0
 ```
 
 #### Check with `lsblk`
 
-```bash id="v06tus"
+```bash
 lsblk
 ```
 
 Example output:
 
-```text id="s5t6qb"
+```text
 NAME   SIZE TYPE MOUNTPOINTS
 sda   238G disk
 └─sda1 238G part /
@@ -1443,7 +1443,7 @@ Create controlled CPU pressure and verify it with `top`, `htop`, and `vmstat`.
 
 #### Simulate the Bottleneck
 
-```bash id="tazxro"
+```bash
 stress-ng --cpu 4 --timeout 60s
 ```
 
@@ -1451,13 +1451,13 @@ This starts four CPU workers for 60 seconds.
 
 #### Check with `top`
 
-```bash id="g8mqre"
+```bash
 top
 ```
 
 Example output:
 
-```text id="jncw6p"
+```text
 %Cpu(s): 95.0 us,  4.0 sy,  0.0 ni,  1.0 id,  0.0 wa
 
 PID USER      PR  NI  S  %CPU COMMAND
@@ -1473,13 +1473,13 @@ Interpretation:
 
 #### Check with `vmstat`
 
-```bash id="da3nz0"
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="ctge11"
+```text
 r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
 5  0      0 800000  20000 500000    0    0     0     1 3000 6000 95  4  1  0  0
 ```
@@ -1498,7 +1498,7 @@ Create memory pressure and observe it with `free`, `vmstat`, and `top`.
 
 Use a conservative test first:
 
-```bash id="m51fzk"
+```bash
 stress-ng --vm 2 --vm-bytes 70% --timeout 60s
 ```
 
@@ -1506,13 +1506,13 @@ This uses memory workers for 60 seconds.
 
 #### Check with `free`
 
-```bash id="ii01qm"
+```bash
 free -h
 ```
 
 Example output:
 
-```text id="enqw12"
+```text
                total        used        free      shared  buff/cache   available
 Mem:            8.0G        6.7G        300M        100M        1.0G        900M
 Swap:           2.0G        300M        1.7G
@@ -1527,13 +1527,13 @@ Interpretation:
 
 #### Check with `vmstat`
 
-```bash id="egcc12"
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="qs1jhr"
+```text
 r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
 2  1 400000 100000  20000 200000  500  800  2000 4000 2000 5000 40 10 35 15  0
 ```
@@ -1552,13 +1552,13 @@ Create disk activity and verify it with `iostat` and `iotop`.
 
 Install tools if needed:
 
-```bash id="x0ojyk"
+```bash
 sudo apt install fio sysstat iotop
 ```
 
 Run a safe file-based write test:
 
-```bash id="e2kc4h"
+```bash
 mkdir -p ~/hardware-lab
 
 fio --name=write-test \
@@ -1573,13 +1573,13 @@ fio --name=write-test \
 
 #### Check with `iostat`
 
-```bash id="jc9b0d"
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="yfbkdr"
+```text
 Device            r/s     w/s     rkB/s     wkB/s   await  aqu-sz  %util
 sda              0.00  350.00      0.00  350000.0   32.50   10.20  99.60
 ```
@@ -1594,13 +1594,13 @@ Interpretation:
 
 #### Check with `iotop`
 
-```bash id="f27w8v"
+```bash
 sudo iotop -o
 ```
 
 Example output:
 
-```text id="n01dka"
+```text
 Total DISK WRITE: 340.00 M/s
 TID  PRIO USER DISK READ DISK WRITE IO> COMMAND
 5221 be/4 user 0.00 B/s  338.00 M/s 92% fio --name=write-test
@@ -1619,7 +1619,7 @@ Instead of bringing down a real interface, create a dummy interface.
 
 #### Create a Dummy Interface
 
-```bash id="kmjjdc"
+```bash
 sudo modprobe dummy
 sudo ip link add dummy0 type dummy
 sudo ip link set dummy0 up
@@ -1627,13 +1627,13 @@ sudo ip link set dummy0 up
 
 #### Check with `ip`
 
-```bash id="lvxtb3"
+```bash
 ip link show dummy0
 ```
 
 Example output:
 
-```text id="lhhr6v"
+```text
 10: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 state UNKNOWN mode DEFAULT
     link/ether 9a:42:cc:10:22:33 brd ff:ff:ff:ff:ff:ff
 ```
@@ -1646,19 +1646,19 @@ Interpretation:
 
 #### Bring It Down
 
-```bash id="iwxdgc"
+```bash
 sudo ip link set dummy0 down
 ```
 
 Check again:
 
-```bash id="rvuo8o"
+```bash
 ip link show dummy0
 ```
 
 Example output:
 
-```text id="ozwz2l"
+```text
 10: dummy0: <BROADCAST,NOARP> mtu 1500 state DOWN mode DEFAULT
 ```
 
@@ -1669,7 +1669,7 @@ Interpretation:
 
 #### Clean Up
 
-```bash id="mt9qfo"
+```bash
 sudo ip link delete dummy0
 ```
 
@@ -1679,13 +1679,13 @@ Understand `rfkill` output and wireless blocking.
 
 #### Check Current State
 
-```bash id="utlwrc"
+```bash
 rfkill list
 ```
 
 Example output:
 
-```text id="lh1qgo"
+```text
 0: phy0: Wireless LAN
     Soft blocked: no
     Hard blocked: no
@@ -1702,19 +1702,19 @@ Interpretation:
 
 #### Unblock Bluetooth
 
-```bash id="p2hf3m"
+```bash
 rfkill unblock bluetooth
 ```
 
 Check again:
 
-```bash id="jpqzmr"
+```bash
 rfkill list
 ```
 
 Example output:
 
-```text id="jitqf4"
+```text
 1: hci0: Bluetooth
     Soft blocked: no
     Hard blocked: no
@@ -1733,13 +1733,13 @@ Observe how CPU load affects temperature.
 
 In one terminal:
 
-```bash id="onrlkz"
+```bash
 watch -n 1 sensors
 ```
 
 Example idle output:
 
-```text id="w0lsko"
+```text
 Package id 0:  +45.0°C  (high = +80.0°C, crit = +100.0°C)
 Core 0:        +44.0°C
 Core 1:        +43.0°C
@@ -1749,13 +1749,13 @@ Core 1:        +43.0°C
 
 In another terminal:
 
-```bash id="owro40"
+```bash
 stress-ng --cpu 4 --timeout 60s
 ```
 
 Example loaded output:
 
-```text id="b2dfv6"
+```text
 Package id 0:  +78.0°C  (high = +80.0°C, crit = +100.0°C)
 Core 0:        +79.0°C
 Core 1:        +77.0°C
@@ -1784,25 +1784,25 @@ Identify which driver is handling a device.
 
 Run:
 
-```bash id="u2akgo"
+```bash
 lspci
 ```
 
 Example:
 
-```text id="qtfojs"
+```text
 00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection I219-LM
 ```
 
 #### Check Driver
 
-```bash id="saxgy9"
+```bash
 lspci -k -s 00:1f.6
 ```
 
 Example output:
 
-```text id="h6emxn"
+```text
 00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection I219-LM
         Kernel driver in use: e1000e
         Kernel modules: e1000e
@@ -1810,13 +1810,13 @@ Example output:
 
 #### Inspect Module
 
-```bash id="s8nr33"
+```bash
 modinfo e1000e | head
 ```
 
 Example output:
 
-```text id="dixduo"
+```text
 filename:    /lib/modules/6.x/kernel/drivers/net/ethernet/intel/e1000e/e1000e.ko
 description: Intel(R) PRO/1000 Network Driver
 license:     GPL
@@ -1836,13 +1836,13 @@ Use logs to identify hardware-like errors.
 
 #### Search Kernel Logs
 
-```bash id="l9s1px"
+```bash
 journalctl -k -b | grep -iE 'error|fail|warn|timeout|reset'
 ```
 
 Example output:
 
-```text id="m9jfsd"
+```text
 Jun 01 10:20:01 host kernel: usb 1-1: USB disconnect, device number 2
 Jun 01 10:20:05 host kernel: ata1.00: failed command: READ FPDMA QUEUED
 Jun 01 10:20:05 host kernel: ata1.00: error: { UNC }
@@ -1856,7 +1856,7 @@ Interpretation:
 
 #### Follow Up with SMART
 
-```bash id="cr5qi0"
+```bash
 sudo smartctl -a /dev/sda
 ```
 
@@ -1879,7 +1879,7 @@ Interpretation:
 
 Check:
 
-```bash id="ab99pc"
+```bash
 lsusb
 lspci
 dmesg -T | tail -50
@@ -1900,7 +1900,7 @@ Possible causes:
 
 Check:
 
-```bash id="qwko97"
+```bash
 lspci -k
 lsmod
 modinfo modulename
@@ -1920,7 +1920,7 @@ Possible causes:
 
 Check:
 
-```bash id="j63w9m"
+```bash
 dmesg -T | grep -iE 'ata|nvme|I/O error|reset|timeout'
 sudo smartctl -a /dev/sda
 ```
@@ -1938,7 +1938,7 @@ Possible fixes:
 
 Check:
 
-```bash id="xb13ak"
+```bash
 sensors
 watch -n 1 sensors
 ```
@@ -1964,7 +1964,7 @@ Possible fixes:
 
 Check:
 
-```bash id="y8ky5b"
+```bash
 ip link
 lspci -k | grep -A3 -i ethernet
 dmesg -T | grep -iE 'firmware|link|eth|wlan|wifi'
@@ -1984,7 +1984,7 @@ Possible causes:
 
 Check:
 
-```bash id="y5gpqn"
+```bash
 alsamixer
 amixer
 aplay -l
@@ -2002,7 +2002,7 @@ Common causes:
 
 Check:
 
-```bash id="enyewt"
+```bash
 xrandr
 lspci -k | grep -A3 -E 'VGA|3D|Display'
 journalctl -k -b | grep -iE 'drm|nvidia|amdgpu|i915'
@@ -2032,7 +2032,7 @@ Common causes:
 
 Hardware inventory:
 
-```bash id="rdq19k"
+```bash
 lspci
 lspci -k
 lsusb
@@ -2044,7 +2044,7 @@ sudo lshw -short
 
 Kernel and device events:
 
-```bash id="elfe7o"
+```bash
 dmesg -T | tail -50
 journalctl -k -b
 sudo udevadm monitor --environment --udev
@@ -2052,7 +2052,7 @@ sudo udevadm monitor --environment --udev
 
 Monitoring:
 
-```bash id="tug0tl"
+```bash
 top
 htop
 vmstat 1
@@ -2065,7 +2065,7 @@ nmon
 
 Drivers:
 
-```bash id="nq6ifp"
+```bash
 lsmod
 modinfo modulename
 sudo modprobe modulename
@@ -2074,14 +2074,14 @@ sudo modprobe -r modulename
 
 Storage health:
 
-```bash id="jxo2ef"
+```bash
 sudo smartctl -H /dev/sda
 sudo smartctl -a /dev/sda
 ```
 
 Network and wireless:
 
-```bash id="xu1nqb"
+```bash
 ip addr show
 ip link show
 rfkill list
@@ -2089,7 +2089,7 @@ rfkill list
 
 Audio and display:
 
-```bash id="sizlnd"
+```bash
 alsamixer
 amixer
 xrandr

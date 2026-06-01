@@ -4,7 +4,7 @@ Storage devices such as HDDs, SSDs, USB drives, and virtual disks provide raw sp
 
 Linux storage can be understood in layers.
 
-```text id="0cdghx"
+```text
 Physical disk
     |
     v
@@ -22,7 +22,7 @@ Usable files and directories
 
 With LVM, there are extra layers that make storage more flexible.
 
-```text id="i9g5w5"
+```text
 Physical disk or partition
     |
     v
@@ -51,7 +51,7 @@ A physical disk can be divided into multiple partitions. Each partition can be u
 
 For example, a disk might contain:
 
-```text id="vcg6dp"
+```text
 /boot       boot files
 /           root filesystem
 /home       user files
@@ -60,7 +60,7 @@ swap        swap space
 
 A simple partition layout might look like this:
 
-```text id="mkpsql"
+```text
 Disk: /dev/sda
 +-------------+----------------+----------------+
 | /dev/sda1   | /dev/sda2      | /dev/sda3      |
@@ -77,7 +77,7 @@ A partition table describes how a disk is divided into partitions.
 
 The two most common partition table types are:
 
-```text id="o5mj7h"
+```text
 MBR
 GPT
 ```
@@ -92,7 +92,7 @@ MBR has an important limitation: it supports only four primary partitions.
 
 To work around this, MBR uses extended and logical partitions.
 
-```text id="24naqi"
+```text
 MBR Disk
 +-------------+-------------+-------------------------------+
 | Primary 1   | Primary 2   | Extended Partition            |
@@ -107,7 +107,7 @@ The extended partition is a container. It does not directly hold a filesystem in
 
 Important point:
 
-```text id="4gca51"
+```text
 Primary, extended, and logical partitions are mainly MBR concepts.
 ```
 
@@ -127,7 +127,7 @@ With GPT:
 
 A GPT disk looks simpler conceptually:
 
-```text id="5g14j7"
+```text
 GPT Disk
 +-------------+-------------+-------------+-------------+
 | Partition 1 | Partition 2 | Partition 3 | Partition 4 |
@@ -142,13 +142,13 @@ A volume is a usable storage area that can contain a filesystem.
 
 A volume may be a simple partition, such as:
 
-```text id="1bka8y"
+```text
 /dev/sda1
 ```
 
 or it may be a logical volume created by LVM, such as:
 
-```text id="p4eqkv"
+```text
 /dev/vg_data/lv_home
 ```
 
@@ -162,7 +162,7 @@ A volume is a usable storage unit that usually contains a filesystem.
 
 A simple partition-based setup looks like this:
 
-```text id="qxj8yp"
+```text
 Disk
  |
  +--> Partition
@@ -174,7 +174,7 @@ Disk
 
 An LVM-based setup looks like this:
 
-```text id="lyc3ci"
+```text
 Disk or partition
  |
  +--> Physical Volume
@@ -215,7 +215,7 @@ For example, instead of being locked into a fixed `/home` partition size, you co
 
 LVM has three main layers:
 
-```text id="t88t39"
+```text
 Physical Volume, PV
 Volume Group, VG
 Logical Volume, LV
@@ -227,7 +227,7 @@ A volume group is a pool of storage made from one or more physical volumes.
 
 A logical volume is a usable storage unit created inside a volume group.
 
-```text id="qjgo5p"
+```text
 |-----------------|     |-----------------|     |-----------------|
 | Physical Volume |     | Physical Volume |     | Physical Volume |
 | PV: /dev/sdb    |     | PV: /dev/sdc    |     | PV: /dev/sdd    |
@@ -263,7 +263,7 @@ A physical volume, or PV, is a disk or partition initialized for use by LVM.
 
 Examples:
 
-```text id="3cyrh2"
+```text
 /dev/sdb
 /dev/sdc1
 /dev/nvme1n1p3
@@ -273,19 +273,19 @@ A PV is not normally mounted directly. Instead, it becomes part of a volume grou
 
 To create a physical volume:
 
-```bash id="nu316t"
+```bash
 sudo pvcreate /dev/sdb
 ```
 
 To view physical volumes:
 
-```bash id="gj0cxr"
+```bash
 sudo pvs
 ```
 
 Example output:
 
-```text id="za6lbx"
+```text
 PV         VG      Fmt  Attr PSize   PFree
 /dev/sdb   TEST    lvm2 a--   50.00g  0
 /dev/sdc   TEST    lvm2 a--  100.00g 10.00g
@@ -307,7 +307,7 @@ A volume group, or VG, is a storage pool made from one or more physical volumes.
 
 Example:
 
-```text id="m6cq7o"
+```text
 TEST
 ```
 
@@ -315,25 +315,25 @@ A VG combines the capacity of all physical volumes assigned to it.
 
 To create a volume group:
 
-```bash id="pn0z5s"
+```bash
 sudo vgcreate TEST /dev/sdb
 ```
 
 To add more physical volumes to an existing volume group:
 
-```bash id="08y4yx"
+```bash
 sudo vgextend TEST /dev/sdc /dev/sdd
 ```
 
 To view volume groups:
 
-```bash id="km21ed"
+```bash
 sudo vgs
 ```
 
 Example output:
 
-```text id="pyui0x"
+```text
 VG     #PV #LV #SN Attr   VSize    VFree
 TEST     3   2   0 wz--n- 300.00g  30.00g
 ```
@@ -357,7 +357,7 @@ It behaves much like a partition. You can format it, mount it, and store files o
 
 Examples:
 
-```text id="u3qj80"
+```text
 /dev/TEST/vol_name_1
 /dev/mapper/TEST-vol_name_1
 ```
@@ -366,7 +366,7 @@ Both paths usually refer to the same logical volume.
 
 To create a logical volume:
 
-```bash id="s90apv"
+```bash
 sudo lvcreate -L 20G -n vol_name_1 TEST
 ```
 
@@ -374,13 +374,13 @@ This creates a 20 GB logical volume named `vol_name_1` inside the volume group `
 
 To view logical volumes:
 
-```bash id="j2wq5w"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="ijxuao"
+```text
 LV          VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
 vol_name_1  TEST  -wi-a----- 180.00g
 vol_name_2  TEST  -wi-a-----  90.00g
@@ -401,38 +401,38 @@ A logical volume is not ready for normal file storage until it has a filesystem.
 
 For example, to create an ext4 filesystem:
 
-```bash id="r9f5st"
+```bash
 sudo mkfs.ext4 /dev/TEST/vol_name_1
 ```
 
 Then create a mount point:
 
-```bash id="qjr6ul"
+```bash
 sudo mkdir -p /mnt/mydata
 ```
 
 Mount it:
 
-```bash id="1bd3v0"
+```bash
 sudo mount /dev/TEST/vol_name_1 /mnt/mydata
 ```
 
 Check it:
 
-```bash id="of75xj"
+```bash
 df -h /mnt/mydata
 ```
 
 Example output:
 
-```text id="c2vwf8"
+```text
 Filesystem                    Size  Used Avail Use% Mounted on
 /dev/mapper/TEST-vol_name_1    20G   24K   19G   1% /mnt/mydata
 ```
 
 Interpretation:
 
-```text id="s7swty"
+```text
 The logical volume is formatted, mounted, and usable.
 Files written to /mnt/mydata are stored on the LV.
 ```
@@ -441,19 +441,19 @@ Files written to /mnt/mydata are stored on the LV.
 
 LVM names usually follow this pattern:
 
-```text id="c8fztx"
+```text
 /dev/VOLUME_GROUP/LOGICAL_VOLUME
 ```
 
 Example:
 
-```text id="js0tgy"
+```text
 /dev/TEST/vol_name_1
 ```
 
 Linux may also show the same LV under `/dev/mapper`:
 
-```text id="pyfv2n"
+```text
 /dev/mapper/TEST-vol_name_1
 ```
 
@@ -474,7 +474,7 @@ A full LVM setup usually follows this order:
 
 Example:
 
-```bash id="t8u1ps"
+```bash
 sudo pvcreate /dev/sdb /dev/sdc /dev/sdd
 sudo vgcreate TEST /dev/sdb
 sudo vgextend TEST /dev/sdc /dev/sdd
@@ -495,7 +495,7 @@ If the volume group has free space, you can increase an LV size.
 
 Example:
 
-```bash id="vz5bqk"
+```bash
 sudo lvextend -L +10G /dev/TEST/vol_name_1
 ```
 
@@ -505,19 +505,19 @@ However, the filesystem also needs to be expanded.
 
 For ext4:
 
-```bash id="ve7wh0"
+```bash
 sudo resize2fs /dev/TEST/vol_name_1
 ```
 
 A more convenient method is to use `-r`, which resizes the filesystem automatically:
 
-```bash id="njys9d"
+```bash
 sudo lvextend -r -L +10G /dev/TEST/vol_name_1
 ```
 
 This is often safer and simpler because it handles both steps:
 
-```text id="ynm3xj"
+```text
 extend LV
 resize filesystem
 ```
@@ -540,7 +540,7 @@ The safe order for ext4 is:
 
 Example:
 
-```bash id="r6m3qk"
+```bash
 sudo umount /dev/TEST/vol_name_1
 sudo e2fsck -f /dev/TEST/vol_name_1
 sudo resize2fs /dev/TEST/vol_name_1 15G
@@ -550,7 +550,7 @@ sudo mount /dev/TEST/vol_name_1 /mnt/vol1
 
 Important warning:
 
-```text id="kljxcr"
+```text
 Do not reduce an LV before reducing the filesystem.
 The filesystem must fit inside the smaller LV.
 ```
@@ -561,13 +561,13 @@ For some filesystems, such as XFS, shrinking is not supported. XFS can be grown 
 
 To delete a logical volume, first unmount it.
 
-```bash id="lz3cao"
+```bash
 sudo umount /mnt/vol1
 ```
 
 Then remove it:
 
-```bash id="f74ok8"
+```bash
 sudo lvremove /dev/TEST/vol_name_1
 ```
 
@@ -577,7 +577,7 @@ After removal, the space returns to the volume group as free space.
 
 Check with:
 
-```bash id="hf682z"
+```bash
 sudo vgs
 ```
 
@@ -595,7 +595,7 @@ Snapshots are useful for:
 
 A snapshot does not immediately copy all data. Instead, it uses copy-on-write behavior. When data changes on the original LV, the snapshot keeps the old blocks so it can preserve the earlier state.
 
-```text id="ghg06l"
+```text
 Original LV before snapshot
         |
         v
@@ -610,7 +610,7 @@ Snapshot preserves old data blocks
 
 Create a snapshot:
 
-```bash id="t6nf0v"
+```bash
 sudo lvcreate -L 1G -s -n snap_vol_name_1 /dev/TEST/vol_name_1
 ```
 
@@ -618,13 +618,13 @@ This creates a 1 GB snapshot named `snap_vol_name_1`.
 
 View snapshots:
 
-```bash id="swwppg"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="bqskbg"
+```text
 LV               VG    Attr       LSize  Origin      Data%
 snap_vol_name_1  TEST  swi-a-s---  1.00g vol_name_1  12.00
 vol_name_1       TEST  owi-a-s--- 20.00g
@@ -640,7 +640,7 @@ Interpretation:
 
 To merge a snapshot back into the original logical volume:
 
-```bash id="lmqcrk"
+```bash
 sudo lvconvert --merge /dev/TEST/snap_vol_name_1
 ```
 
@@ -663,7 +663,7 @@ If you want an LV mounted automatically at boot, add it to `/etc/fstab`.
 
 Example:
 
-```text id="chccnp"
+```text
 /dev/TEST/vol_name_1   /mnt/vol1   ext4   defaults   0   2
 ```
 
@@ -671,25 +671,25 @@ A more robust option is to use a UUID.
 
 Find the UUID:
 
-```bash id="o1d33n"
+```bash
 sudo blkid /dev/TEST/vol_name_1
 ```
 
 Example:
 
-```text id="j8yyrg"
+```text
 /dev/TEST/vol_name_1: UUID="1111-2222" TYPE="ext4"
 ```
 
 Then use:
 
-```text id="brmwfk"
+```text
 UUID=1111-2222   /mnt/vol1   ext4   defaults   0   2
 ```
 
 Test `/etc/fstab` before rebooting:
 
-```bash id="nq1p58"
+```bash
 sudo mount -a
 ```
 
@@ -722,7 +722,7 @@ LVM logical volume:
 
 Modern note:
 
-```text id="pbxug1"
+```text
 On GPT disks, primary/extended/logical partition limits are mostly not relevant.
 GPT supports many normal partitions without extended partitions.
 ```
@@ -748,7 +748,7 @@ Use LVM when:
 
 A common Linux server layout might use both:
 
-```text id="e1i8fk"
+```text
 /boot      normal partition
 /boot/efi  EFI system partition
 /          LVM logical volume
@@ -782,7 +782,7 @@ Creation commands:
 
 Resize commands:
 
-```bash id="rhvt1x"
+```bash
 lvextend -r -L +10G /dev/TEST/vol_name_1
 resize2fs /dev/TEST/vol_name_1
 lvreduce -L 15G /dev/TEST/vol_name_1
@@ -790,14 +790,14 @@ lvreduce -L 15G /dev/TEST/vol_name_1
 
 Snapshot commands:
 
-```bash id="u7lwx1"
+```bash
 lvcreate -L 1G -s -n snap_vol_name_1 /dev/TEST/vol_name_1
 lvconvert --merge /dev/TEST/snap_vol_name_1
 ```
 
 Removal commands:
 
-```bash id="mhcy2x"
+```bash
 umount /mnt/vol1
 lvremove /dev/TEST/vol_name_1
 vgremove TEST
@@ -819,13 +819,11 @@ Important warning:
 
 ### Scenario 1: Create a Complete LVM Setup in a Lab
 
-#### Goal
-
 Simulate three disks, create LVM physical volumes, combine them into one volume group, create a logical volume, format it, mount it, and verify that it works.
 
 #### Step 1: Create Test Disk Files
 
-```bash id="yzevim"
+```bash
 mkdir -p ~/lvm-lab
 
 truncate -s 1G ~/lvm-lab/disk1.img
@@ -837,7 +835,7 @@ These files act like fake disks.
 
 #### Step 2: Attach Files as Loop Devices
 
-```bash id="ki12af"
+```bash
 sudo losetup --find --show ~/lvm-lab/disk1.img
 sudo losetup --find --show ~/lvm-lab/disk2.img
 sudo losetup --find --show ~/lvm-lab/disk3.img
@@ -845,7 +843,7 @@ sudo losetup --find --show ~/lvm-lab/disk3.img
 
 Example output:
 
-```text id="b6s88b"
+```text
 /dev/loop10
 /dev/loop11
 /dev/loop12
@@ -859,13 +857,13 @@ Interpretation:
 
 #### Step 3: Create Physical Volumes
 
-```bash id="kusq9g"
+```bash
 sudo pvcreate /dev/loop10 /dev/loop11 /dev/loop12
 ```
 
 Example output:
 
-```text id="s5pq5g"
+```text
 Physical volume "/dev/loop10" successfully created.
 Physical volume "/dev/loop11" successfully created.
 Physical volume "/dev/loop12" successfully created.
@@ -873,13 +871,13 @@ Physical volume "/dev/loop12" successfully created.
 
 Check:
 
-```bash id="ckqgft"
+```bash
 sudo pvs
 ```
 
 Example output:
 
-```text id="e0rmtg"
+```text
 PV           VG  Fmt  Attr PSize    PFree
 /dev/loop10      lvm2 ---  1024.00m 1024.00m
 /dev/loop11      lvm2 ---  1024.00m 1024.00m
@@ -888,124 +886,122 @@ PV           VG  Fmt  Attr PSize    PFree
 
 Interpretation:
 
-```text id="sxv540"
+```text
 The loop devices are prepared for LVM.
 They are not yet part of a volume group.
 ```
 
 #### Step 4: Create a Volume Group
 
-```bash id="h0vcaq"
+```bash
 sudo vgcreate lab_vg /dev/loop10 /dev/loop11
 ```
 
 Example output:
 
-```text id="rhw6pq"
+```text
 Volume group "lab_vg" successfully created
 ```
 
 Check:
 
-```bash id="mqo2bi"
+```bash
 sudo vgs
 ```
 
 Example output:
 
-```text id="cdgcdl"
+```text
 VG      #PV #LV #SN Attr   VSize  VFree
 lab_vg    2   0   0 wz--n- 1.99g  1.99g
 ```
 
 Interpretation:
 
-```text id="xyk339"
+```text
 Two 1 GB loop disks are combined into one volume group.
 The volume group has about 2 GB of usable space.
 ```
 
 #### Step 5: Create a Logical Volume
 
-```bash id="dh42zw"
+```bash
 sudo lvcreate -L 1G -n data lab_vg
 ```
 
 Example output:
 
-```text id="sjtfpx"
+```text
 Logical volume "data" created.
 ```
 
 Check:
 
-```bash id="a3r36b"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="rawh1k"
+```text
 LV    VG      Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
 data  lab_vg  -wi-a----- 1.00g
 ```
 
 Interpretation:
 
-```text id="o4fcfh"
+```text
 A 1 GB logical volume named data now exists inside lab_vg.
 ```
 
 #### Step 6: Create a Filesystem
 
-```bash id="qopjkl"
+```bash
 sudo mkfs.ext4 /dev/lab_vg/data
 ```
 
 Example output:
 
-```text id="knq2qw"
+```text
 Creating filesystem with 262144 4k blocks and 65536 inodes
 Filesystem UUID: 12345678-abcd-1234-abcd-123456789abc
 ```
 
 Interpretation:
 
-```text id="d0nafn"
+```text
 The logical volume now contains an ext4 filesystem.
 It can be mounted and used for files.
 ```
 
 #### Step 7: Mount the Logical Volume
 
-```bash id="wlng4f"
+```bash
 sudo mkdir -p /mnt/lvmlab
 sudo mount /dev/lab_vg/data /mnt/lvmlab
 ```
 
 Check:
 
-```bash id="gwjwgc"
+```bash
 df -h /mnt/lvmlab
 ```
 
 Example output:
 
-```text id="nasnlw"
+```text
 Filesystem               Size  Used Avail Use% Mounted on
 /dev/mapper/lab_vg-data  974M   24K  907M   1% /mnt/lvmlab
 ```
 
 Interpretation:
 
-```text id="c761po"
+```text
 The logical volume is mounted and usable.
 Files placed in /mnt/lvmlab are stored on the LVM logical volume.
 ```
 
 ### Scenario 2: Simulate a Full Filesystem and Fix It with LVM
-
-#### Goal
 
 Simulate a common storage bottleneck: a mounted filesystem is almost full, but the volume group still has free space.
 
@@ -1013,39 +1009,39 @@ This is one of the best practical use cases for LVM.
 
 #### Step 1: Fill the Filesystem
 
-```bash id="p3t9iq"
+```bash
 sudo fallocate -l 850M /mnt/lvmlab/bigfile
 ```
 
 Check usage:
 
-```bash id="sioih0"
+```bash
 df -h /mnt/lvmlab
 ```
 
 Example output:
 
-```text id="m42d61"
+```text
 Filesystem               Size  Used Avail Use% Mounted on
 /dev/mapper/lab_vg-data  974M  851M   58M  94% /mnt/lvmlab
 ```
 
 Interpretation:
 
-```text id="p6l0xo"
+```text
 The filesystem is almost full.
 Applications writing to /mnt/lvmlab may fail soon.
 ```
 
 #### Step 2: Check Whether the Volume Group Has Free Space
 
-```bash id="fgg7q7"
+```bash
 sudo vgs
 ```
 
 Example output:
 
-```text id="pjnb1v"
+```text
 VG      #PV #LV #SN Attr   VSize  VFree
 lab_vg    2   1   0 wz--n- 1.99g  1016.00m
 ```
@@ -1059,13 +1055,13 @@ Interpretation:
 
 Use `-r` to resize the filesystem at the same time:
 
-```bash id="lrn5li"
+```bash
 sudo lvextend -r -L +500M /dev/lab_vg/data
 ```
 
 Example output:
 
-```text id="j6u4k6"
+```text
 Size of logical volume lab_vg/data changed from 1.00 GiB to 1.49 GiB.
 Logical volume lab_vg/data successfully resized.
 resize2fs 1.46.5
@@ -1074,13 +1070,13 @@ The filesystem is now 390144 blocks long.
 
 #### Step 4: Verify the Result
 
-```bash id="fzi9sx"
+```bash
 df -h /mnt/lvmlab
 ```
 
 Example output:
 
-```text id="o6pccr"
+```text
 Filesystem               Size  Used Avail Use% Mounted on
 /dev/mapper/lab_vg-data  1.5G  851M  542M  62% /mnt/lvmlab
 ```
@@ -1094,19 +1090,17 @@ Interpretation:
 
 ### Scenario 3: Simulate “No Space Left in Volume Group”
 
-#### Goal
-
 Show what happens when the filesystem needs more space but the volume group does not have enough free space.
 
 #### Step 1: Try to Extend Too Much
 
-```bash id="s2fwzq"
+```bash
 sudo lvextend -r -L +5G /dev/lab_vg/data
 ```
 
 Example output:
 
-```text id="grs1zn"
+```text
 Insufficient free space: 1280 extents needed, but only 129 available
 ```
 
@@ -1118,20 +1112,20 @@ Interpretation:
 
 #### Step 2: Confirm with `vgs`
 
-```bash id="b9e1ek"
+```bash
 sudo vgs
 ```
 
 Example output:
 
-```text id="n84sk8"
+```text
 VG      #PV #LV #SN Attr   VSize  VFree
 lab_vg    2   1   0 wz--n- 1.99g  516.00m
 ```
 
 Interpretation:
 
-```text id="h5q06a"
+```text
 Only about 516 MB is free in the volume group.
 A 5 GB extension is impossible without adding more storage.
 ```
@@ -1142,25 +1136,25 @@ Earlier, `/dev/loop12` was prepared as a PV but not added to the VG.
 
 Add it now:
 
-```bash id="co3fbr"
+```bash
 sudo vgextend lab_vg /dev/loop12
 ```
 
 Example output:
 
-```text id="phu3q8"
+```text
 Volume group "lab_vg" successfully extended
 ```
 
 Check:
 
-```bash id="fi91hr"
+```bash
 sudo vgs
 ```
 
 Example output:
 
-```text id="g6pz3f"
+```text
 VG      #PV #LV #SN Attr   VSize  VFree
 lab_vg    3   1   0 wz--n- 2.99g  1.51g
 ```
@@ -1173,19 +1167,19 @@ Interpretation:
 
 #### Step 4: Extend Again
 
-```bash id="funt08"
+```bash
 sudo lvextend -r -L +1G /dev/lab_vg/data
 ```
 
 Check:
 
-```bash id="l5a0pp"
+```bash
 df -h /mnt/lvmlab
 ```
 
 Example output:
 
-```text id="alr6z3"
+```text
 Filesystem               Size  Used Avail Use% Mounted on
 /dev/mapper/lab_vg-data  2.5G  851M  1.6G  35% /mnt/lvmlab
 ```
@@ -1198,19 +1192,17 @@ Interpretation:
 
 ### Scenario 4: Simulate and Inspect LVM Layers
 
-#### Goal
-
 Use LVM tools to understand the relationship between PVs, VGs, LVs, filesystems, and mount points.
 
 #### Check Block Devices
 
-```bash id="xzq9hx"
+```bash
 lsblk
 ```
 
 Example output:
 
-```text id="z5ic26"
+```text
 NAME              SIZE TYPE MOUNTPOINT
 loop10              1G loop
 └─lab_vg-data     2.5G lvm  /mnt/lvmlab
@@ -1228,13 +1220,13 @@ Interpretation:
 
 #### Check Physical Volumes
 
-```bash id="g37vc1"
+```bash
 sudo pvs
 ```
 
 Example output:
 
-```text id="tvh324"
+```text
 PV           VG      Fmt  Attr PSize    PFree
 /dev/loop10  lab_vg  lvm2 a--  1020.00m    0
 /dev/loop11  lab_vg  lvm2 a--  1020.00m    0
@@ -1243,20 +1235,20 @@ PV           VG      Fmt  Attr PSize    PFree
 
 Interpretation:
 
-```text id="e1bbv3"
+```text
 All three loop devices are physical volumes.
 Some free space remains on /dev/loop12.
 ```
 
 #### Check Volume Group
 
-```bash id="we2efe"
+```bash
 sudo vgs
 ```
 
 Example output:
 
-```text id="gt72ug"
+```text
 VG      #PV #LV #SN Attr   VSize  VFree
 lab_vg    3   1   0 wz--n- 2.99g 500.00m
 ```
@@ -1268,13 +1260,13 @@ Interpretation:
 
 #### Check Logical Volume
 
-```bash id="yik0bu"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="hg2slr"
+```text
 LV    VG      Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
 data  lab_vg  -wi-ao---- 2.50g
 ```
@@ -1286,44 +1278,42 @@ Interpretation:
 
 ### Scenario 5: Create a Snapshot Before a Risky Change
 
-#### Goal
-
 Create a snapshot, make a risky change, and understand how the snapshot protects the earlier state.
 
 #### Step 1: Create a Test File
 
-```bash id="v8gmxq"
+```bash
 echo "original version" | sudo tee /mnt/lvmlab/example.txt
 cat /mnt/lvmlab/example.txt
 ```
 
 Example output:
 
-```text id="ysn4sx"
+```text
 original version
 ```
 
 #### Step 2: Create a Snapshot
 
-```bash id="oudohe"
+```bash
 sudo lvcreate -L 200M -s -n data_snap /dev/lab_vg/data
 ```
 
 Example output:
 
-```text id="ro6ozs"
+```text
 Logical volume "data_snap" created.
 ```
 
 Check:
 
-```bash id="p8j1sr"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="x1583m"
+```text
 LV        VG      Attr       LSize   Origin Data%
 data      lab_vg  owi-aos---   2.50g
 data_snap lab_vg  swi-a-s--- 200.00m data   0.01
@@ -1336,26 +1326,26 @@ Interpretation:
 
 #### Step 3: Make a Risky Change
 
-```bash id="o79sl6"
+```bash
 echo "bad change" | sudo tee /mnt/lvmlab/example.txt
 cat /mnt/lvmlab/example.txt
 ```
 
 Example output:
 
-```text id="tbrrqw"
+```text
 bad change
 ```
 
 #### Step 4: Inspect Snapshot Usage
 
-```bash id="l25jps"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="f4rdwr"
+```text
 LV        VG      Attr       LSize   Origin Data%
 data      lab_vg  owi-aos---   2.50g
 data_snap lab_vg  swi-a-s--- 200.00m data   1.25
@@ -1370,40 +1360,40 @@ Interpretation:
 
 Unmount the filesystem first:
 
-```bash id="zq8sgf"
+```bash
 cd ~
 sudo umount /mnt/lvmlab
 ```
 
 Merge the snapshot:
 
-```bash id="sdc56f"
+```bash
 sudo lvconvert --merge /dev/lab_vg/data_snap
 ```
 
 Example output:
 
-```text id="o63qma"
+```text
 Merging of volume lab_vg/data_snap started.
 lab_vg/data: Merged: 100.00%
 ```
 
 Reactivate if needed:
 
-```bash id="lwhwdt"
+```bash
 sudo lvchange -ay /dev/lab_vg/data
 ```
 
 Mount again:
 
-```bash id="kxkrxw"
+```bash
 sudo mount /dev/lab_vg/data /mnt/lvmlab
 cat /mnt/lvmlab/example.txt
 ```
 
 Expected output:
 
-```text id="veakyq"
+```text
 original version
 ```
 
@@ -1420,25 +1410,25 @@ Snapshots need enough space to store changed blocks. If too much changes after t
 
 #### Step 1: Create a Small Snapshot
 
-```bash id="d9kf9c"
+```bash
 sudo lvcreate -L 50M -s -n small_snap /dev/lab_vg/data
 ```
 
 #### Step 2: Write Enough Data to the Original LV
 
-```bash id="n9yplc"
+```bash
 sudo fallocate -l 200M /mnt/lvmlab/change-after-snapshot.bin
 ```
 
 #### Step 3: Check Snapshot Usage
 
-```bash id="a4j6mu"
+```bash
 sudo lvs
 ```
 
 Example output:
 
-```text id="fzq79o"
+```text
 LV          VG      Attr       LSize  Origin Data%
 data        lab_vg  owi-aos--- 2.50g
 small_snap  lab_vg  swi-a-s--- 50.00m data   100.00
@@ -1461,14 +1451,14 @@ Remove the test LVM setup safely.
 
 #### Step 1: Unmount
 
-```bash id="bfdmo5"
+```bash
 cd ~
 sudo umount /mnt/lvmlab
 ```
 
 #### Step 2: Remove Snapshots if Any Remain
 
-```bash id="k4umtu"
+```bash
 sudo lvs
 sudo lvremove /dev/lab_vg/small_snap
 ```
@@ -1477,32 +1467,32 @@ Only remove snapshots that exist.
 
 #### Step 3: Remove the Logical Volume
 
-```bash id="m4k756"
+```bash
 sudo lvremove /dev/lab_vg/data
 ```
 
 Example output:
 
-```text id="lex1ar"
+```text
 Do you really want to remove active logical volume lab_vg/data? [y/n]: y
 Logical volume "data" successfully removed.
 ```
 
 #### Step 4: Remove the Volume Group
 
-```bash id="dvj00j"
+```bash
 sudo vgremove lab_vg
 ```
 
 #### Step 5: Remove Physical Volume Labels
 
-```bash id="rjyd5g"
+```bash
 sudo pvremove /dev/loop10 /dev/loop11 /dev/loop12
 ```
 
 #### Step 6: Detach Loop Devices
 
-```bash id="qfx2sx"
+```bash
 sudo losetup -d /dev/loop10
 sudo losetup -d /dev/loop11
 sudo losetup -d /dev/loop12
@@ -1510,20 +1500,20 @@ sudo losetup -d /dev/loop12
 
 #### Step 7: Delete Test Files
 
-```bash id="q7bpte"
+```bash
 rm -rf ~/lvm-lab
 sudo rmdir /mnt/lvmlab
 ```
 
 Check:
 
-```bash id="j19yhv"
+```bash
 lsblk
 ```
 
 Interpretation:
 
-```text id="mjaffu"
+```text
 The test loop devices, LVM objects, mount point, and files have been removed.
 The lab environment is cleaned up.
 ```
@@ -1534,7 +1524,7 @@ The lab environment is cleaned up.
 
 Symptoms:
 
-```text id="st2n11"
+```text
 applications cannot write files
 df -h shows 100% usage
 "No space left on device"
@@ -1542,7 +1532,7 @@ df -h shows 100% usage
 
 Check:
 
-```bash id="gaz0f1"
+```bash
 df -h
 sudo vgs
 sudo lvs
@@ -1555,7 +1545,7 @@ Interpretation:
 
 Fix if VG has free space:
 
-```bash id="u2f1zc"
+```bash
 sudo lvextend -r -L +10G /dev/VG_NAME/LV_NAME
 ```
 
@@ -1563,7 +1553,7 @@ sudo lvextend -r -L +10G /dev/VG_NAME/LV_NAME
 
 Symptoms:
 
-```text id="mne6vr"
+```text
 lvextend fails
 error mentions insufficient free extents
 vgs shows VFree as 0
@@ -1571,14 +1561,14 @@ vgs shows VFree as 0
 
 Check:
 
-```bash id="gzd4mn"
+```bash
 sudo vgs
 sudo pvs
 ```
 
 Fix:
 
-```bash id="rhup74"
+```bash
 sudo pvcreate /dev/newdisk
 sudo vgextend VG_NAME /dev/newdisk
 sudo lvextend -r -L +10G /dev/VG_NAME/LV_NAME
@@ -1588,7 +1578,7 @@ sudo lvextend -r -L +10G /dev/VG_NAME/LV_NAME
 
 Check:
 
-```bash id="bq530x"
+```bash
 sudo lvs
 lsblk
 findmnt
@@ -1596,7 +1586,7 @@ findmnt
 
 If the LV exists but is not mounted, mount it:
 
-```bash id="doa2re"
+```bash
 sudo mkdir -p /mnt/data
 sudo mount /dev/VG_NAME/LV_NAME /mnt/data
 ```
@@ -1607,19 +1597,19 @@ Sometimes LVM volumes exist but are inactive.
 
 Check:
 
-```bash id="akq2bd"
+```bash
 sudo lvs
 ```
 
 Activate all volume groups:
 
-```bash id="x5zkhp"
+```bash
 sudo vgchange -ay
 ```
 
 Then check again:
 
-```bash id="kb9h3x"
+```bash
 lsblk
 ```
 
@@ -1627,7 +1617,7 @@ lsblk
 
 Check:
 
-```bash id="ycm6un"
+```bash
 sudo lvs
 ```
 
@@ -1642,7 +1632,7 @@ Fix options:
 
 Remove snapshot:
 
-```bash id="kx3887"
+```bash
 sudo lvremove /dev/VG_NAME/SNAPSHOT_NAME
 ```
 

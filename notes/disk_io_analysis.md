@@ -8,7 +8,7 @@ A system can have plenty of CPU and memory but still feel slow if processes are 
 
 In simple terms:
 
-```text id="rp4mq9"
+```text
 Disk I/O bottleneck = the system is waiting too long for storage
 ```
 
@@ -37,7 +37,7 @@ Disk I/O analysis helps answer questions like:
 
 When an application reads or writes data, the request passes through several layers before reaching the physical storage device.
 
-```text id="ozkd4y"
+```text
 +--------------------+
 |    Application     |
 +--------------------+
@@ -82,7 +82,7 @@ When an application reads or writes data, the request passes through several lay
 
 A read operation happens when an application requests data from storage.
 
-```text id="pp0emh"
+```text
 Application asks for data
         |
         v
@@ -104,7 +104,7 @@ Kernel checks page cache
 
 A write operation happens when an application sends data to be stored.
 
-```text id="b4jd8m"
+```text
 Application writes data
         |
         v
@@ -123,7 +123,7 @@ This improves speed but also means that sudden power loss or device removal can 
 
 The `sync` command can force cached writes to be flushed:
 
-```bash id="suqr1w"
+```bash
 sync
 ```
 
@@ -162,7 +162,7 @@ Throughput is the amount of data transferred per second.
 
 It is usually measured in:
 
-```text id="l43tog"
+```text
 KB/s
 MB/s
 GB/s
@@ -206,7 +206,7 @@ A short queue usually means the storage device is keeping up.
 
 A long queue often means requests are arriving faster than the disk can complete them.
 
-```text id="z75epk"
+```text
 Application requests
         |
         v
@@ -227,13 +227,13 @@ I/O wait is the percentage of time the CPU is idle while waiting for I/O to comp
 
 In tools such as `top`, `vmstat`, and `iostat`, I/O wait often appears as:
 
-```text id="s6lxvk"
+```text
 wa
 ```
 
 or:
 
-```text id="jerhnm"
+```text
 %iowait
 ```
 
@@ -247,7 +247,7 @@ Sequential I/O reads or writes data in order.
 
 Example:
 
-```text id="pw4cje"
+```text
 read block 1
 read block 2
 read block 3
@@ -260,7 +260,7 @@ Random I/O jumps around the disk.
 
 Example:
 
-```text id="r0d8vd"
+```text
 read block 900
 read block 12
 read block 4501
@@ -322,13 +322,13 @@ The available schedulers depend on the kernel and storage device.
 
 To see the scheduler for a device:
 
-```bash id="zbfz5f"
+```bash
 cat /sys/block/sda/queue/scheduler
 ```
 
 Example output:
 
-```text id="kqzda1"
+```text
 [mq-deadline] kyber bfq none
 ```
 
@@ -336,7 +336,7 @@ The scheduler in brackets is currently active.
 
 To temporarily change the scheduler:
 
-```bash id="u0zwy8"
+```bash
 echo bfq | sudo tee /sys/block/sda/queue/scheduler
 ```
 
@@ -348,7 +348,7 @@ One classic way to understand disk scheduling is the elevator algorithm.
 
 The disk head moves in one direction, servicing requests along the way, then reverses direction.
 
-```text id="gem2h3"
+```text
 Cylinder Positions:
 0---|---|---|---|---|---|---|---|---|---|---|
     2   10      20 22       35    40
@@ -398,20 +398,20 @@ The most useful beginner tools are:
 
 On Debian or Ubuntu:
 
-```bash id="gg160j"
+```bash
 sudo apt update
 sudo apt install sysstat iotop fio
 ```
 
 On Red Hat, CentOS, or Fedora:
 
-```bash id="wucd21"
+```bash
 sudo dnf install sysstat iotop fio
 ```
 
 or on older systems:
 
-```bash id="dqw9g1"
+```bash
 sudo yum install sysstat iotop fio
 ```
 
@@ -427,7 +427,7 @@ The `sysstat` package provides tools such as:
 
 A common command is:
 
-```bash id="n7m4eq"
+```bash
 iostat -xz 1
 ```
 
@@ -447,7 +447,7 @@ Important columns include:
 
 Example output:
 
-```text id="lg6anb"
+```text
 Device            r/s     w/s     rkB/s    wkB/s   await  aqu-sz  %util
 sda              2.00  950.00     80.0  98000.0   45.20   12.40  99.80
 ```
@@ -470,7 +470,7 @@ This suggests the disk is saturated by write activity.
 
 Run:
 
-```bash id="d2mz0b"
+```bash
 vmstat 1
 ```
 
@@ -489,7 +489,7 @@ Important columns include:
 
 Example output:
 
-```text id="p9rruc"
+```text
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  1  8      0 300000  20000 900000    0    0    10 85000 2000 4000  3  4 20 73  0
@@ -497,7 +497,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 Interpretation:
 
-```text id="a23fud"
+```text
 b = 8       eight processes are blocked, likely waiting for I/O
 bo = 85000  many blocks are being written
 wa = 73     CPU is spending much time waiting on I/O
@@ -511,7 +511,7 @@ This strongly suggests disk I/O pressure.
 
 Run:
 
-```bash id="ahh0ae"
+```bash
 sudo iotop -o
 ```
 
@@ -519,7 +519,7 @@ The `-o` option shows only processes currently doing I/O.
 
 Example output:
 
-```text id="k79z09"
+```text
 Total DISK READ: 0.00 B/s | Total DISK WRITE: 115.42 M/s
 TID  PRIO  USER  DISK READ  DISK WRITE  SWAPIN  IO>  COMMAND
 2451 be/4  user    0.00 B/s  112.00 M/s  0.00 % 89%  fio --name=write-test
@@ -527,7 +527,7 @@ TID  PRIO  USER  DISK READ  DISK WRITE  SWAPIN  IO>  COMMAND
 
 Interpretation:
 
-```text id="bamxxg"
+```text
 fio is writing heavily
 IO> is high
 this process is likely responsible for disk pressure
@@ -535,7 +535,7 @@ this process is likely responsible for disk pressure
 
 `iotop` is one of the easiest tools for answering:
 
-```text id="hmsxrp"
+```text
 Which process is using the disk right now?
 ```
 
@@ -545,13 +545,13 @@ Which process is using the disk right now?
 
 Run:
 
-```bash id="ku0gut"
+```bash
 pidstat -d 1
 ```
 
 Example output:
 
-```text id="tbh976"
+```text
 Linux 6.x (host)     05/31/2026
 
 12:00:01 UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command
@@ -572,20 +572,20 @@ Interpretation:
 
 To view disk statistics every second for five samples:
 
-```bash id="uvcjon"
+```bash
 sar -d 1 5
 ```
 
 Example output:
 
-```text id="cbppz1"
+```text
 12:00:01 DEV       tps   rkB/s    wkB/s   await  %util
 12:00:02 sda    950.00    0.00 98000.00   44.50  99.40
 ```
 
 Interpretation:
 
-```text id="ck72mg"
+```text
 sda is almost fully utilized
 writes dominate
 average wait time is high
@@ -593,7 +593,7 @@ average wait time is high
 
 `sar` is especially useful for answering:
 
-```text id="n24o9j"
+```text
 Was the disk busy earlier, when the problem happened?
 ```
 
@@ -622,7 +622,7 @@ A safe test usually writes to a regular file in a test directory.
 
 Example:
 
-```bash id="h6dswq"
+```bash
 mkdir -p ~/fio-test
 ```
 
@@ -630,15 +630,13 @@ mkdir -p ~/fio-test
 
 This scenario simulates a large write-heavy workload, such as backups, log generation, file copying, or data export.
 
-#### Goal
-
 Create heavy sequential writes and observe disk saturation.
 
 #### Simulate the Bottleneck
 
 Run this in one terminal:
 
-```bash id="uambj8"
+```bash
 mkdir -p ~/fio-test
 
 fio --name=seq-write-test \
@@ -656,7 +654,7 @@ fio --name=seq-write-test \
 
 What this does:
 
-```text id="evpi59"
+```text
 --rw=write       sequential write workload
 --bs=1M          writes in large 1 MB blocks
 --iodepth=16     allows multiple outstanding requests
@@ -668,18 +666,18 @@ What this does:
 
 In another terminal, run:
 
-```bash id="j1jdm2"
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="iyfqb8"
+```text
 Device            r/s     w/s     rkB/s     wkB/s   await  aqu-sz  %util
 sda              0.00  420.00      0.00  420000.0   38.10   14.20  99.90
 ```
 
-Interpretation
+Interpretation:
 
 - wkB/s is very high
 - %util is close to 100%
@@ -694,13 +692,13 @@ If applications are slow during this test, the disk is likely the bottleneck.
 
 Run:
 
-```bash id="jvx6ic"
+```bash
 sudo iotop -o
 ```
 
 Example output:
 
-```text id="uawts0"
+```text
 Total DISK WRITE: 410.00 M/s
 TID  PRIO USER DISK READ DISK WRITE IO> COMMAND
 3124 be/4 user 0.00 B/s  408.00 M/s 95% fio --name=seq-write-test
@@ -716,15 +714,13 @@ Interpretation:
 
 This scenario simulates workloads such as databases, virtual machines, or many small-file reads.
 
-#### Goal
-
 Generate random reads and observe latency and IOPS behavior.
 
 #### Prepare a Test File
 
 First create a file:
 
-```bash id="ibanjx"
+```bash
 mkdir -p ~/fio-test
 
 fio --name=prepare-file \
@@ -740,7 +736,7 @@ fio --name=prepare-file \
 
 Run:
 
-```bash id="cqbn7v"
+```bash
 fio --name=random-read-test \
     --directory=~/fio-test \
     --filename=randomfile \
@@ -757,7 +753,7 @@ fio --name=random-read-test \
 
 What this does:
 
-```text id="e0q1vh"
+```text
 --rw=randread    random read workload
 --bs=4k          small 4 KB reads
 --numjobs=4      four worker jobs
@@ -766,13 +762,13 @@ What this does:
 
 #### Check with `iostat`
 
-```bash id="unj1kr"
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="mkwoaw"
+```text
 Device            r/s     w/s    rkB/s   wkB/s  await  aqu-sz  %util
 sda           5800.00    0.00 23200.0    0.00   22.80   31.50  99.60
 ```
@@ -795,13 +791,11 @@ On an HDD, this workload may perform very poorly. On an SSD or NVMe drive, it sh
 
 Random writes are common in databases, logs, virtual machines, and metadata-heavy workloads.
 
-#### Goal
-
 Generate small random writes and observe queueing and latency.
 
 #### Simulate the Bottleneck
 
-```bash id="g3u2jm"
+```bash
 fio --name=random-write-test \
     --directory=~/fio-test \
     --size=2G \
@@ -819,19 +813,19 @@ fio --name=random-write-test \
 
 Run:
 
-```bash id="l6swii"
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="j0ry5k"
+```text
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  2 10      0 200000  40000 800000    0    0     0 72000 3500 7000  5  8 15 72  0
 ```
 
-Interpretation
+Interpretation:
 
 | Observation    | Meaning                |
 | -------------- | ---------------------- |
@@ -843,13 +837,13 @@ This indicates that processes are waiting on disk writes.
 
 #### Check with `pidstat`
 
-```bash id="ffu7ij"
+```bash
 pidstat -d 1
 ```
 
 Example output:
 
-```text id="o9q8ay"
+```text
 12:10:01 UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command
 12:10:02 1000     3381      0.00  71000.00      0.00     300  fio
 ```
@@ -864,15 +858,13 @@ Interpretation:
 
 High I/O wait appears when the CPU is idle but the system has pending disk operations.
 
-#### Goal
-
 Create enough disk pressure that CPU time shifts into I/O wait.
 
 #### Simulate the Bottleneck
 
 Use a random read/write workload:
 
-```bash id="ka4k15"
+```bash
 fio --name=high-iowait-test \
     --directory=~/fio-test \
     --size=2G \
@@ -891,7 +883,7 @@ fio --name=high-iowait-test \
 
 Run:
 
-```bash id="szn0mp"
+```bash
 top
 ```
 
@@ -899,7 +891,7 @@ Look at the CPU line near the top.
 
 Example:
 
-```text id="snlpea"
+```text
 %Cpu(s):  3.0 us,  6.0 sy,  0.0 ni, 18.0 id, 72.0 wa,  0.0 hi,  1.0 si,  0.0 st
 ```
 
@@ -912,7 +904,7 @@ Interpretation:
 
 Here:
 
-```text id="xfzdwp"
+```text
 wa = 72.0
 ```
 
@@ -926,13 +918,13 @@ Important note:
 
 #### Confirm with `iostat`
 
-```bash id="pmgx4j"
+```bash
 iostat -xz 1
 ```
 
 Example:
 
-```text id="q88htk"
+```text
 Device            r/s     w/s    rkB/s    wkB/s   await  aqu-sz  %util
 sda           3200.00 3100.00 12800.0 12400.0   55.30   45.00 100.00
 ```
@@ -950,15 +942,13 @@ This confirms storage saturation.
 
 This scenario shows how a background disk-heavy task can slow down normal work.
 
-#### Goal
-
 Run a heavy background write job, then observe how it affects another command.
 
 #### Simulate the Background Job
 
 Terminal 1:
 
-```bash id="rtm98c"
+```bash
 fio --name=background-writer \
     --directory=~/fio-test \
     --size=4G \
@@ -973,7 +963,7 @@ fio --name=background-writer \
 
 Terminal 2:
 
-```bash id="mhj8w2"
+```bash
 time find /usr -type f > /tmp/file-list.txt
 ```
 
@@ -983,13 +973,13 @@ This command walks many files and writes output to `/tmp/file-list.txt`.
 
 Terminal 3:
 
-```bash id="f61d8k"
+```bash
 sudo iotop -o
 ```
 
 Example output:
 
-```text id="s16z24"
+```text
 TID  PRIO USER DISK READ DISK WRITE IO> COMMAND
 4001 be/4 user 0.00 B/s  360.00 M/s 92% fio --name=background-writer
 4050 be/4 user 4.00 M/s    2.00 M/s 35% find /usr -type f
@@ -1005,7 +995,7 @@ Interpretation:
 
 Stop the fio job, then rerun it with idle I/O priority:
 
-```bash id="shvt3n"
+```bash
 ionice -c3 fio --name=background-writer \
     --directory=~/fio-test \
     --size=4G \
@@ -1027,13 +1017,11 @@ Interpretation:
 
 This scenario does not make the disk physically slower. Instead, it changes how aggressively a process competes for disk access.
 
-#### Goal
-
 Show how I/O priority affects competing disk workloads.
 
 #### Run a Low-Priority Job
 
-```bash id="lr9wkj"
+```bash
 ionice -c3 fio --name=idle-writer \
     --directory=~/fio-test \
     --size=2G \
@@ -1048,7 +1036,7 @@ ionice -c3 fio --name=idle-writer \
 
 In another terminal:
 
-```bash id="j3illq"
+```bash
 fio --name=normal-reader \
     --directory=~/fio-test \
     --size=2G \
@@ -1061,13 +1049,13 @@ fio --name=normal-reader \
 
 #### Check with `iotop`
 
-```bash id="xxbwla"
+```bash
 sudo iotop -o
 ```
 
 Example output:
 
-```text id="xxyd7b"
+```text
 TID  PRIO USER DISK READ DISK WRITE IO> COMMAND
 5102 be/4 user 300.00 M/s 0.00 B/s 40% fio --name=normal-reader
 5088 idle user 0.00 B/s  40.00 M/s 15% fio --name=idle-writer
@@ -1083,19 +1071,17 @@ Interpretation:
 
 Linux uses RAM as page cache. This can make repeated reads much faster.
 
-#### Goal
-
 Show the difference between cached and uncached reads.
 
 #### Create a Test File
 
-```bash id="hp4rva"
+```bash
 dd if=/dev/zero of=~/fio-test/cache-test.img bs=1M count=1024 status=progress
 ```
 
 #### First Read
 
-```bash id="ces8gt"
+```bash
 time cat ~/fio-test/cache-test.img > /dev/null
 ```
 
@@ -1103,13 +1089,13 @@ time cat ~/fio-test/cache-test.img > /dev/null
 
 Run it again:
 
-```bash id="b6nbee"
+```bash
 time cat ~/fio-test/cache-test.img > /dev/null
 ```
 
 Example output:
 
-```text id="kgvrxx"
+```text
 First read:
 real    0m4.800s
 
@@ -1127,7 +1113,7 @@ Interpretation:
 
 For lab testing only:
 
-```bash id="xsny68"
+```bash
 sync
 echo 3 | sudo tee /proc/sys/vm/drop_caches
 ```
@@ -1136,7 +1122,7 @@ Then repeat the read.
 
 Warning:
 
-```text id="pz9jx4"
+```text
 Do not drop caches on production systems just to test performance.
 It can temporarily reduce performance for running workloads.
 ```
@@ -1145,13 +1131,11 @@ It can temporarily reduce performance for running workloads.
 
 Many small files can create metadata pressure. This affects build systems, package managers, source trees, and mail directories.
 
-#### Goal
-
 Create many small files and observe metadata-heavy I/O.
 
 #### Simulate the Workload
 
-```bash id="d5svkh"
+```bash
 mkdir -p ~/small-files-test
 
 for i in $(seq 1 50000); do
@@ -1161,13 +1145,13 @@ done
 
 #### Check with `iostat`
 
-```bash id="nnjbnk"
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="teozxk"
+```text
 Device            r/s     w/s    rkB/s    wkB/s  await  aqu-sz  %util
 sda             20.00 1800.00   500.0  9000.0   18.40    8.20  88.00
 ```
@@ -1183,7 +1167,7 @@ This is different from large sequential writes. The disk is handling many small 
 
 #### Clean Up
 
-```bash id="yputh1"
+```bash
 rm -rf ~/small-files-test
 ```
 
@@ -1191,41 +1175,39 @@ rm -rf ~/small-files-test
 
 When a system runs out of RAM, it may use swap. Heavy swapping can create severe disk I/O pressure.
 
-#### Goal
-
 Observe how memory pressure can become disk pressure.
 
 #### Safer Simulation Method
 
 Use `stress-ng` if available:
 
-```bash id="l356e6"
+```bash
 sudo apt install stress-ng
 ```
 
 Then run a memory stress test carefully:
 
-```bash id="o7wkm4"
+```bash
 stress-ng --vm 2 --vm-bytes 70% --timeout 60s
 ```
 
 #### Check with `vmstat`
 
-```bash id="kpgv11"
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="eu391a"
+```text
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  3  4 900000  50000  10000 120000 1200 1800  8000 12000 4000 8000 20 15 40 25  0
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="vl7ot4"
+```text
 si is high    swap-in activity
 so is high    swap-out activity
 wa is high    CPU waits on disk
@@ -1240,7 +1222,7 @@ Linux processes can enter different states.
 
 A process waiting on disk I/O may enter uninterruptible sleep, shown as:
 
-```text id="whm62i"
+```text
 D
 ```
 
@@ -1248,27 +1230,27 @@ This is often called D state.
 
 To look for processes in D state:
 
-```bash id="hrbs7y"
+```bash
 ps -eo pid,stat,comm,wchan:30 | awk '$2 ~ /D/ {print}'
 ```
 
 Example output:
 
-```text id="zejyxu"
+```text
 PID   STAT COMMAND         WCHAN
 5678  D    myapp           wait_on_page_bit_common
 ```
 
 Interpretation:
 
-```text id="mr3nec"
+```text
 The process is blocked in uninterruptible sleep.
 It may be waiting for disk, filesystem, or storage-related I/O.
 ```
 
 Important:
 
-```text id="hxj31z"
+```text
 A few short-lived D-state processes can be normal.
 Many processes stuck in D state for a long time may indicate an I/O bottleneck or storage problem.
 ```
@@ -1279,7 +1261,7 @@ Many processes stuck in D state for a long time may indicate an I/O bottleneck o
 
 There are three main classes:
 
-```text id="kvlkj5"
+```text
 -c1   real-time
 -c2   best-effort
 -c3   idle
@@ -1287,26 +1269,26 @@ There are three main classes:
 
 Best-effort has priority levels from 0 to 7:
 
-```text id="xahna5"
+```text
 0 = highest priority
 7 = lowest priority
 ```
 
 Example: set an existing process to best-effort priority 0:
 
-```bash id="lu4euf"
+```bash
 sudo ionice -c2 -n0 -p 5678
 ```
 
 Example: run a backup job with idle priority:
 
-```bash id="q8q2ne"
+```bash
 ionice -c3 rsync -a /data/ /backup/
 ```
 
 Interpretation:
 
-```text id="atwp5c"
+```text
 Use idle priority for background tasks.
 Avoid real-time I/O priority unless absolutely necessary.
 Real-time I/O can starve other processes.
@@ -1316,7 +1298,7 @@ Real-time I/O can starve other processes.
 
 Different filesystems have different strengths.
 
-```text id="ux66no"
+```text
 ext4:
 - common general-purpose Linux filesystem
 - stable and widely supported
@@ -1341,7 +1323,7 @@ Mount options can affect disk behavior.
 
 Common options include:
 
-```text id="k9ig3x"
+```text
 noatime
 relatime
 data=writeback
@@ -1354,13 +1336,13 @@ The `noatime` option disables access-time updates when files are read.
 
 Example `/etc/fstab` option:
 
-```text id="caf61n"
+```text
 UUID=xxxx  /data  ext4  defaults,noatime  0  2
 ```
 
 Benefit:
 
-```text id="m1dum6"
+```text
 Reduces small metadata writes caused by file reads.
 ```
 
@@ -1370,7 +1352,7 @@ This ext4 option may improve performance but can reduce data safety after crashe
 
 Use carefully.
 
-```text id="pl84fg"
+```text
 Higher performance
 Higher risk during crashes
 ```
@@ -1381,7 +1363,7 @@ The `discard` option enables online TRIM for SSDs.
 
 However, many systems prefer periodic TRIM using:
 
-```bash id="p7gpjo"
+```bash
 systemctl status fstrim.timer
 ```
 
@@ -1391,7 +1373,7 @@ Periodic TRIM is often less disruptive than continuous discard.
 
 RAID can affect performance and reliability.
 
-```text id="hwxxby"
+```text
 RAID 0:
 - stripes data across disks
 - improves performance
@@ -1424,13 +1406,13 @@ When checking disk I/O, use several metrics together.
 
 Example:
 
-```text id="g82n78"
+```text
 %util = 99%
 ```
 
 Possible meaning:
 
-```text id="kff2xw"
+```text
 The disk is very busy.
 It may be saturated.
 ```
@@ -1441,13 +1423,13 @@ But on modern fast devices, `%util` can be less clear because devices may proces
 
 Example:
 
-```text id="rhdzw4"
+```text
 await = 80 ms
 ```
 
 Possible meaning:
 
-```text id="q5kjlv"
+```text
 I/O requests are taking a long time.
 Applications may feel slow.
 ```
@@ -1456,13 +1438,13 @@ Applications may feel slow.
 
 Example:
 
-```text id="jln9g6"
+```text
 aqu-sz = 30
 ```
 
 Possible meaning:
 
-```text id="y5xl2k"
+```text
 The I/O queue is building.
 Requests are waiting.
 ```
@@ -1471,13 +1453,13 @@ Requests are waiting.
 
 Example:
 
-```text id="u1ox9e"
+```text
 wa = 70%
 ```
 
 Possible meaning:
 
-```text id="qdldbx"
+```text
 CPU is often idle while waiting for I/O.
 The workload may be storage-bound.
 ```
@@ -1486,14 +1468,14 @@ The workload may be storage-bound.
 
 Example:
 
-```text id="o0oh5g"
+```text
 r/s = 5000
 rkB/s = 20000
 ```
 
 Possible meaning:
 
-```text id="bk58bd"
+```text
 Many small reads are happening.
 This may be random I/O.
 ```
@@ -1502,14 +1484,14 @@ This may be random I/O.
 
 Example:
 
-```text id="s725cp"
+```text
 w/s = 200
 wkB/s = 400000
 ```
 
 Possible meaning:
 
-```text id="ee2t8b"
+```text
 Large sequential writes are happening.
 This may be backups, copying, streaming, or export jobs.
 ```
@@ -1518,7 +1500,7 @@ This may be backups, copying, streaming, or export jobs.
 
 When a system feels slow and disk I/O may be involved, follow a structured process.
 
-```text id="cvmie5"
+```text
 1. Check overall system load
 2. Check CPU iowait
 3. Check disk utilization and latency
@@ -1533,13 +1515,13 @@ When a system feels slow and disk I/O may be involved, follow a structured proce
 
 Use:
 
-```bash id="sxm1pk"
+```bash
 uptime
 ```
 
 Example:
 
-```text id="l6htth"
+```text
 12:00:00 up 3 days,  load average: 12.50, 10.20, 8.70
 ```
 
@@ -1549,19 +1531,19 @@ High load with low CPU usage may suggest processes are blocked on I/O.
 
 Use:
 
-```bash id="e0tsdd"
+```bash
 top
 ```
 
 Look at:
 
-```text id="v2sczs"
+```text
 wa
 ```
 
 Example:
 
-```text id="gt98uh"
+```text
 %Cpu(s):  2.0 us,  5.0 sy, 20.0 id, 73.0 wa
 ```
 
@@ -1571,13 +1553,13 @@ High `wa` suggests the system is waiting on I/O.
 
 Use:
 
-```bash id="ohl3hu"
+```bash
 iostat -xz 1
 ```
 
 Look for:
 
-```text id="nft1d2"
+```text
 high %util
 high await
 high aqu-sz
@@ -1588,13 +1570,13 @@ high read or write rates
 
 Use:
 
-```bash id="pvvcar"
+```bash
 sudo iotop -o
 ```
 
 or:
 
-```bash id="ihgt9q"
+```bash
 pidstat -d 1
 ```
 
@@ -1604,7 +1586,7 @@ This helps identify which process is producing disk activity.
 
 Use `iostat` to compare operations and throughput.
 
-```text id="c75pq3"
+```text
 High IOPS + low throughput:
     random small I/O
 
@@ -1622,7 +1604,7 @@ High reads:
 
 Use:
 
-```bash id="hl89h9"
+```bash
 free -h
 vmstat 1
 ```
@@ -1635,13 +1617,13 @@ This means the disk problem may be caused by memory shortage.
 
 Use:
 
-```bash id="m8yn52"
+```bash
 dmesg | grep -iE 'error|fail|reset|timeout|I/O'
 ```
 
 Example warning signs:
 
-```text id="zjgr9r"
+```text
 I/O error
 buffer I/O error
 reset SuperSpeed USB device
@@ -1683,7 +1665,7 @@ Fixes:
 
 Example:
 
-```bash id="kl2zjj"
+```bash
 ionice -c3 rsync -a /data/ /backup/
 ```
 

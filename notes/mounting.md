@@ -445,7 +445,6 @@ This means:
 | **FSTYPE**  | Filesystem type      |
 | **OPTIONS** | Mount options        |
 
-
 You can also use:
 
 ```bash

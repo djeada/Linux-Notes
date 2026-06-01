@@ -1232,7 +1232,7 @@ AWS_PROFILE=dev terraform plan
 ```
 
 #### Permanent Updates
- 
+
 For permanent updates, add the export statement to a startup file.
 
 Bash:
