@@ -1787,7 +1787,7 @@ Backup:
 slapcat > ldap-backup.ldif
 ```
 
-### Practical Challenges
+### Challenges
 
 1. Install OpenLDAP on a test Linux system and configure the base domain as `dc=example,dc=com`.
 2. Create organizational units for users, groups, and services.
