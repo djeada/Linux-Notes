@@ -1,1175 +1,2109 @@
-## Hardware
+## Hardware on Linux
 
-Linux is a known for its ability to run on a broad range of hardware, from desktops and servers to embedded systems and IoT devices. Its modular kernel design allows efficient hardware management, enabling Linux to support various processors, GPUs, storage devices, and peripherals. With a vast collection of drivers, Linux can interface with both cutting-edge and older hardware, making it a popular choice for developers and organizations seeking flexibility, performance, and cost-effectiveness in managing diverse hardware environments.
+Linux is well known for running on a wide range of hardware. It can run on laptops, desktops, servers, embedded systems, routers, single-board computers, virtual machines, and high-performance clusters.
+
+Linux supports this variety because the kernel is modular. Hardware support can be built directly into the kernel or added through loadable kernel modules, often called drivers.
+
+At a high level, Linux hardware management looks like this:
+
+```text id="jc73u6"
+Hardware device
+      |
+      v
+Kernel driver
+      |
+      v
+Device file, interface, or subsystem
+      |
+      v
+User-space tools and applications
+```
+
+For example, a storage device may appear as `/dev/sda`, a network card may appear as `eth0` or `enp0s3`, and a USB keyboard may appear through the input subsystem.
+
+The main idea is:
+
+- Linux detects hardware.
+- The kernel assigns a driver.
+- The device becomes available to the system.
+- User-space tools inspect, configure, or use it.
 
 ### Hardware Compatibility
 
-Linux is renowned for its extensive hardware compatibility, supporting a vast array of devices ranging from modern desktops and laptops to servers, embedded systems, and even legacy hardware. This broad compatibility is largely due to the collaborative efforts of the global open-source community, which actively develops and maintains drivers for numerous hardware components.
+Linux supports many hardware devices, but support depends on drivers.
 
-However, there may be instances where Linux encounters challenges with certain hardware, particularly proprietary or newly released devices for which manufacturers have not provided drivers or specifications. In such cases, open-source developers may reverse-engineer drivers, but this can lead to delayed or incomplete support.
+Some hardware works immediately because the driver is already included in the Linux kernel. Other hardware may require extra firmware, vendor drivers, or newer kernel versions.
 
-To mitigate compatibility issues:
+Hardware support is usually best when:
 
-- Many hardware manufacturers now provide official Linux drivers or contribute directly to open-source drivers.
-- Linux distributions often include HCLs and tools to detect and configure hardware automatically.
-- Forums and community documentation can offer workarounds and solutions for unsupported hardware.
+- the manufacturer provides Linux support
+- the device uses a common chipset
+- the driver is included in the kernel
+- the distribution includes required firmware
+- the hardware has been available long enough for mature support
+
+Hardware support can be more difficult when:
+
+- the device is very new
+- the manufacturer provides no documentation
+- the driver is proprietary
+- firmware is missing
+- the hardware uses unusual or unsupported chipsets
+
+Common areas where driver issues may appear include:
+
+- Wi-Fi adapters
+- Bluetooth adapters
+- graphics cards
+- webcams
+- fingerprint readers
+- special function keys
+- touchpads
+- audio devices
+- new storage controllers
 
 ### Hardware Architecture Support
 
-One of Linux's significant strengths is its support for multiple hardware architectures, making it a versatile operating system suitable for various environments.
+Linux can run on many CPU architectures.
 
-**Supported Architectures Include:**
+Common architectures include:
 
-| **Architecture**        | **Description**                                                               |
-|-------------------------|-------------------------------------------------------------------------------|
-| x86 and x86_64 (AMD64)   | Commonly used in personal computers and servers.                             |
-| ARM and ARM64            | Used in mobile devices, single-board computers (e.g., Raspberry Pi), and embedded systems. |
-| PowerPC (PPC)            | Employed in some enterprise servers and older Apple hardware.                 |
-| MIPS                     | Found in routers and networking equipment.                                   |
-| SPARC                    | Used in high-end servers and workstations.                                   |
-| RISC-V                   | An emerging open-source hardware architecture gaining popularity.            |
+- x86_64 / AMD64
+- ARM / ARM64
+- PowerPC
+- MIPS
+- SPARC
+- RISC-V
 
-**Benefits:**
+The most common architecture for laptops, desktops, and servers is usually `x86_64`.
 
-- Ability to deploy Linux across diverse hardware platforms.
-- Suitable for both resource-constrained devices and high-performance computing systems.
-- Encourages development on new and emerging architectures.
+ARM and ARM64 are common in phones, embedded systems, Raspberry Pi boards, cloud servers, and low-power devices.
 
-**Challenges:**
+RISC-V is an emerging open hardware architecture.
 
-- Variations in hardware may require architecture-specific optimizations.
-- Some architectures may have less community support or documentation.
+To check the current system architecture:
 
-### Accessing Hardware
-
-In Linux, hardware devices are represented as files within the `/dev` directory, adhering to the Unix philosophy that "everything is a file." This abstraction simplifies hardware interaction and allows for consistent access methods across different device types.
-
-**Device Files in `/dev`:**
-
-| **Device Type**       | **Description**                                                             | **Examples**                                                   |
-|-----------------------|-----------------------------------------------------------------------------|---------------------------------------------------------------|
-| Block Devices          | Represent devices that transfer data in fixed-size blocks (e.g., hard drives, SSDs). | `/dev/sda` (first SATA drive), `/dev/nvme0n1` (first NVMe SSD) |
-| Character Devices      | Represent devices that transfer data character by character (e.g., keyboards, serial ports). | `/dev/ttyS0` (first serial port), `/dev/input/event0` (first input device) |
-| Special Devices        | Virtual devices providing specific functionalities.                        | `/dev/null` (data sink), `/dev/zero` (infinite zero bytes), `/dev/random` (random data generator) |
-
-**Access Control and Permissions:**
-
-- Device files have standard **Linux permissions** (read, write, execute) that control user and group access.
-- **udev Device Manager** manages dynamic creation and removal of device files, handles permissions, and maintains persistent device naming.
-
-**Interacting with Device Files:**
-
-- Programs use standard **system calls** (`open`, `read`, `write`, `ioctl`) to interact with devices.
-- Utilities like `dd`, `cat`, or specialized tools can read from or write to device files for testing or configuration.
-
-Example: Reading from a Device File
-
-```bash
-# Read the first 512 bytes from a disk
-sudo dd if=/dev/sda of=boot_sector.bin bs=512 count=1
+```bash id="dfh7la"
+uname -m
 ```
 
-### Managing Hardware
+Example output:
 
-Efficient hardware management ensures optimal system performance and stability. Linux provides a comprehensive set of tools and commands to manage hardware effectively.
-
-#### Gathering Hardware Information
-
-##### Internal Hardware Information
-
-To obtain detailed information about the system's hardware components:
-
-I. `lspci` lists all PCI devices and details.
-
-```bash
-lspci -vvv
+```text id="z0lqxk"
+x86_64
 ```
 
-Options:
+To see more CPU architecture information:
 
-- `-v` increases verbosity (up to `-vvv` for maximum detail).
-- `-k` shows kernel drivers and modules handling each device.
-
-Example Output:
-
-```plaintext
-00:00.0 Host bridge: Intel Corporation 8th Gen Core Processor Host Bridge/DRAM Registers (rev 07)
-Subsystem: Dell Device 1234
-Flags: bus master, fast devsel, latency 0
-Capabilities: [e0] Vendor Specific Information: Len=10 <?>
-
-00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 620 (rev 07) (prog-if 00 [VGA controller])
-Subsystem: Dell Device 5678
-Flags: bus master, fast devsel, latency 0, IRQ 127
-Memory at 00000000 (64-bit, non-prefetchable) [size=16M]
-Capabilities: [40] Vendor Specific Information: Len=0c <?>
-```
-
-- Each line represents a PCI device, identified by its bus address (e.g., `00:02.0`).
-- The description provides the device type, manufacturer, and model.
-- Details like `Flags`, `Subsystem`, and `Memory` offer insights into device features and configurations.
-- Useful for identifying hardware components and verifying driver installations.
-
-II. `lsusb` displays information about USB buses and connected devices.
-
-```bash
-lsusb -v
-```
-
-Options:
-
-- `-v` makes output verbose.
-
-Example Output:
-
-```plaintext
-Bus 002 Device 003: ID 0bda:5689 Realtek Semiconductor Corp. Integrated Webcam
-Device Descriptor:
-bLength                18
-bDescriptorType         1
-bcdUSB               2.00
-bDeviceClass          239 Miscellaneous Device
-bDeviceSubClass         2
-bDeviceProtocol         1
-iManufacturer           1 Realtek
-iProduct                2 Integrated Webcam
-```
-
-- Lists USB devices with details like `Bus` and `Device` numbers.
-- `ID` shows the Vendor ID and Product ID, helpful for identifying the exact device model.
-- `iManufacturer` and `iProduct` provide human-readable names.
-- Use this to verify connected USB devices and troubleshoot recognition issues.
-
-III. `lscpu` shows CPU architecture information.
-
-```bash
+```bash id="m5zpfw"
 lscpu
 ```
 
-Example Output:
+### Hardware as Files
 
-```plaintext
+Linux follows the Unix idea that many system resources can be represented as files.
+
+Hardware devices are often represented under:
+
+```text id="env1ma"
+/dev
+```
+
+The `/dev` directory contains device files.
+
+These files are special interfaces to hardware or kernel features.
+
+```text id="o7zt5z"
++-------------------+
+| User command      |
+| cat, dd, program  |
++-------------------+
+          |
+          v
++-------------------+
+| Device file       |
+| /dev/sda          |
+| /dev/null         |
+| /dev/input/event0 |
++-------------------+
+          |
+          v
++-------------------+
+| Kernel driver     |
++-------------------+
+          |
+          v
++-------------------+
+| Hardware / kernel |
++-------------------+
+```
+
+### Types of Device Files
+
+There are three common categories to know.
+
+- block devices
+- character devices
+- special virtual devices
+
+### Block Devices
+
+Block devices transfer data in blocks.
+
+Examples include:
+
+- /dev/sda
+- /dev/sdb
+- /dev/nvme0n1
+- /dev/loop0
+
+These usually represent disks, partitions, SSDs, NVMe drives, USB storage, and loop devices.
+
+To list block devices:
+
+```bash id="jeom3r"
+lsblk
+```
+
+Example output:
+
+```text id="n83phz"
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0 238.5G  0 disk
+├─sda1   8:1    0   512M  0 part /boot/efi
+├─sda2   8:2    0     1G  0 part /boot
+└─sda3   8:3    0   237G  0 part /
+sr0     11:0    1  1024M  0 rom
+```
+
+Interpretation:
+
+- sda is a disk
+- sda1, sda2, and sda3 are partitions
+- sr0 is an optical drive
+- MOUNTPOINTS shows where partitions are mounted
+
+### Character Devices
+
+Character devices transfer data as a stream of characters or bytes.
+
+Examples include:
+
+- /dev/tty
+- /dev/ttyS0
+- /dev/input/event0
+- /dev/random
+- /dev/urandom
+
+Character devices are common for terminals, serial ports, input devices, and random number sources.
+
+To inspect a device file:
+
+```bash id="v8zpqc"
+ls -l /dev/null /dev/sda
+```
+
+Example output:
+
+```text id="pu5306"
+crw-rw-rw- 1 root root 1, 3 Jun  1 10:00 /dev/null
+brw-rw---- 1 root disk 8, 0 Jun  1 10:00 /dev/sda
+```
+
+Interpretation:
+
+- c at the start means character device
+- b at the start means block device
+
+### Special Devices
+
+Linux has special virtual devices that are not normal hardware.
+
+Examples:
+
+- /dev/null
+- /dev/zero
+- /dev/random
+- /dev/urandom
+
+`/dev/null` discards anything written to it.
+
+Example:
+
+```bash id="d9z0vs"
+echo "discard this" > /dev/null
+```
+
+`/dev/zero` produces endless zero bytes.
+
+Example:
+
+```bash id="aj50dr"
+head -c 16 /dev/zero | xxd
+```
+
+`/dev/random` and `/dev/urandom` provide random data.
+
+### Device Permissions
+
+Device files have normal Linux permissions.
+
+Example:
+
+```bash id="t68tjm"
+ls -l /dev/sda
+```
+
+Example output:
+
+```text id="etzpbf"
+brw-rw---- 1 root disk 8, 0 Jun  1 10:00 /dev/sda
+```
+
+Interpretation:
+
+- root owns the device
+- the disk group has access
+- normal users may not access it directly
+
+This is why many hardware commands require `sudo`.
+
+### udev
+
+`udev` is the Linux device manager.
+
+It creates device files dynamically when hardware appears and removes them when hardware disappears.
+
+For example, when you plug in a USB drive, the kernel detects it, then `udev` creates device entries such as:
+
+- /dev/sdb
+- /dev/sdb1
+
+The basic flow is:
+
+```text id="m6yfh5"
+Hardware event
+      |
+      v
+Kernel detects device
+      |
+      v
+udev receives event
+      |
+      v
+Device file is created or updated
+      |
+      v
+System can use the device
+```
+
+`udev` can also apply permissions, create symlinks, and trigger rules.
+
+### Gathering Hardware Information
+
+Linux provides many tools for identifying hardware.
+
+The most useful commands are:
+
+- lspci     PCI devices
+- lsusb     USB devices
+- lscpu     CPU information
+- lsblk     block devices
+- lshw      full hardware summary
+- dmesg     kernel hardware messages
+- udevadm   udev events and device information
+
+### PCI Devices with `lspci`
+
+PCI devices include graphics cards, network cards, storage controllers, sound cards, and many motherboard components.
+
+Run:
+
+```bash id="yof2e7"
+lspci
+```
+
+For more detail:
+
+```bash id="k6ir1q"
+lspci -vvv
+```
+
+To show which driver is handling each device:
+
+```bash id="xqdy0p"
+lspci -k
+```
+
+Example output:
+
+```text id="w2zu3u"
+00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller
+        Kernel driver in use: ahci
+        Kernel modules: ahci
+
+01:00.0 VGA compatible controller: NVIDIA Corporation GP107M
+        Kernel driver in use: nvidia
+        Kernel modules: nvidiafb, nouveau, nvidia_drm, nvidia
+```
+
+Interpretation:
+
+- The SATA controller is using the ahci driver.
+- The NVIDIA GPU is using the nvidia driver.
+- Available possible modules are also shown.
+
+This is useful when checking whether the correct driver is loaded.
+
+### USB Devices with `lsusb`
+
+USB devices include webcams, keyboards, mice, flash drives, Bluetooth adapters, printers, and external storage.
+
+Run:
+
+```bash id="i7q9go"
+lsusb
+```
+
+Verbose output:
+
+```bash id="jglyvs"
+lsusb -v
+```
+
+Example output:
+
+```text id="h7l2p2"
+Bus 002 Device 003: ID 0bda:5689 Realtek Semiconductor Corp. Integrated Webcam
+```
+
+Interpretation:
+
+- Bus 002 Device 003 identifies where the device is connected.
+- 0bda:5689 is the vendor ID and product ID.
+- Realtek Integrated Webcam is the detected device.
+
+Vendor and product IDs are useful when searching for driver information.
+
+### CPU Information with `lscpu`
+
+Run:
+
+```bash id="y4rs4q"
+lscpu
+```
+
+Example output:
+
+```text id="k103am"
 Architecture:            x86_64
-CPU op-mode(s):          32-bit, 64-bit
-Byte Order:              Little Endian
 CPU(s):                  8
-On-line CPU(s) list:     0-7
 Thread(s) per core:      2
 Core(s) per socket:      4
 Socket(s):               1
 Vendor ID:               GenuineIntel
 Model name:              Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
-CPU MHz:                 1992.000
-L1d cache:               32K
-L1i cache:               32K
-L2 cache:                256K
-L3 cache:                8192K
 ```
 
-- Provides detailed CPU information, including architecture and capabilities.
-- `CPU(s)`: Total number of logical processors (cores × threads).
-- `Model name`: Specific CPU model installed.
-- Cache sizes impact performance; larger caches can improve speed for certain tasks.
+Interpretation:
 
-IV. `lsblk` lists block devices (storage devices) and their mount points.
+- The system is x86_64.
+- It has 8 logical CPUs.
+- There are 4 physical cores with 2 threads per core.
 
-```bash
-lsblk -a
+This helps understand CPU capacity and architecture.
+
+### Storage Devices with `lsblk`
+
+Run:
+
+```bash id="cecxci"
+lsblk
 ```
 
-Options:
+More useful filesystem view:
 
-- `-a` includes empty devices.
-
-Example Output:
-
-```plaintext
-NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-sda      8:0    0 238.5G  0 disk 
-├─sda1   8:1    0   512M  0 part /boot/efi
-├─sda2   8:2    0     1G  0 part /boot
-└─sda3   8:3    0 237G    0 part /
-sr0     11:0    1  1024M  0 rom  
+```bash id="jrxert"
+lsblk -f
 ```
 
-- Displays a tree of storage devices (`sda`, `sr0`) and their partitions (`sda1`, `sda2`, `sda3`).
-- `TYPE` indicates if it's a disk, partition, or optical drive (`rom`).
-- `MOUNTPOINT` shows where partitions are mounted in the filesystem.
-- Useful for understanding disk layout and managing storage.
+Example output:
 
-V. `lshw` provides comprehensive hardware details (CPU, memory, disks, network, etc.).
+```text id="dhkbf0"
+NAME   FSTYPE LABEL UUID                                 MOUNTPOINTS
+sda
+├─sda1 vfat         1111-2222                            /boot/efi
+├─sda2 ext4         aaaa-bbbb                            /boot
+└─sda3 ext4         cccc-dddd                            /
+```
 
-```bash
+Interpretation:
+
+- sda is the disk.
+- sda1 is a vfat EFI partition.
+- sda2 and sda3 are ext4 partitions.
+- sda3 is mounted as the root filesystem.
+
+### Full Hardware Summary with `lshw`
+
+Run:
+
+```bash id="mdipd3"
 sudo lshw -short
 ```
 
-Example Output:
+Example output:
 
-```plaintext
+```text id="dfzvuq"
 H/W path        Device      Class          Description
 ======================================================
-        system         Latitude 5480
-/0                           bus           0C7KXG
-/0/0                         memory        64KiB BIOS
-/0/4                         processor     Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz
-/0/4/5                       memory        256KiB L1 cache
-/0/4/6                       memory        1MiB L2 cache
-/0/4/7                       memory        3MiB L3 cache
-/0/1c                        memory        8GiB System Memory
-/0/1c/0                      memory        8GiB SODIMM DDR4 Synchronous 2133 MHz
-/0/100                       bridge        Sunrise Point-LP PCI Express Root Port
-/0/100/14                    bus           Sunrise Point-LP USB 3.0 xHCI Controller
-/0/100/14/0      usb1        bus           xHCI Host Controller
-/0/100/14/1      usb2        bus           xHCI Host Controller
-/0/100/1d                    bridge        Sunrise Point-LP PCI Express Root Port
-/0/100/1d/0      wlp2s0      network       Wireless 8265 / 8275
+/0                          system         Latitude 5480
+/0/4                        processor      Intel Core i5-7200U
+/0/1c                       memory         8GiB System Memory
+/0/100/14                   bus            USB 3.0 xHCI Controller
+/0/100/1d/0     wlp2s0      network        Wireless 8265 / 8275
 ```
 
-- Shows a hierarchical listing of hardware components.
-- `Class` indicates the type of hardware (e.g., `processor`, `memory`, `network`).
-- Use this for a quick overview of the system's hardware configuration.
+Interpretation:
 
-##### Plugged Devices Information
+- The system model is shown.
+- The CPU, memory, USB controller, and wireless adapter are listed.
+- The wireless device is associated with interface wlp2s0.
 
-Monitoring connected devices and system events:
+`lshw` is useful when you want a broad inventory of the system.
 
-I. `dmesg` prints kernel ring buffer messages, useful for viewing system events and hardware-related messages.
+### Kernel Messages with `dmesg`
 
-```bash
+`dmesg` shows kernel messages, including hardware detection and errors.
+
+Show recent messages:
+
+```bash id="eksuzr"
 dmesg | tail -50
 ```
 
-Options:
+With readable timestamps:
 
-- `-T` shows human-readable timestamps.
-
-Example Output:
-
-```plaintext
-[ 456.789123] usb 1-1: new high-speed USB device number 3 using xhci_hcd
-[ 456.928756] usb 1-1: New USB device found, idVendor=0781, idProduct=5591
-[ 456.928763] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[ 456.928767] usb 1-1: Product: Ultra USB 3.0
-[ 456.928771] usb 1-1: Manufacturer: SanDisk
-[ 456.928774] usb 1-1: SerialNumber: 4C530001260920112145
-[ 456.929456] usb-storage 1-1:1.0: USB Mass Storage device detected
-[ 456.929678] scsi host6: usb-storage 1-1:1.0
-[ 457.930123] scsi 6:0:0:0: Direct-Access     SanDisk  Ultra USB 3.0   1.00 PQ: 0 ANSI: 6
-[ 457.931456] sd 6:0:0:0: Attached scsi generic sg2 type 0
-[ 457.932345] sd 6:0:0:0: [sdb] 60062500 512-byte logical blocks: (30.7 GB/28.6 GiB)
-[ 457.932567] sd 6:0:0:0: [sdb] Write Protect is off
-[ 457.932570] sd 6:0:0:0: [sdb] Mode Sense: 43 00 00 00
-[ 457.932789] sd 6:0:0:0: [sdb] No Caching mode page found
-[ 457.932793] sd 6:0:0:0: [sdb] Assuming drive cache: write through
-[ 457.935678]  sdb: sdb1
-[ 457.936789] sd 6:0:0:0: [sdb] Attached SCSI removable disk
+```bash id="dyjxth"
+dmesg -T | tail -50
 ```
 
-- Displays recent kernel messages, particularly useful after plugging in a device.
-- Shows device detection steps, including driver assignments and storage allocations.
-- Use this to troubleshoot hardware recognition and driver issues.
+Example after plugging in a USB drive:
 
-II. `udevadm monitor` monitors udev events for real-time hardware changes.
+```text id="cg61kw"
+[Mon Jun  1 10:15:01 2026] usb 1-1: new high-speed USB device number 3 using xhci_hcd
+[Mon Jun  1 10:15:01 2026] usb 1-1: Product: Ultra USB 3.0
+[Mon Jun  1 10:15:02 2026] sd 6:0:0:0: [sdb] 60062500 512-byte logical blocks
+[Mon Jun  1 10:15:02 2026]  sdb: sdb1
+[Mon Jun  1 10:15:02 2026] sd 6:0:0:0: [sdb] Attached SCSI removable disk
+```
 
-```bash
+Interpretation:
+
+- The USB device was detected.
+- The kernel identified it as a storage device.
+- It was assigned the disk name sdb.
+- It has one partition, sdb1.
+
+`dmesg` is one of the first tools to use when hardware is not detected correctly.
+
+### Watching Hardware Events with `udevadm`
+
+To watch hardware events live:
+
+```bash id="l6hk6f"
 sudo udevadm monitor --environment --udev
 ```
 
-Options:
+Example output:
 
-- `--kernel` monitors kernel events.
-- `--udev` monitors udev events.
-- `--environment` prints the environment for each event.
-
-Example Output:
-
-```plaintext
-UDEV  [456.789123] add /devices/pci0000:00/0000:00:14.0/usb1/1-1 (usb)
+```text id="y3l0pc"
+UDEV  [456.789123] add /devices/pci0000:00/.../usb1/1-1 (usb)
 ACTION=add
 DEVNAME=/dev/bus/usb/001/003
-DEVNUM=003
-DEVPATH=/devices/pci0000:00/0000:00:14.0/usb1/1-1
-DEVTYPE=usb_device
 ID_BUS=usb
 ID_MODEL=Ultra_USB_3.0
 ID_VENDOR=SanDisk
-...
-
-UDEV  [457.930123] add /devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1:1.0 (usb)
-ACTION=add
-DEVPATH=/devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1:1.0
-DEVTYPE=usb_interface
-...
 ```
 
-- Real-time monitoring of device events.
-- `ACTION` indicates what's happening (`add`, `remove`, `change`).
-- Environment variables provide detailed information about each event.
-- Helpful for diagnosing issues with device recognition and udev rules.
+Interpretation:
 
-#### Monitoring Hardware
+- udev saw a USB device being added.
+- The action is add.
+- The device vendor and model were detected.
 
-Monitoring hardware performance and system health is crucial for proactive maintenance.
+This is helpful when debugging device rules or checking whether the system notices hardware changes.
 
-I. `top` and `htop` display real-time system processes and resource usage.
+### Monitoring Hardware Performance
 
-```bash
+Hardware monitoring helps identify whether the system is overloaded, overheating, waiting on disk, running out of memory, or experiencing network problems.
+
+Useful tools include:
+
+- top
+- htop
+- vmstat
+- iostat
+- ss
+- sensors
+- glances
+- nmon
+
+### CPU and Process Monitoring with `top` and `htop`
+
+Run:
+
+```bash id="rnyk97"
+top
+```
+
+or:
+
+```bash id="x7e6te"
 htop
 ```
 
-Example Output:
+Example `top` output:
 
-```plaintext
-PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-1234 user      20   0  162476   9568   5824 S   0.7  0.1   0:03.17 bash
-5678 user      20   0  322820  25520  19340 S   0.3  0.3   0:05.61 gnome-terminal
-9101 user      20   0 1629380 119964  73452 S   2.0  1.5   1:12.34 firefox
+```text id="rfa7mg"
+%Cpu(s): 25.0 us,  5.0 sy, 65.0 id,  5.0 wa
+MiB Mem :  16384.0 total, 8192.0 used, 2048.0 free, 6144.0 buff/cache
+
+PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM COMMAND
+5678 user      20   0 2625488   1.2g   9456 S 100.0  7.5 process_name
 ```
 
-| **Field**   | **Description**                    |
-|-------------|------------------------------------|
-| `PID`       | Process ID                         |
-| `%CPU`      | Percentage of CPU usage            |
-| `%MEM`      | Percentage of RAM usage            |
-| `TIME+`     | Total CPU time consumed            |
+Interpretation:
 
-Use this to identify resource-intensive processes and manage them accordingly.
+- process_name is using one full CPU core.
+- CPU idle is still 65%, so the whole system is not fully CPU-saturated.
+- I/O wait is 5%, which is not very high.
 
-II. `vmstat` reports virtual memory statistics and system processes.
+Important fields:
 
-```bash
+- %CPU   CPU usage by process
+- %MEM   memory usage by process
+- RES    resident memory actually used in RAM
+- S      process state
+- wa     CPU time spent waiting on I/O
+
+### System Overview with `vmstat`
+
+Run:
+
+```bash id="vpknsm"
 vmstat 5
 ```
 
-Outputs data every 5 seconds.
+This prints system statistics every 5 seconds.
 
-Example Output:
+Example output:
 
-```plaintext
+```text id="uhvw5p"
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
-r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
-1  0      0  823456  23456 345678    0    0     1     2    3    4  5  1 93  1  0
-0  0      0  823400  23450 345690    0    0     0     1  250  500  4  1 95  0  0
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 1  0      0 823456  23456 345678    0    0     1     2  300  500  5  1 93  1  0
 ```
 
-| **Field**            | **Description**                             |
-|----------------------|---------------------------------------------|
-| `r`                  | Number of processes waiting to run          |
-| `free`               | Amount of free memory                       |
-| `buff` and `cache`   | Memory used for buffers and cache           |
-| `us`, `sy`, `id`, `wa` | User, system, idle, and wait CPU percentages |
+Interpretation:
 
-Monitor overall system performance and identify bottlenecks.
+- r = 1 means one process is waiting to run.
+- b = 0 means no blocked processes.
+- si and so are 0, so the system is not swapping.
+- wa = 1 means little time is spent waiting on disk I/O.
 
-III. `iostat` provides CPU and I/O statistics for devices and partitions.
+Important fields:
 
-```bash
+- r    runnable processes
+- b    blocked processes
+- si   swap in
+- so   swap out
+- bi   blocks read from disk
+- bo   blocks written to disk
+- us   user CPU
+- sy   system CPU
+- id   idle CPU
+- wa   I/O wait
+
+### Disk Monitoring with `iostat`
+
+Run:
+
+```bash id="ogb1kc"
 iostat -xz 1
 ```
 
-Options:
+Example output:
 
-- `-x`: Extended statistics.
-- `-z`: Omit devices with no activity.
-- `1`: Update every second.
+```text id="met1f2"
+avg-cpu:  %user %nice %system %iowait %steal %idle
+           2.00  0.00    1.00    0.50   0.00 96.50
 
-Example Output:
-
-```plaintext
-avg-cpu:  %user   %nice %system %iowait  %steal   %idle
-2.00    0.00    1.00    0.50    0.00   96.50
-
-Device            r/s     w/s     rkB/s   wkB/s  rrqm/s  wrqm/s  %util
-sda              1.00    2.00     50.00  100.00    0.00    0.00   0.15
+Device            r/s     w/s    rkB/s   wkB/s  await  aqu-sz  %util
+sda              1.00    2.00    50.00  100.00   2.20    0.01   0.15
 ```
 
-| **Field**     | **Description**                                |
-|---------------|------------------------------------------------|
-| `r/s`, `w/s`  | Read/write operations per second               |
-| `rkB/s`, `wkB/s` | Kilobytes read/written per second           |
-| `%util`       | How busy the device is (100% means fully utilized) |
+Interpretation:
 
-Helps in identifying disk I/O bottlenecks.
+- sda is barely used.
+- %util is low.
+- await is low.
+- There is no disk bottleneck in this sample.
 
-IV. `netstat` and `ss` provide network statistics and socket information.
+Important fields:
 
-```bash
-netstat -tulnp
-ss -tunap
+- r/s       reads per second
+- w/s       writes per second
+- rkB/s     kilobytes read per second
+- wkB/s     kilobytes written per second
+- await     average request wait time
+- aqu-sz    average queue size
+- %util     device utilization
+
+### Network Sockets with `ss`
+
+The older tool is `netstat`, but modern Linux systems usually prefer `ss`.
+
+Show listening TCP and UDP ports:
+
+```bash id="w8cjra"
+ss -tulnp
 ```
 
-| **Option** | **Description**                    |
-|------------|------------------------------------|
-| `-t`       | TCP connections                   |
-| `-u`       | UDP connections                   |
-| `-l`       | Listening sockets                 |
-| `-n`       | Show numerical addresses          |
-| `-p`       | Show process using the socket      |
+Example output:
 
-Example Output (`netstat -tulnp`):
-
-```plaintext
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1234/sshd
-tcp6       0      0 :::80                   :::*                    LISTEN      5678/nginx
-udp        0      0 0.0.0.0:68              0.0.0.0:*                           9101/dhclient
+```text id="hq92qa"
+Netid State  Local Address:Port  Peer Address:Port Process
+tcp   LISTEN 0.0.0.0:22          0.0.0.0:*         users:(("sshd",pid=1234,fd=3))
+tcp   LISTEN 0.0.0.0:80          0.0.0.0:*         users:(("nginx",pid=5678,fd=6))
 ```
 
-- Shows services listening on network ports.
-- `Local Address`: Port on which the service is listening.
-- `PID/Program name`: Process ID and associated program.
-- Use this to ensure that only intended services are running.
+Interpretation:
 
-V. `sensors` (from `lm_sensors` package) monitors system temperatures, voltages, and fan speeds.
+- SSH is listening on port 22.
+- Nginx is listening on port 80.
+- Both are listening on all IPv4 interfaces.
 
-```bash
+This is useful for checking which services are reachable over the network.
+
+### Temperature and Fan Monitoring with `sensors`
+
+Install sensors tools if needed:
+
+```bash id="e7qi96"
+sudo apt install lm-sensors
+```
+
+Detect available sensors:
+
+```bash id="ex73ia"
+sudo sensors-detect
+```
+
+Then run:
+
+```bash id="k0d4x2"
 sensors
 ```
 
-Requires configuration with `sensors-detect`.
+Example output:
 
-Example Output:
-
-```plaintext
+```text id="yn35ur"
 coretemp-isa-0000
-Adapter: ISA adapter
 Package id 0:  +55.0°C  (high = +80.0°C, crit = +100.0°C)
 Core 0:        +54.0°C  (high = +80.0°C, crit = +100.0°C)
 Core 1:        +53.0°C  (high = +80.0°C, crit = +100.0°C)
 ```
 
-- Displays temperatures for CPU package and individual cores.
-- `high` and `crit` values indicate warning and critical temperature thresholds.
-- Useful for monitoring system thermals and preventing overheating.
+Interpretation:
 
-VI. `glances` is a cross-platform monitoring tool integrating various system metrics.
+- CPU package temperature is 55°C.
+- The high threshold is 80°C.
+- The critical threshold is 100°C.
+- The system is warm but not overheating.
 
-```bash
+High temperatures can cause throttling, instability, shutdowns, or long-term hardware damage.
+
+### All-in-One Monitoring with `glances`
+
+Run:
+
+```bash id="uelawz"
 glances
 ```
 
-Comprehensive overview including CPU, memory, disks, network, processes.
+`glances` shows CPU, memory, disk, network, sensors, and processes in one interface.
 
-Example Output:
+It is useful when you want a quick overall view of system health.
 
-| **Field**          | **Description**                                  |
-|--------------------|--------------------------------------------------|
-| **CPU Usage**       | Real-time graph and percentage                   |
-| **Memory Usage**    | Shows used and free memory                       |
-| **Network Traffic** | Displays current upload and download rates       |
-| **Processes**       | Lists top processes by CPU or memory usage       |
+### Interactive Monitoring with `nmon`
 
-- Provides a holistic view of system performance.
-- Color-coded indicators help identify potential issues quickly.
-- Use keyboard shortcuts to navigate and customize the display.
+Run:
 
-VII. `nmon` is a performance monitoring tool providing detailed statistics.
-
-```bash
+```bash id="gf17c6"
 nmon
 ```
 
-Interactive interface for real-time monitoring.
+Common keys:
 
-Example Output:
+- c   CPU
+- m   memory
+- d   disk
+- n   network
+- t   top processes
 
-| **Field**            | **Description**                                   |
-|----------------------|---------------------------------------------------|
-| **CPU Statistics**    | Press `c` to view CPU usage graphs               |
-| **Memory Usage**      | Press `m` to display memory and swap usage        |
-| **Disk I/O**          | Press `d` to see disk read/write statistics       |
-| **Network**           | Press `n` for network interface statistics        |
+`nmon` is useful for focused performance monitoring.
 
-- Interactive keys allow you to focus on specific metrics.
-- Graphs and numerical data provide insight into resource utilization.
-- Ideal for performance tuning and identifying system bottlenecks.
+### Configuring Hardware
 
-#### Configuring Hardware
+Linux includes tools for configuring different hardware types.
 
-Proper configuration ensures hardware devices operate efficiently and according to system requirements.
+Examples include:
 
-I. `hdparm` can be used to get/set SATA/IDE device parameters.
+- hdparm     SATA/IDE disk parameters
+- sdparm     SCSI/SATA device parameters
+- xrandr     display settings on X11
+- alsamixer  interactive sound mixer
+- amixer     scriptable sound mixer
+- ip         network interface configuration
+- iwconfig   older wireless configuration tool
+- rfkill     block or unblock wireless devices
 
-```bash
+### Disk Information with `hdparm`
+
+Run:
+
+```bash id="jzrlag"
 sudo hdparm -I /dev/sda
 ```
 
-Options:
+Example output:
 
-- `-I` displays detailed device information.
-
-Example Output:
-
-```plaintext
+```text id="uf9o5h"
 /dev/sda:
 
-ATA device, with non-removable media
 Model Number:       Samsung SSD 860 EVO 500GB
 Serial Number:      S3Z9NB0K123456X
 Firmware Revision:  RVT02B6Q
 Transport:          Serial, ATA8-AST, SATA III
-Standards:
-Used: ATA8-ACS revision 4
-Supported: 8 7 6 5
-Configuration:
-Logical         max     current
-cylinders       16383   16383
-heads           16      16
-sectors/track   63      63
---
-CHS current addressable sectors:   16514064
-LBA    user addressable sectors:  268435455
-LBA48  user addressable sectors:  976773168
-Logical  Sector size:                   512 bytes
-Physical Sector size:                   512 bytes
-device size with M = 1024*1024:      476940 MBytes
-device size with M = 1000*1000:      500107 MBytes (500 GB)
+Logical Sector size:   512 bytes
+Physical Sector size:  512 bytes
+device size with M = 1000*1000: 500107 MBytes
 ```
 
-| **Field**                | **Description**                                                         |
-|--------------------------|-------------------------------------------------------------------------|
-| **Model and Serial Number** | Identifies the exact disk installed                                   |
-| **Firmware Revision**     | Indicates the firmware version, which may be relevant for updates       |
-| **Standards Supported**   | Shows the ATA/ATAPI standards the device complies with                  |
-| **Device Size**           | Confirms the storage capacity                                           |
-| **Sector Sizes**          | Important for alignment when partitioning disks                         |
+Interpretation:
 
-II. `sdparm` controls SCSI device parameters.
+- The disk model and firmware are shown.
+- The disk uses SATA.
+- The reported capacity is about 500 GB.
+- Sector size information can matter for alignment and performance.
 
-```bash
+Be careful with `hdparm` write-related options. Some options can affect data safety.
+
+### SCSI Device Parameters with `sdparm`
+
+Run:
+
+```bash id="amri08"
 sudo sdparm --all /dev/sdb
 ```
 
-Example Output:
+Example output:
 
-```plaintext
-/dev/sdb: ATA       WDC WD10EZEX-08WN4A0  01.01A01
-
-Peripheral device type: disk
-Mode parameter header:
-Mode data length=0x00, Medium type=0x00, Device-specific parameter=0x00, Block descriptor length=0x00
-
+```text id="o5yk6f"
 Caching (SBC) mode page:
-IC       (Initiator Control):  0
-ABPF     (Abort Pre-fetch):    0
-CAP      (Caching Analysis Permitted):  0
-DISC     (Discontinuity):      0
-SIZE     (Size Enable):        0
-WCE      (Write Cache Enable): 1
-MF       (Multiplication Factor): 0
-RCD      (Read Cache Disable): 0
+  WCE   Write Cache Enable: 1
+  RCD   Read Cache Disable: 0
 ```
 
-- **Peripheral Device Type** confirms the type (disk).
-- **Caching Mode Page** displays cache settings like write cache enable (WCE).
-- **Parameters** can be adjusted to optimize performance or behavior.
+Interpretation:
 
-III. `xrandr` configures display settings on systems using X11.
+- Write cache is enabled.
+- Read cache is not disabled.
 
-```bash
+Storage cache settings can affect performance and data safety.
+
+### Display Configuration with `xrandr`
+
+On X11 systems, use:
+
+```bash id="xdc0ym"
+xrandr
+```
+
+Set a display mode:
+
+```bash id="r1d5du"
 xrandr --output HDMI-1 --mode 1920x1080 --rate 60 --primary
 ```
 
-Options:
+Example output:
 
-- `--output` specifies the display output.
-- `--mode` sets the resolution.
-- `--rate` sets the refresh rate.
-- `--primary` sets as primary display.
-
-Example Output:
-
-```plaintext
-Screen 0: minimum 320 x 200, current 1920 x 1080, maximum 8192 x 8192
-HDMI-1 connected primary 1920x1080+0+0 (normal left inverted right x axis y axis) 510mm x 290mm
-1920x1080     60.00*+  59.94    50.00
+```text id="zrsj8g"
+HDMI-1 connected primary 1920x1080+0+0
+1920x1080     60.00*+  59.94
 1680x1050     59.88
-1280x1024     75.02    60.02
-1024x768      75.03    70.07    60.00
 ```
 
-- Shows which display outputs are connected (e.g., HDMI-1).
-- Lists resolutions and refresh rates; an asterisk (*) indicates the current mode.
-- Confirms which display is set as primary.
+Interpretation:
 
-IV. `alsamixer` is an interactive command-line mixer for ALSA sound system.
+- HDMI-1 is connected.
+- 1920x1080 at 60 Hz is active.
+- The display is set as primary.
 
-```bash
+Note that Wayland-based desktop environments may use different tools or graphical settings panels.
+
+### Sound with `alsamixer` and `amixer`
+
+Interactive mixer:
+
+```bash id="w5s8sf"
 alsamixer
 ```
 
-Navigation:
+Useful keys:
 
-- Use arrow keys to adjust volumes.
-- Press `M` to mute/unmute channels.
-- Press `F6` to select different sound cards.
+- Arrow keys   adjust volume
+- M            mute or unmute
+- F6           select sound card
+- Esc          exit
 
-Example Output:
+Scriptable commands:
 
-```plaintext
-┌────────────────────────────── AlsaMixer v1.2.2 ──────────────────────────────────┐
-│ Card: PulseAudio                                      F1:  Help                  │
-│ Chip: PulseAudio                                      F2:  System information    │
-│ View: F3:[Playback] F4: Capture  F5: All              F6:  Select sound card     │
-│ Item: Master [dB gain: 0.00]                          Esc: Exit                  │
-│                                                                                  │
-│     ┌──┐     ┌──┐     ┌──┐                                                       │
-│     │▐▐│     │▐▐│     │▐▐│                                                       │
-│     │▐▐│     │▐▐│     │▐▐│                                                       │
-│     │▐▐│     │▐▐│     │▐▐│                                                       │
-│     │▐▐│     │▐▐│     │▐▐│                                                       │
-│     └──┘     └──┘     └──┘                                                       │
-│      100       100       100                                                     │
-│     Master     PCM      Mic                                                      │
-└──────────────────────────────────────────────────────────────────────────────────┘
-```
-
-- **Master** controls the overall system volume.
-- **PCM** adjusts the volume for digital audio.
-- **Mic** adjusts the microphone input level.
-- **Bars** are visual representation of volume levels; the filled areas represent the current setting.
-
-V. `amixer` is a scriptable mixer for automation and scripting.
-
-```bash
+```bash id="k8anzc"
 amixer set Master unmute
 amixer set Master 75%
 ```
 
-Example Output:
+Example output:
 
-```plaintext
+```text id="q9gjvs"
 Simple mixer control 'Master',0
-Capabilities: pvolume pswitch pswitch-joined
-Playback channels: Front Left - Front Right
-Limits: Playback 0 - 65536
-Mono:
 Front Left: Playback 49152 [75%] [on]
 Front Right: Playback 49152 [75%] [on]
 ```
 
-- **Playback Channels** indicates stereo channels (Front Left and Front Right).
-- **Limits and Levels** shows the range and current volume setting.
-- **[on]/[off]** indicates whether the channel is muted.
+Interpretation:
 
-VI. `ip` is a modern tool to configure network interfaces.
+- Master volume is set to 75%.
+- Both left and right channels are unmuted.
 
-```bash
-sudo ip addr show
+### Network Interface Configuration with `ip`
+
+Show network interfaces:
+
+```bash id="odexff"
+ip addr show
+```
+
+Bring an interface up:
+
+```bash id="snxv89"
 sudo ip link set eth0 up
 ```
 
-Example Output (`ip addr show`):
+Example output:
 
-```plaintext
-2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN group default qlen 1000
-link/ether 00:0a:95:9d:68:16 brd ff:ff:ff:ff:ff:ff
+```text id="fv4zzh"
+2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 state DOWN
+    link/ether 00:0a:95:9d:68:16
 ```
 
-- `eth0` is the network interface.
-- Indicates the interface is not active.
-- `ip link set eth0 up` brings the interface up.
+Interpretation:
 
-VII. `iwconfig` configures wireless network interfaces.
+- The interface is administratively UP.
+- NO-CARRIER means no physical link is detected.
+- For Ethernet, this may mean cable disconnected or switch port inactive.
 
-```bash
-sudo iwconfig wlan0 essid "YourSSID" key s:YourPassword
-```
+### Wireless Devices with `rfkill`
 
-Example Output (`iwconfig`):
+Check wireless block status:
 
-```plaintext
-wlan0     IEEE 802.11  ESSID:"YourSSID"  Nickname:"<WIFI@REALTEK>"
-Mode:Managed  Frequency:2.437 GHz  Access Point: 00:14:D1:1A:2B:3C
-Bit Rate:72.2 Mb/s   Sensitivity:0/0
-Retry:off   RTS thr:off   Fragment thr:off
-Power Management:off
-Link Quality=70/70  Signal level=-40 dBm  Noise level=-96 dBm
-```
-
-- **ESSID** is the name of the wireless network you're connected to.
-- **Mode** indicates the operation mode (Managed means it's a client).
-- **Signal Level** shows the strength of the connection.
-
-VIII. `rfkill` is used to enable or disable wireless devices.
-
-```bash
+```bash id="lto0hf"
 rfkill list
+```
+
+Example output:
+
+```text id="myir1e"
+0: phy0: Wireless LAN
+    Soft blocked: no
+    Hard blocked: no
+1: hci0: Bluetooth
+    Soft blocked: yes
+    Hard blocked: no
+```
+
+Interpretation:
+
+- Wi-Fi is not blocked.
+- Bluetooth is blocked by software.
+- There is no hardware block.
+
+Unblock Bluetooth:
+
+```bash id="sagysd"
 rfkill unblock bluetooth
 ```
 
-Example Output (`rfkill list`):
+A hard block usually means a physical switch, BIOS setting, or firmware-level block.
 
-```plaintext
-0: phy0: Wireless LAN
-Soft blocked: no
-Hard blocked: no
-1: hci0: Bluetooth
-Soft blocked: yes
-Hard blocked: no
+### Drivers and Kernel Modules
+
+Linux drivers are often kernel modules.
+
+A module can be loaded, unloaded, inspected, or configured.
+
+Useful commands include:
+
+- lsmod
+- modprobe
+- modprobe -r
+- modinfo
+- insmod
+- rmmod
+
+### Listing Loaded Modules with `lsmod`
+
+Run:
+
+```bash id="axqwfg"
+lsmod
 ```
 
-- **Soft Blocked** is a software-level block (can be toggled via `rfkill`).
-- **Hard Blocked** is a physical switch or BIOS setting (cannot be changed via software).
-- `rfkill unblock bluetooth` removes the software block.
+Search for a module:
 
-#### Managing Drivers in Linux
-
-Drivers in Linux are typically part of the kernel, either built-in or as loadable kernel modules (LKMs). Understanding how to manage these modules is essential for hardware management.
-
-I. `lsmod` displays currently loaded modules.
-
-```bash
-lsmod | grep modulename
+```bash id="xvnp7e"
+lsmod | grep e1000e
 ```
 
-Example Output:
+Example output:
 
-```plaintext
+```text id="n6nrk9"
 e1000e                245760  0
 intel_cstate           20480  0
 ```
 
-- `e1000e` is the module for Intel network cards.
-- 245760 is the memory footprint of the module.
-- Last column shows the number of instances using the module (0 means it's not in use).
+Interpretation:
 
-II. `modprobe` adds modules to the kernel, resolving dependencies.
+- e1000e is loaded.
+- It uses memory in the kernel.
+- The final column shows how many other modules or devices are using it.
 
-```bash
-sudo modprobe modulename
-```
+### Loading a Module with `modprobe`
 
-Example Usage:
+Load a module:
 
-```bash
+```bash id="b2vs3e"
 sudo modprobe e1000e
 ```
 
-- Loads the `e1000e` network driver module.
-- Automatically handles any dependencies required.
+`modprobe` is preferred because it handles dependencies automatically.
 
-III. `modprobe -r` removes modules from the kernel.
+### Removing a Module
 
-```bash
-sudo modprobe -r modulename
-```
+Unload a module:
 
-Example Usage:
-
-```bash
+```bash id="oohcjd"
 sudo modprobe -r e1000e
 ```
 
-- Unloads the `e1000e` module.
-- Will fail if the module is currently in use.
+This may fail if the module is currently in use.
 
-IV. `insmod` inserts a module into the kernel.
+Example:
 
-```bash
-sudo insmod /path/to/module.ko
+```text id="qcx99q"
+modprobe: FATAL: Module e1000e is in use.
 ```
 
-**Note:** Does not resolve dependencies; prefer `modprobe` when possible.
+Interpretation:
 
-Example Usage:
+- A device or another module is still using e1000e.
+- You cannot safely remove it until it is no longer needed.
 
-```bash
-sudo insmod /lib/modules/$(uname -r)/kernel/drivers/net/e1000e/e1000e.ko
+### Inspecting Module Information with `modinfo`
+
+Run:
+
+```bash id="jd6dxw"
+modinfo e1000e
 ```
 
-- Manually loads a specific module file.
-- Use when testing custom or third-party modules.
+Example output:
 
-V. `rmmod` removes a module from the kernel.
-
-```bash
-sudo rmmod modulename
+```text id="gqrj4j"
+filename:    /lib/modules/6.x/kernel/drivers/net/ethernet/intel/e1000e/e1000e.ko
+version:     3.2.6-k
+license:     GPL
+description: Intel(R) PRO/1000 Network Driver
+author:      Intel Corporation
 ```
 
-Example Usage:
+Interpretation:
 
-```bash
-sudo rmmod e1000e
+- This module is an Intel network driver.
+- The file path shows where the module lives.
+- The license and version are shown.
+
+### Module Configuration
+
+Module options can be configured under:
+
+```text id="sdr0ts"
+/etc/modprobe.d/
 ```
 
-- Forcefully removes the module.
-- Should be used with caution as it doesn't handle dependencies.
+Example:
 
-VI. `modinfo` displays information about a kernel module.
-
-```bash
-modinfo modulename
-```
-
-Example Output:
-
-```plaintext
-filename:       /lib/modules/5.4.0-42-generic/kernel/drivers/net/ethernet/intel/e1000e/e1000e.ko
-version:        3.2.6-k
-license:        GPL
-description:    Intel(R) PRO/1000 Network Driver
-author:         Intel Corporation, <e1000-devel@lists.sourceforge.net>
-```
-
-- **Filename** is the location of the module.
-- **Version and License** may be useful for compatibility checks.
-- **Description and Author** provides context about the module's purpose.
-
-VII. Kernel Module Configuration
-
-- Place configuration files in `/etc/modprobe.d/`.
-- To set options for a module:
-
-```bash
-echo "options modulename option=value" | sudo tee /etc/modprobe.d/modulename.conf
-```
-
-Example Usage:
-
-```bash
+```bash id="hq7l7v"
 echo "options e1000e InterruptThrottleRate=3000" | sudo tee /etc/modprobe.d/e1000e.conf
 ```
 
-- **InterruptThrottleRate** adjusts how frequently the network card interrupts the CPU.
-- Settings will apply on boot or when the module is loaded.
+This applies an option when the module loads.
 
-##### Graphics Drivers
+Configuration changes may require unloading and reloading the module or rebooting.
 
-I. **NVIDIA**
+### Blacklisting a Module
 
-- Install via package manager or download from NVIDIA's website.
-- Use `ubuntu-drivers devices` (Ubuntu) to identify the appropriate driver.
+If a module causes problems or conflicts with another driver, it can be blacklisted.
 
-```bash
-sudo apt install nvidia-driver-470
-```
+Example:
 
-Example Output (`nvidia-smi`):
-
-```plaintext
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 470.57.02    Driver Version: 470.57.02    CUDA Version: 11.4     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  GeForce GTX 1050    Off  | 00000000:01:00.0 Off |                  N/A |
-| 30%   35C    P8    N/A /  N/A |    200MiB /  4040MiB |      2%      Default |
-+-------------------------------+----------------------+----------------------+
-```
-
-- **Driver Version** confirms the installed NVIDIA driver.
-- **GPU Details** provides information about the GPU's status and usage.
-- **Memory Usage** shows how much GPU memory is in use.
-
-II. **AMD**
-
-Use open-source `amdgpu` driver or proprietary `amdgpu-pro`.
-
-```bash
-sudo apt install xserver-xorg-video-amdgpu
-```
-
-Example Output (`lspci | grep VGA`):
-
-```plaintext
-01:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 [Radeon RX 5600 OEM/5600 XT / 5700/5700 XT] (rev c1)
-```
-
-- **Device Identification** confirms the AMD GPU model.
-- **Driver Installation** ensures that the appropriate driver is installed for the GPU.
-
-#### Troubleshooting Hardware Issues
-
-Effective troubleshooting involves systematic diagnostics to identify and resolve hardware-related problems.
-
-I. **Check Kernel Messages:**
-
-Use `dmesg` to look for hardware-related errors or warnings.
-
-```bash
-dmesg | grep -i 'error\|fail\|warn'
-```
-
-Example Output:
-
-```plaintext
-[   12.345678] usb 1-1: USB disconnect, device number 2
-[   12.345789] xhci_hcd 0000:00:14.0: Cannot set link state.
-[   12.345800] usb usb1-port1: cannot disable (err = -32)
-[   15.678912] ata1.00: failed command: READ FPDMA QUEUED
-[   15.678923] ata1.00: status: { DRDY ERR }
-[   15.678929] ata1.00: error: { UNC }
-[   20.123456] NVRM: GPU at PCI:0000:01:00: GPU has fallen off the bus.
-[   20.123467] NVRM: A GPU crash dump has been created.
-```
-
-- Each line includes a timestamp and a message from the kernel.
-- Look for keywords like `error`, `fail`, or `warn` to identify potential issues.
-- The example shows errors related to USB devices, disk read failures (`ata1.00`), and GPU problems (`NVRM`).
-- These messages help pinpoint hardware components experiencing issues.
-
-II. **Review System Logs:**
-
-Examine `/var/log/syslog`, `/var/log/messages`, or `/var/log/kern.log`.
-
-```bash
-sudo less /var/log/syslog
-```
-
-Example Output (excerpt from `/var/log/syslog`):
-
-```plaintext
-Sep 25 10:15:32 hostname kernel: [  15.678912] ata1.00: failed command: READ FPDMA QUEUED
-Sep 25 10:15:32 hostname kernel: [  15.678923] ata1.00: status: { DRDY ERR }
-Sep 25 10:15:32 hostname kernel: [  15.678929] ata1.00: error: { UNC }
-Sep 25 10:15:35 hostname NetworkManager[1234]: <warn>  [1632560135.1234] device (wlan0): link timed out.
-Sep 25 10:15:40 hostname kernel: [  20.123456] NVRM: GPU at PCI:0000:01:00: GPU has fallen off the bus.
-Sep 25 10:15:40 hostname kernel: [  20.123467] NVRM: A GPU crash dump has been created.
-```
-
-- The logs contain timestamped entries from various system components.
-- Messages with `kernel:` prefix come from the kernel, similar to `dmesg`.
-- Other services (e.g., `NetworkManager`) may report warnings or errors.
-- Use these logs to gather more context around hardware issues, correlating timestamps with observed problems.
-
-III. **Verify Driver Loading:**
-
-Ensure the correct drivers are loaded for devices.
-
-```bash
-lspci -k | less
-```
-
-Example Output (excerpt):
-
-```plaintext
-00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller 1 [AHCI mode]
-Subsystem: Dell Device 05a4
-Kernel driver in use: ahci
-Kernel modules: ahci
-01:00.0 VGA compatible controller: NVIDIA Corporation GP107M [GeForce GTX 1050 Mobile] (rev a1)
-Subsystem: Dell Device 3810
-Kernel driver in use: nvidia
-Kernel modules: nvidiafb, nouveau, nvidia_drm, nvidia
-```
-
-- Each device is listed with its driver information.
-- `Kernel driver in use` shows the driver currently handling the device.
-- `Kernel modules` lists available modules for the device.
-- Verify that the appropriate driver is in use. For instance, if using an NVIDIA GPU, ensure `nvidia` is the driver in use, not `nouveau` (the open-source alternative).
-- If a device lacks a driver, it may not function correctly.
-
-IV. **Check Hardware Status:**
-
-**Disk Health:**
-
-Use `smartctl` from `smartmontools` to check S.M.A.R.T. status.
-
-```bash
-sudo smartctl -H /dev/sda
-```
-
-Example Output:
-
-```plaintext
-smartctl 7.1 2019-12-30 r5022 [x86_64-linux-5.4.0-42-generic] (local build)
-Copyright (C) 2002-19, Bruce Allen, Christian Franke, www.smartmontools.org
-
-=== START OF READ SMART DATA SECTION ===
-SMART overall-health self-assessment test result: PASSED
-```
-
-- The `PASSED` result indicates that the disk considers itself healthy.
-- If the result is `FAILED`, the disk may be experiencing issues and should be backed up and replaced.
-- For more detailed information, you can run `sudo smartctl -a /dev/sda`.
-
-**Memory Test:**
-
-Use `memtest86+` by booting from installation media or via GRUB menu.
-
-- **Memtest86+** runs a series of tests on your RAM to detect errors.
-- If errors are found, it may indicate faulty RAM modules, which should be replaced.
-
-**CPU Stress Test:**
-
-Use `stress` or `stress-ng` to test CPU stability.
-
-```bash
-sudo stress-ng --cpu 4 --timeout 60s
-```
-
-Example Output:
-
-```plaintext
-stress-ng: info:  [1234] setting to a timeout of 60 seconds
-stress-ng: info:  [1234] dispatching hogs: 4 cpu
-stress-ng: info:  [1234] successful run completed in 60.00s
-```
-
-- The tool stresses the CPU for the specified duration.
-- If the system remains stable and no errors occur, the CPU is likely functioning properly.
-- If the system crashes or reports errors, there may be issues with CPU stability or cooling.
-
-V. **Monitor System Resources:**
-
-Identify processes consuming excessive resources.
-
-```bash
-top
-```
-
-Example Output (partial):
-
-```plaintext
-top - 10:30:01 up 2 days,  4:15,  2 users,  load average: 1.25, 1.10, 1.05
-Tasks: 245 total,   2 running, 243 sleeping,   0 stopped,   0 zombie
-%Cpu(s): 25.0 us,  5.0 sy,  0.0 ni, 65.0 id,  5.0 wa,  0.0 hi,  0.0 si,  0.0 st
-MiB Mem :  16384.0 total,   2048.0 free,   8192.0 used,   6144.0 buff/cache
-MiB Swap:   8192.0 total,   6144.0 free,   2048.0 used.   7168.0 avail Mem
-
-PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-5678 user      20   0 2625488 1.2g  9456 S 100.0  7.5  60:00.00 process_name
-1234 user      20   0  162476  9568  5824 R   5.0  0.1   0:03.17 bash
-```
-
-- `process_name` is consuming 100% of one CPU core.
-- High CPU usage may indicate a runaway process or an application under heavy load.
-- You may decide to investigate or terminate the process if necessary.
-
-Use `iotop` to monitor disk I/O usage.
-
-```bash
-sudo iotop
-```
-
-Example Output:
-
-```plaintext
-Total DISK READ: 100.00 K/s | Total DISK WRITE: 50.00 K/s
-PID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
-7890 be/4  user      50.00 K/s   25.00 K/s  0.00 %  10.00 %  process_a
-5678 be/4  user      50.00 K/s   25.00 K/s  0.00 %   5.00 %  process_b
-```
-
-- `process_a` and `process_b` are performing significant disk I/O.
-- High disk usage can slow down the system or indicate an application issue.
-- Investigate if the disk activity is expected or if it needs attention.
-
-VI. **Inspect Physical Connections:**
-
-- For removable devices, verify all cables and connectors are securely attached.
-- Reseat components like RAM modules and expansion cards if necessary.
-
-**Note:**
-
-- This step involves physically checking the hardware.
-- Ensure the system is powered off and unplugged before touching internal components.
-- Use anti-static precautions to prevent damage to components.
-
-VII. **Update System and Drivers:**
-
-Keep the system updated to benefit from the latest hardware support.
-
-```bash
-sudo apt update && sudo apt upgrade
-```
-
-Example Output:
-
-```plaintext
-Reading package lists... Done
-Building dependency tree       
-Reading state information... Done
-Calculating upgrade... Done
-The following packages will be upgraded:
-linux-image-generic linux-headers-generic
-2 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Need to get 10.5 MB of archives.
-After this operation, 0 B of additional disk space will be used.
-Do you want to continue? [Y/n]
-```
-
-- Lists packages that will be upgraded, including kernel images or drivers.
-- Updating may resolve hardware compatibility issues.
-- Confirm to proceed with the upgrade.
-
-Update the kernel if necessary.
-
-```bash
-sudo apt install linux-generic
-```
-
-**Note:**
-
-- Installing a newer kernel may provide better hardware support.
-- Ensure compatibility with your system and applications before upgrading.
-
-VIII. **Blacklist Conflicting Modules:**
-
-If a module is causing issues, blacklist it to prevent loading.
-
-```bash
-echo "blacklist faulty_module" | sudo tee /etc/modprobe.d/blacklist-faulty_module.conf
-```
-
-Example Usage:
-
-```bash
+```bash id="a928kv"
 echo "blacklist nouveau" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
 ```
 
-- This command creates a configuration file that tells the system not to load the `nouveau` module.
-- Used when `nouveau` (open-source NVIDIA driver) conflicts with the proprietary `nvidia` driver.
-- After blacklisting, you may need to update the initramfs and reboot:
+This prevents the open-source NVIDIA `nouveau` driver from loading.
 
-```bash
+After changing early boot driver behavior, you may need:
+
+```bash id="fgtuik"
 sudo update-initramfs -u
 sudo reboot
 ```
 
-IX. **Use Live Environment:**
+Blacklisting should be done carefully. If you blacklist the wrong driver, hardware may stop working.
 
-Boot from a live USB to determine if the issue is hardware or software-related.
+### Graphics Drivers
 
-**How to Proceed:**
+Graphics drivers are important for desktop performance, external displays, GPU compute, and hardware acceleration.
 
-- Create a bootable USB with a Linux distribution.
-- Boot the system using the USB drive.
-- Check if the hardware functions correctly in the live environment.
-- If issues persist, the problem is likely hardware-related.
+Common GPU vendors include:
 
-X. **Consult Documentation and Support Resources:**
+- Intel
+- AMD
+- NVIDIA
 
-- Refer to official hardware manuals, Linux documentation, and community forums.
-- Search for known issues with specific hardware models.
+Intel and AMD usually work well with open-source drivers included in Linux distributions.
 
-XI. **Reboot the System:**
+NVIDIA may use either the open-source `nouveau` driver or the proprietary NVIDIA driver.
 
-Rebooting can resolve temporary glitches or hardware initialization issues.
+### NVIDIA
 
-```bash
-sudo reboot
+On Ubuntu systems, you can inspect recommended drivers with:
+
+```bash id="q2y29s"
+ubuntu-drivers devices
 ```
 
-**Safety Precautions:**
+Install a driver:
 
-- Always back up important data before performing hardware troubleshooting.
-- Use anti-static precautions when handling internal components.
-- Disconnect power before opening the system chassis.
+```bash id="yvduge"
+sudo apt install nvidia-driver-470
+```
+
+Check status:
+
+```bash id="t4wzgv"
+nvidia-smi
+```
+
+Example output:
+
+```text id="f9bgki"
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.57.02    Driver Version: 470.57.02    CUDA Version: 11.4     |
+| GPU  Name            Temp    Memory-Usage        GPU-Util                   |
+|  0   GeForce GTX1050  35C     200MiB / 4040MiB    2%                         |
++-----------------------------------------------------------------------------+
+```
+
+Interpretation:
+
+- The NVIDIA driver is installed and working.
+- The GPU is detected.
+- Temperature, memory usage, and GPU utilization are visible.
+
+### AMD
+
+AMD GPUs often use the open-source `amdgpu` driver.
+
+Check GPU:
+
+```bash id="subbdw"
+lspci | grep -E 'VGA|3D|Display'
+```
+
+Example output:
+
+```text id="vqvnd5"
+01:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10
+```
+
+Check driver:
+
+```bash id="kmnpch"
+lspci -k | grep -A3 -E 'VGA|3D|Display'
+```
+
+Example:
+
+```text id="lekx5w"
+Kernel driver in use: amdgpu
+Kernel modules: amdgpu
+```
+
+Interpretation:
+
+- The AMD GPU is using the amdgpu kernel driver.
+
+### Hardware Troubleshooting Workflow
+
+Hardware troubleshooting works best when done systematically.
+
+A good order is:
+
+1. Identify the hardware
+2. Check whether the kernel detected it
+3. Check which driver is in use
+4. Check logs for errors
+5. Check device permissions and configuration
+6. Monitor resource usage
+7. Test the hardware under controlled load
+8. Update kernel, firmware, or drivers if needed
+9. Compare with a live USB environment
+10. Consider physical failure if problems persist
+
+### Step 1: Identify the Hardware
+
+Use:
+
+```bash id="w34lcf"
+lspci
+lsusb
+lsblk
+lscpu
+sudo lshw -short
+```
+
+This answers:
+
+- What hardware does the system see?
+- What model is it?
+- What bus is it connected to?
+- Is it storage, network, USB, graphics, or something else?
+
+### Step 2: Check Kernel Detection
+
+Use:
+
+```bash id="co2nar"
+dmesg -T | tail -100
+```
+
+Search for errors:
+
+```bash id="d4zk39"
+dmesg -T | grep -iE 'error|fail|warn|timeout|reset'
+```
+
+Example output:
+
+```text id="vx9jwr"
+[Mon Jun  1 10:20:01 2026] ata1.00: failed command: READ FPDMA QUEUED
+[Mon Jun  1 10:20:01 2026] ata1.00: error: { UNC }
+```
+
+Interpretation:
+
+- The disk reported an unreadable sector or read error.
+- This may indicate disk damage or storage reliability problems.
+- Back up important data immediately.
+
+### Step 3: Verify Driver Loading
+
+Use:
+
+```bash id="vkguc3"
+lspci -k
+```
+
+Look for:
+
+- Kernel driver in use
+- Kernel modules
+
+If no driver is in use, the device may not function properly.
+
+### Step 4: Check System Logs
+
+Depending on the distribution, check:
+
+```bash id="a76tgd"
+sudo less /var/log/syslog
+sudo less /var/log/kern.log
+sudo journalctl -k
+```
+
+With systemd, kernel logs can be viewed using:
+
+```bash id="avw9x6"
+journalctl -k -b
+```
+
+Search for errors:
+
+```bash id="jk5xnr"
+journalctl -k -b | grep -iE 'error|fail|warn|timeout|reset'
+```
+
+### Step 5: Check Disk Health
+
+Install SMART tools:
+
+```bash id="a3msuw"
+sudo apt install smartmontools
+```
+
+Check health:
+
+```bash id="dxs2w0"
+sudo smartctl -H /dev/sda
+```
+
+Example output:
+
+```text id="taqdrj"
+SMART overall-health self-assessment test result: PASSED
+```
+
+Interpretation:
+
+- The disk reports that its overall SMART health check passed.
+- This does not guarantee the disk is perfect, but it is a good sign.
+
+Detailed check:
+
+```bash id="a54gh7"
+sudo smartctl -a /dev/sda
+```
+
+Warning signs include:
+
+- Reallocated_Sector_Ct increasing
+- Current_Pending_Sector greater than 0
+- Offline_Uncorrectable greater than 0
+- SMART overall-health FAILED
+- many CRC errors
+
+### Step 6: Test Memory
+
+Memory problems can cause crashes, corrupted files, random application failures, and kernel panics.
+
+Use Memtest86+ from boot media or the boot menu when available.
+
+General interpretation:
+
+- No errors after multiple passes is a good sign.
+- Any memory error is serious.
+- Faulty RAM should usually be replaced.
+
+### Step 7: Stress Test CPU
+
+Install:
+
+```bash id="gwfwe3"
+sudo apt install stress-ng
+```
+
+Run a CPU stress test:
+
+```bash id="xh8kdc"
+stress-ng --cpu 4 --timeout 60s
+```
+
+Example output:
+
+```text id="ihn74e"
+stress-ng: info: setting to a timeout of 60 seconds
+stress-ng: info: dispatching hogs: 4 cpu
+stress-ng: info: successful run completed in 60.00s
+```
+
+Interpretation:
+
+- The CPU completed the stress test without crashing.
+- If the system freezes, overheats, or powers off, investigate cooling, power, or hardware stability.
+
+### Step 8: Check Physical Connections
+
+Some hardware problems are physical.
+
+Check:
+
+- loose USB cable
+- bad USB port
+- loose SATA cable
+- failing power supply
+- unseated RAM
+- unseated GPU
+- dust buildup
+- fan failure
+- overheating
+
+Safety rules:
+
+- Power off before opening the computer.
+- Unplug power before touching internal components.
+- Use anti-static precautions.
+- Do not open power supplies.
+- Back up important data before hardware work.
+
+### Scenario 1: Simulate a USB Hardware Event and Inspect It
+
+Practice detecting a hardware change using `dmesg`, `lsusb`, `lsblk`, and `udevadm`.
+
+#### Simulation
+
+Plug in a USB flash drive.
+
+In another terminal, watch udev events:
+
+```bash id="p6e11i"
+sudo udevadm monitor --environment --udev
+```
+
+Then plug in the USB device.
+
+#### Check with `dmesg`
+
+```bash id="oed2sm"
+dmesg -T | tail -30
+```
+
+Example output:
+
+```text id="ok5hk2"
+[Mon Jun  1 10:15:01 2026] usb 1-1: new high-speed USB device number 3 using xhci_hcd
+[Mon Jun  1 10:15:01 2026] usb 1-1: Product: Ultra USB 3.0
+[Mon Jun  1 10:15:02 2026] sd 6:0:0:0: [sdb] 60062500 512-byte logical blocks
+[Mon Jun  1 10:15:02 2026]  sdb: sdb1
+```
+
+#### Check with `lsusb`
+
+```bash id="brtgp8"
+lsusb
+```
+
+Example output:
+
+```text id="l3ks65"
+Bus 001 Device 003: ID 0781:5591 SanDisk Corp. Ultra USB 3.0
+```
+
+#### Check with `lsblk`
+
+```bash id="v06tus"
+lsblk
+```
+
+Example output:
+
+```text id="s5t6qb"
+NAME   SIZE TYPE MOUNTPOINTS
+sda   238G disk
+└─sda1 238G part /
+sdb    29G disk
+└─sdb1 29G part
+```
+
+Interpretation:
+
+- dmesg shows the kernel detected the device.
+- lsusb shows the USB identity.
+- lsblk shows the storage device and partition.
+- The USB drive appeared as /dev/sdb with partition /dev/sdb1.
+
+If `lsusb` sees the device but `lsblk` does not, the USB device may not be a storage device, or the storage driver may not have attached properly.
+
+### Scenario 2: Simulate a CPU Bottleneck
+
+Create controlled CPU pressure and verify it with `top`, `htop`, and `vmstat`.
+
+#### Simulate the Bottleneck
+
+```bash id="tazxro"
+stress-ng --cpu 4 --timeout 60s
+```
+
+This starts four CPU workers for 60 seconds.
+
+#### Check with `top`
+
+```bash id="g8mqre"
+top
+```
+
+Example output:
+
+```text id="jncw6p"
+%Cpu(s): 95.0 us,  4.0 sy,  0.0 ni,  1.0 id,  0.0 wa
+
+PID USER      PR  NI  S  %CPU COMMAND
+4321 user      20   0  R 399.0 stress-ng-cpu
+```
+
+Interpretation:
+
+- CPU user time is very high.
+- Idle time is very low.
+- stress-ng is consuming about four CPU cores.
+- This is a CPU bottleneck, not a disk bottleneck.
+
+#### Check with `vmstat`
+
+```bash id="da3nz0"
+vmstat 1
+```
+
+Example output:
+
+```text id="ctge11"
+r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+5  0      0 800000  20000 500000    0    0     0     1 3000 6000 95  4  1  0  0
+```
+
+Interpretation:
+
+- r is high because processes are waiting for CPU.
+- wa is 0, so the system is not waiting on disk.
+- The bottleneck is CPU saturation.
+
+### Scenario 3: Simulate Memory Pressure
+
+Create memory pressure and observe it with `free`, `vmstat`, and `top`.
+
+#### Simulate the Bottleneck
+
+Use a conservative test first:
+
+```bash id="m51fzk"
+stress-ng --vm 2 --vm-bytes 70% --timeout 60s
+```
+
+This uses memory workers for 60 seconds.
+
+#### Check with `free`
+
+```bash id="ii01qm"
+free -h
+```
+
+Example output:
+
+```text id="enqw12"
+               total        used        free      shared  buff/cache   available
+Mem:            8.0G        6.7G        300M        100M        1.0G        900M
+Swap:           2.0G        300M        1.7G
+```
+
+Interpretation:
+
+- Most RAM is used.
+- Available memory is low.
+- Swap is being used.
+- The system may become slower if swapping increases.
+
+#### Check with `vmstat`
+
+```bash id="egcc12"
+vmstat 1
+```
+
+Example output:
+
+```text id="qs1jhr"
+r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+2  1 400000 100000  20000 200000  500  800  2000 4000 2000 5000 40 10 35 15  0
+```
+
+Interpretation:
+
+- si and so are nonzero, so the system is swapping.
+- wa is elevated because swap uses disk.
+- The root problem is memory pressure, even though disk I/O is also visible.
+
+### Scenario 4: Simulate Disk I/O Pressure
+
+Create disk activity and verify it with `iostat` and `iotop`.
+
+#### Simulate the Bottleneck
+
+Install tools if needed:
+
+```bash id="x0ojyk"
+sudo apt install fio sysstat iotop
+```
+
+Run a safe file-based write test:
+
+```bash id="e2kc4h"
+mkdir -p ~/hardware-lab
+
+fio --name=write-test \
+    --directory=~/hardware-lab \
+    --size=1G \
+    --rw=write \
+    --bs=1M \
+    --direct=1 \
+    --runtime=60 \
+    --time_based
+```
+
+#### Check with `iostat`
+
+```bash id="jc9b0d"
+iostat -xz 1
+```
+
+Example output:
+
+```text id="yfbkdr"
+Device            r/s     w/s     rkB/s     wkB/s   await  aqu-sz  %util
+sda              0.00  350.00      0.00  350000.0   32.50   10.20  99.60
+```
+
+Interpretation:
+
+- w/s and wkB/s are high.
+- await is elevated.
+- aqu-sz shows queueing.
+- %util is near 100%.
+- The disk is saturated by writes.
+
+#### Check with `iotop`
+
+```bash id="f27w8v"
+sudo iotop -o
+```
+
+Example output:
+
+```text id="n01dka"
+Total DISK WRITE: 340.00 M/s
+TID  PRIO USER DISK READ DISK WRITE IO> COMMAND
+5221 be/4 user 0.00 B/s  338.00 M/s 92% fio --name=write-test
+```
+
+Interpretation:
+
+- fio is the process generating disk pressure.
+- The bottleneck is caused by heavy disk writes.
+
+### Scenario 5: Simulate a Network Interface State Change Safely
+
+Practice interface inspection without disabling your real network connection.
+
+Instead of bringing down a real interface, create a dummy interface.
+
+#### Create a Dummy Interface
+
+```bash id="kmjjdc"
+sudo modprobe dummy
+sudo ip link add dummy0 type dummy
+sudo ip link set dummy0 up
+```
+
+#### Check with `ip`
+
+```bash id="lvxtb3"
+ip link show dummy0
+```
+
+Example output:
+
+```text id="lhhr6v"
+10: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 state UNKNOWN mode DEFAULT
+    link/ether 9a:42:cc:10:22:33 brd ff:ff:ff:ff:ff:ff
+```
+
+Interpretation:
+
+- dummy0 exists.
+- It is administratively UP.
+- It is a virtual interface, so state may show UNKNOWN.
+
+#### Bring It Down
+
+```bash id="iwxdgc"
+sudo ip link set dummy0 down
+```
+
+Check again:
+
+```bash id="rvuo8o"
+ip link show dummy0
+```
+
+Example output:
+
+```text id="ozwz2l"
+10: dummy0: <BROADCAST,NOARP> mtu 1500 state DOWN mode DEFAULT
+```
+
+Interpretation:
+
+- The interface is now down.
+- This simulates an interface state change safely.
+
+#### Clean Up
+
+```bash id="mt9qfo"
+sudo ip link delete dummy0
+```
+
+### Scenario 6: Simulate a Missing or Blocked Wireless Device
+
+Understand `rfkill` output and wireless blocking.
+
+#### Check Current State
+
+```bash id="utlwrc"
+rfkill list
+```
+
+Example output:
+
+```text id="lh1qgo"
+0: phy0: Wireless LAN
+    Soft blocked: no
+    Hard blocked: no
+1: hci0: Bluetooth
+    Soft blocked: yes
+    Hard blocked: no
+```
+
+Interpretation:
+
+- Wi-Fi is usable.
+- Bluetooth is blocked by software.
+- Bluetooth can be unblocked with rfkill.
+
+#### Unblock Bluetooth
+
+```bash id="p2hf3m"
+rfkill unblock bluetooth
+```
+
+Check again:
+
+```bash id="jpqzmr"
+rfkill list
+```
+
+Example output:
+
+```text id="jitqf4"
+1: hci0: Bluetooth
+    Soft blocked: no
+    Hard blocked: no
+```
+
+Interpretation:
+
+- The Bluetooth software block was removed.
+- If hard blocked were yes, software could not fix it.
+
+### Scenario 7: Simulate Overheating Risk Under CPU Load
+
+Observe how CPU load affects temperature.
+
+#### Start Temperature Monitoring
+
+In one terminal:
+
+```bash id="onrlkz"
+watch -n 1 sensors
+```
+
+Example idle output:
+
+```text id="w0lsko"
+Package id 0:  +45.0°C  (high = +80.0°C, crit = +100.0°C)
+Core 0:        +44.0°C
+Core 1:        +43.0°C
+```
+
+#### Apply CPU Load
+
+In another terminal:
+
+```bash id="owro40"
+stress-ng --cpu 4 --timeout 60s
+```
+
+Example loaded output:
+
+```text id="b2dfv6"
+Package id 0:  +78.0°C  (high = +80.0°C, crit = +100.0°C)
+Core 0:        +79.0°C
+Core 1:        +77.0°C
+```
+
+Interpretation:
+
+- Temperature rose under CPU load.
+- The package is close to the high threshold.
+- If temperature reaches critical levels or the system throttles, check cooling.
+
+Possible fixes:
+
+- clean dust
+- check fans
+- improve airflow
+- replace thermal paste
+- reduce overclocking
+- check laptop power profile
+
+### Scenario 8: Simulate a Driver Investigation
+
+Identify which driver is handling a device.
+
+#### Choose a Device
+
+Run:
+
+```bash id="u2akgo"
+lspci
+```
+
+Example:
+
+```text id="qtfojs"
+00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection I219-LM
+```
+
+#### Check Driver
+
+```bash id="saxgy9"
+lspci -k -s 00:1f.6
+```
+
+Example output:
+
+```text id="h6emxn"
+00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection I219-LM
+        Kernel driver in use: e1000e
+        Kernel modules: e1000e
+```
+
+#### Inspect Module
+
+```bash id="s8nr33"
+modinfo e1000e | head
+```
+
+Example output:
+
+```text id="dixduo"
+filename:    /lib/modules/6.x/kernel/drivers/net/ethernet/intel/e1000e/e1000e.ko
+description: Intel(R) PRO/1000 Network Driver
+license:     GPL
+```
+
+Interpretation:
+
+- The Ethernet controller is using the e1000e driver.
+- The module exists on disk.
+- The driver appears to be correctly loaded.
+
+If no kernel driver is in use, investigate missing firmware, unsupported hardware, or kernel version issues.
+
+### Scenario 9: Simulate a Log-Based Hardware Investigation
+
+Use logs to identify hardware-like errors.
+
+#### Search Kernel Logs
+
+```bash id="l9s1px"
+journalctl -k -b | grep -iE 'error|fail|warn|timeout|reset'
+```
+
+Example output:
+
+```text id="m9jfsd"
+Jun 01 10:20:01 host kernel: usb 1-1: USB disconnect, device number 2
+Jun 01 10:20:05 host kernel: ata1.00: failed command: READ FPDMA QUEUED
+Jun 01 10:20:05 host kernel: ata1.00: error: { UNC }
+```
+
+Interpretation:
+
+- The USB disconnect may indicate a removed device or flaky USB connection.
+- The ATA read failure is more serious and may indicate disk problems.
+- The next step is to check disk health with smartctl.
+
+#### Follow Up with SMART
+
+```bash id="cr5qi0"
+sudo smartctl -a /dev/sda
+```
+
+Look for:
+
+- Reallocated_Sector_Ct
+- Current_Pending_Sector
+- Offline_Uncorrectable
+- UDMA_CRC_Error_Count
+
+Interpretation:
+
+- Sector-related errors may indicate failing media.
+- CRC errors may indicate cable or connection problems.
+- Back up important data before deeper testing.
+
+### Common Hardware Problems and Fixes
+
+#### Device Not Detected
+
+Check:
+
+```bash id="ab99pc"
+lsusb
+lspci
+dmesg -T | tail -50
+journalctl -k -b
+```
+
+Possible causes:
+
+- bad cable
+- bad port
+- missing driver
+- missing firmware
+- hardware disabled in BIOS
+- device failure
+- unsupported hardware
+
+### Device Detected but Not Working
+
+Check:
+
+```bash id="qwko97"
+lspci -k
+lsmod
+modinfo modulename
+dmesg -T | grep -i firmware
+```
+
+Possible causes:
+
+- wrong driver
+- driver conflict
+- missing firmware
+- permissions issue
+- device blocked by rfkill
+- service not running
+
+### Disk Errors
+
+Check:
+
+```bash id="j63w9m"
+dmesg -T | grep -iE 'ata|nvme|I/O error|reset|timeout'
+sudo smartctl -a /dev/sda
+```
+
+Possible fixes:
+
+- back up immediately
+- replace failing disk
+- check cables
+- check power
+- update firmware if appropriate
+- restore from backup if data is corrupted
+
+### Overheating
+
+Check:
+
+```bash id="xb13ak"
+sensors
+watch -n 1 sensors
+```
+
+Symptoms:
+
+- fans loud
+- system slows down
+- sudden shutdowns
+- CPU frequency drops
+- high temperature readings
+
+Possible fixes:
+
+- clean dust
+- improve airflow
+- check fans
+- replace thermal paste
+- reduce load
+- repair cooling system
+
+### Network Hardware Problems
+
+Check:
+
+```bash id="y8ky5b"
+ip link
+lspci -k | grep -A3 -i ethernet
+dmesg -T | grep -iE 'firmware|link|eth|wlan|wifi'
+rfkill list
+```
+
+Possible causes:
+
+- cable disconnected
+- Wi-Fi blocked
+- missing firmware
+- wrong driver
+- bad switch port
+- interface administratively down
+
+### Audio Problems
+
+Check:
+
+```bash id="y5gpqn"
+alsamixer
+amixer
+aplay -l
+```
+
+Common causes:
+
+- muted channel
+- wrong output device
+- low volume
+- missing driver
+- PulseAudio or PipeWire issue
+
+### Display Problems
+
+Check:
+
+```bash id="enyewt"
+xrandr
+lspci -k | grep -A3 -E 'VGA|3D|Display'
+journalctl -k -b | grep -iE 'drm|nvidia|amdgpu|i915'
+```
+
+Common causes:
+
+- wrong display mode
+- driver issue
+- unsupported refresh rate
+- GPU driver conflict
+- bad cable or adapter
+
+### Safe Hardware Troubleshooting Rules
+
+- Back up important data before risky troubleshooting.
+- Do not run destructive disk commands on unknown devices.
+- Do not remove kernel modules used by active hardware unless you understand the risk.
+- Be careful restarting networking over SSH.
+- Power off before touching internal components.
+- Use anti-static precautions.
+- Check logs before guessing.
+- Change one thing at a time.
+- Record what you changed.
+
+### Useful Command Summary
+
+Hardware inventory:
+
+```bash id="rdq19k"
+lspci
+lspci -k
+lsusb
+lscpu
+lsblk
+lsblk -f
+sudo lshw -short
+```
+
+Kernel and device events:
+
+```bash id="elfe7o"
+dmesg -T | tail -50
+journalctl -k -b
+sudo udevadm monitor --environment --udev
+```
+
+Monitoring:
+
+```bash id="tug0tl"
+top
+htop
+vmstat 1
+iostat -xz 1
+ss -tulnp
+sensors
+glances
+nmon
+```
+
+Drivers:
+
+```bash id="nq6ifp"
+lsmod
+modinfo modulename
+sudo modprobe modulename
+sudo modprobe -r modulename
+```
+
+Storage health:
+
+```bash id="jxo2ef"
+sudo smartctl -H /dev/sda
+sudo smartctl -a /dev/sda
+```
+
+Network and wireless:
+
+```bash id="xu1nqb"
+ip addr show
+ip link show
+rfkill list
+```
+
+Audio and display:
+
+```bash id="sizlnd"
+alsamixer
+amixer
+xrandr
+```
 
 ### Challenges
 
-1. Use `lspci`, `lsusb`, and `lsblk` commands to identify all hardware connected to your system. For each device listed, try to determine what it is and what role it serves in the system. Discuss how these commands help identify different hardware components and what information they reveal.
-2. Monitor system resources using `top` or `htop` and identify the processes consuming the most CPU and memory. Analyze the impact of these resource-hungry processes on system performance and discuss how these tools provide insights into system health and load.
-3. Run the `lscpu` command to gather detailed information about your CPU. Identify the number of cores, clock speed, and architecture type, then discuss the role of these characteristics in determining overall system performance.
-4. Use the `lspci -k` or `lsusb -v` commands to examine hardware devices and identify any components that may be missing drivers. Explain why drivers are essential for hardware functionality and how missing drivers can impact device performance or usability.
-5. Choose a device from the `/dev` directory, such as `/dev/null` or `/dev/random`, and use the `file` command to identify whether it is a character or block device. Then, safely read from or write to the device and discuss the purpose of device files and how they facilitate interaction between the operating system and hardware.
-6. Use the `df` command to view disk usage statistics, focusing on the filesystem mounted on the root (`/`). Identify its total size, used space, and available space, and discuss how disk usage monitoring can help with system maintenance and preventing storage-related issues.
-7. If available, use diagnostic tools such as `smartctl` (from `smartmontools`) to check the health status of your hard drives or `memtest` to perform a memory test on your RAM. Explain how these tools help detect hardware issues and the types of problems they can identify.
-8. Simulate a hardware change, such as unplugging a USB device, and use `dmesg` to view system messages generated by this action. Analyze the output to identify the sequence of events logged, and discuss how `dmesg` can be used to troubleshoot hardware-related issues in real time.
-9. Explore the temperature and fan speed sensors on your system by installing and using `lm-sensors`. Run `sensors` to display current temperatures and fan speeds, then discuss how monitoring hardware temperature is crucial for preventing overheating and ensuring long-term component reliability.
-10. Investigate the memory usage on your system using the `free -h` command. Examine how much memory is used, free, and available, and explain the significance of these metrics. Discuss the differences between RAM and swap space and how the system manages them.
+1. Use `lspci`, `lsusb`, and `lsblk` to identify hardware connected to your system. For each device, write what it appears to be and what role it serves.
+2. Use `lscpu` to identify your CPU architecture, number of logical CPUs, cores per socket, and threads per core.
+3. Use `lspci -k` to choose a PCI device and identify the kernel driver currently handling it.
+4. Plug in a USB device, then use `dmesg`, `lsusb`, `lsblk`, and `udevadm monitor` to observe the detection process.
+5. Use `ls -l /dev/null /dev/zero /dev/sda` to compare character and block devices.
+6. Use `top` or `htop` to identify the most CPU-intensive process on your system.
+7. Use `free -h` and `vmstat 1` to inspect memory usage, available memory, and swap activity.
+8. Use `sensors` to check CPU temperature. Then run a short CPU stress test and observe how temperature changes.
+9. Use `smartctl` to check disk health, if SMART is supported by your storage device.
+10. Create a dummy network interface, bring it up and down, inspect it with `ip link`, and then delete it.
