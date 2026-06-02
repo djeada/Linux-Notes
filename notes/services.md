@@ -46,7 +46,7 @@ A simplified model looks like this:
 |         |         ^             +-------------+  |
 |         |         |                              |
 |   start |         | stop/restart/status          |
-| enable |         | disable                       |
+| enable  |         | disable                      |
 |         v         |                              |
 |    +------------------------+                    |
 |    |      Linux Service     |                    |
