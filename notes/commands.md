@@ -1,6 +1,6 @@
 ## Getting Around Like a Pro
 
-Let's talk about some seriously useful tricks that'll make your command-line life much easier. Ever find yourself thinking "I know I ran that command yesterday, but what was it again?" or "There has to be a faster way to do this!" Well, you're in luck - the terminal has some fantastic features to help you work smarter, not harder.
+Let's talk about some seriously useful tricks that'll make your command-line life much easier. Ever find yourself thinking "I know I ran that command yesterday, but what was it again?" or "There has to be a faster way to do this!" Well, you're in luck, the terminal has some fantastic features to help you work smarter, not harder.
 
 ### Your Command History is Your Friend
 
@@ -14,22 +14,23 @@ Want to see your recent commands? It's simple:
 history
 ```
 
-**What you'll see:**
-A numbered list of commands you've run recently. Something like:
+You'll see a numbered list of commands you've run recently. Something like:
+
 ```
-  1  ls -la
-  2  cd Documents
-  3  grep "important" notes.txt
-  4  sudo apt update
+1  ls -la
+2  cd Documents
+3  grep "important" notes.txt
+4  sudo apt update
+...
 ```
 
-**Just want the highlights?** Show only your last 20 commands:
+Just want the highlights? Show only your last 20 commands:
 
 ```bash
 history 20
 ```
 
-**Looking for something specific?** Let's say you remember using `git` but can't recall the exact command:
+Looking for something specific? Let's say you remember using `git` but can't recall the exact command:
 
 ```bash
 history | grep "git"
@@ -39,26 +40,26 @@ This filters your history to show only commands containing "git". Pretty handy w
 
 #### Navigate Your History Like a Time Traveler
 
-**The easy way - arrow keys:**
+The easy way, arrow keys:
+
 - **↑ (Up arrow):** Go back through previous commands
 - **↓ (Down arrow):** Go forward through your history
 
-**The power-user way - reverse search:**
-
-Here's where it gets really cool. Press `Ctrl+R` and start typing any part of a command you remember:
+The power-user way, reverse search. Here's where it gets really cool. Press `Ctrl+R` and start typing any part of a command you remember:
 
 ```bash
 (reverse-i-search)`git`: git commit -m "Fix bug in login"
 ```
 
-**What's happening:**
+What's happening:
+
 - You pressed `Ctrl+R`
 - You started typing "git"
 - The terminal found the most recent command containing "git"
 - Keep pressing `Ctrl+R` to see other matches
 - Press `Enter` to run it, or `Esc` to cancel
 
-**Pro tip:** This searches through your *entire* command history, not just what's visible on screen!
+This searches through your *entire* command history, not just what's visible on screen!
 
 #### Run Previous Commands Without Retyping
 
@@ -87,21 +88,25 @@ This runs the most recent command that started with "git". Super useful for comm
 Made a small mistake in your last command? Don't retype the whole thing! Use this neat trick:
 
 Say you just ran:
+
 ```bash
 echo "Hello wrold"
 ```
 
 Oops, typo! Just fix it like this:
+
 ```bash
 ^wrold^world
 ```
 
-**What just happened:**
+What just happened:
+
 - The `^old^new` pattern finds "wrold" in your last command
 - Replaces it with "world" 
 - Runs the corrected command: `echo "Hello world"`
 
-**Real-world example:**
+Real-world example:
+
 ```bash
 # Oops, wrong directory
 cd /home/user/Docments
@@ -111,11 +116,11 @@ cd /home/user/Docments
 # Now you're in the right place!
 ```
 
-#### History Expansion: Do More With Less Typing
+#### History Expansion
 
 History expansion lets you reuse parts of previous commands without retyping them. These shortcuts can save a lot of keystrokes, especially when working with long file paths or complex arguments.
 
-**Repeat the entire last command:**
+Repeat the last command:
 
 ```bash
 !!
@@ -130,39 +135,41 @@ sudo !!
 # Runs: sudo apt update
 ```
 
-**Grab the last argument from the previous command:**
+Grab the last argument from the previous command:
 
 ```bash
 !$
 ```
 
-*Real scenario:*
+Real scenario:
+
 ```bash
 mkdir -p /var/www/mysite/assets
 cd !$
 # Runs: cd /var/www/mysite/assets
 ```
 
-**Grab the first argument:**
+Grab the first argument:
 
 ```bash
 !^
 ```
 
-**Grab all arguments from the previous command:**
+Grab all arguments from the previous command:
 
 ```bash
 !*
 ```
 
-*Example:*
+Example:
+
 ```bash
 echo one two three
 cat !*
 # Runs: cat one two three
 ```
 
-**Pick a specific argument by position:**
+Pick a specific argument by position:
 
 ```bash
 !:2
@@ -170,14 +177,15 @@ cat !*
 
 The numbering starts at 0 (the command itself), so `!:1` is the first argument, `!:2` is the second, and so on.
 
-*Example:*
+Example:
+
 ```bash
 cp /etc/hosts /tmp/hosts.bak
 cat !:2
 # Runs: cat /tmp/hosts.bak
 ```
 
-**Use arguments from a specific history entry:**
+Use arguments from a specific history entry:
 
 ```bash
 !42:2
@@ -189,7 +197,7 @@ This grabs the second argument from command #42 in your history.
 
 The `fc` (fix command) built-in opens previous commands in your default text editor, letting you make changes before re-executing. This is especially helpful for long or complex commands.
 
-**Edit and re-run the last command:**
+Edit and re-run the last command:
 
 ```bash
 fc
@@ -197,7 +205,7 @@ fc
 
 Your `$EDITOR` (or `vi` by default) opens with the last command. Save and quit to execute the edited version.
 
-**Edit a specific command from history:**
+Edit a specific command from history:
 
 ```bash
 fc 42
@@ -205,7 +213,7 @@ fc 42
 
 Opens command #42 for editing.
 
-**Edit a range of commands:**
+Edit a range of commands:
 
 ```bash
 fc 10 20
@@ -213,7 +221,7 @@ fc 10 20
 
 Opens commands 10 through 20 in the editor. When you save and exit, all the commands run in sequence. This is useful for replaying a series of steps with modifications.
 
-**List recent history without editing (similar to `history`):**
+List recent history without editing (similar to `history`):
 
 ```bash
 fc -l
@@ -224,27 +232,27 @@ fc -l -20
 
 Sometimes you need to run sensitive commands (like those with passwords). Here's how to keep them private:
 
-**The space trick:**
 Start your command with a space, and it won't be saved to history:
 
 ```bash
  mysql -u root -p secret_password
 ```
 
-**Note:** This only works if your shell is configured for it. Make sure you have:
+This only works if your shell is configured for it. Make sure you have:
+
 ```bash
 export HISTCONTROL=ignorespace
 ```
 
 #### Managing Your Command History
 
-**Need a fresh start?** Clear your current session's history:
+Need a fresh start? Clear your current session's history:
 
 ```bash
 history -c
 ```
 
-**Want to save your current session?** Write it to your history file:
+Want to save your current session? Write it to your history file:
 
 ```bash
 history -w
@@ -252,7 +260,7 @@ history -w
 
 This updates your `~/.bash_history` file with commands from your current session.
 
-**Just want to add to it?** Append without overwriting:
+Just want to add to it? Append without overwriting:
 
 ```bash
 history -a
@@ -260,9 +268,7 @@ history -a
 
 This adds your current session's commands to the existing history file.
 
-#### Auto-Complete: Your Typing Shortcut
-
-**The Tab key is magic!**
+#### Auto-Complete
 
 Start typing a command or filename and press `Tab`. The terminal will try to complete it for you:
 
@@ -274,7 +280,7 @@ cd Doc[Tab]
 cd Documents/
 ```
 
-**Not sure what's available?** Press `Tab` twice to see all possibilities:
+Not sure what's available? Press `Tab` twice to see all possibilities:
 
 ```bash
 # Type this:
@@ -284,7 +290,7 @@ git [Tab][Tab]
 add    branch  commit  push   pull   status  log    diff
 ```
 
-**Want even better auto-completion?** Install bash-completion for smarter suggestions:
+Want even better auto-completion? Install bash-completion for smarter suggestions:
 
 ```bash
 sudo apt install bash-completion
@@ -292,7 +298,8 @@ sudo apt install bash-completion
 
 This gives you auto-completion for command options, package names, and much more. It's like having a built-in cheat sheet!
 
-**Pro tip:** Auto-completion works for:
+Auto-completion works for:
+
 - Command names
 - File and directory names  
 - Command options (--help, -v, etc.)
@@ -308,16 +315,14 @@ Think of manual pages (or "man pages") as having a comprehensive encyclopedia bu
 
 #### Getting Help When You Need It
 
-**The basic approach is simple:**
+The basic approach is simple:
 
 ```bash
 man ls
 ```
 
-**What happens:**
-This opens up the complete manual for the `ls` command. You'll see everything - what it does, every possible option, examples, and even related commands.
+This opens up the complete manual for the `ls` command. You'll see everything, what it does, every possible option, examples, and even related commands.
 
-**Real-world scenario:**
 You remember there's a way to make `ls` show file sizes in human-readable format, but you can't remember the flag. Just run `man ls` and search for "human" or "size" - you'll find the `-h` option quickly!
 
 #### Finding Your Way Around Manual Pages
@@ -325,20 +330,31 @@ You remember there's a way to make `ls` show file sizes in human-readable format
 When you open a man page, you're actually using a program called `less` to view it. Here are the essential navigation tricks:
 
 **Moving around:**
-- **Space bar** - Jump down a full page (most useful)
-- **Enter** - Move down one line at a time
-- **b** - Go back up a page
-- **g** - Jump to the very beginning  
-- **G** - Jump to the very end
+
+| Key           | Action                              |
+| ------------- | ----------------------------------- |
+| **Space bar** | Jump down a full page (most useful) |
+| **Enter**     | Move down one line at a time        |
+| **b**         | Go back up a page                   |
+| **g**         | Jump to the very beginning          |
+| **G**         | Jump to the very end                |
 
 **Searching like a detective:**
-- **`/term`** - Search forward for "term"
-- **`?term`** - Search backward for "term"
-- **n** - Go to next search result
-- **N** - Go to previous search result
-- **q** - Quit when you're done
 
-**Pro tip:** Let's say you want to find all the options for making `ls` show hidden files. Open `man ls`, then type `/hidden` and press Enter. The manual will jump right to the relevant section!
+| Key           | Action                              |
+| ------------- | ----------------------------------- |
+| **Space bar** | Jump down a full page (most useful) |
+| **Enter**     | Move down one line at a time        |
+| **b**         | Go back up a page                   |
+| **g**         | Jump to the very beginning          |
+| **G**         | Jump to the very end                |
+| **`/term`**   | Search forward for "term"           |
+| **`?term`**   | Search backward for "term"          |
+| **n**         | Go to next search result            |
+| **N**         | Go to previous search result        |
+| **q**         | Quit when you're done               |
+
+Let's say you want to find all the options for making `ls` show hidden files. Open `man ls`, then type `/hidden` and press Enter. The manual will jump right to the relevant section!
 
 #### The Manual's Organization System
 
@@ -346,7 +362,7 @@ The manual is organized into numbered sections, kind of like different floors in
 
 | Section | What You'll Find | When You'd Use It |
 |---------|------------------|-------------------|
-| 1 | Regular commands you type | Most of the time - `ls`, `cp`, `grep`, etc. |
+| 1 | Regular commands you type | Most of the time `ls`, `cp`, `grep`, etc. |
 | 2 | System calls (programming stuff) | When you're coding and need kernel functions |
 | 3 | Library functions (more programming) | Programming with C libraries |
 | 4 | Device files | Working with hardware devices |
@@ -355,7 +371,6 @@ The manual is organized into numbered sections, kind of like different floors in
 | 7 | Miscellaneous | Special topics and conventions |
 | 8 | Admin commands | System administration tools |
 
-**Why does this matter?**
 Sometimes the same name appears in multiple sections. For example:
 
 ```bash
@@ -365,58 +380,53 @@ man 5 passwd      # Shows the passwd file format (section 5)
 
 The first tells you how to change passwords, the second explains the structure of the password file itself.
 
-**Want to see all sections for a topic?**
+Want to see all sections for a topic?
 
 ```bash
 man -a intro
 ```
 
-This shows you the introduction page for each section - great for understanding what's available.
+This shows you the introduction page for each section, great for understanding what's available.
 
 #### Searching When You Don't Know the Exact Command
 
-**The scenario:** You know you want to do something network-related, but you're not sure which command to use.
-
-**The solution - `apropos`:**
+If you know what you want to do but can't remember the right command, use `apropos`.
 
 ```bash
 apropos network
 ```
 
-**What you'll get:**
-A list of all commands related to networking, with brief descriptions. It's like asking "Show me everything that has to do with networks."
+This searches command descriptions and lists tools related to your keyword. Think of it as asking Linux, "What commands are related to networking?"
 
-**Sample output:**
+Example output:
+
+```text
+ifconfig (8)  - configure a network interface
+netstat (8)   - print network connections and routing tables
+ping (8)      - send ICMP ECHO_REQUEST packets
+wget (1)      - non-interactive network downloader
 ```
-ifconfig (8)         - configure a network interface
-netstat (8)          - Print network connections, routing tables
-ping (8)             - send ICMP ECHO_REQUEST to network hosts
-wget (1)             - The non-interactive network downloader
-```
 
-**Getting more specific:**
-
-Sometimes `apropos` returns too many results. Here's how to narrow it down:
+If the results are too broad, you can narrow them down:
 
 ```bash
-# Only show exact matches for "zip"
+# Show only exact matches
 apropos -e zip
 
-# Only show commands (section 1)
+# Show only commands from section 1
 apropos -s 1 network
 
-# Use patterns - show everything starting with "git"
+# Show commands whose names start with "git"
 apropos -r '^git.*'
 ```
 
-**Real-world example:**
-You want to compress files but can't remember if it's `gzip`, `zip`, or something else:
+A common use case is when you know the task but not the command. For example, if you want to compress files but can't remember whether to use `gzip`, `zip`, or another tool:
 
 ```bash
 apropos compress
 ```
 
-You'll see all compression-related commands with descriptions, making it easy to pick the right one.
+`apropos` will display all commands related to compression, along with short descriptions, helping you quickly find the right tool.
 
 #### When Things Don't Work as Expected
 
@@ -437,7 +447,7 @@ This rebuilds the index (think of refreshing a library’s card catalog), so `ap
 
 #### Power User Tips
 
-**Quick reference without opening the full manual:**
+Quick reference without opening the full manual:
 
 ```bash
 # Get a one-line description
@@ -447,14 +457,14 @@ whatis ls
 man -f passwd
 ```
 
-**Search multiple keywords:**
+Search multiple keywords:
 
 ```bash
 # Find commands related to both "file" and "compress"
 apropos file | grep compress
 ```
 
-**Custom manual paths:**
+Custom manual paths:
 
 If you've installed software in unusual locations:
 
@@ -464,53 +474,70 @@ sudo mandb -c /usr/local/share/man
 
 ### Level Up Your Command Line Skills
 
-Ever wish you could customize how your shell remembers the commands you type? Let's dive into some neat tricks that'll make your terminal experience much smoother!
+Want more control over your shell history? A few Bash settings can make your command history cleaner, more useful, and a bit more private.
 
-**Setting Your Memory Limits**
+**Control How Much History Bash Keeps**
 
 ```bash
-# Keep 1000 commands in memory while you're working
+# Commands kept in memory during the current session
 export HISTSIZE=1000
 
-# Save 2000 commands to your history file for later
+# Commands saved to the history file
 export HISTFILESIZE=2000
 ```
 
-*What's happening here?* HISTSIZE is like your assistant's short-term memory (what it remembers right now), while HISTFILESIZE is the long-term memory (what gets saved when you close the terminal).
+`HISTSIZE` controls how many commands Bash remembers while you're working. `HISTFILESIZE` determines how many commands are stored in your history file (`~/.bash_history`) when the session ends.
 
-**Getting Rid of Annoying Duplicates**
+**Avoid Duplicate Entries**
 
 ```bash
-# Stop recording the same command over and over
 export HISTCONTROL=ignoredups
 ```
 
-No more seeing `ls` repeated 20 times when you hit the up arrow!
+With this setting, Bash won't save consecutive duplicate commands, keeping your history less cluttered.
 
-**Creating a "Private Mode" for Sensitive Commands**
+**Skip Sensitive Commands**
 
 ```bash
-# Commands starting with a space won't be saved
 export HISTCONTROL=ignorespace
 ```
 
-Start any command with a space when typing passwords or sensitive info, and it won't show up in your history. Pretty neat, right?
+Commands that begin with a space won't be recorded in your history. This can be useful for one-off commands containing sensitive information.
 
-**The Best of Both Worlds**
+For example:
 
 ```bash
-# Ignore duplicates AND space-prefixed commands
+ echo "This won't be saved"
+```
+
+**Combine Both Behaviors**
+
+```bash
 export HISTCONTROL=ignoreboth
 ```
 
-**Adding Timestamps (Because When Did I Run That?)**
+This is equivalent to enabling both `ignoredups` and `ignorespace`.
+
+**Add Timestamps to History**
 
 ```bash
-# Add date and time to your history
 export HISTTIMEFORMAT="%F %T "
 ```
 
-*Now you'll see:* Instead of just `git commit`, you'll see `2025-07-26 14:30:15 git commit` - super helpful when you're trying to figure out when you did something!
+This displays the date and time alongside each history entry:
+
+```text
+2025-07-26 14:30:15 git commit -m "Update docs"
+2025-07-26 14:32:01 git push
+```
+
+Timestamps make it much easier to track when commands were run, especially when troubleshooting or reviewing past work.
+
+To make these settings permanent, add them to your `~/.bashrc` or `~/.bash_profile` and reload the file:
+
+```bash
+source ~/.bashrc
+```
 
 #### Keyboard Moves
 
@@ -546,7 +573,7 @@ Type a long command, then use `Ctrl+A` to zip to the beginning. It's oddly satis
 | Want to pause something temporarily | `Ctrl+Z` | "**Z**zz... put it to sleep" |
 | Wake up that sleeping process | `fg` | "Come back to the **f**ore**g**round" |
 
-*Common situation:* You accidentally run a command that's taking forever. Don't panic! `Ctrl+C` is your friend - it's like hitting the emergency stop button.
+*Common situation:* You accidentally run a command that's taking forever. Don't panic! `Ctrl+C` is your friend, it's like hitting the emergency stop button.
 
 **Making These Settings Permanent**
 
@@ -560,8 +587,6 @@ echo 'export HISTCONTROL=ignoreboth' >> ~/.bashrc
 # Then reload your settings
 source ~/.bashrc
 ```
-
-**Practice Makes Perfect**
 
 The best way to remember these shortcuts? Use them! Start with just `Ctrl+A` and `Ctrl+E` for a few days, then gradually add more to your toolkit.
 
