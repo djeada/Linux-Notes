@@ -25,7 +25,7 @@ System administrators, developers, and DevOps engineers rely on inotify for task
                          +-------------------------------+
                          |     Inotify File Descriptor   |
                          |   (Readable via read()/poll() |
-                         |    when events are queued)     |
+                         |    when events are queued)    |
                          +-------------------------------+
                                        │
                                        │ Kernel queues inotify_event
@@ -222,14 +222,14 @@ For applications that need tighter integration, the inotify system calls are ava
 |           "/path", IN_MODIFY | IN_CREATE)|
 |        │                                 |
 |        ▼                                 |
-|  3. read(fd, buf, BUF_LEN)              |
+|  3. read(fd, buf, BUF_LEN)               |
 |        │                                 |
 |        ▼                                 |
 |  4. Process inotify_event structs        |
 |     from buf                             |
 |        │                                 |
 |        ▼                                 |
-|  5. inotify_rm_watch(fd, wd)            |
+|  5. inotify_rm_watch(fd, wd)             |
 |     close(fd)                            |
 +------------------------------------------+
 ```
@@ -336,12 +336,14 @@ Applications that monitor many files (such as IDEs, build tools, or file-syncing
 
 ### Common Use Cases
 
-- **Build systems** such as `make`, `webpack`, and `cargo` use inotify to detect source file changes and trigger automatic rebuilds.
-- **File synchronization** tools like `rsync`-based watchers and `lsyncd` use inotify to detect changes and replicate them to remote servers in near real-time.
-- **Log monitoring** is simplified with inotify because utilities can react to new log entries the moment they are written rather than polling at intervals.
-- **Security auditing** benefits from inotify by allowing administrators to watch critical configuration files (e.g., `/etc/passwd`, `/etc/shadow`) for unauthorized modifications.
-- **Development environments** including IDEs and text editors use inotify to refresh file listings and detect external modifications to open files.
-- **Containerized workloads** and orchestration tools watch configuration files for hot-reload without restarting services.
+| Use Case                                                | How Inotify Is Used                                                                          |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Build systems (`make`, `webpack`, `cargo`)              | Detect source file changes and trigger automatic rebuilds.                                   |
+| File synchronization (`rsync`-based watchers, `lsyncd`) | Detect file changes and replicate them to remote servers in near real-time.                  |
+| Log monitoring                                          | React to new log entries immediately instead of polling at intervals.                        |
+| Security auditing                                       | Watch critical files such as `/etc/passwd` and `/etc/shadow` for unauthorized modifications. |
+| Development environments (IDEs, editors)                | Refresh file listings and detect external changes to open files.                             |
+| Containerized workloads and orchestration tools         | Monitor configuration files and enable hot-reload without restarting services.               |
 
 ### Challenges
 
