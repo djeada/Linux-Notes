@@ -1,8 +1,8 @@
 ## Containers and Docker
 
-Containers have fundamentally changed the way software is built, shipped, and run. If you've spent time administering Linux systems—managing packages, configuring services, and troubleshooting dependency conflicts—you already understand the pain that containers were designed to solve. A container packages an application together with all of its dependencies, libraries, and configuration files into a single, portable unit that runs consistently on any Linux system.
+Containers have fundamentally changed the way software is built, shipped, and run. If you've spent time administering Linux systems, managing packages, configuring services, and troubleshooting dependency conflicts, you already understand the pain that containers were designed to solve. A container packages an application together with all of its dependencies, libraries, and configuration files into a single, portable unit that runs consistently on any Linux system.
 
-Unlike traditional approaches where you install software directly onto a host and hope that library versions don't clash, containers provide **process-level isolation** using features built right into the Linux kernel. Technologies like **namespaces** (which isolate what a process can see) and **cgroups** (which limit what resources a process can consume) make containers lightweight and fast. There is no separate operating system to boot—containers share the host kernel and start in milliseconds.
+Unlike traditional approaches where you install software directly onto a host and hope that library versions don't clash, containers provide **process-level isolation** using features built right into the Linux kernel. Technologies like **namespaces** (which isolate what a process can see) and **cgroups** (which limit what resources a process can consume) make containers lightweight and fast. There is no separate operating system to boot, containers share the host kernel and start in milliseconds.
 
 Docker popularized containers by providing a simple CLI and a standardized image format. Today, containers are at the heart of DevOps workflows, continuous integration pipelines, and orchestration platforms like Kubernetes. Whether you're deploying a single web application or managing hundreds of microservices, understanding containers is an essential skill for any Linux administrator moving into DevOps.
 
@@ -10,9 +10,9 @@ Docker popularized containers by providing a simple CLI and a standardized image
 
 One of the first questions people ask is: "How are containers different from virtual machines?" Both provide isolation, but they do it at very different levels.
 
-A **virtual machine** runs an entire guest operating system on top of a hypervisor. Each VM includes its own kernel, init system, and full set of system libraries. This is powerful but heavy—VMs can take minutes to boot and consume gigabytes of RAM just for the OS overhead.
+A **virtual machine** runs an entire guest operating system on top of a hypervisor. Each VM includes its own kernel, init system, and full set of system libraries. This is powerful but heavy, VMs can take minutes to boot and consume gigabytes of RAM just for the OS overhead.
 
-A **container**, on the other hand, shares the host's Linux kernel. It only packages the application and its userspace dependencies. This makes containers dramatically lighter—a typical container image might be 50–200 MB compared to several gigabytes for a VM image, and containers start in under a second.
+A **container**, on the other hand, shares the host's Linux kernel. It only packages the application and its userspace dependencies. This makes containers dramatically lighter, a typical container image might be 50–200 MB compared to several gigabytes for a VM image, and containers start in under a second.
 
 ```
 +---------------------------------------------------+
@@ -101,7 +101,7 @@ Docker uses a client-server architecture. The **Docker client** (`docker` CLI) s
 
 The key components are:
 
-- **Images**: Read-only templates used to create containers. Built in layers—each Dockerfile instruction creates a new layer, and layers are cached and shared.
+- **Images**: Read-only templates used to create containers. Built in layers, each Dockerfile instruction creates a new layer, and layers are cached and shared.
 - **Containers**: Running instances of images. A container adds a writable layer on top of the image layers.
 - **Registry**: A storage and distribution system for images. Docker Hub is the default public registry.
 - **Dockerfile**: A text file with instructions for building an image.
@@ -196,7 +196,7 @@ nginx        1.25-alpine   2bc7edbc3cf2   2 days ago     43.2MB
 ubuntu       22.04         3b418d7b466a   3 weeks ago    77.8MB
 ```
 
-The `alpine` variant is worth noting—Alpine-based images are dramatically smaller because they use musl libc and BusyBox instead of the full GNU toolchain.
+The `alpine` variant is worth noting, Alpine-based images are dramatically smaller because they use musl libc and BusyBox instead of the full GNU toolchain.
 
 #### Removing Images
 
@@ -279,7 +279,7 @@ docker run -d --name web \
   nginx
 ```
 
-The `:ro` suffix makes the mount read-only inside the container—a good security practice when the container only needs to read files.
+The `:ro` suffix makes the mount read-only inside the container, a good security practice when the container only needs to read files.
 
 #### Running Interactive Containers
 
@@ -343,7 +343,7 @@ docker build -t my-flask-app:1.0 .
  => exporting to image                                       1.0s
 ```
 
-Notice the order: we copy `requirements.txt` and install dependencies *before* copying application code. This exploits Docker's layer caching—if dependencies don't change, Docker reuses the cached layer.
+Notice the order: we copy `requirements.txt` and install dependencies *before* copying application code. This exploits Docker's layer caching, if dependencies don't change, Docker reuses the cached layer.
 
 ```bash
 # Run the newly built image
@@ -370,7 +370,7 @@ EXPOSE 8080
 CMD ["server"]
 ```
 
-The final image contains only the compiled binary and a minimal Alpine base—no Go toolchain, no source code. A Go build image might be 800 MB, but the production image could be under 20 MB.
+The final image contains only the compiled binary and a minimal Alpine base, no Go toolchain, no source code. A Go build image might be 800 MB, but the production image could be under 20 MB.
 
 ### Docker Networking
 
@@ -429,7 +429,7 @@ docker run -d --name app --network my-app-network my-flask-app:1.0
 docker exec app ping db
 ```
 
-Custom bridge networks provide **automatic DNS resolution** between containers—you can reference other containers by name instead of IP address.
+Custom bridge networks provide **automatic DNS resolution** between containers, you can reference other containers by name instead of IP address.
 
 ```bash
 docker network connect my-app-network existing-container   # add network to container
@@ -439,7 +439,7 @@ docker network rm my-app-network                           # remove a network
 
 ### Docker Volumes and Data Persistence
 
-Containers are **ephemeral** by design—when you remove a container, its writable layer is deleted. For data that must persist, Docker provides volumes.
+Containers are **ephemeral** by design, when you remove a container, its writable layer is deleted. For data that must persist, Docker provides volumes.
 
 ```
 +---------------------------------------------------+
@@ -603,7 +603,7 @@ podman stop web && podman rm web
 | Image format | OCI-compatible | OCI-compatible |
 | Docker CLI compatible | Yes | Yes (alias `docker=podman`) |
 
-Many organizations choose Podman for its security posture—running containers without a root daemon reduces the attack surface. On RHEL 8+, Podman is the default container tool.
+Many organizations choose Podman for its security posture, running containers without a root daemon reduces the attack surface. On RHEL 8+, Podman is the default container tool.
 
 ```bash
 # Create a systemd service from a Podman container
@@ -694,7 +694,7 @@ b7c3a1d9e4f2   nginx     Up 5 min (healthy)       web
 2. Pull three different variants of the `nginx` image (`nginx:latest`, `nginx:alpine`, and `nginx:1.25-bookworm`) and compare their sizes using `docker images`. Discuss why Alpine-based images are significantly smaller and what trade-offs might come with using them.
 3. Run an `nginx` container in detached mode with port `8080` mapped to port `80`, then use `curl http://localhost:8080` to verify it is serving the default page. Practice stopping, removing, and restarting the container using `docker stop`, `docker rm`, and `docker run`.
 4. Write a `Dockerfile` for a simple application (such as a static HTML site served by nginx or a Python script). Build the image, tag it with a version number, and run a container from it. Explain how Docker's layer caching works and why instruction order in a Dockerfile matters.
-5. Create a custom bridge network called `app-net`. Run two containers on this network—one running `nginx` and one running `alpine`—and demonstrate that the `alpine` container can reach the `nginx` container by its container name using `ping` or `wget`. Explain the DNS resolution behavior of custom networks.
+5. Create a custom bridge network called `app-net`. Run two containers on this network, one running `nginx` and one running `alpine`, and demonstrate that the `alpine` container can reach the `nginx` container by its container name using `ping` or `wget`. Explain the DNS resolution behavior of custom networks.
 6. Create a named Docker volume, attach it to a PostgreSQL container, insert some data, then remove and recreate the container using the same volume. Verify that your data persists across container removal. Discuss the difference between named volumes and bind mounts.
 7. Write a `docker-compose.yml` file that defines at least three services (for example, a web server, an application backend, and a database). Start the stack with `docker compose up -d`, verify all services are running, and demonstrate that the services can communicate with each other by service name.
 8. Build a multi-stage `Dockerfile` for a compiled application (use any language you are comfortable with, or find a sample Go or C program). Compare the final image size to a single-stage build that includes the full compiler toolchain. Explain why multi-stage builds are important for production images.
