@@ -1,455 +1,1793 @@
-## NFS
+## NFS: Network File System
 
-NFS, or Network File System, is a protocol that allows different computers to share files over a network as if they were on the local machine. This means you can access files on another computer just like you would access files on your own, making collaboration and resource sharing much easier. NFS is compatible with various operating systems, including Linux, macOS, and Windows.
+NFS stands for Network File System.
 
-```
-Client                       Network                      Server
-+--------+                                            +--------+
-|        |    <-- NFS Protocol Communication -->      |        |
-|  User  |                                            |  NFS   |
-| Space  |                                            | Server |
-+--------+                                            +--------+
-     |                                                      |
-+--------+                                            +--------+
-|  NFS   |                                            |  NFS   |
-| Client |                                            | Daemon |
-+--------+                                            +--------+
-     |                                                      |
-+--------+                                            +--------+
-| File   |                                            | File   |
-| System |                                            | System |
-+--------+                                            +--------+
-     |                                                      |
-+--------+                                            +--------+
-| Disk   |                                            | Disk   |
-| Storage|                                            | Storage|
-+--------+                                            +--------+
+It is a protocol that allows one computer to share directories with other computers over a network.
+
+The important idea is:
+
+```text id="hp1p7h"
+A remote directory can appear like a local directory.
 ```
 
-In this diagram, the client interacts with the NFS server over the network. The NFS client software translates local file operations into NFS protocol requests, which are sent to the server. The server processes these requests and accesses its local file system accordingly, providing the requested data back to the client.
+For example, a server may export:
 
-### Reasons for Using NFS
-
-- NFS allows **centralized storage**, enabling multiple clients to access files on a single server, simplifying data management and backup processes.
-- By facilitating **file sharing across networks**, NFS enables seamless access to shared files among different systems, improving collaboration and accessibility.
-- NFS is **platform-independent**, meaning it can be used on various operating systems (such as Linux, UNIX, and Windows) without compatibility issues.
-- It provides **reduced storage duplication**, as files are stored on a central server, eliminating the need for multiple copies across different devices.
-- With **consistent access permissions**, NFS allows administrators to control file permissions centrally, ensuring consistent access rights across all clients.
-- NFS supports **automatic mounting** using configuration files, making it easier for clients to access shared directories without manual intervention.
-- The protocol is **scalable**, allowing additional clients or servers to be added to the network without significant changes to the existing infrastructure.
-- NFS can **improve performance** in certain use cases by reducing local storage requirements and centralizing storage access, optimizing resource usage.
-- NFS facilitates **remote work** and distributed computing by allowing users to access files on a central server from different physical locations.
-- With **cost efficiency**, NFS can reduce hardware costs by centralizing storage and minimizing the need for local storage on client machines.
-- NFS integrates well with **authentication and encryption** methods, such as Kerberos, to provide secure file access over networks.
-
-### Setting Up an NFS Server on CentOS 7
-
-If you're looking to share directories from a CentOS 7 machine so that other computers on the network can access them, you'll need to set up that machine as an NFS server. Here's how you can do it step by step.
-
-#### Installing Necessary Packages
-
-First, you'll need to install the NFS utilities, which include essential services and tools for NFS functionality. Open your terminal and run:
-
-```bash
-yum install nfs-utils nfs-utils-lib
+```text id="ux347e"
+/opt/shared
 ```
 
-This command downloads and installs the `nfs-utils` and `nfs-utils-lib` packages. After running it, you should see output indicating that the packages have been successfully installed, along with any dependencies.
+A client may mount it at:
 
-#### Enabling and Starting Required Services
-
-NFS relies on several background services to operate correctly. These services include `rpcbind`, `nfs-server`, `nfs-lock`, and `nfs-idmap`. Each service plays a role in handling network communication, file locking, and user ID mapping.
-
-To enable these services to start at boot time and to start them immediately, execute the following commands:
-
-```bash
-systemctl enable rpcbind
-systemctl start rpcbind
-
-systemctl enable nfs-server
-systemctl start nfs-server
-
-systemctl enable nfs-lock
-systemctl start nfs-lock
-
-systemctl enable nfs-idmap
-systemctl start nfs-idmap
+```text id="uszbjk"
+/mnt/nfs_shared
 ```
 
-For example, after starting the `nfs-server` service, you can check its status by running:
+Then users on the client can access remote files as if they were local:
 
-```bash
-systemctl status nfs-server
-```
-
-You should see output similar to:
-
-```
-● nfs-server.service - NFS server and services
-   Loaded: loaded (/usr/lib/systemd/system/nfs-server.service; enabled; vendor preset: disabled)
-   Active: active (exited) since Wed 2024-10-10 12:34:56 EDT; 10s ago
-```
-
-This output confirms that the NFS server service is active and running.
-
-#### Configuring NFS Exports
-
-Now it's time to specify which directories you want to share with clients and define the access permissions. This is done by editing the `/etc/exports` file.
-
-Open the exports file with your favorite text editor:
-
-```bash
-vi /etc/exports
-```
-
-Add the following line to share the `/opt/shared` directory with clients on the `192.168.1.0/24` network:
-
-```
-/opt/shared 192.168.1.0/24(rw,sync,no_root_squash,no_all_squash)
-```
-
-Here's what each part means:
-
-- `/opt/shared` is the directory on the server that you want to share.
-- `192.168.1.0/24` is the range of IP addresses that are allowed to access the share.
-- `(rw,sync,no_root_squash,no_all_squash)` is the options that control access permissions and behavior.
-
-To explain the options in more detail, let's look at them in a table:
-
-| Option          | Description                                                                                          |
-|-----------------|------------------------------------------------------------------------------------------------------|
-| `rw`            | Allows both read and write access to the shared directory.                                           |
-| `sync`          | Ensures that changes are written to disk before the server replies to the client.                    |
-| `no_root_squash`| Allows the root user on the client machine to have root privileges on the shared directory.          |
-| `no_all_squash` | Preserves the original user and group IDs when accessing files on the server.                        |
-
-By setting these options, you're controlling how clients interact with the shared directory, including who can read or write files and how user permissions are handled.
-
-#### Applying Configuration Changes
-
-After editing the exports file, you need to inform the NFS server of the changes. This is done using the `exportfs` command:
-
-```bash
-exportfs -r
-```
-
-This command re-reads the `/etc/exports` file and updates the NFS server's table of exported file systems without requiring a restart.
-
-#### Verifying Shared Directories
-
-To confirm that your directory is being shared correctly, you can use:
-
-```bash
-exportfs -v
-```
-
-The output will display the shared directories along with their options, something like:
-
-```
-/opt/shared  192.168.1.0/24(rw,wdelay,root_squash,no_subtree_check,secure)
-```
-
-This confirms that `/opt/shared` is exported and accessible to clients in the specified IP range with the defined options.
-
-#### Adjusting Firewall Settings
-
-For clients to access the NFS share, the server's firewall must allow NFS-related traffic. You can adjust the firewall settings using the `firewall-cmd` utility:
-
-```bash
-firewall-cmd --permanent --add-service=nfs
-firewall-cmd --permanent --add-service=mountd
-firewall-cmd --permanent --add-service=rpc-bind
-firewall-cmd --reload
-```
-
-These commands open the necessary ports for NFS services and reload the firewall configuration to apply the changes immediately.
-
-#### Restarting NFS Services
-
-To ensure that all changes are properly applied, it's a good idea to restart the NFS server:
-
-```bash
-systemctl restart nfs-server
-```
-
-This restarts the NFS server service, ensuring that it recognizes the new configuration and that any pending changes are implemented.
-
-### Setting Up an NFS Client on CentOS 7
-
-Once the NFS server is set up, the next step is to configure a client machine so it can access the shared directory. Here are the steps to set up an NFS client on CentOS 7.
-
-#### Installing NFS Utilities on the Client
-
-Just like on the server, the client needs the NFS utilities installed to communicate with the NFS server:
-
-```bash
-yum install nfs-utils nfs-utils-lib
-```
-
-This installs the necessary packages for NFS client functionality.
-
-#### Enabling and Starting the rpcbind Service
-
-The `rpcbind` service is essential for NFS communication on the client side as well. Enable and start it by running:
-
-```bash
-systemctl enable rpcbind
-systemctl start rpcbind
-```
-
-You can verify that it's running with:
-
-```bash
-systemctl status rpcbind
-```
-
-#### Creating a Mount Point
-
-Decide where you want the NFS share to be mounted on your client system. For example, you might create a directory under `/mnt`:
-
-```bash
-mkdir /mnt/nfs_shared
-```
-
-This directory will serve as the access point for the shared files from the server.
-
-#### Mounting the NFS Share
-
-Now you can mount the NFS share using the `mount` command:
-
-```bash
-mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
-```
-
-Breaking down this command:
-
-- `-t nfs` specifies the file system type as NFS.
-- `192.168.1.100:/opt/shared` indicates the NFS server's IP address and the shared directory.
-- `/mnt/nfs_shared` is the local directory where the NFS share will be mounted.
-
-After running this command, the contents of `/opt/shared` on the server will be accessible under `/mnt/nfs_shared` on the client.
-
-#### Verifying the Mount
-
-To ensure that the NFS share is mounted correctly, you can use:
-
-```bash
-mount | grep nfs
-```
-
-This should display something like:
-
-```
-192.168.1.100:/opt/shared on /mnt/nfs_shared type nfs (rw,addr=192.168.1.100)
-```
-
-Alternatively, you can list the contents of the mounted directory:
-
-```bash
+```bash id="cbwdek"
 ls /mnt/nfs_shared
 ```
 
-This should show the files and directories that are present on the server's shared directory.
+### Big Picture
 
-#### Automating the Mount at Boot
+NFS has two main sides:
 
-If you want the NFS share to be mounted automatically every time the client machine boots up, you can add an entry to the `/etc/fstab` file.
+- NFS server    shares directories
+- NFS client    mounts and uses those directories
 
-Open the `/etc/fstab` file:
+Diagram:
 
-```bash
-vi /etc/fstab
+```text id="krusg7"
+Client                       Network                      Server
++--------+                                            +--------+
+| User   |    file open/read/write requests           | NFS    |
+| Space  |  <------------------------------->         | Server |
++--------+                                            +--------+
+    |                                                     |
++--------+                                            +--------+
+| NFS    |                                            | NFS    |
+| Client |                                            | Daemon |
++--------+                                            +--------+
+    |                                                     |
++--------+                                            +--------+
+| Mount  |                                            | Local  |
+| Point  |                                            | Export |
++--------+                                            +--------+
+    |                                                     |
++--------+                                            +--------+
+| Apps   |                                            | Disk   |
++--------+                                            +--------+
 ```
 
-Add the following line at the end:
+When a client reads or writes a file under the NFS mount point, the NFS client code sends network requests to the server.
 
+The server receives those requests and performs file operations on its own local filesystem.
+
+### Why Use NFS?
+
+NFS is useful when several systems need shared access to files.
+
+Common reasons include:
+
+- centralized storage
+- shared home directories
+- shared project directories
+- cluster storage
+- application data sharing
+- backup centralization
+- reduced duplicate files
+- consistent permissions
+- remote access to common files
+
+Example use cases:
+
+- Several Linux servers need the same software directory.
+- Multiple users need shared project files.
+- A lab needs shared home directories.
+- A compute cluster needs central storage.
+- A backup server exports restore data.
+
+NFS is common in Linux and Unix environments, but clients also exist for macOS and Windows.
+
+### NFS Server and Client Roles
+
+The NFS server owns and exports the real directory.
+
+- Server:
+  - real directory exists on server disk
+  - example: /opt/shared
+
+The NFS client mounts that exported directory.
+
+- Client:
+  - remote directory appears at local mount point
+  - example: /mnt/nfs_shared
+
+Diagram:
+
+```text id="y6y94w"
+Server filesystem:
+/
+└── opt
+    └── shared
+        ├── file1.txt
+        └── file2.txt
+
+Client filesystem:
+/
+└── mnt
+    └── nfs_shared
+        ├── file1.txt
+        └── file2.txt
 ```
-192.168.1.100:/opt/shared /mnt/nfs_shared nfs defaults 0 0
+
+The files are physically stored on the server, but visible through the client mount point.
+
+### Important NFS Components
+
+Common NFS-related components include:
+
+- nfs-server       server-side NFS service
+- rpcbind          maps RPC services to network ports
+- mountd           handles mount requests for older NFS versions
+- idmapd           maps user and group names for NFSv4
+- exportfs         manages exported directories
+- /etc/exports     server export configuration
+- /etc/fstab       client persistent mount configuration
+
+NFSv3 often depends on several RPC services and ports.
+
+NFSv4 simplifies firewalling because it mainly uses TCP port 2049.
+
+### NFS Versions
+
+NFS has several versions.
+
+### NFSv2
+
+NFSv2 is old and rarely used today.
+
+Limitations include:
+
+- older design
+- limited file size support
+- usually UDP-based
+- weaker performance and features
+
+### NFSv3
+
+NFSv3 is still widely used.
+
+It introduced improvements such as:
+
+- large file support
+- better error reporting
+- asynchronous writes
+- TCP and UDP support
+- better performance than NFSv2
+
+NFSv3 is stable and common, but it often requires more firewall considerations because supporting services may use multiple ports.
+
+### NFSv4
+
+NFSv4 is newer and usually preferred for modern environments.
+
+Advantages include:
+
+- stateful protocol
+- single main TCP port, 2049
+- better firewall behavior
+- Kerberos support
+- ACL support
+- compound operations
+- improved security options
+- better cross-platform design
+
+For secure or enterprise environments, NFSv4 with Kerberos is often preferred.
+
+### Basic Server Setup
+
+The NFS server needs:
+
+- NFS utilities installed
+- a directory to export
+- an /etc/exports entry
+- NFS services running
+- firewall rules allowing NFS traffic
+
+The basic flow is:
+
+1. Install NFS packages
+2. Create shared directory
+3. Set ownership and permissions
+4. Edit /etc/exports
+5. Apply exports with exportfs
+6. Start and enable NFS service
+7. Open firewall
+8. Verify export
+
+### Installing NFS Packages
+
+On RHEL, CentOS, Rocky, AlmaLinux, or Fedora-style systems:
+
+```bash id="nnrdg1"
+sudo dnf install nfs-utils
 ```
 
-This tells the system to mount the NFS share at `/mnt/nfs_shared` using default options during the boot process.
+On older CentOS 7 systems:
 
-### Permissions and UID/GID Mapping in NFS
+```bash id="e0xui4"
+sudo yum install nfs-utils
+```
 
-When using NFS to share files across different systems, managing permissions becomes a critical aspect to ensure that users have appropriate access to shared resources. One of the main challenges arises from the way NFS handles user and group identities, specifically through User IDs (UIDs) and Group IDs (GIDs). Understanding how these identifiers work and the potential caveats can help prevent permission issues and security risks.
+On Debian or Ubuntu systems:
 
-#### How UID and GID Affect NFS Permissions
+```bash id="qdsmpd"
+sudo apt install nfs-kernel-server nfs-common
+```
 
-In Unix-like systems, every file and directory is associated with a UID and GID, which determine the ownership and group association. Permissions are then applied based on these IDs, controlling read, write, and execute access for the owner, group, and others.
+Package names vary slightly by distribution, but the main idea is the same:
 
-When an NFS client accesses files on an NFS server, the client uses its local UID and GID to determine permissions. The NFS server, however, relies on its own UID and GID mappings to enforce access controls. If the UIDs and GIDs do not match between the client and server, users might experience unexpected permissions—either being denied access to files they should have rights to or gaining access to files they shouldn't.
+- server needs NFS server tools
+- client needs NFS client tools
 
-For example, suppose a user named "alice" has a UID of 1000 on the NFS client but a different UID on the NFS server. When "alice" tries to access a file she owns on the client, the server might not recognize her as the owner, leading to permission issues.
+### Creating a Shared Directory
 
-#### The Caveats of Mismatched UIDs and GIDs
+Example server directory:
 
-One of the main caveats with NFS permissions is that UIDs and GIDs are numerical and local to each system. There's no inherent mapping of usernames to UIDs across different machines unless explicitly managed. This can lead to several issues:
+```bash id="z2fe5p"
+sudo mkdir -p /opt/shared
+```
 
-- Users may have different UIDs on different systems, causing confusion in file ownership and access rights.
-- A user on one system could unintentionally gain access to files owned by another user on the NFS server if their UIDs match.
-- Manually synchronizing UIDs and GIDs across multiple systems can be error-prone and time-consuming.
+Add a test file:
 
-#### Strategies for Managing UID and GID Consistency
+```bash id="r5759y"
+echo "hello from NFS server" | sudo tee /opt/shared/hello.txt
+```
 
-To mitigate these issues, it's important to establish a consistent mapping of UIDs and GIDs across all systems involved in NFS sharing. Here are some approaches to achieve this:
+Set ownership and permissions based on your use case.
 
-1. Implement a network-wide user directory service like LDAP (Lightweight Directory Access Protocol) or NIS (Network Information Service). This ensures that all users and groups have the same UIDs and GIDs across all systems.
-2. Carefully assign UIDs and GIDs when creating user accounts on each system to ensure they match. While feasible in small environments, this method doesn't scale well for larger networks.
-3. NFS version 4 supports username-based authentication and can map usernames to UIDs and GIDs using the `idmapd` service. This allows for consistent permissions without relying on matching numerical IDs.
+For a simple lab:
 
-#### Configuring `idmapd` for NFSv4
+```bash id="s7hajw"
+sudo chmod 755 /opt/shared
+```
 
-Using `idmapd` can simplify UID and GID management by mapping usernames between client and server. Here's how to set it up:
+For a shared writable directory, you may use a group:
 
-I. **Install and Configure `idmapd`**
+```bash id="g8yis5"
+sudo groupadd nfsusers
+sudo chgrp nfsusers /opt/shared
+sudo chmod 2775 /opt/shared
+```
 
-Ensure that `nfs-utils` is installed, which includes `idmapd`. Edit the `/etc/idmapd.conf` file on both the client and server to set the same domain:
+The `2` in `2775` sets the setgid bit so new files tend to inherit the directory group.
 
-```conf
+### `/etc/exports`
+
+The server uses `/etc/exports` to define what directories are shared and who can access them.
+
+Example:
+
+```exports id="bssxu6"
+/opt/shared 192.168.1.0/24(rw,sync,root_squash)
+```
+
+Meaning:
+
+- /opt/shared       directory being exported
+- 192.168.1.0/24    allowed client network
+- rw                read-write access
+- sync              write changes safely before replying
+- root_squash       map client root to unprivileged user
+
+A more restrictive example:
+
+```exports id="s7a70g"
+/opt/shared 192.168.1.50(ro,sync,root_squash)
+```
+
+This allows only one client and gives read-only access.
+
+### Common Export Options
+
+- ro              read-only
+- rw              read-write
+- sync            commit changes before replying
+- async           allow delayed writes for performance
+- root_squash     map client root to anonymous user
+- no_root_squash  allow client root to act as root on server
+- all_squash      map all users to anonymous user
+- no_all_squash   preserve normal user IDs
+- subtree_check   check file location within exported tree
+- no_subtree_check skip subtree checks, common for reliability/performance
+
+A common safe default:
+
+```exports id="rg32rx"
+/opt/shared 192.168.1.0/24(rw,sync,root_squash,no_subtree_check)
+```
+
+Important warning:
+
+- Avoid no_root_squash unless you truly need it.
+- It gives root on the client powerful access to the exported directory.
+
+### Applying Export Changes
+
+After editing `/etc/exports`, apply changes with:
+
+```bash id="iy6g5q"
+sudo exportfs -r
+```
+
+View exports:
+
+```bash id="n57d4e"
+sudo exportfs -v
+```
+
+Example output:
+
+```text id="b7xx75"
+/opt/shared  192.168.1.0/24(sync,wdelay,hide,no_subtree_check,sec=sys,rw,root_squash,no_all_squash)
+```
+
+Interpretation:
+
+- The server exports /opt/shared to clients in 192.168.1.0/24.
+- The export is read-write.
+- root_squash is enabled.
+
+### Starting NFS Services
+
+On systemd systems:
+
+```bash id="l0bb5x"
+sudo systemctl enable --now nfs-server
+```
+
+Check status:
+
+```bash id="xir812"
+systemctl status nfs-server
+```
+
+Example output:
+
+```text id="n9hf3d"
+● nfs-server.service - NFS server and services
+     Loaded: loaded
+     Active: active (exited)
+```
+
+Interpretation:
+
+- The service is active.
+- For NFS, active (exited) can be normal because systemd started the required kernel NFS services.
+
+On older setups, you may also see or manage:
+
+```bash id="z2wdjo"
+sudo systemctl enable --now rpcbind
+sudo systemctl enable --now nfs-idmapd
+```
+
+### Firewall Rules for NFS
+
+For NFSv4, TCP port 2049 is the main port.
+
+For NFSv3, additional RPC services such as mountd and rpcbind may be needed.
+
+With firewalld:
+
+```bash id="u3q2zi"
+sudo firewall-cmd --permanent --add-service=nfs
+sudo firewall-cmd --permanent --add-service=mountd
+sudo firewall-cmd --permanent --add-service=rpc-bind
+sudo firewall-cmd --reload
+```
+
+Check:
+
+```bash id="qq9r0c"
+sudo firewall-cmd --list-services
+```
+
+Example output:
+
+```text id="jmeir4"
+ssh dhcpv6-client nfs mountd rpc-bind
+```
+
+Interpretation:
+
+- The firewall allows NFS-related services.
+- Clients should be able to reach the NFS server if routing and exports are correct.
+
+With UFW, a simple NFSv4 example:
+
+```bash id="w2u3b6"
+sudo ufw allow from 192.168.1.0/24 to any port 2049 proto tcp
+```
+
+### Client Setup
+
+The NFS client needs:
+
+- NFS client utilities
+- a local mount point
+- network access to the server
+- permission from the server export
+- mount command or /etc/fstab entry
+
+Install packages.
+
+RHEL-style:
+
+```bash id="l8krq8"
+sudo dnf install nfs-utils
+```
+
+Debian/Ubuntu:
+
+```bash id="izhh78"
+sudo apt install nfs-common
+```
+
+Create mount point:
+
+```bash id="ok064r"
+sudo mkdir -p /mnt/nfs_shared
+```
+
+Mount:
+
+```bash id="nhh0dm"
+sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+For NFSv4 explicitly:
+
+```bash id="bi6147"
+sudo mount -t nfs4 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+Check:
+
+```bash id="kmvpeu"
+mount | grep nfs
+```
+
+Example output:
+
+```text id="mzwh8p"
+192.168.1.100:/opt/shared on /mnt/nfs_shared type nfs4 (rw,relatime,vers=4.2,addr=192.168.1.100)
+```
+
+Interpretation:
+
+- The NFS share is mounted.
+- The client is using NFS version 4.2.
+- The mount is read-write.
+
+### Verifying the NFS Mount
+
+List files:
+
+```bash id="uyhe38"
+ls -l /mnt/nfs_shared
+```
+
+Example output:
+
+```text id="ff7z9p"
+-rw-r--r-- 1 root root 22 Jun 1 12:00 hello.txt
+```
+
+Read the test file:
+
+```bash id="qhopu8"
+cat /mnt/nfs_shared/hello.txt
+```
+
+Example output:
+
+```text id="icytql"
+hello from NFS server
+```
+
+Create a file if write access is allowed:
+
+```bash id="y19cn1"
+touch /mnt/nfs_shared/client-test.txt
+```
+
+If this works, the mount is writable for your user.
+
+If it fails with permission denied, check Unix permissions, UID/GID mapping, root squashing, and export options.
+
+### Persistent NFS Mounts with `/etc/fstab`
+
+To mount automatically at boot, add an entry on the client.
+
+Example:
+
+```fstab id="cz80y4"
+192.168.1.100:/opt/shared /mnt/nfs_shared nfs defaults,_netdev 0 0
+```
+
+For NFSv4:
+
+```fstab id="bllsb7"
+192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev 0 0
+```
+
+Important option:
+
+```text id="z9uz0f"
+_netdev means this mount depends on the network.
+```
+
+For systems where the NFS server may not always be available, consider:
+
+```fstab id="vewcb2"
+192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
+```
+
+Meaning:
+
+- nofail              do not fail boot if the mount is unavailable
+- x-systemd.automount mount on first access instead of immediately at boot
+
+Test fstab:
+
+```bash id="z6ni35"
+sudo mount -a
+```
+
+Check:
+
+```bash id="ad3xbb"
+findmnt /mnt/nfs_shared
+```
+
+### UID and GID Mapping
+
+NFS permissions are based heavily on numeric user IDs and group IDs.
+
+This is a major concept.
+
+Linux file ownership is stored as numbers:
+
+- UID = user ID
+- GID = group ID
+
+Example:
+
+```bash id="b8w9by"
+id alice
+```
+
+Output:
+
+```text id="l42xvm"
+uid=1000(alice) gid=1000(alice) groups=1000(alice)
+```
+
+If Alice has UID 1000 on the client but UID 2000 on the server, permissions may not behave as expected.
+
+- Client thinks alice = UID 1000
+- Server thinks alice = UID 2000
+
+- NFS sends numeric UID 1000.
+- Server checks permissions for UID 1000.
+
+This can cause:
+
+- unexpected permission denied
+- wrong file ownership
+- accidental access by the wrong user
+- confusing ls -l output
+
+### Strategies for UID and GID Consistency
+
+Common strategies include:
+
+- centralized identity through LDAP, FreeIPA, or Active Directory
+- consistent manual UID/GID assignment
+- NFSv4 id mapping
+- Kerberos-based NFSv4 authentication
+
+In small labs, manually matching UIDs may be enough.
+
+In larger environments, use centralized identity management.
+
+### NFSv4 and `idmapd`
+
+NFSv4 can use name-based identity mapping through `idmapd`.
+
+The client and server should use the same domain in:
+
+```text id="dhlicb"
+/etc/idmapd.conf
+```
+
+Example:
+
+```conf id="g5uavc"
 [General]
 Domain = example.com
 ```
 
-II. **Start the `idmapd` Service**
+Restart relevant services after changes.
 
-Enable and start the `idmapd` service on both systems:
+Example:
 
-```bash
-systemctl enable nfs-idmapd
-systemctl start nfs-idmapd
+```bash id="a3ga48"
+sudo systemctl restart nfs-idmapd
+sudo systemctl restart nfs-server
 ```
 
-III. **Mount the NFS Share Using NFSv4**
+Check identity mapping issues if files appear owned by:
 
-On the client, mount the NFS share specifying NFS version 4:
+- nobody
+- nfsnobody
+- 4294967294
 
-```bash
-mount -t nfs4 server.example.com:/shared /mnt/shared
+These often indicate mapping problems.
+
+### Root Squashing
+
+Root squashing protects the server from root users on clients.
+
+With `root_squash`, a request from UID 0 on the client is mapped to an anonymous user on the server.
+
+```text id="tqs9n6"
+Client root UID 0
+      |
+      v
+NFS server maps it to anonymous user
+      |
+      v
+Usually nfsnobody or nobody
 ```
 
-#### Root Squashing and Its Impact on Permissions
+This prevents client root from automatically having root privileges on the server export.
 
-Root squashing is an NFS security feature that maps requests from the root user (UID 0) on the client to an anonymous or unprivileged user on the server, typically `nfsnobody`. This prevents a root user on a client machine from having root privileges on the NFS server, enhancing security.
+Example export:
 
-While root squashing protects the server, it can also cause permission issues when administrative tasks require root access to shared files. If necessary, you can disable root squashing by modifying the export options in `/etc/exports`:
-
-```conf
-/shared 192.168.1.0/24(rw,sync,no_root_squash)
+```exports id="g4wx5t"
+/opt/shared 192.168.1.0/24(rw,sync,root_squash)
 ```
 
-However, disabling root squashing should be done cautiously, as it can expose the server to security risks.
+Dangerous option:
 
-#### Using `no_all_squash` and `all_squash` Options
-
-The `no_all_squash` option (default behavior) preserves the original UID and GID of users accessing the NFS share. Conversely, the `all_squash` option maps all user requests to the anonymous user, which can be useful in environments where you want to restrict all client access to a single user identity on the server.
-
-For example, to map all client access to the `nfsnobody` user, you can use:
-
-```conf
-/shared 192.168.1.0/24(rw,sync,all_squash)
+```exports id="rlw6wf"
+/opt/shared 192.168.1.0/24(rw,sync,no_root_squash)
 ```
 
-#### Understanding Permission Denied Errors
+Use `no_root_squash` only in carefully controlled environments.
 
-If users encounter "Permission Denied" errors when accessing NFS shares, it's often due to UID and GID mismatches or incorrect export configurations. To troubleshoot:
+### `all_squash`
 
-- Verify that the user's UID and GID are the same on both the client and server.
-- Ensure that the export options in `/etc/exports` are correctly set and that the client IP is allowed.
-- On the server, confirm that the shared files and directories have the appropriate ownership and permissions.
+The `all_squash` option maps all client users to the anonymous user.
 
-#### Example Scenario
+Example:
 
-Imagine a user named "bob" needs access to a shared directory over NFS. On the server, "bob" has a UID of 1001, but on the client, his UID is 1002. When "bob" tries to access files he owns on the server, the server doesn't recognize him as the owner because the UIDs don't match. As a result, he might be denied access or have limited permissions.
-
-To resolve this, you could:
-
-- Change "bob's" UID on the client to 1001 to match the server.
-- Configure `idmapd` to map "bob's" username to the correct UID, allowing consistent permissions without changing UIDs.
-
-### Additional Considerations
-
-#### Security Measures
-
-While NFS simplifies file sharing across networks, it's important to implement security measures to protect your data.
-
-- Only allow trusted IP addresses or networks to access your NFS shares.
-- Configure firewalls on both the server and client to limit exposure.
-- Unless necessary, avoid using `no_root_squash` as it can grant root access to clients, which is a potential security risk.
-- If possible, use NFS version 4, which includes better security features like stronger authentication.
-
-#### Managing Shared Folders
-
-If you need to view the current shared directories and their options on the server, you can use:
-
-```bash
-exportfs -v
+```exports id="cmtlbx"
+/opt/public 192.168.1.0/24(rw,sync,all_squash)
 ```
 
-This will display detailed information about each exported directory.
+This can be useful for simple public drop-box style shares where all access should use one server-side identity.
 
-If you decide to stop sharing a directory, you can unexport it with:
+Common related options:
 
-```bash
-exportfs -u /opt/shared
+- anonuid=UID
+- anongid=GID
+
+Example:
+
+```exports id="jz49si"
+/opt/public 192.168.1.0/24(rw,sync,all_squash,anonuid=2000,anongid=2000)
 ```
 
-This command stops the NFS server from sharing `/opt/shared`.
+This maps all access to UID 2000 and GID 2000.
 
-#### Troubleshooting Common Issues
+### Security Considerations
 
-If clients are having trouble accessing the NFS share, here are some steps you can take:
+NFS is powerful, but it must be configured carefully.
 
-- Ensure that the client can reach the server using ping or other network tools.
-- Make sure that the necessary ports are open on both the server and client.
-- Double-check the `/etc/exports` file for any typos or incorrect options.
-- Look at the server's system logs for any error messages related to NFS.
+Good practices:
 
-#### Performance Optimization
+- export only needed directories
+- allow only trusted client IPs or subnets
+- use read-only exports where possible
+- avoid no_root_squash unless necessary
+- use firewall rules to restrict access
+- prefer NFSv4 for simpler firewalling
+- use Kerberos for stronger authentication where needed
+- do not expose NFS directly to the public internet
+- use VPN or private networks for remote access
 
-For better performance, especially in environments with heavy file access, consider the following:
+A safe export is usually specific:
 
-- On the server, you can use the `async` option in `/etc/exports` to allow asynchronous writes. This can improve performance but may risk data integrity in the event of a crash.
-- On the client, you can specify mount options like `rsize` and `wsize` to control the read and write buffer sizes.
-
-For example, mounting with specific read and write sizes:
-
-```bash
-mount -t nfs -o rsize=8192,wsize=8192 192.168.1.100:/opt/shared /mnt/nfs_shared
+```exports id="ebskjz"
+/srv/project 192.168.10.0/24(rw,sync,root_squash,no_subtree_check)
 ```
 
-This sets the read and write buffer sizes to 8KB, which can improve performance depending on your network conditions.
+A risky export is broad:
 
-#### Cross-Platform Compatibility
+```exports id="pu09el"
+/  *(rw,no_root_squash)
+```
 
-NFS can be used in mixed operating system environments. For example, macOS and Windows systems can also act as NFS clients.
+Avoid broad exports like that.
 
-- **On macOS** you can mount an NFS share using the `mount` command in the terminal or through the Finder's "Connect to Server" option.
-- **On Windows** you can enable the "Services for NFS" feature and mount NFS shares using the `mount` command in the command prompt.
+### Performance Considerations
 
-#### Understanding NFS Versions
+NFS performance depends on:
 
-There are different versions of NFS, each with its own features:
+- network latency
+- network bandwidth
+- server disk speed
+- client caching
+- NFS version
+- mount options
+- read/write sizes
+- sync vs async exports
+- workload pattern
 
-- NFSv2 was the **initial** version of the Network File System, introduced in 1984, and offered basic functionality. It primarily uses UDP, which is lightweight but lacks **reliability** for data transfer, limiting its performance in certain network conditions.
-- Due to the limitations of **NFSv2**, the protocol is largely considered outdated and is rarely used in modern environments. Its file size support was limited to 2GB, which is inadequate for today's large files, and it did not support **asynchronous** operations.
-- NFSv3 introduced **significant** improvements over NFSv2, supporting file sizes up to 16 exabytes, which allows users to manage much larger datasets. It also includes **asynchronous** writes, enhancing the performance by allowing data to be written to disk without waiting for acknowledgment.
-- With the addition of **asynchronous** operations in NFSv3, the protocol saw increased stability and was better suited to high-performance environments. This version also introduced better error reporting, allowing clients to understand the nature of **failures** more precisely.
-- NFSv3 also supports both **UDP** and **TCP** protocols, with TCP providing greater reliability over large distances or unreliable networks. This version remains widely adopted and **stable**, making it a common choice for many organizations.
-- NFSv4 is a **stateful** protocol, which marks a shift from the previous stateless versions. This improvement enhances **security** and performance by maintaining a session state between client and server, which helps streamline the handling of requests.
-- A key feature of **NFSv4** is its **support** for Kerberos authentication, providing a more secure access mechanism and making it ideal for sensitive or enterprise environments. This version also uses a single TCP port, 2049, simplifying firewall and **network** configurations.
-- Unlike earlier versions, **NFSv4** includes support for ACLs (Access Control Lists), offering more granular file permissions. This feature enables **better** integration with various OS security models and enhances user access control within shared file systems.
-- NFSv4 also introduced **compound** operations, which allow multiple operations to be bundled into a single request. This bundling reduces the **number** of round trips needed between client and server, optimizing network efficiency and improving response times.
-- For **enhanced** performance, NFSv4 supports client-side **caching**, reducing the need to constantly query the server and speeding up data access. This version also incorporates directory delegation, allowing clients to **manage** directory contents locally in certain situations, which is particularly useful in distributed systems.
+Common mount options include:
+
+- rsize     read buffer size
+- wsize     write buffer size
+- hard      retry indefinitely on server failure
+- soft      fail after timeout
+- timeo     timeout value
+- retrans   retry count
+
+Example:
+
+```bash id="x53gcw"
+sudo mount -t nfs -o rsize=8192,wsize=8192 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+Modern systems often negotiate good defaults automatically. Tune only after measuring.
+
+Important safety note:
+
+- async can improve performance but may risk data loss if the server crashes before data is safely written.
+- sync is safer but can be slower.
+
+### Managing Exports with `exportfs`
+
+View exports:
+
+```bash id="uwts38"
+sudo exportfs -v
+```
+
+Reload exports:
+
+```bash id="cc2e3r"
+sudo exportfs -r
+```
+
+Unexport one directory:
+
+```bash id="p4di7r"
+sudo exportfs -u 192.168.1.0/24:/opt/shared
+```
+
+Unexport all:
+
+```bash id="ztbh5i"
+sudo exportfs -ua
+```
+
+Re-export all from `/etc/exports`:
+
+```bash id="ggv0oy"
+sudo exportfs -a
+```
+
+### Scenario 1: Create a Basic NFS Share
+
+#### Goal
+
+Set up a server export and mount it from a client.
+
+#### Server Steps
+
+Install packages:
+
+```bash id="y84t3b"
+sudo dnf install nfs-utils
+```
+
+Create directory:
+
+```bash id="o4zjyr"
+sudo mkdir -p /opt/shared
+echo "hello from server" | sudo tee /opt/shared/hello.txt
+sudo chmod 755 /opt/shared
+```
+
+Edit `/etc/exports`:
+
+```exports id="kfcw99"
+/opt/shared 192.168.1.0/24(rw,sync,root_squash,no_subtree_check)
+```
+
+Apply:
+
+```bash id="jux62s"
+sudo exportfs -r
+sudo systemctl enable --now nfs-server
+sudo exportfs -v
+```
+
+Example output:
+
+```text id="tzdqxm"
+/opt/shared 192.168.1.0/24(sync,wdelay,no_subtree_check,sec=sys,rw,root_squash,no_all_squash)
+```
+
+#### Client Steps
+
+Install client tools:
+
+```bash id="cjk5xk"
+sudo dnf install nfs-utils
+```
+
+Create mount point:
+
+```bash id="g8qbw9"
+sudo mkdir -p /mnt/nfs_shared
+```
+
+Mount:
+
+```bash id="q95g5v"
+sudo mount -t nfs4 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+Check:
+
+```bash id="oufo7e"
+findmnt /mnt/nfs_shared
+cat /mnt/nfs_shared/hello.txt
+```
+
+Example output:
+
+```text id="grv0pw"
+hello from server
+```
+
+#### Interpretation
+
+- The server exported the directory.
+- The client mounted it successfully.
+- The client can read files stored on the server.
+
+### Scenario 2: Simulate “Access Denied by Server”
+
+#### Goal
+
+Show what happens when the client IP is not allowed by `/etc/exports`.
+
+#### Simulate Problem
+
+On the server, restrict the export to the wrong network:
+
+```exports id="w2dm45"
+/opt/shared 10.10.10.0/24(rw,sync,root_squash)
+```
+
+Apply:
+
+```bash id="zhgw1l"
+sudo exportfs -r
+```
+
+On the client:
+
+```bash id="sxka5b"
+sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+Example output:
+
+```text id="xs2map"
+mount.nfs: access denied by server while mounting 192.168.1.100:/opt/shared
+```
+
+#### Check on Server
+
+```bash id="tl4rsm"
+sudo exportfs -v
+```
+
+Example output:
+
+```text id="x7c7iv"
+/opt/shared 10.10.10.0/24(rw,sync,root_squash)
+```
+
+#### Interpretation
+
+- The server is exporting the directory only to 10.10.10.0/24.
+- The client is not in that allowed range.
+- The server rejects the mount request.
+
+#### Fix
+
+Use the correct client subnet or IP:
+
+```exports id="q7d6wl"
+/opt/shared 192.168.1.0/24(rw,sync,root_squash,no_subtree_check)
+```
+
+Apply:
+
+```bash id="p0vqvz"
+sudo exportfs -r
+```
+
+### Scenario 3: Simulate NFS Blocked by Firewall
+
+#### Goal
+
+Diagnose when the export is correct but the client cannot reach NFS services.
+
+#### Simulate Problem
+
+On the server, remove NFS firewall services:
+
+```bash id="spf96q"
+sudo firewall-cmd --permanent --remove-service=nfs
+sudo firewall-cmd --permanent --remove-service=mountd
+sudo firewall-cmd --permanent --remove-service=rpc-bind
+sudo firewall-cmd --reload
+```
+
+On the client:
+
+```bash id="b3t45n"
+sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+Possible output:
+
+```text id="a9n4r6"
+mount.nfs: Connection timed out
+```
+
+#### Check Connectivity
+
+```bash id="g3ctzq"
+nc -vz 192.168.1.100 2049
+```
+
+Example output:
+
+```text id="gbh656"
+nc: connect to 192.168.1.100 port 2049 (tcp) timed out
+```
+
+#### Check Server Firewall
+
+```bash id="qme7ur"
+sudo firewall-cmd --list-services
+```
+
+Example output:
+
+```text id="dlu4wr"
+ssh dhcpv6-client
+```
+
+#### Interpretation
+
+- The NFS export may be correct.
+- The server firewall is blocking NFS traffic.
+- The client cannot reach port 2049.
+
+#### Fix
+
+```bash id="ggpmz4"
+sudo firewall-cmd --permanent --add-service=nfs
+sudo firewall-cmd --permanent --add-service=mountd
+sudo firewall-cmd --permanent --add-service=rpc-bind
+sudo firewall-cmd --reload
+```
+
+Retest:
+
+```bash id="kxdwh8"
+nc -vz 192.168.1.100 2049
+```
+
+Expected:
+
+```text id="e9uwep"
+Connection to 192.168.1.100 2049 port [tcp/nfs] succeeded!
+```
+
+### Scenario 4: Simulate Permission Denied from UID/GID Mismatch
+
+#### Goal
+
+Show why matching usernames is not enough if numeric UIDs differ.
+
+#### Situation
+
+On server:
+
+```text id="d80i0q"
+alice UID = 1001
+```
+
+On client:
+
+```text id="l1tlax"
+alice UID = 1002
+```
+
+The server directory is owned by UID 1001:
+
+```bash id="qf8b3s"
+ls -ln /opt/shared
+```
+
+Example output on server:
+
+```text id="mc9vll"
+drwxr-x--- 2 1001 1001 4096 Jun 1 12:00 /opt/shared
+```
+
+On client, Alice tries:
+
+```bash id="f8qcgn"
+touch /mnt/nfs_shared/test.txt
+```
+
+Example output:
+
+```text id="rs2iez"
+touch: cannot touch '/mnt/nfs_shared/test.txt': Permission denied
+```
+
+#### Check IDs
+
+On client:
+
+```bash id="ndspw7"
+id alice
+```
+
+Example:
+
+```text id="smbxxu"
+uid=1002(alice) gid=1002(alice)
+```
+
+On server:
+
+```bash id="ouphfo"
+id alice
+```
+
+Example:
+
+```text id="eep2z3"
+uid=1001(alice) gid=1001(alice)
+```
+
+#### Interpretation
+
+- NFS uses numeric IDs for permission checks.
+- The server receives UID 1002, not the name alice.
+- The server does not treat UID 1002 as the owner of files owned by UID 1001.
+
+#### Fix Options
+
+- make UIDs and GIDs consistent
+- use centralized identity management
+- configure NFSv4 id mapping
+- use controlled all_squash mapping for simple shared directories
+
+### Scenario 5: Simulate Root Squash Behavior
+
+#### Goal
+
+Show why root on the client may not have root power on the NFS export.
+
+#### Server Export
+
+```exports id="khv6od"
+/opt/shared 192.168.1.0/24(rw,sync,root_squash)
+```
+
+Apply:
+
+```bash id="t19ike"
+sudo exportfs -r
+```
+
+On client as root:
+
+```bash id="zq52bs"
+sudo touch /mnt/nfs_shared/root-created.txt
+```
+
+Possible output:
+
+```text id="lfvvya"
+touch: cannot touch '/mnt/nfs_shared/root-created.txt': Permission denied
+```
+
+Or if the directory allows anonymous writes, check ownership:
+
+```bash id="uenf3v"
+ls -ln /mnt/nfs_shared/root-created.txt
+```
+
+Example output:
+
+```text id="myy9ha"
+-rw-r--r-- 1 65534 65534 0 Jun 1 12:30 root-created.txt
+```
+
+#### Interpretation
+
+- Client root was mapped to an anonymous unprivileged user.
+- This is root_squash protecting the server.
+- UID 65534 often represents nobody or nfsnobody.
+
+#### Unsafe Alternative
+
+```exports id="nkdq19"
+/opt/shared 192.168.1.0/24(rw,sync,no_root_squash)
+```
+
+Warning:
+
+- no_root_squash allows client root to act as root on the export.
+- Use only when required and only for trusted clients.
+
+### Scenario 6: Simulate a Stale NFS File Handle
+
+#### Goal
+
+Understand what happens when the server-side exported directory changes while clients still have old references.
+
+#### Simulate
+
+Client mounts:
+
+```bash id="tnr48n"
+sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
+cd /mnt/nfs_shared
+```
+
+On the server, rename and recreate the export directory:
+
+```bash id="w034th"
+sudo mv /opt/shared /opt/shared.old
+sudo mkdir /opt/shared
+sudo exportfs -r
+```
+
+On the client:
+
+```bash id="zfkifu"
+ls
+```
+
+Possible output:
+
+```text id="zbl3xr"
+ls: cannot access '.': Stale file handle
+```
+
+#### Interpretation
+
+- The client holds references to objects that no longer match the server-side export.
+- The server-side directory was replaced.
+- The client mount needs to be refreshed.
+
+#### Fix
+
+On the client:
+
+```bash id="fdczmf"
+cd /
+sudo umount /mnt/nfs_shared
+sudo mount /mnt/nfs_shared
+```
+
+If unmount is busy:
+
+```bash id="tg3edv"
+sudo lsof +f -- /mnt/nfs_shared
+sudo fuser -vm /mnt/nfs_shared
+```
+
+Then stop the using process or move out of the directory.
+
+### Scenario 7: Simulate Boot Hang from NFS in `/etc/fstab`
+
+#### Goal
+
+Show why NFS mounts should be configured carefully for boot.
+
+#### Problem fstab Entry
+
+```fstab id="c5c3lp"
+192.168.1.100:/opt/shared /mnt/nfs_shared nfs defaults 0 0
+```
+
+If the NFS server is down during boot, the client may wait for a long time.
+
+#### Better Entry
+
+```fstab id="f1uare"
+192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
+```
+
+#### Apply
+
+```bash id="va9gob"
+sudo systemctl daemon-reload
+sudo mount -a
+```
+
+Check systemd mount units:
+
+```bash id="iauyw3"
+systemctl list-units | grep nfs_shared
+```
+
+Example output:
+
+```text id="g0udrs"
+mnt-nfs_shared.automount loaded active waiting /mnt/nfs_shared
+```
+
+#### Interpretation
+
+- The automount unit waits until the path is accessed.
+- nofail prevents boot failure if the server is unavailable.
+- This is safer for laptops and clients that may boot away from the NFS network.
+
+### Scenario 8: Simulate Read-Only Export
+
+#### Goal
+
+Show how export options override client expectations.
+
+#### Server Export
+
+```exports id="pgmbx6"
+/opt/shared 192.168.1.0/24(ro,sync,root_squash)
+```
+
+Apply:
+
+```bash id="h6i8bo"
+sudo exportfs -r
+```
+
+Client remount:
+
+```bash id="vmmryr"
+sudo umount /mnt/nfs_shared
+sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
+```
+
+Try write:
+
+```bash id="palzvy"
+touch /mnt/nfs_shared/test.txt
+```
+
+Example output:
+
+```text id="ptk7qa"
+touch: cannot touch '/mnt/nfs_shared/test.txt': Read-only file system
+```
+
+#### Check Mount
+
+```bash id="tq7syv"
+findmnt /mnt/nfs_shared
+```
+
+Example output:
+
+```text id="ian9f0"
+TARGET          SOURCE                    FSTYPE OPTIONS
+/mnt/nfs_shared 192.168.1.100:/opt/shared nfs4   ro,relatime,vers=4.2
+```
+
+#### Interpretation
+
+- The server exported the directory as read-only.
+- The client cannot write, even if local commands try to create files.
+
+### Scenario 9: Measure NFS Performance
+
+#### Goal
+
+Check whether NFS is slow and where the bottleneck may be.
+
+#### Write Test
+
+On the client:
+
+```bash id="n9qiry"
+dd if=/dev/zero of=/mnt/nfs_shared/testfile bs=1M count=512 conv=fdatasync
+```
+
+Example output:
+
+```text id="zr3u77"
+536870912 bytes copied, 8.2 s, 65.5 MB/s
+```
+
+#### Read Test
+
+```bash id="pkak9p"
+dd if=/mnt/nfs_shared/testfile of=/dev/null bs=1M
+```
+
+Example output:
+
+```text id="m13evq"
+536870912 bytes copied, 4.1 s, 130 MB/s
+```
+
+#### Check Mount Stats
+
+```bash id="aw6pze"
+nfsiostat 1
+```
+
+Example output:
+
+```text id="fsz0uq"
+op/s    rpc bklog
+120.00  0.00
+
+read:  avg RTT  4.0 ms   avg exe  5.0 ms
+write: avg RTT 12.0 ms   avg exe 15.0 ms
+```
+
+#### Interpretation
+
+- Writes are slower than reads.
+- NFS write latency is higher.
+- Possible causes include sync export behavior, server disk speed, network latency, or competing workloads.
+
+#### Other Checks
+
+On client:
+
+```bash id="f4s6kc"
+mount | grep nfs
+nfsstat -c
+```
+
+On server:
+
+```bash id="hgrin7"
+nfsstat -s
+iostat -xz 1
+```
+
+### Scenario 10: Troubleshoot “NFS Server Is Not Responding”
+
+#### Goal
+
+Diagnose a client that hangs or reports server not responding.
+
+#### Symptom
+
+Client log or terminal shows:
+
+```text id="lgbbq1"
+nfs: server 192.168.1.100 not responding, still trying
+```
+
+#### Check Network
+
+```bash id="lp2ynz"
+ping 192.168.1.100
+```
+
+Check NFS port:
+
+```bash id="avx2qc"
+nc -vz 192.168.1.100 2049
+```
+
+Example failure:
+
+```text id="k3hy0m"
+nc: connect to 192.168.1.100 port 2049 failed: No route to host
+```
+
+#### Check Server Service
+
+On server:
+
+```bash id="rwhwx8"
+systemctl status nfs-server
+sudo ss -tulnp | grep 2049
+```
+
+Example output:
+
+```text id="y04taw"
+tcp LISTEN 0 64 0.0.0.0:2049 0.0.0.0:*
+```
+
+#### Interpretation
+
+- If port 2049 is not reachable, the issue may be server service, firewall, routing, or network outage.
+- If the server is reachable but slow, check server disk and NFS statistics.
+
+### Scenario 11: Use `showmount` to Inspect Exports
+
+#### Goal
+
+Check what the server appears to export.
+
+On client:
+
+```bash id="knldox"
+showmount -e 192.168.1.100
+```
+
+Example output:
+
+```text id="v7sgao"
+Export list for 192.168.1.100:
+/opt/shared 192.168.1.0/24
+```
+
+Interpretation:
+
+- The server advertises /opt/shared to clients in 192.168.1.0/24.
+
+Important note:
+
+- showmount is most useful with NFSv3-style services.
+- NFSv4-only servers may not behave the same way.
+
+### Scenario 12: Unexport a Shared Directory
+
+#### Goal
+
+Stop sharing a directory without editing many files manually.
+
+Check current exports:
+
+```bash id="lgb7xe"
+sudo exportfs -v
+```
+
+Unexport:
+
+```bash id="wmga8s"
+sudo exportfs -u 192.168.1.0/24:/opt/shared
+```
+
+Check again:
+
+```bash id="w4rt05"
+sudo exportfs -v
+```
+
+Interpretation:
+
+- The export was removed from the active export table.
+- If the entry remains in /etc/exports, exportfs -r may re-enable it later.
+
+For a permanent stop, remove or comment out the line in `/etc/exports`.
+
+### Common NFS Problems and Fixes
+
+### Problem: Access Denied by Server
+
+Symptoms:
+
+```text id="dyukgw"
+mount.nfs: access denied by server
+```
+
+Check:
+
+```bash id="ddsceu"
+sudo exportfs -v
+cat /etc/exports
+showmount -e SERVER
+```
+
+Likely causes:
+
+- client IP not allowed
+- wrong export path
+- exports not reloaded
+- DNS or hostname mismatch
+- NFS version mismatch
+
+Fix:
+
+```bash id="igsl9u"
+sudo exportfs -r
+```
+
+and correct `/etc/exports`.
+
+### Problem: Connection Timed Out
+
+Symptoms:
+
+```text id="yu6479"
+mount.nfs: Connection timed out
+```
+
+Check:
+
+```bash id="dy7w79"
+ping SERVER
+nc -vz SERVER 2049
+systemctl status nfs-server
+sudo firewall-cmd --list-services
+```
+
+Likely causes:
+
+- firewall blocks NFS
+- NFS service stopped
+- network route problem
+- server down
+- wrong IP address
+
+### Problem: Permission Denied While Writing
+
+Symptoms:
+
+```text id="j92faf"
+touch: Permission denied
+```
+
+Check:
+
+```bash id="ycmho9"
+id
+ls -ln /mnt/nfs_shared
+ls -ln /opt/shared
+sudo exportfs -v
+```
+
+Likely causes:
+
+- UID/GID mismatch
+- directory permissions do not allow write
+- read-only export
+- root_squash
+- all_squash mapping
+
+### Problem: Files Owned by nobody
+
+Symptoms:
+
+```text id="tm9rh1"
+-rw-r--r-- 1 nobody nobody file.txt
+```
+
+or numeric:
+
+```text id="ddrg78"
+4294967294
+```
+
+Likely causes:
+
+- NFSv4 id mapping problem
+- domain mismatch in idmapd.conf
+- unknown user on server
+- root_squash or all_squash behavior
+
+Check:
+
+```bash id="kw31r1"
+cat /etc/idmapd.conf
+id username
+nfsidmap -l
+```
+
+### Problem: Stale File Handle
+
+Symptoms:
+
+```text id="emafzz"
+Stale file handle
+```
+
+Likely causes:
+
+- server-side directory replaced
+- export changed
+- file deleted while client held reference
+- server reboot or filesystem remount
+
+Fix:
+
+```bash id="phbi97"
+cd /
+sudo umount /mnt/nfs_shared
+sudo mount /mnt/nfs_shared
+```
+
+### Problem: Boot Delays Because NFS Is Unavailable
+
+Symptoms:
+
+- boot waits for remote mount
+- emergency mode because mount failed
+
+Fix fstab with:
+
+- _netdev
+- nofail
+- x-systemd.automount
+
+Example:
+
+```fstab id="d5au5j"
+192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
+```
+
+### NFS Troubleshooting Workflow
+
+When NFS fails, troubleshoot in layers.
+
+1. Is the server reachable?
+2. Is NFS service running?
+3. Is port 2049 reachable?
+4. Is the export listed?
+5. Is the client allowed by /etc/exports?
+6. Is the firewall open?
+7. Is the mount command correct?
+8. Are Unix permissions correct?
+9. Are UID/GID mappings correct?
+10. Are logs showing NFS errors?
+
+Useful commands:
+
+```bash id="x6nxz4"
+ping SERVER
+nc -vz SERVER 2049
+systemctl status nfs-server
+sudo exportfs -v
+showmount -e SERVER
+mount | grep nfs
+findmnt /mnt/nfs_shared
+id
+ls -ln
+journalctl -u nfs-server -b
+dmesg -T | grep -i nfs
+```
+
+### Useful Command Summary
+
+Server setup:
+
+```bash id="b7seyz"
+sudo dnf install nfs-utils
+sudo mkdir -p /opt/shared
+sudo vi /etc/exports
+sudo exportfs -r
+sudo exportfs -v
+sudo systemctl enable --now nfs-server
+```
+
+Client setup:
+
+```bash id="dazg1m"
+sudo dnf install nfs-utils
+sudo mkdir -p /mnt/nfs_shared
+sudo mount -t nfs4 SERVER:/opt/shared /mnt/nfs_shared
+findmnt /mnt/nfs_shared
+```
+
+Firewall:
+
+```bash id="miejcz"
+sudo firewall-cmd --permanent --add-service=nfs
+sudo firewall-cmd --permanent --add-service=mountd
+sudo firewall-cmd --permanent --add-service=rpc-bind
+sudo firewall-cmd --reload
+```
+
+NFS inspection:
+
+```bash id="vwp5np"
+sudo exportfs -v
+showmount -e SERVER
+nfsstat -s
+nfsstat -c
+nfsiostat 1
+mount | grep nfs
+```
+
+Persistent mount:
+
+```fstab id="l29ueu"
+SERVER:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
+```
+
+Unmount:
+
+```bash id="po7gb9"
+sudo umount /mnt/nfs_shared
+```
+
+Force investigation if busy:
+
+```bash id="nh69yn"
+sudo lsof +f -- /mnt/nfs_shared
+sudo fuser -vm /mnt/nfs_shared
+```
+
+### Safe Lab Cleanup
+
+On the client:
+
+```bash id="puavzy"
+cd /
+sudo umount /mnt/nfs_shared 2>/dev/null
+sudo rmdir /mnt/nfs_shared 2>/dev/null
+```
+
+Remove fstab test entry if added:
+
+```bash id="m6a6ua"
+sudo vi /etc/fstab
+sudo systemctl daemon-reload
+```
+
+On the server, remove export line from `/etc/exports`, then:
+
+```bash id="u0mrps"
+sudo exportfs -r
+sudo exportfs -v
+```
+
+Optionally remove test directory:
+
+```bash id="rv0n41"
+sudo rm -rf /opt/shared
+```
 
 ### Challenges
 
-1. Describe the primary purpose of NFS and how it facilitates file sharing between different computers on a network. Explain the role of NFS in distributed systems and how it allows users to access files on remote systems as if they were local.
-2. Outline the key components of an NFS server, such as the NFS daemon and `rpcbind` service. Describe how each component contributes to the operation of NFS and why they are necessary for the server to function correctly.
-3. Investigate the role of the `rpcbind` service in NFS, including how it registers and maps network services to the correct ports. Explain why `rpcbind` is essential for NFS communication and the consequences of it not being active.
-4. Configure an NFS server to share a specific directory by editing the `/etc/exports` file and setting appropriate access permissions. Explain the purpose of the `/etc/exports` file and why it is necessary for defining shared directories.
-5. Review and experiment with different options available in the `/etc/exports` file, such as `ro` (read-only), `rw` (read-write), and `sync` (synchronized writes). Discuss how these options affect client access and the security of shared directories.
-6. Compare the setup process of an NFS server and an NFS client. Document the similarities and differences, especially in terms of the services and configuration files required on each side for successful communication.
-7. Mount an NFS-shared directory on a client system using the `mount` command, and verify the connection by accessing the files in the mounted directory. Explain how the client can confirm that the connection is stable and functioning as expected.
-8. Identify potential security risks associated with NFS, such as unauthorized access and data interception. Explore measures to mitigate these risks, including using firewalls, limiting client access, and enabling NFS over VPN for added security.
-9. Demonstrate how NFS can be used to share directories across different operating systems, such as Linux, macOS, and Windows (using an NFS client for Windows). Discuss the benefits and potential challenges of cross-platform file sharing with NFS.
-10. Experiment with the `exportfs` command to view, refresh, and unexport shared directories on the NFS server. Describe how `exportfs` is used for real-time management of NFS shares and how it complements the configuration in the `/etc/exports` file.
+1. Set up an NFS server that exports `/opt/shared` to one trusted client IP.
+2. Mount the export from a client at `/mnt/nfs_shared` and verify it with `findmnt`.
+3. Add a file on the server and confirm it appears on the client.
+4. Create a file on the client and confirm it appears on the server.
+5. Change the export from `rw` to `ro`, reload exports, remount on the client, and explain the write failure.
+6. Simulate an incorrect client subnet in `/etc/exports` and diagnose the resulting `access denied by server` error.
+7. Block NFS with the firewall and confirm that the client cannot connect to port 2049.
+8. Compare UID and GID values for the same user on client and server. Explain how mismatches affect NFS permissions.
+9. Demonstrate root squashing by trying to write as root from the client and inspecting ownership on the server.
+10. Add an NFS mount to `/etc/fstab` using `_netdev,nofail,x-systemd.automount`, then test it with `mount -a`.
+11. Use `nfsstat` or `nfsiostat` to observe NFS activity during a file copy.
+12. Write a troubleshooting report for one NFS failure. Include symptom, command used, output, interpretation, and fix.
