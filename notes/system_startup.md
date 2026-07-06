@@ -4,7 +4,7 @@ The system startup process is everything that happens between pressing the power
 
 At a high level, startup moves through several layers:
 
-```text id="p4f7p1"
+```text
 Power on
    |
    v
@@ -34,7 +34,7 @@ services, login prompts, network, GUI
 
 A more detailed boot flow looks like this:
 
-```text id="x94trb"
+```text
 [1] Power On
        |
        v
@@ -99,7 +99,7 @@ A more detailed boot flow looks like this:
 
 The important idea is:
 
-```text id="zx8hqb"
+```text
 Startup is a chain.
 If one stage fails, the next stage may never begin.
 ```
@@ -176,7 +176,7 @@ On BIOS systems, the firmware reads the first sector of the selected disk.
 
 That first sector is the Master Boot Record, or MBR.
 
-```text id="z3onrm"
+```text
 BIOS
  |
  v
@@ -197,7 +197,7 @@ On UEFI systems, the firmware reads boot entries from NVRAM.
 
 It then loads an EFI executable from the EFI System Partition, also called ESP.
 
-```text id="mlqfdd"
+```text
 UEFI firmware
      |
      v
@@ -229,7 +229,7 @@ It is the first sector of a traditional BIOS disk.
 
 It is usually 512 bytes.
 
-```text id="ldxzec"
+```text
 +--------------------------------------+
 | Master Boot Record, 512 bytes        |
 +----------------------+---------------+
@@ -263,13 +263,13 @@ The ESP is typically:
 
 Check EFI partition:
 
-```bash id="wxzllh"
+```bash
 lsblk -f
 ```
 
 Example output:
 
-```text id="j339dv"
+```text
 NAME   FSTYPE LABEL UUID                                 MOUNTPOINTS
 sda
 ├─sda1 vfat         1111-2222                            /boot/efi
@@ -279,7 +279,7 @@ sda
 
 Interpretation:
 
-```text id="dnzhle"
+```text
 sda1 is a vfat partition mounted at /boot/efi.
 This is likely the EFI System Partition.
 ```
@@ -311,13 +311,13 @@ The exact key depends on the system vendor.
 
 On UEFI systems, boot entries can often be viewed from Linux using:
 
-```bash id="i7vlyx"
+```bash
 sudo efibootmgr
 ```
 
 Example output:
 
-```text id="gxv4ga"
+```text
 BootCurrent: 0002
 BootOrder: 0002,0001,0000
 Boot0000* Windows Boot Manager
@@ -327,7 +327,7 @@ Boot0002* debian
 
 Interpretation:
 
-```text id="q7mzup"
+```text
 The current boot entry is debian.
 The firmware tries debian first, then USB, then Windows.
 ```
@@ -367,13 +367,13 @@ Important files include:
 
 On some Red Hat-based systems:
 
-```text id="ls93d4"
+```text
 /boot/grub2/grub.cfg
 ```
 
 Important note:
 
-```text id="sj02b7"
+```text
 Do not usually edit grub.cfg directly.
 Edit /etc/default/grub or files under /etc/grub.d, then regenerate the configuration.
 ```
@@ -382,19 +382,19 @@ Common regeneration commands:
 
 Debian/Ubuntu:
 
-```bash id="m4x7al"
+```bash
 sudo update-grub
 ```
 
 Generic GRUB command:
 
-```bash id="rfwrve"
+```bash
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 Red Hat-style systems may use:
 
-```bash id="kp5z67"
+```bash
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
@@ -407,13 +407,13 @@ The bootloader normally loads two important files:
 
 Example:
 
-```bash id="uyy4ri"
+```bash
 ls -lh /boot
 ```
 
 Example output:
 
-```text id="smcn1i"
+```text
 -rw-r--r-- 1 root root  12M vmlinuz-6.8.0
 -rw-r--r-- 1 root root  45M initramfs-6.8.0.img
 -rw-r--r-- 1 root root 200K config-6.8.0
@@ -421,7 +421,7 @@ Example output:
 
 Interpretation:
 
-```text id="pkn2qi"
+```text
 The kernel image is vmlinuz-6.8.0.
 The initramfs image contains early boot tools and drivers.
 ```
@@ -432,13 +432,13 @@ The bootloader passes parameters to the kernel.
 
 View the current kernel command line:
 
-```bash id="u7sjn8"
+```bash
 cat /proc/cmdline
 ```
 
 Example output:
 
-```text id="wrum9x"
+```text
 BOOT_IMAGE=/vmlinuz-6.8.0 root=UUID=abcd-1234 ro quiet splash
 ```
 
@@ -470,7 +470,7 @@ The kernel:
 
 A simplified flow:
 
-```text id="rgqlpo"
+```text
 Kernel image starts
        |
        v
@@ -527,19 +527,19 @@ After initramfs finds and mounts the real root filesystem, the system must move 
 
 This is commonly done with:
 
-```text id="f8i23x"
+```text
 switch_root
 ```
 
 or historically:
 
-```text id="rk66g4"
+```text
 pivot_root
 ```
 
 Conceptual flow:
 
-```text id="s3c8wg"
+```text
 Temporary initramfs root
         |
         v
@@ -560,27 +560,27 @@ On most modern Linux systems, PID 1 is systemd.
 
 Check PID 1:
 
-```bash id="lcjzjy"
+```bash
 ps -p 1 -o pid,comm,args
 ```
 
 Example output:
 
-```text id="v25fic"
+```text
 PID COMMAND ARGS
 1   systemd /usr/lib/systemd/systemd
 ```
 
 Interpretation:
 
-```text id="kqhj54"
+```text
 systemd is PID 1.
 It is responsible for starting and supervising user-space services.
 ```
 
 On older systems, PID 1 may be:
 
-```text id="khbnaj"
+```text
 init
 ```
 
@@ -604,7 +604,7 @@ SysV init organizes system states using runlevels.
 
 Commands include:
 
-```bash id="hp8e72"
+```bash
 runlevel
 sudo telinit 3
 ```
@@ -644,7 +644,7 @@ systemd starts units according to dependencies.
 
 A simplified target flow:
 
-```text id="eq8i0e"
+```text
 default.target
       |
       v
@@ -662,7 +662,7 @@ multi-user.target or graphical.target
 
 If the system boots to a GUI, `graphical.target` includes display-manager services.
 
-```text id="r2o62l"
+```text
 graphical.target
       |
       v
@@ -691,19 +691,19 @@ Runlevel meaning can vary between distributions.
 
 Check runlevel:
 
-```bash id="zrtu9o"
+```bash
 runlevel
 ```
 
 Example output:
 
-```text id="bgtgij"
+```text
 N 5
 ```
 
 Interpretation:
 
-```text id="mutq9z"
+```text
 There was no previous runlevel.
 The current runlevel is 5.
 ```
@@ -731,31 +731,31 @@ Approximate mapping:
 
 Check default target:
 
-```bash id="hi1zhb"
+```bash
 systemctl get-default
 ```
 
 Example:
 
-```text id="ss95c8"
+```text
 graphical.target
 ```
 
 Set default target:
 
-```bash id="cbyoxj"
+```bash
 sudo systemctl set-default multi-user.target
 ```
 
 Switch target immediately:
 
-```bash id="3moclj"
+```bash
 sudo systemctl isolate multi-user.target
 ```
 
 Important:
 
-```text id="qmxfc8"
+```text
 set-default changes future boots.
 isolate changes the current running state.
 ```
@@ -766,19 +766,19 @@ After startup reaches the appropriate target, login services become available.
 
 Text login prompts are usually provided by:
 
-```text id="asxzi9"
+```text
 getty@.service
 ```
 
 Example:
 
-```bash id="ko35no"
+```bash
 systemctl status getty@tty1.service
 ```
 
 SSH login is usually provided by:
 
-```text id="ro7pfu"
+```text
 sshd.service
 ```
 
@@ -801,38 +801,38 @@ Boot logs are essential for diagnosing startup problems.
 
 View logs from the current boot:
 
-```bash id="a62vyn"
+```bash
 journalctl -b
 ```
 
 Show only errors from current boot:
 
-```bash id="r9xbbc"
+```bash
 journalctl -b -p err
 ```
 
 Show previous boot:
 
-```bash id="rf3ot3"
+```bash
 journalctl -b -1
 ```
 
 Show kernel messages:
 
-```bash id="v755aj"
+```bash
 journalctl -k -b
 ```
 
 Example:
 
-```text id="s5dwxy"
+```text
 Jun 01 10:00:05 host systemd[1]: Started OpenSSH server daemon.
 Jun 01 10:00:08 host kernel: EXT4-fs (sda3): mounted filesystem with ordered data mode.
 ```
 
 Interpretation:
 
-```text id="aw3nh3"
+```text
 systemd started sshd.
 The kernel mounted the root filesystem successfully.
 ```
@@ -843,20 +843,20 @@ systemd includes tools for measuring boot performance.
 
 Show total boot time:
 
-```bash id="dvbzoy"
+```bash
 systemd-analyze
 ```
 
 Example output:
 
-```text id="h1qpq3"
+```text
 Startup finished in 4.123s (kernel) + 12.456s (userspace) = 16.579s
 graphical.target reached after 12.200s in userspace.
 ```
 
 Interpretation:
 
-```text id="dedcdg"
+```text
 The kernel stage took about 4.1 seconds.
 User-space services took about 12.5 seconds.
 The graphical target was reached after about 12.2 seconds.
@@ -864,13 +864,13 @@ The graphical target was reached after about 12.2 seconds.
 
 Show slow services:
 
-```bash id="mvvctw"
+```bash
 systemd-analyze blame
 ```
 
 Example output:
 
-```text id="jp1zjg"
+```text
 12.000s slow-demo.service
  3.500s NetworkManager-wait-online.service
  1.200s sshd.service
@@ -878,14 +878,14 @@ Example output:
 
 Interpretation:
 
-```text id="di6l0y"
+```text
 slow-demo.service took the most time.
 NetworkManager wait-online also contributed to boot delay.
 ```
 
 Show dependency chain:
 
-```bash id="b2o4nb"
+```bash
 systemd-analyze critical-chain
 ```
 
@@ -917,13 +917,13 @@ Common causes:
 
 Example panic message:
 
-```text id="x3d5tn"
+```text
 Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
 ```
 
 Interpretation:
 
-```text id="a0ff8c"
+```text
 The kernel could not mount the root filesystem.
 Possible causes include wrong root= parameter, missing initramfs driver, bad disk, or filesystem problem.
 ```
@@ -943,7 +943,7 @@ When diagnosing a panic:
 
 Useful commands after booting rescue or a working kernel:
 
-```bash id="kfk1p3"
+```bash
 journalctl -b -1 -p err
 journalctl -k -b -1
 dmesg -T
@@ -958,25 +958,25 @@ fsck
 
 View hostname:
 
-```bash id="vcy4my"
+```bash
 hostname
 ```
 
 Set hostname on systemd systems:
 
-```bash id="qdxo0j"
+```bash
 sudo hostnamectl set-hostname server01
 ```
 
 Verify:
 
-```bash id="pd936q"
+```bash
 hostnamectl
 ```
 
 Example output:
 
-```text id="nkf1pg"
+```text
 Static hostname: server01
 Operating System: Ubuntu
 Kernel: Linux 6.8.0
@@ -985,7 +985,7 @@ Architecture: x86-64
 
 Interpretation:
 
-```text id="py0kyo"
+```text
 The system hostname is server01.
 This name identifies the machine on the network and in logs.
 ```
@@ -994,19 +994,19 @@ This name identifies the machine on the network and in logs.
 
 Check uptime:
 
-```bash id="xjcs94"
+```bash
 uptime
 ```
 
 Example output:
 
-```text id="b1nsnl"
+```text
 15:20:10 up 3 days,  4:12,  2 users,  load average: 0.10, 0.20, 0.18
 ```
 
 Interpretation:
 
-```text id="h4geqj"
+```text
 The system has been running for 3 days and 4 hours.
 Two users are logged in.
 Load average is low.
@@ -1018,25 +1018,25 @@ Uptime helps confirm whether a reboot happened recently.
 
 Reboot immediately:
 
-```bash id="ls9map"
+```bash
 sudo reboot
 ```
 
 or:
 
-```bash id="d417sx"
+```bash
 sudo systemctl reboot
 ```
 
 Schedule reboot in 5 minutes:
 
-```bash id="u7jm8s"
+```bash
 sudo shutdown -r +5
 ```
 
 Cancel scheduled shutdown or reboot:
 
-```bash id="l7twmd"
+```bash
 sudo shutdown -c
 ```
 
@@ -1044,25 +1044,25 @@ sudo shutdown -c
 
 Shutdown immediately:
 
-```bash id="xb0lpt"
+```bash
 sudo shutdown now
 ```
 
 or:
 
-```bash id="synk22"
+```bash
 sudo systemctl poweroff
 ```
 
 Schedule shutdown in 30 minutes:
 
-```bash id="soxn5f"
+```bash
 sudo shutdown -h +30
 ```
 
 Broadcast message example:
 
-```bash id="en66d5"
+```bash
 sudo shutdown -h +30 "System maintenance in 30 minutes"
 ```
 
@@ -1070,25 +1070,25 @@ sudo shutdown -h +30 "System maintenance in 30 minutes"
 
 Show time settings:
 
-```bash id="dsgip4"
+```bash
 timedatectl
 ```
 
 List timezones:
 
-```bash id="b6sc70"
+```bash
 timedatectl list-timezones
 ```
 
 Set timezone:
 
-```bash id="k2d1fj"
+```bash
 sudo timedatectl set-timezone Europe/Berlin
 ```
 
 Verify:
 
-```bash id="f1a0go"
+```bash
 timedatectl
 ```
 
@@ -1109,7 +1109,7 @@ Only perform it on systems you own or are authorized to administer.
 
 A common Red Hat-style recovery method uses:
 
-```text id="fpqif8"
+```text
 rd.break
 ```
 
@@ -1130,7 +1130,7 @@ General flow:
 
 Commands after reaching the emergency shell:
 
-```bash id="rsbgu9"
+```bash
 mount -o remount,rw /sysroot
 chroot /sysroot
 passwd root
@@ -1141,7 +1141,7 @@ exit
 
 Interpretation:
 
-```text id="r4n5jx"
+```text
 The root filesystem is remounted writable.
 chroot makes /sysroot behave like /.
 passwd changes the root password.
@@ -1152,15 +1152,13 @@ On Debian/Ubuntu systems, recovery may use GRUB recovery mode or `init=/bin/bash
 
 ### Scenario 1: Measure Boot Time and Find Slow Services
 
-#### Goal
-
 Identify what slowed down the boot process.
 
 #### Simulate a Boot Delay
 
 Create a test service that sleeps during boot:
 
-```bash id="r732tc"
+```bash
 sudo tee /etc/systemd/system/slow-demo.service > /dev/null <<'EOF'
 [Unit]
 Description=Slow Boot Demo Service
@@ -1176,14 +1174,14 @@ EOF
 
 Enable it:
 
-```bash id="csh81m"
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable slow-demo.service
 ```
 
 Reboot:
 
-```bash id="qbehlk"
+```bash
 sudo systemctl reboot
 ```
 
@@ -1191,34 +1189,34 @@ sudo systemctl reboot
 
 After reboot:
 
-```bash id="tjy0tj"
+```bash
 systemd-analyze
 ```
 
 Example output:
 
-```text id="wk2kdl"
+```text
 Startup finished in 3.800s (kernel) + 25.400s (userspace) = 29.200s
 multi-user.target reached after 25.100s in userspace.
 ```
 
 #### Check Slow Services
 
-```bash id="pupmma"
+```bash
 systemd-analyze blame | head
 ```
 
 Example output:
 
-```text id="yy6b4w"
+```text
 20.010s slow-demo.service
  3.400s NetworkManager-wait-online.service
  1.100s sshd.service
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="m2p2od"
+```text
 The boot delay is mostly caused by slow-demo.service.
 The kernel was not the main bottleneck.
 The userspace service startup path was delayed.
@@ -1226,7 +1224,7 @@ The userspace service startup path was delayed.
 
 #### Cleanup
 
-```bash id="pej7mp"
+```bash
 sudo systemctl disable --now slow-demo.service
 sudo rm -f /etc/systemd/system/slow-demo.service
 sudo systemctl daemon-reload
@@ -1234,13 +1232,11 @@ sudo systemctl daemon-reload
 
 ### Scenario 2: Diagnose a Failed Service During Boot
 
-#### Goal
-
 Simulate a service that fails during boot and diagnose it.
 
 #### Create a Broken Service
 
-```bash id="g9voos"
+```bash
 sudo tee /etc/systemd/system/broken-boot.service > /dev/null <<'EOF'
 [Unit]
 Description=Broken Boot Demo Service
@@ -1256,7 +1252,7 @@ EOF
 
 Enable and start:
 
-```bash id="e80zry"
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable broken-boot.service
 sudo systemctl start broken-boot.service
@@ -1264,46 +1260,46 @@ sudo systemctl start broken-boot.service
 
 #### Check Failed Units
 
-```bash id="wsj8n7"
+```bash
 systemctl --failed
 ```
 
 Example output:
 
-```text id="vkczio"
+```text
 UNIT                 LOAD   ACTIVE SUB    DESCRIPTION
 broken-boot.service  loaded failed failed Broken Boot Demo Service
 ```
 
 #### Check Status
 
-```bash id="y2fe05"
+```bash
 systemctl status broken-boot.service
 ```
 
 Example output:
 
-```text id="b7kxxp"
+```text
 Active: failed (Result: exit-code)
 Process: 1300 ExecStart=/not/a/real/command (code=exited, status=203/EXEC)
 ```
 
 #### Check Logs
 
-```bash id="rhwb7l"
+```bash
 journalctl -u broken-boot.service -b
 ```
 
 Example output:
 
-```text id="v1fd1y"
+```text
 Failed to locate executable /not/a/real/command
 Failed at step EXEC spawning /not/a/real/command: No such file or directory
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="dmvfzk"
+```text
 The service failed because ExecStart points to a missing executable.
 This is not a kernel or bootloader problem.
 It is a systemd unit configuration problem.
@@ -1311,7 +1307,7 @@ It is a systemd unit configuration problem.
 
 #### Cleanup
 
-```bash id="v8oxuf"
+```bash
 sudo systemctl disable broken-boot.service
 sudo rm -f /etc/systemd/system/broken-boot.service
 sudo systemctl daemon-reload
@@ -1320,64 +1316,60 @@ sudo systemctl reset-failed
 
 ### Scenario 3: Simulate Wrong Default Target
 
-#### Goal
-
 Understand the difference between text-mode and graphical boot.
 
 #### Check Current Default Target
 
-```bash id="wdx09z"
+```bash
 systemctl get-default
 ```
 
 Example:
 
-```text id="xnpwed"
+```text
 graphical.target
 ```
 
 #### Change Future Boots to Text Mode
 
-```bash id="xoffg7"
+```bash
 sudo systemctl set-default multi-user.target
 ```
 
 Reboot:
 
-```bash id="lb3r6q"
+```bash
 sudo reboot
 ```
 
 #### Check After Boot
 
-```bash id="tolv9c"
+```bash
 systemctl get-default
 systemctl list-units --type=target --state=active
 ```
 
 Example output:
 
-```text id="mz0s9l"
+```text
 multi-user.target
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="tmz15v"
+```text
 The system is configured to boot into text-mode multi-user state.
 A graphical login manager may not start automatically.
 ```
 
 #### Restore Graphical Boot
 
-```bash id="rxabgf"
+```bash
 sudo systemctl set-default graphical.target
 sudo systemctl isolate graphical.target
 ```
 
 ### Scenario 4: Boot into Rescue Target
-
-#### Goal
 
 Practice entering a limited maintenance environment.
 
@@ -1385,7 +1377,7 @@ Practice entering a limited maintenance environment.
 
 At GRUB, edit the kernel command line and add:
 
-```text id="sbsfd0"
+```text
 systemd.unit=rescue.target
 ```
 
@@ -1395,25 +1387,25 @@ Boot with the edited entry.
 
 From a running system:
 
-```bash id="eov6me"
+```bash
 sudo systemctl isolate rescue.target
 ```
 
 #### Check
 
-```bash id="kjcv5t"
+```bash
 systemctl list-units --type=target --state=active
 ```
 
 Example output:
 
-```text id="g6h0lm"
+```text
 rescue.target loaded active active Rescue Mode
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="ndpyo0"
+```text
 The system is in rescue mode.
 Only essential services are running.
 This mode is useful for maintenance and repair.
@@ -1421,38 +1413,36 @@ This mode is useful for maintenance and repair.
 
 #### Return to Normal Target
 
-```bash id="keknkw"
+```bash
 sudo systemctl isolate multi-user.target
 ```
 
 or for GUI:
 
-```bash id="uh6gsb"
+```bash
 sudo systemctl isolate graphical.target
 ```
 
 ### Scenario 5: Diagnose a Boot Problem from Logs
 
-#### Goal
-
 Use journal logs to find errors from the current or previous boot.
 
 #### Check Current Boot Errors
 
-```bash id="xsu55c"
+```bash
 journalctl -b -p err
 ```
 
 Example output:
 
-```text id="sem6y0"
+```text
 Jun 01 10:05:01 host systemd[1]: failed-demo.service: Failed with result 'exit-code'.
 Jun 01 10:05:01 host kernel: ata1.00: failed command: READ FPDMA QUEUED
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="sy2xml"
+```text
 One service failed.
 The kernel also reported a disk-related error.
 The service failure and disk error should be investigated separately.
@@ -1460,44 +1450,42 @@ The service failure and disk error should be investigated separately.
 
 #### Check Previous Boot
 
-```bash id="kjs5ws"
+```bash
 journalctl -b -1 -p err
 ```
 
 Interpretation:
 
-```text id="xtzl72"
+```text
 Previous boot logs help diagnose failures that happened before the last reboot.
 ```
 
 ### Scenario 6: Simulate and Cancel Scheduled Shutdown
 
-#### Goal
-
 Practice scheduling and canceling shutdowns safely.
 
 #### Schedule Shutdown
 
-```bash id="qojyki"
+```bash
 sudo shutdown -h +10 "Test shutdown in 10 minutes"
 ```
 
 Example broadcast:
 
-```text id="rgyhvs"
+```text
 Broadcast message from root:
 The system is going down for poweroff in 10 minutes!
 ```
 
 #### Cancel It
 
-```bash id="v27fur"
+```bash
 sudo shutdown -c
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="oq3yuk"
+```text
 The shutdown was scheduled.
 shutdown -c canceled it before it happened.
 This is useful during maintenance planning.
@@ -1505,62 +1493,58 @@ This is useful during maintenance planning.
 
 #### Schedule Reboot
 
-```bash id="ql27hh"
+```bash
 sudo shutdown -r +5 "Test reboot in 5 minutes"
 ```
 
 Cancel:
 
-```bash id="b4rklz"
+```bash
 sudo shutdown -c
 ```
 
 ### Scenario 7: Verify a Reboot with Uptime
 
-#### Goal
-
 Confirm that a system actually restarted.
 
 #### Before Reboot
 
-```bash id="k373fp"
+```bash
 uptime
 ```
 
 Example:
 
-```text id="pmvy42"
+```text
 up 14 days, 3:21
 ```
 
 Reboot:
 
-```bash id="hamhxs"
+```bash
 sudo systemctl reboot
 ```
 
 After reboot:
 
-```bash id="dxkbxd"
+```bash
 uptime
 ```
 
 Example:
 
-```text id="k2lojr"
+```text
 up 2 min
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="r55dh3"
+```text
 The uptime reset from 14 days to 2 minutes.
 This confirms the system rebooted.
 ```
 
 ### Scenario 8: Investigate Kernel Panic: Root Filesystem Not Found
-
-#### Goal
 
 Understand a common boot panic pattern.
 
@@ -1568,7 +1552,7 @@ Understand a common boot panic pattern.
 
 Console shows:
 
-```text id="l9vn9d"
+```text
 Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
 ```
 
@@ -1578,14 +1562,14 @@ Boot from an older kernel, rescue mode, or live USB.
 
 Check disks:
 
-```bash id="bayya4"
+```bash
 lsblk -f
 blkid
 ```
 
 Example:
 
-```text id="mq5br6"
+```text
 NAME   FSTYPE UUID       MOUNTPOINTS
 sda1   vfat   1111-2222  /boot/efi
 sda2   ext4   aaaa-bbbb  /boot
@@ -1594,19 +1578,19 @@ sda3   ext4   cccc-dddd  /
 
 Check kernel command line from bootloader configuration:
 
-```bash id="uc7qd3"
+```bash
 grep -R "root=" /boot/grub* /boot/loader 2>/dev/null
 ```
 
 Example problem:
 
-```text id="suuohk"
+```text
 root=UUID=wrong-uuid
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="mdsq4f"
+```text
 The kernel was told to mount a root filesystem UUID that does not exist.
 Fix GRUB configuration or filesystem UUID references.
 ```
@@ -1621,15 +1605,13 @@ Fix GRUB configuration or filesystem UUID references.
 
 ### Scenario 9: Recover Root Password in a Lab VM
 
-#### Goal
-
 Practice emergency administrative recovery.
 
 #### GRUB Step
 
 At GRUB, edit the kernel entry and add:
 
-```text id="j5ebxn"
+```text
 rd.break
 ```
 
@@ -1637,7 +1619,7 @@ Boot with Ctrl-X or F10.
 
 #### Emergency Shell Commands
 
-```bash id="nnpzyc"
+```bash
 mount -o remount,rw /sysroot
 chroot /sysroot
 passwd root
@@ -1648,16 +1630,16 @@ exit
 
 #### Example Output
 
-```text id="u9fox9"
+```text
 Changing password for user root.
 New password:
 Retype new password:
 passwd: all authentication tokens updated successfully.
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="p39e4d"
+```text
 The root password was changed.
 SELinux relabeling was requested for the next boot.
 The system should reboot and allow login with the new password.
@@ -1665,7 +1647,7 @@ The system should reboot and allow login with the new password.
 
 #### Safety Note
 
-```text id="ws7jct"
+```text
 This is for authorized recovery only.
 Physical or console access to a machine often means administrative control is possible.
 Protect servers with disk encryption, firmware passwords, and cloud access controls where appropriate.
@@ -1673,27 +1655,25 @@ Protect servers with disk encryption, firmware passwords, and cloud access contr
 
 ### Scenario 10: Inspect systemd Timers During Startup Maintenance
 
-#### Goal
-
 Understand scheduled system maintenance managed by systemd.
 
 #### Check Timers
 
-```bash id="khbsx3"
+```bash
 systemctl list-timers --all
 ```
 
 Example output:
 
-```text id="x1a9yj"
+```text
 NEXT                        LEFT    LAST                        PASSED UNIT                         ACTIVATES
 Mon 2026-06-15 00:00:00     8h      Sun 2026-06-14 00:00:00     16h    logrotate.timer              logrotate.service
 Mon 2026-06-15 06:00:00     14h     Sun 2026-06-14 06:00:00     10h    apt-daily.timer               apt-daily.service
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="s7f26m"
+```text
 logrotate.timer activates logrotate.service.
 apt-daily.timer activates apt-daily.service.
 Timers are systemd's scheduled task mechanism, similar in purpose to cron.
@@ -1701,58 +1681,54 @@ Timers are systemd's scheduled task mechanism, similar in purpose to cron.
 
 ### Scenario 11: Set and Verify Timezone
 
-#### Goal
-
 Ensure logs and schedules use the correct local time.
 
 #### Check
 
-```bash id="ki86qm"
+```bash
 timedatectl
 ```
 
 Example output:
 
-```text id="fdbfai"
+```text
 Time zone: UTC (UTC, +0000)
 System clock synchronized: yes
 ```
 
 #### Change
 
-```bash id="hqwby8"
+```bash
 sudo timedatectl set-timezone Europe/Berlin
 ```
 
 #### Verify
 
-```bash id="qtq4dj"
+```bash
 timedatectl
 ```
 
 Example output:
 
-```text id="l6kxm7"
+```text
 Time zone: Europe/Berlin (CEST, +0200)
 System clock synchronized: yes
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="x1owfd"
+```text
 The system timezone is now Europe/Berlin.
 Logs, cron jobs, and timers will use this timezone unless configured otherwise.
 ```
 
 ### Scenario 12: Create a Simple Cron Maintenance Task
 
-#### Goal
-
 Use cron for scheduled maintenance.
 
 #### Create a Backup Script
 
-```bash id="p9otcd"
+```bash
 mkdir -p ~/maintenance-demo
 cat > ~/maintenance-demo/backup-demo.sh <<'EOF'
 #!/bin/bash
@@ -1767,32 +1743,32 @@ chmod +x ~/maintenance-demo/backup-demo.sh
 
 Edit crontab:
 
-```bash id="ghr3d0"
+```bash
 crontab -e
 ```
 
 Add:
 
-```text id="ufjjg2"
+```text
 0 0 * * * /home/user/maintenance-demo/backup-demo.sh
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="krv0s4"
+```text
 The script runs every day at midnight.
 Cron is useful for recurring maintenance tasks.
 ```
 
 #### Verify Cron Service
 
-```bash id="k4sfo5"
+```bash
 systemctl status cron
 ```
 
 or on some systems:
 
-```bash id="lgcoft"
+```bash
 systemctl status crond
 ```
 
@@ -1802,7 +1778,7 @@ systemctl status crond
 
 Check:
 
-```bash id="vxfaj9"
+```bash
 systemd-analyze
 systemd-analyze blame
 systemd-analyze critical-chain
@@ -1822,7 +1798,7 @@ Common causes:
 
 Check:
 
-```bash id="zxjdk1"
+```bash
 systemctl --failed
 systemctl status service-name
 journalctl -u service-name -b
@@ -1841,7 +1817,7 @@ Common causes:
 
 Check:
 
-```bash id="sf4psr"
+```bash
 journalctl -xb
 systemctl --failed
 mount -a
@@ -1859,7 +1835,7 @@ Common causes:
 
 A common fix for optional disks is adding:
 
-```text id="dwvzog"
+```text
 nofail
 ```
 
@@ -1874,7 +1850,7 @@ Try during boot:
 
 Also check GRUB configuration:
 
-```bash id="mhdizk"
+```bash
 grep GRUB_TIMEOUT /etc/default/grub
 ```
 
@@ -1891,7 +1867,7 @@ Try:
 
 Commands:
 
-```bash id="hz6sj1"
+```bash
 journalctl -b -1 -p err
 ls /boot
 uname -r
@@ -1901,7 +1877,7 @@ uname -r
 
 Boot and firmware:
 
-```bash id="br2c8u"
+```bash
 sudo efibootmgr
 lsblk -f
 cat /proc/cmdline
@@ -1910,7 +1886,7 @@ ls -lh /boot
 
 systemd boot state:
 
-```bash id="or2ic8"
+```bash
 ps -p 1 -o pid,comm,args
 systemctl get-default
 systemctl list-units --type=target --state=active
@@ -1919,7 +1895,7 @@ systemctl --failed
 
 Boot performance:
 
-```bash id="hy7anf"
+```bash
 systemd-analyze
 systemd-analyze blame
 systemd-analyze critical-chain
@@ -1927,7 +1903,7 @@ systemd-analyze critical-chain
 
 Logs:
 
-```bash id="krnw1i"
+```bash
 journalctl -b
 journalctl -b -p err
 journalctl -k -b
@@ -1936,7 +1912,7 @@ journalctl -b -1
 
 Targets:
 
-```bash id="xjjvx6"
+```bash
 sudo systemctl isolate multi-user.target
 sudo systemctl isolate graphical.target
 sudo systemctl set-default multi-user.target
@@ -1945,7 +1921,7 @@ sudo systemctl set-default graphical.target
 
 System management:
 
-```bash id="gg7tpd"
+```bash
 hostname
 hostnamectl
 uptime
@@ -1959,7 +1935,7 @@ timedatectl
 
 Timers and cron:
 
-```bash id="swyh8o"
+```bash
 systemctl list-timers --all
 crontab -e
 crontab -l
@@ -1969,35 +1945,35 @@ crontab -l
 
 Remove slow demo service:
 
-```bash id="pez11t"
+```bash
 sudo systemctl disable --now slow-demo.service 2>/dev/null
 sudo rm -f /etc/systemd/system/slow-demo.service
 ```
 
 Remove broken boot service:
 
-```bash id="d223j8"
+```bash
 sudo systemctl disable --now broken-boot.service 2>/dev/null
 sudo rm -f /etc/systemd/system/broken-boot.service
 ```
 
 Reload systemd:
 
-```bash id="zw5jhh"
+```bash
 sudo systemctl daemon-reload
 sudo systemctl reset-failed
 ```
 
 Return to graphical target if needed:
 
-```bash id="nhdoye"
+```bash
 sudo systemctl set-default graphical.target
 sudo systemctl isolate graphical.target
 ```
 
 Cancel scheduled shutdown if one exists:
 
-```bash id="uo9x3g"
+```bash
 sudo shutdown -c
 ```
 

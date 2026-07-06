@@ -1031,8 +1031,6 @@ Interpretation:
 
 ### Scenario 1: Observe `execve` for a Normal Command
 
-#### Goal
-
 See the system call used to execute a program.
 
 #### Simulate
@@ -1047,7 +1045,7 @@ strace -e execve ls
 execve("/usr/bin/ls", ["ls"], 0x7ffc8e0a9b10 /* 45 vars */) = 0
 ```
 
-#### Interpretation
+Interpretation:
 
 - The ls command was executed using execve.
 - The path was /usr/bin/ls.
@@ -1059,8 +1057,6 @@ execve("/usr/bin/ls", ["ls"], 0x7ffc8e0a9b10 /* 45 vars */) = 0
 Use this when you want to confirm which executable is actually being run.
 
 ### Scenario 2: Show That `execve` Replaces the Current Process
-
-#### Goal
 
 Demonstrate that `execve` does not create a new PID.
 
@@ -1104,7 +1100,7 @@ Before execve: PID=8123
 Hello after execve
 ```
 
-#### Interpretation
+Interpretation:
 
 - The program printed its PID before execve.
 - Then it was replaced by /bin/echo.
@@ -1113,8 +1109,6 @@ Hello after execve
 The line after `execve` only runs if `execve` fails.
 
 ### Scenario 3: Observe a Script Shebang
-
-#### Goal
 
 See how executing a script causes the interpreter to run.
 
@@ -1144,7 +1138,7 @@ hello from script
 
 Depending on tracing options and shell behavior, you may also observe `/bin/sh` being involved.
 
-#### Interpretation
+Interpretation:
 
 - The kernel sees the shebang line.
 - The script is executed through /bin/sh.
@@ -1177,8 +1171,6 @@ Interpretation:
 - Execution fails because the kernel cannot start the interpreter.
 
 ### Scenario 4: Compare Static and Dynamic Binaries
-
-#### Goal
 
 Understand the difference between static and dynamic linking.
 
@@ -1237,15 +1229,13 @@ libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6
 not a dynamic executable
 ```
 
-#### Interpretation
+Interpretation:
 
 - The dynamic binary depends on shared libraries.
 - The static binary contains the needed library code.
 - The static binary is more suitable for minimal initramfs labs.
 
 ### Scenario 5: Diagnose a Missing Shared Library
-
-#### Goal
 
 Practice identifying why a dynamically linked program fails to start.
 
@@ -1264,7 +1254,7 @@ libexample.so => not found
 libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6
 ```
 
-#### Interpretation
+Interpretation:
 
 - The program requires libexample.so.
 - The dynamic linker cannot find it.
@@ -1294,8 +1284,6 @@ ldconfig -p | grep libexample
 
 ### Scenario 6: Boot a Minimal Initramfs and Run a Static Program
 
-#### Goal
-
 Verify that a custom kernel can start a minimal user space and execute a test program.
 
 #### Simulate
@@ -1324,7 +1312,7 @@ Welcome to the custom initramfs shell!
 Hello from the custom kernel!
 ```
 
-#### Interpretation
+Interpretation:
 
 - The kernel booted successfully.
 - The initramfs /init script ran.
@@ -1334,8 +1322,6 @@ Hello from the custom kernel!
 This confirms that the kernel can load and execute a user-space ELF program.
 
 ### Scenario 7: Break on Kernel Exec Path with GDB
-
-#### Goal
 
 Observe the kernel execution path when a program runs.
 
@@ -1388,15 +1374,13 @@ Inside QEMU:
 Breakpoint 1, do_execveat_common (...)
 ```
 
-#### Interpretation
+Interpretation:
 
 - The kernel reached the exec path.
 - The program execution request entered kernel code.
 - You can now step through the loading process.
 
 ### Scenario 8: Observe ELF Handler Selection
-
-#### Goal
 
 Watch the kernel choose the correct binary format handler.
 
@@ -1424,8 +1408,6 @@ Run inside QEMU:
 This shows how Linux supports multiple executable formats.
 
 ### Scenario 9: Compare ELF Entry Point with Kernel Register Setup
-
-#### Goal
 
 Connect the ELF entry point to where execution begins.
 
@@ -1459,7 +1441,7 @@ Example output:
 $1 = 0x401530
 ```
 
-#### Interpretation
+Interpretation:
 
 - The ELF header says execution begins at 0x401530.
 - The kernel prepared the process so the CPU begins at that address.
@@ -1467,8 +1449,6 @@ $1 = 0x401530
 Exact addresses and structures may vary depending on architecture, compiler, static vs dynamic linking, and kernel version.
 
 ### Scenario 10: Trace Dynamic Linker Involvement
-
-#### Goal
 
 Understand that dynamically linked programs involve the dynamic linker.
 
@@ -1496,7 +1476,7 @@ Example output:
 [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
 ```
 
-#### Interpretation
+Interpretation:
 
 - The executable asks the kernel to start the dynamic linker.
 - The dynamic linker loads required shared libraries.

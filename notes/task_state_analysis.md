@@ -1,4 +1,5 @@
 ## Task-State Analysis for Monitoring Application Processes
+
 Task-state analysis is a way to understand what processes and threads are doing by looking at their runtime states.
 
 Traditional monitoring often starts with resource usage:
@@ -35,7 +36,7 @@ The main idea is:
 
 Threads inside the same process share resources such as memory, open files, and process-level settings.
 
-```text id="m1j6vu"
+```text
 +-------------------------------------+
 |             Process A               |
 |                                     |
@@ -61,6 +62,7 @@ For example, a web server may have:
 If many threads are waiting, users may experience slow responses even if CPU usage looks low.
 
 ### Task
+
 In Linux, a “task” is the kernel’s schedulable unit.
 
 A task may represent:
@@ -78,6 +80,7 @@ For a single-threaded process, the PID and TID are usually the same.
 For a multi-threaded process, all threads share the same process ID, but each thread has its own thread ID.
 
 ### Why Task-State Analysis Matters
+
 Task-state analysis is useful because resource usage alone can be misleading.
 
 Example:
@@ -107,6 +110,7 @@ Task-state analysis helps separate different types of problems:
 | Zombie accumulation | Tasks in zombie (**Z** state)                             |
 
 ### Common Linux Task States
+
 Linux process and thread states are often shown as letters.
 
 | State | Description           |
@@ -128,6 +132,7 @@ For example:
 The first letter is usually the most important state.
 
 ### `R`: Running or Runnable
+
 `R` means the task is either currently running on a CPU or ready to run as soon as CPU time is available.
 
 A task in `R` may be:
@@ -140,11 +145,12 @@ A few `R` tasks are normal.
 
 Many `R` tasks for a long time may suggest CPU pressure.
 
-```text id="t7m1ni"
+```text
 Many R tasks + high CPU usage + high run queue = possible CPU bottleneck
 ```
 
 ### `S`: Sleeping
+
 `S` means interruptible sleep.
 
 The task is waiting for something and can be woken up by a signal.
@@ -166,6 +172,7 @@ This is not automatically bad.
 - The important question is what they are waiting for.
 
 ### `D`: Uninterruptible Sleep
+
 `D` means uninterruptible sleep.
 
 A task in `D` state is usually waiting for a kernel-level operation to finish, often disk I/O or another low-level I/O operation.
@@ -183,7 +190,7 @@ A short-lived `D` state can be normal.
 
 Many tasks stuck in `D` for a long time is a warning sign.
 
-```text id="lhkwsc"
+```text
 Many D tasks + high iowait + high disk latency = likely I/O bottleneck
 ```
 
@@ -193,6 +200,7 @@ Important note:
 - They usually leave D state only when the kernel operation finishes.
 
 ### `T`: Stopped
+
 `T` means the task is stopped.
 
 This can happen when:
@@ -204,6 +212,7 @@ This can happen when:
 A stopped process is not running. It stays paused until continued.
 
 ### `Z`: Zombie
+
 `Z` means zombie.
 
 A zombie process has finished execution, but its parent process has not yet collected its exit status.
@@ -214,20 +223,21 @@ A few short-lived zombies are usually harmless.
 
 Many persistent zombies may indicate that a parent process is broken.
 
-```text id="k4b609"
+```text
 Zombie = child finished, parent has not reaped it
 ```
 
 ### Viewing Process and Thread States with `ps`
+
 A basic command to view process states is:
 
-```bash id="z9uzvv"
+```bash
 ps -eo pid,stat,comm
 ```
 
 Example output:
 
-```text id="hvsjak"
+```text
   PID STAT COMMAND
     1 Ss   systemd
  1234 S    myprocess
@@ -244,13 +254,13 @@ Interpretation:
 
 To include threads, use:
 
-```bash id="fr908r"
+```bash
 ps -eLo pid,tid,stat,comm
 ```
 
 Example output:
 
-```text id="ar8f10"
+```text
   PID   TID STAT COMMAND
  1234  1234 Sl   myprocess
  1234  1235 Rl   myprocess
@@ -264,15 +274,16 @@ Interpretation:
 - The other threads are sleeping.
 
 ### Viewing Threads for One Process
+
 To inspect threads for a specific PID:
 
-```bash id="vf2uhh"
+```bash
 ps -L -p 1234 -o pid,tid,stat,pcpu,pmem,comm
 ```
 
 Example output:
 
-```text id="bd6zt0"
+```text
   PID   TID STAT %CPU %MEM COMMAND
  1234  1234 Sl    0.0  1.2 myprocess
  1234  1235 Rl   95.0  1.2 myprocess
@@ -286,29 +297,30 @@ Interpretation:
 - Only one thread appears CPU-heavy in this sample.
 
 ### Using `/proc` for Task-State Analysis
+
 The `/proc` filesystem exposes runtime information about processes.
 
 For a process:
 
-```text id="dwxt6l"
+```text
 /proc/PID/
 ```
 
 For threads inside a process:
 
-```text id="oz791k"
+```text
 /proc/PID/task/TID/
 ```
 
 To view process status:
 
-```bash id="x7t863"
+```bash
 cat /proc/1234/status
 ```
 
 Example:
 
-```text id="ecz8vy"
+```text
 Name:   myprocess
 State:  S (sleeping)
 Tgid:   1234
@@ -323,17 +335,18 @@ Interpretation:
 - Tgid is the thread group ID, usually the main process ID.
 
 ### `/proc/PID/stat`
+
 The file `/proc/PID/stat` contains many fields.
 
 Example:
 
-```bash id="pswxe4"
+```bash
 cat /proc/1234/stat
 ```
 
 Example output:
 
-```text id="b5djmm"
+```text
 1234 (myprocess) S 1000 1234 1234 0 -1 4194560 ...
 ```
 
@@ -348,15 +361,16 @@ This means the process is sleeping.
 For scripting, `/proc/PID/status` is usually easier to read than `/proc/PID/stat`.
 
 ### Counting Task States
+
 A useful quick view is to count states across the system.
 
-```bash id="r0oaag"
+```bash
 ps -eo state | sort | uniq -c
 ```
 
 Example output:
 
-```text id="zuvsx5"
+```text
   4 D
   8 R
 230 S
@@ -374,7 +388,7 @@ A few sleeping tasks are normal. Many `D` tasks deserve investigation.
 
 To repeat every second:
 
-```bash id="yeu1r6"
+```bash
 while true; do
     date
     ps -eo state | sort | uniq -c
@@ -383,15 +397,16 @@ done
 ```
 
 ### Finding D-State Tasks
+
 To show tasks in uninterruptible sleep:
 
-```bash id="gagdm5"
+```bash
 ps -eo state,pid,cmd | awk '$1 ~ /^D/ {print}'
 ```
 
 Example output:
 
-```text id="xefz75"
+```text
 D  5678  myprocess
 D  6010  backup-worker
 ```
@@ -403,13 +418,13 @@ Interpretation:
 
 To include kernel wait channel:
 
-```bash id="oztb4c"
+```bash
 ps -eo pid,stat,wchan:30,comm | awk '$2 ~ /^D/ {print}'
 ```
 
 Example:
 
-```text id="fyi48b"
+```text
   PID STAT WCHAN                          COMMAND
  5678 D    wait_on_page_bit_common        myprocess
  6010 D    io_schedule                    backup-worker
@@ -421,11 +436,12 @@ Interpretation:
 - io_schedule and wait_on_page_bit_common often point toward I/O waits.
 
 ### `htop` for Interactive State Viewing
+
 `htop` shows processes interactively.
 
 Run:
 
-```bash id="e2g07m"
+```bash
 htop
 ```
 
@@ -443,9 +459,10 @@ In `htop`, look at the state column and CPU usage.
 `htop` is useful when you want to interactively explore which process or thread is active.
 
 ### `top` for Thread View
+
 To show threads in `top`, run:
 
-```bash id="a3yomg"
+```bash
 top -H -p 1234
 ```
 
@@ -456,7 +473,7 @@ Meaning:
 
 Example output:
 
-```text id="ngsjra"
+```text
   PID USER  PR NI S %CPU %MEM TIME+ COMMAND
  1235 user  20  0 R 99.0  1.0 1:20.00 myprocess
  1236 user  20  0 S  0.0  1.0 0:00.10 myprocess
@@ -469,17 +486,18 @@ Interpretation:
 - The other threads are sleeping.
 
 ### `perf top`
+
 `perf` can show where CPU time is being spent.
 
 Run:
 
-```bash id="ostcfd"
+```bash
 sudo perf top
 ```
 
 Example output:
 
-```text id="kzjxfy"
+```text
 Samples: 20K of event 'cycles'
 Overhead  Shared Object      Symbol
   35.10%  myapp              [.] calculate_hash
@@ -496,6 +514,7 @@ Interpretation:
 `perf` is useful after task-state analysis suggests the application is CPU-bound.
 
 ### Combining Task States with Other Tools
+
 Task states are most useful when combined with other metrics.
 
 | Observation      | What to Check                                                           |
@@ -509,30 +528,32 @@ Task states are most useful when combined with other metrics.
 Task-state analysis tells you where to look next.
 
 ### Scenario 1: Simulate CPU-Bound Threads in `R` State
-#### Goal
+
 Create CPU pressure and observe runnable/running tasks.
 
 #### Simulate the Bottleneck
+
 Install `stress-ng` if needed:
 
-```bash id="qzomwh"
+```bash
 sudo apt install stress-ng
 ```
 
 Run four CPU workers:
 
-```bash id="vvhyqk"
+```bash
 stress-ng --cpu 4 --timeout 60s
 ```
 
 #### Check with `top`
-```bash id="mkgy1h"
+
+```bash
 top
 ```
 
 Example output:
 
-```text id="xm7u7j"
+```text
 %Cpu(s): 96.0 us,  3.0 sy,  0.0 ni,  1.0 id,  0.0 wa
 
   PID USER      PR  NI S  %CPU COMMAND
@@ -540,31 +561,33 @@ Example output:
 ```
 
 #### Check Task States
-```bash id="jtbzxp"
+
+```bash
 ps -eLo pid,tid,stat,comm | grep stress-ng
 ```
 
 Example output:
 
-```text id="dtlfe5"
+```text
  4101  4101 R    stress-ng-cpu
  4101  4102 R    stress-ng-cpu
  4101  4103 R    stress-ng-cpu
  4101  4104 R    stress-ng-cpu
 ```
 
-#### Interpretation
+Interpretation:
 - The stress-ng workers are in R state.
 - CPU user time is high.
 - Idle time is very low.
 - This is a CPU-bound workload.
 
 #### What This Means in a Real Application
+
 If an application has many `R` threads and high CPU usage, it may be doing heavy computation or spinning in a loop.
 
 Next tools:
 
-```bash id="plrxyo"
+```bash
 top -H -p PID
 sudo perf top
 ```
@@ -578,34 +601,36 @@ Possible fixes:
 - move heavy jobs to off-peak hours
 
 ### Scenario 2: Simulate Sleeping Tasks in `S` State
-#### Goal
+
 Show that sleeping tasks are often normal.
 
 #### Simulate
+
 Run:
 
-```bash id="wapm6u"
+```bash
 sleep 300
 ```
 
 In another terminal, find it:
 
-```bash id="ycbrrc"
+```bash
 ps -eo pid,stat,comm | grep sleep
 ```
 
 Example output:
 
-```text id="g5ly8a"
+```text
  4200 S    sleep
 ```
 
-#### Interpretation
+Interpretation:
 - The process is sleeping while waiting for its timer to expire.
 - This is normal.
 - It is not consuming CPU.
 
 #### Real Meaning
+
 Many services spend much of their time sleeping because they are waiting for requests.
 
 Examples:
@@ -620,71 +645,73 @@ Sleeping alone is not a bottleneck.
 The question is whether the sleep is expected.
 
 ### Scenario 3: Simulate a Stopped Task in `T` State
-#### Goal
+
 Show what happens when a process is paused.
 
 #### Simulate
+
 Run a long sleep:
 
-```bash id="o39wp2"
+```bash
 sleep 300
 ```
 
 Find its PID:
 
-```bash id="fm9y8s"
+```bash
 pgrep -n sleep
 ```
 
 Example output:
 
-```text id="l2yjcu"
+```text
 4300
 ```
 
 Stop it:
 
-```bash id="v81ozo"
+```bash
 kill -STOP 4300
 ```
 
 Check state:
 
-```bash id="hg31wa"
+```bash
 ps -p 4300 -o pid,stat,comm
 ```
 
 Example output:
 
-```text id="ta2mhy"
+```text
   PID STAT COMMAND
  4300 T    sleep
 ```
 
-#### Interpretation
+Interpretation:
 - T means the process is stopped.
 - It will not continue until it receives SIGCONT.
 
 Continue it:
 
-```bash id="rqk0o4"
+```bash
 kill -CONT 4300
 ```
 
 Check again:
 
-```bash id="y5iuc6"
+```bash
 ps -p 4300 -o pid,stat,comm
 ```
 
 Example output:
 
-```text id="awursy"
+```text
   PID STAT COMMAND
  4300 S    sleep
 ```
 
 #### Real Meaning
+
 A `T` state may appear when:
 
 - a user presses Ctrl+Z
@@ -693,13 +720,14 @@ A `T` state may appear when:
 - job control suspends the process
 
 ### Scenario 4: Simulate a Zombie Process in `Z` State
-#### Goal
+
 Create a safe zombie process and learn how to identify it.
 
 #### Simulate with Python
+
 Create a small script:
 
-```bash id="mplue0"
+```bash
 cat > /tmp/make-zombie.py <<'EOF'
 import os
 import time
@@ -715,28 +743,29 @@ EOF
 
 Run it:
 
-```bash id="lugx2y"
+```bash
 python3 /tmp/make-zombie.py
 ```
 
 In another terminal:
 
-```bash id="aqb66m"
+```bash
 ps -eo pid,ppid,state,cmd | awk '$3 == "Z" {print}'
 ```
 
 Example output:
 
-```text id="y4iwcs"
+```text
  4451  4450 Z [python3] <defunct>
 ```
 
-#### Interpretation
+Interpretation:
 - The child process exited.
 - The parent process has not collected its exit status.
 - The zombie will disappear when the parent exits or reaps it.
 
 #### Real Meaning
+
 A few temporary zombies are not usually a problem.
 
 Many persistent zombies may mean:
@@ -748,21 +777,22 @@ Many persistent zombies may mean:
 Fix the parent process rather than trying to kill the zombie directly.
 
 ### Scenario 5: Simulate Disk I/O Pressure and Look for `D` State
-#### Goal
+
 Generate disk pressure, then check for blocked tasks and disk wait.
 
 `D` state is not always easy to reproduce safely because it depends on kernel-level I/O waits. A normal disk test may create high I/O wait without leaving many visible tasks stuck in `D`.
 
 #### Simulate Disk Pressure
+
 Install tools:
 
-```bash id="qzixyz"
+```bash
 sudo apt install fio sysstat iotop
 ```
 
 Run a random write workload:
 
-```bash id="pn2wdg"
+```bash
 mkdir -p ~/task-state-lab
 
 fio --name=randwrite-test \
@@ -778,22 +808,23 @@ fio --name=randwrite-test \
 ```
 
 #### Check Task States
-```bash id="jkm7kl"
+
+```bash
 ps -eo pid,stat,wchan:30,comm | awk '$2 ~ /^D/ {print}'
 ```
 
 Possible output:
 
-```text id="s24b50"
+```text
  5012 D    io_schedule                    fio
 ```
 
 Or there may be no output:
 
-```text id="fhq6fb"
+```text
 ```
 
-#### Interpretation
+Interpretation:
 If output shows `D`:
 
 - The process is blocked in uninterruptible sleep.
@@ -806,18 +837,19 @@ If there is no `D` output:
 - Check disk metrics with iostat and vmstat.
 
 #### Check with `iostat`
-```bash id="al2o4q"
+
+```bash
 iostat -xz 1
 ```
 
 Example output:
 
-```text id="vmvpvm"
+```text
 Device            r/s     w/s    rkB/s    wkB/s   await  aqu-sz  %util
 sda              0.00  5200.00    0.00  20800.0   48.30   25.60  99.90
 ```
 
-#### Interpretation
+Interpretation:
 - w/s is high.
 - await is high.
 - aqu-sz is high.
@@ -825,13 +857,14 @@ sda              0.00  5200.00    0.00  20800.0   48.30   25.60  99.90
 - The disk is saturated even if D-state sampling does not always catch it.
 
 #### Check with `vmstat`
-```bash id="dqco3x"
+
+```bash
 vmstat 1
 ```
 
 Example output:
 
-```text id="nzrsx2"
+```text
 r  b   swpd   free   buff  cache   si   so    bi    bo   in    cs us sy id wa st
 1  8      0 500000  20000 700000    0    0     0 75000 3000 9000  5  8 15 72  0
 ```
@@ -843,26 +876,27 @@ Interpretation:
 - This confirms an I/O bottleneck.
 
 ### Scenario 6: Simulate High Load from CPU vs High Load from I/O
-#### Goal
+
 Learn that load average can rise for different reasons.
 
 #### CPU-Based Load
+
 Run:
 
-```bash id="hf687l"
+```bash
 stress-ng --cpu 4 --timeout 60s
 ```
 
 Check:
 
-```bash id="ytan1o"
+```bash
 uptime
 vmstat 1
 ```
 
 Example:
 
-```text id="cepiaw"
+```text
 load average: 4.20, 2.10, 1.00
 
 r  b  us sy id wa
@@ -878,18 +912,19 @@ Interpretation:
 - This is CPU pressure.
 
 #### I/O-Based Load
+
 Run the `fio` random write test from Scenario 5.
 
 Check:
 
-```bash id="q1y7q9"
+```bash
 uptime
 vmstat 1
 ```
 
 Example:
 
-```text id="bhvsa1"
+```text
 load average: 6.80, 4.10, 2.30
 
 r  b  us sy id wa
@@ -903,13 +938,14 @@ Interpretation:
 - The load comes from tasks blocked on I/O.
 
 ### Scenario 7: Analyze a Multi-Threaded Process
-#### Goal
+
 See thread-level states inside one process.
 
 #### Simulate a Multi-Threaded Python Program
+
 Create a script:
 
-```bash id="y5yq3e"
+```bash
 cat > /tmp/thread-states.py <<'EOF'
 import threading
 import time
@@ -938,30 +974,31 @@ EOF
 
 Run it:
 
-```bash id="n2kgwo"
+```bash
 python3 /tmp/thread-states.py
 ```
 
 Find PID:
 
-```bash id="dyu8r6"
+```bash
 pgrep -f thread-states.py
 ```
 
 Example output:
 
-```text id="cmuk9s"
+```text
 5200
 ```
 
 #### Check Threads
-```bash id="if57s7"
+
+```bash
 ps -L -p 5200 -o pid,tid,stat,pcpu,comm
 ```
 
 Example output:
 
-```text id="cfh2tg"
+```text
   PID   TID STAT %CPU COMMAND
  5200  5200 Sl    0.0 python3
  5200  5201 Rl   99.0 python3
@@ -969,59 +1006,63 @@ Example output:
  5200  5203 Sl    0.0 python3
 ```
 
-#### Interpretation
+Interpretation:
 - The process has multiple threads.
 - One thread is CPU-bound in R state.
 - Other threads are sleeping.
 - Thread-level monitoring shows more detail than process-level monitoring alone.
 
 #### Check with `top`
-```bash id="odj41n"
+
+```bash
 top -H -p 5200
 ```
 
 This shows CPU usage by thread.
 
 ### Scenario 8: Detect Lock or Synchronization Waiting
-#### Goal
+
 Show how an application can be slow because threads wait, even when CPU is low.
 
 #### Simulate with File Locking
+
 Terminal 1:
 
-```bash id="xilfz5"
+```bash
 flock /tmp/demo.lock sleep 300
 ```
 
 Terminal 2:
 
-```bash id="z3rtoc"
+```bash
 flock /tmp/demo.lock echo "got lock"
 ```
 
 The second command waits because the first command holds the lock.
 
 #### Check State
+
 Find the waiting process:
 
-```bash id="s1u3ag"
+```bash
 ps -eo pid,stat,wchan:30,cmd | grep flock
 ```
 
 Example output:
 
-```text id="zn75jp"
+```text
  5400 S    do_wait                        flock /tmp/demo.lock sleep 300
  5410 S    locks_lock_inode_wait          flock /tmp/demo.lock echo got lock
 ```
 
-#### Interpretation
+Interpretation:
 - The waiting process is sleeping.
 - The wait channel suggests it is waiting on a lock.
 - This is not a CPU bottleneck.
 - It is synchronization or lock contention.
 
 #### Real Meaning
+
 In real applications, many sleeping threads may indicate:
 
 - database lock contention
@@ -1039,31 +1080,32 @@ Next tools may include:
 - language runtime profilers
 
 ### Scenario 9: Use `strace` to See What a Sleeping Process Waits On
-#### Goal
+
 Connect task state to system calls.
 
 #### Simulate
+
 Run:
 
-```bash id="x9q0es"
+```bash
 sleep 300
 ```
 
 Find PID:
 
-```bash id="crd4ti"
+```bash
 pgrep -n sleep
 ```
 
 Attach `strace`:
 
-```bash id="fhh76n"
+```bash
 sudo strace -p PID
 ```
 
 Example output:
 
-```text id="bhkt6i"
+```text
 restart_syscall(<... resuming interrupted nanosleep ...>
 ```
 
@@ -1074,7 +1116,7 @@ Interpretation:
 
 For a network server, `strace` might show:
 
-```text id="ycfvsk"
+```text
 accept(...)
 poll(...)
 epoll_wait(...)
@@ -1082,18 +1124,19 @@ epoll_wait(...)
 
 Interpretation:
 
-```text id="ot9z5w"
+```text
 The process is waiting for network events or connections.
 ```
 
 Use `strace` carefully on production systems because it can add overhead and expose sensitive data.
 
 ### Scenario 10: Create a Simple Task-State Sampler
-#### Goal
+
 Collect thread state counts over time.
 
 #### Script
-```bash id="iuxt82"
+
+```bash
 cat > ~/task-state-sampler.sh <<'EOF'
 #!/bin/bash
 
@@ -1113,13 +1156,13 @@ chmod +x ~/task-state-sampler.sh
 
 Run:
 
-```bash id="ud3w6d"
+```bash
 ~/task-state-sampler.sh 1 5
 ```
 
 Example output:
 
-```text id="p6n24g"
+```text
 ===== Mon Jun  1 15:00:01 CEST 2026 =====
   6 R
 210 S
@@ -1131,7 +1174,7 @@ Example output:
   1 Z
 ```
 
-#### Interpretation
+Interpretation:
 - Most tasks are sleeping.
 - Runnable tasks are present but not extreme.
 - One zombie exists.
@@ -1140,11 +1183,12 @@ Example output:
 This kind of sampling helps show trends over time.
 
 ### Scenario 11: Sample States for One Application
-#### Goal
+
 Track only one process and its threads.
 
 #### Script
-```bash id="g6f3dv"
+
+```bash
 cat > ~/sample-process-threads.sh <<'EOF'
 #!/bin/bash
 
@@ -1170,13 +1214,13 @@ chmod +x ~/sample-process-threads.sh
 
 Run:
 
-```bash id="e8dguq"
+```bash
 ~/sample-process-threads.sh 5200 1 5
 ```
 
 Example output:
 
-```text id="tfxfnm"
+```text
 ===== Mon Jun  1 15:05:01 CEST 2026 =====
   PID   TID STAT %CPU %MEM WCHAN                     COMMAND
  5200  5200 Sl    0.0  0.5 hrtimer_nanosleep          python3
@@ -1185,41 +1229,44 @@ Example output:
  5200  5203 Sl    0.0  0.5 hrtimer_nanosleep          python3
 ```
 
-#### Interpretation
+Interpretation:
 - One thread is CPU-bound.
 - Other threads are sleeping on timers.
 - The application slowdown, if present, would likely be caused by the CPU-heavy thread or single-threaded bottleneck.
 
 ### Scenario 12: Database-Like I/O Wait Investigation
-#### Goal
+
 Use task states to diagnose a slow, I/O-heavy application.
 
 #### Symptoms
+
 - Users report slow queries.
 - CPU usage is low.
 - Application response time is high.
 
 #### Check Task States
-```bash id="wuij6l"
+
+```bash
 ps -eo pid,stat,wchan:30,comm | awk '$2 ~ /^D/ {print}'
 ```
 
 Example output:
 
-```text id="xowm1m"
+```text
  6200 D    wait_on_page_bit_common        postgres
  6201 D    io_schedule                    postgres
  6202 D    io_schedule                    postgres
 ```
 
 #### Check Disk
-```bash id="nj0d4l"
+
+```bash
 iostat -xz 1 3
 ```
 
 Example output:
 
-```text id="y0mk6j"
+```text
 avg-cpu:  %user %system %iowait %idle
            5.00    2.00   90.00  3.00
 
@@ -1227,13 +1274,14 @@ Device            r/s    w/s   rkB/s   wkB/s  await  aqu-sz  %util
 sda            100.00  50.00 5120.0  2560.0   50.00    5.00  75.00
 ```
 
-#### Interpretation
+Interpretation:
 - Several database processes are in D state.
 - CPU iowait is very high.
 - Disk await is high.
 - The database is likely waiting on storage.
 
 #### Possible Fixes
+
 - optimize queries
 - add indexes carefully
 - increase database cache if memory allows
@@ -1243,23 +1291,25 @@ sda            100.00  50.00 5120.0  2560.0   50.00    5.00  75.00
 - check for disk errors
 
 ### Task-State Interpretation Guide
+
 #### Pattern: Many `R` Tasks
+
 Example:
 
-```text id="jihvlg"
+```text
 20 R
 180 S
 ```
 
 Likely meaning:
 
-```text id="bggjx6"
+```text
 CPU pressure or many runnable tasks
 ```
 
 Check:
 
-```bash id="owldld"
+```bash
 top
 vmstat 1
 uptime
@@ -1274,22 +1324,23 @@ Look for:
 - specific CPU-heavy process
 
 ### Pattern: Many `S` Tasks
+
 Example:
 
-```text id="pxmrpc"
+```text
 2 R
 250 S
 ```
 
 Likely meaning:
 
-```text id="l66flv"
+```text
 Normal idle waiting, or application-level waiting
 ```
 
 Check:
 
-```bash id="vsy2fb"
+```bash
 ps -eo pid,stat,wchan:30,comm
 application logs
 strace -p PID
@@ -1304,9 +1355,10 @@ Look for:
 - external service delays
 
 ### Pattern: Many `D` Tasks
+
 Example:
 
-```text id="nrsejm"
+```text
 1 R
 180 S
 15 D
@@ -1314,13 +1366,13 @@ Example:
 
 Likely meaning:
 
-```text id="rmefxq"
+```text
 I/O bottleneck or stuck kernel-level wait
 ```
 
 Check:
 
-```bash id="qpmy4r"
+```bash
 iostat -xz 1
 vmstat 1
 sudo iotop -o
@@ -1336,59 +1388,62 @@ Look for:
 - network filesystem problems
 
 ### Pattern: `T` Tasks
+
 Example:
 
-```text id="ggcz2r"
+```text
 PID STAT COMMAND
 4300 T    python3
 ```
 
 Likely meaning:
 
-```text id="pma0km"
+```text
 process was stopped by signal, shell job control, or debugger
 ```
 
 Check:
 
-```bash id="cwshze"
+```bash
 jobs
 ps -o pid,ppid,stat,cmd -p PID
 ```
 
 Fix:
 
-```bash id="s2x0m6"
+```bash
 kill -CONT PID
 ```
 
 ### Pattern: `Z` Tasks
+
 Example:
 
-```text id="s5ufqi"
+```text
 PID PPID STAT CMD
 4451 4450 Z    [python3] <defunct>
 ```
 
 Likely meaning:
 
-```text id="p4ixg0"
+```text
 child process exited but parent did not reap it
 ```
 
 Check:
 
-```bash id="cyxzl9"
+```bash
 ps -eo pid,ppid,state,cmd | awk '$3 == "Z" {print}'
 ```
 
 Fix:
 
-```text id="nsvjea"
+```text
 restart or fix the parent process
 ```
 
 ### Practical Troubleshooting Workflow
+
 When an application is slow:
 
 1. Identify the process ID.
@@ -1400,18 +1455,20 @@ When an application is slow:
 7. Use deeper tools only when needed.
 
 ### Step 1: Identify the PID
-```bash id="s8ga0a"
+
+```bash
 pgrep -af myprocess
 ```
 
 Example:
 
-```text id="cvd8q6"
+```text
 1234 /usr/local/bin/myprocess --config /etc/myprocess.conf
 ```
 
 ### Step 2: Check Overall System Health
-```bash id="bc5c6v"
+
+```bash
 uptime
 top
 free -h
@@ -1421,7 +1478,8 @@ vmstat 1
 This tells you whether the system is CPU-bound, memory-bound, or I/O-bound.
 
 ### Step 3: Inspect Threads
-```bash id="fq6ni0"
+
+```bash
 ps -L -p 1234 -o pid,tid,stat,pcpu,pmem,wchan:30,comm
 ```
 
@@ -1432,20 +1490,23 @@ Look for:
 - many sleeping threads on the same wait channel
 
 ### Step 4: Check Disk If D-State Appears
-```bash id="riobgq"
+
+```bash
 iostat -xz 1
 sudo iotop -o
 dmesg -T | grep -iE 'I/O|error|timeout|reset'
 ```
 
 ### Step 5: Check CPU Hotspots If R-State Dominates
-```bash id="kqcdjt"
+
+```bash
 top -H -p 1234
 sudo perf top
 ```
 
 ### Step 6: Check Application Logs
-```bash id="rqf19h"
+
+```bash
 journalctl -u myservice.service -b
 tail -f /var/log/myapp.log
 ```
@@ -1453,6 +1514,7 @@ tail -f /var/log/myapp.log
 Logs can reveal errors that task states alone cannot explain.
 
 ### Caveats of Task-State Analysis
+
 Task-state analysis is powerful, but it has limitations.
 
 - Tasks can change state very quickly.
@@ -1476,9 +1538,10 @@ Interpret states together with:
 - user reports
 
 ### Useful Command Summary
+
 Process and thread states:
 
-```bash id="x8ihrd"
+```bash
 ps -eo pid,stat,comm
 ps -eLo pid,tid,stat,comm
 ps -L -p PID -o pid,tid,stat,pcpu,pmem,wchan:30,comm
@@ -1486,25 +1549,25 @@ ps -L -p PID -o pid,tid,stat,pcpu,pmem,wchan:30,comm
 
 Count states:
 
-```bash id="oe2ew7"
+```bash
 ps -eo state | sort | uniq -c
 ```
 
 Find D-state tasks:
 
-```bash id="ji9yhu"
+```bash
 ps -eo pid,stat,wchan:30,comm | awk '$2 ~ /^D/ {print}'
 ```
 
 Find zombies:
 
-```bash id="mnfg96"
+```bash
 ps -eo pid,ppid,state,cmd | awk '$3 == "Z" {print}'
 ```
 
 Inspect `/proc`:
 
-```bash id="jcr6dv"
+```bash
 cat /proc/PID/status
 cat /proc/PID/stat
 ls /proc/PID/task
@@ -1512,7 +1575,7 @@ ls /proc/PID/task
 
 Interactive tools:
 
-```bash id="qjnrks"
+```bash
 top -H -p PID
 htop
 sudo perf top
@@ -1520,7 +1583,7 @@ sudo perf top
 
 Correlate with system metrics:
 
-```bash id="ufp6f3"
+```bash
 uptime
 vmstat 1
 iostat -xz 1
@@ -1530,9 +1593,10 @@ journalctl -u service.service -b
 ```
 
 ### Safe Lab Cleanup
+
 Remove test files:
 
-```bash id="nvlvv2"
+```bash
 rm -f /tmp/make-zombie.py
 rm -f /tmp/thread-states.py
 rm -f ~/task-state-sampler.sh
@@ -1542,7 +1606,7 @@ rm -rf ~/task-state-lab
 
 Stop leftover test processes if needed:
 
-```bash id="x7xgm5"
+```bash
 pkill -f thread-states.py
 pkill -f stress-ng
 pkill -f fio
@@ -1550,7 +1614,7 @@ pkill -f fio
 
 Be careful with `pkill` on shared systems. Confirm process names first with:
 
-```bash id="ks2s0m"
+```bash
 pgrep -af process-name
 ```
 

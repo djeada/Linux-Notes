@@ -738,8 +738,6 @@ Rule of thumb:
 
 ### Scenario 1: Allow SSH but Block HTTP with UFW
 
-#### Goal
-
 Allow remote administration through SSH while blocking web traffic on HTTP port 80.
 
 #### Simulate
@@ -812,7 +810,7 @@ or:
 curl: (28) Connection timed out
 ```
 
-#### Interpretation
+Interpretation:
 
 - SSH is allowed, so remote administration works.
 - HTTP is blocked, so web traffic cannot reach port 80.
@@ -820,8 +818,6 @@ curl: (28) Connection timed out
 - Connection refused may mean no service is listening or the firewall rejected it.
 
 ### Scenario 2: Deny Incoming by Default and Allow Outgoing
-
-#### Goal
 
 Create a secure default host firewall posture.
 
@@ -853,7 +849,7 @@ To                         Action      From
 22/tcp                     ALLOW IN    Anywhere
 ```
 
-#### Interpretation
+Interpretation:
 
 - Unsolicited inbound traffic is blocked.
 - Outbound traffic from the server is allowed.
@@ -861,8 +857,6 @@ To                         Action      From
 - This is a common baseline for servers.
 
 ### Scenario 3: Block ICMP Echo Requests
-
-#### Goal
 
 Prevent the system from replying to ping requests.
 
@@ -901,7 +895,7 @@ Request timeout for icmp_seq 1
 Request timeout for icmp_seq 2
 ```
 
-#### Interpretation
+Interpretation:
 
 - The server is not replying to ICMP echo requests.
 - This can reduce casual network discovery.
@@ -922,8 +916,6 @@ sudo iptables -D INPUT 1
 ```
 
 ### Scenario 4: Allow HTTP Only from One IP Address
-
-#### Goal
 
 Restrict access to a web service so only one trusted client can connect.
 
@@ -984,15 +976,13 @@ Example output:
 curl: (28) Failed to connect: Connection timed out
 ```
 
-#### Interpretation
+Interpretation:
 
 - The trusted IP can access HTTP.
 - Other sources are blocked.
 - This is useful for admin panels, staging sites, or private dashboards.
 
 ### Scenario 5: Safely Change Firewall Rules on a Remote Server
-
-#### Goal
 
 Avoid locking yourself out while changing firewall rules over SSH.
 
@@ -1052,15 +1042,13 @@ atq
 atrm JOB_ID
 ```
 
-#### Interpretation
+Interpretation:
 
 - The rollback timer protects against accidental lockout.
 - If you lose SSH access, UFW disables itself after 5 minutes.
 - If everything works, cancel the rollback job.
 
 ### Scenario 6: Allow SSH Only from Trusted IPs
-
-#### Goal
 
 Reduce SSH attack surface by allowing only known source addresses.
 
@@ -1095,7 +1083,7 @@ Status: active
 [ 2] 22/tcp    DENY IN     Anywhere
 ```
 
-#### Interpretation
+Interpretation:
 
 - Only 203.0.113.25 can connect to SSH.
 - Other IP addresses are denied.
@@ -1107,8 +1095,6 @@ Status: active
 - If your IP changes, you may lock yourself out.
 
 ### Scenario 7: Rate-Limit Incoming Connections
-
-#### Goal
 
 Limit repeated connection attempts to reduce brute-force or abuse.
 
@@ -1136,7 +1122,7 @@ Status: active
 [ 1] 22/tcp    LIMIT IN    Anywhere
 ```
 
-#### Interpretation
+Interpretation:
 
 - UFW allows SSH but rate-limits repeated connection attempts.
 - This can help reduce brute-force attempts.
@@ -1166,15 +1152,13 @@ num  pkts bytes target prot source      destination
 2     200  12K DROP   tcp  0.0.0.0/0   0.0.0.0/0 tcp dpt:8080
 ```
 
-#### Interpretation
+Interpretation:
 
 - New connections to port 8080 are allowed up to the rate limit.
 - Excess traffic is dropped.
 - This can reduce simple connection floods, but it is not a full DDoS solution.
 
 ### Scenario 8: Log Dropped Packets
-
-#### Goal
 
 Record blocked packets for investigation.
 
@@ -1209,7 +1193,7 @@ Example log:
 kernel: iptables denied: IN=eth0 OUT= MAC=... SRC=198.51.100.20 DST=203.0.113.10 LEN=60 PROTO=TCP SPT=51512 DPT=23
 ```
 
-#### Interpretation
+Interpretation:
 
 - A packet from 198.51.100.20 tried to reach port 23.
 - Port 23 is Telnet, which is usually unsafe.
@@ -1221,8 +1205,6 @@ kernel: iptables denied: IN=eth0 OUT= MAC=... SRC=198.51.100.20 DST=203.0.113.10
 - Logging every dropped packet can flood logs and hurt performance.
 
 ### Scenario 9: Forward Port 8080 to Port 80
-
-#### Goal
 
 Redirect traffic arriving on port 8080 to a service listening on port 80.
 
@@ -1268,15 +1250,13 @@ Example output:
 HTTP/1.1 200 OK
 ```
 
-#### Interpretation
+Interpretation:
 
 - The client connects to port 8080.
 - iptables redirects the connection to local port 80.
 - The web server responds successfully.
 
 ### Scenario 10: Block Outgoing Traffic to a Specific IP
-
-#### Goal
 
 Prevent the server from connecting to a known unwanted destination.
 
@@ -1316,7 +1296,7 @@ Example output:
 curl: (7) Failed to connect to 203.0.113.200 port 80
 ```
 
-#### Interpretation
+Interpretation:
 
 - The local system is blocked from connecting to that IP.
 - Outbound filtering can help prevent compromised systems from calling known malicious infrastructure.
@@ -1335,8 +1315,6 @@ For domain-based blocking, consider:
 - regularly updated IP sets
 
 ### Scenario 11: firewalld Public Zone with HTTP and HTTPS
-
-#### Goal
 
 Allow web traffic using firewalld.
 
@@ -1362,7 +1340,7 @@ public (active)
   ports:
 ```
 
-#### Interpretation
+Interpretation:
 
 - The public zone allows SSH, HTTP, and HTTPS.
 - Web clients should be able to connect if services are listening.
@@ -1374,8 +1352,6 @@ sudo ss -tulnp | grep -E ':80|:443'
 ```
 
 ### Scenario 12: firewalld Custom Port
-
-#### Goal
 
 Allow a custom TCP port, such as 8443.
 
@@ -1398,14 +1374,12 @@ Example output:
 8443/tcp
 ```
 
-#### Interpretation
+Interpretation:
 
 - TCP port 8443 is open in the active zone.
 - A service still must be listening on that port for clients to connect.
 
 ### Scenario 13: firewalld Runtime vs Permanent Rule
-
-#### Goal
 
 Understand why a rule may disappear after reload.
 
@@ -1446,7 +1420,7 @@ Example:
 
 No output.
 
-#### Interpretation
+Interpretation:
 
 - The rule was runtime-only.
 - It disappeared after reload.
@@ -1460,8 +1434,6 @@ sudo firewall-cmd --reload
 ```
 
 ### Scenario 14: Diagnose “Service Is Running but Not Reachable”
-
-#### Goal
 
 Use firewall tools to separate service problems from firewall problems.
 
@@ -1529,7 +1501,7 @@ To        Action      From
 80/tcp    DENY IN     Anywhere
 ```
 
-#### Interpretation
+Interpretation:
 
 - The service is running.
 - The firewall blocks port 80.
@@ -1542,8 +1514,6 @@ sudo ufw allow 80/tcp
 ```
 
 ### Scenario 15: Diagnose “Firewall Rule Exists but Still Cannot Connect”
-
-#### Goal
 
 Understand that firewall rules are only one part of connectivity.
 

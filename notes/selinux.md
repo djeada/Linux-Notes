@@ -18,7 +18,7 @@ SELinux goes further. It controls what processes are allowed to do, even if norm
 
 The main idea is:
 
-```text id="vgn1kx"
+```text
 Normal permissions ask:
 Does this user have access?
 
@@ -53,7 +53,7 @@ This is one of the most important SELinux concepts.
 
 SELinux does not replace normal permissions. Both must allow the action.
 
-```text id="rfye0d"
+```text
 Access allowed only if:
 
 DAC allows it
@@ -69,7 +69,7 @@ These labels are called security contexts.
 
 When a process tries to access a file, socket, port, or other object, SELinux compares the process context with the object context and checks the loaded policy.
 
-```text id="c1tqxl"
+```text
 +-------------------+
 | Process           |
 | Example: httpd    |
@@ -114,7 +114,7 @@ SELinux policy defines what domains can do to what types.
 
 A simplified SELinux architecture looks like this:
 
-```text id="uccnxa"
+```text
 +---------------------------------------------------+
 |                   User Process                    |
 |        Example: web server, SSH daemon, app       |
@@ -184,7 +184,7 @@ Examples:
 
 Example:
 
-```text id="v8dwwl"
+```text
 Subject:
 httpd process running as httpd_t
 
@@ -203,13 +203,13 @@ Every SELinux-labeled process and object has a security context.
 
 A context usually has four parts:
 
-```text id="n8yb2b"
+```text
 SELinux user : role : type : level
 ```
 
 Example file context:
 
-```text id="sgetfu"
+```text
 system_u:object_r:httpd_sys_content_t:s0
 ```
 
@@ -224,7 +224,7 @@ Breakdown:
 
 The type is usually the most important part for everyday troubleshooting.
 
-```text id="q2yyg7"
+```text
 In most common SELinux troubleshooting:
 focus on the type.
 ```
@@ -233,13 +233,13 @@ focus on the type.
 
 To view process contexts:
 
-```bash id="muo5j3"
+```bash
 ps -eZ | grep sshd
 ```
 
 Example output:
 
-```text id="mr30yg"
+```text
 system_u:system_r:sshd_t:s0-s0:c0.c1023  1234 ? 00:00:00 sshd
 ```
 
@@ -252,13 +252,13 @@ Interpretation:
 
 To view file contexts:
 
-```bash id="c15tmz"
+```bash
 ls -Z /var/www/html/index.html
 ```
 
 Example output:
 
-```text id="irkgyi"
+```text
 -rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 /var/www/html/index.html
 ```
 
@@ -275,14 +275,14 @@ It cares strongly about labels.
 
 For example, two files may have the same normal permissions:
 
-```text id="latl1v"
+```text
 -rw-r--r-- index.html
 -rw-r--r-- secret.txt
 ```
 
 But they may have different SELinux types:
 
-```text id="xzi1bh"
+```text
 index.html   httpd_sys_content_t
 secret.txt   user_home_t
 ```
@@ -305,7 +305,7 @@ In enforcing mode, SELinux policy is active.
 
 Unauthorized actions are blocked and logged.
 
-```text id="g18ov8"
+```text
 SELinux policy says deny
         |
         v
@@ -321,7 +321,7 @@ This is the normal recommended mode for production systems.
 
 In permissive mode, SELinux does not block actions, but it still logs what would have been denied.
 
-```text id="h1lar2"
+```text
 SELinux policy says deny
         |
         v
@@ -357,37 +357,37 @@ Switching from disabled back to enabled may require relabeling the filesystem.
 
 Use:
 
-```bash id="hgk97p"
+```bash
 getenforce
 ```
 
 Example outputs:
 
-```text id="xn2ez9"
+```text
 Enforcing
 ```
 
 or:
 
-```text id="w5vcno"
+```text
 Permissive
 ```
 
 or:
 
-```text id="r0gbtz"
+```text
 Disabled
 ```
 
 For more detail:
 
-```bash id="ky492l"
+```bash
 sestatus
 ```
 
 Example output:
 
-```text id="cxixy5"
+```text
 SELinux status:                 enabled
 Current mode:                   enforcing
 Mode from config file:          enforcing
@@ -404,31 +404,31 @@ Interpretation:
 
 To switch to permissive mode temporarily:
 
-```bash id="b0g8ze"
+```bash
 sudo setenforce 0
 ```
 
 or:
 
-```bash id="lq6f8g"
+```bash
 sudo setenforce Permissive
 ```
 
 To switch back to enforcing:
 
-```bash id="bqro73"
+```bash
 sudo setenforce 1
 ```
 
 or:
 
-```bash id="fqpisl"
+```bash
 sudo setenforce Enforcing
 ```
 
 Verify:
 
-```bash id="oyy9d7"
+```bash
 getenforce
 ```
 
@@ -441,19 +441,19 @@ Important:
 
 The main configuration file is:
 
-```text id="i3df91"
+```text
 /etc/selinux/config
 ```
 
 Open it:
 
-```bash id="i5ec2b"
+```bash
 sudo nano /etc/selinux/config
 ```
 
 Example:
 
-```text id="s07jqs"
+```text
 SELINUX=enforcing
 SELINUXTYPE=targeted
 ```
@@ -480,7 +480,7 @@ Common policy types include:
 
 For most systems, the common policy is:
 
-```text id="hge8b0"
+```text
 targeted
 ```
 
@@ -545,49 +545,49 @@ Package names vary by distribution.
 
 View file context:
 
-```bash id="znnqe7"
+```bash
 ls -Z /path/to/file
 ```
 
 View directory context:
 
-```bash id="rk5od6"
+```bash
 ls -Zd /path/to/directory
 ```
 
 Example:
 
-```bash id="i7r0k5"
+```bash
 ls -Zd /var/www/html
 ```
 
 Output:
 
-```text id="r1z2dy"
+```text
 drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 /var/www/html
 ```
 
 View process context:
 
-```bash id="psuu6z"
+```bash
 ps -eZ | grep httpd
 ```
 
 or:
 
-```bash id="wt7d6z"
+```bash
 ps -eZ | grep nginx
 ```
 
 Example:
 
-```text id="r6jpar"
+```text
 system_u:system_r:httpd_t:s0  2345 ? 00:00:00 nginx
 ```
 
 Interpretation:
 
-```text id="xjqgpx"
+```text
 The web service process is running in the httpd_t domain.
 ```
 
@@ -601,7 +601,7 @@ The `chcon` command changes a file or directory context directly.
 
 Example:
 
-```bash id="l7i0um"
+```bash
 sudo chcon -t httpd_sys_content_t /srv/mywebsite/index.html
 ```
 
@@ -609,7 +609,7 @@ This changes only the type.
 
 To apply recursively:
 
-```bash id="abz7en"
+```bash
 sudo chcon -R -t httpd_sys_content_t /srv/mywebsite
 ```
 
@@ -626,7 +626,7 @@ The `restorecon` command restores files to their expected default SELinux contex
 
 Example:
 
-```bash id="ncyzzw"
+```bash
 sudo restorecon -Rv /var/www/html
 ```
 
@@ -637,7 +637,7 @@ Options:
 
 Example output:
 
-```text id="j5co9b"
+```text
 Relabeled /var/www/html/index.html from unconfined_u:object_r:default_t:s0 to system_u:object_r:httpd_sys_content_t:s0
 ```
 
@@ -652,13 +652,13 @@ For custom directories, use `semanage fcontext`.
 
 Example:
 
-```bash id="g3m8wx"
+```bash
 sudo semanage fcontext -a -t httpd_sys_content_t "/srv/mywebsite(/.*)?"
 ```
 
 Then apply it:
 
-```bash id="yck1zu"
+```bash
 sudo restorecon -Rv /srv/mywebsite
 ```
 
@@ -692,19 +692,19 @@ They let administrators adjust policy behavior without writing a new policy modu
 
 List all booleans:
 
-```bash id="tjtd1v"
+```bash
 getsebool -a
 ```
 
 Filter for web server booleans:
 
-```bash id="vm7czz"
+```bash
 getsebool -a | grep httpd
 ```
 
 Example output:
 
-```text id="t8v1y2"
+```text
 httpd_can_network_connect --> off
 httpd_enable_homedirs --> off
 httpd_read_user_content --> off
@@ -719,7 +719,7 @@ Interpretation:
 
 Example:
 
-```bash id="h0q6bh"
+```bash
 sudo setsebool httpd_can_network_connect on
 ```
 
@@ -729,7 +729,7 @@ This applies until reboot.
 
 Use `-P`:
 
-```bash id="qa8xzr"
+```bash
 sudo setsebool -P httpd_can_network_connect on
 ```
 
@@ -752,13 +752,13 @@ For example, a web server is normally allowed to bind to ports labeled as HTTP p
 
 View HTTP port mappings:
 
-```bash id="aapobw"
+```bash
 sudo semanage port -l | grep http_port_t
 ```
 
 Example output:
 
-```text id="ced7m3"
+```text
 http_port_t    tcp    80, 81, 443, 488, 8008, 8009, 8443
 ```
 
@@ -769,13 +769,13 @@ Interpretation:
 
 Add a custom HTTP port:
 
-```bash id="v77dwp"
+```bash
 sudo semanage port -a -t http_port_t -p tcp 8081
 ```
 
 If the port already exists under another type, modify instead:
 
-```bash id="dkbs6e"
+```bash
 sudo semanage port -m -t http_port_t -p tcp 8081
 ```
 
@@ -787,31 +787,31 @@ AVC means Access Vector Cache.
 
 Main log location:
 
-```text id="vtog7v"
+```text
 /var/log/audit/audit.log
 ```
 
 Search for SELinux denials from today:
 
-```bash id="qzib85"
+```bash
 sudo ausearch -m avc -ts today
 ```
 
 Search by command name:
 
-```bash id="lfng6i"
+```bash
 sudo ausearch -m avc -c nginx
 ```
 
 or:
 
-```bash id="ibtixf"
+```bash
 sudo ausearch -m avc -c httpd
 ```
 
 Example AVC denial:
 
-```text id="og5l29"
+```text
 type=AVC msg=audit(1609459200.123:456): avc:  denied  { read } for  pid=1234 comm="nginx" name="index.html" dev="sda1" ino=56789 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
 ```
 
@@ -835,13 +835,13 @@ Interpretation:
 
 Use:
 
-```bash id="rycthe"
+```bash
 sudo ausearch -m avc -ts today | audit2why
 ```
 
 Example output:
 
-```text id="kde1nc"
+```text
 type=AVC ... denied { read } ...
 Was caused by:
 Missing type enforcement rule.
@@ -856,7 +856,7 @@ Interpretation:
 
 If `setroubleshoot` is installed:
 
-```bash id="e6588j"
+```bash
 sudo sealert -a /var/log/audit/audit.log
 ```
 
@@ -870,7 +870,7 @@ As a last resort, you can generate a custom policy module from audit logs.
 
 Example:
 
-```bash id="va266v"
+```bash
 sudo grep nginx /var/log/audit/audit.log | audit2allow -M nginx_custom
 sudo semodule -i nginx_custom.pp
 ```
@@ -898,7 +898,7 @@ When something fails and SELinux may be involved:
 
 Useful commands:
 
-```bash id="btfxtj"
+```bash
 getenforce
 sestatus
 ls -Z path
@@ -911,36 +911,34 @@ sudo setsebool -P boolean_name on
 
 ### Scenario 1: Check SELinux Mode and Temporarily Switch to Permissive
 
-#### Goal
-
 Learn how to check and temporarily change SELinux enforcement.
 
 #### Check Mode
 
-```bash id="j4t4zn"
+```bash
 getenforce
 ```
 
 Example output:
 
-```text id="l4ypd5"
+```text
 Enforcing
 ```
 
 #### Simulate Troubleshooting Mode
 
-```bash id="lunhrz"
+```bash
 sudo setenforce 0
 getenforce
 ```
 
 Example output:
 
-```text id="eufki1"
+```text
 Permissive
 ```
 
-#### Interpretation
+Interpretation:
 
 - SELinux is still enabled.
 - It will log policy violations but will not block them.
@@ -948,14 +946,14 @@ Permissive
 
 #### Restore Enforcing Mode
 
-```bash id="vhf6vk"
+```bash
 sudo setenforce 1
 getenforce
 ```
 
 Expected output:
 
-```text id="dzbi6w"
+```text
 Enforcing
 ```
 
@@ -966,21 +964,19 @@ Enforcing
 
 ### Scenario 2: Simulate a Web Server File Context Problem
 
-#### Goal
-
 Show how a service can fail because files have the wrong SELinux label.
 
 #### Situation
 
 A web server is configured to serve files from:
 
-```text id="fygor9"
+```text
 /srv/mywebsite
 ```
 
 The file permissions are correct, but the site returns:
 
-```text id="bd474v"
+```text
 403 Forbidden
 ```
 
@@ -990,24 +986,24 @@ or the service logs show access denied.
 
 Create test content:
 
-```bash id="a5jef1"
+```bash
 sudo mkdir -p /srv/mywebsite
 echo "Hello from SELinux test" | sudo tee /srv/mywebsite/index.html
 ```
 
 Check context:
 
-```bash id="g3f13z"
+```bash
 ls -Z /srv/mywebsite/index.html
 ```
 
 Example output:
 
-```text id="sl8pc0"
+```text
 -rw-r--r--. root root unconfined_u:object_r:default_t:s0 /srv/mywebsite/index.html
 ```
 
-#### Interpretation
+Interpretation:
 
 - The file is labeled default_t.
 - A web server process running as httpd_t is usually not allowed to read default_t.
@@ -1015,23 +1011,23 @@ Example output:
 
 #### Check AVC Denial
 
-```bash id="z5qyod"
+```bash
 sudo ausearch -m avc -ts recent -c nginx
 ```
 
 or:
 
-```bash id="ehcxa5"
+```bash
 sudo ausearch -m avc -ts recent -c httpd
 ```
 
 Example output:
 
-```text id="ihbcm0"
+```text
 type=AVC msg=audit(...): avc:  denied  { open } for  pid=1234 comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
 ```
 
-#### Interpretation
+Interpretation:
 
 - The web server process is httpd_t.
 - The file is default_t.
@@ -1040,27 +1036,27 @@ type=AVC msg=audit(...): avc:  denied  { open } for  pid=1234 comm="nginx" path=
 
 #### Temporary Test Fix with `chcon`
 
-```bash id="g47r77"
+```bash
 sudo chcon -R -t httpd_sys_content_t /srv/mywebsite
 ls -Z /srv/mywebsite/index.html
 ```
 
 Expected context:
 
-```text id="xv06yw"
+```text
 unconfined_u:object_r:httpd_sys_content_t:s0
 ```
 
 #### Permanent Fix with `semanage fcontext`
 
-```bash id="gdfvkw"
+```bash
 sudo semanage fcontext -a -t httpd_sys_content_t "/srv/mywebsite(/.*)?"
 sudo restorecon -Rv /srv/mywebsite
 ```
 
 Example output:
 
-```text id="wdpw86"
+```text
 Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:default_t:s0 to system_u:object_r:httpd_sys_content_t:s0
 ```
 
@@ -1072,43 +1068,41 @@ Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:default_t:s0 to s
 
 ### Scenario 3: Demonstrate `chcon` Is Temporary
 
-#### Goal
-
 Show why `chcon` is not the best permanent fix.
 
 #### Simulate
 
-```bash id="fec4w0"
+```bash
 sudo chcon -R -t httpd_sys_content_t /srv/mywebsite
 ls -Z /srv/mywebsite/index.html
 ```
 
 Example output:
 
-```text id="s3vui0"
+```text
 unconfined_u:object_r:httpd_sys_content_t:s0 index.html
 ```
 
 Now run:
 
-```bash id="uwbcl6"
+```bash
 sudo restorecon -Rv /srv/mywebsite
 ```
 
 If no persistent `semanage fcontext` rule exists, example output may show:
 
-```text id="p5s9mq"
+```text
 Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:httpd_sys_content_t:s0 to unconfined_u:object_r:default_t:s0
 ```
 
-#### Interpretation
+Interpretation:
 
 - restorecon reverted the file to the default label for that path.
 - The chcon change did not define a permanent labeling rule.
 
 #### Permanent Fix
 
-```bash id="uqwij5"
+```bash
 sudo semanage fcontext -a -t httpd_sys_content_t "/srv/mywebsite(/.*)?"
 sudo restorecon -Rv /srv/mywebsite
 ```
@@ -1121,8 +1115,6 @@ sudo restorecon -Rv /srv/mywebsite
 
 ### Scenario 4: Simulate a Web Server Network Connection Denied by Boolean
 
-#### Goal
-
 Show how SELinux booleans control optional service behavior.
 
 #### Situation
@@ -1133,29 +1125,29 @@ The application fails even though networking and firewall rules are correct.
 
 #### Check Boolean
 
-```bash id="eq1ghg"
+```bash
 getsebool httpd_can_network_connect
 ```
 
 Example output:
 
-```text id="qm1440"
+```text
 httpd_can_network_connect --> off
 ```
 
 #### Check AVC Denial
 
-```bash id="in5kii"
+```bash
 sudo ausearch -m avc -ts recent | grep name_connect
 ```
 
 Example output:
 
-```text id="lju6rh"
+```text
 avc:  denied  { name_connect } for  pid=2222 comm="nginx" dest=5432 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:postgresql_port_t:s0 tclass=tcp_socket
 ```
 
-#### Interpretation
+Interpretation:
 
 - The web server process tried to make an outbound network connection.
 - SELinux denied name_connect.
@@ -1165,37 +1157,35 @@ avc:  denied  { name_connect } for  pid=2222 comm="nginx" dest=5432 scontext=sys
 
 Temporarily:
 
-```bash id="uz360r"
+```bash
 sudo setsebool httpd_can_network_connect on
 ```
 
 Persistently:
 
-```bash id="avhtjs"
+```bash
 sudo setsebool -P httpd_can_network_connect on
 ```
 
 Verify:
 
-```bash id="ihffru"
+```bash
 getsebool httpd_can_network_connect
 ```
 
 Expected output:
 
-```text id="d92t24"
+```text
 httpd_can_network_connect --> on
 ```
 
 #### Lesson
 
-```text id="s087er"
+```text
 Booleans are safer than custom policy when the policy already provides a supported switch.
 ```
 
 ### Scenario 5: Simulate a Service Binding to a Nonstandard Port
-
-#### Goal
 
 Show how SELinux controls network port usage.
 
@@ -1203,7 +1193,7 @@ Show how SELinux controls network port usage.
 
 A web server is configured to listen on port:
 
-```text id="td89my"
+```text
 8081
 ```
 
@@ -1211,32 +1201,32 @@ The service fails to start.
 
 #### Check Logs
 
-```bash id="sl8ms3"
+```bash
 sudo ausearch -m avc -ts recent | grep name_bind
 ```
 
 Example output:
 
-```text id="aue8od"
+```text
 avc: denied { name_bind } for pid=3333 comm="nginx" src=8081 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
 ```
 
-#### Interpretation
+Interpretation:
 
-```text id="z2c0n1"
+```text
 The web server tried to bind to TCP port 8081.
 SELinux does not currently label that port as an allowed HTTP port.
 ```
 
 #### Check Allowed HTTP Ports
 
-```bash id="k7tl4y"
+```bash
 sudo semanage port -l | grep http_port_t
 ```
 
 Example output:
 
-```text id="hlsp2p"
+```text
 http_port_t tcp 80, 81, 443, 488, 8008, 8009, 8443
 ```
 
@@ -1244,31 +1234,31 @@ http_port_t tcp 80, 81, 443, 488, 8008, 8009, 8443
 
 Add port 8081 as an HTTP port:
 
-```bash id="ucn4pv"
+```bash
 sudo semanage port -a -t http_port_t -p tcp 8081
 ```
 
 Verify:
 
-```bash id="zo7t2s"
+```bash
 sudo semanage port -l | grep http_port_t
 ```
 
 Expected output includes:
 
-```text id="q63qdd"
+```text
 8081
 ```
 
 Restart service:
 
-```bash id="fz208c"
+```bash
 sudo systemctl restart nginx
 ```
 
 or:
 
-```bash id="rxivz4"
+```bash
 sudo systemctl restart httpd
 ```
 
@@ -1279,8 +1269,6 @@ sudo systemctl restart httpd
 
 ### Scenario 6: Simulate FTP Access to Home Directories Blocked by SELinux
 
-#### Goal
-
 Show how booleans can allow or deny service access to user home directories.
 
 #### Situation
@@ -1289,29 +1277,29 @@ FTP login works, but users cannot access files in their home directories.
 
 #### Check Boolean
 
-```bash id="k7qz5z"
+```bash
 getsebool ftp_home_dir
 ```
 
 Example output:
 
-```text id="zwlw6l"
+```text
 ftp_home_dir --> off
 ```
 
 #### Check AVC Denial
 
-```bash id="w4f05e"
+```bash
 sudo ausearch -m avc -ts recent -c vsftpd
 ```
 
 Example output:
 
-```text id="x6i3wi"
+```text
 avc: denied { read } for pid=4444 comm="vsftpd" name="notes.txt" scontext=system_u:system_r:ftpd_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file
 ```
 
-#### Interpretation
+Interpretation:
 
 - The FTP service is running in ftpd_t.
 - The file is labeled user_home_t.
@@ -1319,44 +1307,42 @@ avc: denied { read } for pid=4444 comm="vsftpd" name="notes.txt" scontext=system
 
 #### Fix
 
-```bash id="txknmn"
+```bash
 sudo setsebool -P ftp_home_dir on
 ```
 
 Verify:
 
-```bash id="idtot0"
+```bash
 getsebool ftp_home_dir
 ```
 
 Expected output:
 
-```text id="w2z171"
+```text
 ftp_home_dir --> on
 ```
 
 #### Lesson
 
-```text id="dj6i48"
+```text
 SELinux booleans allow common optional behaviors without writing custom policy.
 ```
 
 ### Scenario 7: Simulate Permissive Mode Logging
 
-#### Goal
-
 Understand the difference between permissive and enforcing behavior.
 
 #### Step 1: Put SELinux in Permissive Mode
 
-```bash id="b8fpi0"
+```bash
 sudo setenforce 0
 getenforce
 ```
 
 Expected output:
 
-```text id="kk09y1"
+```text
 Permissive
 ```
 
@@ -1364,7 +1350,7 @@ Permissive
 
 For example, use a web content file with the wrong label:
 
-```bash id="e0gfps"
+```bash
 sudo chcon -R -t default_t /srv/mywebsite
 ```
 
@@ -1372,17 +1358,17 @@ Access it through the web server.
 
 #### Step 3: Check Logs
 
-```bash id="vxw908"
+```bash
 sudo ausearch -m avc -ts recent
 ```
 
 Example output:
 
-```text id="sj46yf"
+```text
 avc: denied { read } for pid=1234 comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=1
 ```
 
-#### Interpretation
+Interpretation:
 
 - The denial was logged.
 - permissive=1 means the action was allowed because SELinux is in permissive mode.
@@ -1390,7 +1376,7 @@ avc: denied { read } for pid=1234 comm="nginx" path="/srv/mywebsite/index.html" 
 
 #### Restore Enforcing Mode
 
-```bash id="r63r0i"
+```bash
 sudo setenforce 1
 ```
 
@@ -1401,79 +1387,77 @@ sudo setenforce 1
 
 ### Scenario 8: Diagnose “Permission Denied” When Unix Permissions Look Correct
 
-#### Goal
-
 Show the standard SELinux troubleshooting pattern.
 
 #### Situation
 
 A service fails with:
 
-```text id="srzymi"
+```text
 Permission denied
 ```
 
 But normal permissions look correct:
 
-```bash id="k17sxu"
+```bash
 ls -l /srv/mywebsite/index.html
 ```
 
 Example output:
 
-```text id="qqi7hz"
+```text
 -rw-r--r--. root root 25 Jun 1 12:00 /srv/mywebsite/index.html
 ```
 
 #### Step 1: Check SELinux Mode
 
-```bash id="rgz7lq"
+```bash
 getenforce
 ```
 
 Example:
 
-```text id="vf6jkp"
+```text
 Enforcing
 ```
 
 #### Step 2: Check File Context
 
-```bash id="r84cjh"
+```bash
 ls -Z /srv/mywebsite/index.html
 ```
 
 Example:
 
-```text id="t2024a"
+```text
 unconfined_u:object_r:default_t:s0 index.html
 ```
 
 #### Step 3: Check Process Context
 
-```bash id="yrk2y6"
+```bash
 ps -eZ | grep nginx
 ```
 
 Example:
 
-```text id="yq5w0y"
+```text
 system_u:system_r:httpd_t:s0  1234 ? 00:00:00 nginx
 ```
 
 #### Step 4: Check AVC Logs
 
-```bash id="s5fsnm"
+```bash
 sudo ausearch -m avc -ts recent -c nginx
 ```
 
 Example:
 
-```text id="c53fed"
+```text
 avc: denied { read } for comm="nginx" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
 ```
 
-#### Interpretation
+Interpretation:
 
 - Unix permissions allow reading.
 - SELinux denies reading because the file type is default_t.
@@ -1481,26 +1465,24 @@ avc: denied { read } for comm="nginx" scontext=system_u:system_r:httpd_t:s0 tcon
 
 #### Fix
 
-```bash id="obhagq"
+```bash
 sudo semanage fcontext -a -t httpd_sys_content_t "/srv/mywebsite(/.*)?"
 sudo restorecon -Rv /srv/mywebsite
 ```
 
 ### Scenario 9: Use `audit2why` Before Making Changes
 
-#### Goal
-
 Use audit tools to understand denials before fixing them.
 
 #### Search and Explain
 
-```bash id="pzh520"
+```bash
 sudo ausearch -m avc -ts recent | audit2why
 ```
 
 Example output:
 
-```text id="sjbn9e"
+```text
 type=AVC ... denied { read } ...
 Was caused by:
 Missing type enforcement rule.
@@ -1508,7 +1490,7 @@ Missing type enforcement rule.
 Possible mismatch between source and target contexts.
 ```
 
-#### Interpretation
+Interpretation:
 
 - The tool confirms SELinux policy blocked the action.
 - Before creating a policy module, check whether the target has the wrong label.
@@ -1522,8 +1504,6 @@ Possible mismatch between source and target contexts.
 
 ### Scenario 10: Generate a Custom Policy Only as a Last Resort
 
-#### Goal
-
 Understand how custom policy modules are created and why they require caution.
 
 #### Simulate
@@ -1532,13 +1512,13 @@ Suppose a custom application `myapp` is denied access and there is no existing b
 
 Collect relevant denials:
 
-```bash id="m2ma96"
+```bash
 sudo ausearch -m avc -ts recent -c myapp
 ```
 
 Generate a policy module:
 
-```bash id="sgpj88"
+```bash
 sudo ausearch -m avc -ts recent -c myapp | audit2allow -M myapp_local
 ```
 
@@ -1549,24 +1529,24 @@ This creates files such as:
 
 Inspect the `.te` file before installing:
 
-```bash id="fxbd02"
+```bash
 cat myapp_local.te
 ```
 
 Example rule:
 
-```text id="dhv1wy"
+```text
 allow myapp_t var_log_t:file read;
 ```
 
-#### Interpretation
+Interpretation:
 
 - The generated policy would allow myapp_t to read files labeled var_log_t.
 - You must decide whether this access is actually appropriate.
 
 Install only after review:
 
-```bash id="eszwbk"
+```bash
 sudo semodule -i myapp_local.pp
 ```
 
@@ -1578,34 +1558,32 @@ sudo semodule -i myapp_local.pp
 
 ### Scenario 11: Full Troubleshooting Example for Custom Web Directory
 
-#### Goal
-
 Perform a complete SELinux troubleshooting workflow.
 
 #### Symptom
 
 A web server returns:
 
-```text id="z9iw4t"
+```text
 403 Forbidden
 ```
 
 for content under:
 
-```text id="pj9ta3"
+```text
 /srv/mywebsite
 ```
 
 #### Check Normal Permissions
 
-```bash id="s3n1sj"
+```bash
 ls -ld /srv/mywebsite
 ls -l /srv/mywebsite/index.html
 ```
 
 Example:
 
-```text id="k4y88m"
+```text
 drwxr-xr-x. root root /srv/mywebsite
 -rw-r--r--. root root index.html
 ```
@@ -1617,39 +1595,39 @@ Interpretation:
 
 #### Check SELinux Mode
 
-```bash id="lb7kt7"
+```bash
 getenforce
 ```
 
 Example:
 
-```text id="ozidmg"
+```text
 Enforcing
 ```
 
 #### Check Context
 
-```bash id="rn4ewc"
+```bash
 ls -Zd /srv/mywebsite
 ls -Z /srv/mywebsite/index.html
 ```
 
 Example:
 
-```text id="i1ey6e"
+```text
 unconfined_u:object_r:default_t:s0 /srv/mywebsite
 unconfined_u:object_r:default_t:s0 /srv/mywebsite/index.html
 ```
 
 #### Check Denials
 
-```bash id="wkmn3m"
+```bash
 sudo ausearch -m avc -ts recent -c nginx
 ```
 
 Example:
 
-```text id="a6dmvm"
+```text
 avc: denied { getattr open read } for comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
 ```
 
@@ -1662,20 +1640,20 @@ avc: denied { getattr open read } for comm="nginx" path="/srv/mywebsite/index.ht
 
 #### Fix Permanently
 
-```bash id="jrelci"
+```bash
 sudo semanage fcontext -a -t httpd_sys_content_t "/srv/mywebsite(/.*)?"
 sudo restorecon -Rv /srv/mywebsite
 ```
 
 #### Verify
 
-```bash id="iamfbe"
+```bash
 ls -Z /srv/mywebsite/index.html
 ```
 
 Expected:
 
-```text id="igvnrq"
+```text
 system_u:object_r:httpd_sys_content_t:s0 index.html
 ```
 
@@ -1683,13 +1661,13 @@ system_u:object_r:httpd_sys_content_t:s0 index.html
 
 Restart or reload the web service if needed:
 
-```bash id="m3fve5"
+```bash
 sudo systemctl reload nginx
 ```
 
 or:
 
-```bash id="fxwyjq"
+```bash
 sudo systemctl reload httpd
 ```
 
@@ -1697,15 +1675,13 @@ Then test the page again.
 
 #### Check for Remaining Denials
 
-```bash id="d8f33p"
+```bash
 sudo ausearch -m avc -ts recent -c nginx
 ```
 
 If no new denial appears, the SELinux labeling issue is resolved.
 
 ### Scenario 12: Relabel a Filesystem After SELinux Was Disabled
-
-#### Goal
 
 Understand why relabeling may be needed after SELinux has been disabled.
 
@@ -1717,14 +1693,14 @@ SELinux was disabled for a while, then re-enabled. Some files may not have corre
 
 Create the autorelabel marker:
 
-```bash id="yawqap"
+```bash
 sudo touch /.autorelabel
 sudo reboot
 ```
 
 During boot, the system relabels files according to SELinux policy.
 
-#### Interpretation
+Interpretation:
 
 - Relabeling restores expected SELinux contexts.
 - This can take time on large filesystems.
@@ -1747,20 +1723,20 @@ Symptoms:
 
 Check:
 
-```bash id="nigcwz"
+```bash
 ls -Z path
 sudo ausearch -m avc -ts recent
 ```
 
 Fix:
 
-```bash id="go8rbd"
+```bash
 sudo restorecon -Rv path
 ```
 
 or for custom paths:
 
-```bash id="rpgot0"
+```bash
 sudo semanage fcontext -a -t correct_type "path_regex"
 sudo restorecon -Rv path
 ```
@@ -1774,13 +1750,13 @@ Symptoms:
 
 Check booleans:
 
-```bash id="qd9qlh"
+```bash
 getsebool -a | grep service_name
 ```
 
 Fix:
 
-```bash id="c8ejaq"
+```bash
 sudo setsebool -P boolean_name on
 ```
 
@@ -1793,13 +1769,13 @@ Symptoms:
 
 Check:
 
-```bash id="vcm34s"
+```bash
 sudo semanage port -l | grep service_port_type
 ```
 
 Fix:
 
-```bash id="zlv5mv"
+```bash
 sudo semanage port -a -t correct_port_type -p tcp PORT
 ```
 
@@ -1815,7 +1791,7 @@ Possible causes:
 
 Check:
 
-```bash id="m96d8p"
+```bash
 getenforce
 sudo systemctl status auditd
 sudo journalctl -t setroubleshoot
@@ -1838,7 +1814,7 @@ Disabling SELinux removes a major security layer.
 
 Mode and status:
 
-```bash id="hq6x8y"
+```bash
 getenforce
 sestatus
 sudo setenforce 0
@@ -1847,7 +1823,7 @@ sudo setenforce 1
 
 View contexts:
 
-```bash id="rhkyot"
+```bash
 ls -Z file
 ls -Zd directory
 ps -eZ
@@ -1856,7 +1832,7 @@ ps -eZ | grep service
 
 Fix file contexts:
 
-```bash id="tqxqxp"
+```bash
 sudo chcon -t TYPE file
 sudo restorecon -Rv path
 sudo semanage fcontext -a -t TYPE "path_regex"
@@ -1865,7 +1841,7 @@ sudo restorecon -Rv path
 
 Booleans:
 
-```bash id="r99tgz"
+```bash
 getsebool -a
 getsebool -a | grep httpd
 sudo setsebool boolean_name on
@@ -1874,7 +1850,7 @@ sudo setsebool -P boolean_name on
 
 Ports:
 
-```bash id="u0lhx4"
+```bash
 sudo semanage port -l
 sudo semanage port -l | grep http_port_t
 sudo semanage port -a -t http_port_t -p tcp 8081
@@ -1883,7 +1859,7 @@ sudo semanage port -m -t http_port_t -p tcp 8081
 
 Audit and troubleshooting:
 
-```bash id="zz4ezr"
+```bash
 sudo ausearch -m avc -ts today
 sudo ausearch -m avc -ts recent
 sudo ausearch -m avc -c nginx
@@ -1893,7 +1869,7 @@ sudo sealert -a /var/log/audit/audit.log
 
 Custom policy:
 
-```bash id="og2o5o"
+```bash
 sudo ausearch -m avc -ts recent -c myapp | audit2allow -M myapp_local
 cat myapp_local.te
 sudo semodule -i myapp_local.pp
@@ -1901,7 +1877,7 @@ sudo semodule -i myapp_local.pp
 
 Relabeling:
 
-```bash id="w4kc15"
+```bash
 sudo touch /.autorelabel
 sudo reboot
 ```

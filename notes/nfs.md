@@ -6,25 +6,25 @@ It is a protocol that allows one computer to share directories with other comput
 
 The important idea is:
 
-```text id="hp1p7h"
+```text
 A remote directory can appear like a local directory.
 ```
 
 For example, a server may export:
 
-```text id="ux347e"
+```text
 /opt/shared
 ```
 
 A client may mount it at:
 
-```text id="uszbjk"
+```text
 /mnt/nfs_shared
 ```
 
 Then users on the client can access remote files as if they were local:
 
-```bash id="cbwdek"
+```bash
 ls /mnt/nfs_shared
 ```
 
@@ -37,7 +37,7 @@ NFS has two main sides:
 
 Diagram:
 
-```text id="krusg7"
+```text
 Client                       Network                      Server
 +--------+                                            +--------+
 | User   |    file open/read/write requests           | NFS    |
@@ -105,7 +105,7 @@ The NFS client mounts that exported directory.
 
 Diagram:
 
-```text id="y6y94w"
+```text
 Server filesystem:
 /
 └── opt
@@ -210,19 +210,19 @@ The basic flow is:
 
 On RHEL, CentOS, Rocky, AlmaLinux, or Fedora-style systems:
 
-```bash id="nnrdg1"
+```bash
 sudo dnf install nfs-utils
 ```
 
 On older CentOS 7 systems:
 
-```bash id="e0xui4"
+```bash
 sudo yum install nfs-utils
 ```
 
 On Debian or Ubuntu systems:
 
-```bash id="qdsmpd"
+```bash
 sudo apt install nfs-kernel-server nfs-common
 ```
 
@@ -235,13 +235,13 @@ Package names vary slightly by distribution, but the main idea is the same:
 
 Example server directory:
 
-```bash id="z2fe5p"
+```bash
 sudo mkdir -p /opt/shared
 ```
 
 Add a test file:
 
-```bash id="r5759y"
+```bash
 echo "hello from NFS server" | sudo tee /opt/shared/hello.txt
 ```
 
@@ -249,13 +249,13 @@ Set ownership and permissions based on your use case.
 
 For a simple lab:
 
-```bash id="s7hajw"
+```bash
 sudo chmod 755 /opt/shared
 ```
 
 For a shared writable directory, you may use a group:
 
-```bash id="g8yis5"
+```bash
 sudo groupadd nfsusers
 sudo chgrp nfsusers /opt/shared
 sudo chmod 2775 /opt/shared
@@ -269,7 +269,7 @@ The server uses `/etc/exports` to define what directories are shared and who can
 
 Example:
 
-```exports id="bssxu6"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,root_squash)
 ```
 
@@ -283,7 +283,7 @@ Meaning:
 
 A more restrictive example:
 
-```exports id="s7a70g"
+```exports
 /opt/shared 192.168.1.50(ro,sync,root_squash)
 ```
 
@@ -304,7 +304,7 @@ This allows only one client and gives read-only access.
 
 A common safe default:
 
-```exports id="rg32rx"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,root_squash,no_subtree_check)
 ```
 
@@ -317,19 +317,19 @@ Important warning:
 
 After editing `/etc/exports`, apply changes with:
 
-```bash id="iy6g5q"
+```bash
 sudo exportfs -r
 ```
 
 View exports:
 
-```bash id="n57d4e"
+```bash
 sudo exportfs -v
 ```
 
 Example output:
 
-```text id="b7xx75"
+```text
 /opt/shared  192.168.1.0/24(sync,wdelay,hide,no_subtree_check,sec=sys,rw,root_squash,no_all_squash)
 ```
 
@@ -343,19 +343,19 @@ Interpretation:
 
 On systemd systems:
 
-```bash id="l0bb5x"
+```bash
 sudo systemctl enable --now nfs-server
 ```
 
 Check status:
 
-```bash id="xir812"
+```bash
 systemctl status nfs-server
 ```
 
 Example output:
 
-```text id="n9hf3d"
+```text
 ● nfs-server.service - NFS server and services
      Loaded: loaded
      Active: active (exited)
@@ -368,7 +368,7 @@ Interpretation:
 
 On older setups, you may also see or manage:
 
-```bash id="z2wdjo"
+```bash
 sudo systemctl enable --now rpcbind
 sudo systemctl enable --now nfs-idmapd
 ```
@@ -381,7 +381,7 @@ For NFSv3, additional RPC services such as mountd and rpcbind may be needed.
 
 With firewalld:
 
-```bash id="u3q2zi"
+```bash
 sudo firewall-cmd --permanent --add-service=nfs
 sudo firewall-cmd --permanent --add-service=mountd
 sudo firewall-cmd --permanent --add-service=rpc-bind
@@ -390,13 +390,13 @@ sudo firewall-cmd --reload
 
 Check:
 
-```bash id="qq9r0c"
+```bash
 sudo firewall-cmd --list-services
 ```
 
 Example output:
 
-```text id="jmeir4"
+```text
 ssh dhcpv6-client nfs mountd rpc-bind
 ```
 
@@ -407,7 +407,7 @@ Interpretation:
 
 With UFW, a simple NFSv4 example:
 
-```bash id="w2u3b6"
+```bash
 sudo ufw allow from 192.168.1.0/24 to any port 2049 proto tcp
 ```
 
@@ -425,43 +425,43 @@ Install packages.
 
 RHEL-style:
 
-```bash id="l8krq8"
+```bash
 sudo dnf install nfs-utils
 ```
 
 Debian/Ubuntu:
 
-```bash id="izhh78"
+```bash
 sudo apt install nfs-common
 ```
 
 Create mount point:
 
-```bash id="ok064r"
+```bash
 sudo mkdir -p /mnt/nfs_shared
 ```
 
 Mount:
 
-```bash id="nhh0dm"
+```bash
 sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
 For NFSv4 explicitly:
 
-```bash id="bi6147"
+```bash
 sudo mount -t nfs4 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
 Check:
 
-```bash id="kmvpeu"
+```bash
 mount | grep nfs
 ```
 
 Example output:
 
-```text id="mzwh8p"
+```text
 192.168.1.100:/opt/shared on /mnt/nfs_shared type nfs4 (rw,relatime,vers=4.2,addr=192.168.1.100)
 ```
 
@@ -475,31 +475,31 @@ Interpretation:
 
 List files:
 
-```bash id="uyhe38"
+```bash
 ls -l /mnt/nfs_shared
 ```
 
 Example output:
 
-```text id="ff7z9p"
+```text
 -rw-r--r-- 1 root root 22 Jun 1 12:00 hello.txt
 ```
 
 Read the test file:
 
-```bash id="qhopu8"
+```bash
 cat /mnt/nfs_shared/hello.txt
 ```
 
 Example output:
 
-```text id="icytql"
+```text
 hello from NFS server
 ```
 
 Create a file if write access is allowed:
 
-```bash id="y19cn1"
+```bash
 touch /mnt/nfs_shared/client-test.txt
 ```
 
@@ -513,25 +513,25 @@ To mount automatically at boot, add an entry on the client.
 
 Example:
 
-```fstab id="cz80y4"
+```fstab
 192.168.1.100:/opt/shared /mnt/nfs_shared nfs defaults,_netdev 0 0
 ```
 
 For NFSv4:
 
-```fstab id="bllsb7"
+```fstab
 192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev 0 0
 ```
 
 Important option:
 
-```text id="z9uz0f"
+```text
 _netdev means this mount depends on the network.
 ```
 
 For systems where the NFS server may not always be available, consider:
 
-```fstab id="vewcb2"
+```fstab
 192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
 ```
 
@@ -542,13 +542,13 @@ Meaning:
 
 Test fstab:
 
-```bash id="z6ni35"
+```bash
 sudo mount -a
 ```
 
 Check:
 
-```bash id="ad3xbb"
+```bash
 findmnt /mnt/nfs_shared
 ```
 
@@ -565,13 +565,13 @@ Linux file ownership is stored as numbers:
 
 Example:
 
-```bash id="b8w9by"
+```bash
 id alice
 ```
 
 Output:
 
-```text id="l42xvm"
+```text
 uid=1000(alice) gid=1000(alice) groups=1000(alice)
 ```
 
@@ -609,13 +609,13 @@ NFSv4 can use name-based identity mapping through `idmapd`.
 
 The client and server should use the same domain in:
 
-```text id="dhlicb"
+```text
 /etc/idmapd.conf
 ```
 
 Example:
 
-```conf id="g5uavc"
+```conf
 [General]
 Domain = example.com
 ```
@@ -624,7 +624,7 @@ Restart relevant services after changes.
 
 Example:
 
-```bash id="a3ga48"
+```bash
 sudo systemctl restart nfs-idmapd
 sudo systemctl restart nfs-server
 ```
@@ -643,7 +643,7 @@ Root squashing protects the server from root users on clients.
 
 With `root_squash`, a request from UID 0 on the client is mapped to an anonymous user on the server.
 
-```text id="tqs9n6"
+```text
 Client root UID 0
       |
       v
@@ -657,13 +657,13 @@ This prevents client root from automatically having root privileges on the serve
 
 Example export:
 
-```exports id="g4wx5t"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,root_squash)
 ```
 
 Dangerous option:
 
-```exports id="rlw6wf"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,no_root_squash)
 ```
 
@@ -675,7 +675,7 @@ The `all_squash` option maps all client users to the anonymous user.
 
 Example:
 
-```exports id="cmtlbx"
+```exports
 /opt/public 192.168.1.0/24(rw,sync,all_squash)
 ```
 
@@ -688,7 +688,7 @@ Common related options:
 
 Example:
 
-```exports id="jz49si"
+```exports
 /opt/public 192.168.1.0/24(rw,sync,all_squash,anonuid=2000,anongid=2000)
 ```
 
@@ -712,13 +712,13 @@ Good practices:
 
 A safe export is usually specific:
 
-```exports id="ebskjz"
+```exports
 /srv/project 192.168.10.0/24(rw,sync,root_squash,no_subtree_check)
 ```
 
 A risky export is broad:
 
-```exports id="pu09el"
+```exports
 /  *(rw,no_root_squash)
 ```
 
@@ -749,7 +749,7 @@ Common mount options include:
 
 Example:
 
-```bash id="x53gcw"
+```bash
 sudo mount -t nfs -o rsize=8192,wsize=8192 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
@@ -764,37 +764,35 @@ Important safety note:
 
 View exports:
 
-```bash id="uwts38"
+```bash
 sudo exportfs -v
 ```
 
 Reload exports:
 
-```bash id="cc2e3r"
+```bash
 sudo exportfs -r
 ```
 
 Unexport one directory:
 
-```bash id="p4di7r"
+```bash
 sudo exportfs -u 192.168.1.0/24:/opt/shared
 ```
 
 Unexport all:
 
-```bash id="ztbh5i"
+```bash
 sudo exportfs -ua
 ```
 
 Re-export all from `/etc/exports`:
 
-```bash id="ggv0oy"
+```bash
 sudo exportfs -a
 ```
 
 ### Scenario 1: Create a Basic NFS Share
-
-#### Goal
 
 Set up a server export and mount it from a client.
 
@@ -802,13 +800,13 @@ Set up a server export and mount it from a client.
 
 Install packages:
 
-```bash id="y84t3b"
+```bash
 sudo dnf install nfs-utils
 ```
 
 Create directory:
 
-```bash id="o4zjyr"
+```bash
 sudo mkdir -p /opt/shared
 echo "hello from server" | sudo tee /opt/shared/hello.txt
 sudo chmod 755 /opt/shared
@@ -816,13 +814,13 @@ sudo chmod 755 /opt/shared
 
 Edit `/etc/exports`:
 
-```exports id="kfcw99"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,root_squash,no_subtree_check)
 ```
 
 Apply:
 
-```bash id="jux62s"
+```bash
 sudo exportfs -r
 sudo systemctl enable --now nfs-server
 sudo exportfs -v
@@ -830,7 +828,7 @@ sudo exportfs -v
 
 Example output:
 
-```text id="tzdqxm"
+```text
 /opt/shared 192.168.1.0/24(sync,wdelay,no_subtree_check,sec=sys,rw,root_squash,no_all_squash)
 ```
 
@@ -838,36 +836,36 @@ Example output:
 
 Install client tools:
 
-```bash id="cjk5xk"
+```bash
 sudo dnf install nfs-utils
 ```
 
 Create mount point:
 
-```bash id="g8qbw9"
+```bash
 sudo mkdir -p /mnt/nfs_shared
 ```
 
 Mount:
 
-```bash id="q95g5v"
+```bash
 sudo mount -t nfs4 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
 Check:
 
-```bash id="oufo7e"
+```bash
 findmnt /mnt/nfs_shared
 cat /mnt/nfs_shared/hello.txt
 ```
 
 Example output:
 
-```text id="grv0pw"
+```text
 hello from server
 ```
 
-#### Interpretation
+Interpretation:
 
 - The server exported the directory.
 - The client mounted it successfully.
@@ -875,49 +873,47 @@ hello from server
 
 ### Scenario 2: Simulate “Access Denied by Server”
 
-#### Goal
-
 Show what happens when the client IP is not allowed by `/etc/exports`.
 
 #### Simulate Problem
 
 On the server, restrict the export to the wrong network:
 
-```exports id="w2dm45"
+```exports
 /opt/shared 10.10.10.0/24(rw,sync,root_squash)
 ```
 
 Apply:
 
-```bash id="zhgw1l"
+```bash
 sudo exportfs -r
 ```
 
 On the client:
 
-```bash id="sxka5b"
+```bash
 sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
 Example output:
 
-```text id="xs2map"
+```text
 mount.nfs: access denied by server while mounting 192.168.1.100:/opt/shared
 ```
 
 #### Check on Server
 
-```bash id="tl4rsm"
+```bash
 sudo exportfs -v
 ```
 
 Example output:
 
-```text id="x7c7iv"
+```text
 /opt/shared 10.10.10.0/24(rw,sync,root_squash)
 ```
 
-#### Interpretation
+Interpretation:
 
 - The server is exporting the directory only to 10.10.10.0/24.
 - The client is not in that allowed range.
@@ -927,19 +923,17 @@ Example output:
 
 Use the correct client subnet or IP:
 
-```exports id="q7d6wl"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,root_squash,no_subtree_check)
 ```
 
 Apply:
 
-```bash id="p0vqvz"
+```bash
 sudo exportfs -r
 ```
 
 ### Scenario 3: Simulate NFS Blocked by Firewall
-
-#### Goal
 
 Diagnose when the export is correct but the client cannot reach NFS services.
 
@@ -947,7 +941,7 @@ Diagnose when the export is correct but the client cannot reach NFS services.
 
 On the server, remove NFS firewall services:
 
-```bash id="spf96q"
+```bash
 sudo firewall-cmd --permanent --remove-service=nfs
 sudo firewall-cmd --permanent --remove-service=mountd
 sudo firewall-cmd --permanent --remove-service=rpc-bind
@@ -956,41 +950,41 @@ sudo firewall-cmd --reload
 
 On the client:
 
-```bash id="b3t45n"
+```bash
 sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
 Possible output:
 
-```text id="a9n4r6"
+```text
 mount.nfs: Connection timed out
 ```
 
 #### Check Connectivity
 
-```bash id="g3ctzq"
+```bash
 nc -vz 192.168.1.100 2049
 ```
 
 Example output:
 
-```text id="gbh656"
+```text
 nc: connect to 192.168.1.100 port 2049 (tcp) timed out
 ```
 
 #### Check Server Firewall
 
-```bash id="qme7ur"
+```bash
 sudo firewall-cmd --list-services
 ```
 
 Example output:
 
-```text id="dlu4wr"
+```text
 ssh dhcpv6-client
 ```
 
-#### Interpretation
+Interpretation:
 
 - The NFS export may be correct.
 - The server firewall is blocking NFS traffic.
@@ -998,7 +992,7 @@ ssh dhcpv6-client
 
 #### Fix
 
-```bash id="ggpmz4"
+```bash
 sudo firewall-cmd --permanent --add-service=nfs
 sudo firewall-cmd --permanent --add-service=mountd
 sudo firewall-cmd --permanent --add-service=rpc-bind
@@ -1007,19 +1001,17 @@ sudo firewall-cmd --reload
 
 Retest:
 
-```bash id="kxdwh8"
+```bash
 nc -vz 192.168.1.100 2049
 ```
 
 Expected:
 
-```text id="e9uwep"
+```text
 Connection to 192.168.1.100 2049 port [tcp/nfs] succeeded!
 ```
 
 ### Scenario 4: Simulate Permission Denied from UID/GID Mismatch
-
-#### Goal
 
 Show why matching usernames is not enough if numeric UIDs differ.
 
@@ -1027,37 +1019,37 @@ Show why matching usernames is not enough if numeric UIDs differ.
 
 On server:
 
-```text id="d80i0q"
+```text
 alice UID = 1001
 ```
 
 On client:
 
-```text id="l1tlax"
+```text
 alice UID = 1002
 ```
 
 The server directory is owned by UID 1001:
 
-```bash id="qf8b3s"
+```bash
 ls -ln /opt/shared
 ```
 
 Example output on server:
 
-```text id="mc9vll"
+```text
 drwxr-x--- 2 1001 1001 4096 Jun 1 12:00 /opt/shared
 ```
 
 On client, Alice tries:
 
-```bash id="f8qcgn"
+```bash
 touch /mnt/nfs_shared/test.txt
 ```
 
 Example output:
 
-```text id="rs2iez"
+```text
 touch: cannot touch '/mnt/nfs_shared/test.txt': Permission denied
 ```
 
@@ -1065,29 +1057,29 @@ touch: cannot touch '/mnt/nfs_shared/test.txt': Permission denied
 
 On client:
 
-```bash id="ndspw7"
+```bash
 id alice
 ```
 
 Example:
 
-```text id="smbxxu"
+```text
 uid=1002(alice) gid=1002(alice)
 ```
 
 On server:
 
-```bash id="ouphfo"
+```bash
 id alice
 ```
 
 Example:
 
-```text id="eep2z3"
+```text
 uid=1001(alice) gid=1001(alice)
 ```
 
-#### Interpretation
+Interpretation:
 
 - NFS uses numeric IDs for permission checks.
 - The server receives UID 1002, not the name alice.
@@ -1102,47 +1094,45 @@ uid=1001(alice) gid=1001(alice)
 
 ### Scenario 5: Simulate Root Squash Behavior
 
-#### Goal
-
 Show why root on the client may not have root power on the NFS export.
 
 #### Server Export
 
-```exports id="khv6od"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,root_squash)
 ```
 
 Apply:
 
-```bash id="t19ike"
+```bash
 sudo exportfs -r
 ```
 
 On client as root:
 
-```bash id="zq52bs"
+```bash
 sudo touch /mnt/nfs_shared/root-created.txt
 ```
 
 Possible output:
 
-```text id="lfvvya"
+```text
 touch: cannot touch '/mnt/nfs_shared/root-created.txt': Permission denied
 ```
 
 Or if the directory allows anonymous writes, check ownership:
 
-```bash id="uenf3v"
+```bash
 ls -ln /mnt/nfs_shared/root-created.txt
 ```
 
 Example output:
 
-```text id="myy9ha"
+```text
 -rw-r--r-- 1 65534 65534 0 Jun 1 12:30 root-created.txt
 ```
 
-#### Interpretation
+Interpretation:
 
 - Client root was mapped to an anonymous unprivileged user.
 - This is root_squash protecting the server.
@@ -1150,7 +1140,7 @@ Example output:
 
 #### Unsafe Alternative
 
-```exports id="nkdq19"
+```exports
 /opt/shared 192.168.1.0/24(rw,sync,no_root_squash)
 ```
 
@@ -1161,22 +1151,20 @@ Warning:
 
 ### Scenario 6: Simulate a Stale NFS File Handle
 
-#### Goal
-
 Understand what happens when the server-side exported directory changes while clients still have old references.
 
 #### Simulate
 
 Client mounts:
 
-```bash id="tnr48n"
+```bash
 sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
 cd /mnt/nfs_shared
 ```
 
 On the server, rename and recreate the export directory:
 
-```bash id="w034th"
+```bash
 sudo mv /opt/shared /opt/shared.old
 sudo mkdir /opt/shared
 sudo exportfs -r
@@ -1184,17 +1172,17 @@ sudo exportfs -r
 
 On the client:
 
-```bash id="zfkifu"
+```bash
 ls
 ```
 
 Possible output:
 
-```text id="zbl3xr"
+```text
 ls: cannot access '.': Stale file handle
 ```
 
-#### Interpretation
+Interpretation:
 
 - The client holds references to objects that no longer match the server-side export.
 - The server-side directory was replaced.
@@ -1204,7 +1192,7 @@ ls: cannot access '.': Stale file handle
 
 On the client:
 
-```bash id="fdczmf"
+```bash
 cd /
 sudo umount /mnt/nfs_shared
 sudo mount /mnt/nfs_shared
@@ -1212,7 +1200,7 @@ sudo mount /mnt/nfs_shared
 
 If unmount is busy:
 
-```bash id="tg3edv"
+```bash
 sudo lsof +f -- /mnt/nfs_shared
 sudo fuser -vm /mnt/nfs_shared
 ```
@@ -1221,13 +1209,11 @@ Then stop the using process or move out of the directory.
 
 ### Scenario 7: Simulate Boot Hang from NFS in `/etc/fstab`
 
-#### Goal
-
 Show why NFS mounts should be configured carefully for boot.
 
 #### Problem fstab Entry
 
-```fstab id="c5c3lp"
+```fstab
 192.168.1.100:/opt/shared /mnt/nfs_shared nfs defaults 0 0
 ```
 
@@ -1235,30 +1221,30 @@ If the NFS server is down during boot, the client may wait for a long time.
 
 #### Better Entry
 
-```fstab id="f1uare"
+```fstab
 192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
 ```
 
 #### Apply
 
-```bash id="va9gob"
+```bash
 sudo systemctl daemon-reload
 sudo mount -a
 ```
 
 Check systemd mount units:
 
-```bash id="iauyw3"
+```bash
 systemctl list-units | grep nfs_shared
 ```
 
 Example output:
 
-```text id="g0udrs"
+```text
 mnt-nfs_shared.automount loaded active waiting /mnt/nfs_shared
 ```
 
-#### Interpretation
+Interpretation:
 
 - The automount unit waits until the path is accessed.
 - nofail prevents boot failure if the server is unavailable.
@@ -1266,62 +1252,58 @@ mnt-nfs_shared.automount loaded active waiting /mnt/nfs_shared
 
 ### Scenario 8: Simulate Read-Only Export
 
-#### Goal
-
 Show how export options override client expectations.
 
 #### Server Export
 
-```exports id="pgmbx6"
+```exports
 /opt/shared 192.168.1.0/24(ro,sync,root_squash)
 ```
 
 Apply:
 
-```bash id="h6i8bo"
+```bash
 sudo exportfs -r
 ```
 
 Client remount:
 
-```bash id="vmmryr"
+```bash
 sudo umount /mnt/nfs_shared
 sudo mount -t nfs 192.168.1.100:/opt/shared /mnt/nfs_shared
 ```
 
 Try write:
 
-```bash id="palzvy"
+```bash
 touch /mnt/nfs_shared/test.txt
 ```
 
 Example output:
 
-```text id="ptk7qa"
+```text
 touch: cannot touch '/mnt/nfs_shared/test.txt': Read-only file system
 ```
 
 #### Check Mount
 
-```bash id="tq7syv"
+```bash
 findmnt /mnt/nfs_shared
 ```
 
 Example output:
 
-```text id="ian9f0"
+```text
 TARGET          SOURCE                    FSTYPE OPTIONS
 /mnt/nfs_shared 192.168.1.100:/opt/shared nfs4   ro,relatime,vers=4.2
 ```
 
-#### Interpretation
+Interpretation:
 
 - The server exported the directory as read-only.
 - The client cannot write, even if local commands try to create files.
 
 ### Scenario 9: Measure NFS Performance
-
-#### Goal
 
 Check whether NFS is slow and where the bottleneck may be.
 
@@ -1329,37 +1311,37 @@ Check whether NFS is slow and where the bottleneck may be.
 
 On the client:
 
-```bash id="n9qiry"
+```bash
 dd if=/dev/zero of=/mnt/nfs_shared/testfile bs=1M count=512 conv=fdatasync
 ```
 
 Example output:
 
-```text id="zr3u77"
+```text
 536870912 bytes copied, 8.2 s, 65.5 MB/s
 ```
 
 #### Read Test
 
-```bash id="pkak9p"
+```bash
 dd if=/mnt/nfs_shared/testfile of=/dev/null bs=1M
 ```
 
 Example output:
 
-```text id="m13evq"
+```text
 536870912 bytes copied, 4.1 s, 130 MB/s
 ```
 
 #### Check Mount Stats
 
-```bash id="aw6pze"
+```bash
 nfsiostat 1
 ```
 
 Example output:
 
-```text id="fsz0uq"
+```text
 op/s    rpc bklog
 120.00  0.00
 
@@ -1367,7 +1349,7 @@ read:  avg RTT  4.0 ms   avg exe  5.0 ms
 write: avg RTT 12.0 ms   avg exe 15.0 ms
 ```
 
-#### Interpretation
+Interpretation:
 
 - Writes are slower than reads.
 - NFS write latency is higher.
@@ -1377,21 +1359,19 @@ write: avg RTT 12.0 ms   avg exe 15.0 ms
 
 On client:
 
-```bash id="f4s6kc"
+```bash
 mount | grep nfs
 nfsstat -c
 ```
 
 On server:
 
-```bash id="hgrin7"
+```bash
 nfsstat -s
 iostat -xz 1
 ```
 
 ### Scenario 10: Troubleshoot “NFS Server Is Not Responding”
-
-#### Goal
 
 Diagnose a client that hangs or reports server not responding.
 
@@ -1399,25 +1379,25 @@ Diagnose a client that hangs or reports server not responding.
 
 Client log or terminal shows:
 
-```text id="lgbbq1"
+```text
 nfs: server 192.168.1.100 not responding, still trying
 ```
 
 #### Check Network
 
-```bash id="lp2ynz"
+```bash
 ping 192.168.1.100
 ```
 
 Check NFS port:
 
-```bash id="avx2qc"
+```bash
 nc -vz 192.168.1.100 2049
 ```
 
 Example failure:
 
-```text id="k3hy0m"
+```text
 nc: connect to 192.168.1.100 port 2049 failed: No route to host
 ```
 
@@ -1425,37 +1405,35 @@ nc: connect to 192.168.1.100 port 2049 failed: No route to host
 
 On server:
 
-```bash id="rwhwx8"
+```bash
 systemctl status nfs-server
 sudo ss -tulnp | grep 2049
 ```
 
 Example output:
 
-```text id="y04taw"
+```text
 tcp LISTEN 0 64 0.0.0.0:2049 0.0.0.0:*
 ```
 
-#### Interpretation
+Interpretation:
 
 - If port 2049 is not reachable, the issue may be server service, firewall, routing, or network outage.
 - If the server is reachable but slow, check server disk and NFS statistics.
 
 ### Scenario 11: Use `showmount` to Inspect Exports
 
-#### Goal
-
 Check what the server appears to export.
 
 On client:
 
-```bash id="knldox"
+```bash
 showmount -e 192.168.1.100
 ```
 
 Example output:
 
-```text id="v7sgao"
+```text
 Export list for 192.168.1.100:
 /opt/shared 192.168.1.0/24
 ```
@@ -1471,25 +1449,23 @@ Important note:
 
 ### Scenario 12: Unexport a Shared Directory
 
-#### Goal
-
 Stop sharing a directory without editing many files manually.
 
 Check current exports:
 
-```bash id="lgb7xe"
+```bash
 sudo exportfs -v
 ```
 
 Unexport:
 
-```bash id="wmga8s"
+```bash
 sudo exportfs -u 192.168.1.0/24:/opt/shared
 ```
 
 Check again:
 
-```bash id="w4rt05"
+```bash
 sudo exportfs -v
 ```
 
@@ -1506,13 +1482,13 @@ For a permanent stop, remove or comment out the line in `/etc/exports`.
 
 Symptoms:
 
-```text id="dyukgw"
+```text
 mount.nfs: access denied by server
 ```
 
 Check:
 
-```bash id="ddsceu"
+```bash
 sudo exportfs -v
 cat /etc/exports
 showmount -e SERVER
@@ -1528,7 +1504,7 @@ Likely causes:
 
 Fix:
 
-```bash id="igsl9u"
+```bash
 sudo exportfs -r
 ```
 
@@ -1538,13 +1514,13 @@ and correct `/etc/exports`.
 
 Symptoms:
 
-```text id="yu6479"
+```text
 mount.nfs: Connection timed out
 ```
 
 Check:
 
-```bash id="dy7w79"
+```bash
 ping SERVER
 nc -vz SERVER 2049
 systemctl status nfs-server
@@ -1563,13 +1539,13 @@ Likely causes:
 
 Symptoms:
 
-```text id="j92faf"
+```text
 touch: Permission denied
 ```
 
 Check:
 
-```bash id="ycmho9"
+```bash
 id
 ls -ln /mnt/nfs_shared
 ls -ln /opt/shared
@@ -1588,13 +1564,13 @@ Likely causes:
 
 Symptoms:
 
-```text id="tm9rh1"
+```text
 -rw-r--r-- 1 nobody nobody file.txt
 ```
 
 or numeric:
 
-```text id="ddrg78"
+```text
 4294967294
 ```
 
@@ -1607,7 +1583,7 @@ Likely causes:
 
 Check:
 
-```bash id="kw31r1"
+```bash
 cat /etc/idmapd.conf
 id username
 nfsidmap -l
@@ -1617,7 +1593,7 @@ nfsidmap -l
 
 Symptoms:
 
-```text id="emafzz"
+```text
 Stale file handle
 ```
 
@@ -1630,7 +1606,7 @@ Likely causes:
 
 Fix:
 
-```bash id="phbi97"
+```bash
 cd /
 sudo umount /mnt/nfs_shared
 sudo mount /mnt/nfs_shared
@@ -1651,7 +1627,7 @@ Fix fstab with:
 
 Example:
 
-```fstab id="d5au5j"
+```fstab
 192.168.1.100:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
 ```
 
@@ -1672,7 +1648,7 @@ When NFS fails, troubleshoot in layers.
 
 Useful commands:
 
-```bash id="x6nxz4"
+```bash
 ping SERVER
 nc -vz SERVER 2049
 systemctl status nfs-server
@@ -1690,7 +1666,7 @@ dmesg -T | grep -i nfs
 
 Server setup:
 
-```bash id="b7seyz"
+```bash
 sudo dnf install nfs-utils
 sudo mkdir -p /opt/shared
 sudo vi /etc/exports
@@ -1701,7 +1677,7 @@ sudo systemctl enable --now nfs-server
 
 Client setup:
 
-```bash id="dazg1m"
+```bash
 sudo dnf install nfs-utils
 sudo mkdir -p /mnt/nfs_shared
 sudo mount -t nfs4 SERVER:/opt/shared /mnt/nfs_shared
@@ -1710,7 +1686,7 @@ findmnt /mnt/nfs_shared
 
 Firewall:
 
-```bash id="miejcz"
+```bash
 sudo firewall-cmd --permanent --add-service=nfs
 sudo firewall-cmd --permanent --add-service=mountd
 sudo firewall-cmd --permanent --add-service=rpc-bind
@@ -1719,7 +1695,7 @@ sudo firewall-cmd --reload
 
 NFS inspection:
 
-```bash id="vwp5np"
+```bash
 sudo exportfs -v
 showmount -e SERVER
 nfsstat -s
@@ -1730,19 +1706,19 @@ mount | grep nfs
 
 Persistent mount:
 
-```fstab id="l29ueu"
+```fstab
 SERVER:/opt/shared /mnt/nfs_shared nfs4 defaults,_netdev,nofail,x-systemd.automount 0 0
 ```
 
 Unmount:
 
-```bash id="po7gb9"
+```bash
 sudo umount /mnt/nfs_shared
 ```
 
 Force investigation if busy:
 
-```bash id="nh69yn"
+```bash
 sudo lsof +f -- /mnt/nfs_shared
 sudo fuser -vm /mnt/nfs_shared
 ```
@@ -1751,7 +1727,7 @@ sudo fuser -vm /mnt/nfs_shared
 
 On the client:
 
-```bash id="puavzy"
+```bash
 cd /
 sudo umount /mnt/nfs_shared 2>/dev/null
 sudo rmdir /mnt/nfs_shared 2>/dev/null
@@ -1759,21 +1735,21 @@ sudo rmdir /mnt/nfs_shared 2>/dev/null
 
 Remove fstab test entry if added:
 
-```bash id="m6a6ua"
+```bash
 sudo vi /etc/fstab
 sudo systemctl daemon-reload
 ```
 
 On the server, remove export line from `/etc/exports`, then:
 
-```bash id="u0mrps"
+```bash
 sudo exportfs -r
 sudo exportfs -v
 ```
 
 Optionally remove test directory:
 
-```bash id="rv0n41"
+```bash
 sudo rm -rf /opt/shared
 ```
 
