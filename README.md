@@ -9,7 +9,7 @@
 
 > **Your comprehensive companion for mastering Linux** — from first commands to advanced system administration. Whether you're a curious beginner, aspiring DevOps engineer, or seasoned sysadmin, find everything you need in one place.
 
-![linux](https://github.com/djeada/Linux-Notes/assets/37275728/b383696f-241a-4285-ac57-e0d576ecdb1e)
+<img width="1254" height="1254" alt="linux" src="https://github.com/user-attachments/assets/66aa0160-b3c9-4b65-b64f-bbc2b4a04b41" />
 
 <div align="center">
 
