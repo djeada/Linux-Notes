@@ -182,6 +182,7 @@ The notes are organized from beginner to advanced concepts. **Follow this recomm
 
 - [Grep - Pattern Searching](https://github.com/djeada/Linux-Notes/blob/main/notes/grep.md) — Search text with regular expressions
 - [Sed & Awk - Text Processing](https://github.com/djeada/Linux-Notes/blob/main/notes/sed_and_awk.md) — Advanced text manipulation
+- [Xargs - Command Argument Processing](https://github.com/djeada/Linux-Notes/blob/main/notes/xargs.md) — Build command arguments from pipeline input safely
 - [System Utilities](https://github.com/djeada/Linux-Notes/blob/main/notes/utilities.md) — Essential system utilities and tools
 
 ### 🚀 Advanced Topics
