@@ -244,7 +244,7 @@ rm -- -rf
 The same rule applies when `xargs` invokes `rm`:
 
 ```bash
-printf '%s\n' -- '-rf' | xargs rm --
+printf '%s\n' '-rf' | xargs rm --
 ```
 
 In this command, the `--` belongs to **`rm`**, not to `xargs`. `xargs` constructs a command similar to:
