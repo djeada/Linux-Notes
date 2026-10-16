@@ -19,6 +19,16 @@
 
 ---
 
+## Using the Notes and Examples
+
+Each guide in [`notes/`](notes/) has a contents list and a link back here. Use the learning paths below for a sequence, or open a guide and jump directly to a command, explanation, or exercise.
+
+- Shell examples generally assume **Bash on Linux with GNU tools**. Bash features such as process substitution and `&>` do not work in every `/bin/sh`; BusyBox, BSD, and macOS utilities may also have different options.
+- Paths, usernames, IP addresses, and device names are examples. Check your actual devices with `lsblk -f` and mounted filesystems with `findmnt` before adapting storage commands. Sample output is illustrative, so sizes, PIDs, service names, and versions will differ.
+- Read-only commands usually work as a regular user. Installation and system-configuration examples may assume a root shell; use `sudo` on individual commands when needed. Shell redirection is handled by your current shell: for a protected destination, use a suitable command such as `printf '%s\n' 'setting=value' | sudo tee /etc/example.conf`.
+- Use a disposable VM or dedicated lab disk for formatting, partitioning, recovery, firewall, and service-failure exercises. Read the setup and cleanup steps before running a scenario.
+- For version-sensitive details, compare the installed `man` pages and linked upstream documentation with your distribution. Certification guides distinguish current provider information from retained historical study material.
+
 ## 💡 Why This Repository?
 
 In the vast landscape of Linux documentation, this repository stands out by offering:

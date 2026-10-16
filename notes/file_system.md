@@ -1,5 +1,20 @@
 ## Files and Filesystems
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Types of Files in a UNIX Filesystem](#types-of-files-in-a-unix-filesystem)
+- [Blocks, Superblocks & Pages](#blocks-superblocks--pages)
+- [Directory Hierarchy](#directory-hierarchy)
+- [File System Types](#file-system-types)
+- [Why And When Would You Care About File System?](#why-and-when-would-you-care-about-file-system)
+- [Managing File Systems](#managing-file-systems)
+- [Challenges](#challenges)
+
+</details>
+
 In Unix, files and filesystems are important components of the operating system's structure. A file is a collection of data stored on disk, which can include anything from text documents and images to executable programs. Files are organized within directories in a hierarchical structure, allowing for efficient data management and retrieval.
 
 A filesystem, on the other hand, is a method and data structure that the operating system uses to manage files on a disk or partition. It provides a way to store, retrieve, and organize files, supporting features like file permissions, links, and metadata. Common Unix filesystems include `ext4`, `XFS`, and `Btrfs`, each offering different capabilities and optimizations.
@@ -60,7 +75,9 @@ In a filesystem, certain directory names have special meanings that simplify nav
 
 Blocks, pages, and the superblock are concepts in storage and memory management. A **block** is the smallest unit of data on disk used by file systems, while a **page** is the smallest unit of memory used in RAM by the operating system. The **superblock** holds metadata about the file system, such as its size and structure. While blocks manage how files are stored, pages manage how memory is accessed, and the superblock helps the system organize everything.
 
-#### Block — the Atomic On-Disk I/O Unit
+#### Block — the Filesystem Allocation Unit
+
+The ext4 layout below is one concrete example, not the on-disk design of every filesystem. A filesystem block, a device sector, and a virtual-memory page are different units. A 4 KiB filesystem block is not automatically an atomic hardware write: crash guarantees also depend on the device and storage stack.
 
 ```
 Entire Disk (logical view divided into 4 KiB blocks)
@@ -149,7 +166,7 @@ Every file is represented by an inode, which points to extents—contiguous bloc
 
 * 1 inode ↔ 1 file/dir.
 * Extents record **contiguous** physical block runs ⇒ bitmap compression, faster I/O submit, no indirect block b-tree lookup for large files.
-* Up to 4 extents inline in the inode; spill into extent index blocks when needed (depth ≤ 5 supports files ≈ 8 EiB).
+* Up to 4 extents fit in the inode; additional extents use index blocks. Tree depth alone does not set the maximum file size: ext4's extent format uses 32-bit logical block numbers, giving a 16 TiB file limit with 4 KiB blocks. Larger filesystem-volume limits are a separate question.
 
 #### Directory Entries (dentry blocks)
 
@@ -162,7 +179,7 @@ DIR DATA BLOCK
 └── inode=2050 │ "logs"   │          │ END …       ┘
 ```
 
-* Dir-files are just blocks of `(inode#, name, type)` pairs → ordinary read(2)/write(2) paths apply.
+* Directory contents encode names, inode numbers, and entry metadata, but applications should use directory APIs such as `readdir()` and system calls such as `mkdir()`/`unlink()`. Linux does not let applications edit directory data with ordinary `write()` calls.
 * `htree` index (ext4 dir\_index) upgrades large dirs to O(log n) lookup.
 
 #### Journal (Ordered Mode)
@@ -306,27 +323,29 @@ Several types of file systems can be used on Linux systems, each designed with s
 
 - The **ext2** (Second Extended Filesystem) is among the first file systems crafted specifically for Linux, and while it is **efficient**, it lacks advanced features like journaling or encryption.
 - An improved version of ext2, **ext3** (Third Extended Filesystem), includes support for **journaling**, which helps protect against data loss by maintaining a log of changes that are yet to be committed to the file system.
-- Currently the default Linux file system, **ext4** (Fourth Extended Filesystem) supports larger file sizes and file systems, provides **improved** performance and reliability, and includes features such as delayed allocation and journal checksumming.
+- A widely used default on Linux distributions, **ext4** (Fourth Extended Filesystem) supports larger file sizes and filesystems, delayed allocation, and journal checksumming. Defaults vary by distribution; Linux does not prescribe one default filesystem.
 - Originally developed by IBM, the **JFS** (Journaled File System) is optimized to **handle** large file systems efficiently and includes journaling capabilities.
 - The **NFS** (Network File System) is not a traditional file system but rather a protocol that allows a system to **access** files over a network as though they were on its local hard drive.
 - Serving as a software layer in the kernel, the **VFS** (Virtual File System) provides a common **interface** to various file systems, enabling the operating system to uniformly access and manage different types of file systems.
 - The **FAT** (File Allocation Table) system is simple and widely used, particularly on removable storage devices, making it a **suitable** choice for interoperability across various operating systems.
 - A standard for Windows NT and its later versions, **NTFS** (New Technology File System) can be **accessed** on Linux but is not native, which may result in a lack of full functionality.
-- Known for its strong performance and reliability, **ReiserFS** (Reiser File System) is a general-purpose, journaled file system that efficiently **handles** large numbers of small files, making it a popular choice on servers.
+- **ReiserFS** (Reiser File System) is a historical journaled filesystem known for handling many small files. Keep it in mind when reading older systems documentation; modern installations should use a maintained filesystem supported by their distribution.
 - The **Btrfs** (B-tree File System) is a copy-on-write (CoW) file system for Linux, designed to provide **advanced** features focused on fault tolerance, repair, and simplified administration, with capabilities like snapshots, subvolumes, and built-in RAID.
 - Developed by Silicon Graphics, Inc., **XFS** is a high-performance, **journaling** file system that excels at parallel I/O, making it particularly effective for applications involving large files that require high-performance I/O operations.
 
 | Category                     | ext2                       | ext3                        | ext4                        | JFS                        | NFS                        | VFS                        | FAT                        | NTFS                       | ReiserFS                   | Btrfs                      | XFS                        |
 |------------------------------|----------------------------|-----------------------------|-----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|
-| **Design Purpose**           | Simple Linux file system   | Improved ext2 with journaling | Default Linux file system  | Large file systems         | Network file access        | Common interface for FS    | Removable storage          | Windows file system        | Small files, servers       | Advanced Linux features    | High-performance, large files |
-| **Journaling**               | No                         | Yes                         | Yes                         | Yes                        | N/A (protocol)             | N/A                        | No                         | Yes                        | Yes                        | Yes                        | Yes                        |
+| **Design Purpose**           | Simple Linux file system   | Improved ext2 with journaling | General-purpose Linux filesystem | Large file systems         | Network file access        | Common interface for FS    | Removable storage          | Windows file system        | Small files, servers       | Advanced Linux features    | High-performance, large files |
+| **Journaling**               | No                         | Yes                         | Yes                         | Yes                        | N/A (protocol)             | N/A                        | No                         | Yes                        | Yes                        | CoW transactions (not a traditional journal) | Yes                        |
 | **Performance**              | Efficient for small FS     | Better than ext2            | Better than ext3            | High efficiency            | Depends on network         | N/A                        | Simple, lower performance  | Good, Windows optimized    | Good for small files       | Good, advanced features    | Excellent, parallel I/O    |
 | **Maximum File/FS Size**     | Smaller than ext3/4        | Larger than ext2            | Very large                  | Very large                 | N/A                        | N/A                        | Limited by design          | Very large                 | Large                      | Very large                 | Very large                 |
 | **Suitability**              | Basic, older Linux systems | General Linux use           | Modern Linux systems        | Enterprise, large data     | Network environments       | Kernel-level operations    | Wide compatibility         | Windows environments       | Server use                 | Linux, advanced use        | Large file handling        |
-| **Encryption Support**       | No                         | No                          | Yes (since 4.1)             | No                         | N/A                        | N/A                        | No                         | Yes                        | No                         | Yes                        | No                         |
+| **Encryption Support**       | No                         | No                          | Yes (since 4.1)             | No                         | N/A                        | N/A                        | No                         | Yes                        | No                         | Use a layer such as LUKS | No                         |
 | **Data Recovery**            | Harder                     | Easier than ext2            | Easier than ext3            | Good                       | Depends on implementation  | N/A                        | Simpler but riskier        | Good                       | Good                       | Very good                  | Good                       |
 | **Use in Large Servers**     | Less common                | Common                      | Very common                 | Yes                        | Yes, for shared storage    | N/A                        | Less common                | Less common                | Yes                        | Yes                        | Yes                        |
 | **Use in Personal Devices**  | Less common                | Less common                 | Common                      | Less common                | Less common                | N/A                        | Very common                | Common in Windows          | Less common                | Growing                    | Less common                |
+
+The table is a high-level comparison, not a benchmark or recovery guarantee. Btrfs uses copy-on-write transactions rather than a conventional journal. Encryption can also be provided below the filesystem through a layer such as LUKS, so distinguish that from native file-level encryption. See the [Btrfs introduction](https://btrfs.readthedocs.io/en/latest/Introduction.html) and [Debian's Btrfs encryption notes](https://wiki.debian.org/Btrfs).
 
 ### Why And When Would You Care About File System?
 
@@ -338,28 +357,28 @@ Knowledge about the file systems is important when you need to make sure that da
 - Concurrent operations, in which one process writes while another reads a file, may lead to inconsistent data access, and this situation exemplifies a potential *read-write conflict*.
 - When multiple processes perform write operations on the same file simultaneously without proper locking, the file may become corrupted, and this risk underscores the challenge of *simultaneous writing*.
 
-Below is what the current public benchmark record shows when you compare today’s Linux files-systems on a single NVMe SSD or SATA SSD with their default mount options and no exotic tuning.
+The existing illustration below presents one possible scaling comparison. No reproducible dataset, workload, hardware specification, or filesystem versions are linked here, so its ordering and percentages should be treated as illustrative claims, not general benchmark results. Measure the workload you actually plan to run.
 
 ![Filesystem scaling plot](https://github.com/user-attachments/assets/b2f741ab-c217-4b48-a2e1-72ca51fe4a00)
 
-* **EXT4 edges out XFS with a single thread**, but
-* **XFS scales hardest** once you pass ≈2 parallel writers/readers thanks to its per-allocation-group design — by eight workers it’s \~25 % faster than EXT4.
-* **F2FS slots in between**: flash-optimised and quick at low-to-mid thread counts, but it can’t quite keep up with XFS’s metadata parallelism at the top end.
-* **ZFS and Btrfs trail** because CoW, checksums and copy-on-write write-amplification cost throughput, especially as queue depth rises.
-* **With default settings on a single drive, EXT4 is measurably faster than both Btrfs and ZFS**, and the public data going back years backs that up.  But the moment you start using the advanced features that motivated those filesystems in the first place, their performance story changes—and sometimes surpasses EXT4 in the process.
+* The illustration places **ext4 ahead of XFS with one worker**; that ordering need not hold for another workload.
+* It suggests **XFS scales better** beyond roughly two workers and is about 25% ahead at eight. XFS's allocation groups can help concurrency, but that percentage needs an actual benchmark to substantiate it.
+* It places **F2FS in between**. Flash-oriented design alone does not establish a universal throughput ranking.
+* It places **ZFS and Btrfs behind**. Copy-on-write, checksumming, compression, caching, and allocation policies can change the result in either direction depending on the workload and settings.
+* A single-drive comparison cannot establish that **ext4 is always faster than Btrfs or ZFS**. Compare latency, throughput, durability settings, memory use, and the features you need under equivalent conditions.
 
 **File Limits:**
 
-- The FAT32 file system supports up to *268,173,300 files per volume*, which outlines its capacity constraints for file storage.
+- FAT32 file counts depend on volume size, cluster allocation, and directory entries. The figure *268,173,300 files per volume* should not be treated as a usable guarantee: directories and file data compete for the available storage.
 - The NTFS file system can handle up to *4,294,967,295 files per volume*, ensuring a larger capacity for file management.
-- The ext4 file system also supports up to *4,294,967,295 files per volume*, making it useful for environments that require managing many files.
-- Operating systems typically restrict the number of files a process can have open at one time, and Linux systems often permit *1024 open files per process* by default while allowing this limit to be increased.
+- ext4's 32-bit inode-number space has a theoretical ceiling of *4,294,967,295* usable inode numbers, but a particular filesystem normally has far fewer inodes configured. Check the actual capacity with `df -i`.
+- Open-file limits are separate from filesystem file counts. *1024* is a common example of a soft file-descriptor limit, not a universal Linux default; inspect `ulimit -Sn` and `ulimit -Hn`, or a service's `LimitNOFILE`. File descriptors also represent sockets and pipes.
 
 **Directory Limits:**
 
-- The FAT32 file system permits up to *65,535 files per directory* when using short (8.3) filenames, setting a defined upper boundary for individual directories.
-- The ext4 file system can efficiently manage up to *10 million files per directory*, although performance may decrease as the file count grows.
-- Directory size is determined by the file system's structure, and in FAT32, each short filename entry occupies 32 bytes, capping a directory’s capacity at *2,097,152 bytes*.
+- FAT directory limits depend on the implementation and number of entries each name consumes. The often-quoted *65,535 files per directory* is not a portable FAT32 file-count guarantee, especially with long filenames.
+- ext4 can support very large directories with indexing enabled, but *10 million files per directory* is an example scale to test, not a universal efficiency guarantee or hard limit.
+- Each FAT short-name directory entry uses 32 bytes, and long filenames consume additional entries. The calculation *65,536 × 32 = 2,097,152 bytes* describes a 65,536-entry directory limit where an implementation imposes one; it does not derive a universal FAT32 limit from the entry size alone.
 
 **Space and Performance Considerations:**
 
@@ -369,7 +388,9 @@ Below is what the current public benchmark record shows when you compare today�
 **File System Limits:**
 
 - Different file systems impose varying maximum file sizes, and the FAT32 file system limits individual files to *4 GiB minus 1 byte* while NTFS and ext4 accommodate larger files.
-- File name length limitations differ by file system, and NTFS allows filenames up to *255 characters* in length compared to the shorter naming format of FAT32.
+- Filename limits depend on encoding and implementation. NTFS supports up to 255 UTF-16 code units per component. FAT's short format is 8.3, while VFAT long-filename support also permits names up to 255 UTF-16 code units; compare equivalent naming modes rather than treating all FAT names as 8.3.
+
+For filesystem-specific limits and layouts, see the [ext4 documentation](https://docs.kernel.org/filesystems/ext4/overview.html), [mke2fs inode settings](https://man7.org/linux/man-pages/man8/mke2fs.8.html), and [Microsoft's filesystem comparison](https://learn.microsoft.com/en-us/windows/win32/fileio/filesystem-functionality-comparison).
 
 **Concurrent Reading and Writing Considerations:**
 

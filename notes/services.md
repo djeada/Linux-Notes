@@ -1,5 +1,65 @@
 ## Services, Daemons, and systemd
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Service Management Big Picture](#service-management-big-picture)
+- [Services vs Processes](#services-vs-processes)
+- [Daemons](#daemons)
+- [Daemon vs Service](#daemon-vs-service)
+- [systemd](#systemd)
+- [Units](#units)
+- [Service States](#service-states)
+- [Checking Service Status](#checking-service-status)
+- [Starting and Stopping Services](#starting-and-stopping-services)
+- [Enabling and Disabling Services](#enabling-and-disabling-services)
+- [Masking Services](#masking-services)
+- [Listing Services](#listing-services)
+- [Service Logs with `journalctl`](#service-logs-with-journalctl)
+- [Dependencies](#dependencies)
+- [Targets](#targets)
+- [Older Service Management Tools](#older-service-management-tools)
+- [Installing and Managing an FTP Server Example](#installing-and-managing-an-ftp-server-example)
+- [Installing `vsftpd`](#installing-vsftpd)
+- [Configuring `vsftpd`](#configuring-vsftpd)
+- [Starting and Enabling `vsftpd`](#starting-and-enabling-vsftpd)
+- [Checking Listening Ports](#checking-listening-ports)
+- [Testing an FTP Service](#testing-an-ftp-service)
+- [Checking FTP Logs](#checking-ftp-logs)
+- [Creating a Custom systemd Service](#creating-a-custom-systemd-service)
+- [Unit File Sections](#unit-file-sections)
+- [Simple Custom Service Example](#simple-custom-service-example)
+- [Common Service Types](#common-service-types)
+- [Scenario 1: Simulate a Stopped Service](#scenario-1-simulate-a-stopped-service)
+- [Scenario 2: Simulate a Disabled Service](#scenario-2-simulate-a-disabled-service)
+- [Scenario 3: Simulate a Service That Fails Because ExecStart Is Wrong](#scenario-3-simulate-a-service-that-fails-because-execstart-is-wrong)
+- [Scenario 4: Simulate a Service Crash and Auto-Restart](#scenario-4-simulate-a-service-crash-and-auto-restart)
+- [Scenario 5: Simulate a Port Conflict](#scenario-5-simulate-a-port-conflict)
+- [Scenario 6: Simulate a Service Configuration Error](#scenario-6-simulate-a-service-configuration-error)
+- [Scenario 7: Simulate a Missing Dependency or Wrong Startup Order](#scenario-7-simulate-a-missing-dependency-or-wrong-startup-order)
+- [Scenario 8: Simulate a Failed Service and Reset Its State](#scenario-8-simulate-a-failed-service-and-reset-its-state)
+- [Scenario 9: Simulate a Masked Service](#scenario-9-simulate-a-masked-service)
+- [Scenario 10: Simulate a Service Consuming Too Much CPU](#scenario-10-simulate-a-service-consuming-too-much-cpu)
+- [Scenario 11: Create a One-Shot Service](#scenario-11-create-a-one-shot-service)
+- [Scenario 12: Timers as Scheduled Services](#scenario-12-timers-as-scheduled-services)
+- [Service Troubleshooting Workflow](#service-troubleshooting-workflow)
+- [Step 1: Check Unit Exists](#step-1-check-unit-exists)
+- [Step 2: Check Active State](#step-2-check-active-state)
+- [Step 3: Check Boot State](#step-3-check-boot-state)
+- [Step 4: Read Status](#step-4-read-status)
+- [Step 5: Read Logs](#step-5-read-logs)
+- [Step 6: Check Ports](#step-6-check-ports)
+- [Step 7: Check Processes](#step-7-check-processes)
+- [Step 8: Check Configuration](#step-8-check-configuration)
+- [Common Service Problems and Fixes](#common-service-problems-and-fixes)
+- [Useful Command Summary](#useful-command-summary)
+- [Safe Lab Cleanup](#safe-lab-cleanup)
+- [Challenges](#challenges)
+
+</details>
+
 A service is a background program that provides a function to the system, users, or other programs.
 
 Services usually run without direct user interaction. They may start automatically when the system boots, listen for network connections, process scheduled work, write logs, or respond to requests from other programs.

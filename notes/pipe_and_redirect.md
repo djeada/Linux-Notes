@@ -1,5 +1,19 @@
 ## Working with Data Streams
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Standard Streams](#standard-streams)
+- [Pipe](#pipe)
+- [Redirection](#redirection)
+- [Process Substitution](#process-substitution)
+- [Filters](#filters)
+- [Challenges](#challenges)
+
+</details>
+
 Input redirection (`<`) allows a command to read from a file, while output redirection (`>`) sends a command's output to a file. Streams like stdin, stdout, and stderr control the flow of data between commands and the system, where stdin is the input, stdout is the standard output, and stderr is the error output. Pipes (`|`) connect the output of one command directly into the input of another, enabling you to chain commands together seamlessly. Filters, such as `grep` and `awk`, process these data streams, allowing you to search, manipulate, and extract information efficiently.
 
 ### Standard Streams
@@ -155,6 +169,8 @@ command &> output.txt
 command &>> output.txt
 ```
 
+These combined operators are Bash syntax. The portable forms are `command > output.txt 2>&1` and `command >> output.txt 2>&1`. Redirections are processed left to right: `command 2>&1 > output.txt` leaves stderr pointing to the original stdout instead of sending both streams to the file.
+
 #### IV. Redirecting Standard Input
 
 The `<` symbol redirects the standard input of a command to come from a file instead of the keyboard. For example:
@@ -189,6 +205,8 @@ EOF
 
 In this example, everything between `<<EOF` and `EOF` is treated as input to the `cat` command. The delimiter `EOF` can be replaced with any token, and it marks the end of the input block.
 
+With an unquoted delimiter, the shell expands variables and command substitutions in the body. Use `cat <<'EOF'` when you want literal text, such as a configuration example containing `$variables`.
+
 #### VII. View and Save Output Simultaneously
 
 The `tee` command is useful for displaying output on the screen while also saving it to a file:
@@ -207,7 +225,7 @@ output=$(script -c your_command /dev/null)
 echo "$output"
 ```
 
-Here, the `-c` option specifies the command to run, while `/dev/null` discards any input. The result is captured in the `output` variable.
+Here, `script -c` runs the command through a pseudoterminal, which can change its buffering behavior. `/dev/null` is the destination for the saved typescript, not a discarded input stream. Command substitution captures terminal output only after the command finishes and strips trailing newlines. For live output, run `script -q -c 'your_command' /dev/null`; terminal control sequences may still be present.
 
 #### Summary Table
 
@@ -258,10 +276,10 @@ Here, `<(ls /etc)` and `<(ls /usr/local/etc)` each produce a temporary file desc
 Some commands accept only file arguments and cannot read from standard input. Process substitution bridges that gap:
 
 ```bash
-paste <(cut -f1 data.csv) <(cut -f3 data.csv)
+paste <(cut -d, -f1 data.csv) <(cut -d, -f3 data.csv)
 ```
 
-This extracts the first and third columns from `data.csv` and pastes them side by side.
+This extracts the first and third comma-separated fields and pastes them side by side with a tab between them. It works for simple delimiter-separated text; `cut` does not understand CSV quoting or embedded commas. For tab-separated input, omit `-d,`.
 
 #### Output Process Substitution
 

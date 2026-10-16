@@ -1,5 +1,21 @@
 ## Ports
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Protocols and Their Associated Ports](#protocols-and-their-associated-ports)
+- [Common Services and Their Ports](#common-services-and-their-ports)
+- [The Importance of Securing Network Ports](#the-importance-of-securing-network-ports)
+- [Security Measures for Network Ports](#security-measures-for-network-ports)
+- [Monitoring Ports and Processes](#monitoring-ports-and-processes)
+- [Checking Socket Status with `ss`](#checking-socket-status-with-ss)
+- [Network Scanning with Nmap](#network-scanning-with-nmap)
+- [Challenges](#challenges)
+
+</details>
+
 In computer networking, ports serve as endpoints for communication between devices, similar to doors through which data flows in and out of a computer. In today's interconnected digital landscape, network security is paramount. Network ports are critical points that require diligent management and security measures. Unsecured ports can become vulnerabilities, exposing systems to unauthorized access, data breaches, and various cyber threats. 
 
 Main idea:
@@ -11,6 +27,8 @@ Main idea:
 - **Well-Known Ports** range from 0 to 1023 and are reserved for standard services like HTTP (port 80), HTTPS (port 443), FTP (port 21), and SSH (port 22).
 - **Registered Ports**, ranging from 1024 to 49151, are assigned to non-standard, less common applications, allowing for a diverse set of services beyond the well-known ones.
 - **Dynamic/Private Ports**, ranging from 49152 to 65535, are typically used for temporary purposes or private communications, often assigned dynamically for short-term needs.
+
+TCP and UDP each have their own 16-bit port space: 65,536 values, numbered 0–65,535. Port 0 is reserved rather than an ordinary service port; binding to port 0 asks Linux to choose an available port. The two protocols do not split one shared pool. Linux's automatic local-port range is configurable and may differ from the IANA dynamic/private range; inspect it with `sysctl net.ipv4.ip_local_port_range`.
 
 Example:
 
@@ -42,13 +60,13 @@ I. TCP (Transmission Control Protocol)
 
 - Reliable, connection-oriented.
 - Best for data requiring accuracy and completeness.
-- Higher security needs, due to its susceptibility to attacks.
+- Requires security controls appropriate to the service; TCP alone does not provide encryption or peer authentication.
 
 II. UDP (User Datagram Protocol)
 
 - Faster, connectionless.
 - Suited for streaming, real-time communication where speed is key.
-- Lower security needs than TCP, as it doesn't guarantee delivery or order.
+- Requires security controls too. Lack of delivery or ordering guarantees does not make UDP safer; UDP services can also face spoofing, amplification, or application attacks.
 
 Ports in the OSI Model:
 
@@ -93,6 +111,8 @@ Below is a table detailing some of the most commonly used services and their ass
 | SQL (Database Access)| Varied*   | TCP      |
 
 Note: SQL services vary in port numbers based on the specific SQL database being used (e.g., MySQL, MSSQL, PostgreSQL, etc.).
+
+These are conventional defaults, not guarantees about what is listening. FTP uses additional data connections, HTTP/3 uses QUIC over UDP (commonly 443), and a service may be configured on another port. Identify the protocol and listening process before changing a firewall rule. See [IANA's port registry](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml) and the [Linux IP manual](https://man7.org/linux/man-pages/man7/ip.7.html).
 
 ### The Importance of Securing Network Ports
 
@@ -651,7 +671,7 @@ The scan results are saved in `output.txt`.
 3. Identify which process is running on a specific port using commands like `lsof -i :<port>` on Linux or `netstat -ano` on Windows. Explain how this information can help you monitor unknown services and manage resource usage on your system.
 4. After installing a new service or application, determine which port(s) it is using. Use tools like `netstat`, `ss`, or `lsof` on Linux, and explain how you can track and manage the ports used by new services.
 5. Describe the role of ports in networking, focusing on how they facilitate multi-tasking and allow multiple services to operate simultaneously on the same IP address. Discuss how ports enable different applications to communicate independently over the network.
-6. Explain the significance of having 65,535 ports available, and describe how this number is split between TCP and UDP protocols. Discuss how ports are managed and allocated on a system, and why this range of ports is sufficient for most networking needs.
+6. Explain the 65,536 port-number values (0–65,535) in each of TCP's and UDP's independent port spaces, including the special role of port 0. Discuss how ports are allocated and how source/destination addresses and ports distinguish simultaneous connections.
 7. Compare TCP and UDP ports, describing the differences in how they function. Discuss the underlying mechanisms of each protocol and provide examples of when one might be preferred over the other, such as reliability with TCP and speed with UDP.
 8. Use a tool like `nmap` to view open ports on a server you have access to, and explain how this information can help you understand which services are running. Describe the basic usage of `nmap` and the insights it provides into a system’s network security.
 9. Research the purpose and ethical considerations of port scanning in cybersecurity. Perform a basic `nmap` scan on a local IP address or server you control to identify open ports, and explain why ethical hackers use port scanning as part of their methodology.

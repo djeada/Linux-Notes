@@ -1,5 +1,23 @@
 ## CI/CD Pipelines
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [CI/CD Pipeline Stages](#cicd-pipeline-stages)
+- [Continuous Integration](#continuous-integration)
+- [Continuous Delivery vs Continuous Deployment](#continuous-delivery-vs-continuous-deployment)
+- [Jenkins](#jenkins)
+- [GitLab CI/CD](#gitlab-cicd)
+- [GitHub Actions](#github-actions)
+- [Common Pipeline Patterns](#common-pipeline-patterns)
+- [Pipeline Security](#pipeline-security)
+- [Integrating with Linux Systems](#integrating-with-linux-systems)
+- [Challenges](#challenges)
+
+</details>
+
 CI/CD stands for Continuous Integration and Continuous Delivery (or Continuous Deployment). It is a set of practices that automate the process of integrating code changes, running tests, and delivering software to production environments. For Linux administrators moving into DevOps, CI/CD pipelines are a natural extension of the automation skills you already use daily—writing shell scripts, managing services with `systemd`, and configuring servers over SSH.
 
 At its core, a CI/CD pipeline is a series of automated steps that take code from a developer's machine all the way to a running production system. Every time someone pushes a commit, the pipeline kicks in: it builds the application, runs tests, and—if everything passes—deploys the result. This removes the error-prone manual process of building and deploying software, and it gives teams the confidence to ship changes frequently.
@@ -352,11 +370,13 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
         run: |
+          set -eu
+          umask 077
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
           rsync -avz --delete dist/ deploy@"$DEPLOY_HOST":/var/www/myapp/
           ssh deploy@"$DEPLOY_HOST" 'sudo systemctl restart myapp'
 ```
@@ -366,8 +386,10 @@ Key concepts in GitHub Actions:
 - **Triggers** (`on`) define what events start the workflow—pushes, pull requests, schedules, or manual dispatches.
 - **Jobs** run on virtual machines called runners; `ubuntu-latest` gives you a full Linux environment.
 - **Steps** are individual commands or reusable actions from the GitHub marketplace.
-- **Secrets** are encrypted environment variables configured in repository settings, never exposed in logs.
+- **Secrets** are stored securely in repository, organization, or environment settings and can be passed to a step through `env`. GitHub attempts to redact their values in logs, but transformed values or application output can still leak them. Avoid printing secrets or enabling shell tracing around them.
 - **Needs** enforces job ordering—the deploy job waits for build-and-test to succeed.
+
+For the deployment example, set `DEPLOY_KNOWN_HOSTS` to host-key entries whose fingerprints you have verified through a trusted channel. Running `ssh-keyscan` during deployment only collects the key offered at that moment; it does not authenticate it. See the [ssh-keyscan manual](https://man.openbsd.org/ssh-keyscan.1) and [GitHub's secret-handling guidance](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). The `--delete` option also removes destination files absent from `dist/`, so the destination must be dedicated to this application.
 
 ### Common Pipeline Patterns
 

@@ -1,6 +1,27 @@
 ## LFCS (Linux Foundation Certified System Administrator)
 
-The Linux Foundation Certified System Administrator (LFCS) certification validates your ability to perform core system administration tasks on a live Linux system. Like the RHCSA, it's a performance-based exam — you don't answer multiple-choice questions, you complete real tasks on a real system. What sets it apart is that you can choose your exam distribution (Ubuntu or CentOS), making it a solid choice if you work in environments that aren't Red Hat-centric.
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Exam Details at a Glance](#exam-details-at-a-glance)
+- [Exam Domains and Weights](#exam-domains-and-weights)
+- [Essential Commands](#essential-commands)
+- [Operating Running Systems](#operating-running-systems)
+- [User and Group Management](#user-and-group-management)
+- [Networking](#networking)
+- [Storage Management](#storage-management)
+- [Service Configuration](#service-configuration)
+- [Ubuntu vs CentOS: Key Differences](#ubuntu-vs-centos-key-differences)
+- [Practice Makes Perfect](#practice-makes-perfect)
+- [What's Next?](#whats-next)
+- [Helpful Resources](#helpful-resources)
+- [Challenges](#challenges)
+
+</details>
+
+The Linux Foundation Certified System Administrator (LFCS) certification validates your ability to perform core system administration tasks on a live Linux system. Like the RHCSA, it is a performance-based exam: you complete administration tasks rather than multiple-choice questions. Since the May 2023 refresh, its content is distribution agnostic and candidates no longer choose Ubuntu or CentOS at registration.
 
 This guide covers the exam domains, the commands and skills you need to master, and hands-on exercises that prepare you for what you'll face on exam day.
 
@@ -14,17 +35,29 @@ This guide covers the exam domains, the commands and skills you need to master, 
 | **Duration** | 2 hours |
 | **Number of Tasks** | Typically 15–20 tasks |
 | **Passing Score** | 66% |
-| **Cost** | Approximately $395 USD (includes one free retake) |
+| **Cost** | $445 USD exam-only list price as checked 2026-10-16; confirm current pricing and taxes before booking |
 | **Prerequisites** | None required |
-| **Validity** | 3 years |
-| **Distribution Choice** | Ubuntu or CentOS/RHEL (you choose at registration) |
+| **Validity** | 2 years for certifications earned under the policy effective April 2024 |
+| **Distribution Choice** | No platform selection; distribution-agnostic exam content |
+
+Checked against the [LFCS product page](https://training.linuxfoundation.org/certification/linux-foundation-certified-sysadmin-lfcs/), [2023 exam changes](https://training.linuxfoundation.org/blog/updated-linux-foundation-certified-system-administrator-lfcs-exam/), and [certification policy](https://docs.linuxfoundation.org/tc-docs/certification/lf-handbook2/certificates-and-certification). Treat the task-count estimate as practice guidance, not a guaranteed exam layout.
 
 ### Exam Domains and Weights
 
-The LFCS exam tests five major domains, each weighted differently:
+The current five-domain weighting is:
+
+| Domain | Weight |
+|--------|-------:|
+| Operations and Deployment | 25% |
+| Networking | 25% |
+| Storage | 20% |
+| Essential Commands | 20% |
+| Users and Groups | 10% |
+
+The older six-section outline below is retained as a study checklist, including its historical approximate weights. It is not the current exam blueprint. The present objectives also include containers, virtual machines, SELinux, Git, TLS certificates, and LDAP accounts; compare your preparation with the linked provider objectives.
 
 ```
-LFCS Exam Domains (approximate weights)
+Historical LFCS Study Outline (older approximate weights)
 ├── Essential Commands                           ~25%
 │   ├── Log into local and remote consoles
 │   ├── Search for files
@@ -652,7 +685,9 @@ VI. **Timed practice exam:**
 <details>
 <summary>Click for hints and tips</summary>
 
-**Choosing Ubuntu vs CentOS for the exam:**
+**Choosing Ubuntu vs an RPM-based distribution for your practice lab:**
+
+There is no distribution choice at exam registration. Use this comparison to broaden your practical skills, not to select an exam platform.
 
 - Pick whichever you use most often in your daily work
 - Ubuntu is more common in cloud environments and development
@@ -688,7 +723,7 @@ VI. **Timed practice exam:**
 
 After earning the LFCS, consider advancing your career with:
 
-- [LFCE (Linux Foundation Certified Engineer)](https://training.linuxfoundation.org/certification/linux-foundation-certified-engineer-lfce/) — Advanced Linux engineering topics
+- [LFCE retirement notice](https://training.linuxfoundation.org/lfcecert-inactive/) — LFCE covered advanced engineering but was retired on May 1, 2022; it is not a current next exam
 - [Linux Certification Overview](https://github.com/djeada/Linux-Notes/blob/main/notes/linux_certification_overview.md) — Compare all certification options
 - [RHCSA Certification Guide](https://github.com/djeada/Linux-Notes/blob/main/notes/rhcsa.md) — Add a Red Hat certification to your credentials
 

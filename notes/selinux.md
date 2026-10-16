@@ -1,5 +1,66 @@
 ## SELinux
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [DAC vs MAC](#dac-vs-mac)
+- [Big Picture](#big-picture)
+- [SELinux Architecture](#selinux-architecture)
+- [Subjects and Objects](#subjects-and-objects)
+- [SELinux Contexts](#selinux-contexts)
+- [Process Context Example](#process-context-example)
+- [File Context Example](#file-context-example)
+- [Why Labels Matter](#why-labels-matter)
+- [SELinux Modes](#selinux-modes)
+- [Enforcing Mode](#enforcing-mode)
+- [Permissive Mode](#permissive-mode)
+- [Disabled Mode](#disabled-mode)
+- [Checking SELinux Mode](#checking-selinux-mode)
+- [Temporarily Changing SELinux Mode](#temporarily-changing-selinux-mode)
+- [Permanently Changing SELinux Mode](#permanently-changing-selinux-mode)
+- [SELinux Policy Types](#selinux-policy-types)
+- [Targeted Policy](#targeted-policy)
+- [Strict Policy](#strict-policy)
+- [Common SELinux Tools](#common-selinux-tools)
+- [Viewing Contexts](#viewing-contexts)
+- [Changing Contexts with `chcon`](#changing-contexts-with-chcon)
+- [Restoring Default Contexts with `restorecon`](#restoring-default-contexts-with-restorecon)
+- [Persistent Context Rules with `semanage fcontext`](#persistent-context-rules-with-semanage-fcontext)
+- [`chcon` vs `semanage fcontext`](#chcon-vs-semanage-fcontext)
+- [SELinux Booleans](#selinux-booleans)
+- [Temporarily Changing a Boolean](#temporarily-changing-a-boolean)
+- [Permanently Changing a Boolean](#permanently-changing-a-boolean)
+- [SELinux Ports](#selinux-ports)
+- [Audit Logs and AVC Denials](#audit-logs-and-avc-denials)
+- [Explaining Denials with `audit2why`](#explaining-denials-with-audit2why)
+- [Using `sealert`](#using-sealert)
+- [Custom Policies with `audit2allow`](#custom-policies-with-audit2allow)
+- [Standard SELinux Troubleshooting Workflow](#standard-selinux-troubleshooting-workflow)
+- [Scenario 1: Check SELinux Mode and Temporarily Switch to Permissive](#scenario-1-check-selinux-mode-and-temporarily-switch-to-permissive)
+- [Scenario 2: Simulate a Web Server File Context Problem](#scenario-2-simulate-a-web-server-file-context-problem)
+- [Scenario 3: Demonstrate `chcon` Is Temporary](#scenario-3-demonstrate-chcon-is-temporary)
+- [Scenario 4: Simulate a Web Server Network Connection Denied by Boolean](#scenario-4-simulate-a-web-server-network-connection-denied-by-boolean)
+- [Scenario 5: Simulate a Service Binding to a Nonstandard Port](#scenario-5-simulate-a-service-binding-to-a-nonstandard-port)
+- [Scenario 6: Simulate FTP Access to Home Directories Blocked by SELinux](#scenario-6-simulate-ftp-access-to-home-directories-blocked-by-selinux)
+- [Scenario 7: Simulate Permissive Mode Logging](#scenario-7-simulate-permissive-mode-logging)
+- [Scenario 8: Diagnose “Permission Denied” When Unix Permissions Look Correct](#scenario-8-diagnose-permission-denied-when-unix-permissions-look-correct)
+- [Scenario 9: Use `audit2why` Before Making Changes](#scenario-9-use-audit2why-before-making-changes)
+- [Scenario 10: Generate a Custom Policy Only as a Last Resort](#scenario-10-generate-a-custom-policy-only-as-a-last-resort)
+- [Scenario 11: Full Troubleshooting Example for Custom Web Directory](#scenario-11-full-troubleshooting-example-for-custom-web-directory)
+- [Scenario 12: Relabel a Filesystem After SELinux Was Disabled](#scenario-12-relabel-a-filesystem-after-selinux-was-disabled)
+- [Common SELinux Problems and Fixes](#common-selinux-problems-and-fixes)
+- [Problem: Service Needs Optional Access](#problem-service-needs-optional-access)
+- [Problem: Service Uses Nonstandard Port](#problem-service-uses-nonstandard-port)
+- [Problem: SELinux Denial but No Audit Logs](#problem-selinux-denial-but-no-audit-logs)
+- [Problem: Someone Suggests “Just Disable SELinux”](#problem-someone-suggests-just-disable-selinux)
+- [Useful Command Summary](#useful-command-summary)
+- [Safe Lab Rules](#safe-lab-rules)
+- [Practical Challenges](#practical-challenges)
+
+</details>
+
 SELinux stands for Security-Enhanced Linux.
 
 It is a Linux security system that adds an extra layer of access control on top of normal Linux file permissions.

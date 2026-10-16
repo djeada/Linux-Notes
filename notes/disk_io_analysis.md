@@ -1,5 +1,60 @@
 ## Disk I/O Analysis and Performance Monitoring
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [How Disk I/O Works](#how-disk-io-works)
+- [Read Operations](#read-operations)
+- [Write Operations](#write-operations)
+- [Important Disk I/O Concepts](#important-disk-io-concepts)
+- [Latency](#latency)
+- [Throughput](#throughput)
+- [IOPS](#iops)
+- [Queue Depth](#queue-depth)
+- [I/O Wait](#io-wait)
+- [Sequential vs Random I/O](#sequential-vs-random-io)
+- [HDD, SSD, and NVMe Performance](#hdd-ssd-and-nvme-performance)
+- [Disk Scheduling](#disk-scheduling)
+- [Elevator Algorithm](#elevator-algorithm)
+- [Useful Disk I/O Tools](#useful-disk-io-tools)
+- [Installing Common Tools](#installing-common-tools)
+- [Using `iostat`](#using-iostat)
+- [Using `vmstat`](#using-vmstat)
+- [Using `iotop`](#using-iotop)
+- [Using `pidstat`](#using-pidstat)
+- [Using `sar`](#using-sar)
+- [Using `fio`](#using-fio)
+- [Scenario 1: Simulate a Sequential Write Bottleneck](#scenario-1-simulate-a-sequential-write-bottleneck)
+- [Scenario 2: Simulate a Random Read Bottleneck](#scenario-2-simulate-a-random-read-bottleneck)
+- [Scenario 3: Simulate a Random Write Bottleneck](#scenario-3-simulate-a-random-write-bottleneck)
+- [Scenario 4: Simulate High I/O Wait](#scenario-4-simulate-high-io-wait)
+- [Scenario 5: Simulate a Background Job Interfering with Foreground Work](#scenario-5-simulate-a-background-job-interfering-with-foreground-work)
+- [Scenario 6: Compare I/O Priorities Using `ionice`](#scenario-6-compare-io-priorities-using-ionice)
+- [Scenario 7: Simulate Cache Effects](#scenario-7-simulate-cache-effects)
+- [Scenario 8: Simulate Many Small Files](#scenario-8-simulate-many-small-files)
+- [Scenario 9: Simulate Swap-Related Disk Pressure](#scenario-9-simulate-swap-related-disk-pressure)
+- [Process States and Disk I/O](#process-states-and-disk-io)
+- [I/O Priority with `ionice`](#io-priority-with-ionice)
+- [Filesystem Choices](#filesystem-choices)
+- [Mount Options for I/O Performance](#mount-options-for-io-performance)
+- [RAID and Disk I/O](#raid-and-disk-io)
+- [Bottleneck Interpretation Guide](#bottleneck-interpretation-guide)
+- [Practical Troubleshooting Workflow](#practical-troubleshooting-workflow)
+- [Step 1: Check Overall System Load](#step-1-check-overall-system-load)
+- [Step 2: Check CPU I/O Wait](#step-2-check-cpu-io-wait)
+- [Step 3: Check Disk-Level Metrics](#step-3-check-disk-level-metrics)
+- [Step 4: Identify the Process](#step-4-identify-the-process)
+- [Step 5: Determine the Workload Type](#step-5-determine-the-workload-type)
+- [Step 6: Check Memory and Swap](#step-6-check-memory-and-swap)
+- [Step 7: Check Disk Errors](#step-7-check-disk-errors)
+- [Step 8: Mitigate the Bottleneck](#step-8-mitigate-the-bottleneck)
+- [Common Disk I/O Problems and Fixes](#common-disk-io-problems-and-fixes)
+- [Challenges](#challenges)
+
+</details>
+
 Disk I/O analysis is the process of observing how data is read from and written to storage devices.
 
 Disk I/O matters because many applications depend heavily on storage performance. Databases, file servers, virtual machines, build systems, backup jobs, logging systems, and data-processing workloads can all slow down if the disk cannot keep up.
@@ -640,7 +695,7 @@ Run this in one terminal:
 mkdir -p ~/fio-test
 
 fio --name=seq-write-test \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=2G \
     --rw=write \
     --bs=1M \
@@ -724,7 +779,7 @@ First create a file:
 mkdir -p ~/fio-test
 
 fio --name=prepare-file \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=2G \
     --rw=write \
     --bs=1M \
@@ -738,7 +793,7 @@ Run:
 
 ```bash
 fio --name=random-read-test \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --filename=randomfile \
     --size=2G \
     --rw=randread \
@@ -797,7 +852,7 @@ Generate small random writes and observe queueing and latency.
 
 ```bash
 fio --name=random-write-test \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=2G \
     --rw=randwrite \
     --bs=4k \
@@ -866,7 +921,7 @@ Use a random read/write workload:
 
 ```bash
 fio --name=high-iowait-test \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=2G \
     --rw=randrw \
     --rwmixread=50 \
@@ -950,7 +1005,7 @@ Terminal 1:
 
 ```bash
 fio --name=background-writer \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=4G \
     --rw=write \
     --bs=1M \
@@ -997,7 +1052,7 @@ Stop the fio job, then rerun it with idle I/O priority:
 
 ```bash
 ionice -c3 fio --name=background-writer \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=4G \
     --rw=write \
     --bs=1M \
@@ -1013,17 +1068,19 @@ Interpretation:
 - The background job should only receive disk time when other processes are not using the disk.
 - This can reduce the impact on interactive or foreground workloads.
 
-### Scenario 6: Simulate Slow Disk with I/O Throttling Using `ionice`
+### Scenario 6: Compare I/O Priorities Using `ionice`
 
 This scenario does not make the disk physically slower. Instead, it changes how aggressively a process competes for disk access.
 
 Show how I/O priority affects competing disk workloads.
 
+`ionice` sets scheduling priority, not a fixed IOPS or bandwidth limit. Its effect depends on the active I/O scheduler, kernel, device, and type of I/O; an idle-class job may still use the full device when there is no contention. Inspect `/sys/block/<device>/queue/scheduler` and do not infer a failed command just because throughput is unchanged. For an explicit rate ceiling, use a supported control such as cgroup v2 `io.max` or fio's rate options in a lab.
+
 #### Run a Low-Priority Job
 
 ```bash
 ionice -c3 fio --name=idle-writer \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=2G \
     --rw=write \
     --bs=1M \
@@ -1038,7 +1095,7 @@ In another terminal:
 
 ```bash
 fio --name=normal-reader \
-    --directory=~/fio-test \
+    --directory="$HOME/fio-test" \
     --size=2G \
     --rw=read \
     --bs=1M \

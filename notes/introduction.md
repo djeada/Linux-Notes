@@ -1,6 +1,22 @@
 ## Introduction to Linux
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [What is Operating System?](#what-is-operating-system)
+- [Why Learn Linux?](#why-learn-linux)
+- [Before Linux](#before-linux)
+- [The History of Linux](#the-history-of-linux)
+- [Understanding a Linux Distribution](#understanding-a-linux-distribution)
+- [Challenges](#challenges)
+
+</details>
+
 Linux is a versatile and powerful open-source operating system that forms the backbone of countless technological infrastructures, from servers and desktops to mobile devices and embedded systems. Known for its stability, security, and flexibility, Linux provides a robust platform that can be customized to suit a wide range of applications. It is supported by a vibrant global community of developers and users, which contributes to its continuous evolution and ensures a rich ecosystem of software and tools. Whether for personal use, enterprise environments, or innovative tech projects, Linux offers a reliable and adaptable solution for modern computing needs.
+
+More precisely, Linux is the kernel. A Linux distribution combines that kernel with user-space tools, libraries, a package manager, and usually an installer. These notes use "Linux" for both the kernel and the wider operating-system environment when the context is clear.
 
 ### What is Operating System?
 
@@ -71,7 +87,9 @@ Operating Systems
 ### Why Learn Linux?
 
 - Linux has demonstrated **consistent growth** over the past three decades, affirming its enduring relevance in the technology industry and maintaining its popularity among professionals and enthusiasts.
-- The **versatility** of Linux is showcased by its use across a wide range of systems, including web servers, supercomputers, IoT devices, and even Tesla's electric cars. Additionally, many operating systems, such as Android and Unix-like systems like Playstation OS, Mac OS, and OS X, are either based on or inspired by Linux, underlining its widespread influence.
+- The **versatility** of Linux is showcased by its use in web servers, supercomputers, IoT devices, and vehicle systems. Android uses a Linux-based kernel. Other Unix-like systems have different ancestry: macOS (formerly OS X) uses Darwin/XNU with Mach and BSD components, and PlayStation system software has used BSD-derived components. Sharing Unix concepts does not make these systems Linux distributions.
+
+For the distinction, see [Android's kernel overview](https://source.android.com/docs/core/architecture/kernel) and [Apple's Darwin architecture overview](https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/KernelProgramming/Architecture/Architecture.html).
 - The **Linux kernel** is engineered to support a vast array of hardware types, from personal computers and servers to mobile devices and embedded systems, making it a highly adaptable operating system for various applications.
 - Linux offers a rich selection of **native software**, and many popular applications from Windows and Mac platforms have been ported to run on it, ensuring a broad spectrum of software availability for users.
 - Due to its **open-source** and modular nature, Linux can be tailored to meet a wide range of requirements, facilitating diverse applications across different sectors.

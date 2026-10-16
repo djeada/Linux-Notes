@@ -1,5 +1,66 @@
 ## System Startup Process
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Bootup Process](#bootup-process)
+- [POST: Power-On Self-Test](#post-power-on-self-test)
+- [BIOS vs UEFI](#bios-vs-uefi)
+- [BIOS Boot](#bios-boot)
+- [UEFI Boot](#uefi-boot)
+- [MBR](#mbr)
+- [GPT and EFI System Partition](#gpt-and-efi-system-partition)
+- [Boot Device Selection](#boot-device-selection)
+- [Bootloader](#bootloader)
+- [GRUB 2](#grub-2)
+- [Kernel Image and Initramfs](#kernel-image-and-initramfs)
+- [Kernel Command Line](#kernel-command-line)
+- [Kernel Initialization](#kernel-initialization)
+- [Initramfs](#initramfs)
+- [switch_root and pivot_root](#switch_root-and-pivot_root)
+- [PID 1](#pid-1)
+- [SysV Init](#sysv-init)
+- [systemd](#systemd)
+- [systemd Startup Flow](#systemd-startup-flow)
+- [Runlevels](#runlevels)
+- [systemd Targets](#systemd-targets)
+- [Login Prompts and User Sessions](#login-prompts-and-user-sessions)
+- [Boot Logs](#boot-logs)
+- [Boot Performance Tools](#boot-performance-tools)
+- [Kernel Panic](#kernel-panic)
+- [Kernel Panic Recovery Workflow](#kernel-panic-recovery-workflow)
+- [Basic System Management Commands](#basic-system-management-commands)
+- [Hostname](#hostname)
+- [Uptime](#uptime)
+- [Reboot](#reboot)
+- [Shutdown](#shutdown)
+- [Timezone](#timezone)
+- [Root Password Recovery](#root-password-recovery)
+- [Scenario 1: Measure Boot Time and Find Slow Services](#scenario-1-measure-boot-time-and-find-slow-services)
+- [Scenario 2: Diagnose a Failed Service During Boot](#scenario-2-diagnose-a-failed-service-during-boot)
+- [Scenario 3: Simulate Wrong Default Target](#scenario-3-simulate-wrong-default-target)
+- [Scenario 4: Boot into Rescue Target](#scenario-4-boot-into-rescue-target)
+- [Scenario 5: Diagnose a Boot Problem from Logs](#scenario-5-diagnose-a-boot-problem-from-logs)
+- [Scenario 6: Simulate and Cancel Scheduled Shutdown](#scenario-6-simulate-and-cancel-scheduled-shutdown)
+- [Scenario 7: Verify a Reboot with Uptime](#scenario-7-verify-a-reboot-with-uptime)
+- [Scenario 8: Investigate Kernel Panic: Root Filesystem Not Found](#scenario-8-investigate-kernel-panic-root-filesystem-not-found)
+- [Scenario 9: Recover Root Password in a Lab VM](#scenario-9-recover-root-password-in-a-lab-vm)
+- [Scenario 10: Inspect systemd Timers During Startup Maintenance](#scenario-10-inspect-systemd-timers-during-startup-maintenance)
+- [Scenario 11: Set and Verify Timezone](#scenario-11-set-and-verify-timezone)
+- [Scenario 12: Create a Simple Cron Maintenance Task](#scenario-12-create-a-simple-cron-maintenance-task)
+- [Common Startup Problems and Fixes](#common-startup-problems-and-fixes)
+- [Problem: Service Fails at Boot](#problem-service-fails-at-boot)
+- [Problem: Boot Drops to Emergency Mode](#problem-boot-drops-to-emergency-mode)
+- [Problem: GRUB Menu Does Not Show](#problem-grub-menu-does-not-show)
+- [Problem: Kernel Panic After Update](#problem-kernel-panic-after-update)
+- [Useful Command Summary](#useful-command-summary)
+- [Safe Lab Cleanup](#safe-lab-cleanup)
+- [Challenges](#challenges)
+
+</details>
+
 The system startup process is everything that happens between pressing the power button and reaching a usable login prompt or graphical desktop.
 
 At a high level, startup moves through several layers:

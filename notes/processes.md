@@ -1,5 +1,20 @@
 ## Processes
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Process Management Commands](#process-management-commands)
+- [Process life cycle](#process-life-cycle)
+- [Process Spawning](#process-spawning)
+- [Process Termination](#process-termination)
+- [Finding Processes](#finding-processes)
+- [Foreground vs Background Jobs](#foreground-vs-background-jobs)
+- [Challenges](#challenges)
+
+</details>
+
 In any operating system, a process is the fundamental unit of execution—a live instance of a program. Beyond its executable code (the text segment), a process encompasses its dynamic state: the program counter, CPU registers, call stack, heap, and other variable storage. To manage and schedule these tasks, the OS assigns each process a unique process identifier (PID).
 
 When a user executes a command, launches an application, or initiates a system service, a new process is instantiated. Modern computing systems, with their powerful processors, can handle a multitude of processes at the same time. This parallel execution is managed through a technique known as rapid context switching, where the operating system's scheduler assigns CPU time slices to each process and switches between them so quickly that it gives the illusion of simultaneous execution.
@@ -8,8 +23,8 @@ In the context of multicore CPUs, each core can handle its own set of processes 
 
 Processes in a system can be broadly categorized into two types:
 
-- A **Shell Job** refers to a process started from a user's command line interface or shell. It is typically interactive, requiring user input and providing output directly to the user's console. Examples of shell jobs include editing a document in a text editor or running a custom script.
-- In contrast, a **Daemon** is a background process that usually starts at system boot and runs with elevated privileges. Daemons do not interact directly with the user interface; instead, they operate silently in the background, handling various system-related tasks. Common examples include the print spooler daemon, which manages print jobs, and the network daemon, which handles network connections.
+- A **Shell Job** is a process or pipeline managed by a shell's job control. It may run in the foreground or background and need not be interactive. Examples include editing a document or running a script.
+- A **Daemon** provides a background service, such as printing or networking. It may start at boot or on demand, and many daemons run under dedicated unprivileged accounts. These are useful descriptions, not an exhaustive classification of all processes.
 
 ### Process Management Commands
 
@@ -87,7 +102,7 @@ PID TTY      STAT   TIME COMMAND
 ```
 
 ```
-ps -o
+ps -o pid,ppid,stat,cmd
 ```
 
 Customizes the output by specifying column names, tailored for specific requirements.
@@ -126,7 +141,9 @@ The life cycle of a process in an operating system is a critical concept. The pr
 - In the **Running** state, the process is actively executing instructions on the CPU.
 - A process can be **Interrupted**, meaning it is temporarily stopped. This may occur to allow other processes to run or because the process is waiting for an input or an event.
 - The **Exit** state indicates that the process has completed its execution and is ready to be removed from the system.
-- If a process is **Terminated**, it means that an error occurred or an explicit kill command was issued, resulting in the process being forcefully stopped.
+- A process is **Terminated** when it has finished, whether through a normal exit or a signal. A terminated child can remain as a zombie until its parent collects its exit status with a wait function.
+
+The diagram uses conceptual lifecycle stages. Linux tools report states such as `R` (running or runnable), `S` (interruptible sleep), `D` (uninterruptible sleep), `T` (stopped), and `Z` (zombie). See [Task-State Analysis](task_state_analysis.md) for the distinction between waiting, stopping, and exiting.
 
 ### Process Spawning
 
@@ -134,7 +151,7 @@ Process spawning is a fundamental aspect of any operating system. It's the actio
 
 * The first process that initiates when a system boots up is assigned Process ID (PID) 1. 
 * This initial process is known as `systemd` or `init`, based on the Linux distribution in use. 
-* Being the first process, it acts as the parent to all subsequently spawned processes.
+* PID 1 starts the user-space service tree and normally adopts orphaned descendants unless a nearer child subreaper does so. It is not the direct parent of every process; kernel threads have a separate ancestry.
 
 Spawning a process can be as straightforward as executing a command or running a program from the command line. For instance:
 
@@ -142,33 +159,44 @@ Spawning a process can be as straightforward as executing a command or running a
 echo "Hello, world!"
 ```
 
-This command creates a new process that executes the echo command, resulting in the specified text being printed on the terminal.
+This prints the text. In Bash, `echo` is normally a builtin, so this particular command does not create a new process. Running an external command such as `/bin/echo "Hello, world!"` normally makes the shell create a child and execute that program.
 
 For more complex operations, you might need to spawn processes programmatically. In the C programming language, the fork and exec functions are frequently used for this purpose.
 
 - `fork()` creates a copy of the currently executing process, generating a new child process.
-- `exec()` replaces the current process with a new one.
+- The `exec` family replaces the current process's program image while retaining its PID; it does not create another process. In C, use a concrete function such as `execl()` or `execvp()` rather than a function literally named `exec()`.
 
 Consider the following example:
 
 ```C
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
-int main() {
+int main(void) {
   pid_t pid = fork();
-  if (pid == 0) {
-    // This is the child process
-    exec("/bin/ls");
-  } else {
-    // This is the parent process
-    printf("Child process ID: %d\n", pid);
+  if (pid == -1) {
+    perror("fork");
+    return EXIT_FAILURE;
   }
-  return 0;
+  if (pid == 0) {
+    execl("/bin/ls", "ls", (char *)NULL);
+    // Reached only if execl fails.
+    perror("execl");
+    _exit(127);
+  }
+  printf("Child process ID: %ld\n", (long)pid);
+  int status;
+  if (waitpid(pid, &status, 0) == -1) {
+    perror("waitpid");
+    return EXIT_FAILURE;
+  }
+  return WIFEXITED(status) ? WEXITSTATUS(status) : EXIT_FAILURE;
 }
 ```
 
-In this program, a new process is created using the fork function, which then gets replaced by the `ls` command via the exec function. The parent process simply prints the child process ID on the terminal.
+Here `fork()` creates the child, `execl()` loads `ls` into that child, and the parent prints the child PID and waits for its exit status. Save it as `spawn.c`, compile with `cc -Wall -Wextra -Werror spawn.c -o spawn`, and run `./spawn` in a practice directory. See the Linux manuals for [execve](https://man7.org/linux/man-pages/man2/execve.2.html) and [waitpid](https://man7.org/linux/man-pages/man2/waitpid.2.html).
 
 There are several other methods to spawn processes in Linux. Functions like `system`, `popen`, or `posix_spawn` from the POSIX library also provide process spawning capabilities.
 
@@ -222,20 +250,22 @@ When using the `kill` command, special PID values can be used to target multiple
 
 - Using **`-1`** as a signal target sends the signal to all processes that the user has permission to signal, excluding the process itself and process ID 1 (the init process).
 - The **`0`** target sends the signal to all processes in the same process group as the calling process, allowing for group-wide signaling.
-- When **negative values less than -1** are used, the signal is sent to all processes in the process group corresponding to the absolute value of the given number. For example, executing `kill -2 -SIGTERM` sends the SIGTERM signal to all processes in the process group with PGID 2.
+- When **negative values less than -1** are used, the signal is sent to the process group whose ID is the absolute value of the target. For example, `kill -s TERM -- -2` targets PGID 2. Put the signal option before the target and use `--` to separate options from negative targets.
 
 These special values allow for more flexible management of processes and process groups, especially in scenarios where you need to signal multiple related processes at once. Here are examples of using these special values:
 
 ```bash
 # Sending SIGTERM to all processes the user can signal
-kill -1 -SIGTERM
+kill -s TERM -- -1
 
 # Sending SIGTERM to all processes in the same process group as the current process
-kill 0 -SIGTERM
+kill -s TERM -- 0
 
 # Sending SIGTERM to all processes in the process group with PGID 2
-kill -2 -SIGTERM
+kill -s TERM -- -2
 ```
+
+These broad-target examples explain signal semantics; run them only in an isolated lab process group or session. They can terminate your shell and unrelated work. Prefer an inspected, specific PID for normal administration. The exclusion of the caller for target `-1` describes Linux's [kill system call](https://man7.org/linux/man-pages/man2/kill.2.html); when an external `kill` program is the caller, the invoking shell may still be a target.
 
 ### Finding Processes
 
@@ -265,7 +295,7 @@ user      2411  2345  0 11:02 ?        00:00:00 /usr/lib/firefox/firefox -conten
 | **%CPU / %MEM** | If you add the `-o %cpu,%mem` flags, you’ll see quick resource usage. |
 | **CMD**         | Full command line—helps confirm you’re looking at the right thing.    |
 
-> **Tip:** End the pipeline with `grep -v grep` or use `ps -ef | grep [f]irefox` so the `grep` process doesn’t show up in the results.
+> **Tip:** End the pipeline with `grep -v grep` or use `ps -ef | grep '[f]irefox'` so the `grep` process doesn't show up in the results. Quoting prevents the shell from treating `[f]` as a filename glob.
 
 #### `pgrep` — faster, script-friendly
 
@@ -298,8 +328,8 @@ for pid in $(pgrep nginx); do sudo strace -p "$pid"; done
 #### `htop` — interactive, real-time dashboard
 
 1. `htop` ↵ to open the UI.
-2. Press **F4** (or `/`) and start typing a name—e.g., `python`.
-3. Matching rows highlight instantly; everything else is temporarily hidden.
+2. Press **F4** to filter rows, or **F3** (often also `/`) to search, and type a name such as `python`.
+3. Filtering hides nonmatching rows; searching locates a match without hiding the other processes. Check the key labels in your installed version.
 4. Use the **arrow keys** to move, **F9** to send a signal if you need to kill/stop a misbehaving process.
 
 ```

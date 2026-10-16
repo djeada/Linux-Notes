@@ -1,5 +1,31 @@
 ## Log Files, Journals, and Logging Systems
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [What Is a Log?](#what-is-a-log)
+- [The Linux Logging Landscape](#the-linux-logging-landscape)
+- [Common Linux Log Locations](#common-linux-log-locations)
+- [Plain Text Logs](#plain-text-logs)
+- [Journald and `journalctl`](#journald-and-journalctl)
+- [Linux Logs by System Layer](#linux-logs-by-system-layer)
+- [Creating Logs from Python Applications](#creating-logs-from-python-applications)
+- [Creating Logs from Shell Scripts](#creating-logs-from-shell-scripts)
+- [Rsyslog](#rsyslog)
+- [Log Housekeeping](#log-housekeeping)
+- [Quickly Searching and Parsing Logs](#quickly-searching-and-parsing-logs)
+- [Centralized Log Collection](#centralized-log-collection)
+- [Debugging with Logs: Practical Playbooks](#debugging-with-logs-practical-playbooks)
+- [Security-Focused Log Examples](#security-focused-log-examples)
+- [Best Practices](#best-practices)
+- [Quick Command Cheat Sheet](#quick-command-cheat-sheet)
+- [Best Practices](#best-practices-1)
+- [Challenges](#challenges)
+
+</details>
+
 Understanding how logging works in Linux is like learning the language your system uses to communicate. Logs are the detailed records that your system keeps about its activities, and they are invaluable for troubleshooting, monitoring performance, and ensuring security. Let's embark on a journey to demystify log files, journals, and the various logging systems used in Linux.
 
 ### What Is a Log?

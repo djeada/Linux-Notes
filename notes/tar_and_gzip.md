@@ -1,5 +1,26 @@
 ## File Compression and Archiving Commands
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Tar](#tar)
+- [Compressing the Archive with `gzip`](#compressing-the-archive-with-gzip)
+- [Extracting Files from an Archive](#extracting-files-from-an-archive)
+- [Listing the Contents of an Archive](#listing-the-contents-of-an-archive)
+- [Using `gzip` Independently](#using-gzip-independently)
+- [Practical Examples](#practical-examples)
+- [Understanding File Permissions and Ownership](#understanding-file-permissions-and-ownership)
+- [Excluding Files from an Archive](#excluding-files-from-an-archive)
+- [Archiving Over SSH](#archiving-over-ssh)
+- [Splitting Large Archives](#splitting-large-archives)
+- [Using Other Compression Tools with `tar`](#using-other-compression-tools-with-tar)
+- [Common Pitfalls and Tips](#common-pitfalls-and-tips)
+- [Challenges](#challenges)
+
+</details>
+
 Working with files on Unix-based systems often involves managing multiple files and directories, especially when it comes to storage or transferring data. Tools like `tar` and `gzip` are invaluable for packaging and compressing files efficiently. Understanding how to use these commands can simplify tasks like backing up data, sharing files, or deploying applications.
 
 Imagine you have a collection of files and folders that you want to bundle together into a single package. Think of it as packing items into a suitcase for a trip—`tar` acts as the suitcase that holds everything together.
@@ -185,9 +206,9 @@ This command extracts the contents of `project_backup.tar.gz` into `/path/to/des
 
 ### Understanding File Permissions and Ownership
 
-One of the strengths of using `tar` is that it preserves file permissions and ownership by default. This is important when you're archiving files that need to maintain their original access rights.
+`tar` records permissions and ownership in the archive. Restoration depends on the extracting user's privileges and options; recording metadata does not guarantee it can all be restored.
 
-For instance, if a file is owned by `user1` and has specific permissions, when you extract the archive as a different user, `tar` will attempt to preserve the original ownership and permissions. If you have the necessary permissions (e.g., running as root), the files will retain their original ownership.
+For GNU tar, an ordinary user normally owns the extracted files, and the umask limits restored permissions. Root normally restores archived ownership and permissions. Use `--same-permissions` (`-p`) deliberately when exact permissions are needed; ACLs and extended attributes need options such as `--acls` and `--xattrs` on both creation and extraction. Extract unfamiliar archives into a separate directory as an ordinary user.
 
 ### Excluding Files from an Archive
 
@@ -196,10 +217,12 @@ Sometimes, you might want to exclude certain files or directories when creating 
 For example:
 
 ```bash
-tar -czvf archive.tar.gz dir1 --exclude='dir1/tmp/*'
+tar --exclude='dir1/tmp/*' -czvf archive.tar.gz dir1
 ```
 
 This command archives `dir1` but excludes all files in the `dir1/tmp` directory.
+
+Place GNU tar's position-sensitive exclusion options before the file operands they should affect. An exclusion after `dir1` may be ineffective and produce an error. The quotes keep the shell from expanding the pattern first. See [GNU tar's option ordering](https://www.gnu.org/software/tar/manual/html_node/Position_002dSensitive-Options.html).
 
 ### Archiving Over SSH
 

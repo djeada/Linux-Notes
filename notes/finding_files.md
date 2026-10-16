@@ -1,5 +1,17 @@
 ## Finding Files
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Find](#find)
+- [Locate](#locate)
+- [Which](#which)
+- [Challenges](#challenges)
+
+</details>
+
 The `find`, `locate`, and `which` commands are commonly used for file search operations. The `find` command performs a comprehensive search using attributes such as name, size, and type. `locate` provides a faster, albeit periodically updated, search by filename. `which` locates the path of a program's executable within the system's `PATH`.
 
 ### Find
@@ -73,7 +85,7 @@ If `guest` owns files in `/home/guest/`, this command excludes those files.
 To find files modified more recently than `file2`:
 
 ```bash
-find -anewer file2
+find . -type f -newer file2
 ```
 
 This finds files updated after `file2`, such as:
@@ -83,15 +95,19 @@ file3
 file4
 ```
 
+`-newer file2` compares modification times. The related `-anewer file2` compares each candidate's **access time** with `file2`'s modification time; it does not mean "modified more recently." An explicit `.` makes the starting directory clear.
+
 #### Finding and Deleting Files Modified More Recently Than Another File
 
 To find files newer than `file2` and delete them:
 
 ```bash
-find -anewer file2 -exec rm -v {} \;
+find . -type f -newer file2 -exec rm -v -- {} \;
 ```
 
 This will delete files, such as `file3` and `file4`, and print each deleted file's name due to the `-v` (verbose) option.
+
+First run `find . -type f -newer file2 -print` to review the matches in a practice directory. Keep the same tests when adding the deletion action. `--` prevents `rm` from interpreting a filename as an option.
 
 #### Other Examples of `find` Usage
 
@@ -110,7 +126,7 @@ find . -name "*.bak" -type f -delete
 To find all files larger than 2000 blocks (approximately 1MB) and ask the user for permission to remove them:
 
 ```bash
-find $HOME -type f -size +2000 -exec ls -s {} \; -ok rm -f {} \;
+find "$HOME" -type f -size +2000 -exec ls -s -- {} \; -ok rm -f -- {} \;
 ```
 
 🔴 **Caution**: The `find` command can be very powerful, but it also poses a risk of unintentional file deletion or modification, especially when combined with `-exec` or `-delete`. Always double-check your commands and use `-ok` instead of `-exec` when performing critical operations.
@@ -224,6 +240,8 @@ The `locate` command is faster than `find` but might not always show the most up
 
 ### Which
 
+For shell command resolution, also use `command -v name` or, in Bash, `type -a name`. These show builtins, aliases, and functions as well as executables; external `which` implementations differ in how they handle shell definitions.
+
 The `which` command in Unix/Linux is used to locate the executable file associated with a given command. It searches for the executable in directories specified by the `PATH` environment variable.
 
 The general syntax of the `which` command is as follows:
@@ -281,6 +299,8 @@ This indicates that there are multiple `python` executables located at `/usr/bin
 #### Note
 
 The `which` command only searches for executables in directories specified in the `PATH` variable. If an executable is located elsewhere, `which` will not be able to find it. This limitation means that if a binary is not in a directory included in `PATH`, `which` will not display it, even if it exists on the system.
+
+References: [GNU Findutils timestamp comparisons](https://www.gnu.org/software/findutils/manual/html_node/find_html/Comparing-Timestamps.html) and [find operators and precedence](https://manpages.debian.org/unstable/findutils/find.1.en.html#OPERATORS).
 
 ### Challenges
 

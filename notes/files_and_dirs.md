@@ -1,5 +1,19 @@
 ## Understanding Files and Directories
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Types of File Paths](#types-of-file-paths)
+- [Navigation and File Manipulation](#navigation-and-file-manipulation)
+- [Managing Files and Directories](#managing-files-and-directories)
+- [Viewing and Inspecting File Contents](#viewing-and-inspecting-file-contents)
+- [File Name Expansion Techniques](#file-name-expansion-techniques)
+- [Challenges](#challenges)
+
+</details>
+
 One of the fundamental skills is to navigate and manage files and directories effectively. Here, we focus on the crucial concepts that will facilitate your work within the file system.
 
 ### Types of File Paths

@@ -1,5 +1,25 @@
 ## Partitioning Disks
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Basic Partition Operations](#basic-partition-operations)
+- [Relationship Between Physical Disks and Partitions](#relationship-between-physical-disks-and-partitions)
+- [Disk Naming Conventions](#disk-naming-conventions)
+- [Types of Partitions](#types-of-partitions)
+- [Partition Table Formats: MBR vs. GPT](#partition-table-formats-mbr-vs-gpt)
+- [Operations in `gdisk` and `fdisk`](#operations-in-gdisk-and-fdisk)
+- [Managing Disk Partitions](#managing-disk-partitions)
+- [Practical Examples and Commands](#practical-examples-and-commands)
+- [Changing MBR to GPT Using gdisk](#changing-mbr-to-gpt-using-gdisk)
+- [Safety Precautions](#safety-precautions)
+- [Common Errors and Troubleshooting](#common-errors-and-troubleshooting)
+- [Challenges](#challenges)
+
+</details>
+
 Partitioning a disk involves dividing a physical storage device into separate, manageable sections called partitions. Each partition functions as an independent disk within the operating system, allowing for better organization, multi-boot setups, or separation of system files from user data. The two main partition table formats used to define how these partitions are structured on the disk are the Master Boot Record (MBR) and the GUID Partition Table (GPT).
 
 Imagine your disk as a bookshelf divided into compartments:
@@ -20,14 +40,14 @@ In this illustration, the disk `/dev/sda` is divided into three partitions with 
 
 In real-world scenarios, this setup could serve multiple purposes. For instance, different partitions might use different file systems tailored to their roles. A common choice is to use ext4 for both system files (`/`) and user data (`/home`), while swap space supports memory management.
 
-Another practical use is on a shared server where several developers work. Here, each developer might get a separate partition or directory. This way, one developer's work won’t use up space meant for another, preventing conflicts and accidental data overwrites. The free space on the disk offers room for future expansion or for creating new partitions as project needs evolve.
+On a shared server, separate partitions or logical volumes can isolate storage capacity between projects. Separate directories on the same filesystem do not impose capacity limits by themselves; use quotas if one user must not consume another's allocation. Permissions control access, while partitions and quotas address different aspects of space management. Unallocated disk space can allow future expansion.
 
 ### Basic Partition Operations
 
 Several operations can be performed on disk partitions:
 
 - If unallocated space exists on the disk, new partitions can be created to store data, install additional operating systems, or organize files.
-- Removing a partition frees up space on the disk but also erases all data within that partition. It's essential to back up any important information before deletion.
+- Removing a partition deletes its partition-table entry and makes that area available for reuse. It does not securely erase all underlying data, but subsequent writes or repartitioning can make the old filesystem unrecoverable. Back up needed data first and use a separate sanitization procedure when erasure is the goal.
 - Adjusting the size of existing partitions can help optimize disk space usage. This may involve expanding a partition into adjacent free space or shrinking it to make room for new partitions.
 - After creating a partition, it must be formatted with a filesystem (e.g., ext4, NTFS) to store files. Formatting prepares the partition for data storage.
 

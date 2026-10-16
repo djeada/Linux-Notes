@@ -1,5 +1,27 @@
 ## RHCSA (Red Hat Certified System Administrator)
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Exam Details at a Glance](#exam-details-at-a-glance)
+- [Exam Objectives Overview](#exam-objectives-overview)
+- [Essential Tools](#essential-tools)
+- [Operating Running Systems](#operating-running-systems)
+- [Configuring Local Storage](#configuring-local-storage)
+- [Managing Users and Groups](#managing-users-and-groups)
+- [Managing Security](#managing-security)
+- [Networking](#networking)
+- [Scheduling Tasks](#scheduling-tasks)
+- [Managing Containers](#managing-containers)
+- [Practice Makes Perfect](#practice-makes-perfect)
+- [What's Next?](#whats-next)
+- [Helpful Resources](#helpful-resources)
+- [Challenges](#challenges)
+
+</details>
+
 The Red Hat Certified System Administrator (RHCSA) certification is one of the most respected credentials in the Linux world. Unlike exams where you pick answers from a list, RHCSA is entirely performance-based — you sit in front of a live Red Hat Enterprise Linux system and complete real tasks within a time limit. If you can pass it, employers know you can actually do the work.
 
 This guide walks through the exam objectives, key concepts you need to master, and practical exercises to build the skills that get tested.
@@ -16,14 +38,16 @@ This guide walks through the exam objectives, key concepts you need to master, a
 | **Cost** | Approximately $500 USD |
 | **Prerequisites** | None required, but RHCSA-level experience recommended |
 | **Validity** | 3 years |
-| **Based On** | Red Hat Enterprise Linux 9 (current version) |
+| **Based On** | Red Hat Enterprise Linux 10 on the provider page checked 2026-10-16; confirm the version of your booked exam |
+
+The examples below retain useful RHEL 9-era material. Check the [current EX200 objectives](https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam) before booking: price, task count, and exam delivery details can vary. The current outline adds software management with Flatpak and explicitly lists systemd timers and VFAT; containers are retained here as additional practice rather than a claim about current EX200 coverage.
 
 ### Exam Objectives Overview
 
-Red Hat publishes official exam objectives that change with each RHEL version. The following covers the major domains:
+Red Hat publishes objectives for each exam version. The following is the retained RHEL 9-era study outline; use the linked RHEL 10 objectives as the authoritative checklist for the current exam.
 
 ```
-RHCSA Exam Domains
+RHCSA RHEL 9-Era Study Outline
 ├── Understand and Use Essential Tools
 │   ├── Access shell prompts and issue commands
 │   ├── Use input/output redirection
@@ -340,7 +364,7 @@ visudo
 
 #### SELinux
 
-SELinux questions are guaranteed on the RHCSA. Many candidates fail because they don't practice this enough:
+SELinux is part of the published RHCSA objectives. Practice diagnosing labels, ports, and booleans rather than assuming a particular task will appear:
 
 ```bash
 # Check current SELinux mode
@@ -442,7 +466,7 @@ systemctl list-timers
 
 ### Managing Containers
 
-Container management is a newer addition to the RHCSA objectives (RHEL 9):
+Container management appeared in earlier RHCSA objectives, including RHEL 9. It remains useful administration practice, but is not listed in the RHEL 10 EX200 objectives checked above:
 
 ```bash
 # Log in to a container registry
@@ -531,7 +555,7 @@ The `:Z` flag at the end of the volume mount tells podman to apply the correct S
 **Critical things that must survive a reboot:**
 
 - `/etc/fstab` entries (use `mount -a` to test before rebooting)
-- Firewall rules (always use `--permanent` flag then `--reload`)
+- Firewall rules (understand runtime versus permanent configuration; add permanent rules and reload, or test runtime rules before deliberately saving them)
 - SELinux settings (use `-P` flag with `setsebool`)
 - Systemd service enablement (`systemctl enable`)
 - Network configuration changes made persistent via `nmcli`

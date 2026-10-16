@@ -1,8 +1,29 @@
 ## Package Managers
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Installing and Updating Software Packages](#installing-and-updating-software-packages)
+- [APT](#apt)
+- [YUM](#yum)
+- [Tarballs](#tarballs)
+- [RPM](#rpm)
+- [Software Package Repositories](#software-package-repositories)
+- [Key Components of a Repository](#key-components-of-a-repository)
+- [Common Repository Labels](#common-repository-labels)
+- [Managing APT Repositories](#managing-apt-repositories)
+- [Managing YUM Repositories](#managing-yum-repositories)
+- [Challenges](#challenges)
+
+</details>
+
 Debian and Ubuntu are popular Linux distributions for home users. These distributions and their derivatives use the Advanced Package Tool (`APT`). Other distributions use alternative package managers, like `DNF`, `YUM`, `Pacman`, which have unique functionalities and syntax.
 
 Be cautious with package managers as they install software and dependencies and may affect your system's configuration.
+
+Run installation, removal, and repository changes as root or with `sudo`. Read-only searches and queries usually need no elevation. Package and service names differ by distribution: Apache is commonly `apache2` on Debian/Ubuntu and `httpd` on Fedora/RHEL.
 
 ```
 User
@@ -28,7 +49,7 @@ System directories (/usr/bin, /usr/lib, etc.)
 
 ### APT
 
-APT (Advanced Package Tool) is the command-line tool used in Debian-based Linux distributions for handling packages. It's preferred over its predecessors, `apt-get` and `aptitude`.
+APT (Advanced Package Tool) is the package-management system used by Debian-based distributions. The `apt` command provides an interactive interface; `apt-get` and `apt-cache` remain appropriate for scripts because their interfaces emphasize compatibility. `aptitude` is a separate frontend, not simply a superseded version of `apt`.
 
 I. Updating Repository Information
 
@@ -48,10 +69,10 @@ apt upgrade
 
 III. Installing New Packages
 
-To install a new package from the repositories. For example, installing `httpd`:
+To install a new package from the repositories, such as Apache on Debian/Ubuntu:
 
 ```bash
-apt install httpd
+apt install apache2
 ```
 
 IV. Installing Local .deb Files
@@ -64,15 +85,19 @@ apt install /path/to/package/name.deb
 
 V. Verifying Installation
 
-To check if a package is successfully installed and to view its details:
+To inspect repository metadata for the package:
 
 ```bash
-apt show httpd
+apt show apache2
 ```
+
+`apt show` can describe a package that is not installed. Check local installation status separately with `dpkg-query -W -f='${Status}\n' apache2`; an installed package reports `install ok installed`.
 
 ### YUM
 
-YUM (Yellowdog Updater, Modified) is a package manager used in Red Hat-based Linux distributions. It differs from `apt` in that it doesn't require repository updates before installing or updating software.
+YUM (Yellowdog Updater, Modified) is associated with older Red Hat-based distributions. Current Fedora/RHEL-family systems commonly use DNF, and `yum` may be a compatibility command. YUM/DNF refresh expired repository metadata automatically; this differs from the usual explicit `apt update` step, but does not mean they operate without a metadata cache.
+
+For DNF, the corresponding common commands are `dnf check-update`, `dnf upgrade`, `dnf install httpd`, and `dnf remove httpd`. A `check-update` exit status of 100 means updates are available, not that the query failed. The YUM examples below remain useful for older systems.
 
 I. Checking for Updates
 
@@ -216,7 +241,7 @@ IV. Listing a Specific Package
 To check if a specific package, like `nano`, is installed:
 
 ```bash
-rpm -qa nano
+rpm -q nano
 ```
 
 V. Displaying Package Documentation
@@ -244,6 +269,8 @@ rpm -e nano
 A software package repository in the context of Linux and other Unix-like operating systems is a centralized storage location containing various software packages. These repositories are essential components in the package management system, utilized by package managers to download and install software and updates.
 
 ### Key Components of a Repository
+
+The CentOS 7 URLs below illustrate historical repository syntax. CentOS Linux 7 is end of life; use your supported distribution's current repository configuration rather than copying these endpoints. Repository labels and package contents vary by vendor and release.
 
 - The **label** might be something like `base`, `updates`, or `extras`, which uniquely identifies each repository in configuration files. For example, in a YUM repository configuration, the label `[base]` identifies the base repository.
 - The **name** could be descriptive, such as "CentOS Base Repository" or "Fedora Updates", giving a clear indication of the content or purpose. For instance, "CentOS Base" suggests this repository contains the core CentOS packages.
@@ -276,13 +303,16 @@ apt install software-properties-common
 
 To demonstrate managing APT repositories, here's how you can install Wine on a Debian-based system:
 
+This example targets the historical Ubuntu 20.04 (`focal`) repository, not arbitrary Debian/Ubuntu releases. Before using it, follow [WineHQ's current distribution-specific instructions](https://gitlab.winehq.org/wine/wine/-/wikis/Debian-Ubuntu), including supported release, architecture, and key verification. A repository signing key should be scoped to that repository with `signed-by`, rather than trusted globally.
+
 I. Get and Install the Repository Key
 
 Download and install the GPG key for the Wine repository:
 
 ```bash
 wget -nc https://dl.winehq.org/wine-builds/winehq.key
-gpg -o /etc/apt/trusted.gpg.d/winehq.key.gpg --dearmor winehq.key
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo gpg -o /etc/apt/keyrings/winehq.gpg --dearmor winehq.key
 ```
 
 II. Add the Wine Repository
@@ -290,7 +320,7 @@ II. Add the Wine Repository
 Add the Wine repository to your system's sources:
 
 ```bash
-add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main'
+sudo add-apt-repository 'deb [signed-by=/etc/apt/keyrings/winehq.gpg] https://dl.winehq.org/wine-builds/ubuntu/ focal main'
 ```
 
 III. Update the Package Database

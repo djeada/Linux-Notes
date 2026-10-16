@@ -1,5 +1,18 @@
 ## File System Metadata and Links
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Inodes](#inodes)
+- [Hardlinks](#hardlinks)
+- [Symlinks (Symbolic Links)](#symlinks-symbolic-links)
+- [Key Differences Between Hardlinks and Symlinks](#key-differences-between-hardlinks-and-symlinks)
+- [Challenges](#challenges)
+
+</details>
+
 Inodes are critical as they store essential metadata about files, such as permissions and locations, allowing efficient file system management. Hard links are important because they let multiple file names point to the same inode, saving disk space by avoiding data duplication. Symlinks provide flexibility by creating references to files or directories, allowing for easier access and organization without duplicating the actual content. Together, these structures optimize storage, file access, and navigation in file systems.
 
 ### Inodes
@@ -29,11 +42,11 @@ An inode (short for "index node") is a fundamental concept in many filesystems, 
 
 Main idea:
 
-- An inode stores essential metadata such as the file's owner, permissions, size, timestamps (creation, modification, and last accessed), and pointers to the file's data blocks.
+- An inode stores metadata such as the file's owner, permissions, size, access time (`atime`), content modification time (`mtime`), and status change time (`ctime`). `ctime` is not creation time; birth/creation time is a separate field available only when the filesystem and tools support it.
 - Every file or directory has a unique inode number within a given filesystem. This number helps the system efficiently manage and locate the file's data.
 - Multiple filenames can point to the same inode (hard links).
-- The number of inodes is fixed when the file system is created, limiting the number of files.
-- When a file is deleted, the inode and data blocks are freed if no other links point to it.
+- Filesystems such as ext4 normally establish their inode capacity at creation time; others, such as XFS and Btrfs, allocate inode metadata dynamically. Use `df -i` where inode accounting is supported rather than assuming every filesystem has a fixed inode pool.
+- After the last hard link is removed, storage can be reclaimed once no open file descriptors or other active references remain. This explains why deleting an open log file may not immediately free disk space.
 - The **directory entry** contains the filename and the inode number.
 - The **inode** stores metadata and pointers to the data blocks.
 - The actual **data blocks** (Block 1, Block 2, etc.) contain the file's content.
@@ -57,7 +70,7 @@ $ stat file1
   File: file1
   Size: 41        	Blocks: 8          IO Block: 4096   regular file
 Device: 806h/2054d	Inode: 684867      Links: 1
-Access: (0644/-rw-rw-r--)  Uid: ( 1000/    adam)   Gid: ( 1000/    adam)
+Access: (0644/-rw-r--r--)  Uid: ( 1000/    adam)   Gid: ( 1000/    adam)
 ```
 
 An inode stores various types of metadata, but does not store the filename or the file's content. The breakdown of the inode metadata is as follows:
@@ -85,6 +98,10 @@ Inode Number: 1234
 - **File size** is the total size of the file in bytes.
 - **Timestamps** include the access time, modification time, and change time for the file.
 - The inode does not store the actual content of the file but contains **pointers** that indicate the location of the file's data blocks on the disk. These pointers direct the system to the specific blocks where the file's data is stored.
+
+The block-pointer diagram is a simplified model of a traditional Unix inode. Filesystems may use extents or store small amounts of data inline; for example, a short symlink's target can be stored in its inode.
+
+For metadata fields and inode identity, see the [Linux inode manual](https://man7.org/linux/man-pages/man7/inode.7.html).
 
 ### Hardlinks
 
@@ -116,7 +133,7 @@ II. Deleting a hardlink leaves the original file untouched. However, if you dele
 
 - Both "file1.txt" and "file2.txt" point to the same inode (1234).
 - They are indistinguishable at the file content level.
-- Deleting one link does not delete the inode until all links are removed.
+- Deleting one link leaves the other names usable. Reclaiming the inode also requires the open references described above to be released.
 
 ### Symlinks (Symbolic Links)
 
@@ -130,11 +147,13 @@ II. Use the `ln -s` command to create a symlink:
 ln -s existing_file symlink_name
 ```
 
-III. To determine the target of a symlink, use the `readlink -f` command:
+III. To resolve a symlink to a canonical absolute path, use `readlink -f`:
 
 ```
 readlink -f symlink_name
 ```
+
+Use `readlink symlink_name` to see the stored target text, including a relative path. Relative targets are resolved from the symlink's containing directory, not from your current directory. GNU `readlink -f` resolves intermediate links and requires all but the final component to exist; `readlink -e` requires the entire resolved path to exist.
 
 IV. Deleting the symlink doesn't affect the target, but if the target file or directory is removed, the symlink becomes a "dangling link", pointing to a non-existent location.
 
@@ -158,7 +177,7 @@ IV. Deleting the symlink doesn't affect the target, but if the target file or di
 | Feature                                        | Hardlink                | Symlink                              |
 | ---------------------------------------------- | ----------------------- | ------------------------------------ |
 | Points across different filesystems            | No                      | Yes                                  |
-| Affected by changes to its target's attributes | Yes (Shares same inode) | No (Points to a path, not an inode) |
+| Target metadata observed when opening the link | Shared inode metadata | Target metadata after following the path; the symlink itself has separate metadata |
 | Points to non-existent files                   | No                      | Yes (Can create "dangling links")    |
 | Reference                                      | Inode of the target     | Path to the target                   |
 
@@ -172,5 +191,5 @@ IV. Deleting the symlink doesn't affect the target, but if the target file or di
 6. Try creating a hard link to a directory. Document what happens and explain why most filesystems do not allow hard links to directories, considering potential risks or technical limitations.
 7. Create a text file named `multi.txt` and make three hard links to it in different locations. Modify the contents of `multi.txt` and check the content of all three hard links. Describe your observations and explain how hard links reflect changes to the original file.
 8. Use the `ls` command with a flag that shows the file type for each item in the `/etc` directory. Identify the flag to use and describe the indicators for different types of items (regular files, directories, symlinks, etc.).
-9. Create two text files, `fileA.txt` and `fileB.txt`. Then create a symlink named `mylink` that points to `fileA.txt`. Without deleting `mylink`, change its target to `fileB.txt` and explain the process you used. Discuss how this method avoids recreating the symlink.
+9. Create two text files, `fileA.txt` and `fileB.txt`. Then create a symlink named `mylink` that points to `fileA.txt`. Replace `mylink` so it points to `fileB.txt`, and explain the process you used. A symlink target cannot be edited in place: `ln -sfn fileB.txt mylink` replaces the link. For an atomic replacement, create a temporary symlink in the same directory and rename it over `mylink`.
 10. Research the typical space consumption of an inode on a filesystem. Explain how inode size can vary based on the filesystem and why inode space consumption is an important factor in filesystem design.
