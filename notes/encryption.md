@@ -1,5 +1,59 @@
 ## Encryption and GPG
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Why Encryption Matters](#why-encryption-matters)
+- [Basic Encryption Process](#basic-encryption-process)
+- [Basic Decryption Process](#basic-decryption-process)
+- [Symmetric and Asymmetric Encryption](#symmetric-and-asymmetric-encryption)
+- [GPG](#gpg)
+- [Public and Private Keys](#public-and-private-keys)
+- [Public Key vs Private Key Responsibilities](#public-key-vs-private-key-responsibilities)
+- [Installing GPG](#installing-gpg)
+- [Generating a GPG Key Pair](#generating-a-gpg-key-pair)
+- [Key Expiration](#key-expiration)
+- [Listing GPG Keys](#listing-gpg-keys)
+- [Understanding Key Usage Flags](#understanding-key-usage-flags)
+- [Importing a Public Key](#importing-a-public-key)
+- [Checking a Key Fingerprint](#checking-a-key-fingerprint)
+- [Trusting an Imported Public Key](#trusting-an-imported-public-key)
+- [Encrypting a File for Someone](#encrypting-a-file-for-someone)
+- [Decrypting a File](#decrypting-a-file)
+- [Symmetric Encryption with GPG](#symmetric-encryption-with-gpg)
+- [Asymmetric vs Symmetric Encryption](#asymmetric-vs-symmetric-encryption)
+- [Creating Digital Signatures](#creating-digital-signatures)
+- [Verifying a Signature](#verifying-a-signature)
+- [Detached Signatures](#detached-signatures)
+- [Exporting Your Public Key](#exporting-your-public-key)
+- [Exporting Your Private Key](#exporting-your-private-key)
+- [Revoking a Key](#revoking-a-key)
+- [Subkeys](#subkeys)
+- [Advanced Encryption Options](#advanced-encryption-options)
+- [Working with Encrypted Email](#working-with-encrypted-email)
+- [Encrypting an Email Message Manually](#encrypting-an-email-message-manually)
+- [Decrypting an Encrypted Email Message](#decrypting-an-encrypted-email-message)
+- [Key Servers](#key-servers)
+- [Sending a Key to a Key Server](#sending-a-key-to-a-key-server)
+- [Searching for Keys on a Key Server](#searching-for-keys-on-a-key-server)
+- [Refreshing Keys](#refreshing-keys)
+- [Disk Encryption](#disk-encryption)
+- [GPG and LUKS Together](#gpg-and-luks-together)
+- [Creating a Random LUKS Keyfile](#creating-a-random-luks-keyfile)
+- [Encrypting the Keyfile with GPG](#encrypting-the-keyfile-with-gpg)
+- [Initializing a LUKS Volume with a Keyfile](#initializing-a-luks-volume-with-a-keyfile)
+- [Decrypting the Keyfile and Opening the LUKS Volume](#decrypting-the-keyfile-and-opening-the-luks-volume)
+- [Mounting the Decrypted Volume](#mounting-the-decrypted-volume)
+- [Securely Deleting the Decrypted Keyfile](#securely-deleting-the-decrypted-keyfile)
+- [Advantages of Combining GPG with LUKS](#advantages-of-combining-gpg-with-luks)
+- [Security Best Practices](#security-best-practices)
+- [Common GPG Commands](#common-gpg-commands)
+- [Challenges](#challenges)
+
+</details>
+
 Encryption is one of the main tools used to protect digital information. It keeps data private by changing readable information into an unreadable form. The readable version is called plaintext, and the unreadable version is called ciphertext.
 
 For example, the message:
@@ -251,7 +305,7 @@ Example output:
 /home/user/.gnupg/pubring.kbx
 -----------------------------
 pub   rsa4096 2022-01-01 [SC]
-      1A2B3C4D5E6F7G8H
+      1A2B3C4D5E6F7081
 uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 ```
 
@@ -267,7 +321,7 @@ Example output:
 /home/user/.gnupg/pubring.kbx
 -----------------------------
 sec   rsa4096 2022-01-01 [SC]
-      1A2B3C4D5E6F7G8H
+      1A2B3C4D5E6F7081
 uid           [ultimate] John Doe (Work Key) <john.doe@example.com>
 ```
 
@@ -323,7 +377,7 @@ gpg --import recipient_public_key.asc
 Example output:
 
 ```text
-gpg: key 9H8G7F6E5D4C3B2A: public key "Jane Smith <jane.smith@example.com>" imported
+gpg: key 908F7E6D5C4B3A21: public key "Jane Smith <jane.smith@example.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
 ```
@@ -560,7 +614,7 @@ Example output:
 
 ```text
 gpg: Signature made Mon 03 Oct 2022 12:00:00 PM UTC
-gpg:                using RSA key 1A2B3C4D5E6F7G8H
+gpg:                using RSA key 1A2B3C4D5E6F7081
 gpg: Good signature from "John Doe (Work Key) <john.doe@example.com>"
 ```
 
@@ -850,13 +904,13 @@ They import it and use it
 To upload a public key to a key server, use:
 
 ```bash
-gpg --send-keys --keyserver hkp://pgp.mit.edu 1A2B3C4D5E6F7G8H
+gpg --send-keys --keyserver hkp://pgp.mit.edu 1A2B3C4D5E6F7081
 ```
 
 Example output:
 
 ```text
-gpg: sending key 1A2B3C4D5E6F7G8H to hkp://pgp.mit.edu
+gpg: sending key 1A2B3C4D5E6F7081 to hkp://pgp.mit.edu
 ```
 
 This makes your public key available to people who search that key server.
@@ -876,9 +930,9 @@ Example output:
 ```text
 gpg: data source: http://pgp.mit.edu:11371
 (1)     Jane Smith <jane.smith@example.com>
-          4096 bit RSA key 9H8G7F6E5D4C3B2A, created: 2022-01-01
+          4096 bit RSA key 908F7E6D5C4B3A21, created: 2022-01-01
 Keys 1-1 of 1 for "jane.smith@example.com". Enter number(s), N)ext, or Q)uit > 1
-gpg: key 9H8G7F6E5D4C3B2A: public key "Jane Smith <jane.smith@example.com>" imported
+gpg: key 908F7E6D5C4B3A21: public key "Jane Smith <jane.smith@example.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
 ```
@@ -901,7 +955,7 @@ Example output:
 
 ```text
 gpg: refreshing 1 keys from hkp://pgp.mit.edu
-gpg: key 9H8G7F6E5D4C3B2A: "Jane Smith <jane.smith@example.com>" not changed
+gpg: key 908F7E6D5C4B3A21: "Jane Smith <jane.smith@example.com>" not changed
 gpg: Total number processed: 1
 gpg:              unchanged: 1
 ```
@@ -1023,7 +1077,7 @@ Then use the correct email address or key ID.
 To format a device as a LUKS encrypted volume using the keyfile, run:
 
 ```bash
-cryptsetup luksFormat /dev/sdX /root/luks-keyfile
+cryptsetup luksFormat /dev/sdX --key-file /root/luks-keyfile
 ```
 
 Be extremely careful with `/dev/sdX`.
@@ -1044,7 +1098,7 @@ This will overwrite data on /dev/sdX irrevocably.
 Are you sure? (Type uppercase yes): YES
 ```
 
-This warning means the data on that device will be overwritten.
+`luksFormat` initializes the LUKS header and keyslots. It does not convert an existing filesystem into an encrypted one or securely overwrite every old data block. Treat existing data as lost unless it was backed up; the new mapping still needs a filesystem before it can be mounted.
 
 ### Decrypting the Keyfile and Opening the LUKS Volume
 
@@ -1083,7 +1137,19 @@ Access mapped device
 
 ### Mounting the Decrypted Volume
 
-After opening the LUKS volume, mount it:
+For a **newly initialized lab volume only**, create a filesystem on the opened mapping first:
+
+```bash
+mkfs.ext4 /dev/mapper/my_encrypted_volume
+```
+
+Skip `mkfs` when reopening a volume that already contains a filesystem: formatting it again destroys that filesystem. Create the mount point before mounting:
+
+```bash
+mkdir -p /mnt/my_mount_point
+```
+
+Then mount the decrypted filesystem:
 
 ```bash
 mount /dev/mapper/my_encrypted_volume /mnt/my_mount_point
@@ -1105,7 +1171,7 @@ mkdir -p /mnt/my_mount_point
 
 After unlocking the volume, the decrypted keyfile should not be left sitting on disk.
 
-To securely delete it, run:
+On storage that overwrites data in place, you can attempt to overwrite and remove it with:
 
 ```bash
 shred -u /root/luks-keyfile
@@ -1115,7 +1181,7 @@ The `shred` command overwrites the file before deleting it.
 
 The `-u` option removes the file after overwriting.
 
-This helps reduce the risk of someone recovering the keyfile later.
+This is not a reliable erasure guarantee on SSDs, copy-on-write filesystems, snapshots, data-journaling configurations, or backups. See [GNU shred's limitations](https://www.gnu.org/s/coreutils/manual/html_node/shred-invocation.html). For new designs, avoid writing a decrypted keyfile to persistent storage when possible. A verified GPG decryption can instead feed `cryptsetup open --key-file -` through a pipe; handle decryption failures and unlock failures explicitly in any automation.
 
 ### Advantages of Combining GPG with LUKS
 

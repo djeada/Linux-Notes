@@ -1,5 +1,18 @@
 ## Secure Server Access
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [SSH](#ssh)
+- [Transferring Files with SCP](#transferring-files-with-scp)
+- [Transferring Files with SFTP](#transferring-files-with-sftp)
+- [Other Protocols for File Transfers](#other-protocols-for-file-transfers)
+- [Challenges](#challenges)
+
+</details>
+
 SSH, SFTP, and SCP are network protocols that provide secure data communication and file transfer over insecure networks. Here's a brief overview of each:
 
 ### SSH
@@ -19,11 +32,11 @@ SSH (Secure Shell) is a protocol and a tool suite that facilitates secure commun
      |                                      |
      |  <- 2. Sends Server's Public Key ----|
      |                                      |
-     | 3. Creates Encrypted Session Key --> |
-     | (using server's public key)          |
+     | 3. Exchange key-agreement data <-->  |
+     | (derive shared session keys)        |
      |                                      |
-     |  <- 4. Decrypts Session Key (using   |
-     | private key) & establishes session   |
+     |  <- 4. Server signs exchange; client |
+     | verifies the server's host identity |
      |                                      |
      | 5. Client Authenticates using ->     |
      | its private key                      |
@@ -37,6 +50,10 @@ SSH (Secure Shell) is a protocol and a tool suite that facilitates secure commun
 ```
 
 SSH leverages public-key cryptography to authenticate users and to secure the data being transferred. This ensures that only authorized users can connect, and the data cannot be intercepted in a readable format by malicious actors.
+
+The diagram is simplified: modern SSH negotiates a key-exchange algorithm to derive shared traffic keys. The server's host key authenticates the exchange; it is not simply used to decrypt a session key sent by the client. User authentication happens inside the protected connection and may use a password or a signature made by the client's private key. The private key itself is never sent to the server.
+
+On a first connection, verify the server's host-key fingerprint through a trusted channel before accepting it. An unexpected changed-host-key warning needs investigation; deleting the stored key without checking removes this identity check.
 
 #### Connecting with SSH
 
@@ -59,12 +76,12 @@ Depending upon the authentication method chosen, the server will either prompt y
 The ssh command accommodates various flags that allow you to customize your connection further. Here are some notable options:
 
 - The `-l` option specifies the username for the SSH connection. An alternative way to include the username is by using the format `ssh -l username serverhost`.
-- With the `-i` option, you can designate the path to the private key file used for key authentication. By default, SSH looks for the key file in the `~/.ssh/id_rsa` directory.
+- With `-i`, specify an identity file, such as `~/.ssh/id_ed25519` or `~/.ssh/id_rsa`. These are files inside `~/.ssh`, not directories. OpenSSH can also use other default identity filenames and keys supplied by an authentication agent.
 - The `-F` option indicates the path to the SSH connection configuration file. Each user typically has a personal configuration file at `~/.ssh/config`, while a global configuration file is located at `/etc/ssh/ssh_config`.
 - Using the `-p` option, you can specify a different port number if the SSH server is not using the default port 22.
 - The `-v, -vv, -vvv` options increase the verbosity of the SSH command, providing more detailed output, which is particularly useful for troubleshooting connection issues.
 
-For example SSH usually uses port 22, but you can use another port for better security. To use a different port, like 561, do this:
+SSH usually uses port 22. A different port may reduce automated scanning noise, but it does not replace authentication, updates, or access controls. If the server is configured to listen on port 561, connect with:
 
 ```
 ssh -p 561 username@serverhost
@@ -125,7 +142,7 @@ These commands will install the SSH server package, enable the SSH service to st
 
 ### Transferring Files with SCP
 
-SCP (Secure Copy Protocol), which utilizes SSH for data transfer, offers a secure method for transferring files between computers over a network. Here's how you can leverage SCP for various tasks:
+The `scp` command copies files over SSH. Since [OpenSSH 9.0](https://www.openssh.com/txt/release-9.0), it uses SFTP by default; the older SCP/rcp wire protocol is available with `-O` when compatibility requires it. Distinguish the command's name from the protocol it actually uses when comparing `scp` and `sftp`.
 
 #### Uploading Files to a Remote Server
 
@@ -169,9 +186,9 @@ I. SSH as the Underlying Protocol
 II. Configure SSH Server
 
 - SFTP depends on the SSH server configuration. It uses the SSH server's settings for port numbers, encryption types, and authentication methods.
-- The SSH configuration file (usually `/etc/ssh/sshd_config`) should have an entry like `Subsystem sftp /usr/lib/openssh/sftp-server` to enable SFTP service.
+- The SSH configuration file (usually `/etc/ssh/sshd_config`) should enable an SFTP subsystem. The executable path, such as `/usr/lib/openssh/sftp-server`, varies by distribution; `Subsystem sftp internal-sftp` uses OpenSSH's in-process implementation instead. Configure one subsystem entry, not both.
 
-III. Apply the changes by restarting the SSH service (`sudo systemctl restart ssh`).
+III. Check the configuration with `sudo sshd -t`, then reload the service (`sudo systemctl reload ssh` on Debian/Ubuntu, or `sshd` on many RPM-based systems). Keep the existing session open and test a second connection before disconnecting.
 
 #### Client Setup
 

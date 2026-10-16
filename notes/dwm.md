@@ -1,5 +1,18 @@
 ## Dynamic Window Manager (DWM)
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Challenges](#challenges)
+- [Further Resources](#further-resources)
+
+</details>
+
 The Dynamic Window Manager (DWM) is a minimal, lightweight, and highly efficient tiling window manager designed to help you manage application windows in a clean and distraction-free manner. Instead of overlapping windows as seen in traditional window managers, DWM organizes windows in a tiled layout, making it easy to see and navigate multiple applications simultaneously. DWM is based on the X Window System, making it suitable for use on Unix-like operating systems.
 
 DWM stands out for its extreme simplicity and high customization capability. It is part of the suckless software philosophy, which emphasizes clarity, simplicity, and resource efficiency. 
@@ -24,32 +37,34 @@ Remember that DWM is highly customizable, but changes typically require modifyin
 
 ### Usage
 
+These shortcuts assume upstream's default `MODKEY` (`Alt`). Distribution packages and custom builds can use a different modifier or terminal. Compare your `config.h` with the [upstream default configuration](https://git.suckless.org/dwm/file/config.def.h.html); the optional features below require explicit configuration or patches.
+
 - After installing DWM, interaction is mainly through keyboard shortcuts, making it quicker and more efficient than using a mouse in a tiling window manager environment.
-- Opening a new terminal can be done by pressing `Shift + Alt + Enter`, which typically launches the `st` terminal or `xterm` if `st` isn't installed.
+- `Shift + Alt + Enter` launches the terminal configured in `termcmd`, which is `st` upstream. There is no automatic fallback to `xterm`; install the configured terminal or change that setting.
 - To move focus between different windows, you use `Alt + j` and `Alt + k`, which cycle through the windows in the currently visible tag.
 - Promoting a window from the stack to the master area or vice versa is done by pressing `Alt + Enter`.
-- Closing the currently focused window can be achieved by either clicking the close button or typing `exit` and pressing `Enter` in terminal windows.
+- Close the focused client with `Shift + Alt + c`, use the application's own quit action, or type `exit` in a terminal shell. Upstream dwm does not draw a conventional window close button.
 - DWM uses a concept called tags, similar to virtual desktops or workspaces, and switching views to another tag is done by pressing `Alt + [tag number]`, with tag numbers ranging from 1 to 9.
 - To quit DWM, you press `Shift + Alt + q`, which will close the window manager and return you to your display manager or console.
 - Moving a window to another tag involves focusing on the window and then pressing `Shift + Alt + [tag number]`.
-- Toggling a window between tiled and floating modes is done by focusing on it and pressing `Alt + t`. This shortcut can also be used to revert the window back to the tiled layout.
-- Toggling a window to full-screen mode within the current layout is done by pressing `Alt + m`, which switches to the monocle layout, making the focused window occupy the entire screen. This is particularly useful when you want to focus on a single window.
+- `Alt + Shift + Space` toggles floating for the focused client. `Alt + t` selects the tiled layout, while `Alt + f` selects the floating layout for the current view.
+- `Alt + m` selects the monocle layout, which gives each tiled client the available layout area. This differs from an application's fullscreen mode and does not inherently hide dwm's bar.
 - Resizing a floating window can be accomplished by holding `Alt`, then right-clicking and dragging the window.
 - Moving a floating window similarly requires holding `Alt` and then left-clicking and dragging the window.
 - Launching an application launcher like `dmenu` can be done by pressing `Alt + p`, allowing you to start applications by typing their name, making for a quick and efficient workflow.
-- Cycling through different layouts (e.g., tiling, floating, monocle) is done by pressing `Alt + Space`. This is useful when you want to experiment with different ways of arranging your windows.
+- `Alt + Space` switches between the two most recently selected layouts; use `Alt + t`, `Alt + f`, or `Alt + m` to choose a particular layout.
 - Viewing all windows across all tags simultaneously can be achieved by pressing `Alt + 0`. This allows you to quickly access any open window without switching tags.
-- Moving a window to the scratchpad (a hidden, floating workspace) is done by pressing `Shift + Alt + s`. This is useful for keeping a window handy without cluttering your main workspace.
+- A scratchpad can keep a window available in a hidden floating workspace, but it requires a patch or custom implementation. `Shift + Alt + s` is a possible custom binding, not an upstream default.
 - Switching between the last used tags is quickly done by pressing `Alt + Tab`, allowing for fast toggling between workspaces.
-- Focusing on the master area window directly can be done by pressing `Alt + l`. This is handy when you want to quickly shift your attention to the main application you're working on.
+- A direct focus-master shortcut can be added through a patch or custom binding. Upstream `Alt + l` increases the master-area width rather than focusing its window.
 - Adjusting the master area size can be done dynamically by holding `Alt` and pressing `h` or `l`. This allows you to give more screen space to the master window or the stack area as needed.
-- Restarting DWM without logging out is possible by pressing `Shift + Alt + r`, which reloads DWM with any new configurations applied, making it easier to test changes without disrupting your session.
+- Restart support and a binding such as `Shift + Alt + r` require an appropriate patch or session setup; upstream dwm has no default restart shortcut. Recompiling does not reload the running process automatically.
 - Taking a screenshot can be done by integrating tools like `scrot` or `maim` and binding them to a key combination in your `config.h`. For example, `Alt + Shift + s` could be used to take a screenshot of your current screen.
 - Adjusting gaps between windows (if you've patched DWM with gaps support) can be done with custom keybindings, allowing you to increase or decrease spacing dynamically, tailoring your workspace to your visual preferences.
 - Killing a non-responsive window can be done by focusing on it and pressing `Shift + Alt + c`, force-closing the application without needing to open a task manager.
 - Checking the system status (like CPU usage, memory, or battery) can be enhanced by adding a custom status bar script to DWM, providing real-time system information directly on your screen.
 - Locking your screen for security can be done by setting up a keybinding like `Alt + Shift + l` to launch a screen locker like `slock`, ensuring your system is protected when you step away.
-- Navigating between monitors in a multi-monitor setup is done by pressing `Alt + Shift + [arrow key]`, allowing you to quickly move focus or windows across different screens.
+- Upstream monitor focus uses `Alt + ,` and `Alt + .`; add `Shift` to move the focused client to the previous or next monitor. Arrow-key bindings require customization.
 
 ### Configuration
 

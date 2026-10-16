@@ -1,5 +1,21 @@
 ## Disk Usage Management
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Understanding the df command](#understanding-the-df-command)
+- [Exploring the `du` Command](#exploring-the-du-command)
+- [The `ncdu` Command](#the-ncdu-command)
+- [Cleaning Up Disk Space](#cleaning-up-disk-space)
+- [Managing Disk Quotas](#managing-disk-quotas)
+- [Automating Disk Usage Checks](#automating-disk-usage-checks)
+- [Monitoring Disk Usage with Grafana](#monitoring-disk-usage-with-grafana)
+- [Challenges](#challenges)
+
+</details>
+
 Managing and monitoring disk usage is necessary for server maintenance, allowing administrators to identify disk space shortages caused by large log files, such as Apache or system logs, and malfunctioning applications that generate excessive data. Tools like `df` provide quick overviews of available disk space, while `du` helps analyze directory sizes to locate space hogs. For planning future storage needs, tracking data growth with monitoring software like Nagios or Grafana enables accurate forecasting and timely upgrades of storage hardware or cloud solutions. Regularly cleaning up unused files involves deleting obsolete backups, removing temporary files from `/tmp`, archiving old user data, and eliminating redundant application caches using automated scripts or cleanup utilities like BleachBit.
 
 ### Understanding the df command
@@ -32,7 +48,7 @@ To find the top 10 largest directories starting from the root directory (`/`), y
 du -x / | sort -nr | head -10
 ```
 
-An example output might look like this:
+Illustrative directory rows are shown below; the full output also includes the total for `/` itself. Parent and child directory totals overlap, so do not add these rows together:
 
 ```
 10485760    /usr
@@ -55,33 +71,33 @@ In this command:
 
 This command sequence helps you quickly identify the directories consuming the most space on your system.
 
-To further improve the speed of the `du` command, especially when dealing with many subdirectories, you can use `xargs -P` to parallelize the processing. This approach takes advantage of multiple CPU cores, allowing `du` to run on multiple directories simultaneously. Additionally, combining it with `awk` can help format the output more cleanly.
+You can also try `xargs -P` to scan independent directories in parallel. This can help some workloads, but storage contention can make it slower; multiple CPU cores alone do not guarantee a faster disk scan. The example below skips `/` itself to avoid scanning the same tree both as a whole and through each child, and it uses NUL-separated input to preserve spaces in directory names.
 
 Here’s an enhanced example that finds the top 10 largest directories and uses `xargs` to speed up the process:
 
 ```bash
-find / -maxdepth 1 -type d | xargs -I{} -P 4 du -sh {} 2>/dev/null | sort -hr | head -10 | awk '{printf "%-10s %s\n", $1, $2}'
+find / -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 -r -n 1 -P 4 du -sxh -- 2>/dev/null | sort -hr | head -10 | awk '{size=$1; sub(/^[^[:space:]]+[[:space:]]+/, ""); printf "%-10s %s\n", size, $0}'
 ```
 
 Explanation:
 
-I. `find / -maxdepth 1 -type d`: This command finds all directories at the root level (`/`), limiting the search to the top-level directories only (`-maxdepth 1`).
+I. `find / -mindepth 1 -maxdepth 1 -type d -print0` finds immediate child directories and separates their paths with NUL bytes. `-mindepth 1` excludes `/` itself.
 
-II. `xargs -I{} -P 4 du -sh {} 2>/dev/null`: 
+II. `xargs -0 -r -n 1 -P 4 du -sxh -- 2>/dev/null`:
 
 - `xargs` takes the output of `find` and passes each directory to the `du` command.
-- `-I{}` is used to specify the replacement string `{}` for the directory name.
+- `-0` reads NUL-separated paths, `-r` skips execution on empty input, and `-n 1` passes one directory per invocation.
 - `-P 4` specifies that up to 4 `du` processes can run in parallel, leveraging multiple cores for faster execution.
-- `du -sh {}` calculates the size of each directory in a human-readable format.
+- `du -sxh --` summarizes each directory in human-readable units and stays on that directory's filesystem. Separate mounted filesystems can still be scanned when they are explicit starting directories.
 - `2>/dev/null` suppresses any error messages, such as permission denied errors.
 
 III. `sort -hr`: Sorts the output in human-readable format and in reverse order, so the largest directories come first.
 
 IV. `head -10`: Limits the output to the top 10 largest directories.
 
-V. `awk '{printf "%-10s %s\n", $1, $2}'`: Formats the output, ensuring the size and directory name align neatly. The `%-10s` ensures the size column has a fixed width, making the output more readable.
+V. `awk` keeps the size in `size`, removes the leading size field from the line, and prints the remaining path. This preserves spaces within names, unlike printing only `$2`. The final report is for human reading and assumes names contain no embedded newlines; use an end-to-end NUL-aware pipeline for machine processing of arbitrary filenames.
 
-By using `xargs -P`, you can significantly reduce the time it takes to compute the disk usage of directories, especially on systems with many directories and multiple CPU cores. This method effectively utilizes system resources to perform the operation more efficiently.
+Compare elapsed time with the serial scan before choosing a parallelism level. Independent `du` invocations can count shared hard links in more than one directory, so this report is not an accounting total. Suppressed permission errors also mean a scan may be incomplete; rerun without `2>/dev/null` to diagnose missing entries.
 
 ### The `ncdu` Command
 

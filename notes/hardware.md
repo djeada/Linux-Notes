@@ -1,5 +1,83 @@
 ## Hardware on Linux
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Hardware Compatibility](#hardware-compatibility)
+- [Hardware Architecture Support](#hardware-architecture-support)
+- [Hardware as Files](#hardware-as-files)
+- [Types of Device Files](#types-of-device-files)
+- [Block Devices](#block-devices)
+- [Character Devices](#character-devices)
+- [Special Devices](#special-devices)
+- [Device Permissions](#device-permissions)
+- [udev](#udev)
+- [Gathering Hardware Information](#gathering-hardware-information)
+- [PCI Devices with `lspci`](#pci-devices-with-lspci)
+- [USB Devices with `lsusb`](#usb-devices-with-lsusb)
+- [CPU Information with `lscpu`](#cpu-information-with-lscpu)
+- [Storage Devices with `lsblk`](#storage-devices-with-lsblk)
+- [Full Hardware Summary with `lshw`](#full-hardware-summary-with-lshw)
+- [Kernel Messages with `dmesg`](#kernel-messages-with-dmesg)
+- [Watching Hardware Events with `udevadm`](#watching-hardware-events-with-udevadm)
+- [Monitoring Hardware Performance](#monitoring-hardware-performance)
+- [CPU and Process Monitoring with `top` and `htop`](#cpu-and-process-monitoring-with-top-and-htop)
+- [System Overview with `vmstat`](#system-overview-with-vmstat)
+- [Disk Monitoring with `iostat`](#disk-monitoring-with-iostat)
+- [Network Sockets with `ss`](#network-sockets-with-ss)
+- [Temperature and Fan Monitoring with `sensors`](#temperature-and-fan-monitoring-with-sensors)
+- [All-in-One Monitoring with `glances`](#all-in-one-monitoring-with-glances)
+- [Interactive Monitoring with `nmon`](#interactive-monitoring-with-nmon)
+- [Configuring Hardware](#configuring-hardware)
+- [Disk Information with `hdparm`](#disk-information-with-hdparm)
+- [SCSI Device Parameters with `sdparm`](#scsi-device-parameters-with-sdparm)
+- [Display Configuration with `xrandr`](#display-configuration-with-xrandr)
+- [Sound with `alsamixer` and `amixer`](#sound-with-alsamixer-and-amixer)
+- [Network Interface Configuration with `ip`](#network-interface-configuration-with-ip)
+- [Wireless Devices with `rfkill`](#wireless-devices-with-rfkill)
+- [Drivers and Kernel Modules](#drivers-and-kernel-modules)
+- [Listing Loaded Modules with `lsmod`](#listing-loaded-modules-with-lsmod)
+- [Loading a Module with `modprobe`](#loading-a-module-with-modprobe)
+- [Removing a Module](#removing-a-module)
+- [Inspecting Module Information with `modinfo`](#inspecting-module-information-with-modinfo)
+- [Module Configuration](#module-configuration)
+- [Blacklisting a Module](#blacklisting-a-module)
+- [Graphics Drivers](#graphics-drivers)
+- [NVIDIA](#nvidia)
+- [AMD](#amd)
+- [Hardware Troubleshooting Workflow](#hardware-troubleshooting-workflow)
+- [Step 1: Identify the Hardware](#step-1-identify-the-hardware)
+- [Step 2: Check Kernel Detection](#step-2-check-kernel-detection)
+- [Step 3: Verify Driver Loading](#step-3-verify-driver-loading)
+- [Step 4: Check System Logs](#step-4-check-system-logs)
+- [Step 5: Check Disk Health](#step-5-check-disk-health)
+- [Step 6: Test Memory](#step-6-test-memory)
+- [Step 7: Stress Test CPU](#step-7-stress-test-cpu)
+- [Step 8: Check Physical Connections](#step-8-check-physical-connections)
+- [Scenario 1: Simulate a USB Hardware Event and Inspect It](#scenario-1-simulate-a-usb-hardware-event-and-inspect-it)
+- [Scenario 2: Simulate a CPU Bottleneck](#scenario-2-simulate-a-cpu-bottleneck)
+- [Scenario 3: Simulate Memory Pressure](#scenario-3-simulate-memory-pressure)
+- [Scenario 4: Simulate Disk I/O Pressure](#scenario-4-simulate-disk-io-pressure)
+- [Scenario 5: Simulate a Network Interface State Change Safely](#scenario-5-simulate-a-network-interface-state-change-safely)
+- [Scenario 6: Simulate a Missing or Blocked Wireless Device](#scenario-6-simulate-a-missing-or-blocked-wireless-device)
+- [Scenario 7: Simulate Overheating Risk Under CPU Load](#scenario-7-simulate-overheating-risk-under-cpu-load)
+- [Scenario 8: Simulate a Driver Investigation](#scenario-8-simulate-a-driver-investigation)
+- [Scenario 9: Simulate a Log-Based Hardware Investigation](#scenario-9-simulate-a-log-based-hardware-investigation)
+- [Common Hardware Problems and Fixes](#common-hardware-problems-and-fixes)
+- [Device Detected but Not Working](#device-detected-but-not-working)
+- [Disk Errors](#disk-errors)
+- [Overheating](#overheating)
+- [Network Hardware Problems](#network-hardware-problems)
+- [Audio Problems](#audio-problems)
+- [Display Problems](#display-problems)
+- [Safe Hardware Troubleshooting Rules](#safe-hardware-troubleshooting-rules)
+- [Useful Command Summary](#useful-command-summary)
+- [Challenges](#challenges)
+
+</details>
+
 Linux is well known for running on a wide range of hardware. It can run on laptops, desktops, servers, embedded systems, routers, single-board computers, virtual machines, and high-performance clusters.
 
 Linux supports this variety because the kernel is modular. Hardware support can be built directly into the kernel or added through loadable kernel modules, often called drivers.
@@ -1562,7 +1640,7 @@ Run a safe file-based write test:
 mkdir -p ~/hardware-lab
 
 fio --name=write-test \
-    --directory=~/hardware-lab \
+    --directory="$HOME/hardware-lab" \
     --size=1G \
     --rw=write \
     --bs=1M \

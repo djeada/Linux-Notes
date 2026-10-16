@@ -1,5 +1,33 @@
 ## Cron
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [How Cron Works](#how-cron-works)
+- [Types of Crontab Files](#types-of-crontab-files)
+- [Understanding Crontab Syntax](#understanding-crontab-syntax)
+- [Cron Directories for Regular Intervals](#cron-directories-for-regular-intervals)
+- [Anacron](#anacron)
+- [How Anacron Works](#how-anacron-works)
+- [Anacron Configuration File](#anacron-configuration-file)
+- [Field descriptions:](#field-descriptions-1)
+- [Cron vs. Anacron: Key Differences](#cron-vs-anacron-key-differences)
+- [Relationship with Cron Directories](#relationship-with-cron-directories)
+- [Running Anacron Manually](#running-anacron-manually)
+- [Useful Anacron Options](#useful-anacron-options)
+- [Best Practices](#best-practices)
+- [Practical Examples of Anacron](#practical-examples-of-anacron)
+- [Creating Custom Schedules with Crontab](#creating-custom-schedules-with-crontab)
+- [Advanced Scheduling Techniques](#advanced-scheduling-techniques)
+- [Example Scenarios](#example-scenarios)
+- [Best Practices](#best-practices-1)
+- [Common Pitfalls](#common-pitfalls)
+- [Challenges](#challenges)
+
+</details>
+
 Cron is a powerful utility in Unix-like operating systems that automates the execution of scripts or commands at specified times, dates, or intervals. It is used for tasks such as system maintenance, backups, updates, and more.
 
 ### How Cron Works
@@ -72,7 +100,11 @@ For example, to schedule the `apt update` command to run as the root user every 
 
 ### Understanding Crontab Syntax
 
-A crontab file consists of lines with six fields: five time fields and a command field.
+A user crontab job has five time fields followed by the command. `/etc/crontab` and `/etc/cron.d/` add a username field between the time fields and command; do not copy that username into `crontab -e`.
+
+Schedules are calendar matches, not elapsed-time timers. `*/15` in the minute field means minutes 0, 15, 30, and 45 of each hour. When both day-of-month and day-of-week are restricted, traditional cron runs on either match (OR), not only when both match. An unescaped `%` in the command is also special to cron, even inside shell quotes; use `\%` for a literal percent sign, for example `date +\%F`.
+
+Jobs usually run through `/bin/sh` with a smaller environment than your interactive shell. Choose Bash explicitly when a script needs Bash features. Time-zone and daylight-saving behavior varies between cron implementations; check `man 5 crontab`, especially for jobs in a skipped or repeated local hour. See the [Cronie crontab reference](https://man7.org/linux/man-pages/man5/crontab.5.html).
 
 #### Crontab Field Structure
 
@@ -209,7 +241,7 @@ Example entry from `/etc/crontab`:
 
 While `cron` schedules jobs at precise times, it assumes the system is always running. This is not suitable for laptops or systems that may be powered off during scheduled execution times. `anacron` ensures that missed scheduled tasks are executed when the system becomes available again.
 
-Anacron is commonly used together with cron. Cron provides precise scheduling, while Anacron guarantees reliability for systems with irregular uptime.
+Anacron is commonly used together with cron or systemd timers. It can catch up an overdue daily or longer-period job when it is next invoked, subject to configured delays and allowed running hours. It does not guarantee that a job succeeds or replay every missed occurrence.
 
 ### How Anacron Works
 
@@ -329,7 +361,7 @@ Below are common scenarios where Anacron is used to ensure vital tasks are not s
 
 #### 1. Daily Database Backup
 
-Ensure a local database backup is performed every day. If the laptop is closed at midnight, the backup will trigger 15 minutes after the user logs in the next morning.
+Schedule a daily local database backup. When Anacron is next invoked after the job becomes overdue, it waits at least the configured 15-minute delay before starting it; this is not specifically tied to a user logging in.
 
 ```
 period    delay    job-id       command
@@ -428,7 +460,7 @@ For example, to schedule the script `weekly_task.sh` to run every week, use the 
 
 - The `/etc/cron.allow` file is used to specify which users are allowed to access and use the cron service for scheduling tasks.
 - Conversely, the `/etc/cron.deny` file lists users who are explicitly denied permission to use cron for task automation.
-- If **neither** of these files exists on the system, only the superuser is permitted to use cron, restricting access to regular users.
+- If **neither** file exists, the default access policy depends on the cron implementation and distribution. Check `man crontab`; PAM rules can impose additional restrictions. These files primarily control access to the `crontab` command and do not necessarily stop already scheduled jobs.
 
 #### Editing System-Wide Crontab
 

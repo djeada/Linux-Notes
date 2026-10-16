@@ -1,5 +1,63 @@
 ## NFS: Network File System
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Big Picture](#big-picture)
+- [Why Use NFS?](#why-use-nfs)
+- [NFS Server and Client Roles](#nfs-server-and-client-roles)
+- [Important NFS Components](#important-nfs-components)
+- [NFS Versions](#nfs-versions)
+- [NFSv2](#nfsv2)
+- [NFSv3](#nfsv3)
+- [NFSv4](#nfsv4)
+- [Basic Server Setup](#basic-server-setup)
+- [Installing NFS Packages](#installing-nfs-packages)
+- [Creating a Shared Directory](#creating-a-shared-directory)
+- [`/etc/exports`](#etcexports)
+- [Common Export Options](#common-export-options)
+- [Applying Export Changes](#applying-export-changes)
+- [Starting NFS Services](#starting-nfs-services)
+- [Firewall Rules for NFS](#firewall-rules-for-nfs)
+- [Client Setup](#client-setup)
+- [Verifying the NFS Mount](#verifying-the-nfs-mount)
+- [Persistent NFS Mounts with `/etc/fstab`](#persistent-nfs-mounts-with-etcfstab)
+- [UID and GID Mapping](#uid-and-gid-mapping)
+- [Strategies for UID and GID Consistency](#strategies-for-uid-and-gid-consistency)
+- [NFSv4 and `idmapd`](#nfsv4-and-idmapd)
+- [Root Squashing](#root-squashing)
+- [`all_squash`](#all_squash)
+- [Security Considerations](#security-considerations)
+- [Performance Considerations](#performance-considerations)
+- [Managing Exports with `exportfs`](#managing-exports-with-exportfs)
+- [Scenario 1: Create a Basic NFS Share](#scenario-1-create-a-basic-nfs-share)
+- [Scenario 2: Simulate “Access Denied by Server”](#scenario-2-simulate-access-denied-by-server)
+- [Scenario 3: Simulate NFS Blocked by Firewall](#scenario-3-simulate-nfs-blocked-by-firewall)
+- [Scenario 4: Simulate Permission Denied from UID/GID Mismatch](#scenario-4-simulate-permission-denied-from-uidgid-mismatch)
+- [Scenario 5: Simulate Root Squash Behavior](#scenario-5-simulate-root-squash-behavior)
+- [Scenario 6: Simulate a Stale NFS File Handle](#scenario-6-simulate-a-stale-nfs-file-handle)
+- [Scenario 7: Simulate Boot Hang from NFS in `/etc/fstab`](#scenario-7-simulate-boot-hang-from-nfs-in-etcfstab)
+- [Scenario 8: Simulate Read-Only Export](#scenario-8-simulate-read-only-export)
+- [Scenario 9: Measure NFS Performance](#scenario-9-measure-nfs-performance)
+- [Scenario 10: Troubleshoot “NFS Server Is Not Responding”](#scenario-10-troubleshoot-nfs-server-is-not-responding)
+- [Scenario 11: Use `showmount` to Inspect Exports](#scenario-11-use-showmount-to-inspect-exports)
+- [Scenario 12: Unexport a Shared Directory](#scenario-12-unexport-a-shared-directory)
+- [Common NFS Problems and Fixes](#common-nfs-problems-and-fixes)
+- [Problem: Access Denied by Server](#problem-access-denied-by-server)
+- [Problem: Connection Timed Out](#problem-connection-timed-out)
+- [Problem: Permission Denied While Writing](#problem-permission-denied-while-writing)
+- [Problem: Files Owned by nobody](#problem-files-owned-by-nobody)
+- [Problem: Stale File Handle](#problem-stale-file-handle)
+- [Problem: Boot Delays Because NFS Is Unavailable](#problem-boot-delays-because-nfs-is-unavailable)
+- [NFS Troubleshooting Workflow](#nfs-troubleshooting-workflow)
+- [Useful Command Summary](#useful-command-summary)
+- [Safe Lab Cleanup](#safe-lab-cleanup)
+- [Challenges](#challenges)
+
+</details>
+
 NFS stands for Network File System.
 
 It is a protocol that allows one computer to share directories with other computers over a network.

@@ -1,5 +1,26 @@
 ## Linux Certification Overview
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Why Get Certified?](#why-get-certified)
+- [The Certification Landscape](#the-certification-landscape)
+- [Comparing the Major Certifications](#comparing-the-major-certifications)
+- [Key Differences in Exam Style](#key-differences-in-exam-style)
+- [Choosing the Right Certification](#choosing-the-right-certification)
+- [Certification Progression Paths](#certification-progression-paths)
+- [Common Exam Topics Across Certifications](#common-exam-topics-across-certifications)
+- [Study Strategies That Actually Work](#study-strategies-that-actually-work)
+- [Mapping Repository Notes to Exam Objectives](#mapping-repository-notes-to-exam-objectives)
+- [Practice Makes Perfect](#practice-makes-perfect)
+- [What's Next?](#whats-next)
+- [Helpful Resources](#helpful-resources)
+- [Challenges](#challenges)
+
+</details>
+
 Earning a Linux certification proves to employers (and to yourself) that you can actually manage real systems under pressure. Whether you're just entering the field or aiming for a senior infrastructure role, there's a certification path that fits your goals. This guide maps out the major options, compares them side-by-side, and helps you decide which one makes the most sense for where you are right now.
 
 ### Why Get Certified?
@@ -12,6 +33,8 @@ Certifications are not a replacement for hands-on experience, but they complemen
 - The structured study process fills gaps in your knowledge that self-directed learning sometimes misses.
 
 ### The Certification Landscape
+
+**Version note (2026-10-16):** Certification offerings change. [LFCE was retired on May 1, 2022](https://training.linuxfoundation.org/lfcecert-inactive/); its entries and arrows below are retained as historical context. The current [LFCS](https://training.linuxfoundation.org/certification/linux-foundation-certified-sysadmin-lfcs/) is distribution agnostic and has a two-year validity period. Check each provider's current catalog, exam version, price, and candidate handbook before choosing or booking an exam.
 
 ```
 Linux Certification Paths
@@ -45,10 +68,12 @@ Linux Certification Paths
 | Certification | Provider | Exam Format | Duration | Passing Score | Approximate Cost | Renewal Period |
 |---------------|----------|-------------|----------|---------------|------------------|----------------|
 | **CompTIA Linux+** | CompTIA | Multiple choice + performance-based | 90 min | 720/900 | ~$370 | 3 years (CE program) |
-| **LFCS** | Linux Foundation | Performance-based on live system | 2 hours | 66% | ~$395 | 3 years |
-| **LFCE** | Linux Foundation | Performance-based on live system | 2 hours | 57% | ~$395 | 3 years |
+| **LFCS** | Linux Foundation | Performance-based on live system | 2 hours | Older guide: 66%; verify current candidate instructions | $445 list price checked 2026-10-16 | 2 years |
+| **LFCE (retired)** | Linux Foundation | Historical performance-based exam | Historically 2 hours | Historical 57% | No longer offered | Historical 3 years |
 | **RHCSA** | Red Hat | Performance-based on live system | 2.5 hours | 210/300 (70%) | ~$500 | 3 years |
 | **RHCE** | Red Hat | Performance-based on live system | 3.5 hours | 210/300 (70%) | ~$500 | 3 years |
+
+Except for the dated LFCS price above, the approximate costs are older budgeting examples, not current quotes. LFCE cannot be booked. Red Hat exam versions and the RHCE pathway have changed, so consult the current provider catalog rather than treating the progression diagrams as a required or currently offered sequence.
 
 ### Key Differences in Exam Style
 
@@ -95,11 +120,11 @@ RHCSA is widely considered the gold standard for Linux system administrators. Be
 
 #### If You Prefer Distribution-Neutral Skills
 
-LFCS tests you on a Linux system of your choice (Ubuntu or CentOS/RHEL). It focuses on core system administration skills that apply regardless of distribution. This is a good choice if you work in environments with mixed distributions.
+LFCS tests distribution-agnostic administration skills; candidates no longer select Ubuntu or CentOS/RHEL for the exam. Practicing on both Debian-based and RPM-based systems is still useful for understanding which concepts transfer and which commands differ.
 
 #### If You're Targeting Advanced Roles
 
-After earning your RHCSA, the natural next step is RHCE, which focuses heavily on Ansible automation. For the Linux Foundation path, LFCE covers advanced networking, security, and service configuration. Both are respected for senior-level positions.
+After RHCSA, compare Red Hat's current advanced certification paths with your target role. The historical RHCE Ansible path and LFCE networking/service curriculum can still guide study, but LFCE is retired. Choose an available advanced Linux, automation, or cloud certification from the provider's current catalog.
 
 ### Certification Progression Paths
 
@@ -144,8 +169,10 @@ No matter which certification you pursue, you'll need solid knowledge in these a
 | Firewall configuration | ✅ | ✅ | ✅ |
 | Scheduled tasks (cron) | ✅ | ✅ | ✅ |
 | Log management | ✅ | ✅ | ✅ |
-| Container basics | ❌ | ❌ | ✅ |
-| Ansible automation | ❌ | ❌ | Partial |
+| Container basics | Check current objectives | ✅ | Earlier exam versions; check booked version |
+| Ansible automation | Check current objectives | Not a named domain | Not a named EX200 domain |
+
+This is a broad study comparison, not an exam blueprint. In particular, current LFCS objectives include container engines and container management, while the RHEL 10 EX200 list no longer has the earlier container domain. Use the current [LFCS objectives](https://training.linuxfoundation.org/certification/linux-foundation-certified-sysadmin-lfcs/) and [RHCSA objectives](https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam) to resolve version differences.
 
 ### Study Strategies That Actually Work
 
@@ -163,7 +190,7 @@ Set up a virtual environment where you can break things without consequences:
 # For RHCSA practice, use Rocky Linux or AlmaLinux (free RHEL clones
 # that closely match the exam environment; avoid CentOS Stream as
 # its rolling release model may differ from stable RHEL)
-# For LFCS, pick whatever distribution you plan to test on
+# For LFCS, practice across distributions; registration has no platform choice
 ```
 
 #### Practice Under Timed Conditions
@@ -291,7 +318,7 @@ Once you've chosen your certification path, dive into the specific preparation g
 #### Official Certification Pages
 
 - [Red Hat Certification](https://www.redhat.com/en/services/certification) — RHCSA, RHCE, and RHCA information
-- [Linux Foundation Certification](https://training.linuxfoundation.org/certification/) — LFCS and LFCE information
+- [Linux Foundation Certification](https://training.linuxfoundation.org/certification/) — Current certifications; see the LFCE retirement notice above for older references
 - [CompTIA Linux+](https://www.comptia.org/certifications/linux) — Exam objectives and registration
 
 #### Study Materials

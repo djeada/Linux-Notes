@@ -1,5 +1,24 @@
 ## Virtual Machines
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Types of Virtualization](#types-of-virtualization)
+- [Virtualization Technologies](#virtualization-technologies)
+- [Understanding Hypervisors](#understanding-hypervisors)
+- [Networking Methods](#networking-methods)
+- [Creating Virtual Machines](#creating-virtual-machines)
+- [Managing Virtual Machines](#managing-virtual-machines)
+- [Benefits of Virtual Machines](#benefits-of-virtual-machines)
+- [VirtualBox](#virtualbox)
+- [VMware](#vmware)
+- [KVM](#kvm)
+- [Challenges](#challenges)
+
+</details>
+
 Virtual machines have revolutionized the way we approach computing resources by enabling the creation of software-based representations of physical hardware. This concept, known as virtualization, allows us to emulate hardware components like CPUs, memory, storage devices, and network interfaces, providing a flexible and efficient environment for running applications and operating systems.
 
 Imagine having multiple computers running different operating systems, all within a single physical machine. Virtual machines make this possible by isolating each environment, ensuring that applications run independently without interfering with one another. This isolation not only enhances security but also optimizes resource utilization, making it a cornerstone technology in cloud computing, data centers, and development environments.

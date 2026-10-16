@@ -1,5 +1,20 @@
 ## File Permissions
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Standard Permissions](#standard-permissions)
+- [Symbolic File Permissions](#symbolic-file-permissions)
+- [Numeric File Permissions](#numeric-file-permissions)
+- [Default Permissions](#default-permissions)
+- [Special Permissions: setuid, setgid, and the Sticky Bit](#special-permissions-setuid-setgid-and-the-sticky-bit)
+- [Access Control Lists (ACLs)](#access-control-lists-acls)
+- [Challenges](#challenges)
+
+</details>
+
 File permissions are crucial in any Unix-like operating systems, including Linux, which employ several mechanisms for controlling access to files and directories. These mechanisms include standard permissions, special permissions, and access control lists (ACLs).
 
 ### Standard Permissions
@@ -16,7 +31,9 @@ Each permission category confers specific capabilities for users, as detailed in
 |------------|-------------------------------------------------|------------------------------------------------------------|
 | Read (`r`) | Allows viewing and reading the contents of files.| Enables the listing of directory contents.                 |
 | Write (`w`)| Permits modification or deletion of file contents.| Allows adding, deleting, or renaming files in the directory.|
-| Execute (`x`)| Enables running the file as a program or script. | Grants the ability to enter the directory and execute commands within it, or access files therein.|
+| Execute (`x`)| Enables running the file as a program or script. | Allows searching/traversing the directory, including looking up a known filename within it.|
+
+Directory operations often need permissions in combination: listing names needs `r`, accessing an entry needs `x`, and creating, deleting, or renaming entries normally needs both `w` and `x` on the parent directory. Deleting a file removes a directory entry; it does not require write permission on the file itself. The sticky bit and other access controls can impose further restrictions.
 
 These permissions can be set for different classes of users, each with varying levels of access:
 
@@ -104,15 +121,15 @@ In Linux, when you create a new file or directory, it is assigned a set of defau
 
 #### Default File and Directory Permissions
 
-By default, new files are created with the permissions `rw-rw-rw-`, equivalent to the numeric value `666`. This allows any user to read and write to the file, but not execute it.
+Programs commonly request `rw-rw-rw-` (`0666`) when creating ordinary files. This is a starting mode, before the process's umask is applied; it is not normally the final permission mode.
 
-New directories, on the other hand, are created with the permissions `rwxrwxrwx` or `777`. This allows any user to read, write, and execute within the directory.
+Programs commonly request `rwxrwxrwx` (`0777`) for new directories. With a umask of `0022`, the usual final modes are `0644` for files and `0755` for directories. A program can request a stricter mode, such as `0600`, and a parent directory's default ACL can also affect the result.
 
 #### Using Umask to Change Default Permissions
 
 The `umask` command is used to determine the default permissions for newly created files and directories. It's a three-digit number that specifies which permissions should be removed or "masked" when new files and directories are created. 
 
-For example, a `umask` value of `0022` subtracts write permissions for group and others from the default permissions, resulting in default permissions of `rw-r--r--` (`644`) for new files and `rwxr-xr-x` (`755`) for new directories.
+For example, a `umask` value of `0022` clears write permission for group and others from the requested mode, resulting in `rw-r--r--` (`644`) for files requested as `666` and `rwxr-xr-x` (`755`) for directories requested as `777`. This is bit masking, not arithmetic subtraction: without a default ACL, `final_mode = requested_mode & ~umask`.
 
 To view the current `umask` value, simply use the `umask` command:
 
@@ -132,9 +149,9 @@ This will set the umask value to 0022, and new files and directories will be cre
 
 Here are some common umask values and the resulting default permissions for files and directories:
 
-| Umask | Value	Default File Permissions | Default Directory Permissions |
+| Umask | Default File Permissions | Default Directory Permissions |
 | ----- | ------------------------------ | ----------------------------- |
-| 022 |	rw-r--r--	| rwxr-xr-x |
+| 022 | rw-r--r-- | rwxr-xr-x |
 | 027	| rw-r-----	| rwxr-x--- |
 | 077	| rw-------	| rwx------ |
 
@@ -150,7 +167,7 @@ The umask command would look like this:
 umask u-x,g=r,o+w
 ```
 
-This command configures the umask such that new files and directories will have the permissions specified.
+Symbolic `umask` operands describe allowed permissions, the complement of the mask. The relative operations above depend on the current mask. They cannot add permissions that the creating program did not request; in particular, normal file creation still does not gain execute bits. Use `umask -S` to inspect the resulting symbolic setting.
 
 ### Special Permissions: setuid, setgid, and the Sticky Bit
 
@@ -181,6 +198,8 @@ The setuid (“set user ID”) bit causes a program to run with the file owner�
 
 * The `passwd` command needs to modify `/etc/shadow`, which is owned by root. By marking `/usr/bin/passwd` as setuid root, any user can change their own password despite not having write access to the shadow file.
 * If a setuid binary is vulnerable (e.g., buffer overflow), an attacker might exploit it to gain root. Always audit and minimize setuid programs.
+
+On Linux, setuid and setgid execution changes apply to executable binaries; the kernel ignores these bits on interpreter scripts. A `nosuid` mount or `no_new_privs` can also prevent the privilege change. An uppercase `S` in `ls -l` means the special bit is set but the corresponding execute bit is absent.
 
 **How to set the setuid bit:**
 
@@ -223,8 +242,8 @@ The setgid (“set group ID”) bit causes an executable to run with the group p
 
 **Why it matters:**
 
-* A backup script owned by group `backup` can be run by any user in that group, with file-creation operations done under the `backup` group, ensuring correct group ownership of backup archives.
-* On `/srv/shared`, setgid makes new files inherit the `shared` group, so every team member automatically has group write permission on new files.
+* A compiled backup program with setgid and an owning group of `backup` can run with that effective group, subject to the execution restrictions above. Setting setgid on a shell script does not have this effect on Linux.
+* On `/srv/shared`, setgid makes new files inherit the directory's group. It does not grant group write permission: use a suitable umask or default ACL as well. Newly created subdirectories also inherit setgid.
 * A setgid program with flaws could let a non-group member escalate privileges to that group, potentially accessing sensitive group-owned resources.
 
 **How to set the setgid bit:**
@@ -257,14 +276,14 @@ ls -ld /path/to/file_or_directory
 **Find all setgid files/directories:**
 
 ```bash
-find / -perm /2000 -type f -or -type d 2>/dev/null
+find / \( -type f -o -type d \) -perm /2000 2>/dev/null
 ```
 
-Searches for the setgid bit in both files and directories.
+Searches for the setgid bit in both files and directories. Parentheses matter: implicit AND binds more tightly than `-o`, so an ungrouped `-perm /2000 -type f -or -type d` would also match every directory.
 
 #### Sticky Bit
 
-When set on a directory, the sticky bit ensures that within that directory, only the file’s owner (or root) may delete or rename their files. It prevents users from removing or renaming other users’ files in a shared directory.
+When set on a directory, the sticky bit restricts deletion and renaming to the file's owner, the directory's owner, or a suitably privileged process. The usual directory write and search permissions still apply. This prevents unrelated users from removing each other's files in shared directories such as `/tmp`.
 
 **Why it matters:**
 
@@ -318,7 +337,7 @@ Use these checks and examples to ensure each special permission is applied corre
 
 Access Control Lists (ACLs) are an additional layer of discretionary access control provided by many Linux systems. They allow for more fine-grained control over file and directory access, extending beyond the standard user, group, and other permissions.
 
-ACLs are not supported by all tools, but modern 'mke2fs' typically enables ACLs in the default mount options during filesystem creation in enterprise Linux distributions. To utilize ACLs, the filesystem must be mounted with the 'acl' option.
+ACL support depends on the filesystem and its mount settings, and preservation depends on the copy or backup tool. Many Linux filesystems enable POSIX ACLs by default; an explicit `acl` mount option is not universally required or supported. Check the documentation for your filesystem and inspect effective permissions with `getfacl`.
 
 ```
   Type : Entity : Permissions
@@ -332,12 +351,12 @@ ACLs are not supported by all tools, but modern 'mke2fs' typically enables ACLs 
 
 #### Setting ACLs with `setfacl`
 
-The `setfacl` command is used to manage ACLs on a file or directory. It can set, modify, or remove ACL entries. If no path is provided, it takes file and directory names from the standard input (stdin). Each line of input should contain one path name.
+The `setfacl` command sets, modifies, or removes ACL entries on the paths you provide. To read a newline-separated list of paths from standard input, use `-` as the path operand explicitly.
 
 To modify ACLs, use the `-m` flag followed by the ACL specification. For example, the following command grants read and write permissions to a specific group on a directory:
 
 ```bash
-setfacl -m g:group_name:rw /opt/test
+setfacl -m g:group_name:rwx /opt/test
 ```
 
 To remove an ACL, use the -x flag followed by the ACL specification to be removed. For example:
@@ -348,7 +367,7 @@ setfacl -x g:group_name /opt/test
 
 #### Viewing ACLs with getfacl
 
-The getfacl command is used to display the ACLs of a file or directory. Use the -l flag to list the ACLs:
+The `getfacl` command displays ACLs directly; no listing flag is needed:
 
 ```bash
 getfacl /opt/test
@@ -361,11 +380,15 @@ ACL specifications define who has what kind of access to a file or directory. He
 - `u:user_name:rwx` : Grants read, write, and execute permissions to a specific user.
 - `g:group_name:r-x` : Grants read and execute permissions to a specific group.
 - `o:r--` : Grants read permissions to others.
-- `m:rwx` : Grants read, write, and execute permissions to both the owner of the file (u) and the file's group (g).
-- `:r-x` : Grants read and execute permissions to everyone (equivalent to a:r-x).
-- `:---` : Removes all permissions for everyone (equivalent to a:---).
+- `m::rwx` : Sets the maximum effective permissions for named users, the owning group, and named groups. It does not grant access by itself or limit the owner or others.
+- `u::r-x,g::r-x,o::r-x` : Sets the three base entries to read and execute. Unlike `chmod a=rx`, this does not change any existing named entries or mask.
+- `u::---,g::---,o::---,m::---` : Clears the base permissions and mask, also limiting existing named entries to no effective access. The shorthand `:---` is not a valid POSIX ACL entry.
 
-ACLs are applied in conjunction with standard Linux permissions, and they can either override or supplement them. For example, a file with standard permissions of rw-rw-r-- and an ACL entry of g:r-x would grant read and execute permissions to the group, even though the standard permissions do not grant execute permission. Thus, with the proper use of ACLs, you can achieve a higher level of security and flexibility in managing file and directory access.
+ACLs and mode bits describe the same access policy. With an extended ACL, the group bits shown by `ls -l` represent the ACL mask, rather than just the owning group's entry. For example, `setfacl -m g:project:r-x file` adds a named group entry and normally recalculates the mask; `getfacl file` shows whether the mask limits that entry. A later `chmod g=...` also changes the mask and can change named users' or groups' effective access.
+
+For new items in a shared directory, an access ACL affects the directory itself, while a default ACL supplies inherited entries. For example, `setfacl -d -m g:group_name:rwx /opt/test` sets an inherited group entry; permissions on each new item remain limited by the mode requested by its creating program.
+
+References: [ACL model and mask](https://man7.org/linux/man-pages/man5/acl.5.html), [umask](https://man7.org/linux/man-pages/man2/umask.2.html), and [set-ID execution rules](https://man7.org/linux/man-pages/man2/execve.2.html).
 
 ### Challenges
 

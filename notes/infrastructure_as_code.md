@@ -1,5 +1,22 @@
 ## Infrastructure as Code
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Core Principles of IaC](#core-principles-of-iac)
+- [Configuration Management with Ansible](#configuration-management-with-ansible)
+- [Ansible Practical Examples](#ansible-practical-examples)
+- [Infrastructure Provisioning with Terraform](#infrastructure-provisioning-with-terraform)
+- [Terraform Practical Examples](#terraform-practical-examples)
+- [Comparison of IaC Tools](#comparison-of-iac-tools)
+- [IaC Best Practices](#iac-best-practices)
+- [Integrating IaC with Linux Administration](#integrating-iac-with-linux-administration)
+- [Challenges](#challenges)
+
+</details>
+
 If you have ever spent hours manually configuring Linux servers, installing packages one by one, editing configuration files by hand, and then trying to remember exactly what you did when it is time to set up the next server, you already understand the problem that Infrastructure as Code solves. Infrastructure as Code, or IaC, is the practice of managing and provisioning computing infrastructure through machine-readable definition files rather than through interactive configuration tools or physical hardware configuration. Instead of logging into servers and running commands by hand, you describe your desired infrastructure in code, and tools take care of making it happen.
 
 Think of it this way: all the Linux administration skills you have built, managing packages, configuring services, setting up firewalls, creating users, are still essential. IaC simply gives you a repeatable, version-controlled, and automated way to apply those skills across one server or a thousand.
@@ -433,13 +450,15 @@ terraform {
     bucket         = "my-terraform-state"
     key            = "production/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-locks"
+    use_lockfile   = true
     encrypt        = true
   }
 }
 ```
 
 🔴 **Caution**: The state file can contain sensitive information such as database passwords and API keys. Always store it securely and never commit it to a public Git repository.
+
+The example uses S3-native state locking (`use_lockfile`, available in Terraform 1.10 and later). Older configurations may use `dynamodb_table = "terraform-locks"`; DynamoDB-based locking is deprecated. Create the bucket first and grant the required state/lockfile permissions. See the [S3 backend documentation](https://developer.hashicorp.com/terraform/language/backend/s3).
 
 ### Terraform Practical Examples
 
@@ -620,6 +639,8 @@ ansible-vault encrypt group_vars/production/secrets.yml
 ansible-playbook site.yml --ask-vault-pass
 ```
 
+Vault protects data at rest, not every later use of the decrypted value. Use `no_log: true` on tasks that handle secrets and avoid exposing them through debugging or diff output. See [Ansible Vault's scope](https://docs.ansible.com/ansible/latest/vault_guide/vault.html).
+
 II. Use environment variables or a secrets manager for Terraform:
 
 ```hcl
@@ -701,6 +722,6 @@ IV. Gradually move from configuring existing servers to provisioning new ones wi
 
 8. Set up a project directory following the modular structure described in the best practices section, with separate Ansible roles for a web server, a database server, and a common baseline configuration. Each role should handle its own packages, services, configuration files, and firewall rules. Write a `site.yml` that applies the appropriate roles to each host group.
 
-9. Create an Ansible Vault-encrypted file containing sensitive variables (such as a database password and an API key) and write a playbook that references those variables. Run the playbook using `--ask-vault-pass` and verify that the secrets are never displayed in the playbook output. Then try running the playbook without the vault password to confirm it fails securely.
+9. Create an Ansible Vault-encrypted file containing sensitive variables (such as a database password and an API key) and write a playbook that references those variables. Use `no_log: true` on secret-bearing tasks, run the playbook using `--ask-vault-pass`, and inspect the output for accidental disclosure. Vault encryption alone does not suppress runtime output. Then try running the playbook without the vault password to confirm that decryption fails.
 
 10. Build a complete IaC pipeline that uses Terraform to provision a virtual machine and then uses Ansible to configure it, combining both tools in a single workflow. The Terraform output should generate an Ansible inventory file dynamically, and the Ansible playbook should install and configure a web server with a firewall. Document each step and verify the end-to-end process by accessing the deployed web application.

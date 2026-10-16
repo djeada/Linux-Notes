@@ -1,5 +1,61 @@
 ## How the Linux Kernel Executes Programs
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Big Picture](#big-picture)
+- [The `execve` System Call](#the-execve-system-call)
+- [Important Property of `execve`](#important-property-of-execve)
+- [What the Kernel Does During `execve`](#what-the-kernel-does-during-execve)
+- [Observing `execve` with `strace`](#observing-execve-with-strace)
+- [`execve` and the Shell](#execve-and-the-shell)
+- [Executing Scripts](#executing-scripts)
+- [Executable Permissions](#executable-permissions)
+- [Binary Formats](#binary-formats)
+- [ELF Loading](#elf-loading)
+- [Static and Dynamic Linking](#static-and-dynamic-linking)
+- [Static Linking](#static-linking)
+- [Dynamic Linking](#dynamic-linking)
+- [Inspecting Shared Libraries with `ldd`](#inspecting-shared-libraries-with-ldd)
+- [Library Search Paths](#library-search-paths)
+- [`ldconfig`](#ldconfig)
+- [`LD_LIBRARY_PATH`](#ld_library_path)
+- [Building a Custom Kernel for Learning](#building-a-custom-kernel-for-learning)
+- [Kernel Source](#kernel-source)
+- [Debug-Friendly Kernel Configuration](#debug-friendly-kernel-configuration)
+- [Compiling the Kernel](#compiling-the-kernel)
+- [Initramfs](#initramfs)
+- [BusyBox](#busybox)
+- [Creating a Minimal Initramfs](#creating-a-minimal-initramfs)
+- [Adding a Test Program](#adding-a-test-program)
+- [Creating the Initramfs Archive](#creating-the-initramfs-archive)
+- [Booting with QEMU](#booting-with-qemu)
+- [Debugging with GDB](#debugging-with-gdb)
+- [Binary Handler Selection](#binary-handler-selection)
+- [Program Entry Point](#program-entry-point)
+- [Scenario 1: Observe `execve` for a Normal Command](#scenario-1-observe-execve-for-a-normal-command)
+- [Scenario 2: Show That `execve` Replaces the Current Process](#scenario-2-show-that-execve-replaces-the-current-process)
+- [Scenario 3: Observe a Script Shebang](#scenario-3-observe-a-script-shebang)
+- [Scenario 4: Compare Static and Dynamic Binaries](#scenario-4-compare-static-and-dynamic-binaries)
+- [Scenario 5: Diagnose a Missing Shared Library](#scenario-5-diagnose-a-missing-shared-library)
+- [Scenario 6: Boot a Minimal Initramfs and Run a Static Program](#scenario-6-boot-a-minimal-initramfs-and-run-a-static-program)
+- [Scenario 7: Break on Kernel Exec Path with GDB](#scenario-7-break-on-kernel-exec-path-with-gdb)
+- [Scenario 8: Observe ELF Handler Selection](#scenario-8-observe-elf-handler-selection)
+- [Scenario 9: Compare ELF Entry Point with Kernel Register Setup](#scenario-9-compare-elf-entry-point-with-kernel-register-setup)
+- [Scenario 10: Trace Dynamic Linker Involvement](#scenario-10-trace-dynamic-linker-involvement)
+- [Common Problems and Fixes](#common-problems-and-fixes)
+- [Problem: No Such File or Directory](#problem-no-such-file-or-directory)
+- [Problem: Missing Shared Library](#problem-missing-shared-library)
+- [Problem: Initramfs Kernel Panic](#problem-initramfs-kernel-panic)
+- [Problem: GDB Breakpoint Does Not Work](#problem-gdb-breakpoint-does-not-work)
+- [Useful Command Summary](#useful-command-summary)
+- [Safe Lab Rules](#safe-lab-rules)
+- [Practical Challenges](#practical-challenges)
+
+</details>
+
 When you type a command such as:
 
 ```bash
@@ -95,10 +151,11 @@ The arguments are:
 - argv       argument vector passed to the new program
 - envp       environment variables passed to the new program
 
-Example:
+Example C fragment, assuming `envp` is a valid environment array and the declarations above are available:
 
 ```c
-execve("/bin/ls", ["ls", "-l", "/tmp", NULL], envp);
+char *argv[] = {"ls", "-l", "/tmp", NULL};
+execve("/bin/ls", argv, envp);
 ```
 
 This asks the kernel to run:
@@ -548,6 +605,8 @@ Diagram:
 ```
 
 ### Inspecting Shared Libraries with `ldd`
+
+Use `ldd` only on trusted executables. Some implementations or unusual ELF interpreters can execute code while resolving dependencies. For an untrusted file, `objdump -p ./program | grep NEEDED` inspects direct dependency declarations without running its interpreter; it does not resolve the full dependency tree. See the [ldd manual](https://man7.org/linux/man-pages/man1/ldd.1.html).
 
 Use:
 

@@ -1,5 +1,36 @@
 ## Understanding Users
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [/etc/passwd File](#etcpasswd-file)
+- [/etc/shadow File](#etcshadow-file)
+- [The Superuser (root)](#the-superuser-root)
+- [Adding a User to the sudo Group](#adding-a-user-to-the-sudo-group)
+- [Configuring sudo Access](#configuring-sudo-access)
+- [Granting Limited sudo Privileges](#granting-limited-sudo-privileges)
+- [Switching Between Users](#switching-between-users)
+- [Using the su Command](#using-the-su-command)
+- [Advanced Tips](#advanced-tips)
+- [Managing Users in Linux](#managing-users-in-linux)
+- [Adding New Users](#adding-new-users)
+- [Setting and Changing User Passwords](#setting-and-changing-user-passwords)
+- [Setting Password During User Creation](#setting-password-during-user-creation)
+- [Group Management](#group-management)
+- [Viewing Existing Groups](#viewing-existing-groups)
+- [Visualization of Users and Groups](#visualization-of-users-and-groups)
+- [Creating and Managing Groups](#creating-and-managing-groups)
+- [Adjusting File or Folder Ownership](#adjusting-file-or-folder-ownership)
+- [User ID and Group ID](#user-id-and-group-id)
+- [Permissions and Ownership](#permissions-and-ownership)
+- [Retrieving UID and GID](#retrieving-uid-and-gid)
+- [Modifying UID and GID](#modifying-uid-and-gid)
+- [Challenges](#challenges)
+
+</details>
+
 In Linux, user management is a crucial aspect of system administration. A user is essentially an entity that can log into the computer system and perform tasks based on the permissions granted to them. The Linux operating system stores user-related information in a couple of key files: `/etc/passwd` and `/etc/shadow`.
 
 ### /etc/passwd File
@@ -26,15 +57,15 @@ If you want a concise list of all user names in the system, use the following:
 awk -F: '{ print $1}' /etc/passwd | uniq
 ```
 
-This command reads the /etc/passwd file, parses it using the colon as a delimiter, and prints the first field (i.e., usernames). The uniq command ensures there are no duplicates in the list.
+This reads `/etc/passwd` and prints the username field. `uniq` removes only adjacent duplicate lines; use `sort -u` if you need to deduplicate an arbitrary list. `getent passwd` queries configured account sources as well as local files, so it can also show directory-service accounts.
 
 ### /etc/shadow File
 
-The `/etc/shadow` file is more security-sensitive as it contains encrypted passwords and other crucial data related to user authentication, such as:
+The `/etc/shadow` file is more security-sensitive because it contains password hashes and password-aging data, such as:
 
-* **Encrypted Password**: The actual password in encrypted form.
+* **Password Hash**: A salted one-way password hash, or a marker such as `!` or `*` that prevents password authentication. The original password is not stored in decryptable form.
 * **Password Expiration:** Details about when the password was last changed and when it will expire.
-* **Password History**: Information to prevent users from reusing recent passwords.
+* **Account Aging**: Inactivity and account-expiration fields. Password-reuse history, when configured, is managed separately by authentication modules rather than stored as a history list in `/etc/shadow`.
 
 Because of the sensitive nature of its content, only the root user or users with appropriate privileges can access this file.
 
@@ -43,6 +74,8 @@ To inspect its content:
 ```bash
 less /etc/shadow
 ```
+
+Run that command with appropriate administrative privileges and keep its output private. The [shadow format manual](https://man7.org/linux/man-pages/man5/shadow.5.html) describes the fields.
 
 ## The Superuser (root)
 

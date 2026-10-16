@@ -1,5 +1,22 @@
 ## Utilities
 
+[All guides](../README.md)
+
+<details>
+<summary>Contents</summary>
+
+- [Taking Screenshots with Scrot](#taking-screenshots-with-scrot)
+- [Recording the Screen with Vokoscreen](#recording-the-screen-with-vokoscreen)
+- [Preparing a Bootable USB Stick with USBImager](#preparing-a-bootable-usb-stick-with-usbimager)
+- [Malware Detection with Maldet](#malware-detection-with-maldet)
+- [Installation](#installation)
+- [Scanning for malware](#scanning-for-malware)
+- [Viewing the scan report](#viewing-the-scan-report)
+- [Quarantining infected files](#quarantining-infected-files)
+- [Challenges](#challenges)
+
+</details>
+
 We will discuss various tools that can be used on Linux systems for tasks such as taking screenshots, recording screens, preparing bootable sticks, and detecting malware. It provides brief explanations of each tool and includes installation and usage instructions.
 
 ## Taking Screenshots with Scrot
@@ -18,11 +35,13 @@ This will save the screenshot as a PNG image in the current working directory. I
 scrot /path/to/screenshot.png
 ```
 
-To take a screenshot of a specific window, use the -u option followed by the window title or ID:
+To capture the currently focused window, use `-u`:
 
 ```
-scrot -u "Window Title" screenshot.png
+scrot -u screenshot.png
 ```
+
+[Scrot's `-u` option](https://manpages.debian.org/testing/scrot/scrot.1.en.html) does not take a window title or ID. To choose a window interactively, use `scrot -s screenshot.png` and click it. Scrot is an X11 tool; native Wayland sessions require a compatible capture tool or desktop screenshot interface.
 
 To take a screenshot of a selected area of the screen, use the -s option:
 
@@ -94,10 +113,12 @@ One tool that can be used for malware detection is Maldet (short for Linux Malwa
 To install Maldet on a Debian-based system, use the following commands:
 
 ```
-wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
+wget https://www.rfxn.com/downloads/maldetect-current.tar.gz
 tar xvfz maldetect-current.tar.gz
-cd maldetect-2.1.1 && sudo ./install.sh
+cd maldetect-*/ && sudo ./install.sh
 ```
+
+The directory glob assumes there is one extracted `maldetect-*` directory in the current directory. If there are several, use the exact directory name shown after extraction. Review the publisher's current installation and verification instructions before running the downloaded installer as root.
 
 This will download and extract the latest version of Maldet, and then run the installation script to install the software on the system.
 
