@@ -68,7 +68,7 @@ Linux Certification Paths
 | Certification | Provider | Exam Format | Duration | Passing Score | Approximate Cost | Renewal Period |
 |---------------|----------|-------------|----------|---------------|------------------|----------------|
 | **CompTIA Linux+** | CompTIA | Multiple choice + performance-based | 90 min | 720/900 | ~$370 | 3 years (CE program) |
-| **LFCS** | Linux Foundation | Performance-based on live system | 2 hours | 66% | $445 list price checked 2026-10-16 | 2 years |
+| **LFCS** | Linux Foundation | Performance-based on live system | 2 hours | Older guide: 66%; verify current candidate instructions | $445 list price checked 2026-10-16 | 2 years |
 | **LFCE (retired)** | Linux Foundation | Historical performance-based exam | Historically 2 hours | Historical 57% | No longer offered | Historical 3 years |
 | **RHCSA** | Red Hat | Performance-based on live system | 2.5 hours | 210/300 (70%) | ~$500 | 3 years |
 | **RHCE** | Red Hat | Performance-based on live system | 3.5 hours | 210/300 (70%) | ~$500 | 3 years |
@@ -190,7 +190,7 @@ Set up a virtual environment where you can break things without consequences:
 # For RHCSA practice, use Rocky Linux or AlmaLinux (free RHEL clones
 # that closely match the exam environment; avoid CentOS Stream as
 # its rolling release model may differ from stable RHEL)
-# For LFCS, pick whatever distribution you plan to test on
+# For LFCS, practice across distributions; registration has no platform choice
 ```
 
 #### Practice Under Timed Conditions

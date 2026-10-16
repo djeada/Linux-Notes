@@ -33,14 +33,14 @@ This guide covers the exam domains, the commands and skills you need to master, 
 | **Provider** | Linux Foundation |
 | **Format** | Performance-based (hands-on tasks on a live system) |
 | **Duration** | 2 hours |
-| **Number of Tasks** | Typically 15–20 tasks |
-| **Passing Score** | 66% |
+| **Number of Tasks** | Older study estimate: 15–20; do not assume a fixed task count |
+| **Passing Score** | Older guide value: 66%; confirm the current LFCS candidate instructions |
 | **Cost** | $445 USD exam-only list price as checked 2026-10-16; confirm current pricing and taxes before booking |
 | **Prerequisites** | None required |
 | **Validity** | 2 years for certifications earned under the policy effective April 2024 |
 | **Distribution Choice** | No platform selection; distribution-agnostic exam content |
 
-Checked against the [LFCS product page](https://training.linuxfoundation.org/certification/linux-foundation-certified-sysadmin-lfcs/), [2023 exam changes](https://training.linuxfoundation.org/blog/updated-linux-foundation-certified-system-administrator-lfcs-exam/), and [certification policy](https://docs.linuxfoundation.org/tc-docs/certification/lf-handbook2/certificates-and-certification). Treat the task-count estimate as practice guidance, not a guaranteed exam layout.
+Updated format, price, and validity information is checked against the [LFCS product page](https://training.linuxfoundation.org/certification/linux-foundation-certified-sysadmin-lfcs/), [2023 exam changes](https://training.linuxfoundation.org/blog/updated-linux-foundation-certified-system-administrator-lfcs-exam/), and [certification policy](https://docs.linuxfoundation.org/tc-docs/certification/lf-handbook2/certificates-and-certification). The retained task-count and passing-score entries are older guide values, not verified current booking requirements.
 
 ### Exam Domains and Weights
 
@@ -115,7 +115,7 @@ Historical LFCS Study Outline (older approximate weights)
 
 ### Essential Commands
 
-This domain carries the most weight. You need to be fast and accurate with these skills.
+These skills support tasks across the exam domains. Practice them for speed and accuracy; Essential Commands is currently weighted at 20%, below the 25% Operations and Deployment and Networking domains.
 
 #### Searching for Files
 
@@ -619,7 +619,7 @@ firewall-cmd --reload
 
 ### Ubuntu vs CentOS: Key Differences
 
-Since you choose your distribution at registration, know the differences that matter:
+These differences are useful when moving between practice environments. The current exam is distribution agnostic and no longer offers a distribution choice at registration:
 
 | Task | Ubuntu/Debian | CentOS/RHEL |
 |------|---------------|-------------|
@@ -696,7 +696,7 @@ There is no distribution choice at exam registration. Use this comparison to bro
 
 **Exam strategy:**
 
-- The LFCS gives you 2 hours for 15–20 tasks, so pace yourself
+- The LFCS allows 2 hours; pace yourself using the tasks presented and their weights rather than assuming a fixed task count
 - Read each task fully before starting to work on it
 - Handle quick tasks first, then tackle complex ones
 - Use `man` pages aggressively — they contain answers to most questions
