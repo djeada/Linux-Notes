@@ -1,30 +1,5 @@
 ## Networking
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Network Interfaces](#network-interfaces)
-- [IP Addresses](#ip-addresses)
-- [DHCP](#dhcp)
-- [Networking Commands](#networking-commands)
-- [Default Gateway](#default-gateway)
-- [Setting and Removing a Default Gateway](#setting-and-removing-a-default-gateway)
-- [NetworkManager](#networkmanager)
-- [Useful `nmcli` Commands](#useful-nmcli-commands)
-- [Configuring a Static IP with `nmcli`](#configuring-a-static-ip-with-nmcli)
-- [Configuring DHCP with `nmcli`](#configuring-dhcp-with-nmcli)
-- [`nmtui`](#nmtui)
-- [DNS](#dns)
-- [Packet Analysis](#packet-analysis)
-- [IP Forwarding](#ip-forwarding)
-- [Network Troubleshooting](#network-troubleshooting)
-- [Hardware and Physical Checks](#hardware-and-physical-checks)
-- [Challenges](#challenges)
-
-</details>
-
 Networking is the practice of connecting computers, servers, phones, routers, printers, and other devices so they can communicate and exchange data.
 
 A network can be very small, such as two computers connected together, or very large, such as the internet. Most modern systems depend on networking in some way, whether for browsing websites, logging into remote servers, downloading software, sharing files, using cloud services, or communicating between applications.

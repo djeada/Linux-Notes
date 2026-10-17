@@ -1,17 +1,5 @@
 ## Getting Around Like a Pro
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Your Command History is Your Friend](#your-command-history-is-your-friend)
-- [The Manual Pages: Your Built-in Documentation Library](#the-manual-pages-your-built-in-documentation-library)
-- [Level Up Your Command Line Skills](#level-up-your-command-line-skills)
-- [Challenges](#challenges)
-
-</details>
-
 Let's talk about some seriously useful tricks that'll make your command-line life much easier. Ever find yourself thinking "I know I ran that command yesterday, but what was it again?" or "There has to be a faster way to do this!" Well, you're in luck, the terminal has some fantastic features to help you work smarter, not harder.
 
 ### Your Command History is Your Friend

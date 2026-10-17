@@ -1,25 +1,5 @@
 ## Partitioning Disks
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Basic Partition Operations](#basic-partition-operations)
-- [Relationship Between Physical Disks and Partitions](#relationship-between-physical-disks-and-partitions)
-- [Disk Naming Conventions](#disk-naming-conventions)
-- [Types of Partitions](#types-of-partitions)
-- [Partition Table Formats: MBR vs. GPT](#partition-table-formats-mbr-vs-gpt)
-- [Operations in `gdisk` and `fdisk`](#operations-in-gdisk-and-fdisk)
-- [Managing Disk Partitions](#managing-disk-partitions)
-- [Practical Examples and Commands](#practical-examples-and-commands)
-- [Changing MBR to GPT Using gdisk](#changing-mbr-to-gpt-using-gdisk)
-- [Safety Precautions](#safety-precautions)
-- [Common Errors and Troubleshooting](#common-errors-and-troubleshooting)
-- [Challenges](#challenges)
-
-</details>
-
 Partitioning a disk involves dividing a physical storage device into separate, manageable sections called partitions. Each partition functions as an independent disk within the operating system, allowing for better organization, multi-boot setups, or separation of system files from user data. The two main partition table formats used to define how these partitions are structured on the disk are the Master Boot Record (MBR) and the GUID Partition Table (GPT).
 
 Imagine your disk as a bookshelf divided into compartments:

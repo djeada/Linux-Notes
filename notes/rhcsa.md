@@ -1,27 +1,5 @@
 ## RHCSA (Red Hat Certified System Administrator)
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Exam Details at a Glance](#exam-details-at-a-glance)
-- [Exam Objectives Overview](#exam-objectives-overview)
-- [Essential Tools](#essential-tools)
-- [Operating Running Systems](#operating-running-systems)
-- [Configuring Local Storage](#configuring-local-storage)
-- [Managing Users and Groups](#managing-users-and-groups)
-- [Managing Security](#managing-security)
-- [Networking](#networking)
-- [Scheduling Tasks](#scheduling-tasks)
-- [Managing Containers](#managing-containers)
-- [Practice Makes Perfect](#practice-makes-perfect)
-- [What's Next?](#whats-next)
-- [Helpful Resources](#helpful-resources)
-- [Challenges](#challenges)
-
-</details>
-
 The Red Hat Certified System Administrator (RHCSA) certification is one of the most respected credentials in the Linux world. Unlike exams where you pick answers from a list, RHCSA is entirely performance-based — you sit in front of a live Red Hat Enterprise Linux system and complete real tasks within a time limit. If you can pass it, employers know you can actually do the work.
 
 This guide walks through the exam objectives, key concepts you need to master, and practical exercises to build the skills that get tested.

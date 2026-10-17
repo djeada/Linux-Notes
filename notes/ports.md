@@ -1,21 +1,5 @@
 ## Ports
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Protocols and Their Associated Ports](#protocols-and-their-associated-ports)
-- [Common Services and Their Ports](#common-services-and-their-ports)
-- [The Importance of Securing Network Ports](#the-importance-of-securing-network-ports)
-- [Security Measures for Network Ports](#security-measures-for-network-ports)
-- [Monitoring Ports and Processes](#monitoring-ports-and-processes)
-- [Checking Socket Status with `ss`](#checking-socket-status-with-ss)
-- [Network Scanning with Nmap](#network-scanning-with-nmap)
-- [Challenges](#challenges)
-
-</details>
-
 In computer networking, ports serve as endpoints for communication between devices, similar to doors through which data flows in and out of a computer. In today's interconnected digital landscape, network security is paramount. Network ports are critical points that require diligent management and security measures. Unsecured ports can become vulnerabilities, exposing systems to unauthorized access, data breaches, and various cyber threats. 
 
 Main idea:

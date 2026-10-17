@@ -1,22 +1,5 @@
 ## Inotify
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [How Inotify Works](#how-inotify-works)
-- [Event Types](#event-types)
-- [Using inotifywait and inotifywatch](#using-inotifywait-and-inotifywatch)
-- [Practical Shell Script Examples](#practical-shell-script-examples)
-- [The Inotify C API](#the-inotify-c-api)
-- [Kernel Limits and Tuning](#kernel-limits-and-tuning)
-- [Inotify vs Alternatives](#inotify-vs-alternatives)
-- [Common Use Cases](#common-use-cases)
-- [Challenges](#challenges)
-
-</details>
-
 Inotify is a Linux kernel subsystem that provides a mechanism for monitoring file system events. It allows applications to watch files and directories for changes such as creation, deletion, modification, and access. Rather than repeatedly polling the file system to detect changes, inotify delivers event notifications directly to user-space programs, making it both efficient and responsive.
 
 System administrators and developers use inotify for log monitoring, backup triggers, build watchers, and alerts about local file changes. Its event-driven model avoids repeated scans, but watches and event queues still consume memory and processing time.

@@ -1,19 +1,5 @@
 ## Working with Data Streams
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Standard Streams](#standard-streams)
-- [Pipe](#pipe)
-- [Redirection](#redirection)
-- [Process Substitution](#process-substitution)
-- [Filters](#filters)
-- [Challenges](#challenges)
-
-</details>
-
 Input redirection (`<`) allows a command to read from a file, while output redirection (`>`) sends a command's output to a file. Streams like stdin, stdout, and stderr control the flow of data between commands and the system, where stdin is the input, stdout is the standard output, and stderr is the error output. Pipes (`|`) connect the output of one command directly into the input of another, enabling you to chain commands together seamlessly. Filters, such as `grep` and `awk`, process these data streams, allowing you to search, manipulate, and extract information efficiently.
 
 ### Standard Streams

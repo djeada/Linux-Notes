@@ -1,18 +1,5 @@
 ## File System Metadata and Links
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Inodes](#inodes)
-- [Hardlinks](#hardlinks)
-- [Symlinks (Symbolic Links)](#symlinks-symbolic-links)
-- [Key Differences Between Hardlinks and Symlinks](#key-differences-between-hardlinks-and-symlinks)
-- [Challenges](#challenges)
-
-</details>
-
 Inodes are critical as they store essential metadata about files, such as permissions and locations, allowing efficient file system management. Hard links are important because they let multiple file names point to the same inode, saving disk space by avoiding data duplication. Symlinks provide flexibility by creating references to files or directories, allowing for easier access and organization without duplicating the actual content. Together, these structures optimize storage, file access, and navigation in file systems.
 
 ### Inodes

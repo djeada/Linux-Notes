@@ -1,22 +1,5 @@
 ## Linux Kernel
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [What is the Linux Kernel?](#what-is-the-linux-kernel)
-- [The Role of the Kernel in the System](#the-role-of-the-kernel-in-the-system)
-- [Understanding Kernel Space and User Space](#understanding-kernel-space-and-user-space)
-- [Locating the Kernel on Your System](#locating-the-kernel-on-your-system)
-- [Kernel Modules](#kernel-modules)
-- [Exploring the Kernel Source Code](#exploring-the-kernel-source-code)
-- [Configuring the Kernel](#configuring-the-kernel)
-- [Compiling and Installing the Kernel](#compiling-and-installing-the-kernel)
-- [Challenges](#challenges)
-
-</details>
-
 We will now delve deeply into the Linux kernel to understand its role in the operating system, where it resides on your system, and how kernel modules function. We will also explore how to download and examine the Linux kernel source code, and discuss the various configuration options available within it. The goal is to provide you with a comprehensive understanding of this critical component of the operating system—not necessarily to enable you to compile your own custom kernel, but to appreciate what the kernel does and how it operates.
 
 ### What is the Linux Kernel?

@@ -1,26 +1,5 @@
 ## Grep
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Syntax](#syntax)
-- [How It Works Internally](#how-it-works-internally)
-- [Example: Searching for a Word in a File](#example-searching-for-a-word-in-a-file)
-- [Common Options](#common-options)
-- [Understanding Regular Expressions (RegEx)](#understanding-regular-expressions-regex)
-- [Basic RegEx Symbols](#basic-regex-symbols)
-- [Practical Examples of RegEx Symbols](#practical-examples-of-regex-symbols)
-- [Advanced RegEx Quantifiers](#advanced-regex-quantifiers)
-- [Contextual Searches with `grep`](#contextual-searches-with-grep)
-- [Excluding and Including Files in Searches](#excluding-and-including-files-in-searches)
-- [Combining Multiple Options](#combining-multiple-options)
-- [Tips and Best Practices](#tips-and-best-practices)
-- [Challenges](#challenges)
-
-</details>
-
 The `grep` command is one of the most powerful and versatile tools in the Unix and Unix-like operating systems, including Linux and macOS. Its name stands for **global regular expression print**, and it is primarily used for searching plain-text data sets for lines that match a regular expression or a fixed string. `grep` is an essential utility for system administrators, developers, and anyone who works with text processing on the command line.
 
 `grep` was originally developed in the early 1970s by Ken Thompson, one of the creators of Unix. It was inspired by the `ed` editor's search command, which used regular expressions to search for patterns in text files. The name "grep" comes from the `ed` command `g/re/p`, which stands for "global search for regular expression and print matching lines."

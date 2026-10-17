@@ -1,59 +1,5 @@
 ## Encryption and GPG
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Why Encryption Matters](#why-encryption-matters)
-- [Basic Encryption Process](#basic-encryption-process)
-- [Basic Decryption Process](#basic-decryption-process)
-- [Symmetric and Asymmetric Encryption](#symmetric-and-asymmetric-encryption)
-- [GPG](#gpg)
-- [Public and Private Keys](#public-and-private-keys)
-- [Public Key vs Private Key Responsibilities](#public-key-vs-private-key-responsibilities)
-- [Installing GPG](#installing-gpg)
-- [Generating a GPG Key Pair](#generating-a-gpg-key-pair)
-- [Key Expiration](#key-expiration)
-- [Listing GPG Keys](#listing-gpg-keys)
-- [Understanding Key Usage Flags](#understanding-key-usage-flags)
-- [Importing a Public Key](#importing-a-public-key)
-- [Checking a Key Fingerprint](#checking-a-key-fingerprint)
-- [Trusting an Imported Public Key](#trusting-an-imported-public-key)
-- [Encrypting a File for Someone](#encrypting-a-file-for-someone)
-- [Decrypting a File](#decrypting-a-file)
-- [Symmetric Encryption with GPG](#symmetric-encryption-with-gpg)
-- [Asymmetric vs Symmetric Encryption](#asymmetric-vs-symmetric-encryption)
-- [Creating Digital Signatures](#creating-digital-signatures)
-- [Verifying a Signature](#verifying-a-signature)
-- [Detached Signatures](#detached-signatures)
-- [Exporting Your Public Key](#exporting-your-public-key)
-- [Exporting Your Private Key](#exporting-your-private-key)
-- [Revoking a Key](#revoking-a-key)
-- [Subkeys](#subkeys)
-- [Advanced Encryption Options](#advanced-encryption-options)
-- [Working with Encrypted Email](#working-with-encrypted-email)
-- [Encrypting an Email Message Manually](#encrypting-an-email-message-manually)
-- [Decrypting an Encrypted Email Message](#decrypting-an-encrypted-email-message)
-- [Key Servers](#key-servers)
-- [Sending a Key to a Key Server](#sending-a-key-to-a-key-server)
-- [Searching for Keys on a Key Server](#searching-for-keys-on-a-key-server)
-- [Refreshing Keys](#refreshing-keys)
-- [Disk Encryption](#disk-encryption)
-- [GPG and LUKS Together](#gpg-and-luks-together)
-- [Creating a Random LUKS Keyfile](#creating-a-random-luks-keyfile)
-- [Encrypting the Keyfile with GPG](#encrypting-the-keyfile-with-gpg)
-- [Initializing a LUKS Volume with a Keyfile](#initializing-a-luks-volume-with-a-keyfile)
-- [Decrypting the Keyfile and Opening the LUKS Volume](#decrypting-the-keyfile-and-opening-the-luks-volume)
-- [Mounting the Decrypted Volume](#mounting-the-decrypted-volume)
-- [Securely Deleting the Decrypted Keyfile](#securely-deleting-the-decrypted-keyfile)
-- [Advantages of Combining GPG with LUKS](#advantages-of-combining-gpg-with-luks)
-- [Security Best Practices](#security-best-practices)
-- [Common GPG Commands](#common-gpg-commands)
-- [Challenges](#challenges)
-
-</details>
-
 Encryption is one of the main tools used to protect digital information. It keeps data private by changing readable information into an unreadable form. The readable version is called plaintext, and the unreadable version is called ciphertext.
 
 For example, the message:

@@ -1,22 +1,5 @@
 ## Utilities
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Taking Screenshots with Scrot](#taking-screenshots-with-scrot)
-- [Recording the Screen with Vokoscreen](#recording-the-screen-with-vokoscreen)
-- [Preparing a Bootable USB Stick with USBImager](#preparing-a-bootable-usb-stick-with-usbimager)
-- [Malware Detection with Maldet](#malware-detection-with-maldet)
-- [Installation](#installation)
-- [Scanning for malware](#scanning-for-malware)
-- [Viewing the scan report](#viewing-the-scan-report)
-- [Quarantining infected files](#quarantining-infected-files)
-- [Challenges](#challenges)
-
-</details>
-
 We will discuss various tools that can be used on Linux systems for tasks such as taking screenshots, recording screens, preparing bootable sticks, and detecting malware. It provides brief explanations of each tool and includes installation and usage instructions.
 
 ## Taking Screenshots with Scrot

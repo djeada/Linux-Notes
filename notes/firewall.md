@@ -1,59 +1,5 @@
 ## Firewalls
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Basic Firewall Concepts](#basic-firewall-concepts)
-- [Common Firewall Actions](#common-firewall-actions)
-- [Incoming, Outgoing, and Forwarded Traffic](#incoming-outgoing-and-forwarded-traffic)
-- [Ports and Protocols](#ports-and-protocols)
-- [Firewall Tools on Linux](#firewall-tools-on-linux)
-- [Safety Warning for Remote Servers](#safety-warning-for-remote-servers)
-- [`iptables`](#iptables)
-- [Viewing `iptables` Rules](#viewing-iptables-rules)
-- [`iptables` Rule Order](#iptables-rule-order)
-- [Adding an `iptables` Rule](#adding-an-iptables-rule)
-- [Deleting an `iptables` Rule](#deleting-an-iptables-rule)
-- [Saving `iptables` Rules](#saving-iptables-rules)
-- [`ufw`](#ufw)
-- [Basic `ufw` Commands](#basic-ufw-commands)
-- [UFW Default Policies](#ufw-default-policies)
-- [`firewalld`](#firewalld)
-- [Runtime vs Permanent Configuration](#runtime-vs-permanent-configuration)
-- [Viewing firewalld Rules](#viewing-firewalld-rules)
-- [Adding and Removing firewalld Rules](#adding-and-removing-firewalld-rules)
-- [firewalld Zones and Interfaces](#firewalld-zones-and-interfaces)
-- [firewalld Rich Rules](#firewalld-rich-rules)
-- [Choosing Between `iptables`, `ufw`, and `firewalld`](#choosing-between-iptables-ufw-and-firewalld)
-- [Scenario 1: Allow SSH but Block HTTP with UFW](#scenario-1-allow-ssh-but-block-http-with-ufw)
-- [Scenario 2: Deny Incoming by Default and Allow Outgoing](#scenario-2-deny-incoming-by-default-and-allow-outgoing)
-- [Scenario 3: Block ICMP Echo Requests](#scenario-3-block-icmp-echo-requests)
-- [Scenario 4: Allow HTTP Only from One IP Address](#scenario-4-allow-http-only-from-one-ip-address)
-- [Scenario 5: Safely Change Firewall Rules on a Remote Server](#scenario-5-safely-change-firewall-rules-on-a-remote-server)
-- [Scenario 6: Allow SSH Only from Trusted IPs](#scenario-6-allow-ssh-only-from-trusted-ips)
-- [Scenario 7: Rate-Limit Incoming Connections](#scenario-7-rate-limit-incoming-connections)
-- [Scenario 8: Log Dropped Packets](#scenario-8-log-dropped-packets)
-- [Scenario 9: Forward Port 8080 to Port 80](#scenario-9-forward-port-8080-to-port-80)
-- [Scenario 10: Block Outgoing Traffic to a Specific IP](#scenario-10-block-outgoing-traffic-to-a-specific-ip)
-- [Scenario 11: firewalld Public Zone with HTTP and HTTPS](#scenario-11-firewalld-public-zone-with-http-and-https)
-- [Scenario 12: firewalld Custom Port](#scenario-12-firewalld-custom-port)
-- [Scenario 13: firewalld Runtime vs Permanent Rule](#scenario-13-firewalld-runtime-vs-permanent-rule)
-- [Scenario 14: Diagnose “Service Is Running but Not Reachable”](#scenario-14-diagnose-service-is-running-but-not-reachable)
-- [Scenario 15: Diagnose “Firewall Rule Exists but Still Cannot Connect”](#scenario-15-diagnose-firewall-rule-exists-but-still-cannot-connect)
-- [Common Firewall Troubleshooting Workflow](#common-firewall-troubleshooting-workflow)
-- [Step 1: Identify the Traffic](#step-1-identify-the-traffic)
-- [Step 2: Check Service Listening](#step-2-check-service-listening)
-- [Step 3: Check Firewall Rules](#step-3-check-firewall-rules)
-- [Step 4: Check Packet Counters](#step-4-check-packet-counters)
-- [Step 5: Test from Client](#step-5-test-from-client)
-- [Useful Command Summary](#useful-command-summary)
-- [Safe Lab Cleanup](#safe-lab-cleanup)
-- [Practical Challenges](#practical-challenges)
-
-</details>
-
 A firewall controls network traffic entering, leaving, or passing through a system.
 
 A simple way to think about a firewall is:

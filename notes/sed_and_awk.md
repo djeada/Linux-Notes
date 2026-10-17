@@ -1,16 +1,5 @@
 ## Command-Line Stream Editors
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [`sed`](#sed)
-- [`awk`](#awk)
-- [Challenges](#challenges)
-
-</details>
-
 `sed` (Stream Editor) and `awk` are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands.
 
 ### `sed`

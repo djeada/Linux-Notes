@@ -1,25 +1,5 @@
 ## Containers and Docker
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Containers vs Virtual Machines](#containers-vs-virtual-machines)
-- [Docker Architecture](#docker-architecture)
-- [Installing Docker](#installing-docker)
-- [Working with Docker Images](#working-with-docker-images)
-- [Running Containers](#running-containers)
-- [Building Custom Images with Dockerfiles](#building-custom-images-with-dockerfiles)
-- [Docker Networking](#docker-networking)
-- [Docker Volumes and Data Persistence](#docker-volumes-and-data-persistence)
-- [Docker Compose](#docker-compose)
-- [Podman as an Alternative](#podman-as-an-alternative)
-- [Container Best Practices](#container-best-practices)
-- [Challenges](#challenges)
-
-</details>
-
 Containers have fundamentally changed the way software is built, shipped, and run. If you've spent time administering Linux systems, managing packages, configuring services, and troubleshooting dependency conflicts, you already understand the pain that containers were designed to solve. A container packages an application together with all of its dependencies, libraries, and configuration files into a single, portable unit that runs consistently on any Linux system.
 
 Unlike traditional approaches where you install software directly onto a host and hope that library versions don't clash, containers provide **process-level isolation** using features built right into the Linux kernel. Technologies like **namespaces** (which isolate what a process can see) and **cgroups** (which limit what resources a process can consume) make containers lightweight and fast. There is no separate operating system to boot, containers share the host kernel and start in milliseconds.

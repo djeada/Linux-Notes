@@ -1,33 +1,5 @@
 ## Cron
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [How Cron Works](#how-cron-works)
-- [Types of Crontab Files](#types-of-crontab-files)
-- [Understanding Crontab Syntax](#understanding-crontab-syntax)
-- [Cron Directories for Regular Intervals](#cron-directories-for-regular-intervals)
-- [Anacron](#anacron)
-- [How Anacron Works](#how-anacron-works)
-- [Anacron Configuration File](#anacron-configuration-file)
-- [Field descriptions:](#field-descriptions-1)
-- [Cron vs. Anacron: Key Differences](#cron-vs-anacron-key-differences)
-- [Relationship with Cron Directories](#relationship-with-cron-directories)
-- [Running Anacron Manually](#running-anacron-manually)
-- [Useful Anacron Options](#useful-anacron-options)
-- [Best Practices](#best-practices)
-- [Practical Examples of Anacron](#practical-examples-of-anacron)
-- [Creating Custom Schedules with Crontab](#creating-custom-schedules-with-crontab)
-- [Advanced Scheduling Techniques](#advanced-scheduling-techniques)
-- [Example Scenarios](#example-scenarios)
-- [Best Practices](#best-practices-1)
-- [Common Pitfalls](#common-pitfalls)
-- [Challenges](#challenges)
-
-</details>
-
 Cron is a powerful utility in Unix-like operating systems that automates the execution of scripts or commands at specified times, dates, or intervals. It is used for tasks such as system maintenance, backups, updates, and more.
 
 ### How Cron Works

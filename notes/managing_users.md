@@ -1,36 +1,5 @@
 ## Understanding Users
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [/etc/passwd File](#etcpasswd-file)
-- [/etc/shadow File](#etcshadow-file)
-- [The Superuser (root)](#the-superuser-root)
-- [Adding a User to the sudo Group](#adding-a-user-to-the-sudo-group)
-- [Configuring sudo Access](#configuring-sudo-access)
-- [Granting Limited sudo Privileges](#granting-limited-sudo-privileges)
-- [Switching Between Users](#switching-between-users)
-- [Using the su Command](#using-the-su-command)
-- [Advanced Tips](#advanced-tips)
-- [Managing Users in Linux](#managing-users-in-linux)
-- [Adding New Users](#adding-new-users)
-- [Setting and Changing User Passwords](#setting-and-changing-user-passwords)
-- [Setting Password During User Creation](#setting-password-during-user-creation)
-- [Group Management](#group-management)
-- [Viewing Existing Groups](#viewing-existing-groups)
-- [Visualization of Users and Groups](#visualization-of-users-and-groups)
-- [Creating and Managing Groups](#creating-and-managing-groups)
-- [Adjusting File or Folder Ownership](#adjusting-file-or-folder-ownership)
-- [User ID and Group ID](#user-id-and-group-id)
-- [Permissions and Ownership](#permissions-and-ownership)
-- [Retrieving UID and GID](#retrieving-uid-and-gid)
-- [Modifying UID and GID](#modifying-uid-and-gid)
-- [Challenges](#challenges)
-
-</details>
-
 In Linux, user management is a crucial aspect of system administration. A user is essentially an entity that can log into the computer system and perform tasks based on the permissions granted to them. The Linux operating system stores user-related information in a couple of key files: `/etc/passwd` and `/etc/shadow`.
 
 ### /etc/passwd File

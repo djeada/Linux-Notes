@@ -1,47 +1,5 @@
 ## Disk Partitions, Volumes, and LVM
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Partitions](#partitions)
-- [Partition Tables](#partition-tables)
-- [MBR Partitions](#mbr-partitions)
-- [GPT Partitions](#gpt-partitions)
-- [Volumes](#volumes)
-- [Partition vs Volume](#partition-vs-volume)
-- [Why Use LVM?](#why-use-lvm)
-- [LVM Big Picture](#lvm-big-picture)
-- [Physical Volumes](#physical-volumes)
-- [Volume Groups](#volume-groups)
-- [Logical Volumes](#logical-volumes)
-- [Filesystems on Logical Volumes](#filesystems-on-logical-volumes)
-- [LVM Naming](#lvm-naming)
-- [Basic LVM Creation Workflow](#basic-lvm-creation-workflow)
-- [Extending a Logical Volume](#extending-a-logical-volume)
-- [Reducing a Logical Volume](#reducing-a-logical-volume)
-- [Deleting a Logical Volume](#deleting-a-logical-volume)
-- [LVM Snapshots](#lvm-snapshots)
-- [Restoring from a Snapshot](#restoring-from-a-snapshot)
-- [Persistent Mounting with `/etc/fstab`](#persistent-mounting-with-etcfstab)
-- [Partition Types Compared](#partition-types-compared)
-- [When to Use Partitions vs LVM](#when-to-use-partitions-vs-lvm)
-- [Useful LVM Commands](#useful-lvm-commands)
-- [Safe LVM Lab Setup Using Loopback Disks](#safe-lvm-lab-setup-using-loopback-disks)
-- [Scenario 1: Create a Complete LVM Setup in a Lab](#scenario-1-create-a-complete-lvm-setup-in-a-lab)
-- [Scenario 2: Simulate a Full Filesystem and Fix It with LVM](#scenario-2-simulate-a-full-filesystem-and-fix-it-with-lvm)
-- [Scenario 3: Simulate “No Space Left in Volume Group”](#scenario-3-simulate-no-space-left-in-volume-group)
-- [Scenario 4: Simulate and Inspect LVM Layers](#scenario-4-simulate-and-inspect-lvm-layers)
-- [Scenario 5: Create a Snapshot Before a Risky Change](#scenario-5-create-a-snapshot-before-a-risky-change)
-- [Scenario 6: Simulate Snapshot Space Exhaustion](#scenario-6-simulate-snapshot-space-exhaustion)
-- [Scenario 7: Clean Up the LVM Lab](#scenario-7-clean-up-the-lvm-lab)
-- [Common LVM Troubleshooting](#common-lvm-troubleshooting)
-- [LVM Safety Rules](#lvm-safety-rules)
-- [Challenges](#challenges)
-
-</details>
-
 Storage devices such as HDDs, SSDs, USB drives, and virtual disks provide raw space. Before that space can be used conveniently, it usually needs to be divided, organized, formatted, and mounted.
 
 Linux storage can be understood in layers.

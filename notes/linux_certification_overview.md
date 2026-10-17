@@ -1,26 +1,5 @@
 ## Linux Certification Overview
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Why Get Certified?](#why-get-certified)
-- [The Certification Landscape](#the-certification-landscape)
-- [Comparing the Major Certifications](#comparing-the-major-certifications)
-- [Key Differences in Exam Style](#key-differences-in-exam-style)
-- [Choosing the Right Certification](#choosing-the-right-certification)
-- [Certification Progression Paths](#certification-progression-paths)
-- [Common Exam Topics Across Certifications](#common-exam-topics-across-certifications)
-- [Study Strategies That Actually Work](#study-strategies-that-actually-work)
-- [Mapping Repository Notes to Exam Objectives](#mapping-repository-notes-to-exam-objectives)
-- [Practice Makes Perfect](#practice-makes-perfect)
-- [What's Next?](#whats-next)
-- [Helpful Resources](#helpful-resources)
-- [Challenges](#challenges)
-
-</details>
-
 Earning a Linux certification proves to employers (and to yourself) that you can actually manage real systems under pressure. Whether you're just entering the field or aiming for a senior infrastructure role, there's a certification path that fits your goals. This guide maps out the major options, compares them side-by-side, and helps you decide which one makes the most sense for where you are right now.
 
 ### Why Get Certified?
