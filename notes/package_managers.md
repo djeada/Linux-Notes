@@ -1,24 +1,5 @@
 ## Package Managers
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Installing and Updating Software Packages](#installing-and-updating-software-packages)
-- [APT](#apt)
-- [YUM](#yum)
-- [Tarballs](#tarballs)
-- [RPM](#rpm)
-- [Software Package Repositories](#software-package-repositories)
-- [Key Components of a Repository](#key-components-of-a-repository)
-- [Common Repository Labels](#common-repository-labels)
-- [Managing APT Repositories](#managing-apt-repositories)
-- [Managing YUM Repositories](#managing-yum-repositories)
-- [Challenges](#challenges)
-
-</details>
-
 Debian and Ubuntu are popular Linux distributions for home users. These distributions and their derivatives use the Advanced Package Tool (`APT`). Other distributions use alternative package managers, like `DNF`, `YUM`, `Pacman`, which have unique functionalities and syntax.
 
 Be cautious with package managers as they install software and dependencies and may affect your system's configuration.

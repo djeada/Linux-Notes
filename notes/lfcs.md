@@ -1,26 +1,5 @@
 ## LFCS (Linux Foundation Certified System Administrator)
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Exam Details at a Glance](#exam-details-at-a-glance)
-- [Exam Domains and Weights](#exam-domains-and-weights)
-- [Essential Commands](#essential-commands)
-- [Operating Running Systems](#operating-running-systems)
-- [User and Group Management](#user-and-group-management)
-- [Networking](#networking)
-- [Storage Management](#storage-management)
-- [Service Configuration](#service-configuration)
-- [Ubuntu vs CentOS: Key Differences](#ubuntu-vs-centos-key-differences)
-- [Practice Makes Perfect](#practice-makes-perfect)
-- [What's Next?](#whats-next)
-- [Helpful Resources](#helpful-resources)
-- [Challenges](#challenges)
-
-</details>
-
 The Linux Foundation Certified System Administrator (LFCS) certification validates your ability to perform core system administration tasks on a live Linux system. Like the RHCSA, it is a performance-based exam: you complete administration tasks rather than multiple-choice questions. Since the May 2023 refresh, its content is distribution agnostic and candidates no longer choose Ubuntu or CentOS at registration.
 
 This guide covers the exam domains, the commands and skills you need to master, and hands-on exercises that prepare you for what you'll face on exam day.

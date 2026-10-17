@@ -1,19 +1,5 @@
 ## Introduction to Linux
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [What is Operating System?](#what-is-operating-system)
-- [Why Learn Linux?](#why-learn-linux)
-- [Before Linux](#before-linux)
-- [The History of Linux](#the-history-of-linux)
-- [Understanding a Linux Distribution](#understanding-a-linux-distribution)
-- [Challenges](#challenges)
-
-</details>
-
 Linux is a versatile and powerful open-source operating system that forms the backbone of countless technological infrastructures, from servers and desktops to mobile devices and embedded systems. Known for its stability, security, and flexibility, Linux provides a robust platform that can be customized to suit a wide range of applications. It is supported by a vibrant global community of developers and users, which contributes to its continuous evolution and ensures a rich ecosystem of software and tools. Whether for personal use, enterprise environments, or innovative tech projects, Linux offers a reliable and adaptable solution for modern computing needs.
 
 More precisely, Linux is the kernel. A Linux distribution combines that kernel with user-space tools, libraries, a package manager, and usually an installer. These notes use "Linux" for both the kernel and the wider operating-system environment when the context is clear.

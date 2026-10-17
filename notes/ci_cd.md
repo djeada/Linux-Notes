@@ -1,23 +1,5 @@
 ## CI/CD Pipelines
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [CI/CD Pipeline Stages](#cicd-pipeline-stages)
-- [Continuous Integration](#continuous-integration)
-- [Continuous Delivery vs Continuous Deployment](#continuous-delivery-vs-continuous-deployment)
-- [Jenkins](#jenkins)
-- [GitLab CI/CD](#gitlab-cicd)
-- [GitHub Actions](#github-actions)
-- [Common Pipeline Patterns](#common-pipeline-patterns)
-- [Pipeline Security](#pipeline-security)
-- [Integrating with Linux Systems](#integrating-with-linux-systems)
-- [Challenges](#challenges)
-
-</details>
-
 CI/CD stands for Continuous Integration and Continuous Delivery (or Continuous Deployment). It is a set of practices that automate the process of integrating code changes, running tests, and delivering software to production environments. For Linux administrators moving into DevOps, CI/CD pipelines are a natural extension of the automation skills you already use daily—writing shell scripts, managing services with `systemd`, and configuring servers over SSH.
 
 At its core, a CI/CD pipeline is a series of automated steps that take code from a developer's machine all the way to a running production system. Every time someone pushes a commit, the pipeline kicks in: it builds the application, runs tests, and—if everything passes—deploys the result. This removes the error-prone manual process of building and deploying software, and it gives teams the confidence to ship changes frequently.

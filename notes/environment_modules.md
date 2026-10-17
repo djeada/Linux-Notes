@@ -1,41 +1,5 @@
 ## Environment Modules
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Why Environment Modules Are Useful](#why-environment-modules-are-useful)
-- [The Basic Model](#the-basic-model)
-- [Installing Environment Modules](#installing-environment-modules)
-- [Making the `module` Command Available](#making-the-module-command-available)
-- [What Modulefiles Are](#what-modulefiles-are)
-- [Where Modulefiles Are Stored](#where-modulefiles-are-stored)
-- [Creating a Modulefile Directory](#creating-a-modulefile-directory)
-- [Writing a Simple Modulefile](#writing-a-simple-modulefile)
-- [Understanding the Modulefile Line by Line](#understanding-the-modulefile-line-by-line)
-- [Managing `MODULEPATH`](#managing-modulepath)
-- [Basic `module` Commands](#basic-module-commands)
-- [Listing Available Modules](#listing-available-modules)
-- [Loading Modules](#loading-modules)
-- [Listing Loaded Modules](#listing-loaded-modules)
-- [Unloading Modules](#unloading-modules)
-- [Showing Module Details](#showing-module-details)
-- [Getting Module Help](#getting-module-help)
-- [Switching Between Module Versions](#switching-between-module-versions)
-- [Purging All Modules](#purging-all-modules)
-- [Saving and Restoring Module Sets](#saving-and-restoring-module-sets)
-- [Example: Switching Between Python Versions](#example-switching-between-python-versions)
-- [Setting Default Module Versions](#setting-default-module-versions)
-- [Advanced Modulefile Techniques](#advanced-modulefile-techniques)
-- [Best Practices](#best-practices)
-- [Troubleshooting](#troubleshooting)
-- [Useful Command Summary](#useful-command-summary)
-- [Practical Example Session](#practical-example-session)
-- [Challenges](#challenges)
-
-</details>
-
 Environment Modules is a tool used to manage software environments from the command line.
 
 It allows users to load, unload, and switch between different software packages and software versions without manually editing shell configuration files every time.

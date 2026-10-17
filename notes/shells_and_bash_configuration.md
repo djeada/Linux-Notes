@@ -1,39 +1,5 @@
 ## Shells and Terminals
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [The Basic Interaction Model](#the-basic-interaction-model)
-- [Terminal vs Shell](#terminal-vs-shell)
-- [Common Shells](#common-shells)
-- [Checking Which Shells Are Installed](#checking-which-shells-are-installed)
-- [Switching Shells](#switching-shells)
-- [Bash Configuration Files](#bash-configuration-files)
-- [Login Shells](#login-shells)
-- [Interactive Non-Login Shells](#interactive-non-login-shells)
-- [Why `~/.bashrc` Is Often Loaded from `~/.bash_profile`](#why-bashrc-is-often-loaded-from-bash_profile)
-- [Common Things Stored in `~/.bashrc`](#common-things-stored-in-bashrc)
-- [Aliases](#aliases)
-- [Environment Variables](#environment-variables)
-- [Command History](#command-history)
-- [Prompt Customization](#prompt-customization)
-- [Shell Functions](#shell-functions)
-- [Alias vs Function](#alias-vs-function)
-- [Reloading Bash Configuration](#reloading-bash-configuration)
-- [Example `~/.bashrc`](#example-bashrc)
-- [Terminal Emulators](#terminal-emulators)
-- [Common Terminal Emulator Features](#common-terminal-emulator-features)
-- [Common Terminal Emulators](#common-terminal-emulators)
-- [Opening a Terminal](#opening-a-terminal)
-- [Useful Commands for Exploring Shells](#useful-commands-for-exploring-shells)
-- [Searching for Profile Files](#searching-for-profile-files)
-- [Important Safety Note About Changing Shells](#important-safety-note-about-changing-shells)
-- [Challenges](#challenges)
-
-</details>
-
 A Unix shell is a command-line program that lets a user communicate with the operating system. Instead of using buttons and menus, the user types commands, and the shell interprets those commands.
 
 For example, when you type:

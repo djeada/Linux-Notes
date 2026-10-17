@@ -1,45 +1,5 @@
 ## Mounting and Unmounting
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [What Can Be Mounted](#what-can-be-mounted)
-- [Required and Optional Mounts](#required-and-optional-mounts)
-- [Mounting on Desktop Linux](#mounting-on-desktop-linux)
-- [Understanding Mounting](#understanding-mounting)
-- [Important Mounting Idea](#important-mounting-idea)
-- [Mount Points](#mount-points)
-- [Device Names](#device-names)
-- [Checking Which Devices Exist](#checking-which-devices-exist)
-- [The `mount` Command](#the-mount-command)
-- [Basic Manual Mount Example](#basic-manual-mount-example)
-- [Verifying Mounted Filesystems](#verifying-mounted-filesystems)
-- [Understanding Mount Output](#understanding-mount-output)
-- [Filesystem Types](#filesystem-types)
-- [Mount Options](#mount-options)
-- [Unmounting](#unmounting)
-- [Why Unmounting Matters](#why-unmounting-matters)
-- [The `sync` Command](#the-sync-command)
-- [Handling “Target Is Busy”](#handling-target-is-busy)
-- [Finding Processes Using a Mount](#finding-processes-using-a-mount)
-- [Lazy and Forced Unmounts](#lazy-and-forced-unmounts)
-- [Mounting ISO Images](#mounting-iso-images)
-- [Mounting Network Shares](#mounting-network-shares)
-- [Persistent Mounts with `/etc/fstab`](#persistent-mounts-with-etcfstab)
-- [Prefer UUIDs in `/etc/fstab`](#prefer-uuids-in-etcfstab)
-- [Testing `/etc/fstab`](#testing-etcfstab)
-- [Visualizing the Mounting Process](#visualizing-the-mounting-process)
-- [Typical Mounting Workflow](#typical-mounting-workflow)
-- [Data Integrity](#data-integrity)
-- [Automounting](#automounting)
-- [Automating Mounting with `udev`](#automating-mounting-with-udev)
-- [Troubleshooting Mounting Problems](#troubleshooting-mounting-problems)
-- [Challenges](#challenges)
-
-</details>
-
 In Linux, mounting is the process of making a filesystem available somewhere inside the main directory tree.
 
 This can feel unusual if you come from Windows. In Windows, storage devices usually appear as separate drive letters, such as:

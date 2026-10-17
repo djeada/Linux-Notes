@@ -1,34 +1,5 @@
 ## Variable Types
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Shell Variables](#shell-variables)
-- [Environment Variables](#environment-variables)
-- [Parent and Child Processes](#parent-and-child-processes)
-- [Subshells](#subshells)
-- [Builtins vs External Commands](#builtins-vs-external-commands)
-- [Common Environment Variables](#common-environment-variables)
-- [Changing Variables](#changing-variables)
-- [Operations on Variables](#operations-on-variables)
-- [`env`: Running Commands with Modified Environments](#env-running-commands-with-modified-environments)
-- [Practical Debugging Examples](#practical-debugging-examples)
-- [Prove That Sourcing Changes the Current Shell](#prove-that-sourcing-changes-the-current-shell)
-- [Environment Variables and Python Virtual Environments](#environment-variables-and-python-virtual-environments)
-- [What a Python Virtual Environment Contains](#what-a-python-virtual-environment-contains)
-- [What `activate` Actually Changes](#what-activate-actually-changes)
-- [`pip install` Inside a Virtual Environment](#pip-install-inside-a-virtual-environment)
-- [Why `python -m pip` Is Often Safer Than `pip`](#why-python--m-pip-is-often-safer-than-pip)
-- [Container Build, Credentials, and Environment Variables](#container-build-credentials-and-environment-variables)
-- [Build Time vs Runtime](#build-time-vs-runtime)
-- [Copying `ARG` into `ENV`](#copying-arg-into-env)
-- [Runtime Environment Variables Override Dockerfile `ENV`](#runtime-environment-variables-override-dockerfile-env)
-- [Challenges](#challenges)
-
-</details>
-
 In Unix-style shells, variables let you store and reuse pieces of information, such as your preferred editor:
 
 ```bash

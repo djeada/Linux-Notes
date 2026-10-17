@@ -1,17 +1,5 @@
 ## Finding Files
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Find](#find)
-- [Locate](#locate)
-- [Which](#which)
-- [Challenges](#challenges)
-
-</details>
-
 The `find`, `locate`, and `which` commands are commonly used for file search operations. The `find` command performs a comprehensive search using attributes such as name, size, and type. `locate` provides a faster, albeit periodically updated, search by filename. `which` locates the path of a program's executable within the system's `PATH`.
 
 ### Find

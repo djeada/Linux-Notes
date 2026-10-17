@@ -1,22 +1,5 @@
 ## Infrastructure as Code
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Core Principles of IaC](#core-principles-of-iac)
-- [Configuration Management with Ansible](#configuration-management-with-ansible)
-- [Ansible Practical Examples](#ansible-practical-examples)
-- [Infrastructure Provisioning with Terraform](#infrastructure-provisioning-with-terraform)
-- [Terraform Practical Examples](#terraform-practical-examples)
-- [Comparison of IaC Tools](#comparison-of-iac-tools)
-- [IaC Best Practices](#iac-best-practices)
-- [Integrating IaC with Linux Administration](#integrating-iac-with-linux-administration)
-- [Challenges](#challenges)
-
-</details>
-
 If you have ever spent hours manually configuring Linux servers, installing packages one by one, editing configuration files by hand, and then trying to remember exactly what you did when it is time to set up the next server, you already understand the problem that Infrastructure as Code solves. Infrastructure as Code, or IaC, is the practice of managing and provisioning computing infrastructure through machine-readable definition files rather than through interactive configuration tools or physical hardware configuration. Instead of logging into servers and running commands by hand, you describe your desired infrastructure in code, and tools take care of making it happen.
 
 Think of it this way: all the Linux administration skills you have built, managing packages, configuring services, setting up firewalls, creating users, are still essential. IaC simply gives you a repeatable, version-controlled, and automated way to apply those skills across one server or a thousand.

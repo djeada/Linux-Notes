@@ -1,20 +1,5 @@
 ## Processes
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Process Management Commands](#process-management-commands)
-- [Process life cycle](#process-life-cycle)
-- [Process Spawning](#process-spawning)
-- [Process Termination](#process-termination)
-- [Finding Processes](#finding-processes)
-- [Foreground vs Background Jobs](#foreground-vs-background-jobs)
-- [Challenges](#challenges)
-
-</details>
-
 In any operating system, a process is the fundamental unit of execution—a live instance of a program. Beyond its executable code (the text segment), a process encompasses its dynamic state: the program counter, CPU registers, call stack, heap, and other variable storage. To manage and schedule these tasks, the OS assigns each process a unique process identifier (PID).
 
 When a user executes a command, launches an application, or initiates a system service, a new process is instantiated. Modern computing systems, with their powerful processors, can handle a multitude of processes at the same time. This parallel execution is managed through a technique known as rapid context switching, where the operating system's scheduler assigns CPU time slices to each process and switches between them so quickly that it gives the illusion of simultaneous execution.

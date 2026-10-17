@@ -1,29 +1,5 @@
 ## Xargs and Command Argument Processing
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Syntax](#syntax)
-- [Standard Input Versus Command Arguments](#standard-input-versus-command-arguments)
-- [Common Options](#common-options)
-- [Controlling How Many Arguments Are Passed](#controlling-how-many-arguments-are-passed)
-- [Replacement with `-I`](#replacement-with--i)
-- [Parallel Execution with `-P`](#parallel-execution-with--p)
-- [Filenames, Whitespace, and the `-0` Option](#filenames-whitespace-and-the--0-option)
-- [The Meaning of `--`](#the-meaning-of---)
-- [Using `find` with `xargs`](#using-find-with-xargs)
-- [`find -exec` Versus `xargs`](#find--exec-versus-xargs)
-- [Shell Globbing Versus `xargs`](#shell-globbing-versus-xargs)
-- [Previewing Commands Before Running Them](#previewing-commands-before-running-them)
-- [Empty Input](#empty-input)
-- [Practical Patterns](#practical-patterns)
-- [Common Mistakes](#common-mistakes)
-- [Challenges](#challenges)
-
-</details>
-
 The `xargs` command builds command lines from standard input. It is commonly used when one command produces a list of items and another command expects those items as command-line arguments rather than as text on standard input.
 
 This distinction is important in Unix pipelines:

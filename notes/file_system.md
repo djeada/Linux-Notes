@@ -1,20 +1,5 @@
 ## Files and Filesystems
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Types of Files in a UNIX Filesystem](#types-of-files-in-a-unix-filesystem)
-- [Blocks, Superblocks & Pages](#blocks-superblocks--pages)
-- [Directory Hierarchy](#directory-hierarchy)
-- [File System Types](#file-system-types)
-- [Why And When Would You Care About File System?](#why-and-when-would-you-care-about-file-system)
-- [Managing File Systems](#managing-file-systems)
-- [Challenges](#challenges)
-
-</details>
-
 In Unix, files and filesystems are important components of the operating system's structure. A file is a collection of data stored on disk, which can include anything from text documents and images to executable programs. Files are organized within directories in a hierarchical structure, allowing for efficient data management and retrieval.
 
 A filesystem, on the other hand, is a method and data structure that the operating system uses to manage files on a disk or partition. It provides a way to store, retrieve, and organize files, supporting features like file permissions, links, and metadata. Common Unix filesystems include `ext4`, `XFS`, and `Btrfs`, each offering different capabilities and optimizations.

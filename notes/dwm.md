@@ -1,18 +1,5 @@
 ## Dynamic Window Manager (DWM)
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Challenges](#challenges)
-- [Further Resources](#further-resources)
-
-</details>
-
 The Dynamic Window Manager (DWM) is a minimal, lightweight, and highly efficient tiling window manager designed to help you manage application windows in a clean and distraction-free manner. Instead of overlapping windows as seen in traditional window managers, DWM organizes windows in a tiled layout, making it easy to see and navigate multiple applications simultaneously. DWM is based on the X Window System, making it suitable for use on Unix-like operating systems.
 
 DWM stands out for its extreme simplicity and high customization capability. It is part of the suckless software philosophy, which emphasizes clarity, simplicity, and resource efficiency. 

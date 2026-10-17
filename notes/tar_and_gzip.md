@@ -1,26 +1,5 @@
 ## File Compression and Archiving Commands
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Tar](#tar)
-- [Compressing the Archive with `gzip`](#compressing-the-archive-with-gzip)
-- [Extracting Files from an Archive](#extracting-files-from-an-archive)
-- [Listing the Contents of an Archive](#listing-the-contents-of-an-archive)
-- [Using `gzip` Independently](#using-gzip-independently)
-- [Practical Examples](#practical-examples)
-- [Understanding File Permissions and Ownership](#understanding-file-permissions-and-ownership)
-- [Excluding Files from an Archive](#excluding-files-from-an-archive)
-- [Archiving Over SSH](#archiving-over-ssh)
-- [Splitting Large Archives](#splitting-large-archives)
-- [Using Other Compression Tools with `tar`](#using-other-compression-tools-with-tar)
-- [Common Pitfalls and Tips](#common-pitfalls-and-tips)
-- [Challenges](#challenges)
-
-</details>
-
 Working with files on Unix-based systems often involves managing multiple files and directories, especially when it comes to storage or transferring data. Tools like `tar` and `gzip` are invaluable for packaging and compressing files efficiently. Understanding how to use these commands can simplify tasks like backing up data, sharing files, or deploying applications.
 
 Imagine you have a collection of files and folders that you want to bundle together into a single package. Think of it as packing items into a suitcase for a trip—`tar` acts as the suitcase that holds everything together.

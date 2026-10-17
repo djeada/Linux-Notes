@@ -1,20 +1,5 @@
 ## File Permissions
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Standard Permissions](#standard-permissions)
-- [Symbolic File Permissions](#symbolic-file-permissions)
-- [Numeric File Permissions](#numeric-file-permissions)
-- [Default Permissions](#default-permissions)
-- [Special Permissions: setuid, setgid, and the Sticky Bit](#special-permissions-setuid-setgid-and-the-sticky-bit)
-- [Access Control Lists (ACLs)](#access-control-lists-acls)
-- [Challenges](#challenges)
-
-</details>
-
 File permissions are crucial in any Unix-like operating systems, including Linux, which employ several mechanisms for controlling access to files and directories. These mechanisms include standard permissions, special permissions, and access control lists (ACLs).
 
 ### Standard Permissions

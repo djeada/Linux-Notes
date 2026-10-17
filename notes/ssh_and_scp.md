@@ -1,18 +1,5 @@
 ## Secure Server Access
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [SSH](#ssh)
-- [Transferring Files with SCP](#transferring-files-with-scp)
-- [Transferring Files with SFTP](#transferring-files-with-sftp)
-- [Other Protocols for File Transfers](#other-protocols-for-file-transfers)
-- [Challenges](#challenges)
-
-</details>
-
 SSH, SFTP, and SCP are network protocols that provide secure data communication and file transfer over insecure networks. Here's a brief overview of each:
 
 ### SSH

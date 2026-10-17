@@ -1,58 +1,5 @@
 ## Performance Monitoring
 
-[All guides](../README.md)
-
-<details>
-<summary>Contents</summary>
-
-- [Basic Performance Model](#basic-performance-model)
-- [Important Usage Statistics](#important-usage-statistics)
-- [CPU Usage](#cpu-usage)
-- [RAM Usage](#ram-usage)
-- [Swap Usage](#swap-usage)
-- [Disk Usage vs Disk I/O](#disk-usage-vs-disk-io)
-- [Load Average](#load-average)
-- [Monitoring Workflow](#monitoring-workflow)
-- [`top`](#top)
-- [Example `top` Output](#example-top-output)
-- [Understanding the Top Summary](#understanding-the-top-summary)
-- [Understanding CPU Fields in `top`](#understanding-cpu-fields-in-top)
-- [Understanding Process Columns in `top`](#understanding-process-columns-in-top)
-- [Useful `top` Keys](#useful-top-keys)
-- [`htop`](#htop)
-- [Example `htop` View](#example-htop-view)
-- [`free`](#free)
-- [Understanding `free -h`](#understanding-free--h)
-- [RSS and VSZ](#rss-and-vsz)
-- [RSS](#rss)
-- [VSZ](#vsz)
-- [Example RSS and VSZ Calculation](#example-rss-and-vsz-calculation)
-- [Finding Top Memory Processes](#finding-top-memory-processes)
-- [Checking Memory for a Specific Process](#checking-memory-for-a-specific-process)
-- [`vmstat`](#vmstat)
-- [Example `vmstat` Output](#example-vmstat-output)
-- [`uptime`](#uptime)
-- [`iostat`](#iostat)
-- [`iotop`](#iotop)
-- [`df` and `du`](#df-and-du)
-- [Scenario 1: Simulate a CPU Bottleneck](#scenario-1-simulate-a-cpu-bottleneck)
-- [Scenario 2: Simulate Memory Pressure](#scenario-2-simulate-memory-pressure)
-- [Scenario 3: Simulate Swap Thrashing](#scenario-3-simulate-swap-thrashing)
-- [Scenario 4: Simulate Disk I/O Bottleneck](#scenario-4-simulate-disk-io-bottleneck)
-- [Scenario 5: Simulate High Disk Space Usage](#scenario-5-simulate-high-disk-space-usage)
-- [Scenario 6: Simulate High Load Average from CPU](#scenario-6-simulate-high-load-average-from-cpu)
-- [Scenario 7: Simulate High Load Average from Disk Wait](#scenario-7-simulate-high-load-average-from-disk-wait)
-- [Scenario 8: Identify a Memory-Heavy Process](#scenario-8-identify-a-memory-heavy-process)
-- [Scenario 9: Simulate a Zombie Process](#scenario-9-simulate-a-zombie-process)
-- [Scenario 10: Script an Alert for Disk Usage Above 80%](#scenario-10-script-an-alert-for-disk-usage-above-80)
-- [Scenario 11: Gather Hourly Performance Logs](#scenario-11-gather-hourly-performance-logs)
-- [Performance Troubleshooting Decision Guide](#performance-troubleshooting-decision-guide)
-- [Useful Command Summary](#useful-command-summary)
-- [Safe Lab Rules](#safe-lab-rules)
-- [Practical Challenges](#practical-challenges)
-
-</details>
-
 Performance monitoring is the process of observing how a system uses its resources.
 
 The goal is to understand whether the system is healthy, overloaded, or waiting on a specific bottleneck.
