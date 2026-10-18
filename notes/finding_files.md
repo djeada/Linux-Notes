@@ -288,7 +288,7 @@ This indicates that there are multiple `python` executables located at `/usr/bin
 
 The `which` command only searches for executables in directories specified in the `PATH` variable. If an executable is located elsewhere, `which` will not be able to find it. This limitation means that if a binary is not in a directory included in `PATH`, `which` will not display it, even if it exists on the system.
 
-References: [GNU Findutils timestamp comparisons](https://www.gnu.org/software/findutils/manual/html_node/find_html/Comparing-Timestamps.html) and [find operators and precedence](https://manpages.debian.org/unstable/findutils/find.1.en.html#OPERATORS).
+References: [find timestamp predicates](https://man7.org/linux/man-pages/man1/find.1.html) and [find operators and precedence](https://manpages.debian.org/unstable/findutils/find.1.en.html#OPERATORS).
 
 ### Challenges
 
