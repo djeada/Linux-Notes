@@ -65,7 +65,7 @@ Check your understanding of interfaces, addressing, routing, DNS, ports, firewal
 * [x] 254
 * [ ] 256
 
-> **Explanation:** `/24` means 24 network bits, leaving 8 host bits, or 256 addresses. The all-zeros network address and the all-ones broadcast address are reserved, leaving 254 for hosts.
+> **Explanation:** `/24` means 24 network bits, leaving 8 host bits, or $2^8 = 256$ addresses. The all-zeros network address and the all-ones broadcast address are reserved, leaving $2^8 - 2 = 254$ for hosts.
 
 #### Q. What is the job of a subnet mask or prefix length such as `/24`?
 
