@@ -1,367 +1,406 @@
-#### Q. Which command shows the current IP addresses assigned to all network interfaces in modern Linux distributions?
+# Networking Quiz
+
+Notes: [Networking](../notes/networking.md), [Ports](../notes/ports.md), [Firewalls](../notes/firewall.md)
+
+Check your understanding of interfaces, addressing, routing, DNS, ports, firewalls and network troubleshooting.
+
+#### Q. Which command is the modern way to show the IP addresses assigned to every network interface?
 
 * [ ] `ifconfig -a`
 * [x] `ip addr show`
 * [ ] `netstat -i`
 * [ ] `route -n`
-* [ ] `iptables -L`
 
-#### Q. Where is the default gateway specified in the routing table?
+> **Explanation:** `ip addr show` (or `ip a`) lists every interface with its IPv4 and IPv6 addresses. `ifconfig` is deprecated on many distributions, `netstat -i` shows interface counters, and `route -n` shows the routing table.
 
-* [ ] Destination `0.0.0.0` / Genmask `255.255.255.255`
-* [x] Destination `0.0.0.0` / Genmask `0.0.0.0`
-* [ ] Destination `127.0.0.0` / Genmask `255.0.0.0`
-* [ ] Destination `255.255.255.255` / Genmask `255.255.255.255`
-* [ ] Destination `192.168.1.0` / Genmask `255.255.255.0`
+#### Q. Which command lists interfaces with their MAC addresses and `UP`/`DOWN` state, but without IP addresses?
 
-#### Q. Which file is used to define static DNS servers for name resolution system-wide?
+* [ ] `ip addr show`
+* [x] `ip link show`
+* [ ] `ip route show`
+* [ ] `ip neigh show`
 
-* [ ] `/etc/hostname`
-* [ ] `/etc/resolvconf.conf`
-* [x] `/etc/resolv.conf`
-* [ ] `/etc/hosts.dns`
-* [ ] `/etc/dns.conf`
+> **Explanation:** `ip link` works at the link layer: interface names, MAC addresses, MTU and state. `ip addr` adds the IP addresses, `ip route` shows routes and `ip neigh` shows the ARP/neighbour cache.
 
-#### Q. How do you display all listening TCP ports and their associated processes?
-
-* [ ] `ss -uplt`
-* [ ] `netstat -ulpn`
-* [x] `ss -tulpn`
-* [ ] `lsof -i udp`
-* [ ] `iptables -L -n`
-
-#### Q. To permanently assign a static IP to `eth0` on a Debian-based system, which file would you edit?
-
-* [x] `/etc/network/interfaces`
-* [ ] `/etc/sysconfig/network-scripts/ifcfg-eth0`
-* [ ] `/etc/netplan/config.yaml`
-* [ ] `/etc/dhcp/dhclient.conf`
-* [ ] `/etc/NetworkManager/system-connections/eth0.nmconnection`
-
-#### Q. What command tests connectivity and reports round-trip time to a host?
-
-* [ ] `traceroute`
-* [x] `ping`
-* [ ] `dig`
-* [ ] `nslookup`
-* [ ] `arping`
-
-#### Q. Which utility shows real-time bandwidth usage per network interface?
-
-* [x] `iftop`
-* [ ] `nethogs`
-* [ ] `nload`
-* [ ] `iperf`
-* [ ] `netcat`
-
-#### Q. How do you flush all IPv4 routes from the routing table?
-
-* [ ] `ip route flush all`
-* [x] `ip route flush table main`
-* [ ] `route del default`
-* [ ] `ifdown --flush`
-* [ ] `netstat -r --flush`
-
-#### Q. In `/etc/hosts`, what does the line `127.0.0.1   localhost` achieve?
-
-* [ ] Maps `localhost` to the public IP of the host
-* [x] Resolves `localhost` to the loopback interface
-* [ ] Routes all traffic to `localhost` through the router
-* [ ] Disables DNS lookup for `localhost`
-* [ ] Assigns a virtual IP for containers
-
-#### Q. Which command captures packets on `eth0` and writes them to `capture.pcap`?
-
-* [ ] `tcpdump -w eth0 capture.pcap`
-* [x] `tcpdump -i eth0 -w capture.pcap`
-* [ ] `wireshark -i eth0 -o capture.pcap`
-* [ ] `snort -c eth0 capture.pcap`
-* [ ] `nmap -sP eth0 -o capture.pcap`
-
-#### Q. What is the purpose of the `mtu` parameter in network interface configuration?
-
-* [ ] Maximum Transfer Unit - defines maximum bandwidth
-* [x] Maximum Transmission Unit - defines maximum packet size
-* [ ] Memory Transfer Unit - defines buffer size
-* [ ] Multiple Terminal Unit - defines connection count
-* [ ] Message Transfer Unit - defines protocol type
-
-#### Q. Which command adds a static route to network `192.168.10.0/24` via gateway `192.168.1.1`?
-
-* [ ] `route add -net 192.168.10.0/24 gw 192.168.1.1`
-* [x] `ip route add 192.168.10.0/24 via 192.168.1.1`
-* [ ] `netstat -r 192.168.10.0/24 192.168.1.1`
-* [ ] `ifroute add 192.168.10.0/24 192.168.1.1`
-* [ ] `gateway add 192.168.10.0/24 192.168.1.1`
-
-#### Q. Which file contains the system's hostname on most Linux distributions?
-
-* [ ] `/etc/hosts`
-* [x] `/etc/hostname`
-* [ ] `/etc/sysconfig/network`
-* [ ] `/proc/sys/kernel/hostname`
-* [ ] `/etc/machine-info`
-
-#### Q. What does the command `ip link set eth0 down` accomplish?
-
-* [ ] Removes IP address from eth0
-* [x] Disables the eth0 network interface
-* [ ] Deletes the eth0 interface permanently
-* [ ] Sets eth0 to promiscuous mode
-* [ ] Flushes the ARP cache for eth0
-
-#### Q. Which protocol does the `dig` command primarily use for DNS queries?
-
-* [ ] TCP only
-* [x] UDP (with TCP fallback)
-* [ ] ICMP
-* [ ] HTTP
-* [ ] DHCP
-
-#### Q. In iptables, what does the `-j DROP` action do to packets?
-
-* [ ] Forwards packets to another chain
-* [ ] Logs packet information and continues
-* [x] Silently discards the packet
-* [ ] Sends ICMP unreachable message
-* [ ] Redirects packet to localhost
-
-#### Q. Which command shows network interface statistics including packet counts and errors?
+#### Q. Which command shows per-interface packet counts, including RX/TX errors and dropped packets?
 
 * [ ] `ip addr`
 * [x] `ip -s link`
-* [ ] `netstat -r`
-* [ ] `ss -i`
-* [ ] `ifconfig -v`
+* [ ] `ip route`
+* [ ] `ss -s`
 
-#### Q. What is the default DHCP client configuration file on Ubuntu systems?
+> **Explanation:** The `-s` flag adds statistics to `ip link`, showing bytes, packets, errors and drops per interface. `ss -s` summarises sockets, not interface counters.
 
-* [ ] `/etc/dhcpcd.conf`
-* [ ] `/etc/network/dhcp.conf`
-* [x] `/etc/dhcp/dhclient.conf`
-* [ ] `/etc/netplan/dhcp.conf`
-* [ ] `/etc/systemd/network/dhcp.conf`
+#### Q. What does `sudo ip link set eth0 down` do?
 
-#### Q. Which command displays the current ARP table entries?
+* [ ] Removes the IP address from `eth0` but keeps the link up
+* [x] Disables the `eth0` interface until it is brought up again
+* [ ] Deletes the `eth0` interface from the system permanently
+* [ ] Flushes the ARP cache entries learned on `eth0`
 
-* [ ] `route -n`
-* [x] `ip neigh show`
-* [ ] `netstat -arp`
-* [ ] `ss -arp`
-* [ ] `ifconfig -arp`
+> **Explanation:** Setting a link `down` stops the interface from sending or receiving traffic; `ip link set eth0 up` re-enables it. The change is not persistent and does not delete the device.
 
-#### Q. How do you enable IP forwarding temporarily on a Linux system?
+#### Q. A web server works with `curl http://127.0.0.1` on the server itself. What does this prove?
 
-* [ ] `ip forward enable`
-* [x] `echo 1 > /proc/sys/net/ipv4/ip_forward`
-* [ ] `sysctl net.ipv4.ip_forward=1`
-* [ ] `iptables -A FORWARD -j ACCEPT`
-* [ ] `netfilter --enable-forward`
+* [ ] Remote clients can reach the server on port 80
+* [x] The service answers on the loopback interface inside the same machine
+* [ ] The default gateway is configured correctly
+* [ ] DNS resolution for the server's hostname works
 
-#### Q. Which port does SSH typically use for connections?
+> **Explanation:** `127.0.0.1` is the loopback address: the machine talking to itself through `lo`. It confirms the service runs locally but says nothing about routing, DNS or firewalls for remote clients.
 
-* [ ] 21
-* [x] 22
-* [ ] 23
-* [ ] 25
-* [ ] 80
+#### Q. Which of these addresses is a private IPv4 address, not routed on the public internet?
 
-#### Q. What does the `netstat -tulpn` command display?
+* [ ] `172.32.10.5`
+* [x] `172.20.10.5`
+* [ ] `192.169.1.5`
+* [ ] `11.0.0.5`
 
-* [ ] Only UDP connections
-* [x] TCP and UDP listening ports with process information
-* [ ] Only TCP connections
-* [ ] Network interface statistics
-* [ ] Routing table information
+> **Explanation:** The private ranges are `10.0.0.0/8`, `172.16.0.0` to `172.31.255.255`, and `192.168.0.0/16`. `172.32.x.x` falls just outside the 172.16/12 block, and `192.169.x.x` is not `192.168.x.x`.
 
-#### Q. Which configuration directive in `/etc/resolv.conf` specifies the DNS search domain?
+#### Q. In `192.168.1.0/24`, how many usable host addresses are there?
 
-* [ ] `nameserver`
-* [x] `search`
-* [ ] `domain`
-* [ ] `options`
-* [ ] `sortlist`
+* [ ] 24
+* [ ] 255
+* [x] 254
+* [ ] 256
 
-#### Q. How do you test if a specific TCP port is open on a remote host using netcat?
+> **Explanation:** `/24` means 24 network bits, leaving 8 host bits, or 256 addresses. The all-zeros network address and the all-ones broadcast address are reserved, leaving 254 for hosts.
 
-* [ ] `nc -u hostname port`
-* [x] `nc -zv hostname port`
-* [ ] `nc -l hostname port`
-* [ ] `nc -s hostname port`
-* [ ] `nc -p hostname port`
+#### Q. What is the job of a subnet mask or prefix length such as `/24`?
 
-#### Q. Which systemd service manages network connections on modern Linux distributions?
+* [ ] It encrypts traffic between hosts on the same network
+* [x] It splits an IP address into its network part and host part
+* [ ] It assigns the MAC address used on the local link
+* [ ] It selects the DNS server used for name lookups
 
-* [ ] `network.service`
-* [x] `NetworkManager.service`
-* [ ] `networking.service`
-* [ ] `systemd-networkd.service`
-* [ ] `ifupdown.service`
+> **Explanation:** The mask tells the host which leading bits identify the network. Addresses with the same network part are reached directly; everything else is sent to the default gateway.
 
-#### Q. What does the `traceroute` command accomplish?
+#### Q. In what order do the four DHCP lease messages occur?
 
-* [ ] Tests bandwidth between hosts
-* [x] Shows the path packets take to reach a destination
-* [ ] Captures network packets
-* [ ] Displays network interface configuration
-* [ ] Monitors real-time traffic
+* [ ] Request, Offer, Discover, Acknowledge
+* [x] Discover, Offer, Request, Acknowledge
+* [ ] Offer, Discover, Acknowledge, Request
+* [ ] Discover, Request, Offer, Acknowledge
 
-#### Q. In a CIDR notation `192.168.1.0/24`, what does the `/24` represent?
+> **Explanation:** The client broadcasts DHCPDISCOVER, a server replies with DHCPOFFER, the client asks for that address with DHCPREQUEST, and the server confirms the lease with DHCPACK (often remembered as DORA).
 
-* [ ] The host portion of the address
-* [x] The number of network bits in the subnet mask
-* [ ] The maximum number of hosts
-* [ ] The VLAN identifier
-* [ ] The default gateway address
+#### Q. A laptop shows the address `169.254.23.7` on its Ethernet interface. What is the most likely cause?
 
-#### Q. Which command creates a network namespace named `test`?
+* [ ] The interface was given a static public IP address
+* [x] The client failed to get a lease from a DHCP server
+* [ ] DNS is returning the wrong address for the hostname
+* [ ] The firewall is blocking outgoing ICMP traffic
 
-* [ ] `ip netns create test`
-* [x] `ip netns add test`
-* [ ] `netns create test`
-* [ ] `namespace add test`
-* [ ] `ip namespace create test`
+> **Explanation:** `169.254.x.x` is a link-local address a host assigns itself when DHCP fails. Check the cable or Wi-Fi, `ip link`, `nmcli dev status` and the DHCP server.
 
-#### Q. What is the purpose of the loopback interface (`lo`)?
+#### Q. A printer must always get the same IP address, but you want to keep managing addresses centrally on the DHCP server. What should you configure?
 
-* [ ] External network communication
-* [x] Internal system communication and testing
-* [ ] Wireless network management
-* [ ] VPN connections
-* [ ] Bridge configuration
+* [ ] A shorter DHCP lease time on the printer
+* [x] A DHCP reservation for the printer's MAC address
+* [ ] A static route to the printer via the gateway
+* [ ] An `/etc/hosts` entry on every client
 
-#### Q. Which file would you modify to make network interface changes persistent on CentOS/RHEL systems?
+> **Explanation:** A DHCP reservation makes the server always hand the same address to a given MAC address. The address stays stable without manual configuration on the device itself.
 
-* [ ] `/etc/network/interfaces`
-* [x] `/etc/sysconfig/network-scripts/ifcfg-ethX`
-* [ ] `/etc/netplan/config.yaml`
-* [ ] `/etc/systemd/network/ethX.network`
-* [ ] `/etc/NetworkManager/conf.d/ethX.conf`
+#### Q. Which command shows only the default route on a Linux system?
 
-#### Q. How do you display only IPv6 addresses using the `ip` command?
+* [ ] `ip addr show default`
+* [x] `ip route show default`
+* [ ] `ip link show default`
+* [ ] `ip neigh show default`
 
-* [ ] `ip -6 addr`
-* [x] `ip -6 addr show`
-* [ ] `ip addr show ipv6`
-* [ ] `ip6 addr show`
-* [ ] `ip addr -6`
+> **Explanation:** `ip route show default` prints a line such as `default via 192.168.1.1 dev eth0`, where the address after `via` is the default gateway. The default route matches any destination with no more specific route.
 
-#### Q. What is the purpose of a subnet mask?
+#### Q. In the output of `route -n`, which entry is the default gateway?
 
-* [ ] To encrypt network traffic
-* [x] To divide an IP address into network and host portions
-* [ ] To speed up network connections
-* [ ] To assign MAC addresses
-* [ ] To route packets between networks
+* [ ] Destination `0.0.0.0` with Genmask `255.255.255.255`
+* [x] Destination `0.0.0.0` with Genmask `0.0.0.0`
+* [ ] Destination `127.0.0.0` with Genmask `255.0.0.0`
+* [ ] Destination `192.168.1.0` with Genmask `255.255.255.0`
 
-#### Q. Which command displays the routing table on Linux?
+> **Explanation:** A destination of `0.0.0.0/0` (mask `0.0.0.0`) matches every address, so it is the catch-all default route. A `192.168.1.0/24` entry is the directly connected local network.
 
-* [ ] `route show`
-* [x] `ip route` or `route -n`
-* [ ] `netstat -i`
-* [ ] `ifconfig -r`
-* [ ] `traceroute`
+#### Q. Which command adds a default gateway of `192.168.1.254` until the next reboot or network restart?
 
-#### Q. What is the loopback IP address?
+* [ ] `sudo ip addr add default 192.168.1.254`
+* [x] `sudo ip route add default via 192.168.1.254`
+* [ ] `sudo ip link set default via 192.168.1.254`
+* [ ] `sudo ip route add 192.168.1.254 dev default`
 
-* [ ] 0.0.0.0
-* [x] 127.0.0.1
-* [ ] 192.168.1.1
-* [ ] 255.255.255.255
-* [ ] 10.0.0.1
+> **Explanation:** Routes are managed with `ip route`, and `via` names the next-hop router. Changes made this way are runtime only; make them persistent through NetworkManager, netplan or the distribution's network files.
 
-#### Q. Which port does HTTP use by default?
+#### Q. Which command adds a route to `10.20.0.0/16` through the router `192.168.1.1`?
 
-* [ ] 21
-* [ ] 22
-* [ ] 443
-* [x] 80
-* [ ] 25
+* [ ] `ip route add 192.168.1.1 via 10.20.0.0/16`
+* [x] `ip route add 10.20.0.0/16 via 192.168.1.1`
+* [ ] `ip addr add 10.20.0.0/16 via 192.168.1.1`
+* [ ] `ip route add 10.20.0.0/16 dev 192.168.1.1`
 
-#### Q. Which port does HTTPS use by default?
+> **Explanation:** The syntax is `ip route add DESTINATION via GATEWAY`. `dev` expects an interface name such as `eth0`, not an IP address.
 
-* [ ] 80
-* [ ] 8080
-* [x] 443
-* [ ] 8443
-* [ ] 22
+#### Q. `ping 192.168.1.1` (the router) succeeds, but `ping 8.8.8.8` fails. What should you check first?
 
-#### Q. What does DNS stand for?
+* [ ] The DNS servers in `/etc/resolv.conf`
+* [x] The default route and the path beyond the router
+* [ ] The MAC address of the local interface
+* [ ] The entries in `/etc/hosts`
 
-* [ ] Direct Network Service
-* [x] Domain Name System
-* [ ] Dynamic Network Server
-* [ ] Distributed Name Service
-* [ ] Data Network System
+> **Explanation:** The local network works, but traffic to other networks does not. Check `ip route` for a correct default gateway and use `traceroute 8.8.8.8` to see where packets stop. DNS is not involved when pinging a raw IP.
 
-#### Q. Which command tests DNS resolution?
+#### Q. `ping 8.8.8.8` works, but `ping google.com` fails with "Name or service not known". What is the most likely problem?
 
-* [ ] `ping`
-* [x] `nslookup` or `dig`
-* [ ] `traceroute`
-* [ ] `netstat`
-* [ ] `ifconfig`
+* [ ] The interface is down
+* [x] Name resolution (DNS) is broken
+* [ ] The default gateway is missing
+* [ ] ICMP is blocked by the firewall
 
-#### Q. What is the purpose of the `/etc/hosts` file?
+> **Explanation:** Reaching an IP address proves the interface, routing and ICMP all work. Failing only on a name points to DNS. Inspect `/etc/resolv.conf`, `resolvectl status`, and compare `dig google.com` with `dig @8.8.8.8 google.com`.
 
-* [ ] To store passwords
-* [x] To provide static hostname to IP address mappings
-* [ ] To configure network interfaces
-* [ ] To store routing information
-* [ ] To configure DNS servers
+#### Q. Which command queries a specific DNS server, `8.8.8.8`, directly and bypasses the system's configured resolver?
 
-#### Q. Which file configures DNS resolver settings?
+* [ ] `dig google.com 8.8.8.8`
+* [x] `dig @8.8.8.8 google.com`
+* [ ] `nslookup -server 8.8.8.8`
+* [ ] `host -r 8.8.8.8 google.com`
+
+> **Explanation:** `dig @SERVER NAME` sends the query to that server. If this works while plain `dig google.com` fails, the locally configured resolver is the problem.
+
+#### Q. Which file traditionally lists the DNS servers the resolver uses, via `nameserver` lines?
 
 * [ ] `/etc/hosts`
 * [x] `/etc/resolv.conf`
-* [ ] `/etc/dns.conf`
-* [ ] `/etc/network/dns`
+* [ ] `/etc/hostname`
 * [ ] `/etc/nsswitch.conf`
 
-#### Q. What is the purpose of ARP?
+> **Explanation:** `/etc/resolv.conf` holds `nameserver` and `search` lines. On many modern systems it is generated by NetworkManager or systemd-resolved, so manual edits may be overwritten. `/etc/nsswitch.conf` sets lookup order, not servers.
 
-* [ ] To assign IP addresses
-* [x] To resolve IP addresses to MAC addresses
-* [ ] To route packets between networks
-* [ ] To encrypt network traffic
-* [ ] To establish TCP connections
+#### Q. On a system using systemd-resolved, which command shows the DNS servers actually in use per interface?
 
-#### Q. Which command shows the ARP cache?
+* [ ] `cat /etc/hostname`
+* [x] `resolvectl status`
+* [ ] `ip route show`
+* [ ] `nmcli con reload`
 
-* [ ] `ifconfig -a`
-* [x] `arp -a` or `ip neigh`
-* [ ] `netstat -arp`
-* [ ] `route arp`
-* [ ] `show arp`
+> **Explanation:** With systemd-resolved, `/etc/resolv.conf` often only points at a local stub resolver (`127.0.0.53`). `resolvectl status` shows the real upstream servers configured for each link.
 
-#### Q. What is a VLAN?
+#### Q. In `/etc/resolv.conf`, which directive lists the domains appended to short names, so that `ping web1` can resolve `web1.corp.example`?
 
-* [ ] Virtual Local Access Node
-* [x] Virtual Local Area Network
-* [ ] Very Large Area Network
-* [ ] Virtual Link Access Network
-* [ ] Variable Length Address Network
+* [ ] `nameserver`
+* [x] `search`
+* [ ] `options`
+* [ ] `sortlist`
 
-#### Q. Which protocol is used to automatically assign IP addresses?
+> **Explanation:** `search corp.example` makes the resolver try `web1.corp.example` when you look up the short name `web1`. `nameserver` sets server addresses and `options` tunes resolver behaviour such as timeouts.
 
-* [ ] DNS
-* [ ] ARP
-* [x] DHCP
-* [ ] NAT
-* [ ] ICMP
+#### Q. You add `192.168.1.50 myserver.local` to `/etc/hosts`. What is the effect?
 
-#### Q. What command displays active network connections and listening ports?
+* [ ] DNS servers on the network start answering for `myserver.local`
+* [x] This machine resolves `myserver.local` locally, usually before asking DNS
+* [ ] Traffic to `192.168.1.50` is routed through `myserver.local`
+* [ ] The machine's own hostname changes to `myserver.local`
 
-* [ ] `ifconfig`
-* [x] `netstat -tuln` or `ss -tuln`
-* [ ] `ip addr`
-* [ ] `route -n`
-* [ ] `ping localhost`
+> **Explanation:** `/etc/hosts` is a static, local name-to-IP table that is normally checked before DNS. It affects only the machine where the file is edited.
 
-#### Q. What is the purpose of NAT?
+#### Q. With NetworkManager, which setting stops a connection from using the DNS servers handed out by DHCP?
 
-* [ ] To encrypt traffic
-* [x] To translate private IP addresses to public IP addresses
-* [ ] To resolve hostnames
-* [ ] To balance network load
-* [ ] To monitor network traffic
+* [ ] `ipv4.method manual`
+* [x] `ipv4.ignore-auto-dns yes`
+* [ ] `ipv4.never-default yes`
+* [ ] `ipv4.dns-search ""`
+
+> **Explanation:** After setting `ipv4.dns` with `nmcli con mod`, `ipv4.ignore-auto-dns yes` keeps the DHCP-supplied servers out. `ipv4.method manual` would turn off DHCP addressing entirely, not just DNS.
+
+#### Q. Which `nmcli` command shows each network device and whether it is connected?
+
+* [ ] `nmcli con reload`
+* [x] `nmcli dev status`
+* [ ] `nmcli con up eth0`
+* [ ] `nmcli general hostname`
+
+> **Explanation:** `nmcli dev status` lists devices with their type, state and active connection profile. `nmcli con show` lists saved connection profiles instead.
+
+#### Q. You created a profile with `nmcli con add ... ipv4.method manual ipv4.addresses 192.168.1.10/24`. What must you do for it to take effect now?
+
+* [ ] Run `nmcli con reload`
+* [x] Run `nmcli con up <profile-name>`
+* [ ] Run `ip link set eth0 up`
+* [ ] Reboot the machine
+
+> **Explanation:** Creating or modifying a profile only saves it. `nmcli con up <name>` activates it on the interface. `nmcli con reload` re-reads profile files from disk but does not activate anything.
+
+#### Q. Which command measures round-trip time to a host and stops after exactly five probes?
+
+* [ ] `ping -w 5 example.com`
+* [x] `ping -c 5 example.com`
+* [ ] `traceroute -m 5 example.com`
+* [ ] `ping -i 5 example.com`
+
+> **Explanation:** `-c` sets the packet count. `-w 5` sets a five-second deadline instead, `-i 5` waits five seconds between packets, and `traceroute -m` limits hop count.
+
+#### Q. What does `traceroute -n example.com` show?
+
+* [ ] The bandwidth available on each link to the host
+* [x] Each router hop on the path, as numeric IPs without DNS lookups
+* [ ] Only the final destination's IP address
+* [ ] The open ports on each router along the path
+
+> **Explanation:** `traceroute` lists each hop and its latency, which helps locate where delay or loss begins. `-n` skips reverse DNS lookups, making the output faster and showing raw IPs.
+
+#### Q. Which command shows listening TCP and UDP sockets with numeric ports and the process that owns each one?
+
+* [ ] `ss -tan`
+* [x] `sudo ss -tulpn`
+* [ ] `ss -s`
+* [ ] `sudo ss -tu state established`
+
+> **Explanation:** `-t` TCP, `-u` UDP, `-l` listening only, `-p` owning process (needs root for other users' processes), `-n` numeric. `-tan` shows all TCP sockets without process names, and `-s` is a summary.
+
+#### Q. `ss -tuln` shows `127.0.0.1:5432` in LISTEN state, and remote clients cannot connect. Why?
+
+* [ ] Port 5432 is a well-known port that needs root
+* [x] The service is bound only to loopback, so it accepts local connections only
+* [ ] The service is listening on UDP instead of TCP
+* [ ] The service is listening on every interface, which conflicts with routing
+
+> **Explanation:** A socket bound to `127.0.0.1` is reachable only from the same machine. To accept remote clients the service must listen on `0.0.0.0`, `[::]` or a specific external address, and the firewall must allow the port.
+
+#### Q. Which command shows which process is using TCP port 80?
+
+* [ ] `sudo lsof /var/run/80`
+* [x] `sudo lsof -i :80`
+* [ ] `sudo ss -s :80`
+* [ ] `sudo netstat -r :80`
+
+> **Explanation:** `lsof -i :80` lists open network files on port 80 with the command, PID and user. `ss -s` only prints summary counts, and `netstat -r` shows routes.
+
+#### Q. Which `nc` command checks whether TCP port 443 is open on `web01` without sending any data?
+
+* [ ] `nc -l web01 443`
+* [x] `nc -zv web01 443`
+* [ ] `nc -u web01 443`
+* [ ] `nc -p web01 443`
+
+> **Explanation:** `-z` scans for a listening daemon without sending data and `-v` reports the result. `-l` makes `nc` listen locally, `-u` switches to UDP, and `-p` sets the source port.
+
+#### Q. Which port range contains the well-known ports such as 22, 80 and 443?
+
+* [ ] 1024–49151
+* [x] 0–1023
+* [ ] 49152–65535
+* [ ] 0–65535
+
+> **Explanation:** Ports 0–1023 are well-known (SSH 22, HTTP 80, HTTPS 443). 1024–49151 are registered ports and 49152–65535 are dynamic/private. TCP and UDP each have their own 0–65535 space.
+
+#### Q. Which service commonly uses port 53 over both UDP and TCP?
+
+* [ ] SMTP
+* [x] DNS
+* [ ] DHCP
+* [ ] SSH
+
+> **Explanation:** DNS uses UDP 53 for most queries and TCP 53 for large responses and zone transfers. DHCP uses UDP 67/68, SMTP uses TCP 25 and SSH uses TCP 22.
+
+#### Q. An `nmap` scan reports port 8080 as `filtered`. What does that mean?
+
+* [ ] A service is accepting connections on the port
+* [x] Nmap cannot tell whether the port is open because packets are being filtered
+* [ ] The host is reachable but nothing listens on the port
+* [ ] The host is down
+
+> **Explanation:** `filtered` means a firewall or filter dropped the probes, so Nmap got no clear answer. `closed` means the host replied but nothing listens there; `open` means a service accepted the connection.
+
+#### Q. Which command captures 100 packets on `eth0` and saves them to `capture.pcap` for later analysis in Wireshark?
+
+* [ ] `sudo tcpdump -w eth0 -c 100 capture.pcap`
+* [x] `sudo tcpdump -i eth0 -c 100 -w capture.pcap`
+* [ ] `sudo tcpdump -r capture.pcap -i eth0 -c 100`
+* [ ] `sudo tcpdump -i eth0 -c 100 > capture.pcap`
+
+> **Explanation:** `-i` selects the interface, `-c` limits the packet count and `-w` writes raw packets to a file. `-r` reads a capture, and redirecting stdout saves text output, not a pcap file.
+
+#### Q. Which `tcpdump` filter captures only DNS traffic on `eth0`?
+
+* [ ] `sudo tcpdump -i eth0 icmp`
+* [x] `sudo tcpdump -i eth0 port 53`
+* [ ] `sudo tcpdump -i eth0 port 80`
+* [ ] `sudo tcpdump -i eth0 host 53`
+
+> **Explanation:** DNS uses port 53, so `port 53` matches its UDP and TCP traffic. `host` expects an IP address or hostname, not a port number.
+
+#### Q. Which command enables IPv4 forwarding at runtime, so the machine can route packets between networks?
+
+* [ ] `sudo ip link set ip_forward on`
+* [x] `sudo sysctl -w net.ipv4.ip_forward=1`
+* [ ] `sudo iptables -A FORWARD -j ACCEPT`
+* [ ] `sudo sysctl -p net.ipv4.ip_forward`
+
+> **Explanation:** `sysctl -w` changes the kernel parameter immediately; `cat /proc/sys/net/ipv4/ip_forward` then shows `1`. A FORWARD rule only filters forwarded packets and does not turn forwarding on.
+
+#### Q. How do you make IPv4 forwarding survive a reboot?
+
+* [ ] Run `echo 1 > /proc/sys/net/ipv4/ip_forward` once
+* [x] Add `net.ipv4.ip_forward=1` to `/etc/sysctl.conf` and run `sysctl -p`
+* [ ] Add `ip_forward=yes` to `/etc/resolv.conf`
+* [ ] Run `sudo sysctl -w net.ipv4.ip_forward=1` once
+
+> **Explanation:** Writing to `/proc` or using `sysctl -w` changes only the running kernel. Settings in `/etc/sysctl.conf` (or `/etc/sysctl.d/`) are applied at boot, and `sysctl -p` loads them now.
+
+#### Q. What is the main purpose of NAT on a home router?
+
+* [ ] To resolve hostnames to IP addresses
+* [x] To let many devices with private addresses share one public IP address
+* [ ] To assign IP addresses to devices automatically
+* [ ] To encrypt traffic leaving the local network
+
+> **Explanation:** Private addresses are not routed on the internet, so the router rewrites their source address to its public IP and tracks connections to map replies back. DNS resolves names and DHCP assigns addresses.
+
+#### Q. A firewall rule uses `DROP` instead of `REJECT`. What does a client trying to connect experience?
+
+* [ ] An immediate "connection refused" error
+* [x] No response, so the connection attempt hangs until it times out
+* [ ] A redirect to another port on the same server
+* [ ] A successful connection with no data returned
+
+> **Explanation:** `DROP` silently discards the packet. `REJECT` sends an error back, so the client fails quickly with "connection refused" or "unreachable".
+
+#### Q. The INPUT chain contains these rules, checked in this order. What happens to a new SSH connection on port 22?
+
+```text
+1  DROP    all  --  0.0.0.0/0  0.0.0.0/0
+2  ACCEPT  tcp  --  0.0.0.0/0  0.0.0.0/0  tcp dpt:22
+```
+
+* [ ] It is accepted, because the more specific rule wins
+* [x] It is dropped, because rule 1 matches first
+* [ ] It is accepted, because ACCEPT rules override DROP rules
+* [ ] It falls through to the chain's default policy
+
+> **Explanation:** iptables evaluates rules top to bottom and stops at the first matching terminating rule. Rule 1 matches everything, so the SSH rule is never reached. Insert the ACCEPT above it with `iptables -I`.
+
+#### Q. Which command allows incoming HTTP traffic by appending a rule to the INPUT chain?
+
+* [ ] `sudo iptables -A OUTPUT -p tcp --sport 80 -j ACCEPT`
+* [x] `sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT`
+* [ ] `sudo iptables -D INPUT -p tcp --dport 80 -j ACCEPT`
+* [ ] `sudo iptables -A FORWARD -p udp --dport 80 -j ACCEPT`
+
+> **Explanation:** `-A INPUT` appends to the chain for traffic addressed to this host, `-p tcp --dport 80` matches HTTP, and `-j ACCEPT` allows it. `-D` deletes a rule, and FORWARD handles traffic routed through the host.
+
+#### Q. You are about to run `sudo ufw default deny incoming` and `sudo ufw enable` on a remote server over SSH. What should you do first?
+
+* [ ] Run `sudo ufw disable`
+* [x] Run `sudo ufw allow ssh`
+* [ ] Run `sudo ufw default deny outgoing`
+* [ ] Run `sudo ufw delete allow ssh`
+
+> **Explanation:** With incoming traffic denied by default, enabling UFW without an SSH rule can lock you out of the server. Allow SSH (or your custom SSH port) before enabling the firewall.
+
+#### Q. You run `sudo firewall-cmd --permanent --add-service=http`, but HTTP is still blocked. What is missing?
+
+* [ ] `sudo firewall-cmd --runtime-to-permanent`
+* [x] `sudo firewall-cmd --reload`
+* [ ] `sudo systemctl disable firewalld`
+* [ ] `sudo firewall-cmd --add-port=http`
+
+> **Explanation:** `--permanent` writes the rule to the saved configuration but does not change the running firewall. `--reload` loads the permanent configuration into the runtime. `--runtime-to-permanent` copies in the opposite direction.

@@ -246,9 +246,9 @@ While viewing files with more or less, you can use these commands:
 
 - The `Enter` command moves forward by one line.
 - The `Space` command moves forward by one page.
-- The `b` command moves one page backward, applicable in the "less" pager only.
+- The `b` command moves one page backward. util-linux `more` supports it only for files, not for piped input; `less` supports it everywhere.
 - The `q` command quits the pager, usable in both "more" and "less" pagers.
-- The `/pattern` command searches for the next occurrence of the specified text "pattern," available in the "less" pager only.
+- The `/pattern` command searches forward for the next occurrence of "pattern" in both pagers; `less` also searches backward with `?pattern` and highlights matches.
 
 #### Viewing File Parts with head and tail
 

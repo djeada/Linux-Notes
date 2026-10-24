@@ -1,359 +1,367 @@
-#### Q. What does SSH stand for?
+# SSH and SCP Quiz
 
-* [ ] Simple Shell
-* [x] Secure Shell
-* [ ] System Shell
-* [ ] Standard Shell
-* [ ] Server Shell
+Notes: [Secure Server Access](../notes/ssh_and_scp.md), [Ports](../notes/ports.md), [File Compression and Archiving](../notes/tar_and_gzip.md)
 
-#### Q. What is the default port number for SSH?
+Check your understanding of SSH connections, key-based authentication, tunnels and secure file transfer with SCP, SFTP and rsync.
 
-* [ ] 21
-* [x] 22
-* [ ] 23
-* [ ] 25
-* [ ] 80
+#### Q. Which command connects to `server.example.com` as user `deploy`?
 
-#### Q. Which command connects to a remote server using SSH?
+* [ ] `ssh server.example.com@deploy`
+* [x] `ssh deploy@server.example.com`
+* [ ] `ssh -u deploy server.example.com`
+* [ ] `ssh server.example.com -user deploy`
 
-* [ ] `ssh server username`
-* [x] `ssh username@server`
-* [ ] `connect username@server`
-* [ ] `remote username@server`
-* [ ] `login username@server`
+> **Explanation:** The form is `ssh user@host`. The equivalent option form is `ssh -l deploy server.example.com`; `ssh` has no `-u` or `-user` option.
 
-#### Q. Which command generates a new SSH key pair?
+#### Q. How do you run `df -h` on `server` and see its output locally, without opening an interactive shell?
 
-* [ ] `ssh-add`
-* [x] `ssh-keygen`
-* [ ] `ssh-create`
-* [ ] `ssh-newkey`
-* [ ] `ssh-generate`
+* [ ] `ssh -N user@server df -h`
+* [x] `ssh user@server 'df -h'`
+* [ ] `ssh user@server; df -h`
+* [ ] `ssh -D df user@server`
 
-#### Q. Where are SSH private keys typically stored?
+> **Explanation:** A command after the host runs on the remote side, and its output comes back to your terminal. In `ssh user@server; df -h` the `df` runs locally after the session ends, and `-N` runs no command at all.
 
-* [ ] `/etc/ssh/`
-* [x] `~/.ssh/`
-* [ ] `/var/ssh/`
-* [ ] `~/keys/`
-* [ ] `/home/ssh/`
+#### Q. The SSH server listens on port 2222. Which command connects to it?
 
-#### Q. Which file contains the public keys authorized to log into a user's account?
+* [ ] `ssh -P 2222 user@host`
+* [x] `ssh -p 2222 user@host`
+* [ ] `ssh user@host:2222`
+* [ ] `ssh -l 2222 user@host`
+
+> **Explanation:** `ssh` takes a lowercase `-p` for the port. `scp` and `sftp` use uppercase `-P` because their `-p` means "preserve times and modes". `user@host:2222` is not port syntax for `ssh`.
+
+#### Q. Which command generates a new Ed25519 key pair, the modern default choice for SSH keys?
+
+* [ ] `ssh-add -t ed25519`
+* [x] `ssh-keygen -t ed25519`
+* [ ] `ssh-copy-id -t ed25519`
+* [ ] `ssh-keyscan -t ed25519`
+
+> **Explanation:** `ssh-keygen -t TYPE` creates a key pair, by default `~/.ssh/id_ed25519` and `id_ed25519.pub`. Ed25519 keys are short, fast and secure; for RSA, use at least 2048 bits with `-b`.
+
+#### Q. After running `ssh-keygen -t ed25519`, which file must stay secret?
+
+* [ ] `~/.ssh/id_ed25519.pub`
+* [x] `~/.ssh/id_ed25519`
+* [ ] `~/.ssh/known_hosts`
+* [ ] `~/.ssh/authorized_keys`
+
+> **Explanation:** The file without `.pub` is the private key; anyone holding it can log in as you wherever the public key is trusted. The `.pub` file is meant to be copied to servers.
+
+#### Q. Which command installs your public key on a server so that later logins can use key authentication?
+
+* [ ] `ssh-add ~/.ssh/id_ed25519.pub`
+* [x] `ssh-copy-id -i ~/.ssh/id_ed25519.pub user@server`
+* [ ] `scp ~/.ssh/id_ed25519 user@server:~/.ssh/`
+* [ ] `ssh-keygen -y user@server`
+
+> **Explanation:** `ssh-copy-id` appends the public key to `~/.ssh/authorized_keys` on the server, creating it if needed. Copying the private key, as in the `scp` option, defeats the point of key pairs.
+
+#### Q. On the server, which file lists the public keys allowed to log in to a user account?
 
 * [ ] `~/.ssh/known_hosts`
-* [ ] `~/.ssh/id_rsa`
 * [x] `~/.ssh/authorized_keys`
 * [ ] `~/.ssh/config`
-* [ ] `~/.ssh/identity`
+* [ ] `/etc/ssh/ssh_config`
 
-#### Q. Which command copies your public key to a remote server for key-based authentication?
+> **Explanation:** `sshd` checks the target user's `~/.ssh/authorized_keys` during public-key authentication. `known_hosts` is the client's record of server host keys.
 
-* [ ] `ssh-add`
-* [ ] `ssh-keygen -c`
-* [x] `ssh-copy-id`
-* [ ] `scp ~/.ssh/id_rsa.pub`
-* [ ] `ssh-upload`
+#### Q. During public-key authentication, what does the client send to prove its identity?
 
-#### Q. What encryption algorithm is considered more secure and modern for SSH keys?
+* [ ] The private key, encrypted with the server's public key
+* [x] A signature made with the private key, which the server checks against the public key
+* [ ] The user's password, hashed with the private key
+* [ ] The public key alone, with no further proof
 
-* [ ] RSA-1024
-* [ ] DSA
-* [x] Ed25519
-* [ ] MD5
-* [ ] SHA1
+> **Explanation:** The private key never leaves the client. The server verifies the signature using the public key in `authorized_keys`, all inside the already-encrypted session.
 
-#### Q. Which SSH option specifies a non-default port to connect to?
+#### Q. `ssh` refuses to use your key and warns `UNPROTECTED PRIVATE KEY FILE!`. Which command fixes it?
 
-* [ ] `-l`
-* [x] `-p`
-* [ ] `-i`
-* [ ] `-o`
-* [ ] `-P`
+* [ ] `chmod 644 ~/.ssh/id_ed25519`
+* [x] `chmod 600 ~/.ssh/id_ed25519`
+* [ ] `chmod 755 ~/.ssh/id_ed25519`
+* [ ] `chmod 666 ~/.ssh/id_ed25519`
 
-#### Q. Which SSH option specifies a private key file for authentication?
+> **Explanation:** OpenSSH ignores private keys that other users can read. Mode `600` limits the file to its owner. The `~/.ssh` directory itself is normally `700`.
 
-* [ ] `-k`
-* [ ] `-p`
-* [x] `-i`
-* [ ] `-f`
-* [ ] `-K`
+#### Q. Which option tells `ssh` to use a specific private key file?
 
-#### Q. What does SCP stand for?
+* [ ] `-k ~/.ssh/work_key`
+* [x] `-i ~/.ssh/work_key`
+* [ ] `-f ~/.ssh/work_key`
+* [ ] `-p ~/.ssh/work_key`
 
-* [ ] Simple Copy Protocol
-* [x] Secure Copy Protocol
-* [ ] System Copy Protocol
-* [ ] Server Copy Protocol
-* [ ] Shell Copy Protocol
+> **Explanation:** `-i` selects the identity (private key) file. `-f` sends `ssh` to the background, and `-p` sets the port.
 
-#### Q. Which command uploads a file to a remote server using SCP?
+#### Q. What does `ssh-agent` do?
 
-* [ ] `scp username@server:/remote/file /local/file`
-* [x] `scp /local/file username@server:/remote/path/`
-* [ ] `scp --upload /local/file server`
-* [ ] `cp /local/file ssh://username@server/remote/`
-* [ ] `upload /local/file username@server`
+* [ ] It generates new key pairs on demand
+* [x] It holds decrypted private keys in memory so you enter each passphrase only once
+* [ ] It runs on the server and checks `authorized_keys`
+* [ ] It copies public keys to remote servers
 
-#### Q. Which command downloads a file from a remote server using SCP?
+> **Explanation:** The agent keeps unlocked keys in memory and answers signing requests from `ssh`. You add keys to it with `ssh-add`. The server-side checks are done by `sshd`.
 
-* [x] `scp username@server:/remote/file /local/path/`
-* [ ] `scp /local/path/ username@server:/remote/file`
-* [ ] `scp --download server:/remote/file`
-* [ ] `download username@server:/remote/file`
-* [ ] `get username@server:/remote/file`
+#### Q. Which command loads your private key into the running `ssh-agent`?
 
-#### Q. Which SCP option enables recursive directory copying?
+* [ ] `ssh-keygen -a ~/.ssh/id_ed25519`
+* [x] `ssh-add ~/.ssh/id_ed25519`
+* [ ] `ssh-agent ~/.ssh/id_ed25519`
+* [ ] `ssh-copy-id ~/.ssh/id_ed25519`
 
-* [ ] `-d`
-* [x] `-r`
-* [ ] `-R`
-* [ ] `-a`
-* [ ] `-c`
+> **Explanation:** `ssh-add` asks for the passphrase once and gives the key to the agent. `ssh-add -l` lists loaded keys. Running `ssh-agent FILE` would try to run `FILE` as a command.
 
-#### Q. Which SCP option specifies a non-default port?
+#### Q. Which command prints the fingerprint of the key in `~/.ssh/id_ed25519.pub`?
 
-* [ ] `-p`
-* [x] `-P`
-* [ ] `-o`
-* [ ] `-port`
-* [ ] `-n`
+* [ ] `ssh-keygen -p -f ~/.ssh/id_ed25519.pub`
+* [x] `ssh-keygen -lf ~/.ssh/id_ed25519.pub`
+* [ ] `ssh-keygen -t ~/.ssh/id_ed25519.pub`
+* [ ] `ssh-keygen -R ~/.ssh/id_ed25519.pub`
 
-#### Q. What does SFTP stand for?
+> **Explanation:** `-l` shows the fingerprint and `-f` names the file. `-p` changes a key's passphrase, and `-R` removes a host from `known_hosts`.
 
-* [ ] Simple File Transfer Protocol
-* [x] Secure File Transfer Protocol
-* [ ] System File Transfer Protocol
-* [ ] Server File Transfer Protocol
-* [ ] Standard FTP
+#### Q. What is stored in the client's `~/.ssh/known_hosts` file?
 
-#### Q. Which command starts an interactive SFTP session?
+* [ ] Public keys of users allowed to log in to this machine
+* [x] Host keys of servers you have connected to, used to detect impersonation
+* [ ] Hostnames and aliases for your saved connections
+* [ ] A log of past SSH sessions
 
-* [ ] `ftp username@server`
-* [x] `sftp username@server`
-* [ ] `ssh --ftp username@server`
-* [ ] `connect-sftp username@server`
-* [ ] `ftps username@server`
+> **Explanation:** On first connection you accept the server's host key, and later connections check it against this file. Aliases belong in `~/.ssh/config`, and user keys in `authorized_keys`.
 
-#### Q. In an SFTP session, which command uploads a local file to the remote server?
+#### Q. `ssh` warns `REMOTE HOST IDENTIFICATION HAS CHANGED!` for a server. What is the right first step?
 
-* [ ] `upload filename`
-* [x] `put filename`
-* [ ] `send filename`
-* [ ] `copy filename`
-* [ ] `push filename`
+* [ ] Delete `~/.ssh/known_hosts` and reconnect
+* [x] Confirm the server's new host-key fingerprint through a trusted channel before trusting it
+* [ ] Reconnect with `-o StrictHostKeyChecking=no`
+* [ ] Generate a new client key with `ssh-keygen`
 
-#### Q. In an SFTP session, which command downloads a file from the remote server?
+> **Explanation:** A changed host key may mean a reinstall, or a man-in-the-middle attack. Verify it first; only then remove the old entry with `ssh-keygen -R host`. Deleting entries or disabling checking removes the protection.
 
-* [ ] `download filename`
-* [x] `get filename`
-* [ ] `receive filename`
-* [ ] `fetch filename`
-* [ ] `pull filename`
+#### Q. With this block in `~/.ssh/config`, what does `ssh web` do?
 
-#### Q. Which file stores known host keys for SSH connections?
+```text
+Host web
+    HostName 203.0.113.10
+    User deploy
+    Port 2222
+```
 
-* [ ] `~/.ssh/authorized_keys`
-* [ ] `~/.ssh/id_rsa.pub`
-* [x] `~/.ssh/known_hosts`
-* [ ] `~/.ssh/config`
-* [ ] `~/.ssh/identity`
+* [ ] Looks up a host named `web` in DNS and connects on port 22
+* [x] Connects to `203.0.113.10` on port 2222 as user `deploy`
+* [ ] Connects to `203.0.113.10` on port 22 as your local username
+* [ ] Fails, because `Host` entries are read only by `sshd`
 
-#### Q. Which SSH configuration file is used to define connection settings per host?
+> **Explanation:** A `Host` block defines an alias, and the keywords under it apply when you connect to that alias. `IdentityFile` can also be set there, and `-F file` points `ssh` at a different config file.
 
-* [ ] `~/.ssh/known_hosts`
-* [ ] `~/.ssh/authorized_keys`
-* [x] `~/.ssh/config`
-* [ ] `/etc/ssh/sshd_config`
-* [ ] `~/.ssh/options`
+#### Q. A server was rebuilt, and you have verified its new host key. Which command removes only its old entry from `~/.ssh/known_hosts`?
 
-#### Q. What is the main SSH server configuration file?
+* [ ] `ssh-keygen -l -F server.example.com`
+* [x] `ssh-keygen -R server.example.com`
+* [ ] `ssh-add -d server.example.com`
+* [ ] `rm ~/.ssh/known_hosts`
+
+> **Explanation:** `ssh-keygen -R host` deletes that host's keys from `known_hosts` and keeps a backup. `-F` only finds and prints the entry, `ssh-add -d` removes keys from the agent, and deleting the file discards every saved host key.
+
+#### Q. Which file configures the SSH server daemon, as opposed to the client?
 
 * [ ] `/etc/ssh/ssh_config`
 * [x] `/etc/ssh/sshd_config`
-* [ ] `/etc/ssh/config`
+* [ ] `~/.ssh/config`
 * [ ] `/etc/sshd.conf`
-* [ ] `/var/ssh/sshd_config`
 
-#### Q. Which SSH option increases verbosity for debugging connection issues?
+> **Explanation:** The extra `d` stands for daemon: `sshd_config` controls the server, while `ssh_config` and `~/.ssh/config` control the client.
 
-* [ ] `-d`
+#### Q. Which pair of `sshd_config` settings blocks direct root logins and allows only key-based logins?
+
+* [ ] `PermitRootLogin yes` and `PasswordAuthentication yes`
+* [x] `PermitRootLogin no` and `PasswordAuthentication no`
+* [ ] `RootLogin disabled` and `PasswordLogin no`
+* [ ] `PermitRootLogin no` and `PubkeyAuthentication no`
+
+> **Explanation:** `PermitRootLogin no` blocks root over SSH, and `PasswordAuthentication no` forces key authentication. `PubkeyAuthentication no` would turn off keys, which is the opposite of what you want.
+
+#### Q. You edited `/etc/ssh/sshd_config` on a remote server. What is the safest way to apply the change?
+
+* [ ] Reboot the server and reconnect
+* [x] Run `sudo sshd -t`, reload the service, and test a new connection before closing the current one
+* [ ] Run `sudo systemctl stop ssh`, then start it again from the new session
+* [ ] Close your session first, then reconnect to load the new settings
+
+> **Explanation:** `sshd -t` catches syntax errors before they can lock you out. Reloading keeps existing sessions alive, so if the new login fails you can still fix the config from the open session.
+
+#### Q. You changed `sshd` to listen on port 2222 on a server with UFW. Which firewall step is needed so you can still connect?
+
+* [ ] `sudo ufw deny 2222/tcp`
+* [x] `sudo ufw allow 2222/tcp`
+* [ ] `sudo ufw allow 2222/udp`
+* [ ] `sudo ufw delete allow 2222/tcp`
+
+> **Explanation:** SSH uses TCP, so the new port must be allowed before you rely on it; then remove the old port 22 rule. A non-standard port reduces scan noise but does not replace strong authentication.
+
+#### Q. Which command makes the SSH service start automatically at boot on a Debian-based systemd system?
+
+* [ ] `sudo systemctl start ssh`
+* [x] `sudo systemctl enable ssh`
+* [ ] `sudo systemctl reload ssh`
+* [ ] `sudo systemctl status ssh`
+
+> **Explanation:** `enable` creates the links that start the unit at boot, and `start` runs it now. `enable --now` does both. On many RPM-based systems the unit is named `sshd`.
+
+#### Q. Which option increases `ssh` output so you can see where a connection or authentication is failing?
+
+* [ ] `-q`
 * [x] `-v`
 * [ ] `-V`
-* [ ] `-debug`
+* [ ] `-N`
+
+> **Explanation:** `-v` prints debug messages, and `-vv` or `-vvv` add more detail. `-V` prints the version, `-q` suppresses warnings, and `-N` skips the remote command.
+
+#### Q. What does `ssh -L 8080:localhost:5432 user@db.example.com` do?
+
+* [ ] Opens port 8080 on `db.example.com` and forwards it to port 5432 on your machine
+* [x] Opens port 8080 on your machine and forwards it through SSH to port 5432 on `db.example.com`
+* [ ] Starts a SOCKS proxy on local port 8080
+* [ ] Copies the database on port 5432 to local port 8080
+
+> **Explanation:** `-L local_port:dest_host:dest_port` is local forwarding. `localhost` is resolved on the server side, so connecting to `localhost:8080` on your machine reaches the server's local port 5432.
+
+#### Q. Which option creates a reverse tunnel, so that a port on the remote server forwards back to a service on your machine?
+
+* [ ] `-L`
+* [x] `-R`
 * [ ] `-D`
+* [ ] `-X`
 
-#### Q. What type of cryptography does SSH use for secure authentication?
+> **Explanation:** `-R remote_port:host:port` opens the listening port on the server and sends connections back through the tunnel. `-L` listens locally, `-D` starts a SOCKS proxy, and `-X` forwards X11.
 
-* [ ] Symmetric cryptography only
-* [x] Public-key cryptography
-* [ ] Hash-based cryptography only
-* [ ] Caesar cipher
-* [ ] No encryption
+#### Q. What does `ssh -D 1080 user@host` provide?
 
-#### Q. Which command enables the SSH service to start at boot on a systemd-based system?
+* [ ] A debug log written to port 1080
+* [x] A local SOCKS proxy on port 1080 that sends traffic out through `host`
+* [ ] A forward from local port 1080 to the same port on `host`
+* [ ] A disconnect after 1080 seconds of inactivity
 
-* [ ] `systemctl start ssh`
-* [x] `systemctl enable ssh`
-* [ ] `service ssh enable`
-* [ ] `ssh --enable`
-* [ ] `chkconfig ssh on`
+> **Explanation:** `-D` sets up dynamic port forwarding. Applications configured to use `localhost:1080` as a SOCKS proxy reach any destination as if they were connecting from `host`.
 
-#### Q. What is the purpose of SSH agent?
+#### Q. Why add `-N` to a command such as `ssh -N -L 8080:localhost:80 user@host`?
 
-* [ ] To generate new SSH keys
-* [x] To hold private keys in memory for passwordless authentication
-* [ ] To configure SSH server settings
-* [ ] To transfer files securely
-* [ ] To scan for SSH vulnerabilities
+* [ ] It disables host-key checking for the tunnel
+* [x] It keeps the tunnel open without running a remote command or shell
+* [ ] It uses numeric IP addresses only
+* [ ] It compresses traffic through the tunnel
 
-#### Q. Which command adds a private key to the SSH agent?
+> **Explanation:** `-N` is for forwarding-only sessions. It is often combined with `-f` to send `ssh` to the background after authentication. Compression is `-C`.
 
-* [ ] `ssh-keygen`
-* [x] `ssh-add`
-* [ ] `ssh-agent add`
-* [ ] `ssh-key add`
-* [ ] `ssh-load`
+#### Q. Which option connects to an internal server through the bastion host `jump.example.com` in a single command?
 
-#### Q. Which protocol does SFTP run over?
+* [ ] `ssh -L jump.example.com user@internal`
+* [x] `ssh -J user@jump.example.com user@internal`
+* [ ] `ssh -D jump.example.com user@internal`
+* [ ] `ssh -F jump.example.com user@internal`
 
-* [ ] FTP
-* [x] SSH
-* [ ] HTTP
-* [ ] TLS
-* [ ] Telnet
+> **Explanation:** `-J` (ProxyJump) connects to the jump host first and tunnels the SSH connection to the target through it. In `~/.ssh/config` the same thing is written as `ProxyJump`.
 
-#### Q. What does the `-l` option do in the `ssh` command?
+#### Q. What does `ssh -X user@host` enable?
 
-* [x] Specifies the login username
-* [ ] Lists available hosts
-* [ ] Enables logging
-* [ ] Sets the local port
-* [ ] Loads a key file
+* [ ] Extra-verbose debugging output
+* [x] X11 forwarding, so graphical programs on `host` display on your screen
+* [ ] Exclusive access, blocking other sessions
+* [ ] Extended key exchange algorithms
 
-#### Q. Which command can be used to securely tunnel another protocol through SSH?
+> **Explanation:** `-X` forwards X11 connections through the encrypted tunnel. The server must allow it with `X11Forwarding yes`.
 
-* [ ] `ssh-tunnel`
-* [x] `ssh -L`
-* [ ] `ssh-forward`
-* [ ] `sshtunnel`
-* [ ] `ssh-proxy`
+#### Q. Which command copies `report.pdf` from your machine to `/srv/docs/` on `server`?
 
-#### Q. What is the minimum recommended key size for RSA SSH keys?
+* [ ] `scp user@server:/srv/docs/ report.pdf`
+* [x] `scp report.pdf user@server:/srv/docs/`
+* [ ] `scp report.pdf server/srv/docs/`
+* [ ] `scp -u report.pdf user@server:/srv/docs/`
 
-* [ ] 512 bits
-* [ ] 1024 bits
-* [x] 2048 bits
-* [ ] 4096 bits
-* [ ] 8192 bits
+> **Explanation:** `scp` works like `cp`: `scp SOURCE DEST`, with remote paths written as `user@host:path`. Without the colon, `server/srv/docs/` is just a local path.
 
-#### Q. Which SSH option disables strict host key checking?
+#### Q. Which command downloads `/var/log/app.log` from `server` into the current local directory?
 
-* [ ] `-o NoHostKey=yes`
-* [ ] `-o IgnoreHostKey=yes`
-* [x] `-o StrictHostKeyChecking=no`
-* [ ] `-o DisableHostCheck=yes`
-* [ ] `-o SkipHostKey=yes`
+* [ ] `scp . user@server:/var/log/app.log`
+* [x] `scp user@server:/var/log/app.log .`
+* [ ] `scp -d user@server:/var/log/app.log`
+* [ ] `scp user@server /var/log/app.log .`
 
-#### Q. What does the `-X` option enable when connecting via SSH?
+> **Explanation:** The remote file is the source, so it comes first, and `.` (the current directory) is the destination.
 
-* [ ] Extra verbose output
-* [x] X11 forwarding for graphical applications
-* [ ] XML output format
-* [ ] Extended authentication
-* [ ] Xterm mode
+#### Q. Which command copies the whole `site/` directory to a server whose SSH daemon listens on port 2222?
 
-#### Q. What does the `-D` option do in SSH?
+* [ ] `scp -p 2222 -r site/ user@server:/var/www/`
+* [x] `scp -P 2222 -r site/ user@server:/var/www/`
+* [ ] `scp -P 2222 site/ user@server:/var/www/`
+* [ ] `scp --port 2222 -R site/ user@server:/var/www/`
 
-* [ ] Disables password authentication
-* [x] Creates a dynamic SOCKS proxy
-* [ ] Enables debug mode
-* [ ] Downloads files
-* [ ] Deletes remote files
+> **Explanation:** `scp` uses uppercase `-P` for the port and `-r` to copy directories. Without `-r` it refuses to copy a directory, and lowercase `-p` preserves times and modes.
 
-#### Q. What is the purpose of the `ssh-agent`?
-
-* [ ] To generate SSH keys
-* [x] To cache SSH private keys in memory for passwordless authentication
-* [ ] To manage SSH connections
-* [ ] To configure SSH settings
-* [ ] To monitor SSH traffic
-
-#### Q. Which command adds a private key to the ssh-agent?
-
-* [ ] `ssh-keygen -a`
-* [x] `ssh-add`
-* [ ] `ssh-agent add`
-* [ ] `ssh-load`
-* [ ] `ssh-import`
-
-#### Q. What does the `-N` option do in an SSH command?
-
-* [ ] Enables null authentication
-* [x] Does not execute a remote command (useful for port forwarding)
-* [ ] Uses numeric IP addresses
-* [ ] Disables host key checking
-* [ ] Enables NAT traversal
-
-#### Q. How do you specify a different SSH configuration file?
-
-* [ ] `ssh --config file`
-* [x] `ssh -F file`
-* [ ] `ssh -c file`
-* [ ] `ssh -C file`
-* [ ] `ssh --file file`
-
-#### Q. What is the purpose of the `~/.ssh/config` file?
-
-* [ ] To store SSH keys
-* [x] To define connection settings for specific hosts
-* [ ] To log SSH connections
-* [ ] To store known hosts
-* [ ] To configure the SSH daemon
-
-#### Q. Which SCP option preserves file modification times and permissions?
+#### Q. Which `scp` option preserves the source files' modification times, access times and permission modes?
 
 * [ ] `-r`
 * [x] `-p`
-* [ ] `-v`
 * [ ] `-C`
 * [ ] `-q`
 
-#### Q. What does the `-C` option do in SSH and SCP?
+> **Explanation:** Lowercase `-p` preserves times and modes. `-r` copies recursively, `-C` compresses and `-q` hides the progress meter.
 
-* [ ] Clears the screen
-* [x] Enables compression
-* [ ] Checks connection
-* [ ] Creates directories
-* [ ] Copies recursively
+#### Q. Since OpenSSH 9.0, what protocol does the `scp` command use by default, and how do you force the legacy one?
 
-#### Q. Which command displays the fingerprint of an SSH key?
+* [ ] The SCP/rcp protocol; force SFTP with `-s`
+* [x] The SFTP protocol; force the legacy SCP protocol with `-O`
+* [ ] FTP over TLS; force SCP with `-T`
+* [ ] The rsync protocol; force SCP with `-L`
 
-* [ ] `ssh-keygen -p`
-* [x] `ssh-keygen -lf`
-* [ ] `ssh-add -l`
-* [ ] `ssh-fingerprint`
-* [ ] `ssh-show`
+> **Explanation:** Modern `scp` sends its transfers over SFTP. The `-O` flag switches back to the original SCP/rcp protocol for old servers that lack an SFTP subsystem.
 
-#### Q. What is the default location for the SSH server configuration file?
+#### Q. In an interactive `sftp` session, which commands upload a local file and download a remote file?
 
-* [ ] `~/.ssh/sshd_config`
-* [x] `/etc/ssh/sshd_config`
-* [ ] `/etc/sshd.conf`
-* [ ] `/var/ssh/config`
-* [ ] `/usr/ssh/sshd_config`
+* [ ] `send` and `receive`
+* [x] `put` and `get`
+* [ ] `push` and `pull`
+* [ ] `upload` and `download`
 
-#### Q. Which directive in sshd_config disables password authentication?
+> **Explanation:** `put local_file` uploads to the remote working directory and `get remote_file` downloads it. `ls`, `cd`, `mkdir` and `rm` act on the remote side, and `exit` ends the session.
 
-* [ ] `NoPassword yes`
-* [x] `PasswordAuthentication no`
-* [ ] `DisablePassword yes`
-* [ ] `AuthPassword no`
-* [ ] `PasswordLogin no`
+#### Q. How is SFTP related to SSH?
 
-#### Q. What is SOCKS proxy mode in SSH?
+* [ ] SFTP is FTP with TLS added on top
+* [x] SFTP runs as a subsystem over an SSH connection, using the same port and authentication
+* [ ] SFTP needs its own daemon listening on port 21
+* [ ] SFTP sends data unencrypted after logging in over SSH
 
-* [ ] A secure file transfer mode
-* [x] Dynamic port forwarding that creates a local SOCKS proxy
-* [ ] A compression algorithm
-* [ ] A key exchange method
-* [ ] A connection pooling feature
+> **Explanation:** SFTP is enabled through a `Subsystem sftp` line in `sshd_config`. It uses SSH's encryption and logins, typically on port 22. FTP with TLS is FTPS, a different protocol.
+
+#### Q. The server's SSH daemon listens on port 2222. How do you point `rsync` at it?
+
+* [ ] `rsync -avz -P 2222 ./project/ user@host:/srv/project/`
+* [x] `rsync -avz -e "ssh -p 2222" ./project/ user@host:/srv/project/`
+* [ ] `rsync -avz --ssh-port=2222 ./project/ user@host:/srv/project/`
+* [ ] `rsync -avz ./project/ user@host:2222/srv/project/`
+
+> **Explanation:** `-e` sets the remote shell command, so the SSH options go there. In `rsync`, `-P` means `--partial --progress`, not port.
+
+#### Q. What does this command do?
+
+```bash
+ssh user@remotehost "tar -czf - /srv/data" > data.tar.gz
+```
+
+* [ ] Copies the local `data.tar.gz` to the remote host
+* [x] Creates a compressed archive on the remote host and streams it into a local file
+* [ ] Extracts `data.tar.gz` into `/srv/data` on the remote host
+* [ ] Creates `data.tar.gz` on the remote host and leaves it there
+
+> **Explanation:** `-f -` makes `tar` write the archive to stdout, `ssh` carries that stdout back, and the local `>` saves it. No temporary archive is written on the server.
+
+#### Q. Which plain-text protocol should you avoid on untrusted networks, because it sends logins and data unencrypted?
+
+* [ ] SFTP
+* [x] FTP
+* [ ] SCP
+* [ ] FTPS
+
+> **Explanation:** Plain FTP sends credentials and files in clear text. SFTP and SCP run over SSH, and FTPS adds TLS encryption to FTP.
