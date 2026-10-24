@@ -1,391 +1,458 @@
-#### Q. What is the default shell on most Linux distributions?
+# Shell and Bash Quiz
 
-* [ ] zsh
-* [x] bash
-* [ ] sh
-* [ ] ksh
-* [ ] tcsh
+Notes: [Shells and Terminals](../notes/shells_and_bash_configuration.md), [Variables](../notes/environment_variable.md), [Data Streams](../notes/pipe_and_redirect.md)
 
-#### Q. What does "bash" stand for?
+Check your understanding of Bash startup files, variables, quoting, redirection and safe scripting.
 
-* [ ] Basic Shell
-* [x] Bourne-Again Shell
-* [ ] Batch Shell
-* [ ] Binary Shell
-* [ ] Best Available Shell
+#### Q. What is the difference between a terminal and a shell?
 
-#### Q. Which file lists all valid login shells on a Linux system?
+* [ ] They are two names for the same program
+* [x] The terminal is the window you type into; the shell interprets the commands
+* [ ] The shell draws the window; the terminal runs the commands
+* [ ] A terminal is used only for remote sessions, a shell only for local ones
+
+> **Explanation:** A terminal emulator such as GNOME Terminal or xterm provides the window and keyboard input. The shell (Bash, Zsh, and so on) runs inside it, parses commands and starts programs.
+
+#### Q. Which file lists the shells that may be used as login shells, and is checked by `chsh`?
 
 * [ ] `/etc/passwd`
 * [x] `/etc/shells`
-* [ ] `/etc/shell.conf`
-* [ ] `/etc/bash.bashrc`
 * [ ] `/etc/login.defs`
+* [ ] `/etc/bash.bashrc`
 
-#### Q. Which command displays your current shell?
+> **Explanation:** `chsh -s /bin/zsh` normally refuses a shell that is not listed in `/etc/shells`. Each user's chosen login shell is then stored in the last field of their `/etc/passwd` entry.
 
-* [ ] `echo $PATH`
-* [x] `echo $SHELL`
-* [ ] `which shell`
-* [ ] `shell --version`
-* [ ] `ps shell`
+#### Q. Your login shell is Bash, but you have just typed `zsh` to try it out. Which command reliably shows the shell you are running right now?
 
-#### Q. Which command permanently changes your default login shell?
+* [ ] `echo "$SHELL"`
+* [x] `ps -p "$$" -o comm=`
+* [ ] `cat /etc/shells`
+* [ ] `echo "$PATH"`
 
-* [ ] `shell`
-* [x] `chsh`
-* [ ] `setshell`
-* [ ] `usermod -shell`
-* [ ] `newshell`
+> **Explanation:** `$$` is the PID of the current shell, and `ps` prints its command name. `$SHELL` normally holds your default login shell, so it would still say `/bin/bash`.
 
-#### Q. Which configuration file is executed for interactive non-login bash shells?
+#### Q. `echo "$0"` prints `-bash`. What does the leading dash tell you?
+
+* [ ] The shell is running in POSIX compatibility mode
+* [x] The shell was started as a login shell
+* [ ] The shell is a non-interactive subshell
+* [ ] The shell is running with restricted permissions
+
+> **Explanation:** By convention, a login shell's `argv[0]` starts with `-`. Login shells read `/etc/profile` and then the first of `~/.bash_profile`, `~/.bash_login` or `~/.profile` that exists.
+
+#### Q. You log in over SSH, and Bash starts as a login shell. A user has both `~/.bash_profile` and `~/.profile`. Which files does Bash read?
+
+* [ ] Only `~/.bashrc`
+* [x] `/etc/profile`, then `~/.bash_profile` only
+* [ ] `/etc/profile`, then `~/.bash_profile`, then `~/.profile`
+* [ ] `~/.profile`, then `/etc/profile`
+
+> **Explanation:** A login shell reads `/etc/profile`, then only the first user file it finds out of `~/.bash_profile`, `~/.bash_login` and `~/.profile`. Here `~/.profile` is skipped because `~/.bash_profile` exists.
+
+#### Q. Which file does Bash read when you open a new terminal tab in a desktop session (an interactive, non-login shell)?
 
 * [ ] `~/.bash_profile`
 * [x] `~/.bashrc`
-* [ ] `~/.profile`
-* [ ] `~/.bash_login`
+* [ ] `~/.bash_logout`
 * [ ] `/etc/profile`
 
-#### Q. Which configuration file is executed for login shells?
+> **Explanation:** Interactive non-login shells read `~/.bashrc`, often after a system-wide file such as `/etc/bash.bashrc`. Aliases, functions and prompt settings usually live there.
 
-* [ ] `~/.bashrc`
-* [x] `~/.bash_profile`
-* [ ] `~/.bash_logout`
-* [ ] `/etc/bashrc`
-* [ ] `~/.inputrc`
+#### Q. Aliases defined in `~/.bashrc` are missing when you log in over SSH. What is the usual fix?
 
-#### Q. What is executed when a login shell exits?
+* [ ] Move the aliases into `/etc/shells`
+* [x] Source `~/.bashrc` from `~/.bash_profile`
+* [ ] Rename `~/.bashrc` to `~/.bash_logout`
+* [ ] Add `export` in front of each alias
+
+> **Explanation:** SSH starts a login shell, which reads `~/.bash_profile` rather than `~/.bashrc`. Adding `if [ -f ~/.bashrc ]; then . ~/.bashrc; fi` to `~/.bash_profile` gives both kinds of shell the same settings.
+
+#### Q. Which file does Bash run when a login shell exits?
 
 * [ ] `~/.bashrc`
 * [ ] `~/.bash_profile`
 * [x] `~/.bash_logout`
-* [ ] `/etc/profile`
 * [ ] `~/.profile`
 
-#### Q. Which variable holds the current user's home directory?
+> **Explanation:** `~/.bash_logout` runs when a login shell exits, which makes it handy for cleanup such as clearing the screen.
 
-* [ ] `$PATH`
-* [ ] `$USER`
-* [x] `$HOME`
-* [ ] `$PWD`
-* [ ] `$SHELL`
+#### Q. You edited `~/.bashrc` to add an alias. How do you apply it to the current shell without opening a new terminal?
 
-#### Q. Which command creates an alias in bash?
+* [ ] `bash ~/.bashrc`
+* [x] `source ~/.bashrc`
+* [ ] `./.bashrc`
+* [ ] `export ~/.bashrc`
 
-* [ ] `set ll='ls -la'`
-* [x] `alias ll='ls -la'`
-* [ ] `define ll='ls -la'`
-* [ ] `shortcut ll='ls -la'`
-* [ ] `bind ll='ls -la'`
+> **Explanation:** `source` (or `.`) runs the file inside the current shell, so its aliases and variables stay defined. `bash ~/.bashrc` runs it in a child process whose changes vanish when it exits.
 
-#### Q. Which command displays all currently defined aliases?
+#### Q. A script run with `bash` exports a new value. What does the parent shell print afterwards?
 
-* [ ] `list alias`
-* [x] `alias`
-* [ ] `show aliases`
-* [ ] `echo $ALIAS`
-* [ ] `aliases --list`
+```bash
+export TOKEN=old
+cat > change.sh <<'EOF'
+export TOKEN=new
+EOF
+bash change.sh
+echo "$TOKEN"
+```
 
-#### Q. What does the `export` command do?
+* [x] `old`
+* [ ] `new`
+* [ ] An empty line
+* [ ] `TOKEN`
 
-* [ ] Deletes a variable
-* [x] Makes a variable available to child processes
-* [ ] Imports a variable from another shell
-* [ ] Saves a variable to a file
-* [ ] Prints a variable value
+> **Explanation:** `bash change.sh` runs in a child process. A child gets a copy of the parent's environment and cannot change the parent's copy. Using `source change.sh` would print `new`.
 
-#### Q. Which variable contains the directories searched for executable programs?
+#### Q. Why must a Python virtual environment be activated with `source venv/bin/activate`, not by running `./venv/bin/activate`?
 
-* [x] `$PATH`
-* [ ] `$HOME`
-* [ ] `$BIN`
-* [ ] `$EXEC`
-* [ ] `$PROGRAMS`
+* [ ] The `activate` file is not marked executable
+* [x] It must change `PATH` in the current shell, which a child process cannot do
+* [ ] Running it directly would install packages globally
+* [ ] `source` gives the script root privileges
 
-#### Q. What is the purpose of the `source` command?
+> **Explanation:** `activate` works by changing variables such as `PATH` and `VIRTUAL_ENV`. Only code that runs in the current shell, by being sourced, can change that shell's environment.
 
-* [ ] Downloads a file
-* [x] Executes commands from a file in the current shell
-* [ ] Creates a backup copy
-* [ ] Compiles a script
-* [ ] Displays file source code
+#### Q. What does this print, given the difference between `( )` and `{ }`?
 
-#### Q. Which symbol is used for single-line comments in bash scripts?
+```bash
+COLOR=blue
+( COLOR=red )
+echo "$COLOR"
+{ COLOR=green; }
+echo "$COLOR"
+```
 
-* [ ] `//`
-* [x] `#`
-* [ ] `--`
-* [ ] `/* */`
-* [ ] `;`
+* [ ] `red` then `green`
+* [x] `blue` then `green`
+* [ ] `blue` then `blue`
+* [ ] `red` then `red`
 
-#### Q. What does the `$?` variable contain?
+> **Explanation:** Parentheses run commands in a subshell, so its assignment is lost. Braces group commands in the current shell, so `green` sticks. Braces need spaces and a trailing `;` before `}`.
 
-* [ ] Current process ID
-* [x] Exit status of the last command
-* [ ] Number of arguments
-* [ ] Current shell name
-* [ ] Last background job PID
+#### Q. What does `printenv` show for a variable that was set but never exported?
 
-#### Q. What does `$0` represent in a bash script?
+```bash
+count=5
+printenv count
+```
 
-* [x] The name of the script
-* [ ] The first argument
-* [ ] The exit status
-* [ ] The process ID
-* [ ] The number of arguments
+* [ ] It prints `5`
+* [x] It prints nothing, because `count` is a shell variable that was not exported
+* [ ] It prints `count=5`
+* [ ] It fails with a syntax error
 
-#### Q. Which variable holds the number of positional parameters passed to a script?
+> **Explanation:** `printenv` is an external program and sees only exported variables. Run `export count` first. `echo "$count"` would still print `5`, because the shell expands the variable itself.
 
-* [ ] `$@`
-* [ ] `$*`
-* [x] `$#`
-* [ ] `$0`
-* [ ] `$?`
+#### Q. What does `DEBUG=1 ./app` do?
 
-#### Q. What does `$@` represent in a bash script?
+* [ ] Sets `DEBUG` permanently in the current shell and runs `./app`
+* [x] Puts `DEBUG=1` in the environment of `./app` only
+* [ ] Runs `./app` with debug tracing turned on in Bash
+* [ ] Fails, because `export` is required
 
-* [ ] The script name
-* [ ] The number of arguments
-* [x] All positional parameters as separate words
-* [ ] The exit status
-* [ ] The current working directory
+> **Explanation:** A `NAME=value` prefix adds the variable to that one command's environment. Afterwards `echo "$DEBUG"` in the shell prints nothing.
 
-#### Q. Which command reads user input into a variable?
+#### Q. Which line adds `~/bin` to the front of the command search path for this shell and its children?
 
-* [ ] `input`
-* [x] `read`
-* [ ] `get`
-* [ ] `scan`
-* [ ] `prompt`
+* [ ] `PATH=~/bin`
+* [x] `export PATH="$HOME/bin:$PATH"`
+* [ ] `export PATH="$PATH;$HOME/bin"`
+* [ ] `set PATH=$HOME/bin:$PATH`
 
-#### Q. How do you make a bash script executable?
+> **Explanation:** `PATH` entries are separated by colons and searched left to right, so prepending puts `~/bin` first. `PATH=~/bin` throws away the existing directories, and `;` is not a separator on Linux.
 
-* [ ] `bash script.sh`
-* [x] `chmod +x script.sh`
-* [ ] `exec script.sh`
-* [ ] `run script.sh`
-* [ ] `enable script.sh`
+#### Q. What does `env -i bash --norc` give you?
 
-#### Q. What is the shebang line for a bash script?
+* [ ] A Bash shell that runs as root
+* [x] A new Bash process with an empty environment
+* [ ] A copy of the current shell, including its unexported variables
+* [ ] A Bash shell that ignores `PATH` lookups
 
-* [ ] `#/bin/bash`
-* [x] `#!/bin/bash`
+> **Explanation:** `env -i` clears the environment before starting the command. This is useful for checking whether a script secretly depends on your personal variables.
+
+#### Q. What does `readonly MAX_RETRIES=5` followed by `MAX_RETRIES=3` do?
+
+* [ ] Silently keeps the value `5`
+* [x] Fails with `MAX_RETRIES: readonly variable`
+* [ ] Changes the value to `3` and prints a warning
+* [ ] Changes the value to `3` only in child processes
+
+> **Explanation:** Read-only variables cannot be reassigned or `unset` in that shell, so Bash reports an error. This is useful for constants in scripts.
+
+#### Q. A script starts with `: "${API_KEY:?API_KEY is required}"`. What happens if `API_KEY` is unset?
+
+* [ ] `API_KEY` is set to the text `API_KEY is required`
+* [x] The script prints the message to stderr and exits with a non-zero status
+* [ ] The line is ignored, because `:` is a comment
+* [ ] The script prompts the user to type a value
+
+> **Explanation:** `${VAR:?msg}` aborts a non-interactive shell with `msg` if `VAR` is unset or empty. `:` is a no-op command that still expands its arguments, so the check runs.
+
+#### Q. What does this print when using the `${x:-7}` default-value expansion?
+
+```bash
+x=5; echo "${x:-7}"; unset x; echo "${x:-7}"
+```
+
+* [ ] `5` then nothing
+* [x] `5` then `7`
+* [ ] `7` then `7`
+* [ ] `x:-7` then `x:-7`
+
+> **Explanation:** `${x:-7}` uses the default `7` only when `x` is unset or empty, and does not assign it. The `${x:=7}` form would also store `7` in `x`.
+
+#### Q. Which shebang finds `bash` through the user's `PATH`, so the script works where Bash is not at `/bin/bash`?
+
+* [ ] `#!/bin/sh`
+* [x] `#!/usr/bin/env bash`
 * [ ] `#!bash`
-* [ ] `#!/bash`
-* [ ] `#/usr/bin/bash`
+* [ ] `# /usr/bin/bash`
 
-#### Q. Which operator is used for command substitution in bash?
+> **Explanation:** `env` searches `PATH` for `bash`, which helps on systems such as FreeBSD or macOS with Homebrew. `#!/bin/sh` may be Dash, which lacks Bash features. A shebang needs `#!` followed by the interpreter's full path.
 
-* [ ] `{command}`
-* [x] `$(command)`
-* [ ] `[command]`
-* [ ] `<command>`
-* [ ] `@(command)`
+#### Q. A script `deploy.sh` has a valid shebang. What lets you run it as `./deploy.sh`?
 
-#### Q. What does the `PS1` variable control?
+* [ ] `bash deploy.sh`
+* [x] `chmod +x deploy.sh`
+* [ ] `source deploy.sh`
+* [ ] `export deploy.sh`
 
-* [ ] Path settings
-* [x] The primary command prompt
-* [ ] Process status
-* [ ] Password settings
-* [ ] Print settings
+> **Explanation:** The kernel will only `execve` the file if it has execute permission; it then reads the shebang to pick the interpreter. `bash deploy.sh` runs the script without needing `+x`, but that is not `./deploy.sh`.
 
-#### Q. Which command displays the value of an environment variable?
+#### Q. A script is run as `./greet.sh Ann Bob`. Inside it, what are `$0`, `$1` and `$#`?
 
-* [ ] `show VAR`
-* [x] `echo $VAR`
-* [ ] `print VAR`
-* [ ] `display $VAR`
-* [ ] `get VAR`
+* [ ] `Ann`, `Bob`, `2`
+* [x] `./greet.sh`, `Ann`, `2`
+* [ ] `./greet.sh`, `Ann`, `3`
+* [ ] `greet.sh`, `Bob`, `1`
 
-#### Q. What is the difference between single quotes and double quotes in bash?
+> **Explanation:** `$0` is the name the script was invoked by, `$1` is the first argument, and `$#` counts the arguments, not including `$0`.
 
-* [ ] There is no difference
-* [x] Single quotes preserve literal values; double quotes allow variable expansion
-* [ ] Single quotes allow variable expansion; double quotes preserve literal values
-* [ ] Single quotes are for numbers; double quotes are for strings
-* [ ] Single quotes are deprecated
+#### Q. What does this print, comparing `"$@"` with `"$*"`?
 
-#### Q. Which command runs a script in a subshell?
+```bash
+count() { echo "$#"; }
+set -- "a b" c
+count "$@"; count "$*"
+```
 
-* [x] `./script.sh`
-* [ ] `source script.sh`
-* [ ] `. script.sh`
-* [ ] `exec script.sh`
-* [ ] `eval script.sh`
+* [ ] `3` then `3`
+* [x] `2` then `1`
+* [ ] `1` then `2`
+* [ ] `2` then `2`
 
-#### Q. What is the purpose of `~/.inputrc`?
+> **Explanation:** `"$@"` expands to each argument as a separate word, keeping `a b` intact, so you get 2. `"$*"` joins every argument into one string, so you get 1. Use `"$@"` to pass arguments through safely.
 
-* [ ] Configures shell prompts
-* [x] Configures readline key bindings
-* [ ] Stores command history
-* [ ] Defines aliases
-* [ ] Sets environment variables
+#### Q. What do `$?`, `$$` and `$!` hold?
 
-#### Q. Which command displays the command history?
+* [ ] The PID of the last background job, the exit status, and the shell's PID
+* [x] The last command's exit status, the current shell's PID, and the PID of the last background job
+* [ ] The argument count, the shell's PID, and the last exit status
+* [ ] The current shell's PID, the parent's PID, and the last exit status
 
-* [ ] `show history`
-* [x] `history`
-* [ ] `hist`
-* [ ] `commands`
-* [ ] `log`
+> **Explanation:** `$?` is `0` on success and non-zero on failure. `$$` is the shell's own PID, and `$!` is set when you start something with `&`, which makes it useful with `wait "$!"`.
 
-#### Q. How do you run the previous command in bash?
+#### Q. What does `echo "Today is $(date +%A)"` do?
 
-* [ ] `prev`
-* [x] `!!`
-* [ ] `--`
-* [ ] `last`
-* [ ] `^`
+* [ ] Prints the text `$(date +%A)` literally
+* [x] Runs `date +%A` and puts its output into the string
+* [ ] Starts `date` in the background
+* [ ] Stores the output of `date` in a variable called `A`
 
-#### Q. What is the purpose of the `set -e` option in a bash script?
+> **Explanation:** `$(...)` is command substitution: the command's stdout, without trailing newlines, replaces the expression. Backticks do the same thing but are harder to nest.
 
-* [ ] Enables echo mode
-* [x] Exits the script immediately if any command fails
-* [ ] Exports all variables
-* [ ] Enables extended globbing
-* [ ] Sets environment variables
+#### Q. With `name=World`, what does `echo 'Hello $name'` print?
 
-#### Q. Which command displays the exit status of the last executed command?
+* [ ] `Hello World`
+* [x] `Hello $name`
+* [ ] `Hello`
+* [ ] `'Hello World'`
 
-* [ ] `echo $!`
-* [x] `echo $?`
-* [ ] `echo $$`
-* [ ] `echo $@`
-* [ ] `echo $#`
+> **Explanation:** Single quotes keep every character literal. Double quotes, as in `"Hello $name"`, still expand variables and command substitutions but prevent word splitting and globbing.
 
-#### Q. What does `$#` represent in a bash script?
+#### Q. Which alias definition makes `ll` run `ls -la`?
 
-* [ ] The script name
-* [ ] The last argument
-* [x] The number of arguments passed to the script
-* [ ] All arguments as a string
-* [ ] The process ID
+* [ ] `alias ll ls -la`
+* [x] `alias ll='ls -la'`
+* [ ] `alias ll=ls -la`
+* [ ] `set ll='ls -la'`
 
-#### Q. Which operator is used for command substitution in bash?
+> **Explanation:** There must be no spaces around `=`, and the value needs quotes because it contains a space. `alias` with no arguments lists all aliases, and `unalias ll` removes one.
 
-* [ ] `{command}`
-* [x] `$(command)` or backticks
-* [ ] `[command]`
-* [ ] `<command>`
-* [ ] `#command#`
+#### Q. You want a shortcut `backup notes.txt` that copies a file to `notes.txt.bak`. Why use a function instead of an alias?
 
-#### Q. Which shell option causes the script to exit when expanding an unset variable?
+* [ ] Aliases cannot contain the `cp` command
+* [x] A function can use its argument as `$1` anywhere in its body
+* [ ] Functions run faster because they are compiled
+* [ ] Aliases are deleted when the terminal is resized
 
-* [ ] `set +u`
-* [ ] `set -x`
-* [ ] `set -e`
-* [x] `set -u`
-* [ ] `set -n`
+> **Explanation:** An alias is only text substitution at the start of a command, so it cannot reuse an argument. `backup() { cp -- "$1" "$1.bak"; }` can. Use aliases for simple shortcuts and functions for logic.
 
-#### Q. What does enabling `set -o pipefail` do in a bash script?
+#### Q. Which of these is a valid Bash function definition?
 
-* [ ] Forces pipelines to run in the background
-* [x] Causes a pipeline to fail if any command in it fails
-* [ ] Disables error checking in pipelines
-* [ ] Redirects pipeline output to `/dev/null`
-* [ ] Enables command tracing for pipelines
+* [ ] `def greet { echo hi; }`
+* [x] `greet() { echo "hi $1"; }`
+* [ ] `greet() { echo "hi $1" }`
+* [ ] `function greet() echo "hi $1"`
 
-#### Q. What is the difference between `$@` and `$*`?
+> **Explanation:** The body is a brace group, which needs a space after `{` and a `;` or newline before `}`. Without the semicolon, Bash keeps reading and reports a syntax error.
 
-* [ ] There is no difference
-* [x] `$@` treats each argument as separate; `$*` treats all as one string
-* [ ] `$*` treats each argument as separate; `$@` treats all as one string
-* [ ] `$@` is for arrays; `$*` is for strings
-* [ ] `$*` includes the script name
+#### Q. In `PS1='\u@\h:\w\$ '`, what do `\u`, `\h` and `\w` expand to?
 
-#### Q. Which command makes a script executable?
+* [ ] User ID, home directory, and time
+* [x] Username, hostname, and current working directory
+* [ ] Uptime, history number, and window title
+* [ ] Username, home directory, and week day
 
-* [ ] `run script.sh`
-* [x] `chmod +x script.sh`
-* [ ] `exec script.sh`
-* [ ] `enable script.sh`
-* [ ] `./script.sh`
+> **Explanation:** `PS1` is the primary prompt. `\$` shows `$` for normal users and `#` for root.
 
-#### Q. What does the shebang `#!/bin/bash` do?
+#### Q. What is the difference between `HISTSIZE` and `HISTFILESIZE`?
 
-* [ ] Comments out the line
-* [x] Specifies the interpreter for the script
-* [ ] Imports bash functions
-* [ ] Enables bash mode
-* [ ] Prints bash version
+* [ ] They are aliases for the same setting
+* [x] `HISTSIZE` limits commands kept in memory; `HISTFILESIZE` limits lines saved in `~/.bash_history`
+* [ ] `HISTSIZE` is in kilobytes; `HISTFILESIZE` is in lines
+* [ ] `HISTSIZE` applies to root; `HISTFILESIZE` applies to normal users
 
-#### Q. Which command is commonly used to enable “strict mode” (exit on error, unset vars, pipeline failures) in bash scripts?
+> **Explanation:** During a session, Bash keeps up to `HISTSIZE` commands. When the shell exits, the history file is cut down to `HISTFILESIZE` lines.
+
+#### Q. In an interactive Bash shell, what does `sudo !!` do?
+
+* [ ] Runs `sudo` with no arguments twice
+* [x] Re-runs the previous command with `sudo` in front
+* [ ] Opens the history list in an editor
+* [ ] Repeats the last command that used `sudo`
+
+> **Explanation:** `!!` is history expansion for the previous command line. `!$` expands to the last argument of the previous command.
+
+#### Q. Which redirection sends both stdout and stderr of `make` to `build.log`, overwriting the file?
+
+* [ ] `make 2>&1 > build.log`
+* [x] `make > build.log 2>&1`
+* [ ] `make >> build.log 2>build.log`
+* [ ] `make | build.log`
+
+> **Explanation:** Redirections are processed left to right: stdout goes to the file, then stderr is pointed at the same place. `2>&1 > build.log` points stderr at the old stdout (the terminal) first. Bash's `&> build.log` is a shorter form.
+
+#### Q. Which command adds a line to the end of `notes.txt` instead of replacing its contents?
+
+* [ ] `echo "done" > notes.txt`
+* [x] `echo "done" >> notes.txt`
+* [ ] `echo "done" < notes.txt`
+* [ ] `echo "done" 2> notes.txt`
+
+> **Explanation:** `>>` appends, while `>` truncates the file first. `<` redirects input, and `2>` redirects only stderr.
+
+#### Q. How do you run `find / -name core` and throw away its "Permission denied" messages, while still seeing the results?
+
+* [ ] `find / -name core > /dev/null`
+* [x] `find / -name core 2>/dev/null`
+* [ ] `find / -name core &> /dev/null`
+* [ ] `find / -name core | /dev/null`
+
+> **Explanation:** Error messages go to file descriptor 2, so `2>/dev/null` discards just those. `> /dev/null` would discard the results, and `&>` would discard both streams.
+
+#### Q. Which command shows output on screen and also appends it to `run.log`?
+
+* [ ] `./run.sh > run.log`
+* [x] `./run.sh | tee -a run.log`
+* [ ] `./run.sh | tee run.log > /dev/null`
+* [ ] `./run.sh >> run.log 2>&1`
+
+> **Explanation:** `tee` copies stdin to the screen and to a file, and `-a` appends instead of overwriting. The redirect-only versions show nothing on screen.
+
+#### Q. What does this here-document print when its delimiter is quoted?
+
+```bash
+name=World
+cat <<'EOF'
+Hello $name
+EOF
+```
+
+* [ ] `Hello World`
+* [x] `Hello $name`
+* [ ] `Hello`
+* [ ] It fails because the delimiter is quoted
+
+> **Explanation:** Quoting the here-document delimiter (`'EOF'`) turns off expansion in the body. With an unquoted `EOF`, the shell would expand `$name` and print `Hello World`.
+
+#### Q. What does `diff <(ls dir1) <(ls dir2)` do?
+
+* [ ] Compares two files literally named `ls dir1` and `ls dir2`
+* [x] Compares the outputs of the two `ls` commands as if they were files
+* [ ] Copies `dir1` into `dir2`, then compares them
+* [ ] Fails, because `diff` cannot read from pipes
+
+> **Explanation:** Process substitution `<(cmd)` runs the command and passes a path such as `/dev/fd/63` that reads its output. That lets programs that expect filenames read command output.
+
+#### Q. What does `set -e` change in a script?
+
+* [ ] It echoes each command before running it
+* [x] The script exits when a command fails, outside tests such as `if` or `&&`
+* [ ] It exports every variable to child processes
+* [ ] It makes unset variables an error
+
+> **Explanation:** `set -e` (errexit) stops the script at the first unchecked failure. Commands used as conditions are exempt. Tracing is `set -x`, and unset-variable errors are `set -u`.
+
+#### Q. What does this script do when it uses an unset variable?
+
+```bash
+#!/usr/bin/env bash
+set -u
+echo "Count is $count"
+echo "after"
+```
+
+* [ ] `Count is ` then `after`
+* [x] An error like `count: unbound variable`, and the script stops
+* [ ] `Count is $count` then `after`
+* [ ] `Count is 0` then `after`
+
+> **Explanation:** `set -u` (nounset) makes expanding an unset variable an error, which ends a non-interactive shell. Without it, `$count` silently becomes an empty string and hides the bug.
+
+#### Q. What does this print, before and after enabling `pipefail`?
+
+```bash
+false | true; echo $?
+set -o pipefail
+false | true; echo $?
+```
+
+* [ ] `1` then `1`
+* [x] `0` then `1`
+* [ ] `0` then `0`
+* [ ] `1` then `0`
+
+> **Explanation:** A pipeline's status is normally that of its last command, so the failing `false` is hidden. With `pipefail`, a pipeline fails if any command in it fails.
+
+#### Q. Which line is the usual "strict mode" at the top of a Bash script: exit on error, error on unset variables, and fail pipelines on any error?
 
 * [ ] `set -ex`
-* [ ] `set -Ee`
 * [ ] `set -eu`
-* [ ] `set -eox pipefail`
 * [x] `set -euo pipefail`
+* [ ] `set +euo pipefail`
 
-#### Q. Why do many scripts use the shebang `#!/usr/bin/env bash` instead of `#!/bin/bash`?
+> **Explanation:** `-e` exits on unchecked errors, `-u` treats unset variables as errors, and `-o pipefail` makes pipeline failures visible. A `+` prefix turns options off instead of on.
 
-* [x] It locates `bash` via the `PATH`, improving portability across systems
-* [ ] It forces a login shell
-* [ ] It runs the script with elevated privileges
-* [ ] It disables environment variable inheritance
-* [ ] It makes the script POSIX compliant
+#### Q. What does `set -x` do?
 
-#### Q. What is the order of configuration file execution for a bash login shell?
+* [ ] Exits the script on the first error
+* [x] Prints each command, after expansion, before it runs
+* [ ] Marks the script as executable
+* [ ] Exports every new variable
 
-* [ ] ~/.bashrc → ~/.bash_profile → /etc/profile
-* [x] /etc/profile → ~/.bash_profile (or ~/.bash_login or ~/.profile)
-* [ ] ~/.profile → /etc/profile → ~/.bashrc
-* [ ] ~/.bash_login → /etc/profile → ~/.bashrc
-* [ ] All files are executed simultaneously
+> **Explanation:** `set -x` (xtrace) prints each command to stderr with a `+` prefix, which is useful for debugging. Turn it off again with `set +x`.
 
-#### Q. What is the purpose of `~/.bash_history`?
+#### Q. What does this `trap` line do in a script?
 
-* [ ] Stores bash aliases
-* [ ] Stores bash functions
-* [x] Stores command history
-* [ ] Stores environment variables
-* [ ] Stores shell options
+```bash
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+```
 
-#### Q. Which variable controls the number of commands stored in history?
+* [ ] Deletes the temporary file immediately
+* [x] Removes the temporary file whenever the script exits, including after an error
+* [ ] Stops the script from being interrupted with Ctrl+C
+* [ ] Prevents other users from reading the temporary file
 
-* [ ] `$HISTORY`
-* [x] `$HISTSIZE`
-* [ ] `$CMDHISTORY`
-* [ ] `$HISTLEN`
-* [ ] `$HISTMAX`
-
-#### Q. What does `set -x` do in a bash script?
-
-* [ ] Exits on error
-* [x] Prints each command before executing (debug mode)
-* [ ] Exports variables
-* [ ] Sets execute permission
-* [ ] Enables extended options
-
-#### Q. How do you define a function in bash?
-
-* [ ] `def function_name { }`
-* [x] `function_name() { }` or `function function_name { }`
-* [ ] `func function_name { }`
-* [ ] `define function_name { }`
-* [ ] `sub function_name { }`
-
-#### Q. What is the purpose of the `trap` command?
-
-* [ ] Captures keyboard input
-* [x] Catches signals and executes commands when received
-* [ ] Traps errors in scripts
-* [ ] Creates a debug breakpoint
-* [ ] Logs command output
-
-#### Q. Which command runs a script in the current shell environment?
-
-* [ ] `./script.sh`
-* [x] `source script.sh` or `. script.sh`
-* [ ] `bash script.sh`
-* [ ] `exec script.sh`
-* [ ] `run script.sh`
-
-#### Q. What is a here document in bash?
-
-* [ ] Documentation for scripts
-* [x] A way to redirect multiple lines of input to a command
-* [ ] A help command
-* [ ] A man page
-* [ ] A comment block
+> **Explanation:** `trap COMMAND EXIT` runs the command when the shell exits for any reason. `trap` can also handle signals such as `INT` or `TERM`, which makes it the standard cleanup tool.

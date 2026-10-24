@@ -231,7 +231,7 @@ The notes are organized from beginner to advanced concepts. **Follow this recomm
 - [Running Executables](https://github.com/djeada/Linux-Notes/blob/main/notes/running_executables.md) — Execute and manage programs
 
 **Practice Materials:**
-- 📝 **Quizzes**: Test your knowledge with interactive quizzes in the `/quizzes` directory
+- 📝 **Quizzes**: Ten topic quizzes with explanations in the [`/quizzes`](quizzes/) directory, also playable interactively on the [Technical Quizzes](https://adamdjellouli.com/tools/quiz_app/?category=linux) page
 - 🔧 **Scripts**: Practical scripts and tools in the `/scripts` directory
 - 📊 **Resources**: Additional diagrams and reference materials in `/resources`
 
@@ -295,7 +295,7 @@ Use the table of contents above to navigate directly to your topic of interest.
 3. **Study networking thoroughly**: Complete the Networking & Security section
 4. **Practice text processing**: Excel at grep, sed, and awk
 5. **Explore advanced topics**: Based on certification requirements (RHCSA, LFCS, etc.)
-6. **Test your knowledge**: Use the quizzes in the `/quizzes` directory
+6. **Test your knowledge**: Use the quizzes in the [`/quizzes`](quizzes/) directory or [take them online](https://adamdjellouli.com/tools/quiz_app/?category=linux)
 7. **Hands-on practice**: Complete ALL exercises — they're designed to simulate real scenarios
 
 **Pro tip**: Create your own cheat sheets as you study — it helps retention!

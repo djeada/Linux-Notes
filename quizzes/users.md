@@ -1,398 +1,491 @@
-#### Q. Which file contains the list of local user accounts and their default shells?
+# Users and Permissions Quiz
+
+Notes: [Managing Users](../notes/managing_users.md), [Permissions](../notes/permissions.md), [LDAP](../notes/ldap.md)
+
+Check your understanding of user and group management, `su` and `sudo`, file permissions, ACLs and LDAP directories.
+
+#### Q. Which file lists local user accounts with their UID, home directory and login shell?
 
 * [ ] `/etc/shadow`
 * [ ] `/etc/group`
 * [x] `/etc/passwd`
-* [ ] `/etc/userlist`
 * [ ] `/etc/login.defs`
 
-#### Q. What command creates a new user named `alice` without creating a home directory?
+> **Explanation:** Each line of `/etc/passwd` describes one account: name, password placeholder, UID, primary GID, comment, home directory and shell. Password hashes live in `/etc/shadow`.
 
-* [ ] `useradd -m alice`
-* [x] `useradd -M alice`
-* [ ] `adduser --no-home alice`
-* [ ] `usermod -N alice`
-* [ ] `adduser -d alice`
-
-#### Q. Which file stores the encrypted password hashes on a typical Linux system?
+#### Q. Which file stores the password hashes and password-aging data for local accounts?
 
 * [ ] `/etc/passwd`
-* [ ] `/etc/login.defs`
-* [x] `/etc/shadow`
-* [ ] `/etc/security/pwhash`
+* [ ] `/etc/sudoers`
 * [ ] `/etc/securetty`
+* [x] `/etc/shadow`
 
-#### Q. How do you add an existing user `bob` to the supplementary group `docker`?
+> **Explanation:** `/etc/shadow` holds salted one-way hashes plus expiry fields and is readable only by root. `/etc/passwd` is world-readable, so it only contains an `x` placeholder.
 
+#### Q. What does this `/etc/passwd` line tell you about the account?
+
+```text
+deploy:x:1001:2000:Deploy User:/srv/deploy:/usr/sbin/nologin
+```
+
+* [x] UID 1001, primary GID 2000, home `/srv/deploy`, and no interactive login shell
+* [ ] UID 2000, primary GID 1001, home `/srv/deploy`, and the password is `x`
+* [ ] UID 1001, member of 2000 groups, home `/usr/sbin/nologin`
+* [ ] UID 1001, primary GID 2000, and the password stored in plain text in field 2
+
+> **Explanation:** The fields are name, password placeholder (`x` means "see `/etc/shadow`"), UID, primary GID, comment, home and shell. A shell of `nologin` is typical for service accounts.
+
+#### Q. In `/etc/shadow`, what does a password field that starts with `!` mean?
+
+* [ ] The account has no password and anyone can log in
+* [ ] The password must be changed at next login
+* [x] Password authentication is disabled for the account
+* [ ] The password is stored unencrypted
+
+> **Explanation:** A hash prefixed with `!` (or a field of `*`) cannot match any password, so password logins fail. `passwd -l` locks accounts this way, but other methods such as SSH keys may still work.
+
+#### Q. Which command creates the user `adam` together with a home directory?
+
+* [ ] `useradd adam`
+* [ ] `useradd -M adam`
+* [x] `useradd -m adam`
+* [ ] `usermod -m adam`
+
+> **Explanation:** `-m` creates the home directory and copies the skeleton files into it. Without it, whether a home is created depends on distribution defaults; `-M` explicitly skips it.
+
+#### Q. Which command creates the user `alice` without a home directory, even if the system default would create one?
+
+* [x] `useradd -M alice`
+* [ ] `useradd -m alice`
+* [ ] `usermod -M alice`
+* [ ] `passwd -d alice`
+
+> **Explanation:** `-M` (`--no-create-home`) overrides `CREATE_HOME` in `/etc/login.defs`. `usermod` changes existing accounts, and `passwd -d` deletes a password.
+
+#### Q. How do `useradd` and `adduser` differ?
+
+* [ ] `adduser` can only create system accounts
+* [x] `adduser` is a friendlier, interactive front end that is not available on every distribution
+* [ ] `useradd` always prompts for the full name and password
+* [ ] `useradd` only works on Red Hat systems
+
+> **Explanation:** `adduser` asks questions and sets up the home directory for you, but it may be missing or behave differently across distributions. `useradd` is the low-level tool and the safer choice in portable scripts.
+
+#### Q. Which command adds the existing user `bob` to the supplementary group `docker` without removing his other groups?
+
+* [ ] `usermod -G docker bob`
 * [ ] `groupadd docker bob`
-* [ ] `usermod -a docker bob`
 * [x] `usermod -aG docker bob`
-* [ ] `addgroup bob docker`
-* [ ] `gpasswd -add bob docker`
+* [ ] `useradd -G docker bob`
 
-#### Q. Which command changes the user’s login shell to `/bin/zsh` for user `carol`?
+> **Explanation:** `-a` appends to the supplementary group list. `useradd` would try to create a new user, and `groupadd` creates groups rather than adding members.
 
-* [ ] `usermod --shell zsh carol`
-* [ ] `chsh carol -s zsh`
-* [x] `chsh -s /bin/zsh carol`
+#### Q. What happens if you run `usermod -G docker bob` without `-a`?
+
+* [ ] Bob is added to `docker` and keeps his other groups
+* [ ] Bob's primary group changes to `docker`
+* [ ] The command fails because `-a` is mandatory
+* [x] Bob's supplementary groups are replaced, so he is removed from any group other than `docker`
+
+> **Explanation:** Without `-a`, `-G` sets the complete list of supplementary groups. Forgetting `-a` is a classic way to accidentally remove someone from `sudo` or `wheel`.
+
+#### Q. Which command removes user `adam` from the group `admins`?
+
+* [ ] `groupdel admins adam`
+* [ ] `usermod -aG admins adam`
+* [ ] `userdel adam admins`
+* [x] `gpasswd -d adam admins`
+
+> **Explanation:** `gpasswd -d` deletes a single member from a group. `groupdel` removes the whole group and `userdel` deletes the user account.
+
+#### Q. A line in `/etc/group` reads `admins:x:1001:adam,eve`. What does `1001` represent?
+
+* [ ] The number of members
+* [x] The group ID (GID)
+* [ ] Adam's UID
+* [ ] The group's password
+
+> **Explanation:** The fields are group name, password placeholder, GID and a comma-separated member list. `getent group admins` prints the same format.
+
+#### Q. What does `id adam` display?
+
+* [ ] Adam's password expiry information
+* [ ] Adam's last login time
+* [x] Adam's UID, primary GID and group memberships
+* [ ] Adam's home directory and shell
+
+> **Explanation:** `id` prints something like `uid=1000(adam) gid=1000(adam) groups=1000(adam),27(sudo)`. Expiry details come from `chage -l` and logins from `last`.
+
+#### Q. Which command changes the login shell of user `carol` to `/bin/zsh`?
+
 * [ ] `useradd -s /bin/zsh carol`
-* [ ] `passwd -s /bin/zsh carol`
+* [ ] `chmod -s /bin/zsh carol`
+* [ ] `export SHELL=/bin/zsh carol`
+* [x] `chsh -s /bin/zsh carol`
 
-#### Q. What does the `id` command display by default when run as a normal user?
+> **Explanation:** `chsh -s` updates the shell field in `/etc/passwd` (as does `usermod -s`). `useradd` creates new accounts, and exporting `SHELL` only affects the current session.
 
-* [ ] Current password expiry information
-* [x] UID, GID, and group memberships
-* [ ] Last login time and source IP
-* [ ] List of all users on the system
-* [ ] Home directory and shell path
+#### Q. Which command locks the password of user `dave` so password logins fail?
 
-#### Q. How do you lock the account of user `dave` to prevent logins?
-
-* [ ] `passwd -e dave`
-* [ ] `usermod -D dave`
 * [x] `passwd -l dave`
-* [ ] `userdel -r dave`
-* [ ] `chage -E0 dave`
+* [ ] `passwd -d dave`
+* [ ] `passwd -e dave`
+* [ ] `passwd -S dave`
 
-#### Q. Which directory is the default parent for newly created user home directories on many Linux distributions?
+> **Explanation:** `-l` prefixes the hash with `!`. It does not disable the account entirely, so SSH key logins may still work. `-d` removes the password, `-e` forces a change at next login and `-S` shows status.
 
-* [ ] `/home/users/`
-* [ ] `/usr/home/`
-* [x] `/home/`
-* [ ] `/etc/home/`
-* [ ] `/var/home/`
-#### Q. Which protocol does LDAP use by default for directory access?
+#### Q. Which command deletes the user `eve` together with her home directory and mail spool?
 
-* [ ] HTTP
-* [x] TCP/IP on port 389
-* [ ] UDP on port 53
-* [ ] SMTP on port 25
-* [ ] TCP/IP on port 636
+* [ ] `userdel eve`
+* [ ] `usermod -L eve`
+* [ ] `rm -r /home/eve`
+* [x] `userdel -r eve`
 
-#### Q. What is the default port for LDAP over SSL (LDAPS)?
+> **Explanation:** `-r` removes the home directory and mail spool along with the account. Plain `userdel` leaves the files behind, and deleting the directory alone leaves the account in place.
 
-* [ ] 389
-* [ ] 465
-* [x] 636
-* [ ] 3268
-* [ ] 8443
+#### Q. What UID does the root account have?
 
-#### Q. In an LDAP directory entry, what does “dn” stand for?
+* [ ] 1
+* [x] 0
+* [ ] 1000
+* [ ] 65534
 
-* [x] Distinguished Name
-* [ ] Directory Number
-* [ ] Domain Namespace
-* [ ] Data Node
-* [ ] Default Name
+> **Explanation:** The kernel grants superuser privileges to UID 0, whatever the account is called. Regular users usually start at 1000, and 65534 is commonly `nobody`.
 
-#### Q. Which file defines sudo privileges for users and groups?
+#### Q. What is the difference between `su adam` and `su - adam`?
 
-* [ ] `/etc/passwd`
-* [ ] `/etc/shadow`
-* [x] `/etc/sudoers`
-* [ ] `/etc/sudo.conf`
-* [ ] `/etc/security/sudoers.d`
+* [ ] `su - adam` does not ask for a password
+* [ ] `su adam` switches to root first
+* [x] `su - adam` starts a login shell with adam's own environment and startup files
+* [ ] `su - adam` runs only one command and then exits
 
-#### Q. What is the safest way to edit the sudoers file?
+> **Explanation:** The `-` (or `-l`) option simulates a full login: adam's environment variables are loaded and you start in his home directory. Plain `su adam` keeps much of the caller's environment.
 
-* [ ] `nano /etc/sudoers`
-* [x] `visudo`
-* [ ] `vim /etc/sudoers`
-* [ ] `sudoedit /etc/sudoers.d`
-* [ ] `edit /etc/sudoers`
+#### Q. Which command runs `whoami` as user `adam` and then returns to your own session?
 
-#### Q. Which sudoers directive allows a user to run all commands without being prompted for a password?
+* [ ] `su adam whoami`
+* [x] `su adam -c "whoami"`
+* [ ] `su -l whoami adam`
+* [ ] `sudo -l adam whoami`
 
-* [ ] `ALL =(ALL) ALL`
-* [x] `NOPASSWD: ALL`
-* [ ] `PASSWD: ALL`
-* [ ] `!authenticate`
-* [ ] `NOPROMPT: ALL`
+> **Explanation:** `su -c` passes a single command to the target user's shell, and the output appears in your terminal. Here it prints `adam`.
 
-#### Q. In sudoers syntax, what does `%admin ALL=(ALL) ALL` do?
+#### Q. To give user `adam` administrative rights through the default sudoers setup, which group do you add him to on Debian/Ubuntu versus RHEL/Fedora?
 
-* [ ] Grants user “admin” full sudo rights
-* [ ] Grants all users full sudo rights on hosts named “admin”
-* [x] Grants all members of the “admin” group full sudo rights
-* [ ] Denies group “admin” any sudo rights
-* [ ] Logs all commands run by group “admin”
+* [ ] `admin` on both
+* [ ] `root` on both
+* [x] `sudo` on Debian/Ubuntu and `wheel` on RHEL/Fedora
+* [ ] `wheel` on Debian/Ubuntu and `sudo` on RHEL/Fedora
 
-#### Q. Which command runs `apt update` as root but preserves your current environment variables?
+> **Explanation:** Debian-based systems grant `%sudo` full rights, while Red Hat-based systems use `%wheel`. For example, `usermod -aG wheel adam` on RHEL.
 
-* [ ] `sudo apt update`
-* [ ] `sudo -i apt update`
-* [x] `sudo -E apt update`
-* [ ] `sudo -s apt update`
-* [ ] `sudoenv apt update`
+#### Q. Why should you edit `/etc/sudoers` with `visudo` rather than a regular editor?
 
-#### Q. By default, where does sudo log its authentication events on many Linux systems?
+* [ ] `visudo` encrypts the file
+* [ ] Regular editors cannot open files in `/etc`
+* [x] `visudo` locks the file and checks the syntax before saving, preventing a broken configuration
+* [ ] `visudo` automatically grants the current user full rights
 
-* [ ] `/var/log/syslog`
-* [ ] `/var/log/messages`
-* [x] `/var/log/auth.log`
-* [ ] `/var/log/sudo.log`
-* [ ] `/var/log/secure`
+> **Explanation:** A syntax error in sudoers can stop `sudo` from working at all, locking you out of administration. `visudo` validates the file and refuses to install a broken version.
 
-#### Q. Which sudo option runs a login shell as the target user (typically root)?
+#### Q. What does the sudoers line `%wheel ALL=(ALL) ALL` do?
+
+* [ ] Grants the user named `wheel` full sudo rights
+* [x] Lets all members of the `wheel` group run any command as any user on any host
+* [ ] Lets all users run commands as members of the `wheel` group
+* [ ] Denies the `wheel` group any sudo rights
+
+> **Explanation:** `%` marks a group. The fields are hosts (`ALL`), the users you may become (`(ALL)`) and the allowed commands (`ALL`). By default users still have to enter their own password.
+
+#### Q. What does the sudoers line `adam ALL = NOPASSWD:/sbin/reboot` allow?
+
+* [ ] Adam can run any command without a password
+* [ ] Adam can reboot only after entering the root password
+* [ ] Every user can reboot without a password
+* [x] Adam can run `/sbin/reboot` through sudo without being asked for a password
+
+> **Explanation:** The rule names one user and one command, and the `NOPASSWD:` tag skips authentication for it. Other commands still follow the remaining rules.
+
+#### Q. Which sudoers line lets user `alice` run only `/usr/bin/systemctl` as root, still asking for her password?
+
+* [x] `alice ALL=(root) /usr/bin/systemctl`
+* [ ] `alice ALL=(ALL) ALL`
+* [ ] `alice ALL=(root) NOPASSWD: ALL`
+* [ ] `alice ALL=(root) !/usr/bin/systemctl`
+
+> **Explanation:** Listing one command restricts alice to it, and without `NOPASSWD:` she must authenticate. `ALL` would allow every command, and `!` would forbid `systemctl` instead.
+
+#### Q. What does `sudo -l` show?
+
+* [ ] All processes currently running as root
+* [ ] The sudo log file
+* [x] Which commands the invoking user may run with sudo on this host
+* [ ] The list of members in the `sudo` group
+
+> **Explanation:** `sudo -l` (list) prints the user's allowed and forbidden commands according to the sudoers policy. It is the quickest way to check what a new rule grants.
+
+#### Q. Which `sudo` option starts a login shell as the target user, reading that user's profile files?
 
 * [ ] `-E`
-* [ ] `-s`
-* [x] `-i`
 * [ ] `-l`
+* [x] `-i`
 * [ ] `-u`
 
-#### Q. How do you allow user `alice` to run only `/usr/bin/systemctl` via sudo?
+> **Explanation:** `sudo -i` runs the target user's shell as a login shell, much like `su -`. `-E` preserves your environment, `-l` lists privileges and `-u` only chooses the target user.
 
-* [ ] `alice ALL=(ALL) ALL: /usr/bin/systemctl`
-* [x] `alice ALL=(ALL) /usr/bin/systemctl`
-* [ ] `alice ALL=(ALL) NOPASSWD: /usr/bin/systemctl`
-* [ ] `alice ALL=(root) !/usr/bin/systemctl`
-* [ ] `alice ALL=(ALL) !/usr/bin/systemctl`
+#### Q. Which command runs `make install` as root while asking sudo to keep your current environment variables?
 
-#### Q. Which command displays both standard permissions and ACLs for the file `example.txt`?
+* [ ] `sudo -i make install`
+* [ ] `sudo -s make install`
+* [x] `sudo -E make install`
+* [ ] `sudo -k make install`
 
-* [ ] `ls -l example.txt`
-* [ ] `stat -c "%A %n" example.txt`
-* [x] `getfacl example.txt`
-* [ ] `lsattr example.txt`
-* [ ] `aclshow example.txt`
+> **Explanation:** `-E` (`--preserve-env`) requests that your environment be kept, if the security policy allows it. `-i` uses a login environment and `-k` discards cached credentials.
 
-#### Q. How do you give user `bob` read (`r`) and execute (`x`) permissions on `script.sh` without affecting existing ACL entries?
-
-* [ ] `chmod u+rx script.sh`
-* [ ] `setfacl u:bob:rx script.sh`
-* [x] `setfacl -m u:bob:rx script.sh`
-* [ ] `setfacl --add u:bob:rx script.sh`
-* [ ] `chmod +a "bob:rx" script.sh`
-
-#### Q. Which option removes all ACL entries (but leaves standard permissions intact) on `data/`?
-
-* [ ] `setfacl -x a:data`
-* [x] `setfacl -b data/`
-* [ ] `setfacl --clear-mask data/`
-* [ ] `chmod a-rwx data/`
-* [ ] `getfacl --remove-all data/`
-
-#### Q. What does the “mask” entry in an ACL represent?
-
-* [ ] The maximum file size allowed
-* [x] The maximum permissions granted to named users and groups
-* [ ] The default ACL applied to new files
-* [ ] The owner’s effective permissions
-* [ ] A special ACL for the `root` user
-
-#### Q. How do you set a default ACL so that any new file in `project/` grants group `devs` write access?
-
-* [ ] `setfacl -m d:g:devs:rw project/`
-* [x] `setfacl -d -m g:devs:rw project/`
-* [ ] `setfacl --default g:devs:rw project/`
-* [ ] `setfacl -m g:devs:rw project/`
-* [ ] `chmod g+w project/`
-
-#### Q. Which command recursively applies the ACL change to all files and subdirectories under `shared/`?
-
-* [ ] `setfacl -m u:alice:r shared/`
-* [ ] `setfacl --recursive u:alice:r shared/`
-* [x] `setfacl -R -m u:alice:r shared/`
-* [ ] `getfacl -R shared/ | setfacl --apply`
-* [ ] `chmod -R +a "alice:rx" shared/`
-
-#### Q. After setting ACLs, which command shows the effective permissions for user `carol` on `report.pdf`?
-
-* [ ] `getfacl --effective carol report.pdf`
-* [x] `getfacl -e report.pdf`
-* [ ] `setfacl --check u:carol report.pdf`
-* [ ] `aclcheck report.pdf carol`
-* [ ] `stat -c "%A %n" report.pdf`
-
-#### Q. To remove only the ACL entry for group `sales` on `budget.xls`, which command is correct?
-
-* [ ] `setfacl -m g:sales: budget.xls`
-* [ ] `setfacl --delete g:sales budget.xls`
-* [x] `setfacl -x g:sales budget.xls`
-* [ ] `chmod g-sales- budget.xls`
-* [ ] `getfacl -x g:sales budget.xls`
-
-#### Q. What happens if you copy a file with ACLs using `cp --preserve=all`?
-
-* [ ] The ACLs are stripped on the copy.
-* [ ] Only the owner and group ACL entries are kept.
-* [x] All ACL entries and attributes are preserved on the copy.
-* [ ] The copy is placed in a default ACL-enabled directory.
-* [ ] The mask is reset but other ACLs are kept.
-
-#### Q. Which umask setting will ensure that new files allow group write permission so ACL default entries can grant rwx to a group?
-
-* [ ] `umask 022`
-* [ ] `umask 077`
-* [x] `umask 002`
-* [ ] `umask 027`
-* [ ] `umask 007`
-
-#### Q. What does the `sudo -l` command do for the invoking user?
-
-* [ ] Lists all processes running as root
-* [x] Lists which commands the user is allowed (and not allowed) to run via sudo
-* [ ] Locks the sudo account for one hour
-* [ ] Logs you out of the root shell
-* [ ] Lists all sudo logs
-
-#### Q. Which default in `/etc/sudoers` prevents users from keeping their environment variables unless explicitly allowed?
+#### Q. Which sudoers `Defaults` setting makes commands run with a minimal, clean environment instead of the caller's variables?
 
 * [ ] `env_keep`
-* [ ] `env_passwd`
 * [x] `env_reset`
 * [ ] `requiretty`
-* [ ] `preserve_env`
+* [ ] `secure_path`
 
-#### Q. Which permission bit allows a user to read a file?
+> **Explanation:** `env_reset` (on by default) discards most of the caller's environment. `env_keep` lists exceptions that are kept, and `secure_path` sets the `PATH` used for commands.
 
-* [x] `r`
-* [ ] `w`
-* [ ] `x`
-* [ ] `s`
-* [ ] `t`
+#### Q. What does the execute (`x`) permission mean on a directory?
 
-#### Q. What does the octal permission `754` represent for user/group/others?
+* [ ] Programs in the directory can be run
+* [ ] Files can be created in the directory
+* [ ] The directory's file names can be listed
+* [x] The directory can be entered and traversed to reach entries inside it
 
-* [ ] `rwx rwx rwx`
-* [ ] `rw- r-x r--`
-* [x] `rwx r-x r--`
-* [ ] `rwx r-- r-x`
-* [ ] `rwx rw- r-x`
+> **Explanation:** For directories, `r` lists names, `w` lets you create, delete and rename entries (together with `x`), and `x` allows access through the directory. Without `x`, `cd` and opening files inside fail.
 
-#### Q. How do you add execute permission for the owner of `script.sh` without affecting other bits?
+#### Q. Bob has write and execute permission on `/shared`, which has no sticky bit. A file there is owned by alice with mode `444`. Can bob delete it?
 
-* [ ] `chmod 700 script.sh`
-* [ ] `chmod u=+x script.sh`
-* [x] `chmod u+x script.sh`
-* [ ] `chmod +x script.sh`
-* [ ] `chmod a+x script.sh`
+* [ ] No, because the file is read-only
+* [ ] No, because only the owner can delete a file
+* [x] Yes, because deleting a file needs write and execute permission on the directory, not on the file
+* [ ] Yes, but only if bob is in alice's group
 
-#### Q. Which special permission on a directory causes new files to inherit the directory’s group?
+> **Explanation:** Removing a file removes a directory entry, so the directory's permissions decide. `rm` may ask about a write-protected file, but it succeeds. The sticky bit is what prevents this in shared directories.
+
+#### Q. Which symbolic permissions does octal mode `754` represent?
+
+* [ ] `rwxrwxr--`
+* [ ] `rw-r-xr--`
+* [ ] `rwxr--r-x`
+* [x] `rwxr-xr--`
+
+> **Explanation:** Each digit is the sum of read 4, write 2 and execute 1: 7 = `rwx` for the owner, 5 = `r-x` for the group and 4 = `r--` for others.
+
+#### Q. Which octal mode does `chmod u=rw,go=r file.txt` set?
+
+* [ ] `664`
+* [x] `644`
+* [ ] `640`
+* [ ] `755`
+
+> **Explanation:** `u=rw` gives the owner 6 and `go=r` gives group and others 4 each. The `=` operator sets the permissions exactly rather than adding to them.
+
+#### Q. What is the effect of `chmod o-rwx file.txt`?
+
+* [ ] It grants all permissions to others
+* [ ] It removes all permissions for the owner
+* [x] It removes read, write and execute permission for others, leaving owner and group unchanged
+* [ ] It makes the file immutable
+
+> **Explanation:** `o` selects others and `-` removes the listed bits. Owner (`u`) and group (`g`) permissions are not touched.
+
+#### Q. With `umask 027`, what permissions does a new regular file get when the program requests mode `666`?
+
+* [ ] `rw-r--r--`
+* [ ] `rw-rw-r--`
+* [ ] `rwxr-x---`
+* [x] `rw-r-----`
+
+> **Explanation:** The umask clears bits: `666` with group write and all of others' bits masked gives `640`. Directories requested as `777` would become `750`.
+
+#### Q. Why can ordinary users change their own password even though `/etc/shadow` is writable only by root?
+
+* [ ] `/etc/shadow` has the sticky bit set
+* [ ] Users are temporarily added to the `root` group
+* [x] `/usr/bin/passwd` is setuid root, so it runs with the file owner's privileges
+* [ ] Password changes are written to the user's home directory
+
+> **Explanation:** The setuid bit makes an executable run with its owner's user ID. Because setuid programs run as root, they must be audited carefully.
+
+#### Q. `ls -l` shows `-rwSr--r--` for a file. What does the uppercase `S` mean?
+
+* [ ] The file is a socket
+* [ ] The file has the sticky bit
+* [x] The setuid bit is set, but the owner has no execute permission
+* [ ] The file is a symbolic link
+
+> **Explanation:** A lowercase `s` means setuid plus execute, while `S` means the special bit is present without the underlying `x`, which usually signals a mistake.
+
+#### Q. Which permission on a shared project directory makes new files inherit the directory's group?
 
 * [ ] Sticky bit (`chmod +t`)
-* [ ] Set-user-ID (`chmod u+s`)
-* [x] Set-group-ID (`chmod g+s`)
-* [ ] No-execute (`chmod -x`)
-* [ ] Immutable bit (`chattr +i`)
+* [ ] Setuid (`chmod u+s`)
+* [x] Setgid (`chmod g+s`)
+* [ ] Group write (`chmod g+w`)
 
-#### Q. What does the sticky bit (`t`) do when set on `/tmp`?
+> **Explanation:** With setgid on a directory, new files get the directory's group and new subdirectories inherit setgid. It does not grant group write; use a suitable umask or a default ACL for that.
 
-* [ ] Makes files in `/tmp` executable
-* [ ] Prevents deletion by anyone
-* [x] Restricts file deletion so only owner/root can remove their files
-* [ ] Inherits owner’s permissions on new files
-* [ ] Encrypts files in `/tmp`
+#### Q. What does the sticky bit do on a world-writable directory such as `/tmp`?
 
-#### Q. How do you recursively set permissions `755` on all directories under `project/`?
+* [ ] It makes every file in the directory executable
+* [ ] It prevents anyone from deleting files
+* [x] It lets only a file's owner, the directory's owner or root delete or rename that file
+* [ ] It clears the directory at every reboot
+
+> **Explanation:** Without the sticky bit, anyone with write permission on the directory could remove other users' files. `ls -ld /tmp` shows it as a `t` in the last position (`drwxrwxrwt`).
+
+#### Q. Which command lists every file on the system that has the setuid bit set?
+
+* [ ] `find / -perm /2000 -type f`
+* [ ] `find / -perm /1000 -type d`
+* [ ] `ls -lR / | grep rwx`
+* [x] `find / -perm /4000 -type f 2>/dev/null`
+
+> **Explanation:** In octal, 4000 is setuid, 2000 is setgid and 1000 is the sticky bit. `-perm /4000` matches files with that bit set; `2>/dev/null` hides permission errors.
+
+#### Q. Which command recursively sets mode `755` on every directory under `project/` without changing regular files?
 
 * [ ] `chmod -R 755 project/`
 * [ ] `find project/ -type f -exec chmod 755 {} +`
 * [x] `find project/ -type d -exec chmod 755 {} +`
 * [ ] `chmod 755 project/*`
-* [ ] `chmod 755 project/**`
 
-#### Q. Which command shows the numeric (octal) permission representation for files in the current directory?
+> **Explanation:** `find -type d` selects only directories and passes them to `chmod`. `chmod -R` would also make every regular file executable, and the glob only reaches the top level.
 
-* [ ] `ls -l`
-* [x] `stat -c "%a %n" *`
-* [ ] `getfacl *`
-* [ ] `ls -n`
-* [ ] `stat --octal *`
+#### Q. Which command changes the owner of `script.sh` to user `alice` and its group to `devs` in one step?
 
-#### Q. What is the effect of `chmod o-rwx file.txt`?
+* [ ] `chmod alice:devs script.sh`
+* [ ] `chgrp alice:devs script.sh`
+* [x] `chown alice:devs script.sh`
+* [ ] `usermod -g devs alice script.sh`
 
-* [ ] Grants all permissions to others
-* [ ] Removes read/write, grants execute to others
-* [x] Revokes all permissions (read, write, execute) for others
-* [ ] Sets owner permissions to none
-* [ ] Makes the file immutable
+> **Explanation:** `chown user:group` sets both at once; `chgrp` changes only the group. `chmod` changes permission bits, not ownership.
 
-#### Q. Which command displays both standard and ACL permissions for `data/`?
+#### Q. Which command grants user `bob` read and write access to `report.txt` through an ACL, keeping existing ACL entries?
 
-* [ ] `ls -la data/`
-* [x] `getfacl data/`
-* [ ] `stat data/`
-* [ ] `aclshow data/`
-* [ ] `lsattr data/`
-
-#### Q. How do you set an ACL to give user `bob` read and write access to `report.txt`?
-
-* [ ] `chmod user: bob:rw report.txt`
-* [ ] `setfacl -R u:bob:rw report.txt`
+* [ ] `chmod u:bob:rw report.txt`
+* [ ] `setfacl -x u:bob:rw report.txt`
+* [ ] `getfacl -m u:bob:rw report.txt`
 * [x] `setfacl -m u:bob:rw report.txt`
-* [ ] `setfacl --add bob:rw report.txt`
-* [ ] `aclmod u:bob:rw report.txt`
 
-#### Q. Which command-line tool can you use to search an LDAP directory?
+> **Explanation:** `setfacl -m` (modify) adds or updates one entry and leaves others intact. `-x` removes entries, and `getfacl` only displays ACLs.
 
-* [ ] ldapadd
-* [ ] ldapmodify
-* [x] ldapsearch
-* [ ] ldappasswd
-* [ ] slapcat
+#### Q. Which command removes only the ACL entry for group `sales` from `budget.xls`?
 
-#### Q. In the LDAP schema, which attribute uniquely identifies an entry within its parent?
+* [ ] `setfacl -b budget.xls`
+* [x] `setfacl -x g:sales budget.xls`
+* [ ] `setfacl -m g:sales:--- budget.xls`
+* [ ] `chgrp -sales budget.xls`
 
-* [ ] cn (Common Name)
-* [x] rdn (Relative Distinguished Name)
-* [ ] uid (User ID)
-* [ ] objectClass
-* [ ] dn (Distinguished Name)
+> **Explanation:** `-x` deletes the named entry; no permissions are given in the spec. `-b` would remove every extended entry, and `-m g:sales:---` keeps an entry that denies access.
 
-#### Q. Which suffix is commonly used to specify the base DN for a company “example.com”?
+#### Q. Which command removes all extended ACL entries from `data/`, keeping only the standard owner, group and other permissions?
 
-* [ ] dc=company,dc=com
-* [ ] dn=example,cn=com
-* [x] dc=example,dc=com
-* [ ] ou=example,ou=com
-* [ ] cn=example,cn=com
+* [ ] `setfacl -x data/`
+* [ ] `chmod a-rwx data/`
+* [ ] `getfacl --remove-all data/`
+* [x] `setfacl -b data/`
 
-#### Q. How do you add a new entry to the directory using LDAP tools?
+> **Explanation:** `-b` (`--remove-all`) strips named user, named group and mask entries but retains the base permissions. `chmod a-rwx` would remove the base permissions instead.
 
-* [ ] slapcat -i entry.ldif
-* [x] ldapadd -f entry.ldif
-* [ ] ldapmodify -a entry.ldif
-* [ ] ldapsearch -a entry.ldif
-* [ ] ldapdelete -f entry.ldif
+#### Q. Which command makes every file later created in `project/` grant group `devs` read and write access by default?
 
-#### Q. Which operation modifies an existing LDAP entry?
+* [ ] `setfacl -m g:devs:rw project/`
+* [ ] `chmod g+s project/`
+* [ ] `setfacl -b project/`
+* [x] `setfacl -d -m g:devs:rw project/`
 
-* [ ] ldapadd
-* [ ] ldapdelete
-* [x] ldapmodify
-* [ ] ldapsearch
-* [ ] slapindex
+> **Explanation:** `-d` sets a default ACL, which new items in the directory inherit. Without `-d`, the entry applies only to the directory itself, and setgid changes group ownership, not permissions.
 
-#### Q. What file format is used to batch import or export LDAP entries?
+#### Q. `getfacl notes.txt` shows the lines below. What access does user `joe` actually have?
+
+```text
+user:joe:rwx        #effective:r--
+mask::r--
+```
+
+* [ ] `rwx`, because named user entries ignore the mask
+* [x] Read only, because the mask limits named users and groups
+* [ ] No access, because the mask overrides all entries
+* [ ] Read and execute, the default for named users
+
+> **Explanation:** The mask is the upper bound for named users, named groups and the owning group. Joe's entry says `rwx`, but only the bits also present in the mask, `r--`, take effect.
+
+#### Q. A file has extended ACL entries. What does running `chmod g=r` on it change?
+
+* [ ] Only the owning group's own ACL entry
+* [ ] Nothing, because `chmod` is ignored on files with ACLs
+* [ ] It deletes all named ACL entries
+* [x] The ACL mask, which can reduce named users' and groups' effective access
+
+> **Explanation:** With an extended ACL, the group bits shown by `ls -l` represent the mask. Changing them with `chmod` therefore changes the mask and limits every named entry.
+
+#### Q. In the DN `uid=jdoe,ou=users,dc=example,dc=com`, what does `ou=users` represent?
+
+* [ ] The user's login name
+* [ ] The domain the directory belongs to
+* [x] The organizational unit (container) that holds the entry
+* [ ] The user's group membership
+
+> **Explanation:** A DN is read from the most specific part to the most general, like a path: `uid=jdoe` is the entry, `ou=users` its container, and `dc=example,dc=com` the domain.
+
+#### Q. What is the conventional base DN for a directory serving the domain `example.com`?
+
+* [ ] `cn=example,cn=com`
+* [ ] `ou=example,ou=com`
+* [ ] `dn=example.com`
+* [x] `dc=example,dc=com`
+
+> **Explanation:** Each part of the DNS name becomes a domain component (`dc`). Searches and new entries are placed under this base, such as `ou=users,dc=example,dc=com`.
+
+#### Q. Which TCP ports do plain LDAP and LDAP over SSL (LDAPS) use by default?
+
+* [ ] 53 and 853
+* [ ] 88 and 464
+* [x] 389 and 636
+* [ ] 443 and 8443
+
+> **Explanation:** LDAP listens on 389, where StartTLS can upgrade the connection, and LDAPS uses TLS from the start on 636. Ports 53/853 are DNS, 88/464 are Kerberos and 443/8443 are HTTPS.
+
+#### Q. Which command searches the subtree `dc=example,dc=com` for the user `jdoe` using simple authentication?
+
+* [ ] `ldapadd -x -b "dc=example,dc=com" "(uid=jdoe)"`
+* [ ] `ldapsearch -b "(uid=jdoe)" "dc=example,dc=com"`
+* [x] `ldapsearch -x -b "dc=example,dc=com" "(uid=jdoe)"`
+* [ ] `ldapwhoami -x "dc=example,dc=com" "(uid=jdoe)"`
+
+> **Explanation:** `-x` selects simple authentication, `-b` sets the search base, and the filter comes after it. `ldapadd` creates entries and `ldapwhoami` only tests a bind.
+
+#### Q. Which LDAP filter matches entries that are of class `person` and have an email address?
+
+* [ ] `(|(objectClass=person)(mail=*))`
+* [ ] `(objectClass=person,mail=*)`
+* [ ] `(!(objectClass=person)(mail=*))`
+* [x] `(&(objectClass=person)(mail=*))`
+
+> **Explanation:** LDAP filters use prefix notation: `&` is AND, `|` is OR and `!` is NOT. `(mail=*)` is a presence test that matches any entry with a `mail` attribute.
+
+#### Q. Which file format is used to add, modify or export LDAP entries in bulk with tools such as `ldapadd` and `ldapmodify`?
 
 * [ ] JSON
-* [ ] XML
-* [x] LDIF
 * [ ] CSV
+* [x] LDIF
 * [ ] YAML
 
-#### Q. Which objectClass would you include to create a user entry in OpenLDAP?
+> **Explanation:** LDIF (LDAP Data Interchange Format) is plain text listing a `dn:` line followed by attributes. For example, `ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f user.ldif` loads it.
 
-* [ ] objectClass: organization
-* [ ] objectClass: domain
-* [x] objectClass: inetOrgPerson
-* [ ] objectClass: posixGroup
-* [ ] objectClass: ldapSubentry
+#### Q. A user entry in LDAP has only the `inetOrgPerson` object class, and `getent passwd jdoe` returns nothing. What is missing for Linux login?
 
-#### Q. To delete user `eve` and remove her home directory and mail spool, which command is correct?
+* [ ] A `mail` attribute
+* [ ] An `ou=groups` entry
+* [ ] The `organization` object class
+* [x] The `posixAccount` object class with `uidNumber`, `gidNumber`, `homeDirectory` and `loginShell`
 
-* [ ] `userdel eve --remove`
-* [ ] `deluser eve --home`
-* [x] `userdel -r eve`
-* [ ] `usermod --delete eve -h`
-* [ ] `rmuser eve -a`
-
-#### Q. Which file associates group names with GIDs and lists group membership?
-
-* [ ] `/etc/passwd`
-* [x] `/etc/group`
-* [ ] `/etc/shadow`
-* [ ] `/etc/gshadow`
-* [ ] `/etc/sudoers`
+> **Explanation:** `inetOrgPerson` describes a person, but NSS needs POSIX attributes to build a Unix account. Adding `posixAccount` (and often `shadowAccount`) with those attributes lets `getent passwd jdoe` resolve.

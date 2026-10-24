@@ -1,383 +1,435 @@
-#### Q. What type of partition is used to store data and can be directly accessed by the system?
+# Partitions and Logical Volumes Quiz
 
-* [ ] Extended Partition
-* [ ] Logical Partition
-* [x] Primary Partition
-* [ ] Volume Group
-* [ ] Logical Volume
+Notes: [Partitions](../notes/partitions.md), [Logical Volume Management](../notes/logical_volume_management.md)
 
-#### Q. How many primary partitions can be created on a hard drive using a traditional MBR partition scheme?
+Check your understanding of MBR and GPT partitioning, partitioning tools, and LVM physical volumes, volume groups, logical volumes and snapshots.
 
-* [ ] 2
-* [x] 4
-* [ ] 6
-* [ ] 8
-* [ ] 16
+#### Q. What is a disk partition?
 
-#### Q. Which type of partition acts as a container for logical partitions?
+* [ ] A directory that has its own permissions
+* [x] A section of a disk that the OS can manage independently, with its own filesystem
+* [ ] A copy of the disk kept for recovery
+* [ ] A file that stores swap space
 
-* [ ] Primary Partition
-* [ ] Logical Partition
-* [x] Extended Partition
-* [ ] Volume Group
-* [ ] Physical Volume
+> **Explanation:** A partition is a region of a physical disk recorded in the partition table. Each one can be formatted with its own filesystem and mounted separately, or used for swap.
 
-#### Q. When an extended partition is created, what does it directly store?
+#### Q. On a shared server, two projects store data in `/srv/projA` and `/srv/projB` on the same filesystem. What stops one project from filling the disk for both?
 
-* [ ] Data
-* [ ] File Systems
-* [x] Logical Partitions
-* [ ] Boot Information
-* [ ] Operating Systems
+* [x] Nothing, unless the directories are on separate partitions or logical volumes, or quotas are used
+* [ ] Directory permissions automatically limit each directory's capacity
+* [ ] Linux reserves an equal share of space for each top-level directory
+* [ ] The `/srv` directory is limited to half of the disk by default
 
-#### Q. What is the main advantage of using logical partitions?
+> **Explanation:** Directories on one filesystem share its free space. Permissions control who can access files, not how much space they use; capacity is isolated by separate partitions or LVs, or limited with quotas.
 
-* [ ] They automatically back up data.
-* [ ] They increase the speed of data transfer.
-* [ ] They provide additional protection for system files.
-* [x] They allow for creating more than four partitions on a system.
-* [ ] They improve the system’s boot time.
-
-#### Q. In a Logical Volume Management (LVM) setup, what is a logical volume?
-
-* [ ] A type of extended partition.
-* [ ] A physical hard drive used in the volume group.
-* [x] A virtual partition that is created within a volume group.
-* [ ] A primary partition that has been converted to a secondary partition.
-* [ ] A component that holds data temporarily.
-
-#### Q. What component in LVM holds the physical storage devices?
-
-* [ ] Logical Volume
-* [ ] Volume Group
-* [x] Physical Volume
-* [ ] File System
-* [ ] Logical Partition
-
-#### Q. What happens to the logical volumes when a volume group is removed in LVM?
-
-* [ ] They are automatically converted to primary partitions.
-* [ ] They become part of a new volume group.
-* [x] They are deleted, and data may be lost unless backed up.
-* [ ] They are reformatted with a new file system.
-* [ ] They are merged into a single volume.
-
-#### Q. Which method is used to format a primary partition?
-
-* [ ] Partition Table
-* [ ] Logical Volume Manager
-* [x] File System (e.g., NTFS, FAT32, ext4)
-* [ ] Boot Manager
-* [ ] Disk Cleanup Tool
-
-#### Q. What does marking a primary partition as "active" indicate?
-
-* [ ] It is used for storing backup files.
-* [ ] It is part of an extended partition.
-* [x] It contains the operating system that the computer should boot from.
-* [ ] It is a placeholder for logical partitions.
-* [ ] It has been encrypted for security.
-
-#### Q. What is a volume group in LVM?
-
-* [ ] A single physical hard drive.
-* [ ] A type of extended partition.
-* [x] A collection of physical volumes that are grouped together.
-* [ ] A virtual partition within an extended partition.
-* [ ] A file system used to manage data.
-
-#### Q. What is the purpose of a physical volume in LVM?
-
-* [ ] To act as a virtual partition within a volume group.
-* [x] To provide physical storage space that is used in volume groups.
-* [ ] To format partitions with a file system.
-* [ ] To hold data temporarily before it is backed up.
-* [ ] To serve as a backup for logical volumes.
-
-#### Q. Which LVM component is responsible for creating and managing logical volumes?
-
-* [ ] Volume Group
-* [ ] Physical Volume
-* [x] Logical Volume Manager (LVM)
-* [ ] Partition Table
-* [ ] File System
-
-#### Q. What command in LVM is used to extend an existing logical volume?
-
-* [ ] lvremove
-* [ ] lvcreate
-* [ ] lvdisplay
-* [x] lvextend
-* [ ] lvsnapshot
-
-#### Q. How is a logical volume formatted?
-
-* [ ] By converting it to a primary partition.
-* [ ] By using the Disk Management tool in Windows.
-* [ ] By creating a new volume group.
-* [x] By applying a file system to it.
-* [ ] By removing the volume group it belongs to.
-
-#### Q. What is the benefit of using logical volumes over physical partitions?
-
-* [ ] They are faster in terms of data transfer speed.
-* [ ] They automatically back up data.
-* [ ] They provide physical separation of data.
-* [x] They allow for dynamic resizing and flexible management of storage.
-* [ ] They improve system boot time.
-
-#### Q. What must you do before removing a volume group in LVM?
-
-* [ ] Convert all logical volumes to physical partitions.
-* [ ] Backup all data from the logical volumes.
-* [x] Remove or move all logical volumes from the volume group.
-* [ ] Format all logical volumes with a new file system.
-* [ ] Increase the size of the physical volumes.
-
-#### Q. What is the maximum number of primary partitions that can be created on a hard drive using the MBR (Master Boot Record) partition scheme?
+#### Q. How many primary partitions can an MBR partition table hold?
 
 * [ ] 2
 * [x] 4
-* [ ] 6
-* [ ] 8
 * [ ] 16
+* [ ] 128
 
-#### Q. How much of the hard drive’s space is used by an extended partition in the MBR partition scheme?
+> **Explanation:** MBR has room for four primary entries. To get more partitions, one of them can be an extended partition holding logical partitions. 128 is GPT's default entry count.
 
-* [ ] It takes up the entire drive.
-* [x] It takes up a portion of the drive’s space and is not directly usable for data storage.
-* [ ] It uses exactly half of the drive’s space.
-* [ ] It uses all the space except for one primary partition slot.
-* [ ] It is equal to the size of the logical partitions created within it.
+#### Q. What is the purpose of an extended partition on an MBR disk?
 
-#### Q. In an LVM setup, what is the relationship between a physical volume and a volume group?
+* [ ] It stores the boot loader
+* [ ] It holds a backup copy of the partition table
+* [x] It acts as a container for logical partitions, working around the four-partition limit
+* [ ] It extends a filesystem across two disks
 
-* [ ] A physical volume is a virtual partition within a volume group.
-* [ ] A volume group is a logical volume created from physical volumes.
-* [x] A physical volume is a physical storage device that is included in a volume group.
-* [ ] A volume group is a type of extended partition used to manage physical volumes.
-* [ ] A physical volume is a collection of volume groups.
+> **Explanation:** An extended partition takes one of the four primary slots and does not hold a normal filesystem itself. Logical partitions are created inside it, and only one extended partition is allowed per disk.
 
-#### Q. What must be true about the total size of logical volumes in relation to the size of the physical volumes in LVM?
-
-* [ ] The total size of logical volumes can exceed the size of physical volumes.
-* [ ] The total size of logical volumes must exactly match the size of physical volumes.
-* [x] The total size of logical volumes must be less than or equal to the combined size of physical volumes in the volume group.
-* [ ] The total size of logical volumes must be double the size of physical volumes.
-* [ ] The size of logical volumes is independent of the size of physical volumes.
-
-#### Q. When creating a new partition, what should you ensure about the partition size in relation to the total drive capacity?
-
-* [ ] The partition size can be larger than the total drive capacity.
-* [x] The partition size must be less than or equal to the total drive capacity.
-* [ ] The partition size must be exactly half of the total drive capacity.
-* [ ] The partition size must be exactly the same as the total drive capacity.
-* [ ] The partition size does not need to match the drive capacity.
-
-#### Q. What is the effect of removing a primary partition from a hard drive?
-
-* [ ] The data in the primary partition is preserved.
-* [ ] The primary partition is converted to an extended partition.
-* [x] The data in the primary partition is typically lost unless backed up, and the space becomes unallocated.
-* [ ] The primary partition is merged with the extended partition.
-* [ ] The data is automatically restored to a new partition.
-
-#### Q. In LVM, what happens to the physical volume space when logical volumes are removed?
-
-* [ ] The physical volume space is automatically resized.
-* [ ] The space is converted into a new file system.
-* [x] The space is reclaimed and can be used for other logical volumes or left unallocated.
-* [ ] The physical volume is deleted.
-* [ ] The space is locked and cannot be reused.
-
-#### Q. What must be done before creating a new logical volume in LVM?
-
-* [ ] Ensure that the total size of logical volumes is greater than the physical volume size.
-* [ ] Format the physical volume with a new file system.
-* [x] Create a volume group that includes the physical volumes.
-* [ ] Delete existing logical volumes.
-* [ ] Convert physical volumes into primary partitions.
-
-#### Q. What is the maximum number of logical volumes that can be created within a single volume group in LVM?
+#### Q. An MBR disk already has three primary partitions and an extended partition. What number does `fdisk` give the first logical partition?
 
 * [ ] 4
-* [ ] 16
-* [ ] 64
-* [ ] 256
-* [x] There is no fixed limit; it depends on the system's resources and configuration.
+* [x] 5
+* [ ] 1
+* [ ] 0
 
-#### Q. When resizing a logical volume in LVM, what must be considered?
+> **Explanation:** Numbers 1 to 4 are reserved for primary and extended entries, so logical partitions always start at 5, for example `/dev/sda5`.
 
-* [ ] The size of the logical volume must be reduced to be less than the physical volume.
-* [ ] The total size of logical volumes must always be equal to the size of the volume group.
-* [ ] The physical volume size must be resized before resizing the logical volume.
-* [x] The volume group must have sufficient free space to accommodate the resizing.
-* [ ] The volume group size must be reduced to match the size of the logical volume.
+#### Q. What happens when you delete an extended partition that contains logical partitions?
 
-#### Q. What is a common technique used to span a logical volume across multiple physical disks?
+* [ ] The logical partitions become primary partitions
+* [ ] Only the empty space in it is freed
+* [x] All logical partitions inside it are removed too
+* [ ] The operation is refused until you convert the disk to GPT
 
-* [x] Logical Volume Management (LVM)
-* [ ] Network File System (NFS)
-* [ ] Partition Table
-* [ ] File Allocation Table (FAT)
-* [ ] Extended Partition
+> **Explanation:** Logical partitions are defined inside the extended partition, so removing the container removes them as well. Back up their data before doing this.
 
-#### Q. In LVM, what term describes the process of combining multiple physical volumes into a volume group?
+#### Q. You want to use the full capacity of a new 4 TB disk as one partition. Why should you choose GPT over MBR?
 
-* [ ] Striping
-* [x] Aggregation
-* [ ] Mirroring
-* [ ] Partitioning
-* [ ] Fragmentation
+* [ ] MBR cannot hold Linux filesystems
+* [x] MBR is limited to about 2 TB disks (with 512-byte sectors), while GPT supports far larger disks
+* [ ] GPT partitions are formatted automatically
+* [ ] MBR allows only one partition on disks over 1 TB
 
-#### Q. Which storage configuration provides data striping across multiple disks for improved read/write performance?
+> **Explanation:** MBR stores sector addresses in 32-bit fields, which caps it at about 2 TB with 512-byte sectors. GPT removes that limit and also supports many partitions without extended partitions.
 
-* [x] RAID 0
-* [ ] RAID 1
-* [ ] RAID 5
-* [ ] RAID 10
-* [ ] RAID 6
+#### Q. Which feature makes GPT more robust than MBR?
 
-#### Q. What is the primary advantage of using RAID 5 in a multi-disk configuration?
+* [ ] It encrypts the partition table
+* [x] It stores a backup partition table and protects it with CRC32 checksums
+* [ ] It keeps the partition table in RAM
+* [ ] It mirrors every partition to a second disk
 
-* [ ] Increased write speed
-* [ ] Mirrored data for redundancy
-* [x] Balanced performance and redundancy with distributed parity
-* [ ] Simplified storage management
-* [ ] Highest capacity utilization
+> **Explanation:** GPT keeps a primary table at the start of the disk and a backup at the end, both with checksums, so corruption can be detected and repaired. MBR has one unprotected copy in the first sector.
 
-#### Q. When using LVM to manage logical volumes across multiple physical disks, what should be considered regarding space allocation?
+#### Q. On an MBR disk booted by legacy BIOS, what does marking a primary partition as "active" (the boot flag) mean?
 
-* [ ] The total size of logical volumes must be less than the size of each individual physical volume.
-* [ ] Logical volumes can exceed the size of the physical volumes they span.
-* [x] The total size of logical volumes should not exceed the combined size of all physical volumes in the volume group.
-* [ ] Each physical volume must be the same size.
-* [ ] Logical volumes must be resized to match the size of the smallest physical volume.
+* [ ] The partition is currently mounted
+* [ ] The partition holds the swap area
+* [ ] The partition is encrypted
+* [x] It is the partition the firmware's boot code should boot from
 
-#### Q. How does Network File System (NFS) interact with multiple physical disks on a server?
+> **Explanation:** The boot flag, toggled with `a` in `fdisk`, tells MBR boot code which partition to start. Extended partitions cannot be booted directly.
 
-* [ ] NFS directly manages physical disks and partitions them.
-* [x] NFS provides network access to files stored on the server's disks but does not manage the disks themselves.
-* [ ] NFS aggregates multiple disks into a single network file system.
-* [ ] NFS automatically mirrors data across multiple disks.
-* [ ] NFS handles RAID configurations for physical disks.
+#### Q. When converting a BIOS-booted disk from MBR to GPT, what does GRUB need on the GPT disk?
 
-#### Q. What is a key benefit of using NFS for file sharing across multiple servers?
+* [ ] An extended partition
+* [x] A small BIOS boot partition (type code `ef02` in `gdisk`)
+* [ ] A FAT32 partition larger than 1 GB
+* [ ] A logical partition numbered 5
 
-* [ ] It increases physical disk performance.
-* [ ] It simplifies RAID configuration.
-* [x] It allows for centralized access and management of files across different servers.
-* [ ] It directly combines storage capacity from multiple servers.
-* [ ] It manages the logical volume resizing automatically.
+> **Explanation:** GPT does not guarantee the post-MBR gap that GRUB uses on MBR disks, so a tiny BIOS boot partition holds GRUB's core image. After writing the table, reinstall GRUB with `grub-install`.
 
-#### Q. In a multi-server environment, how can storage be effectively managed to ensure high availability?
+#### Q. What does the device name `/dev/sdb` refer to?
 
-* [ ] By using a single NFS server with local disks.
-* [ ] By configuring RAID 0 across all servers.
-* [x] By implementing a clustered file system or distributed storage system that provides redundancy.
-* [ ] By manually syncing files between servers.
-* [ ] By using only physical disks without network access.
+* [ ] The second partition on the first disk
+* [x] The second SCSI or SATA disk
+* [ ] The second virtual disk in KVM
+* [ ] The boot partition
 
-#### Q. What is a clustered file system and how does it relate to multi-server setups?
+> **Explanation:** The letter after `sd` identifies the disk: `a` is the first, `b` the second. Partitions add a number, as in `/dev/sda2`, and KVM virtual disks use `/dev/vdX`.
 
-* [ ] A system that manages physical disks independently on each server.
-* [ ] A file system that provides local storage for each server.
-* [x] A file system designed to allow multiple servers to access the same storage as if it were local, providing high availability and redundancy.
-* [ ] A system that exclusively uses NFS for file sharing.
-* [ ] A method for partitioning physical disks across servers.
+#### Q. Which device name refers to the second partition on the second SATA disk?
 
-#### Q. When setting up a distributed storage system across multiple physical disks and servers, what is a critical consideration?
-
-* [ ] Ensuring each disk is formatted with the same file system.
-* [ ] The total storage capacity must be the same on all servers.
-* [x] Properly managing data redundancy, load balancing, and network connectivity to avoid bottlenecks and ensure reliability.
-* [ ] All disks must be of the same physical size.
-* [ ] Each server should be configured with identical hardware specifications.
-
-#### Q. What is the primary purpose of using Logical Volume Manager (LVM) in a multi-disk setup?
-
-* [ ] To create and manage partitions on each disk individually.
-* [ ] To directly handle network traffic and file sharing.
-* [x] To abstract and aggregate multiple physical disks into flexible logical volumes, allowing dynamic resizing and management.
-* [ ] To perform RAID operations on a single disk.
-* [ ] To manage NFS configurations.
-
-#### Q. What is a disk sector (logical block)?
-
-* [ ] A physical platter on the disk
-* [x] The smallest addressable unit of storage on a disk
-* [ ] The partition table entry
-* [ ] The filesystem metadata area
-* [ ] A special cache area on SSDs
-
-#### Q. How is a disk partition defined?
-
-* [ ] By filesystem type only
-* [ ] By mount point only
-* [x] By a start block and an end block on the disk
-* [ ] By a unique device letter or name
-* [ ] By partition label alone
-
-#### Q. How are physical disks numbered in Windows?
-
-* [ ] Disk A, Disk B, Disk C
-* [x] Disk 0, Disk 1, Disk 2
-* [ ] Disk C, Disk D, Disk E
-* [ ] Disk 1, Disk 2, Disk 3
-* [ ] Disk A:, Disk B:, Disk C:
-
-#### Q. In Linux, which device name corresponds to the second SCSI disk?
-
-* [x] `/dev/sdb`
 * [ ] `/dev/sda2`
-* [ ] `/dev/hdb`
-* [ ] `/dev/nda`
-* [ ] `/dev/vdb`
+* [ ] `/dev/sdb1`
+* [x] `/dev/sdb2`
+* [ ] `/dev/sd2b`
 
-#### Q. How does Windows mount partitions?
+> **Explanation:** `sdb` is the second disk and the trailing `2` is the partition number. `/dev/sda2` is the second partition of the first disk.
 
-* [ ] As directory paths under `/mnt/`
-* [x] As drive letters (e.g. C:, D:)
-* [ ] Using `fstab` entries
-* [ ] By labeling volumes only
-* [ ] By UUIDs in the registry
+#### Q. Which device name refers to the first partition on the first NVMe disk?
 
-#### Q. Which Linux command lists all block devices and their partitions?
+* [ ] `/dev/nvme0n1`
+* [ ] `/dev/sda1`
+* [ ] `/dev/nvme1`
+* [x] `/dev/nvme0n1p1`
 
-* [x] `lsblk`
-* [ ] `mount`
-* [ ] `df -h`
-* [ ] `fdisk -l`
-* [ ] `du`
+> **Explanation:** NVMe names are controller, namespace and then `p` plus the partition number. `/dev/nvme0n1` is the whole disk.
 
-#### Q. Can partitions on the same disk use different file systems?
-
-* [ ] No, they must all match
-* [x] Yes, each partition can be formatted independently
-* [ ] Only if the disk is GPT
-* [ ] Only on Windows
-* [ ] Only on Linux
-
-#### Q. If you see paths `/home/user1` and `/var/log` on Linux, could they be on different partitions?
-
-* [ ] No, Linux uses a single root partition
-* [x] Yes, each directory can be a separate mount point
-* [ ] Only if `/etc/fstab` is misconfigured
-* [ ] Only on enterprise distributions
-* [ ] Only when using LVM
-
-#### Q. You attach a new SCSI disk to Linux; it appears as `/dev/sdc`. What is the first partition likely named?
+#### Q. You attach a new SATA disk and it appears as `/dev/sdc`. After you create one partition on it, what is that partition called?
 
 * [ ] `/dev/sdc0`
 * [x] `/dev/sdc1`
 * [ ] `/dev/sdca`
-* [ ] `/dev/sdc01`
-* [ ] `/dev/sdc-m1`
+* [ ] `/dev/sdc-p1`
 
-#### Q. Why is understanding partition and mount differences between Windows and Linux important?
+> **Explanation:** Partition numbers start at 1, so the first partition on `/dev/sdc` is `/dev/sdc1`. The `p` separator is only used when the disk name ends in a digit, such as NVMe.
 
-* [x] It ensures you correctly locate and manage data across systems
-* [ ] It only matters for SSDs, not HDDs
-* [ ] It lets you convert NTFS to ext4 on the fly
-* [ ] It’s only required for network shares
-* [ ] It avoids using drive letters on Linux
+#### Q. Which command lists disks and their partitions as a tree, with sizes and mount points?
+
+* [ ] `df -h`
+* [ ] `mount`
+* [x] `lsblk`
+* [ ] `du -h`
+
+> **Explanation:** `lsblk` shows every block device, including unmounted partitions and LVM volumes, with `TYPE` and `MOUNTPOINT` columns. `df` lists only mounted filesystems.
+
+#### Q. What does this `lsblk` output tell you?
+
+```text
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   500G  0 disk
+├─sda1   8:1    0    50G  0 part /
+└─sda2   8:2    0    50G  0 part /home
+```
+
+* [ ] The disk is full
+* [ ] `/home` is 500G in size
+* [x] About 400G of the disk is not allocated to any partition
+* [ ] `sda2` is the boot partition
+
+> **Explanation:** The disk is 500G and its two partitions use 100G, so roughly 400G is unallocated and available for new partitions. `lsblk` does not print free space directly; you infer it.
+
+#### Q. Inside `fdisk`, which command saves your partition changes to the disk and exits?
+
+* [ ] `q`
+* [ ] `p`
+* [ ] `n`
+* [x] `w`
+
+> **Explanation:** `fdisk` keeps changes in memory until you press `w`. `q` quits without saving, which is a safe way to back out, `p` prints the table and `n` creates a partition.
+
+#### Q. While creating a partition in `fdisk`, what should you enter at the "Last sector" prompt to make it 50 GiB?
+
+* [ ] `50G`
+* [x] `+50G`
+* [ ] `-50G`
+* [ ] `50000`
+
+> **Explanation:** A leading `+` gives a size relative to the first sector. A bare number is read as an absolute sector, so `50000` would end the partition at sector 50000, making it only about 23 MiB.
+
+#### Q. Which partitioning tool was designed specifically for GPT disks?
+
+* [x] `gdisk`
+* [ ] `fdisk`
+* [ ] `lsblk`
+* [ ] `resize2fs`
+
+> **Explanation:** `gdisk` is the GPT counterpart of `fdisk`, with commands such as `o` to create a new GPT. Modern `fdisk` also handles GPT, but it started as an MBR tool; `lsblk` and `resize2fs` do not edit partition tables.
+
+#### Q. You just created `/dev/sdb1` with `fdisk`. What must you do before you can store files on it?
+
+* [ ] Nothing, it can be mounted immediately
+* [ ] Run `lvcreate` on it
+* [ ] Mark it as active
+* [x] Create a filesystem on it, for example `mkfs.ext4 /dev/sdb1`
+
+> **Explanation:** A new partition is just raw space. A filesystem must be created on it before it can be mounted and used for files.
+
+#### Q. What does deleting a partition with `fdisk` actually do?
+
+* [ ] Securely overwrites all data in that area
+* [ ] Moves the data to the neighbouring partition
+* [x] Removes its entry from the partition table and marks the area as free
+* [ ] Converts it into unformatted swap space
+
+> **Explanation:** Deletion only removes the table entry. Old data may still be on disk until it is overwritten, so it is not a secure erase, and you should back up anything you need first.
+
+#### Q. You need to shrink the ext4 filesystem on `/dev/sda1` and its partition. In what order should you work?
+
+* [ ] Shrink the partition with `fdisk`, then run `resize2fs`
+* [x] Back up, unmount, shrink the filesystem with `resize2fs`, then shrink the partition
+* [ ] Run `resize2fs` while mounted, then reboot
+* [ ] Delete the partition and run `mkfs.ext4` with a smaller size
+
+> **Explanation:** The filesystem must already fit inside the smaller space before the partition is cut down; doing it the other way round destroys data. When growing, reverse the order: enlarge the partition, then run `resize2fs`.
+
+#### Q. You enlarged the partition `/dev/sda1` into free space. Which command makes its ext4 filesystem use the new space?
+
+* [ ] `fsck -f /dev/sda1`
+* [ ] `mkfs.ext4 /dev/sda1`
+* [x] `resize2fs /dev/sda1`
+* [ ] `tune2fs -l /dev/sda1`
+
+> **Explanation:** Without a size argument, `resize2fs` grows the filesystem to fill its partition. `mkfs.ext4` would erase the data, and `tune2fs -l` only prints superblock information.
+
+#### Q. A partitioning tool reports "Partition in use" when you try to change `/dev/sda1`. What is the usual fix?
+
+* [x] Unmount the partition and close programs using it
+* [ ] Run `mkfs` on the partition first
+* [ ] Convert the disk to GPT
+* [ ] Add the partition to `/etc/fstab`
+
+> **Explanation:** A mounted partition cannot safely be resized or deleted. Unmount it with `umount`, or for system partitions work from a live USB.
+
+#### Q. In what order are the three LVM layers built, from the disk upward?
+
+* [ ] Logical volume, volume group, physical volume
+* [x] Physical volume, volume group, logical volume
+* [ ] Volume group, physical volume, logical volume
+* [ ] Physical volume, logical volume, volume group
+
+> **Explanation:** Disks or partitions become physical volumes, PVs are pooled into a volume group, and logical volumes are carved from the VG. A filesystem then goes on the LV.
+
+#### Q. What is an LVM physical volume (PV)?
+
+* [ ] A logical volume that has been mounted
+* [ ] A snapshot of a volume group
+* [x] A disk or partition initialized with `pvcreate` for use by LVM
+* [ ] The filesystem created on a logical volume
+
+> **Explanation:** A PV is a device such as `/dev/sdb` or `/dev/sdc1` labeled for LVM. It is not mounted directly; it contributes its space to a volume group.
+
+#### Q. What is an LVM volume group (VG)?
+
+* [ ] A group of users allowed to manage LVM
+* [x] A storage pool made from one or more physical volumes
+* [ ] A single partition on one disk
+* [ ] A list of mounted logical volumes
+
+> **Explanation:** A VG combines the capacity of its PVs, so its size is the sum of theirs. Logical volumes are allocated from that pool.
+
+#### Q. Which statement about an LVM logical volume (LV) is true?
+
+* [ ] It must be the same size as one physical disk
+* [ ] It can only be used for swap
+* [ ] It is a type of extended partition
+* [x] It can be formatted and mounted like a partition, and can span several disks in the VG
+
+> **Explanation:** An LV behaves like a partition to the rest of the system, but it is allocated from the VG's pool, so it can use space from several PVs and be resized later.
+
+#### Q. You have two blank disks, `/dev/sdb` and `/dev/sdc`, and want to start building LVM on them. Which command comes first?
+
+* [x] `sudo pvcreate /dev/sdb /dev/sdc`
+* [ ] `sudo lvcreate -L 20G -n data TEST`
+* [ ] `sudo mkfs.ext4 /dev/sdb`
+* [ ] `sudo vgextend TEST /dev/sdc`
+
+> **Explanation:** The devices must be initialized as PVs before they can join a volume group with `vgcreate`. LVs come after the VG, and the filesystem goes on the LV, not on the raw disk.
+
+#### Q. Which command adds the physical volume `/dev/sdd` to the existing volume group `TEST`?
+
+* [ ] `sudo vgcreate TEST /dev/sdd`
+* [ ] `sudo pvcreate TEST /dev/sdd`
+* [x] `sudo vgextend TEST /dev/sdd`
+* [ ] `sudo lvextend TEST /dev/sdd`
+
+> **Explanation:** `vgextend` grows a VG by adding PVs. `vgcreate` would try to make a new group, and `lvextend` resizes logical volumes, not groups.
+
+#### Q. Which command creates a 20 GB logical volume named `vol_name_1` in the volume group `TEST`?
+
+* [ ] `sudo lvcreate -n 20G -L vol_name_1 TEST`
+* [ ] `sudo vgcreate -L 20G -n vol_name_1 TEST`
+* [ ] `sudo lvcreate TEST vol_name_1 20G`
+* [x] `sudo lvcreate -L 20G -n vol_name_1 TEST`
+
+> **Explanation:** `-L` sets the size and `-n` the name, followed by the VG. The new LV appears as `/dev/TEST/vol_name_1`.
+
+#### Q. How are `/dev/TEST/vol_name_1` and `/dev/mapper/TEST-vol_name_1` related?
+
+* [ ] The first is the LV and the second is its snapshot
+* [ ] The first is a PV and the second is the VG
+* [x] They are two names for the same logical volume
+* [ ] The second is a backup copy of the first
+
+> **Explanation:** LVM creates both paths for every LV: `/dev/VG/LV` and the device-mapper name `/dev/mapper/VG-LV`. Either can be used with `mkfs`, `mount` or `/etc/fstab`.
+
+#### Q. What is the difference between `lvextend -L +10G /dev/TEST/data` and `lvextend -L 10G /dev/TEST/data`?
+
+* [ ] There is no difference
+* [ ] `+10G` also resizes the filesystem, while `10G` does not
+* [ ] `+10G` uses a new disk, while `10G` uses free space in the VG
+* [x] `+10G` adds 10 GB to the current size, while `10G` sets the total size to 10 GB
+
+> **Explanation:** A leading `+` is relative. Without it the value is the target size, which `lvextend` refuses if it is smaller than the current size. Filesystem resizing is controlled by `-r`.
+
+#### Q. After `sudo lvextend -L +10G /dev/TEST/vol_name_1`, `df -h` still shows the old size. What is missing?
+
+* [ ] A reboot to reload the partition table
+* [ ] Running `vgextend` on the volume group
+* [x] Growing the filesystem, for example with `resize2fs`, or using `lvextend -r`
+* [ ] Recreating the filesystem with `mkfs.ext4`
+
+> **Explanation:** `lvextend` enlarges only the block device. The filesystem on it must be grown too; `-r` does both steps in one command.
+
+#### Q. A filesystem on an LV is 100% full and `vgs` shows `VFree` as 0. What must you do before you can extend the LV?
+
+* [ ] Run `lvextend -r` anyway, since it allocates space automatically
+* [x] Add storage with `pvcreate` and `vgextend`, or free space in the VG
+* [ ] Run `vgchange -ay`
+* [ ] Create a snapshot of the LV
+
+> **Explanation:** An LV can only grow into free extents in its VG. When `VFree` is 0, add a new PV to the group or remove or shrink other LVs first.
+
+#### Q. In `pvs` output, what does the `PFree` column show?
+
+* [ ] The space used by snapshots
+* [ ] The size of the largest LV on that disk
+* [ ] The number of free partitions on the disk
+* [x] The unallocated space remaining on that physical volume
+
+> **Explanation:** `PSize` is the PV's total size and `PFree` is how much of it no LV uses yet. The volume group equivalent in `vgs` is `VFree`.
+
+#### Q. What is the correct order for safely shrinking an ext4 filesystem on a logical volume?
+
+* [ ] `lvreduce`, then `resize2fs`, then `e2fsck`
+* [ ] `lvreduce` while mounted, then reboot
+* [x] Unmount, `e2fsck -f`, `resize2fs` to the new size, then `lvreduce`
+* [ ] `resize2fs`, then `lvreduce`, both while mounted
+
+> **Explanation:** The filesystem must be checked and shrunk to fit before the LV is reduced; reducing the LV first cuts off data. Back up beforehand and remount and verify afterwards.
+
+#### Q. Why can't you shrink a logical volume that holds an XFS filesystem in the usual way?
+
+* [x] XFS can be grown, even online, but cannot be shrunk in place
+* [ ] XFS cannot be used on LVM
+* [ ] XFS is read-only once created
+* [ ] XFS needs `vgreduce` instead of `lvreduce`
+
+> **Explanation:** XFS supports growing but has no shrink operation. To get a smaller XFS volume you must back up, recreate the filesystem and restore.
+
+#### Q. What happens to the space of a logical volume after `lvremove /dev/TEST/vol_name_1`?
+
+* [ ] It is lost until the disk is repartitioned
+* [x] It returns to the volume group as free space
+* [ ] It is moved to a snapshot automatically
+* [ ] It becomes a new physical volume
+
+> **Explanation:** Removing an LV frees its extents in the VG, which `vgs` shows as `VFree`. Unmount the LV first, and remember its data is gone.
+
+#### Q. How does an LVM snapshot preserve the original state of a logical volume?
+
+* [ ] It copies the whole LV when the snapshot is created
+* [x] It uses copy-on-write, keeping old blocks only as they change on the origin
+* [ ] It compresses the origin LV into a file
+* [ ] It mirrors all writes to a second disk
+
+> **Explanation:** A new snapshot is nearly empty. When a block on the origin is about to change, the old block is saved into the snapshot, so it only needs space for changed data.
+
+#### Q. Which command creates a 1 GB snapshot named `snap1` of `/dev/TEST/vol_name_1`?
+
+* [ ] `sudo lvextend -s 1G snap1 /dev/TEST/vol_name_1`
+* [ ] `sudo lvconvert --merge /dev/TEST/vol_name_1 snap1`
+* [x] `sudo lvcreate -L 1G -s -n snap1 /dev/TEST/vol_name_1`
+* [ ] `sudo vgcreate -s snap1 /dev/TEST/vol_name_1`
+
+> **Explanation:** `lvcreate -s` makes a snapshot of the origin LV, with `-L` reserving space for changed blocks. `lvconvert --merge` is used later to roll back to a snapshot.
+
+#### Q. In `lvs` output, a snapshot's `Data%` reaches 100%. What does that mean?
+
+* [ ] The origin LV is full
+* [ ] The snapshot has been merged automatically
+* [x] The snapshot ran out of space and is no longer valid
+* [ ] The snapshot is ready to be mounted
+
+> **Explanation:** Once the snapshot's space is used up by changed blocks, it can no longer represent the earlier state and becomes invalid. Extend or remove snapshots before they fill, and do not keep them longer than needed.
+
+#### Q. A risky upgrade broke the data on `/dev/TEST/vol_name_1`, which has the snapshot `snap1`. Which command rolls the LV back to the snapshot?
+
+* [ ] `sudo lvremove /dev/TEST/snap1`
+* [x] `sudo lvconvert --merge /dev/TEST/snap1`
+* [ ] `sudo lvextend -r /dev/TEST/snap1`
+* [ ] `sudo vgchange -ay /dev/TEST/snap1`
+
+> **Explanation:** Merging writes the snapshot's preserved state back into the origin. If the origin is in use, the merge happens at the next activation, so unmount it first.
+
+#### Q. Why are LVM snapshots not a replacement for real backups?
+
+* [ ] Snapshots cannot be mounted
+* [ ] Snapshots are deleted at every reboot
+* [ ] Snapshots only store file names, not data
+* [x] Snapshots live on the same storage, so a disk failure can destroy them along with the origin
+
+> **Explanation:** A snapshot depends on the origin LV and sits in the same volume group. Keep separate backups on other storage for disaster recovery.
+
+#### Q. After booting a rescue system, `lvs` lists your logical volumes but they cannot be mounted because they are inactive. Which command activates them?
+
+* [ ] `sudo pvcreate -a`
+* [ ] `sudo lvextend -ay`
+* [ ] `sudo mount -a`
+* [x] `sudo vgchange -ay`
+
+> **Explanation:** `vgchange -ay` activates all logical volumes in all volume groups, creating their device nodes. Check with `lsblk` afterwards, then mount them.
+
+#### Q. Why must you be careful running `pvcreate /dev/sdb`?
+
+* [ ] It immediately mounts the disk
+* [x] It writes LVM metadata to the disk and destroys any data already on it
+* [ ] It removes the disk from all volume groups
+* [ ] It changes the disk's device name
+
+> **Explanation:** `pvcreate` initializes the device for LVM, overwriting what was there. Confirm the device with `lsblk` before running it.
+
+#### Q. In a typical Linux server layout that uses LVM, which part is usually kept as a plain partition rather than a logical volume?
+
+* [ ] `/home`
+* [ ] `/var`
+* [ ] `/`
+* [x] The EFI system partition
+
+> **Explanation:** Firmware must read the EFI system partition (and often `/boot`) directly, without LVM support, so they stay plain partitions. `/`, `/home` and `/var` benefit from LVM's resizing.
