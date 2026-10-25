@@ -302,11 +302,11 @@ Filters are specialized commands designed to process text, typically working wit
 |---------|-------------|-------------|----------------|----------|
 | `sort`  | Orders lines in text alphabetically or numerically. | `sort [options] [file]` | - `-n`: Sort numerically. <br> - `-r`: Reverse order. <br> - `-k`: Specify sort key. | `sort -n numbers.txt` sorts `numbers.txt` numerically. |
 | `uniq`  | Filters out repeated lines in adjacent positions, simplifying repeated content. | `uniq [options] [file]` | - `-c`: Count occurrences. <br> - `-d`: Only show duplicates. <br> - `-u`: Only show unique lines. | `uniq -c sorted.txt` counts occurrences of unique lines in `sorted.txt`. |
-| `cut`   | Extracts specific columns or fields from each line, useful for structured text. | `cut [options] [file]` | - `-f`: Specify delimiter. <br> - `-d`: Use a custom delimiter. <br> - `-c`: Choose column or range of characters. | `cut -f1,3 -d',' data.csv` extracts columns 1 and 3 from `data.csv`, using ',' as a delimiter. |
-| `tr`    | Transforms characters into others or removes specific characters. | `tr [options] [string1] [string2]` | - `-d`: Delete characters in `string1`. <br> - `-s`: Squeeze repeated characters. <br> - `-c`: Compliment `string1`. | `tr 'a-z' 'A-Z' < input.txt` converts lowercase to uppercase in `input.txt`. |
-| `wc`    | Counts lines, words, and characters in text. | `wc [options] [file]` | - `-l`: Line count. <br> - `-w`: Word count. <br> - `-c`: Character count. | `wc -l file.txt` returns the line count for `file.txt`. |
+| `cut`   | Extracts specific columns or fields from each line, useful for structured text. | `cut [options] [file]` | - `-f`: Select fields. <br> - `-d`: Use a custom delimiter (default is tab). <br> - `-c`: Choose column or range of characters. | `cut -f1,3 -d',' data.csv` extracts columns 1 and 3 from `data.csv`, using ',' as a delimiter. |
+| `tr`    | Transforms characters into others or removes specific characters. | `tr [options] [string1] [string2]` | - `-d`: Delete characters in `string1`. <br> - `-s`: Squeeze repeated characters. <br> - `-c`: Complement `string1`. | `tr 'a-z' 'A-Z' < input.txt` converts lowercase to uppercase in `input.txt`. |
+| `wc`    | Counts lines, words, and characters in text. | `wc [options] [file]` | - `-l`: Line count. <br> - `-w`: Word count. <br> - `-c`: Byte count (`-m` counts characters). | `wc -l file.txt` returns the line count for `file.txt`. |
 | `grep`  | Searches input for lines matching a pattern or regular expression. | `grep [options] pattern [file]` | - `-i`: Ignore case. <br> - `-v`: Invert match. <br> - `-r`: Search recursively in directories. | `grep 'error' logfile.txt` searches for 'error' in `logfile.txt`. |
-| `awk`   | Processes text by extracting fields and performing actions based on conditions. | `awk 'pattern {action}' [file]` | - `-F`: Specify field separator. <br> - `-v`: Invert match. <br> - `-f`: Use file for program script. | `awk '{print $1, $3}' data.txt` prints columns 1 and 3 from `data.txt`. |
+| `awk`   | Processes text by extracting fields and performing actions based on conditions. | `awk 'pattern {action}' [file]` | - `-F`: Specify field separator. <br> - `-v`: Assign a variable (`-v name=value`). <br> - `-f`: Use file for program script. | `awk '{print $1, $3}' data.txt` prints columns 1 and 3 from `data.txt`. |
 
 #### Examples
 
@@ -489,7 +489,7 @@ II. **sort**
 
 The `sort` command reads the incoming text and arranges the lines in lexicographical order. Sorting helps to group identical or similar log messages together.
 
-After sorting:  
+After sorting (byte order, as in the C locale, e.g. `LC_ALL=C sort`; in a locale such as `en_US.UTF-8` the `error:` lines sort between `ArduinoInit` and `SensorTemp` instead):  
 
 ```
 ArduinoInit: Success

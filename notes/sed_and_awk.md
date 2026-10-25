@@ -545,7 +545,6 @@ This is a simple way to convert comma-separated data into pipe-separated data wi
 #### Multi-line and hold space
 
 `sed` normally works on one line at a time, but it also has:
-Editor) and awk are powerful command-line utilities that originated from Unix and have become indispensable tools in Unix-like operating systems, including Linux and macOS. They are designed for processing and transforming text, allowing users to perform complex text manipulations with simple commands. This guide provides a comprehensive overview of both utilities, including their history, usage, syntax, options, and practical examples.
 
 * **pattern space** = current working text
 * **hold space** = temporary storage
@@ -599,8 +598,6 @@ sed 's|/usr/local|/opt/tools|g' file.txt
 ```
 
 Using `|` instead of `/` makes path replacements easier to read.
-
-Here’s the same treatment for **`awk`**: cleaner structure, flatter explanations, more readable, with **one main table** covering fields, variables, operators, blocks, and common functions.
 
 ### `awk`
 

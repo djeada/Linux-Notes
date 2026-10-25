@@ -20,25 +20,25 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 * [ ] zypper
 * [x] DNF
 
-> **Explanation:** DNF replaced YUM on modern Fedora and RHEL, and `yum` is often kept as a compatibility command. zypper belongs to openSUSE, and APT and dpkg to Debian.
+> **Explanation:** DNF replaced YUM on Fedora and RHEL 8+, where `yum` is kept only as a link to `dnf`. zypper belongs to openSUSE, and APT and dpkg to Debian.
 
 #### Q. What does `apt update` do?
 
-* [ ] Upgrades all installed packages to their newest versions
-* [x] Downloads fresh package lists from the configured repositories without installing anything
-* [ ] Updates the `apt` program itself
-* [ ] Removes packages that are no longer needed
+* [ ] Downloads and installs the newest versions of all installed packages
+* [x] Refreshes the package lists from the configured repositories, installing nothing
+* [ ] Updates the `apt` program itself to its newest release
+* [ ] Removes packages that are no longer needed by anything
 
 > **Explanation:** `apt update` refreshes the local index of available packages and versions. Installing newer versions is the job of `apt upgrade`, which should run after the index is current.
 
-#### Q. Which command upgrades all installed packages to the newest versions in the refreshed package lists?
+#### Q. `apt upgrade` reports that one package was "kept back" because its new version needs another installed package removed. Which command performs that upgrade?
 
 * [ ] `apt update`
-* [ ] `apt install --all`
-* [ ] `apt refresh`
-* [x] `apt upgrade`
+* [ ] `apt install --reinstall`
+* [x] `apt full-upgrade`
+* [ ] `apt autoremove`
 
-> **Explanation:** `apt upgrade` installs available updates for installed packages. Run `apt update` first so APT knows which versions exist.
+> **Explanation:** `apt upgrade` may install new dependencies but never removes installed packages, so it skips such upgrades. `apt full-upgrade` is allowed to remove packages when that is needed to upgrade the system as a whole.
 
 #### Q. Which command installs the package `nginx` from the configured APT repositories?
 
@@ -51,21 +51,21 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 #### Q. You downloaded `package.deb` and want to install it while letting APT fetch any missing dependencies. Which command does that?
 
+* [x] `apt install ./package.deb`
 * [ ] `dpkg -i package.deb`
 * [ ] `apt download package.deb`
 * [ ] `apt-cache show package.deb`
-* [x] `apt install ./package.deb`
 
 > **Explanation:** Given a path (note the `./`), `apt install` installs the local file and pulls dependencies from the repositories. `dpkg -i` installs the file but does not resolve dependencies.
 
-#### Q. Which low-level tool installs a `.deb` file directly without resolving dependencies?
+#### Q. `dpkg -i cowsay.deb` ends with "dependency problems - leaving unconfigured". Which command installs the missing dependencies and finishes configuring the package?
 
-* [ ] `rpm -ivh`
-* [x] `dpkg -i`
-* [ ] `apt-cache`
-* [ ] `yum localinstall`
+* [ ] `dpkg --configure -a`
+* [x] `apt-get install -f`
+* [ ] `apt-get clean`
+* [ ] `dpkg -r cowsay`
 
-> **Explanation:** `dpkg` is the Debian package tool underneath APT. If dependencies are missing it leaves the package unconfigured, which a later `apt install -f` can fix.
+> **Explanation:** `dpkg` unpacks the package but cannot fetch dependencies, so it stays half-installed (`iU`). `apt-get install -f` (fix broken) downloads what is missing and completes configuration; `dpkg --configure -a` alone would fail again for the same reason.
 
 #### Q. Which command uninstalls a package but keeps its system-wide configuration files?
 
@@ -76,21 +76,21 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 > **Explanation:** `apt remove` deletes the program files and leaves configuration in `/etc`, so a reinstall picks it up again. `apt purge` removes the configuration files too.
 
-#### Q. Which command uninstalls a package and also deletes its system-wide configuration files?
+#### Q. After `apt remove cron`, `dpkg -l cron` shows the status `rc`. What does that mean?
 
-* [ ] `apt remove package`
-* [ ] `apt clean package`
-* [x] `apt purge package`
-* [ ] `apt autoclean package`
+* [ ] The package is installed, and its configuration files are up to date
+* [ ] The package is marked for reinstallation the next time APT runs
+* [ ] The package and all its configuration files were removed completely
+* [x] The package is removed, but its configuration files are still on disk
 
-> **Explanation:** `purge` is `remove` plus deleting the package's configuration files. Files in users' home directories are never touched by either command.
+> **Explanation:** The first letter is the desired state (`r`emove) and the second the actual state (`c`onfig-files only). `apt purge cron` deletes those leftovers even after a plain remove; files in home directories are never touched.
 
 #### Q. What does `apt autoremove` do?
 
-* [ ] Removes broken packages
-* [ ] Deletes downloaded package files from the cache
-* [ ] Removes old configuration files
 * [x] Removes packages that were installed as dependencies and are no longer needed
+* [ ] Removes packages whose installation failed or left them broken
+* [ ] Deletes downloaded `.deb` files from the cache in `/var/cache/apt`
+* [ ] Removes configuration files left behind by removed packages
 
 > **Explanation:** When nothing depends on an automatically installed package any more, `autoremove` uninstalls it to free space. Cleaning the download cache is `apt clean`.
 
@@ -105,30 +105,30 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 #### Q. `apt show apache2` prints a full description of the package. What does this prove?
 
-* [ ] That `apache2` is installed and running
-* [ ] That `apache2` is installed but not running
-* [ ] That `apache2` was installed at some point
+* [ ] That `apache2` is installed and its service is currently running
+* [ ] That `apache2` is installed, although its service may be stopped
+* [ ] That `apache2` was installed on this system at some point in the past
 * [x] Only that the package exists in the repository metadata, installed or not
 
 > **Explanation:** `apt show` describes packages from repository data. Check local installation with `dpkg-query -W -f='${Status}\n' apache2`, which prints `install ok installed` for installed packages.
 
 #### Q. Which command searches the APT package lists for packages related to `nginx`?
 
+* [x] `apt search nginx`
 * [ ] `apt find nginx`
 * [ ] `apt locate nginx`
 * [ ] `apt query nginx`
-* [x] `apt search nginx`
 
 > **Explanation:** `apt search` matches names and descriptions in the package index. Searching needs no root privileges, unlike installing or removing.
 
 #### Q. Why do scripts usually call `apt-get` and `apt-cache` instead of `apt`?
 
-* [ ] `apt` is not installed on servers
-* [ ] `apt-get` resolves dependencies, while `apt` does not
+* [ ] `apt` is not installed by default on Debian or Ubuntu server images
+* [ ] `apt-get` resolves dependencies automatically, while `apt` installs only named packages
 * [x] `apt` is designed for interactive use, while `apt-get` keeps a stable interface for scripts
-* [ ] `apt-get` is faster because it skips signature checks
+* [ ] `apt-get` is faster because it skips repository signature checks
 
-> **Explanation:** `apt` adds progress bars and friendlier output and may change between releases. `apt-get` and `apt-cache` prioritize backward-compatible behaviour, so automation should use them.
+> **Explanation:** `apt` adds progress bars and friendlier output and may change between releases; piping it prints "apt does not have a stable CLI interface". `apt-get` and `apt-cache` prioritize backward compatibility, so automation should use them.
 
 #### Q. Which command lists the packages installed on a Debian-based system?
 
@@ -151,20 +151,20 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 #### Q. Where are APT repositories configured?
 
 * [ ] `/etc/yum.repos.d/`
-* [ ] `/var/lib/apt/lists/`
+* [ ] `/var/lib/apt/lists/` and the index files cached inside it
 * [x] `/etc/apt/sources.list` and files in `/etc/apt/sources.list.d/`
-* [ ] `/etc/apt/apt.conf` only
+* [ ] `/etc/apt/apt.conf` and files in `/etc/apt/apt.conf.d/`
 
-> **Explanation:** Repository entries live in `sources.list` and the `sources.list.d/` directory. `/var/lib/apt/lists/` holds the downloaded index files, and `/etc/yum.repos.d/` is for YUM/DNF.
+> **Explanation:** Repository entries live in `sources.list` and in `sources.list.d/` (Ubuntu 24.04 uses `sources.list.d/ubuntu.sources`). `/var/lib/apt/lists/` holds the downloaded index files, and `/etc/yum.repos.d/` is for YUM/DNF.
 
 #### Q. Which command adds a repository, such as a PPA, on Ubuntu?
 
+* [x] `add-apt-repository ppa:user/repo`
 * [ ] `apt add-repo ppa:user/repo`
 * [ ] `apt-key add ppa:user/repo`
 * [ ] `apt source ppa:user/repo`
-* [x] `add-apt-repository ppa:user/repo`
 
-> **Explanation:** `add-apt-repository` writes the repository entry into `/etc/apt/sources.list.d/`. It comes from the `software-properties-common` package; run `apt update` afterwards.
+> **Explanation:** `add-apt-repository` (from `software-properties-common`) writes the entry into `/etc/apt/sources.list.d/` and, on current Ubuntu, refreshes the package lists itself unless given `-n`.
 
 #### Q. What is a PPA on Ubuntu?
 
@@ -177,66 +177,84 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 #### Q. Why does a modern APT source entry include `[signed-by=/etc/apt/keyrings/winehq.gpg]`?
 
-* [ ] It encrypts the downloaded packages
-* [ ] It makes APT skip signature checks for that repository
-* [ ] It speeds up downloads by caching the key
+* [ ] It encrypts the packages downloaded from that repository with the key
+* [ ] It tells APT to skip signature checks because the repository is trusted
+* [ ] It speeds up downloads by caching the key instead of fetching it each time
 * [x] It restricts trust in that key to this repository instead of trusting it for all repositories
 
 > **Explanation:** Scoping a third-party signing key with `signed-by` means it can only vouch for packages from that one source, limiting the damage if the key or repository is compromised.
 
 #### Q. What is the purpose of GPG signatures in package management?
 
-* [ ] To compress packages
+* [ ] To compress packages so they download faster from mirrors
 * [x] To verify that packages are authentic and have not been tampered with
-* [ ] To encrypt package contents during download
-* [ ] To track package version numbers
+* [ ] To encrypt package contents so mirrors cannot read them
+* [ ] To record which package version is installed on each system
 
 > **Explanation:** The package manager checks each package or repository index against a trusted signing key. A failed check means the data did not come from the expected source or was modified.
 
-#### Q. In a YUM `.repo` file, what does `gpgcheck=1` do?
+#### Q. In a YUM/DNF `.repo` file, what does `gpgcheck=1` do?
 
 * [ ] Enables the repository
 * [ ] Downloads the repository's GPG key automatically
-* [x] Makes YUM verify the GPG signature of packages from that repository
+* [x] Makes YUM/DNF verify the GPG signature of packages from that repository
 * [ ] Encrypts connections to the mirror
 
-> **Explanation:** With `gpgcheck=1`, packages whose signatures do not verify are refused. Enabling a repository is controlled separately with `enabled=1`.
+> **Explanation:** With `gpgcheck=1`, packages whose signatures do not verify are refused. Enabling a repository is controlled separately with `enabled=1`, and the key location with `gpgkey=`.
 
-#### Q. Which command lists the available updates for installed packages on a YUM-based system?
+#### Q. A server has this file. You run `dnf install mytool`, and `mytool` exists only in this repository. What happens?
 
-* [ ] `yum show updates`
-* [ ] `yum pending`
-* [ ] `yum history`
-* [x] `yum check-update`
+```text
+# /etc/yum.repos.d/internal.repo
+[internal]
+name=Internal tools
+baseurl=https://repo.example.com/el9/
+enabled=0
+gpgcheck=1
+```
 
-> **Explanation:** `yum check-update` (or `dnf check-update`) lists packages with newer versions. An exit status of 100 means updates are available, not that the command failed.
+* [ ] DNF installs `mytool` but skips the signature check
+* [x] DNF reports that no package `mytool` is available, because the repository is disabled
+* [ ] DNF enables the repository permanently and installs `mytool`
+* [ ] DNF downloads `mytool` from a mirror list instead of `baseurl`
+
+> **Explanation:** `enabled=0` hides the repository from normal commands. `dnf --enablerepo=internal install mytool` uses it once, and `gpgcheck=1` still applies to the downloaded package.
+
+#### Q. A nightly script runs `dnf check-update` and alerts on any non-zero exit status. It alerts almost every night, though nothing is broken. Why?
+
+* [ ] `check-update` needs root and fails for normal users
+* [ ] `check-update` exits 1 whenever the metadata cache is refreshed
+* [ ] `check-update` installs updates and exits non-zero when a reboot is needed
+* [x] `check-update` exits 100 when updates are available, 0 when there are none and 1 on error
+
+> **Explanation:** `dnf check-update` (and `yum check-update`) only lists pending updates. Exit status 100 means "updates available", so scripts should treat 100 separately from real errors.
 
 #### Q. Which YUM command updates every installed package?
 
+* [x] `yum update`
 * [ ] `yum check-update`
 * [ ] `yum refresh`
 * [ ] `yum install --all`
-* [x] `yum update`
 
-> **Explanation:** `yum update` with no package names upgrades everything; naming a package, as in `yum update httpd`, limits it. On DNF the usual spelling is `dnf upgrade`.
+> **Explanation:** `yum update` with no package names upgrades everything; naming a package, as in `yum update httpd`, limits it. On DNF the usual spelling is `dnf upgrade`, and `update` is accepted as an alias.
 
 #### Q. How does refreshing package metadata on YUM/DNF differ from APT?
 
-* [ ] YUM/DNF never use a metadata cache
+* [ ] YUM/DNF never cache metadata and query the repository on every command
 * [x] YUM/DNF refresh expired metadata automatically, while APT needs an explicit `apt update`
-* [ ] YUM/DNF require `yum update` before every install
-* [ ] YUM/DNF download all packages ahead of time
+* [ ] YUM/DNF require running `yum update` before every install, like APT
+* [ ] YUM/DNF download every package in the repository ahead of time
 
-> **Explanation:** YUM and DNF keep a metadata cache and refresh it when it expires. With APT you normally run `apt update` yourself before installing or upgrading.
+> **Explanation:** YUM and DNF keep a metadata cache and refresh it when it is older than `metadata_expire`. With APT you normally run `apt update` yourself before installing or upgrading.
 
-#### Q. Which command searches YUM repositories for packages matching `apache`?
+#### Q. On Rocky Linux 9 you need the command `semanage`, but it is not installed. Which command tells you which package provides it?
 
-* [ ] `yum find apache`
-* [ ] `yum locate apache`
-* [x] `yum search apache`
-* [ ] `yum query apache`
+* [ ] `dnf search semanage`
+* [ ] `rpm -qf /usr/sbin/semanage`
+* [x] `dnf provides /usr/sbin/semanage`
+* [ ] `dnf info semanage`
 
-> **Explanation:** `yum search` matches package names and summaries. Searching does not require root privileges.
+> **Explanation:** `dnf provides` searches repository file lists and reports `policycoreutils-python-utils`. `rpm -qf` only works for files that are already installed, and `dnf search` matches names and summaries, not file paths.
 
 #### Q. Which package name do you install to get the Apache web server on Fedora/RHEL, compared with Debian/Ubuntu?
 
@@ -249,12 +267,12 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 #### Q. Which YUM command shows detailed information such as version, size and description for the package `httpd`?
 
+* [x] `yum info httpd`
 * [ ] `yum show httpd`
 * [ ] `yum describe httpd`
 * [ ] `yum about httpd`
-* [x] `yum info httpd`
 
-> **Explanation:** `yum info` displays metadata for an installed or available package. On APT systems the equivalent is `apt show`.
+> **Explanation:** `yum info` (or `dnf info`) displays metadata for an installed or available package. On APT systems the equivalent is `apt show`.
 
 #### Q. Which command lists all installed packages using YUM?
 
@@ -274,14 +292,14 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 > **Explanation:** `yum clean all` deletes cached packages and metadata, freeing space and forcing fresh metadata on the next run.
 
-#### Q. Which YUM command reverts the most recent package transaction?
+#### Q. Which command reverts the most recent package transaction on a YUM/DNF system?
 
-* [ ] `yum revert`
-* [ ] `yum rollback`
-* [ ] `yum cancel`
 * [x] `yum history undo last`
+* [ ] `yum revert`
+* [ ] `yum cancel last`
+* [ ] `yum remove --last`
 
-> **Explanation:** `yum history` lists past transactions, and `yum history undo` reverses one; `last` refers to the most recent. DNF offers the same subcommands.
+> **Explanation:** `yum history` lists past transactions, and `yum history undo` reverses one; `last` refers to the most recent. `dnf history undo last` works the same, though undo fails if older package versions are no longer available.
 
 #### Q. Where are YUM repository definitions stored?
 
@@ -292,6 +310,15 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 > **Explanation:** Each `.repo` file in `/etc/yum.repos.d/` defines one or more repositories with a label, name, base URL or mirror list and `gpgcheck` setting. `/var/cache/yum/` only holds cached data.
 
+#### Q. A `.repo` file section contains both `baseurl=` and `mirrorlist=` lines. How do they differ?
+
+* [ ] `baseurl` is used to download packages, while `mirrorlist` only supplies GPG keys
+* [x] `baseurl` names one repository location, while `mirrorlist` is a URL returning a list of mirrors
+* [ ] `mirrorlist` names a local cache directory, while `baseurl` is the remote server
+* [ ] `baseurl` is consulted only for updates, while `mirrorlist` is used for new installs
+
+> **Explanation:** A mirror list lets the client pick a nearby, up-to-date mirror; `baseurl` names one fixed location. Either can locate the repository metadata, and the `[label]` in brackets is the repository ID used by `--enablerepo`.
+
 #### Q. Which command shows all enabled and disabled repositories on a YUM system?
 
 * [ ] `yum repos`
@@ -301,39 +328,48 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 
 > **Explanation:** `yum repolist` shows enabled repositories, and adding `all` includes disabled ones. `dnf repolist all` works the same way.
 
-#### Q. Which command adds a new YUM repository from a URL?
+#### Q. On RHEL or Rocky Linux 9 with `yum-utils` installed, which command adds a new repository from a `.repo` URL?
 
+* [x] `yum-config-manager --add-repo=URL`
 * [ ] `yum install --repo=URL`
 * [ ] `add-apt-repository URL`
 * [ ] `yum repolist --add URL`
-* [x] `yum-config-manager --add-repo=URL`
 
-> **Explanation:** `yum-config-manager` (from `yum-utils`) writes a `.repo` file for the URL; on DNF the equivalent is `dnf config-manager --add-repo`. `add-apt-repository` is for APT.
+> **Explanation:** `yum-config-manager` saves the `.repo` file into `/etc/yum.repos.d/`; `dnf config-manager --add-repo` is the same on DNF 4. `add-apt-repository` is for APT.
 
-#### Q. Which command permanently disables the repository with ID `epel` on a YUM system?
+#### Q. On Fedora 41 or later, which uses DNF 5, which command adds a repository from a `.repo` file URL?
+
+* [ ] `dnf config-manager --add-repo=URL`
+* [x] `dnf config-manager addrepo --from-repofile=URL`
+* [ ] `rpm --import URL`
+* [ ] `dnf repolist --add URL`
+
+> **Explanation:** DNF 5 turned `config-manager` options into subcommands, and the old `--add-repo` option is rejected as an unknown argument. `rpm --import` only imports a GPG key.
+
+#### Q. Which command permanently disables the repository with ID `epel` on a RHEL 9-family system?
 
 * [ ] `yum remove epel`
 * [ ] `yum --enablerepo=epel update`
 * [ ] `yum clean epel`
 * [x] `yum-config-manager --disable epel`
 
-> **Explanation:** `--disable` sets `enabled=0` in the repository's `.repo` file, so it stays off until re-enabled with `--enable`.
+> **Explanation:** `--disable` sets `enabled=0` in the repository's `.repo` file, so it stays off until re-enabled with `--enable`. For a single command, use `--disablerepo=epel` instead.
 
 #### Q. What does the `--enablerepo=REPO` option do on a `yum` or `dnf` command?
 
-* [ ] Permanently enables the repository
-* [ ] Creates a new repository
-* [ ] Enables every configured repository
+* [ ] Enables the repository permanently by editing its `.repo` file
+* [ ] Creates a new repository definition with the given ID
+* [ ] Enables every configured repository, including disabled ones
 * [x] Enables a disabled repository for that single command only
 
 > **Explanation:** The option affects only the current command, so the `.repo` file keeps the repository disabled. Use `yum-config-manager --enable` for a permanent change.
 
 #### Q. In `rpm -ivh package.rpm`, what do the three letters mean?
 
-* [ ] Install, validate, hold
-* [ ] Information, version, help
-* [ ] Interactive, verify, hash
 * [x] Install, verbose, print hash marks for progress
+* [ ] Install, validate signatures, hold the package
+* [ ] Show information, print the version, show help
+* [ ] Interactive mode, verify files, compute hashes
 
 > **Explanation:** `-i` installs, `-v` prints details and `-h` shows a progress bar of `#` marks. RPM itself does not download dependencies.
 
@@ -353,7 +389,16 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 * [ ] `rpm -ivh nano`
 * [ ] `rpm --install nano`
 
-> **Explanation:** `rpm -q nano` prints the installed version, or "package nano is not installed". `rpm -e` would remove it.
+> **Explanation:** `rpm -q nano` prints the installed version, such as `nano-5.6.1-7.el9.x86_64`, or "package nano is not installed" with exit status 1. `rpm -e` would remove it.
+
+#### Q. What does `rpm -qd nano` print?
+
+* [x] The documentation files installed by the `nano` package
+* [ ] The packages that `nano` depends on
+* [ ] The files `nano` would delete when removed
+* [ ] The description text from the `nano` package header
+
+> **Explanation:** In query mode `-d` selects documentation files. Dependencies are shown with `rpm -qR`, the full file list with `rpm -ql` and the description with `rpm -qi`.
 
 #### Q. Which command removes the installed package `nano` with RPM?
 
@@ -362,25 +407,34 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 * [x] `rpm -e nano`
 * [ ] `rpm -x nano`
 
-> **Explanation:** `-e` stands for erase. RPM refuses if other installed packages depend on `nano`, because it does not manage dependencies for you.
+> **Explanation:** `-e` stands for erase. RPM refuses with "Failed dependencies" if other installed packages need `nano`, because it does not manage dependencies for you.
 
 #### Q. `rpm -ivh tool.rpm` fails with "Failed dependencies". Why would `dnf install ./tool.rpm` succeed?
 
-* [ ] DNF ignores dependencies
-* [ ] DNF converts the package to a `.deb`
-* [ ] DNF installs the file without verifying it
 * [x] DNF resolves the dependencies and installs them from the repositories
+* [ ] DNF ignores dependencies, which RPM checks strictly
+* [ ] DNF rebuilds the package so that it no longer has dependencies
+* [ ] DNF installs the file without verifying its signature or dependencies
 
 > **Explanation:** RPM is a low-level tool that only checks dependencies. High-level managers like YUM and DNF find and install what is missing, which is their main advantage.
 
+#### Q. On Ubuntu, `apt install chrony` lists `systemd-timesyncd` under "The following packages will be REMOVED". Why?
+
+* [ ] APT removes the oldest package whenever disk space is low
+* [ ] `chrony` is a newer version of `systemd-timesyncd`
+* [x] The two packages declare a conflict, so APT must remove one to install the other
+* [ ] APT always removes packages that were installed automatically
+
+> **Explanation:** Packages can declare `Conflicts` or `Breaks`. APT resolves them by proposing removals and asks before proceeding, so read that section carefully before answering yes.
+
 #### Q. What is the main advantage of a package manager over installing software by hand?
 
-* [ ] It always installs the newest upstream version
-* [x] It resolves dependencies and keeps the software updated with the rest of the system
-* [ ] It never requires root privileges
-* [ ] It produces smaller programs
+* [ ] It always installs the newest upstream release as soon as it is published
+* [x] It tracks dependencies and installed files, so software can be updated or removed cleanly
+* [ ] It lets any user install software system-wide without root privileges
+* [ ] It compiles every program from source for your specific CPU model
 
-> **Explanation:** Packages declare their dependencies, and the manager tracks installed files so it can update or remove them cleanly. Manually installed software must be tracked and patched by you.
+> **Explanation:** Packages declare their dependencies, and the manager records which files belong to which package. Manually installed software must be tracked, patched and removed by you.
 
 #### Q. What is the usual order of steps to build and install software from a source tarball?
 
@@ -389,13 +443,22 @@ Check your understanding of APT, dpkg, YUM/DNF, RPM, repositories and installing
 * [x] Extract, run `./configure` if present, `make`, then `make install`
 * [ ] Extract, then `make install`, then `make`
 
-> **Explanation:** After `tar -xzf`, `./configure` checks dependencies and prepares the build, `make` compiles and `make install` copies the results into place, often under `/usr/local`.
+> **Explanation:** After `tar -xzf`, `./configure` checks dependencies and prepares the build, `make` compiles and `make install` copies the results into place, by default under `/usr/local`.
+
+#### Q. You build a tarball whose build uses an autoconf `configure` script, but you have no root access. How do you make `make install` put the program in `~/.local`?
+
+* [ ] Run `make install DESTDIR=/usr/local`
+* [ ] Run `sudo make install`, which is required for every tarball
+* [ ] Copy the tarball into `~/.local` before extracting it
+* [x] Run `./configure --prefix=$HOME/.local` before `make` and `make install`
+
+> **Explanation:** `--prefix` sets the install location, which defaults to `/usr/local`, so the binary goes to `~/.local/bin`. Writing under `/usr/local` needs root, and `DESTDIR` only stages files for packaging.
 
 #### Q. What is the main maintenance drawback of software installed from a tarball?
 
-* [ ] It cannot be run by regular users
-* [ ] It always overwrites files owned by packages
+* [ ] It can only be run by root, because it was installed with `make install`
+* [ ] It always overwrites files that belong to distribution packages
 * [x] It does not receive automatic updates, so you must track security fixes yourself
-* [ ] It is deleted when the package cache is cleaned
+* [ ] It is deleted the next time the package cache is cleaned
 
 > **Explanation:** The package manager does not know about manually built software, so `apt upgrade` or `dnf upgrade` will never patch it. Installing it under `/usr/local` at least keeps it separate from packaged files.

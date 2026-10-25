@@ -13,7 +13,7 @@ Unix and Unix-like systems, including Linux, organize files in a hierarchical st
 1. **Ordinary files** are the most common type, containing text, data, or program code. They cannot contain other files or directories.
 2. **Directory files** function as folders to organize other files, with the root directory (`/`) being the top-level directory of the entire filesystem. Users' files are usually stored in their respective home directories, such as `/home/adam/`.
 3. **Device files** represent hardware devices as if they were files. Block-oriented devices, like hard drives, transfer data in large blocks, whereas character-oriented devices, such as keyboards or modems, handle data one byte at a time.
-4. **Link files** serve as references to other files. Hard links are essentially duplicates of the original file and behave identically, while soft links (or symbolic links) act as indirect pointers to a file or directory, similar to shortcuts in Windows.
+4. **Link files** serve as references to other files. Hard links are additional names for the same file (the same inode) and behave identically, while soft links (or symbolic links) act as indirect pointers to a file or directory, similar to shortcuts in Windows.
 
 The `file` command in Linux is a powerful tool that helps identify and classify these file types by analyzing their content and structure. Below are insights on how the `file` command interprets and reports on these various classifications:
 
@@ -85,11 +85,11 @@ Offset 0     ┌─────────────────────�
 
 ```
 Filesystem Layout (ext4, 4 KiB blocks)
-LBA 0           LBA 124      LBA 125                      LBA 126+  
-┌──────────┬─────────────┬────────────────────┬──────────────────────────┐
-│ Boot     │ Padding     │ Primary Superblock │ Group Descriptor Table   │
-│ Sector   │ (blocks)    │ (block 1024)       │ (blocks 1025…1025+GDT)   │
-└──────────┴─────────────┴────────────────────┴──────────────────────────┘
+Byte 0         Byte 1024              Block 1
+┌──────────────┬──────────────────────┬──────────────────────────┐
+│ Boot area /  │ Primary Superblock   │ Group Descriptor Table   │
+│ padding      │ (1024 bytes, block 0)│ (blocks 1…GDT size)      │
+└──────────────┴──────────────────────┴──────────────────────────┘
                                   │
                                   ▼
               ┌───────────────────────────────────────────┐
@@ -99,7 +99,7 @@ LBA 0           LBA 124      LBA 125                      LBA 126+
               └───────────────────────────────────────────┘
 ```
 
-* **Superblock** (at block 1024) holds global FS metadata plus a pointer (offset) to the start of the Group Descriptor Table (GDT).
+* **Superblock** (at byte offset 1024, inside block 0 when blocks are 4 KiB; backups sit in later block groups, e.g. block 32768) holds global FS metadata plus a pointer (offset) to the start of the Group Descriptor Table (GDT).
 * **GDT** is an array of one descriptor per block group; each descriptor records where that group begins, how many free blocks/inodes remain, etc.
 * When the kernel needs to read a block group’s metadata, it indexes into the GDT to find its on-disk location.
 
@@ -110,9 +110,9 @@ Descriptor #2
     ↓
 Block Group #2 Start
 ┌───────────────────────────────────────────────────────────────────┐
-│ Inode Bitmap    [1 block]                                         │
-├───────────────────────────────────────────────────────────────────┤
 │ Block Bitmap    [1 block]                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ Inode Bitmap    [1 block]                                         │
 ├───────────────────────────────────────────────────────────────────┤
 │ Inode Table     [ (InodesPerGroup×InodeSize)/BlockSize blocks ]   │
 ├───────────────────────────────────────────────────────────────────┤
@@ -181,7 +181,7 @@ RESERVED JOURNAL AREA
 ```
 
 * Write-ahead log capturing **metadata** (and optionally data) before main-area overwrite.
-* Ext3/4 default **ordered** mode: data blocks reach media before the commit → no fs-checker sees stale metadata.
+* Ext3/4 default **ordered** mode: data blocks reach media before the metadata that references them is committed → after a crash, files do not point at blocks holding stale data.
 * Replayed by `jbd2` on mount after unclean shutdown.
 
 #### End-to-End Walk-Through
@@ -216,7 +216,7 @@ RAM phys addr 0x3f7e_0000
 
 * **Fault-on-first-touch**: VFS sees a cache miss, allocates a free page, submits `bio` to read the 4 KiB block.
 * Subsequent I/O hits the in-RAM page; mmap’d code/data benefit identically — the cache is unified across read(), mmap(), readdir, etc.
-* Indexing: `page->index = logical_block_number` allows constant-time lookup in radix-tree/xarray.
+* Indexing: `page->index` is the file offset in page units (equal to the logical block number when blocks are 4 KiB), which allows constant-time lookup in radix-tree/xarray.
 
 #### Dirty Pages → Write-back Pipeline
 
@@ -234,7 +234,7 @@ USER SPACE write(2) / memcpy to mmap
 ```
 
 * Dirty clustering (`writepages()`): adjacent dirty pages coalesced into single bio up to the device `queue_max_hw_sectors`.
-* **pdflush / bdi flusher** wakes when `vm.dirty_ratio` or `dirty_expire_centisecs` thresholds fire.
+* Per-device (**bdi**) flusher workers, which replaced `pdflush` in Linux 2.6.32, start background writeback when dirty data exceeds `vm.dirty_background_ratio` or is older than `vm.dirty_expire_centisecs`; at `vm.dirty_ratio` writing processes are throttled.
 * `sync`, `fsync`, `O_SYNC`, and journal commit barriers guarantee persistence semantics demanded by databases and userspace logs.
 
 ### Directory Hierarchy 

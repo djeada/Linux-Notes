@@ -188,7 +188,7 @@ Partition table formats are  organize data on storage devices, enabling the syst
 
 #### Master Boot Record (MBR)
 
-The Master Boot Record is the original partition table format, introduced in the 1980s, which has been the standard for decades. Located in the first sector of a storage device, the MBR holds the boot loader and information about the disk's partitions. However, MBR has some notable limitations: it supports a maximum disk size of 2 TB and can only create up to four primary partitions. For users needing more partitions, an extended partition must be created to hold additional logical partitions. Despite these limitations, MBR's simplicity and broad compatibility with older systems make it a popular choice for users and devices that do not require large storage capacities or numerous partitions.
+The Master Boot Record is the original partition table format, introduced in the 1980s, which has been the standard for decades. Located in the first sector of a storage device, the MBR holds the boot loader and information about the disk's partitions. However, MBR has some notable limitations: it supports a maximum disk size of 2 TiB (with 512-byte sectors) and can only create up to four primary partitions. For users needing more partitions, an extended partition must be created to hold additional logical partitions. Despite these limitations, MBR's simplicity and broad compatibility with older systems make it a popular choice for users and devices that do not require large storage capacities or numerous partitions.
 
 #### GUID Partition Table (GPT)
 
@@ -202,7 +202,7 @@ Comparison Table:
 | Max Partitions             | 4 primary partitions           | 128 partitions (default)           |
 | Data Redundancy            | No                             | Yes (multiple partition tables)    |
 | Error Checking             | None                           | CRC32 checksums                    |
-| Boot Mode                  | BIOS                           | UEFI                               |
+| Boot Mode                  | BIOS (UEFI firmware often too) | UEFI (BIOS via a BIOS boot partition) |
 | Compatibility              | Older systems                  | Modern systems                     |
 
 ### Operations in `gdisk` and `fdisk`
@@ -345,7 +345,7 @@ To check for unallocated space on a disk—space that hasn’t been assigned to 
 
 ##### Using `fdisk`
 
-With `fdisk`, you can view both existing partitions and unallocated space. When you use `fdisk -l`, it lists the partitions on the disk, and at the end, any unallocated space will be noted.
+With `fdisk`, you can view both existing partitions and unallocated space. `fdisk -l` lists the disk's total sectors and each partition's start and end sectors, so gaps can be inferred; inside interactive `fdisk`, the `F` command lists the unpartitioned regions directly.
 
 ```bash
 sudo fdisk -l /dev/sda
@@ -364,12 +364,10 @@ Disk identifier: 0x12345678
 Device     Boot   Start        End    Sectors   Size Id Type
 /dev/sda1          2048  104857599 104855552    50G 83 Linux
 /dev/sda2     104857600 209715199 104857600    50G 83 Linux
-
-Disk /dev/sda has 400 GiB of unallocated space.
 ```
 
-- This shows that `/dev/sda` has 500 GB in total, with two partitions, and it indicates unallocated space.
-- You can see that the remainder of the disk (400 GB) is unallocated.
+- This shows that `/dev/sda` has 500 GB (1048576000 sectors) in total, with two partitions.
+- The last partition ends at sector 209715199, so the remainder of the disk (about 400 GB) is unallocated.
 
 ##### Using `parted`
 
@@ -400,7 +398,7 @@ Number  Start   End     Size    Type     File system  Flags
 
 ##### Using `lsblk`
 
-`lsblk` doesn’t directly show unallocated space, but by listing only mounted filesystems and partitions, it indirectly indicates where unallocated space might be found on a disk.
+`lsblk` doesn’t directly show unallocated space, but by listing each disk and all of its partitions with their sizes, it indirectly indicates where unallocated space might be found on a disk.
 
 ```bash
 lsblk
@@ -459,11 +457,13 @@ I. Open `parted`:
 sudo parted /dev/sda
 ```
 
-II. Set Disk Label (Optional):
+II. Set Disk Label (Optional, only for a new or empty disk):
 
 ```bash
 mklabel gpt
 ```
+
+`mklabel` writes a new, empty partition table, which discards every existing partition on the disk. Skip this step when adding a partition to a disk that already has a table.
 
 III. Create the Partition:
 
@@ -471,7 +471,7 @@ III. Create the Partition:
 mkpart primary ext4 100GB 150GB
 ```
 
-This creates a primary partition formatted as `ext4` starting at 100 GB and ending at 150 GB.
+This creates a partition starting at 100 GB and ending at 150 GB. On GPT, `primary` is just the partition name, and `ext4` only sets the partition type; `mkpart` does not create a filesystem.
 
 IV. Type `quit` to exit `parted`.
 
@@ -633,7 +633,7 @@ IV. Verify the Deletion:
 
 Use `lsblk` or `sudo gdisk -l /dev/sda` to confirm the partition has been removed.
 
-**Note:** Deleting a partition will remove all data on that partition. Make sure to back up any important data before proceeding with the deletion process.
+**Note:** Deleting a partition makes the data on it inaccessible, even though the old blocks are not securely erased. Make sure to back up any important data before proceeding with the deletion process.
 
 ### Practical Examples and Commands
 
@@ -769,23 +769,26 @@ Partition table scan:
   APM: not present
   GPT: not present
 
-Found valid MBR with protective or hybrid GPT; converting MBR to GPT format in memory.
-This operation may not preserve existing partitions.
+***************************************************************
+Found invalid GPT and valid MBR; converting MBR to GPT format
+in memory.
+***************************************************************
 
 Disk /dev/sda: 20971520 sectors, 10.0 GiB
 Sector size (logical/physical): 512 bytes / 512 bytes
 Disk identifier (GUID): FFFFEEEE-DDDD-CCCC-BBBB-AAAA99998888
 Partition table holds up to 128 entries
 First usable sector is 34, last usable sector is 20971486
-Total free space is 0 sectors (0 bytes)
+Total free space is 4029 sectors (2.0 MiB)
 
 Number  Start (sector)    End (sector)  Size       Code  Name
-   1            2048        20971519   10.0 GiB    0700  Microsoft basic data
+   1            2048        20969471   10.0 GiB    8300  Linux filesystem
 ```
 
 - The disk `/dev/sda` currently uses the MBR partitioning scheme.
-- There's one primary partition occupying the entire disk.
+- There's one primary partition occupying nearly the entire disk. `gdisk` maps MBR type codes to GPT ones, so MBR type `83` (Linux) becomes `8300`.
 - `gdisk` is ready to convert the MBR partition table to GPT in memory.
+- GPT stores a backup table in the last 33 sectors of the disk. If an MBR partition runs to the very last sector, `gdisk` refuses to write ("Secondary partition table overlaps the last partition by 33 blocks!") until that partition is shrunk.
 
 #### Step 2: Launch gdisk Interactive Mode
 
@@ -827,11 +830,11 @@ Disk identifier (GUID): A1B2C3D4-E5F6-7890-1234-56789ABCDEF0
 Partition table holds up to 128 entries
 
 Number  Start (sector)    End (sector)  Size       Code  Name
-   1            2048        20971519   10.0 GiB    0700  Microsoft basic data
+   1            2048        20969471   10.0 GiB    8300  Linux filesystem
 ```
 
-- Confirms the presence of a single partition spanning the entire disk.
-- The partition code `0700` indicates a Microsoft basic data partition.
+- Confirms the presence of a single partition spanning nearly the entire disk.
+- The partition code `8300` indicates a Linux filesystem partition.
 
 #### Step 4: Write the New GPT Partition Table
 
@@ -883,7 +886,7 @@ Disk identifier (GUID): B123C456-D789-0E12-3456-7890ABCDEF12
 Partition table holds up to 128 entries
 
 Number  Start (sector)    End (sector)  Size       Code  Name
-   1            2048        20971519   10.0 GiB    8300  Linux filesystem
+   1            2048        20969471   10.0 GiB    8300  Linux filesystem
 ```
 
 - The disk now has a GPT partition table.
@@ -930,8 +933,8 @@ n
 | Option            | Action                                            |
 |-------------------|---------------------------------------------------|
 | Partition Number  | Press Enter to accept the default.                |
-| First Sector      | Press Enter to accept the default.                |
-| Last Sector       | `+1M` (creates a 1 MB partition).                 |
+| First Sector      | `34` (the start of the gap before partition 1).   |
+| Last Sector       | Press Enter to fill the gap up to sector 2047.    |
 | Hex Code          | `ef02` (BIOS boot partition).                     |
 
 **Example Output:**
@@ -939,12 +942,14 @@ n
 ```
 Command (? for help): n
 Partition number (2-128, default 2): [Press Enter]
-First sector (34-2047, default = 34) or {+-}size{KMGTP}: [Press Enter]
-Last sector (2048-2047, default = 2047) or {+-}size{KMGTP}: +1M
-Current type is 'Linux filesystem'
+First sector (34-20971486, default = 20969472) or {+-}size{KMGTP}: 34
+Last sector (34-2047, default = 2047) or {+-}size{KMGTP}: [Press Enter]
+Current type is 8300 (Linux filesystem)
 Hex code or GUID (L to show codes, Enter = 8300): ef02
 Changed type of partition to 'BIOS boot partition'
 ```
+
+The gap between sector 34 and sector 2047 is just under 1 MiB, which is enough for GRUB's core image. A `+1M` size would not fit there; on a new disk, leave about 1 MiB free for this partition.
 
 - A small BIOS boot partition is created at the beginning of the disk.
 - This partition is required for GRUB to boot from a GPT disk on BIOS systems.

@@ -106,7 +106,7 @@ Task-state analysis helps separate different types of problems:
 | CPU bottleneck      | Many tasks runnable or running (**R** state)              |
 | I/O bottleneck      | Many tasks blocked in uninterruptible sleep (**D** state) |
 | Idle waiting        | Many tasks sleeping (**S** state)                         |
-| Stopped process     | Tasks in stopped/traced (**T** state)                     |
+| Stopped process     | Tasks stopped (**T**) or stopped by a tracer (**t**)      |
 | Zombie accumulation | Tasks in zombie (**Z** state)                             |
 
 ### Common Linux Task States
@@ -207,7 +207,7 @@ This can happen when:
 
 - a user sends SIGSTOP
 - a shell job is suspended with Ctrl+Z
-- a debugger stops the process
+- a debugger stops the process (shown as lowercase `t`, "tracing stop")
 
 A stopped process is not running. It stays paused until continued.
 
@@ -365,8 +365,10 @@ For scripting, `/proc/PID/status` is usually easier to read than `/proc/PID/stat
 A useful quick view is to count states across the system.
 
 ```bash
-ps -eo state | sort | uniq -c
+ps -eo state= | sort | uniq -c
 ```
+
+The `=` after `state` removes the column header, which would otherwise be counted as one extra `S`.
 
 Example output:
 
@@ -391,7 +393,7 @@ To repeat every second:
 ```bash
 while true; do
     date
-    ps -eo state | sort | uniq -c
+    ps -eo state= | sort | uniq -c
     sleep 1
 done
 ```
@@ -557,7 +559,10 @@ Example output:
 %Cpu(s): 96.0 us,  3.0 sy,  0.0 ni,  1.0 id,  0.0 wa
 
   PID USER      PR  NI S  %CPU COMMAND
- 4101 user      20   0 R 399.0 stress-ng-cpu
+ 4102 user      20   0 R 100.0 stress-ng-cpu
+ 4103 user      20   0 R 100.0 stress-ng-cpu
+ 4104 user      20   0 R  99.7 stress-ng-cpu
+ 4105 user      20   0 R  99.7 stress-ng-cpu
 ```
 
 #### Check Task States
@@ -569,11 +574,13 @@ ps -eLo pid,tid,stat,comm | grep stress-ng
 Example output:
 
 ```text
- 4101  4101 R    stress-ng-cpu
- 4101  4102 R    stress-ng-cpu
- 4101  4103 R    stress-ng-cpu
- 4101  4104 R    stress-ng-cpu
+ 4102  4102 R    stress-ng-cpu
+ 4103  4103 R    stress-ng-cpu
+ 4104  4104 R    stress-ng-cpu
+ 4105  4105 R    stress-ng-cpu
 ```
+
+The parent `stress-ng` process (here PID 4101) sleeps in `S`; each worker is a separate single-threaded process, so its TID equals its PID.
 
 Interpretation:
 - The stress-ng workers are in R state.
@@ -1145,7 +1152,7 @@ COUNT="${2:-10}"
 
 for i in $(seq 1 "$COUNT"); do
     echo "===== $(date) ====="
-    ps -eo state | sort | uniq -c
+    ps -eo state= | sort | uniq -c
     echo
     sleep "$INTERVAL"
 done
@@ -1550,7 +1557,7 @@ ps -L -p PID -o pid,tid,stat,pcpu,pmem,wchan:30,comm
 Count states:
 
 ```bash
-ps -eo state | sort | uniq -c
+ps -eo state= | sort | uniq -c
 ```
 
 Find D-state tasks:

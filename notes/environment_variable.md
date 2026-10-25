@@ -731,13 +731,13 @@ source venv/bin/activate
 
 A Python virtual environment activation script must modify your current shell’s `PATH`, so it has to be sourced.
 
-If you ran it as a normal script:
+If you ran it as a separate script:
 
 ```bash
-./venv/bin/activate
+bash venv/bin/activate
 ```
 
-it would modify only a child process and then exit, leaving your shell unchanged.
+it would modify only a child process and then exit, leaving your shell unchanged. Running `./venv/bin/activate` directly fails with `Permission denied`, because `venv` does not make `activate` executable.
 
 ### Subshells
 
@@ -1630,10 +1630,10 @@ You can also start with an empty environment using `env -i`:
 env -i python3 -c 'import os; print(os.environ)'
 ```
 
-Example output:
+Example output (Python 3.7+ adds `LC_CTYPE` itself when it coerces the C locale to UTF-8):
 
 ```bash
-environ({})
+environ({'LC_CTYPE': 'C.UTF-8'})
 ```
 
 A more realistic example:
@@ -1965,13 +1965,13 @@ not:
 ./.venv/bin/activate
 ```
 
-If you run it as a normal script:
+If you run it as a separate script:
 
 ```bash
-./.venv/bin/activate
+bash .venv/bin/activate
 ```
 
-it runs in a child process.
+it runs in a child process. (Running `./.venv/bin/activate` directly fails with `Permission denied`, because the file is not executable.)
 
 That child process may modify its own environment, but then it exits. Your parent shell stays unchanged.
 

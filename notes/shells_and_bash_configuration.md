@@ -550,7 +550,7 @@ HISTFILESIZE=2000
 
 `HISTSIZE` controls how many commands are kept in memory during the current session.
 
-`HISTFILESIZE` controls how many commands are saved in the history file, usually:
+`HISTFILESIZE` controls how many lines are kept in the history file, usually:
 
 ```bash
 ~/.bash_history

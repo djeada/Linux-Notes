@@ -82,7 +82,7 @@ Sample Output:
 ```
 PID TTY      STAT   TIME COMMAND
   2 ?        S      0:00 [kthreadd]
-/-+- 3951 ?        S      0:07  \_ [kworker/u8:2]
+ 3951 ?        I      0:07  \_ [kworker/u8:2]
 ...
 ```
 
@@ -344,7 +344,7 @@ When you kick off a command in a shell, it either *grabs the terminal* (foregrou
 |                        |
 +-----------+------------+
             |
-            | Ctrl+Z or bg
+            | Ctrl+Z, then bg
             v
 +-----------+------------+
 |                        |
@@ -394,14 +394,14 @@ II. **`bg %1`** — resumes that job *in the background*.
 
 III. **`fg %1`** — yanks it back to the foreground whenever you’re ready.
 
-> **Shortcut:** If there’s only one stopped job, plain `bg` or `fg` is enough; `%1` is implied.
+> **Shortcut:** Plain `bg` or `fg` acts on the current job (`%+`, marked `+` by `jobs`). Bash makes the most recently stopped job current, so with one stopped job no job spec is needed.
 
 #### Peeking at Your Jobs
 
 ```bash
 $ jobs -l        # -l also shows the PID
-[1]  + 3241 Running    sleep 1000 &
-[2]  - 3250 Stopped    vi notes.txt
+[1]- 3241 Running                 sleep 1000 &
+[2]+ 3250 Stopped                 vi notes.txt
 ```
 
 Column guide
@@ -424,7 +424,7 @@ Column guide
 
 * **Accidental Ctrl + Z** — Editors (`vim`, `nano`) freeze; a quick `fg` gets you back.
 * **Background output spam** — Redirect stdout/stderr (`cmd &>log &`) to avoid cluttering your prompt.
-* **Long-running daemons** — For anything critical, use proper service managers (`systemd`, `tmux`, `screen`) instead of backgrounding from a login shell, which dies when your session closes.
+* **Long-running daemons** — For anything critical, use a service manager (`systemd`) or a terminal multiplexer (`tmux`, `screen`) instead of backgrounding from a login shell; when the session hangs up, Bash sends `SIGHUP` to its jobs unless they were started with `nohup` or removed with `disown`.
 
 ### Challenges
 

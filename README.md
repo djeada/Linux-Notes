@@ -231,7 +231,7 @@ The notes are organized from beginner to advanced concepts. **Follow this recomm
 - [Running Executables](https://github.com/djeada/Linux-Notes/blob/main/notes/running_executables.md) — Execute and manage programs
 
 **Practice Materials:**
-- 📝 **Quizzes**: Ten topic quizzes with explanations in the [`/quizzes`](quizzes/) directory, also playable interactively on the [Technical Quizzes](https://adamdjellouli.com/tools/quiz_app/?category=linux) page
+- 📝 **Quizzes**: Fifteen topic quizzes (about 800 questions) with explanations in the [`/quizzes`](quizzes/) directory, also playable interactively on the [Technical Quizzes](https://adamdjellouli.com/tools/quiz_app/?category=linux) page
 - 🔧 **Scripts**: Practical scripts and tools in the `/scripts` directory
 - 📊 **Resources**: Additional diagrams and reference materials in `/resources`
 

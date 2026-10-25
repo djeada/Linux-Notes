@@ -101,7 +101,7 @@ Docker uses a client-server architecture. The **Docker client** (`docker` CLI) s
 
 The key components are:
 
-- **Images**: Read-only templates used to create containers. Built in layers, each Dockerfile instruction creates a new layer, and layers are cached and shared.
+- **Images**: Read-only templates used to create containers. Built in layers: each instruction that changes files (`RUN`, `COPY`, `ADD`) creates a new layer, while instructions such as `ENV`, `EXPOSE` and `CMD` only change image metadata. Layers are cached and shared.
 - **Containers**: Running instances of images. A container adds a writable layer on top of the image layers.
 - **Registry**: A storage and distribution system for images. Docker Hub is the default public registry.
 - **Dockerfile**: A text file with instructions for building an image.
@@ -292,7 +292,7 @@ docker logs -f my-nginx                              # follow logs (like tail -f
 
 ### Building Custom Images with Dockerfiles
 
-A **Dockerfile** is a text file containing instructions for assembling a Docker image. Each instruction creates a layer.
+A **Dockerfile** is a text file containing instructions for assembling a Docker image. Each instruction that changes the filesystem (`RUN`, `COPY`, `ADD`) creates a layer; the others only record metadata.
 
 #### Dockerfile Syntax
 

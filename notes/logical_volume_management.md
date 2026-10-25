@@ -644,7 +644,7 @@ To merge a snapshot back into the original logical volume:
 sudo lvconvert --merge /dev/TEST/snap_vol_name_1
 ```
 
-The merge may happen immediately or at the next activation, depending on whether the origin volume is active.
+The merge may happen immediately or at the next activation, depending on whether the origin and snapshot are open (for example, mounted). If either is open, the merge starts the next time the origin is activated and both are closed.
 
 A common safe workflow is:
 
@@ -1156,7 +1156,7 @@ Example output:
 
 ```text
 VG      #PV #LV #SN Attr   VSize  VFree
-lab_vg    3   1   0 wz--n- 2.99g  1.51g
+lab_vg    3   1   0 wz--n- 2.99g  1.50g
 ```
 
 Interpretation:
@@ -1230,7 +1230,7 @@ Example output:
 PV           VG      Fmt  Attr PSize    PFree
 /dev/loop10  lab_vg  lvm2 a--  1020.00m    0
 /dev/loop11  lab_vg  lvm2 a--  1020.00m    0
-/dev/loop12  lab_vg  lvm2 a--  1020.00m  500.00m
+/dev/loop12  lab_vg  lvm2 a--  1020.00m  512.00m
 ```
 
 Interpretation:
@@ -1250,13 +1250,13 @@ Example output:
 
 ```text
 VG      #PV #LV #SN Attr   VSize  VFree
-lab_vg    3   1   0 wz--n- 2.99g 500.00m
+lab_vg    3   1   0 wz--n- 2.99g 512.00m
 ```
 
 Interpretation:
 
 * The volume group contains 3 PVs and 1 LV
-* It still has 500 MB free
+* It still has 512 MB free
 
 #### Check Logical Volume
 
@@ -1268,7 +1268,7 @@ Example output:
 
 ```text
 LV    VG      Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
-data  lab_vg  -wi-ao---- 2.50g
+data  lab_vg  -wi-ao---- 2.49g
 ```
 
 Interpretation:
@@ -1315,7 +1315,7 @@ Example output:
 
 ```text
 LV        VG      Attr       LSize   Origin Data%
-data      lab_vg  owi-aos---   2.50g
+data      lab_vg  owi-aos---   2.49g
 data_snap lab_vg  swi-a-s--- 200.00m data   0.01
 ```
 
@@ -1347,7 +1347,7 @@ Example output:
 
 ```text
 LV        VG      Attr       LSize   Origin Data%
-data      lab_vg  owi-aos---   2.50g
+data      lab_vg  owi-aos---   2.49g
 data_snap lab_vg  swi-a-s--- 200.00m data   1.25
 ```
 
@@ -1417,8 +1417,10 @@ sudo lvcreate -L 50M -s -n small_snap /dev/lab_vg/data
 #### Step 2: Write Enough Data to the Original LV
 
 ```bash
-sudo fallocate -l 200M /mnt/lvmlab/change-after-snapshot.bin
+sudo dd if=/dev/urandom of=/mnt/lvmlab/change-after-snapshot.bin bs=1M count=200 conv=fsync
 ```
+
+Use `dd` rather than `fallocate` here: `fallocate` only reserves blocks as unwritten extents without writing data, so it changes very few blocks on the origin and barely fills the snapshot.
 
 #### Step 3: Check Snapshot Usage
 
@@ -1430,7 +1432,7 @@ Example output:
 
 ```text
 LV          VG      Attr       LSize  Origin Data%
-data        lab_vg  owi-aos--- 2.50g
+data        lab_vg  owi-aos--- 2.49g
 small_snap  lab_vg  swi-a-s--- 50.00m data   100.00
 ```
 

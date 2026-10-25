@@ -73,7 +73,7 @@ usermod -aG wheel adam
 
 ### Configuring sudo Access
 
-After adding the user to the correct group, it's necessary to edit the `/etc/sudoers` file to grant sudo access. The safest way to do this is via the visudo command, which prevents saving a corrupted sudoers file.
+On default Ubuntu/Debian and Fedora/RHEL installations, the rule for the `sudo` or `wheel` group is already enabled in `/etc/sudoers`, so adding the user to the group is enough; the user must log in again for the new group membership to take effect. If the rule is missing, edit the `/etc/sudoers` file to grant sudo access. The safest way to do this is via the visudo command, which prevents saving a corrupted sudoers file.
 
 Uncomment (or add) the following line to grant the group sudo access:
 
@@ -131,7 +131,7 @@ This will print adam if the switch was successful.
 
 ### Advanced Tips
 
-I. Preserving the Environment
+I. Loading the Target User's Environment
 
 By using the `-` or `-l` option with `su`, you can switch to another user and also load that user's environment:
 

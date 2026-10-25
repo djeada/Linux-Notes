@@ -85,7 +85,7 @@ Compare elapsed time with the serial scan before choosing a parallelism level. I
 
 ### The `ncdu` Command
 
-For a more visual and interactive representation of disk usage, you can use `ncdu` (NCurses Disk Usage). `ncdu` is a ncurses-based tool that provides a user-friendly interface to quickly assess which directories are consuming the most disk space. If it is not already installed, you can install it via your package manager, such as `apt` for Debian-based systems or `yum` for Red Hat-based systems.
+For a more visual and interactive representation of disk usage, you can use `ncdu` (NCurses Disk Usage). `ncdu` is a ncurses-based tool that provides a user-friendly interface to quickly assess which directories are consuming the most disk space. If it is not already installed, you can install it via your package manager, such as `apt` for Debian-based systems or `dnf` for Red Hat-based systems.
 
 Running the command `ncdu -x /` will start the program at the root directory (`/`) and present an interactive interface. Here, you can navigate through directories using arrow keys and view their sizes, making it easier to identify space hogs.
 

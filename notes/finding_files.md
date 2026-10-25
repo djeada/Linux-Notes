@@ -140,7 +140,7 @@ Here are some commonly used options with the `locate` command:
 | --- | --- |
 | `-i` |	Ignore case distinctions in both the pattern and the file names. |
 | `-l, --limit, -n`	| Limit the number of match results. |
-| `-S, --statistics` | Display statistics about each read database. |
+| `-S, --statistics` | Display statistics about each read database (`mlocate` only; `plocate`, the default on current Ubuntu, does not have it). |
 | `-b, --basename` |	Match only the base name against the specified patterns. |
 | `-r, --regexp REGEXP`	| Search for a basic regexp REGEXP. |
 
@@ -224,7 +224,7 @@ This command will find files matching the regular expression `ex.*\.txt$`, such 
 
 #### Important Note
 
-The `locate` command is faster than `find` but might not always show the most up-to-date information. If the file or directory was recently created or deleted, the database might not reflect the change. The database of filenames is typically stored at `/var/lib/mlocate/mlocate.db`. To update the database manually, use the `updatedb` command (requires root privileges).
+The `locate` command is faster than `find` but might not always show the most up-to-date information. If the file or directory was recently created or deleted, the database might not reflect the change. The database of filenames is typically stored at `/var/lib/plocate/plocate.db` on current distributions that use `plocate` (older `mlocate` systems use `/var/lib/mlocate/mlocate.db`). To update the database manually, use the `updatedb` command (requires root privileges).
 
 ### Which
 

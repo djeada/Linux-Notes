@@ -343,10 +343,11 @@ Install it on Debian or Ubuntu:
 sudo apt install htop
 ```
 
-On Red Hat or CentOS:
+On RHEL, Rocky Linux or AlmaLinux (`htop` comes from the EPEL repository):
 
 ```bash
-sudo yum install htop
+sudo dnf install epel-release
+sudo dnf install htop
 ```
 
 On Fedora:
@@ -794,13 +795,16 @@ Example output:
 %Cpu(s): 96.0 us,  3.0 sy,  0.0 ni,  1.0 id,  0.0 wa
 
 PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM COMMAND
-4321 user      20   0   50000   8000   2000 R 399.0  0.1 stress-ng-cpu
+4322 user      20   0   50000   8000   2000 R 100.0  0.1 stress-ng-cpu
+4323 user      20   0   50000   8000   2000 R 100.0  0.1 stress-ng-cpu
+4324 user      20   0   50000   8000   2000 R  99.7  0.1 stress-ng-cpu
+4325 user      20   0   50000   8000   2000 R  99.7  0.1 stress-ng-cpu
 ```
 
 Interpretation:
 - CPU user time is very high.
 - Idle time is almost zero.
-- stress-ng is using about four CPU cores.
+- Each of the four stress-ng worker processes uses about one full core.
 - I/O wait is zero, so this is not a disk bottleneck.
 
 #### Check with `vmstat`

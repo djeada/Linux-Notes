@@ -360,7 +360,7 @@ yum-config-manager --enable [repo_id]
 
 IV. Disable a Repository
 
-To disable a repository temporarily (for example, to prevent updates from that repository), use:
+To disable a repository (for example, to prevent updates from that repository), use the command below. The change is saved as `enabled=0` and persists until you re-enable it; for a single command, use `--disablerepo=[repo_id]` instead:
 
 ```bash
 yum-config-manager --disable [repo_id]
