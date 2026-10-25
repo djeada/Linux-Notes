@@ -2,16 +2,25 @@
 
 Notes: [Files and Directories](../notes/files_and_dirs.md), [Disk Usage](../notes/disk_usage.md), [Inodes and Symlinks](../notes/inodes_and_symlinks.md), [Finding Files](../notes/finding_files.md)
 
-Check your understanding of paths, file manipulation, globbing, `rsync`, disk usage, quotas, inodes and links.
+Check your understanding of paths, file manipulation, globbing, `rsync`, disk usage, quotas, inodes, links and finding files.
 
 #### Q. Which of these is an absolute path?
 
 * [ ] `notes/file_name.txt`
-* [x] `/home/user/notes/file_name.txt`
 * [ ] `./notes/file_name.txt`
 * [ ] `../user/notes/file_name.txt`
+* [x] `/home/user/notes/file_name.txt`
 
 > **Explanation:** An absolute path starts at the root directory `/`, so it points to the same place no matter where you are. The others are relative paths resolved from the current working directory.
+
+#### Q. Your current directory is `/home/user/Documents`. Which relative path refers to `/home/user/notes/todo.txt`?
+
+* [x] `../notes/todo.txt`
+* [ ] `./notes/todo.txt`
+* [ ] `notes/todo.txt`
+* [ ] `../../notes/todo.txt`
+
+> **Explanation:** `..` moves up one level to `/home/user`, and `notes/todo.txt` continues from there. `notes/...` and `./notes/...` look inside `Documents`, and `../..` climbs too far, to `/home`.
 
 #### Q. How can you recognize a hidden file in a Linux directory listing?
 
@@ -25,20 +34,29 @@ Check your understanding of paths, file manipulation, globbing, `rsync`, disk us
 #### Q. Which command lists all files, including hidden ones, in long format with permissions, owner and size?
 
 * [ ] `ls -l`
-* [ ] `ls -a`
 * [x] `ls -al`
+* [ ] `ls -a`
 * [ ] `ls -lh`
 
 > **Explanation:** `-a` includes entries starting with a dot and `-l` gives the long format. `ls -l` alone hides dotfiles, and `ls -lh` only changes how sizes are printed.
 
+#### Q. `mkdir projects/2024/q1` fails with "No such file or directory" because `projects` does not exist yet. Which command creates the whole path?
+
+* [x] `mkdir -p projects/2024/q1`
+* [ ] `mkdir -r projects/2024/q1`
+* [ ] `mkdir -m 755 projects/2024/q1`
+* [ ] `touch projects/2024/q1`
+
+> **Explanation:** `-p` creates every missing parent directory and does not complain if the path already exists. `mkdir` has no `-r` option, `-m` only sets the mode, and `touch` creates files, not directories.
+
 #### Q. You run `cp project /backup/` where `project` is a directory. What happens?
 
-* [ ] The directory and all its contents are copied to `/backup/project`
 * [x] `cp` skips it with a message that `-r` was not specified
+* [ ] The directory and all its contents are copied to `/backup/project`
 * [ ] Only the files at the top level of `project` are copied
 * [ ] An empty directory named `project` is created in `/backup`
 
-> **Explanation:** Without `-r` (or `-a`), `cp` refuses to copy directories and prints `-r not specified; omitting directory 'project'`. Use `cp -r project /backup/` to copy the whole tree.
+> **Explanation:** Without `-r` (or `-a`), GNU `cp` refuses to copy directories and prints `-r not specified; omitting directory 'project'`. Use `cp -r project /backup/` to copy the whole tree.
 
 #### Q. Which `cp` command copies the directory `project` recursively while preserving permissions, timestamps and symbolic links?
 
@@ -47,12 +65,12 @@ Check your understanding of paths, file manipulation, globbing, `rsync`, disk us
 * [ ] `cp -i project /backup/`
 * [x] `cp -a project /backup/`
 
-> **Explanation:** `-a` (archive) recurses and preserves attributes and symlinks. `-r` recurses but gives the copies new timestamps and default ownership, `-v` only prints progress, and `-i` only prompts before overwriting.
+> **Explanation:** `-a` (archive) recurses and preserves mode, ownership, timestamps and symlinks. `-r` recurses but gives the copies new timestamps and the copying user's ownership, `-v` only prints progress, and `-i` only prompts before overwriting.
 
 #### Q. Which command copies `file.txt` into `/backup/` but asks for confirmation before overwriting an existing file?
 
-* [ ] `cp -f file.txt /backup/`
 * [x] `cp -i file.txt /backup/`
+* [ ] `cp -f file.txt /backup/`
 * [ ] `cp -p file.txt /backup/`
 * [ ] `cp -u file.txt /backup/`
 
@@ -60,8 +78,8 @@ Check your understanding of paths, file manipulation, globbing, `rsync`, disk us
 
 #### Q. What does `mv oldname.txt newname.txt` do when both names are in the same directory?
 
-* [ ] Copies the file and keeps both names
 * [x] Renames the file
+* [ ] Copies the file and keeps both names
 * [ ] Fails because `mv` only moves files between directories
 * [ ] Creates a hard link called `newname.txt`
 
@@ -92,24 +110,24 @@ touch file{1..4}{a..f}
 ```
 
 * [ ] 10
-* [x] 24
 * [ ] 4
 * [ ] 6
+* [x] 24
 
 > **Explanation:** Brace expansion produces every combination: 4 numbers times 6 letters gives 24 names, `file1a` through `file4f`, and `touch` creates each one.
 
-#### Q. What does this brace expansion print?
+#### Q. What does this command do?
 
 ```bash
-echo a{b,c}d
+cp config.yml{,.bak}
 ```
 
-* [x] `abd acd`
-* [ ] `abcd`
-* [ ] `a{b,c}d`
-* [ ] `ab cd`
+* [ ] It fails, because a brace list cannot contain an empty item
+* [ ] It copies `config.yml` and a file named `.bak` into the current directory
+* [x] It copies `config.yml` to a new file named `config.yml.bak`
+* [ ] It creates a directory `config.yml` that contains `.bak`
 
-> **Explanation:** Brace expansion turns `{b,c}` into two words and attaches the prefix `a` and suffix `d` to each, giving `abd` and `acd`.
+> **Explanation:** Brace expansion runs before `cp` and turns the word into `config.yml config.yml.bak` (empty item, then `.bak`), so `cp` receives a source and a destination. It is a common shortcut for making a backup copy.
 
 #### Q. What does this nested brace expansion print?
 
@@ -117,21 +135,21 @@ echo a{b,c}d
 echo {A,B{1..3},C}
 ```
 
-* [ ] `A B C 1 2 3`
-* [ ] `A B1 C B2 B3`
 * [x] `A B1 B2 B3 C`
+* [ ] `A B1 C B2 B3`
+* [ ] `A B C 1 2 3`
 * [ ] `AB1C AB2C AB3C`
 
 > **Explanation:** The inner range `{1..3}` expands with the prefix `B` to `B1 B2 B3`, and those words sit in the outer list between `A` and `C`.
 
 #### Q. In a directory containing `file.txt`, `file1.txt` and `file12.txt`, which files does `ls file?.txt` list?
 
-* [ ] `file.txt` and `file1.txt`
 * [x] Only `file1.txt`
+* [ ] `file.txt` and `file1.txt`
 * [ ] `file1.txt` and `file12.txt`
 * [ ] All three files
 
-> **Explanation:** In a glob, `?` matches exactly one character. `file.txt` has none in that position and `file12.txt` has two, so only `file1.txt` matches.
+> **Explanation:** In a glob, `?` matches exactly one character. `file.txt` has none in that position and `file12.txt` has two, so only `file1.txt` matches. In a regular expression, by contrast, `?` means "zero or one of the preceding element".
 
 #### Q. Which filename is matched by the glob `file[12].txt`?
 
@@ -151,32 +169,32 @@ echo {A,B{1..3},C}
 
 > **Explanation:** Globs only match existing files. When nothing matches, Bash leaves the pattern unchanged (unless `nullglob` or `failglob` is set), so `echo` prints `*.txt`. Brace expansion, by contrast, always generates its words.
 
-#### Q. In a shell glob, what does `?` match?
+#### Q. A directory contains `.env`, `a.txt` and `b.log`. In Bash with default settings, what does `echo *` print?
 
-* [ ] Zero or one occurrence of the preceding character
-* [x] Exactly one character of any kind
-* [ ] Any number of characters, including none
-* [ ] Only a literal question mark
+* [ ] `.env a.txt b.log`
+* [ ] `*`
+* [ ] `.env`
+* [x] `a.txt b.log`
 
-> **Explanation:** In globs `?` is a one-character wildcard. "Zero or one of the preceding element" is its meaning in regular expressions, as in `colou?r`, and "any number of characters" is what `*` does in a glob.
+> **Explanation:** A leading dot must be matched explicitly, so `*` skips hidden files (unless `dotglob` is set). That is also why `rm -r dir/*` leaves dotfiles behind; `.*` would match `.env`.
 
 #### Q. While viewing a file with `more`, what does pressing Enter do?
 
-* [ ] Scrolls forward one full screen
 * [x] Scrolls forward one line
+* [ ] Scrolls forward one full screen
 * [ ] Scrolls back one screen
 * [ ] Jumps to the next search match
 
-> **Explanation:** Enter advances one line and Space advances one page. Scrolling backward and search are better handled in `less`, which supports full navigation in both directions.
+> **Explanation:** Enter advances one line and Space advances one page. Moving backward is limited in `more` (`b` works only on files, not pipes), while `less` supports full navigation in both directions.
 
-#### Q. Which key quits both the `more` and `less` pagers?
+#### Q. While reading a log in `less`, which keys search backward from the current position for the text `ERROR`?
 
-* [ ] `x`
-* [ ] `e`
-* [x] `q`
-* [ ] `w`
+* [ ] `/ERROR`
+* [ ] `:ERROR`
+* [x] `?ERROR`
+* [ ] `bERROR`
 
-> **Explanation:** `q` exits either pager and returns you to the shell. In `less`, `e` and `w` are navigation keys, and `x` is not a quit command in either program.
+> **Explanation:** In `less`, `/pattern` searches forward and `?pattern` searches backward; `n` repeats the last search. `b` scrolls back one page and is not a search command.
 
 #### Q. Why is `less` usually a better choice than `cat` for reading a very large log file?
 
@@ -187,19 +205,19 @@ echo {A,B{1..3},C}
 
 > **Explanation:** `cat` dumps the whole file to the terminal at once. `less` pages the content, supports backward movement and `/pattern` searches, and does not modify the file.
 
-#### Q. How many lines does `head file.txt` print when no option is given?
+#### Q. What does `head -n 2 a.txt b.txt` print?
 
-* [ ] 5
-* [ ] 20
-* [ ] 25
-* [x] 10
+* [ ] The first 2 lines of `a.txt` followed by those of `b.txt`, with no separator
+* [ ] Only the first 2 lines of `a.txt`, because the second name is ignored
+* [ ] An error, because `head` accepts only one file at a time
+* [x] The first 2 lines of each file, each block preceded by a `==> name <==` header
 
-> **Explanation:** Both `head` and `tail` default to 10 lines. Use `-n` to choose another count, for example `head -n 3 file.txt`.
+> **Explanation:** With several files, `head` (and `tail`) prints a header line such as `==> a.txt <==` before each file's lines. Without `-n` the default is 10 lines; `-q` suppresses the headers.
 
 #### Q. What does `tail -n +2 data.csv` output?
 
-* [ ] The last 2 lines of the file
 * [x] Every line from line 2 to the end, skipping the header line
+* [ ] The last 2 lines of the file
 * [ ] Only line 2 of the file
 * [ ] The file with every second line removed
 
@@ -218,20 +236,20 @@ tail -n +50 data.csv | head -n 11
 
 > **Explanation:** `tail -n +50` starts output at line 50 and `head -n 11` keeps the next 11 lines, which are lines 50 through 60.
 
-#### Q. What is the effect of the trailing slash on the source in `rsync -av /home/user/documents/ /mnt/backup/documents/`?
+#### Q. The directory `dest/` already exists. After running `rsync -a src dest/` (no trailing slash on `src`), where does the file `src/f1` end up?
 
-* [ ] It makes `rsync` follow symbolic links
-* [ ] It makes `rsync` delete files missing from the source
-* [x] It copies the contents of `documents` rather than creating a nested `documents/documents`
-* [ ] It makes the transfer recursive
+* [x] `dest/src/f1`
+* [ ] `dest/f1`
+* [ ] `dest/src/src/f1`
+* [ ] Nowhere; `rsync` requires a trailing slash on a directory source
 
-> **Explanation:** With a trailing `/`, `rsync` copies what is inside the source directory. Without it, the directory itself is copied into the destination, producing an extra nested folder.
+> **Explanation:** Without a trailing slash, `rsync` copies the directory itself into the destination. `rsync -a src/ dest/` copies only the contents of `src`, so the file would land at `dest/f1`.
 
 #### Q. Which command makes `/dest/` an exact mirror of `/src/`, removing files that no longer exist in the source?
 
 * [ ] `rsync -az /src/ /dest/`
-* [x] `rsync -a --delete /src/ /dest/`
 * [ ] `rsync -a --dry-run /src/ /dest/`
+* [x] `rsync -a --delete /src/ /dest/`
 * [ ] `rsync -aP /src/ /dest/`
 
 > **Explanation:** `--delete` removes destination files that are absent from the source. Without it `rsync` only adds and updates files; `--dry-run` changes nothing and `-P` only shows progress.
@@ -239,11 +257,11 @@ tail -n +50 data.csv | head -n 11
 #### Q. What does `rsync --dry-run` (`-n`) do?
 
 * [ ] Copies only files whose checksums differ
-* [ ] Transfers files without compression
 * [x] Shows what would be transferred without changing anything
+* [ ] Transfers files without compression
 * [ ] Deletes extra files in the destination
 
-> **Explanation:** A dry run simulates the transfer and lists the actions. It is a good habit before a run that uses `--delete`.
+> **Explanation:** A dry run simulates the transfer and lists the actions (add `-v` to see them). It is a good habit before a run that uses `--delete`.
 
 #### Q. Which `rsync` option compresses data during the transfer to save bandwidth?
 
@@ -266,18 +284,18 @@ tail -n +50 data.csv | head -n 11
 #### Q. Why is `rsync` usually preferred over `cp` for repeated backups of the same directory?
 
 * [ ] It always compresses files stored on the destination
-* [x] It transfers only the differences between source and destination
 * [ ] It can copy files that `cp` is not permitted to read
 * [ ] It keeps old versions of every changed file
+* [x] It skips files that are already up to date at the destination
 
-> **Explanation:** `rsync` compares source and destination and skips what is already up to date, so later runs are much faster. It does not bypass permissions or keep version history by itself.
+> **Explanation:** `rsync` compares source and destination (by size and modification time by default) and transfers only what changed, so later runs are much faster. It does not bypass permissions or keep version history by itself.
 
 #### Q. What is the main difference between `df` and `du`?
 
 * [ ] `df` counts files, while `du` counts directories
-* [ ] `df` works only on the root filesystem, while `du` works on any filesystem
-* [ ] `df` shows memory usage, while `du` shows disk usage
-* [x] `df` reports usage per mounted filesystem, while `du` estimates space used by given files and directories
+* [x] `df` reports usage per filesystem, while `du` sums the given files and directories
+* [ ] `df` reads only `/`, while `du` reads every mounted filesystem
+* [ ] `df` reports memory usage, while `du` reports disk usage
 
 > **Explanation:** `df` asks each mounted filesystem for its size, used and available space. `du` walks a directory tree and adds up what the files occupy, which is how you find space hogs.
 
@@ -288,7 +306,7 @@ tail -n +50 data.csv | head -n 11
 * [ ] `ls -h`
 * [ ] `du -h /`
 
-> **Explanation:** `du -s` gives one total per argument and `-h` uses K, M and G units; the glob passes each item as an argument. `df -h .` reports the whole filesystem, not individual items.
+> **Explanation:** `du -s` gives one total per argument and `-h` uses K, M and G units; the glob passes each non-hidden item as an argument. `df -h .` reports the whole filesystem, not individual items.
 
 #### Q. When running `du` on `/`, which option keeps it from descending into other mounted filesystems such as `/proc` or a network share?
 
@@ -304,7 +322,7 @@ tail -n +50 data.csv | head -n 11
 * [ ] `sort -n` cannot read tab-separated input
 * [ ] `sort -h` is faster on large inputs
 * [ ] `sort -n` sorts in reverse order by default
-* [x] `sort -n` ignores unit suffixes, so `900K` would sort above `2.0G`
+* [x] `sort -n` ignores unit suffixes, so it treats `900K` as larger than `2.0G`
 
 > **Explanation:** `-n` compares only the leading number (900 versus 2.0). `-h` understands human-readable suffixes, so `du -sh * | sort -hr` correctly lists the largest items first.
 
@@ -324,7 +342,7 @@ tail -n +50 data.csv | head -n 11
 * [ ] `df` caches its results for an hour
 * [ ] Log files are always stored in a reserved area
 
-> **Explanation:** `rm` removes the name, but the inode and data are kept until every open file descriptor is closed. Restarting the process that writes the log releases the space.
+> **Explanation:** `rm` removes the name, but the inode and data are kept until every open file descriptor is closed. `lsof +L1` lists such deleted-but-open files; restarting the process that writes the log releases the space.
 
 #### Q. With disk quotas, what distinguishes a soft limit from a hard limit?
 
@@ -335,14 +353,14 @@ tail -n +50 data.csv | head -n 11
 
 > **Explanation:** A user above the soft limit gets a grace period (set with `edquota -t`) before writes are refused. The hard limit is an absolute ceiling. Both block and inode limits have soft and hard values.
 
-#### Q. Which mount options must be added to a filesystem's `/etc/fstab` entry to enable user and group quotas?
+#### Q. Which mount options must be added to an ext4 filesystem's `/etc/fstab` entry to enable user and group quotas?
 
 * [ ] `quota=on`
 * [x] `usrquota,grpquota`
 * [ ] `uquota,acl`
 * [ ] `limits`
 
-> **Explanation:** After adding `usrquota,grpquota` and remounting, `quotacheck -cug` creates the quota files and `quotaon` starts enforcement.
+> **Explanation:** After adding `usrquota,grpquota` and remounting, `quotacheck -cug` creates the quota files and `quotaon` starts enforcement. `uquota` is XFS's spelling for user quotas, and `acl` enables access control lists, not quotas.
 
 #### Q. Which command opens an editor to set the soft and hard quota limits for user `alice`?
 
@@ -352,6 +370,15 @@ tail -n +50 data.csv | head -n 11
 * [x] `edquota -u alice`
 
 > **Explanation:** `edquota` edits limits. `quota -u` only displays a user's usage, `repquota` reports on all users of a filesystem, and `quotaon` turns enforcement on for a filesystem.
+
+#### Q. In `repquota /home` output, user bob's line shows `+-` right after his name. What does that mean?
+
+* [ ] bob has exceeded both his block and inode hard limits
+* [x] bob's block usage is over its soft limit, but his file count is not
+* [ ] bob's block quota is disabled, but his inode quota is enabled
+* [ ] bob is under every limit and his grace period was reset
+
+> **Explanation:** The first character refers to block limits and the second to inode (file) limits; `+` means usage is above the soft limit. bob can keep writing until he hits the hard limit or the grace period shown in the grace column expires.
 
 #### Q. Which piece of information is stored in the directory entry rather than in the file's inode?
 
@@ -389,7 +416,7 @@ tail -n +50 data.csv | head -n 11
 
 > **Explanation:** Without `-s`, `ln` creates a hard link, a second name for the same inode. The data is kept until the last name is removed, so `copy.txt` is unaffected.
 
-#### Q. Right after running `ln report.txt copy.txt`, what link count does `stat report.txt` show?
+#### Q. You create a new file `report.txt` and then run `ln report.txt copy.txt`. What link count does `stat report.txt` show?
 
 * [ ] 0
 * [ ] 1
@@ -398,14 +425,32 @@ tail -n +50 data.csv | head -n 11
 
 > **Explanation:** The inode now has two directory entries pointing at it, so its link count is 2. A symlink would not change the target's link count.
 
+#### Q. After `ln -s a.txt link`, what does `ls -li a.txt link` show?
+
+* [ ] The same inode number for both names, and a link count of 2
+* [x] Different inode numbers, and `a.txt` still has a link count of 1
+* [ ] The same inode number, with `link` marked by an `l` type
+* [ ] Only `a.txt`, because symlinks have no inode of their own
+
+> **Explanation:** A symlink is a separate small file with its own inode that stores the path `a.txt`. It adds no directory entry for the target's inode, so the target's link count is unchanged.
+
 #### Q. Why does `ln /mnt/usb/data.txt ~/data.txt` fail when `/mnt/usb` is a separate filesystem?
 
 * [ ] Hard links require root privileges
-* [ ] Hard links only work for files in the same directory
+* [ ] Hard links only work within one directory
 * [ ] USB drives do not support links of any kind
-* [x] A hard link refers to an inode number, which is only meaningful within one filesystem
+* [x] Inode numbers are only meaningful within one filesystem
 
-> **Explanation:** Inode numbers are unique only within a filesystem, so hard links cannot cross filesystems (error: invalid cross-device link). A symbolic link, which stores a path, works instead.
+> **Explanation:** A hard link is a directory entry pointing at an inode number, and those are unique only within a filesystem, so `ln` fails with "Invalid cross-device link". A symbolic link, which stores a path, works instead.
+
+#### Q. What happens when you run `ln dir1 dir2`, where `dir1` is a directory?
+
+* [ ] `dir2` becomes a second name for `dir1`
+* [x] `ln` refuses, because hard links to directories are not allowed
+* [ ] `dir2` is created as a symbolic link to `dir1`
+* [ ] `dir1` is copied recursively to `dir2`
+
+> **Explanation:** GNU `ln` prints "hard link not allowed for directory". Directory hard links could create loops in the tree and confuse `..` and tools that walk it; use `ln -s dir1 dir2` for a second path to a directory.
 
 #### Q. What happens to a symbolic link when its target file is deleted?
 
@@ -432,7 +477,7 @@ tail -n +50 data.csv | head -n 11
 * [ ] `ls -i mylink`
 * [ ] `stat -L mylink`
 
-> **Explanation:** `readlink -f` follows every link in the chain and prints an absolute path. Plain `readlink` prints the stored target text, which may be relative.
+> **Explanation:** `readlink -f` follows every link in the chain and prints an absolute path. Plain `readlink` prints the stored target text, which may be relative, and `stat -L` shows the target's metadata rather than its path.
 
 #### Q. The symlink `mylink` currently points to `fileA.txt`. Which command makes it point to `fileB.txt` instead?
 
@@ -461,6 +506,24 @@ tail -n +50 data.csv | head -n 11
 
 > **Explanation:** `-newer` compares modification times against the reference file. Adding `-type f` restricts results to regular files.
 
+#### Q. With GNU `find`, which files does `find . -type f -size +2000` match?
+
+* [ ] Files larger than 2000 bytes
+* [ ] Files larger than 2000 KiB
+* [x] Files using more than 2000 blocks of 512 bytes (about 1 MB)
+* [ ] Files containing more than 2000 lines
+
+> **Explanation:** A `-size` number without a suffix counts 512-byte blocks, rounded up. Suffixes change the unit, for example `-size +10M` for more than 10 MiB or `c` for bytes.
+
+#### Q. You want `find` to ask before deleting each matching `.bak` file. Which command does that?
+
+* [ ] `find . -name "*.bak" -delete`
+* [ ] `find . -name "*.bak" -exec rm {} \;`
+* [x] `find . -name "*.bak" -ok rm {} \;`
+* [ ] `find . -name "*.bak" -print -delete`
+
+> **Explanation:** `-ok` works like `-exec` but prompts before each command and runs it only on a `y` answer. `-delete` and `-exec rm` remove matches without asking.
+
 #### Q. You create `report.txt` and immediately run `locate report.txt`, but it finds nothing. Why?
 
 * [ ] `locate` only searches the current directory
@@ -469,3 +532,12 @@ tail -n +50 data.csv | head -n 11
 * [x] `locate` searches a prebuilt database that has not been updated yet
 
 > **Explanation:** `locate` is fast because it queries a database built by `updatedb`, which usually runs periodically. Newly created files appear after the next update; `find` searches the live filesystem.
+
+#### Q. In Bash, `ls` is an alias for `ls --color=auto`. Which command shows the alias as well as every `ls` executable found in `PATH`?
+
+* [ ] `which ls`
+* [x] `type -a ls`
+* [ ] `locate -b ls`
+* [ ] `which -a ls`
+
+> **Explanation:** `type` is a shell builtin, so it knows about aliases, functions and builtins, and `-a` lists every match. `which` is an external program that only searches `PATH` for files, even with `-a`.

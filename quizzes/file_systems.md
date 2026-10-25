@@ -2,22 +2,22 @@
 
 Notes: [File Systems](../notes/file_system.md), [Mounting](../notes/mounting.md), [NFS](../notes/nfs.md)
 
-Check your understanding of filesystem types, the directory hierarchy, mounting, `/etc/fstab` and NFS.
+Check your understanding of filesystem types and internals, the directory hierarchy, mounting, `/etc/fstab` and NFS.
 
 #### Q. Which command creates an ext4 filesystem on the partition `/dev/sdb1`?
 
 * [ ] `mkfs -t ext3 /dev/sdb1`
-* [x] `mkfs.ext4 /dev/sdb1`
 * [ ] `mkfs.ext4 /mnt/sdb1`
 * [ ] `format ext4 /dev/sdb1`
+* [x] `mkfs.ext4 /dev/sdb1`
 
 > **Explanation:** `mkfs.ext4` takes the block device, not a mount point. `mkfs -t ext3` would build the wrong filesystem type, and `format` is not a Linux command.
 
 #### Q. What happens to the existing files on `/dev/sdb1` when you run `mkfs.ext4 /dev/sdb1`?
 
+* [x] They are lost, because a new empty filesystem replaces the old one
 * [ ] They are converted to the ext4 format
 * [ ] They are moved to a `lost+found` directory
-* [x] They are lost, because a new empty filesystem replaces the old one
 * [ ] They are kept, because `mkfs` only writes free space
 
 > **Explanation:** Creating a filesystem writes fresh metadata (superblock, inode tables, journal) over the old structures, so existing data is no longer reachable. Back up first and double-check the device name.
@@ -37,9 +37,9 @@ Check your understanding of filesystem types, the directory hierarchy, mounting,
 /dev/sdb1   /mnt/external   ext4    defaults    0   2
 ```
 
+* [x] `defaults`
 * [ ] `ext4`
 * [ ] `/mnt/external`
-* [x] `defaults`
 * [ ] `2`
 
 > **Explanation:** The fields are device, mount point, filesystem type, options, dump and fsck pass. `defaults` is the standard set of options such as read-write.
@@ -59,12 +59,12 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 
 #### Q. Why is `UUID=...` usually preferred over `/dev/sdb1` in `/etc/fstab`?
 
-* [ ] UUIDs make the filesystem mount faster
-* [x] Device names such as `/dev/sdb1` can change between boots, but a filesystem's UUID does not
-* [ ] Only UUIDs work with ext4
-* [ ] UUIDs encrypt the mount
+* [ ] UUIDs make the filesystem mount faster at boot
+* [ ] Only UUIDs are accepted for ext4 filesystems
+* [ ] UUIDs encrypt the connection to the device
+* [x] `/dev/sdX` names can change between boots, but the UUID does not
 
-> **Explanation:** Adding or removing disks can renumber `/dev/sdX` names, causing the wrong device to mount or a boot failure. The UUID identifies the filesystem itself.
+> **Explanation:** Adding or removing disks can renumber `/dev/sdX` names, causing the wrong device to mount or a boot failure. The UUID is stored in the filesystem itself, so it follows the filesystem wherever the disk appears.
 
 #### Q. Which command prints the UUID and filesystem type of `/dev/sdb1`?
 
@@ -87,20 +87,20 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 #### Q. You just added a line to `/etc/fstab`. What should you run before rebooting to catch mistakes?
 
 * [ ] `sync`
-* [x] `sudo mount -a`
 * [ ] `sudo umount -a`
 * [ ] `sudo fsck /etc/fstab`
+* [x] `sudo mount -a`
 
-> **Explanation:** `mount -a` tries to mount everything listed in `/etc/fstab`, so a typo shows up now instead of breaking the next boot. `fsck` checks filesystems, not configuration files.
+> **Explanation:** `mount -a` tries to mount everything listed in `/etc/fstab`, so a typo shows up now instead of breaking the next boot; `findmnt --verify` also checks the file. `fsck` checks filesystems, not configuration files.
 
-#### Q. Which `/etc/fstab` option lets the system finish booting even if a listed external drive is not connected?
+#### Q. Which `/etc/fstab` option mounts an external drive at boot when it is connected, but lets boot finish normally when it is not?
 
-* [ ] `noauto,rw`
+* [ ] `noauto`
 * [ ] `ro`
 * [x] `nofail`
 * [ ] `sync`
 
-> **Explanation:** `nofail` tells the boot process not to treat a missing device as an error. It is recommended for removable or optional disks, often combined with `x-systemd.automount`.
+> **Explanation:** `nofail` tells the boot process not to treat a missing device as an error, while still mounting it when present. `noauto` would skip the mount at boot even when the drive is connected.
 
 #### Q. Which mount option stops the kernel from updating a file's access time every time it is read?
 
@@ -109,23 +109,23 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 * [x] `noatime`
 * [ ] `sync`
 
-> **Explanation:** `noatime` skips access-time updates, reducing writes on busy filesystems. `nosuid` and `nodev` are security options, and `sync` makes writes synchronous.
+> **Explanation:** `noatime` skips access-time updates, reducing writes on busy filesystems; the usual default, `relatime`, already limits them. `nosuid` and `nodev` are security options, and `sync` makes writes synchronous.
 
-#### Q. You need to inspect a disk from a damaged system without any risk of changing it. Which mount command is appropriate?
+#### Q. You want to browse a disk taken from a damaged system without being able to change its files through the mount. Which command is appropriate?
 
 * [ ] `sudo mount -o rw /dev/sdb1 /mnt/external`
 * [x] `sudo mount -o ro /dev/sdb1 /mnt/external`
 * [ ] `sudo mount -o noexec /dev/sdb1 /mnt/external`
 * [ ] `sudo mount -o remount /dev/sdb1 /mnt/external`
 
-> **Explanation:** `ro` mounts the filesystem read-only, so nothing can be written. `noexec` blocks running programs but still allows writes.
+> **Explanation:** `ro` mounts the filesystem read-only; `noexec` still allows writes. ext4 may still replay a dirty journal on an `ro` mount, so add `noload` or use `blockdev --setro` when the device itself must stay untouched.
 
 #### Q. What does the `noexec` mount option do?
 
 * [ ] Makes the filesystem read-only
-* [x] Prevents programs on the filesystem from being executed directly
 * [ ] Ignores device files on the filesystem
 * [ ] Hides executable files from directory listings
+* [x] Prevents programs on the filesystem from being executed directly
 
 > **Explanation:** With `noexec`, binaries stored on that filesystem cannot be run, which is useful for removable media or `/tmp`. Files can still be read and written.
 
@@ -154,14 +154,14 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 * [x] `sudo mount -o loop ubuntu.iso /mnt/iso`
 * [ ] `sudo tar -xf ubuntu.iso /mnt/iso`
 
-> **Explanation:** The `loop` option attaches the regular file to a loop device so it can be mounted like a disk. A bind mount only mirrors existing directories, and copying the file does not expose its contents.
+> **Explanation:** The `loop` option attaches the regular file to a loop device so it can be mounted like a disk; recent `mount` versions add it automatically for regular files. A bind mount only mirrors an existing path, and copying the file does not expose its contents.
 
 #### Q. Which command makes the existing directory `/var/log` also accessible at `/mnt/logs`?
 
 * [ ] `mount -o loop /var/log /mnt/logs`
-* [x] `mount --bind /var/log /mnt/logs`
 * [ ] `mount -t tmpfs /var/log /mnt/logs`
 * [ ] `mount -o remount /var/log /mnt/logs`
+* [x] `mount --bind /var/log /mnt/logs`
 
 > **Explanation:** A bind mount attaches an existing directory tree at a second location. `loop` is for image files, and a tmpfs mount would create an empty in-memory filesystem.
 
@@ -177,7 +177,7 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 #### Q. `sudo umount /mnt/external` fails with "target is busy". What is a common cause?
 
 * [ ] The filesystem has errors that need `fsck`
-* [x] A shell or program has its current directory or an open file inside `/mnt/external`
+* [x] A process has its working directory or an open file there
 * [ ] The device was mounted with `nofail`
 * [ ] The command must be spelled `unmount`
 
@@ -195,16 +195,16 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 #### Q. What does `umount -l /mnt/external` do?
 
 * [ ] Lists processes that keep the mount busy
-* [x] Detaches the mount point now and finishes cleanup once it is no longer busy
 * [ ] Forces the unmount and kills processes using it
 * [ ] Unmounts every filesystem listed in `/etc/fstab`
+* [x] Detaches the mount point now and finishes cleanup once it is no longer busy
 
 > **Explanation:** A lazy unmount removes the filesystem from the directory tree immediately and releases it once the last user finishes. Prefer a normal unmount after closing the users when you can.
 
 #### Q. Why should you unmount a USB drive before unplugging it?
 
-* [ ] Unmounting erases temporary files from the drive
 * [x] Linux caches writes, and unmounting ensures they are written to the device
+* [ ] Unmounting erases temporary files from the drive
 * [ ] The drive cannot be detected again otherwise
 * [ ] Unmounting checks the drive for viruses
 
@@ -212,12 +212,39 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 
 #### Q. Which utility lists mounted filesystems as a tree with their sources, types and options?
 
-* [ ] `blkid`
 * [x] `findmnt`
+* [ ] `blkid`
 * [ ] `fdisk -l`
 * [ ] `du -h`
 
 > **Explanation:** `findmnt` shows the mount hierarchy, and `findmnt /mnt/point` checks a single mount. `blkid` reports filesystem signatures and `fdisk -l` shows partition tables.
+
+#### Q. Which command shows the filesystem type, such as `ext4` or `nfs4`, of the filesystem that holds `/mnt/data/report.txt`?
+
+* [x] `df -T /mnt/data/report.txt`
+* [ ] `file /mnt/data/report.txt`
+* [ ] `stat -c %s /mnt/data/report.txt`
+* [ ] `ls -l /mnt/data/report.txt`
+
+> **Explanation:** `df -T` adds a Type column for the filesystem containing each given path. `file` describes the file's contents, `stat -c %s` prints its size and `ls -l` shows its permissions and owner.
+
+#### Q. In `/proc/filesystems`, what does `nodev` in front of `tmpfs` mean?
+
+* [ ] tmpfs is mounted with the `nodev` option
+* [x] tmpfs is not backed by a block device
+* [ ] tmpfs is listed but not supported by the kernel
+* [ ] tmpfs cannot contain device files
+
+> **Explanation:** `/proc/filesystems` lists the types the running kernel supports. `nodev` marks types such as `proc`, `sysfs` and `tmpfs` that need no block device; lines without it, such as `ext4`, are mounted from a disk or image.
+
+#### Q. You rename the image `logo.png` to `logo.txt`. What does `file logo.txt` report?
+
+* [ ] `ASCII text`, because the name ends in `.txt`
+* [ ] `data`, because the name and contents disagree
+* [x] `PNG image data`, read from the file's contents
+* [ ] An error, because the extension is not registered
+
+> **Explanation:** `file` identifies type from the contents, mainly "magic" byte signatures, not from the name. Linux in general does not rely on extensions to decide what a file is.
 
 #### Q. What should you do before running `fsck` to repair the ext4 filesystem on `/dev/sdb1`?
 
@@ -228,14 +255,32 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 
 > **Explanation:** Repairing a mounted filesystem can corrupt it further because the kernel is changing it at the same time. Unmount first, or for the root filesystem use a rescue or live environment.
 
+#### Q. `e2fsck /dev/sdb1` reports a damaged superblock. The ext4 filesystem uses 4 KiB blocks. Which command checks it using the first backup superblock?
+
+* [x] `e2fsck -b 32768 /dev/sdb1`
+* [ ] `mkfs.ext4 -b 32768 /dev/sdb1`
+* [ ] `tune2fs -l 32768 /dev/sdb1`
+* [ ] `e2label /dev/sdb1 32768`
+
+> **Explanation:** ext4 keeps backup superblocks in several block groups; with 4 KiB blocks the first is at block 32768. `dumpe2fs` lists them, and `mkfs.ext4` prints them when creating the filesystem. `mkfs.ext4 -b` would reformat the device.
+
 #### Q. What does `tune2fs -l /dev/sdb1` display?
 
 * [ ] Live I/O statistics for the device
 * [ ] The files in the filesystem's root directory
-* [x] The filesystem's superblock information, such as block count, inode count, UUID and features
-* [ ] The current mount options
+* [x] Superblock details such as block count, UUID and features
+* [ ] The options it is currently mounted with
 
 > **Explanation:** `-l` lists superblock contents for ext2, ext3 and ext4. Mount options are shown by `findmnt`, and I/O statistics by tools such as `iostat`.
+
+#### Q. Which statement about resizing an ext4 filesystem with `resize2fs` is true?
+
+* [ ] It can shrink a mounted filesystem, but growing requires unmounting
+* [x] It can grow a mounted filesystem, but shrinking requires unmounting
+* [ ] It also changes the size of the underlying partition
+* [ ] It only works on ext2, so ext4 must be converted first
+
+> **Explanation:** ext4 supports online growth, but `resize2fs` shrinks only unmounted filesystems. It never changes the partition: grow the partition first before enlarging, and shrink the filesystem before shrinking the partition.
 
 #### Q. Which command converts an existing ext2 filesystem to ext3 by adding a journal?
 
@@ -254,6 +299,15 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 * [ ] FAT32
 
 > **Explanation:** ext3 is ext2 plus a journal, which records pending changes so the filesystem can recover quickly after a crash. ext4 kept journaling and added larger limits and extents.
+
+#### Q. An ext4 machine loses power in the middle of heavy writes. What happens when the filesystem is mounted again?
+
+* [x] The journal is replayed to restore consistent metadata; uncommitted writes may be lost
+* [ ] Every file written since the last `fsck` is rolled back to its earlier content
+* [ ] The filesystem must be recreated with `mkfs.ext4` before it can be used
+* [ ] Nothing special happens, because ext4 writes all data synchronously
+
+> **Explanation:** The journal (handled by `jbd2`) lets the kernel finish or discard interrupted transactions without a full `fsck`. It protects filesystem structure; data still in the page cache at the crash can be lost unless the application used `fsync`.
 
 #### Q. Which Linux filesystem uses copy-on-write and natively supports snapshots and subvolumes?
 
@@ -276,8 +330,8 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 #### Q. What is the role of the Virtual File System (VFS) in the Linux kernel?
 
 * [ ] It stores files in RAM instead of on disk
-* [ ] It shares files with other machines over the network
-* [x] It gives programs one common interface for working with many different filesystem types
+* [ ] It shares files with other machines over a network
+* [x] It gives programs one interface to many filesystem types
 * [ ] It encrypts data before it reaches the disk
 
 > **Explanation:** The VFS layer translates system calls like `open` and `read` into operations for ext4, XFS, NFS and others, so applications do not need filesystem-specific code.
@@ -291,6 +345,15 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 
 > **Explanation:** FAT32 limits individual files to 4 GiB minus 1 byte. exFAT, NTFS and ext4 all support much larger files.
 
+#### Q. A FAT32 USB stick mounted by root shows every file owned by root, and `chown` on it fails. How do you let the user with UID 1000 write to it?
+
+* [x] Remount it with `-o uid=1000,gid=1000`
+* [ ] Run `chown -R 1000:1000` again with `sudo`
+* [ ] Run `tune2fs -o user_xattr` on the device
+* [ ] Add `usrquota` to its mount options
+
+> **Explanation:** FAT stores no Unix owners or permission bits, so the driver presents one owner for every file, chosen at mount time with `uid=` and `gid=` (and `umask` for the mode). `tune2fs` only works on ext filesystems.
+
 #### Q. A program needs temporary files that survive a reboot. Which directory is intended for that?
 
 * [ ] `/tmp`
@@ -299,6 +362,15 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 * [ ] `/proc`
 
 > **Explanation:** `/tmp` is commonly cleared at boot and `/run` holds volatile runtime data, while `/var/tmp` is meant to persist between reboots. `/proc` is a kernel pseudo filesystem.
+
+#### Q. `/tmp` has mode `drwxrwxrwt` (1777). Why can't user bob delete alice's file `/tmp/a.txt`?
+
+* [ ] `/tmp` is mounted with `noexec`
+* [ ] bob lacks write permission on `a.txt` itself
+* [ ] tmpfs does not allow files to be deleted
+* [x] The sticky bit lets only a file's owner, the directory owner or root remove it
+
+> **Explanation:** The trailing `t` is the sticky bit. Normally anyone with write permission on a directory can delete any entry in it; on a sticky directory, unlinking or renaming an entry also requires owning it (or the directory), or being root.
 
 #### Q. Where should an administrator install a program compiled from source so it does not clash with distribution-managed packages?
 
@@ -312,17 +384,17 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 #### Q. Why should you never store persistent files in `/proc` or `/sys`?
 
 * [ ] They are mounted read-only for all users
-* [ ] They are backed up and overwritten every night
+* [ ] They are wiped and rebuilt by a nightly job
 * [ ] They are encrypted with a per-boot key
-* [x] They are pseudo filesystems generated by the kernel, with no data stored on disk
+* [x] They are kernel-generated pseudo filesystems, not disk storage
 
 > **Explanation:** `/proc` and `/sys` expose live kernel and process state. Their contents are created on the fly and disappear at shutdown.
 
 #### Q. How do block device files differ from character device files under `/dev`?
 
-* [ ] Block devices are virtual, while character devices are physical hardware
-* [x] Block devices transfer data in blocks (such as disks), while character devices handle a stream of bytes (such as terminals)
-* [ ] Block devices can only be read by root, while character devices can be read by anyone
+* [ ] Block devices are virtual, while character devices are physical
+* [x] Block devices move fixed-size blocks, while character devices move byte streams
+* [ ] Block devices are root-only, while character devices are world-readable
 * [ ] Block devices hold directories, while character devices hold files
 
 > **Explanation:** Disks like `/dev/sda` are block devices accessed in fixed-size chunks. Keyboards, terminals and serial ports are character devices; `ls -l` marks them with `b` and `c`.
@@ -399,6 +471,33 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 
 > **Explanation:** `showmount -e` queries the server's export list (most useful with NFSv3-style services). `exportfs` runs on the server itself, and `findmnt` shows local mounts.
 
+#### Q. Mounting `192.168.1.100:/opt/shared` fails with `mount.nfs: access denied by server`, although port 2049 on the server is reachable. What is the most likely cause?
+
+* [x] The client's address is not covered by the export's entry in `/etc/exports`
+* [ ] The server firewall is blocking TCP port 2049
+* [ ] The user's UID differs between the client and the server
+* [ ] The client did not include `noatime` in its mount options
+
+> **Explanation:** The server answered and refused, which points at the export rules: wrong client subnet, wrong path or exports not reloaded. A blocked port gives a timeout instead, and UID mismatches only show up as permission errors after mounting.
+
+#### Q. The server exports `/opt/shared` with `ro`, and a client mounts it with default options. What happens when a client user runs `touch /mnt/nfs_shared/new.txt`?
+
+* [ ] It succeeds, because the client mounted the share read-write
+* [ ] It succeeds locally, and the file is discarded at unmount
+* [x] It fails with "Read-only file system"
+* [ ] It makes every NFS mount on the client read-only
+
+> **Explanation:** Export options are enforced by the server, whatever the client asks for in its own mount options. The server rejects the write, and the client reports it as a read-only filesystem error.
+
+#### Q. An NFS share is mounted with default options and the server crashes. What happens to client processes that read files on the share?
+
+* [ ] They receive an I/O error immediately
+* [x] They block, and the client keeps retrying until the server returns
+* [ ] They read cached copies from the client's local disk
+* [ ] The client unmounts the share automatically
+
+> **Explanation:** The default `hard` option retries requests indefinitely, logging "server not responding, still trying". `soft` returns an error after `retrans` retries instead, which avoids hangs but can cause data loss for writes.
+
 #### Q. A laptop has an NFS share in `/etc/fstab` and hangs at boot when away from the office network. Which options fix this?
 
 * [ ] `defaults,sync`
@@ -408,14 +507,14 @@ UUID=1234-ABCD   /mnt/mydata   ext4   defaults   0   2
 
 > **Explanation:** `_netdev` marks the mount as network-dependent, `nofail` stops a missing server from failing the boot, and `x-systemd.automount` mounts the share on first access instead of at boot.
 
-#### Q. User alice has UID 1000 on an NFS client but UID 2000 on the server. Why does she get "Permission denied" on her own files in the share?
+#### Q. User alice has UID 1000 on an NFS client but UID 2000 on the server, and the export uses the default `sec=sys` authentication. Why does she get "Permission denied" on her own files in the share?
 
 * [ ] NFS ignores file permissions for non-root users
 * [ ] The server always maps users to `nobody`
 * [x] NFS sends the numeric UID 1000, which the server does not treat as alice
 * [ ] Usernames longer than four characters are not supported
 
-> **Explanation:** With traditional NFS authentication, ownership checks use numeric UIDs and GIDs. Keep them consistent through central identity management such as LDAP, or assign matching IDs manually.
+> **Explanation:** With `sec=sys`, ownership checks use the numeric UIDs and GIDs the client sends. Keep them consistent through central identity management such as LDAP, or assign matching IDs manually.
 
 #### Q. Files on an NFSv4 mount show the owner `nobody` even though the UIDs match. What is a likely cause?
 

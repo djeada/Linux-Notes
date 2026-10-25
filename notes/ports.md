@@ -229,7 +229,7 @@ Incoming TCP traffic on port 631 is now blocked.
 sudo ss -tuln | grep :631
 ```
 
-If there's no output, it indicates that port 631 is no longer listening.
+A firewall rule does not close the socket, so `ss` still shows port 631 listening after `ufw deny`; test the block from another host (for example with `nmap` or `nc -zv`). To stop the port listening at all, stop and disable the service that owns it. If `ss` shows no output, nothing is listening on port 631.
 
 ####  Changing Default Ports
 
@@ -260,6 +260,8 @@ Port 2222
 ```bash
 sudo systemctl restart sshd
 ```
+
+On Ubuntu 22.10 and later, where `sshd` is socket-activated by `ssh.socket`, run `sudo systemctl daemon-reload` and then `sudo systemctl restart ssh.socket` instead; restarting only the service keeps the old port.
 
 **Updating Firewall Rules:**
 
@@ -568,7 +570,7 @@ sudo nmap -sS <IP-address>
 
 Expected Output:
 
-Similar to the default scan but may find additional ports due to different scanning technique.
+When Nmap runs as root, this SYN scan is already the default scan type. Without root privileges, Nmap cannot send raw packets and falls back to a full TCP connect scan (`-sT`).
 
 III. **Ping Scan (Discover Live Hosts):**
 

@@ -429,10 +429,10 @@ cn: John Doe
 sn: Doe
 mail: jdoe@example.com
 
-## search result
+# search result
 result: 0 Success
 
-## numEntries: 1
+# numEntries: 1
 ```
 
 Interpretation:
@@ -743,7 +743,7 @@ uid: jdoe
 cn: John Doe
 mail: jdoe@example.com
 
-## numEntries: 1
+# numEntries: 1
 ```
 
 Search for a group:
@@ -1197,7 +1197,7 @@ ldapsearch -x -H ldap://localhost -b "dc=wrong,dc=com" "(uid=jdoe)"
 Example output:
 
 ```text
-## search result
+# search result
 search: 2
 result: 32 No such object
 ```
@@ -1221,7 +1221,7 @@ Expected result:
 
 ```text
 result: 0 Success
-## numEntries: 1
+# numEntries: 1
 ```
 
 ### Scenario 5: Simulate Search Filter That Finds Nothing
@@ -1239,12 +1239,11 @@ ldapsearch -x -H ldap://localhost -b "dc=example,dc=com" "(uid=nosuchuser)"
 Example output:
 
 ```text
-## search result
+# search result
 search: 2
 result: 0 Success
 
-## numResponses: 1
-## numEntries: 0
+# numResponses: 1
 ```
 
 Interpretation:
@@ -1681,7 +1680,7 @@ then the base DN may be wrong or missing.
 ldapsearch -x -H ldap://localhost -b "ou=users,dc=example,dc=com" "(uid=jdoe)"
 ```
 
-If `numEntries` is 0, the user may not exist or the filter is wrong.
+If the output has no `# numEntries` line (zero entries matched), the user may not exist or the filter is wrong.
 
 ### Step 7: Test Linux Account Resolution
 

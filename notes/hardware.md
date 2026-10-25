@@ -1073,7 +1073,7 @@ Example:
 echo "blacklist nouveau" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
 ```
 
-This prevents the open-source NVIDIA `nouveau` driver from loading.
+This stops the open-source NVIDIA `nouveau` driver from being loaded automatically (for example by udev when the hardware is detected). A `blacklist` line does not stop an explicit `modprobe nouveau`; to block that as well, add `install nouveau /bin/false` to the same file.
 
 After changing early boot driver behavior, you may need:
 

@@ -182,9 +182,9 @@ To create a new GPG key pair, run:
 gpg --gen-key
 ```
 
-GPG will ask a series of questions.
+In GnuPG 2.1 and later, `--gen-key` asks only for a name, an email address and a passphrase, and uses the default algorithm and expiry. To be asked for every option, run `gpg --full-generate-key` instead.
 
-A typical key generation process includes choosing the key type, key size, expiration date, name, email address, optional comment, and passphrase.
+A full key generation process includes choosing the key type, key size, expiration date, name, email address, optional comment, and passphrase.
 
 Example choices might be:
 
@@ -208,7 +208,7 @@ GPG will also ask for a passphrase. This passphrase protects the private key. Ev
 The process looks like this:
 
 ```text
-gpg --gen-key
+gpg --full-generate-key
       |
       v
 Choose key type and size

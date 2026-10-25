@@ -1295,12 +1295,13 @@ Example output:
 
 ```text
 TARGET          SOURCE                    FSTYPE OPTIONS
-/mnt/nfs_shared 192.168.1.100:/opt/shared nfs4   ro,relatime,vers=4.2
+/mnt/nfs_shared 192.168.1.100:/opt/shared nfs4   rw,relatime,vers=4.2
 ```
 
 Interpretation:
 
 - The server exported the directory as read-only.
+- The client mount can still show `rw`; the server enforces the export's `ro` and rejects writes.
 - The client cannot write, even if local commands try to create files.
 
 ### Scenario 9: Measure NFS Performance

@@ -259,7 +259,7 @@ ls -Z /var/www/html/index.html
 Example output:
 
 ```text
--rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 /var/www/html/index.html
+system_u:object_r:httpd_sys_content_t:s0 /var/www/html/index.html
 ```
 
 Interpretation:
@@ -564,7 +564,7 @@ ls -Zd /var/www/html
 Output:
 
 ```text
-drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 /var/www/html
+system_u:object_r:httpd_sys_content_t:s0 /var/www/html
 ```
 
 View process context:
@@ -638,7 +638,7 @@ Options:
 Example output:
 
 ```text
-Relabeled /var/www/html/index.html from unconfined_u:object_r:default_t:s0 to system_u:object_r:httpd_sys_content_t:s0
+Relabeled /var/www/html/index.html from unconfined_u:object_r:default_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
 ```
 
 Interpretation:
@@ -1000,13 +1000,13 @@ ls -Z /srv/mywebsite/index.html
 Example output:
 
 ```text
--rw-r--r--. root root unconfined_u:object_r:default_t:s0 /srv/mywebsite/index.html
+unconfined_u:object_r:var_t:s0 /srv/mywebsite/index.html
 ```
 
 Interpretation:
 
-- The file is labeled default_t.
-- A web server process running as httpd_t is usually not allowed to read default_t.
+- The file is labeled var_t.
+- A web server process running as httpd_t is usually not allowed to read var_t.
 - This can cause access denial even when normal permissions look correct.
 
 #### Check AVC Denial
@@ -1024,13 +1024,13 @@ sudo ausearch -m avc -ts recent -c httpd
 Example output:
 
 ```text
-type=AVC msg=audit(...): avc:  denied  { open } for  pid=1234 comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
+type=AVC msg=audit(...): avc:  denied  { open } for  pid=1234 comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:var_t:s0 tclass=file
 ```
 
 Interpretation:
 
 - The web server process is httpd_t.
-- The file is default_t.
+- The file is var_t.
 - SELinux denied file open.
 - The likely fix is to label the directory as web content.
 
@@ -1057,7 +1057,7 @@ sudo restorecon -Rv /srv/mywebsite
 Example output:
 
 ```text
-Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:default_t:s0 to system_u:object_r:httpd_sys_content_t:s0
+Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:var_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
 ```
 
 #### Final Interpretation
@@ -1092,7 +1092,7 @@ sudo restorecon -Rv /srv/mywebsite
 If no persistent `semanage fcontext` rule exists, example output may show:
 
 ```text
-Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:httpd_sys_content_t:s0 to unconfined_u:object_r:default_t:s0
+Relabeled /srv/mywebsite/index.html from unconfined_u:object_r:httpd_sys_content_t:s0 to unconfined_u:object_r:var_t:s0
 ```
 
 Interpretation:
@@ -1208,7 +1208,7 @@ sudo ausearch -m avc -ts recent | grep name_bind
 Example output:
 
 ```text
-avc: denied { name_bind } for pid=3333 comm="nginx" src=8081 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
+avc: denied { name_bind } for pid=3333 comm="nginx" src=8081 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:transproxy_port_t:s0 tclass=tcp_socket
 ```
 
 Interpretation:
@@ -1232,10 +1232,10 @@ http_port_t tcp 80, 81, 443, 488, 8008, 8009, 8443
 
 #### Fix
 
-Add port 8081 as an HTTP port:
+Port 8081 is already labeled `transproxy_port_t` in the targeted policy, so modify its type to `http_port_t` (`-a` is for ports that have no type yet):
 
 ```bash
-sudo semanage port -a -t http_port_t -p tcp 8081
+sudo semanage port -m -t http_port_t -p tcp 8081
 ```
 
 Verify:
@@ -1430,7 +1430,7 @@ ls -Z /srv/mywebsite/index.html
 Example:
 
 ```text
-unconfined_u:object_r:default_t:s0 index.html
+unconfined_u:object_r:var_t:s0 index.html
 ```
 
 #### Step 3: Check Process Context
@@ -1454,13 +1454,13 @@ sudo ausearch -m avc -ts recent -c nginx
 Example:
 
 ```text
-avc: denied { read } for comm="nginx" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
+avc: denied { read } for comm="nginx" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:var_t:s0 tclass=file
 ```
 
 Interpretation:
 
 - Unix permissions allow reading.
-- SELinux denies reading because the file type is default_t.
+- SELinux denies reading because the file type is var_t.
 - The correct fix is to label the file as web content.
 
 #### Fix
@@ -1615,8 +1615,8 @@ ls -Z /srv/mywebsite/index.html
 Example:
 
 ```text
-unconfined_u:object_r:default_t:s0 /srv/mywebsite
-unconfined_u:object_r:default_t:s0 /srv/mywebsite/index.html
+unconfined_u:object_r:var_t:s0 /srv/mywebsite
+unconfined_u:object_r:var_t:s0 /srv/mywebsite/index.html
 ```
 
 #### Check Denials
@@ -1628,13 +1628,13 @@ sudo ausearch -m avc -ts recent -c nginx
 Example:
 
 ```text
-avc: denied { getattr open read } for comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file
+avc: denied { getattr open read } for comm="nginx" path="/srv/mywebsite/index.html" scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:var_t:s0 tclass=file
 ```
 
 #### Interpret
 
 - The web server process is httpd_t.
-- The target file is default_t.
+- The target file is var_t.
 - SELinux denied access.
 - The file needs a web content context.
 
@@ -1654,7 +1654,7 @@ ls -Z /srv/mywebsite/index.html
 Expected:
 
 ```text
-system_u:object_r:httpd_sys_content_t:s0 index.html
+unconfined_u:object_r:httpd_sys_content_t:s0 index.html
 ```
 
 #### Retest
@@ -1719,7 +1719,7 @@ Symptoms:
 
 - service gets permission denied
 - Unix permissions look correct
-- AVC denial shows target type default_t or user_home_t
+- AVC denial shows target type default_t, var_t or user_home_t
 
 Check:
 

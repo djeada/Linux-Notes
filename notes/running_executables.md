@@ -584,10 +584,11 @@ That means the program may fail to start.
 
 The dynamic linker searches for libraries using several sources.
 
-Common places include:
+For glibc, the order is:
 
-- RPATH or RUNPATH embedded in the executable
-- LD_LIBRARY_PATH environment variable
+- RPATH embedded in the executable (only if it has no RUNPATH)
+- LD_LIBRARY_PATH environment variable (ignored for setuid programs)
+- RUNPATH embedded in the executable
 - /etc/ld.so.cache
 - /lib
 - /usr/lib

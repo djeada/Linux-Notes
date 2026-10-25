@@ -190,10 +190,10 @@ The Linux kernel follows a `major.minor.patch` versioning scheme. Each major rel
 | Version Series | Release Year | Notable Changes |
 |---|---|---|
 | 2.6.x | 2003 | Long-lived series; introduced udev, sysfs, NPTL threading, and improved SMP support. |
-| 3.x | 2011 | Numbering change (no functional leap from 2.6.39); added Btrfs improvements, transparent huge pages, and cgroup-based resource control. |
-| 4.x | 2015 | Live kernel patching, eBPF for tracing and networking, improved GPU support, and overlayfs. |
+| 3.x | 2011 | Numbering change (no functional leap from 2.6.39); added Btrfs improvements, overlayfs (3.18), and the first eBPF infrastructure (3.18). |
+| 4.x | 2015 | Live kernel patching, eBPF for tracing and networking (including XDP), improved GPU support, and cgroup v2 (4.5). |
 | 5.x | 2019 | io_uring for async I/O, WireGuard VPN, exFAT support, and energy-aware scheduling. |
-| 6.x | 2022 | Rust language support in kernel modules, improved Btrfs RAID, MGLRU memory management, and user-space access to hardware performance counters. |
+| 6.x | 2022 | Rust language support in kernel modules, improved Btrfs RAID, MGLRU memory management, and the EEVDF scheduler (6.6). |
 
 To check your current kernel version:
 
@@ -235,7 +235,7 @@ Kernel modules are pieces of code that can be loaded and unloaded into the kerne
 
 - **Device drivers** facilitate communication between the operating system and various hardware components, enabling devices like network cards, USB peripherals, and graphics cards to function correctly within the system.
 - To ensure compatibility across diverse storage formats, **file system drivers** provide support for various file systems, including NTFS, FAT, and ext4, allowing the operating system to read and write data to different types of storage media.
-- **System calls** offer a structured way for applications to request specific functionalities from the operating system, such as file manipulation, memory allocation, and network communication, enhancing the interaction between user applications and the kernel.
+- **Network protocol and filtering modules**, such as `wireguard` or `nf_tables`, add networking features to the running kernel only when they are needed.
 
 #### Viewing Loaded Modules
 
@@ -511,6 +511,8 @@ After editing the configuration file, you can apply the changes without rebootin
 sysctl -p
 ```
 
+`sysctl -p` reads only `/etc/sysctl.conf` (or the file you name). To load the files in `/etc/sysctl.d/` and the other system directories as well, use `sysctl --system`.
+
 Here are some common scenarios where `sysctl` is used, with relevant examples and explanations for each:
 
 ##### Adjust TCP Buffer Sizes (Network Performance Tuning)
@@ -569,7 +571,7 @@ ASLR randomizes the memory addresses used by system processes, making it harder 
 
 ##### Increase Maximum Number of Open File Descriptors (Process Management)
 
-You need to increase the maximum number of file descriptors a process can open, which is important for applications handling many simultaneous connections (e.g., web servers).
+You need to increase the maximum number of file descriptors the whole system can open, which is important for applications handling many simultaneous connections (e.g., web servers).
 
 ```bash
 sysctl -w fs.file-max=100000

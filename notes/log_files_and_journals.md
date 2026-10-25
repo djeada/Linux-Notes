@@ -768,7 +768,7 @@ Explanation:
 
 * `-k` shows kernel messages from the journal.
 * Uses normal journal timestamps.
-* Can include persisted kernel logs from previous boots if journal persistence is enabled.
+* Implies `-b`, so it shows the current boot only; use `journalctl -k -b -1` for the previous boot (needs a persistent journal).
 * Useful when you want kernel logs with `journalctl` filtering options.
 
 ```bash

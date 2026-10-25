@@ -246,7 +246,7 @@ chmod g+s /path/to/file_or_directory
 chmod g-s /path/to/file_or_directory
 ```
 
-Octal equivalent: `chmod 0755 /path/to/file` or `chmod 0775 /path/to/directory`
+Octal equivalent: `chmod 0755 /path/to/file`. For a directory, GNU `chmod 0775` keeps an existing setgid bit; use `chmod g-s` or a five-digit mode such as `chmod 00775 /path/to/directory`.
 
 **How to verify if setgid is in place:**
 
@@ -338,7 +338,7 @@ ACL support depends on the filesystem and its mount settings, and preservation d
 
 The `setfacl` command sets, modifies, or removes ACL entries on the paths you provide. To read a newline-separated list of paths from standard input, use `-` as the path operand explicitly.
 
-To modify ACLs, use the `-m` flag followed by the ACL specification. For example, the following command grants read and write permissions to a specific group on a directory:
+To modify ACLs, use the `-m` flag followed by the ACL specification. For example, the following command grants read, write and execute permissions to a specific group on a directory:
 
 ```bash
 setfacl -m g:group_name:rwx /opt/test

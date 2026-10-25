@@ -191,7 +191,7 @@ The `-l` option lists only the names of files containing matches, not the matchi
 Find all files containing the word 'nginx' in the `/var/log/` directory:
 
 ```bash
-grep -l 'nginx' /var/log/*
+grep -rl 'nginx' /var/log/
 ```
 
 **Example Output:**
@@ -462,7 +462,7 @@ The `(abc){2}` pattern matches two consecutive occurrences of "abc." This requir
 Find lines containing "color" or "colour":
 
 ```bash
-grep 'colou?r' /opt/test.txt
+grep -Ew 'colou?r' /opt/test.txt
 ```
 
 **Sample Input (`/opt/test.txt`):**
@@ -481,7 +481,7 @@ color
 colour
 ```
 
-The `u?` makes the character `u` optional, so it matches both "color" and "colour."
+The `u?` makes the character `u` optional, so it matches both "color" and "colour." In basic regex (no `-E`) a plain `?` is literal, and without `-w` the pattern would also match "colored" and "colourful".
 
 #### Using Character Classes `[]`
 
@@ -614,7 +614,7 @@ grep -E '\b\w{4}\b' words.txt
 
 ```
 This is a test.
-Many words have four characters.
+Several elephants appeared.
 Time flies.
 ```
 
@@ -640,7 +640,7 @@ grep -E '\b\w{8,}\b' large_words.txt
 ```
 supercalifragilisticexpialidocious
 complexity
-simplify
+simple
 ```
 
 **Example Output:**
@@ -654,10 +654,10 @@ The `\w{8,}` pattern matches words with at least eight characters.
 
 #### Using `{,m}` (Up to m Occurrences)
 
-Find lines with words of up to 5 characters:
+Print each word of up to 5 characters (`-o` prints only the matched parts):
 
 ```bash
-grep -E '\b\w{,5}\b' words.txt
+grep -oE '\b\w{,5}\b' words.txt
 ```
 
 **Sample Input (`words.txt`):**
@@ -669,10 +669,14 @@ tiny big vast enormous small huge
 **Example Output:**
 
 ```
-tiny big small huge
+tiny
+big
+vast
+small
+huge
 ```
 
-The `\w{,5}` pattern matches words with up to five characters, filtering shorter words.
+The `\w{,5}` pattern matches words with up to five characters, so only "enormous" is left out. Without `-o`, grep would print the whole matching line.
 
 #### Using `{n,m}` (Between n and m Occurrences)
 
@@ -695,7 +699,9 @@ earth
 **Example Output:**
 
 ```
-blue sky green earth
+blue sky
+green
+earth
 ```
 
 The `\w{3,6}` pattern matches words with lengths from three to six characters, identifying "blue", "sky", "green", and "earth".
@@ -826,7 +832,7 @@ grep -r --include='*.txt' 'pattern' /path/to/search/
 You can combine multiple options to tailor the `grep` command for specific needs. This example demonstrates searching for the case-insensitive pattern 'error' in all `.log` files under `/var/log/`, excluding files larger than 1MB, and displaying line numbers with context:
 
 ```bash
-find /var/log/ -type f -name '*.log' -size -1M -exec grep -inC 2 'error' {} +
+find /var/log/ -type f -name '*.log' -size -1024k -exec grep -inC 2 'error' {} +
 ```
 
 Breaking down the command:
@@ -837,7 +843,7 @@ Breaking down the command:
 | `/var/log/`                  | Specifies the directory to search within.                                                           |
 | `-type f`                    | Limits the search to files only, excluding directories.                                              |
 | `-name '*.log'`              | Searches for files with the `.log` extension.                                                        |
-| `-size -1M`                  | Includes files smaller than 1MB.                                                                     |
+| `-size -1024k`               | Includes files smaller than 1 MiB. (`-size -1M` would match only empty files, because `find` rounds sizes up to whole units.) |
 | `-exec grep -inC 2 'error'`  | Executes `grep` on each found file with specified options.                                           |
 | `grep -i`                    | Performs a case-insensitive search for the term 'error'.                                             |
 | `grep -n`                    | Displays line numbers alongside matched lines.                                                       |
@@ -870,17 +876,20 @@ INFO: Server shutdown.
 Example Output:
 
 ```
-/var/log/syslog.log:3-ERROR: Disk not found.
-  INFO: Process halted.
-  INFO: Restarting services.
-  ERROR: Network failure.
-
-/var/log/server.log:2-ERROR: Connection timed out.
-  WARNING: High CPU usage.
-  INFO: Server shutdown.
+/var/log/syslog.log-1-INFO: System started.
+/var/log/syslog.log-2-WARNING: Low memory detected.
+/var/log/syslog.log:3:ERROR: Disk not found.
+/var/log/syslog.log-4-INFO: Process halted.
+/var/log/syslog.log-5-INFO: Restarting services.
+/var/log/syslog.log:6:ERROR: Network failure.
+--
+/var/log/server.log-1-INFO: Server initialized.
+/var/log/server.log:2:ERROR: Connection timed out.
+/var/log/server.log-3-WARNING: High CPU usage.
+/var/log/server.log-4-INFO: Server shutdown.
 ```
 
-- For each matching line, two lines above and below the match are displayed to provide context.
+- For each matching line, two lines above and below the match are displayed to provide context. Matching lines use `:` after the file name and line number, context lines use `-`, and `--` separates groups that are not adjacent.
 - The `-n` option displays the line number for each match.
 - The `-i` option ensures that any occurrence of 'error' is matched, regardless of case (e.g., 'Error' or 'ERROR').
 
@@ -890,7 +899,7 @@ Example Output:
 - Use `grep` on a small sample file to test complex patterns before running on large datasets.
 - Familiarize yourself with regular expressions to leverage the full power of `grep`.
 - Combine `grep` with other commands like `find`, `awk`, and `sed` for advanced text processing.
-- For very large files, consider using `fgrep` (or `grep -F`) which treats the pattern as a fixed string, improving performance.
+- For very large files, consider using `grep -F`, which treats the pattern as a fixed string, improving performance. The old `fgrep` command is obsolescent, so use `grep -F` in new scripts.
 
 ### Challenges
 
