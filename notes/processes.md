@@ -128,7 +128,7 @@ The life cycle of a process in an operating system is a critical concept. The pr
 - The **Exit** state indicates that the process has completed its execution and is ready to be removed from the system.
 - A process is **Terminated** when it has finished, whether through a normal exit or a signal. A terminated child can remain as a zombie until its parent collects its exit status with a wait function.
 
-The diagram uses conceptual lifecycle stages. Linux tools report states such as `R` (running or runnable), `S` (interruptible sleep), `D` (uninterruptible sleep), `T` (stopped), and `Z` (zombie). See [Task-State Analysis](task_state_analysis.md) for the distinction between waiting, stopping, and exiting.
+The diagram uses conceptual lifecycle stages. Linux tools report states such as `R` (running or runnable), `S` (interruptible sleep), `D` (uninterruptible sleep), `T` (stopped), and `Z` (zombie). See [Task-State Analysis](https://github.com/djeada/Linux-Notes/blob/main/notes/task_state_analysis.md) for the distinction between waiting, stopping, and exiting.
 
 ### Process Spawning
 
